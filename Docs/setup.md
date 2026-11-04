@@ -50,8 +50,9 @@ Nový projekt (supabase.com, přihlášení přes GitHub):
 Po vytvoření: **Project Settings → API Keys** – Project URL a publishable key patří do `web/js/config.js`.
 Secret key se nikam nekopíruje.
 
-Struktura databáze: SQL skripty z `supabase/migrations/` se spouštějí postupně podle čísla
-v **SQL Editoru** (fáze 1 doplní přesný postup).
+Struktura databáze: každý SQL skript z `supabase/migrations/` se spustí **jednou**, postupně
+podle čísla v názvu: **SQL Editor → New query → vložit obsah → Run**. Propojení Supabase
+s GitHubem (automatické migrace) se nezapíná.
 
 ## 4. TMDB
 
@@ -60,6 +61,31 @@ v **SQL Editoru** (fáze 1 doplní přesný postup).
    **Edge Functions → Secrets** → název `TMDB_READ_TOKEN`.
 3. Token nikdy nepatří do repozitáře ani do kódu webu.
 
-## 5. Keep-alive
+## 5. Edge Function a import filmů
 
-Doplní se ve fázi 1 (GitHub Action `keep-alive.yml`).
+1. Správcovský klíč: `openssl rand -hex 24` (Git Bash) → Supabase **Edge Functions → Secrets**
+   → `MMD_ADMIN_KEY`. Uložit i do správce hesel.
+2. **Edge Functions → Deploy a new function → Via Editor**, název `tmdb`, obsah
+   `supabase/functions/tmdb/index.ts` → **Deploy**.
+3. V nastavení funkce **vypnout Verify JWT**.
+4. Import (ve složce repozitáře):
+   ```bash
+   curl -X POST "https://vvnexfdnfvwbwluazwoo.supabase.co/functions/v1/tmdb?action=import" \
+     -H "apikey: sb_publishable_ECIGAmDLE3Fj8FNTnx0mgw_P1dEBspM" \
+     -H "x-admin-key: <MMD_ADMIN_KEY>" \
+     -H "Content-Type: application/json" \
+     --data-binary @supabase/seed/universes.json \
+     -o import-report.json
+   cat import-report.json
+   ```
+   Jen jedno univerzum: na konec adresy přidat `&only=mcu`.
+5. V reportu zkontrolovat `warnings` (jiný název / rok) a `notFound`. Chybnou shodu opravit
+   doplněním `"tmdb": <id>` k filmu v seedu a import pustit znovu.
+
+Po změně kódu funkce: v dashboardu otevřít funkci `tmdb` → Code → vložit nový obsah → Deploy.
+
+## 6. Keep-alive
+
+GitHub Action `keep-alive.yml` volá každé 3 dny databázovou funkci `ping()`.
+Ruční spuštění: **Actions → Keep Supabase awake → Run workflow**; výsledek je vidět
+v tabulce `heartbeat`.

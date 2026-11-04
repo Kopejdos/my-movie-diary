@@ -4,6 +4,9 @@
 supabase/.temp/
 supabase/.branches/
 
+# Výstupy importu filmů (jen pro kontrolu, nepatří do repozitáře)
+import-report*.json
+
 # Editory a systém
 .vscode/
 .idea/

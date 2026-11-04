@@ -1,0 +1,319 @@
+{
+  "_comment": "Seznam univerz a filmů pro import (Edge Function tmdb, action=import). Film se v TMDB hledá podle 'title' a 'year'; když to nestačí, doplní se 'tmdb' (přesné ID). 'optional' = nepočítá se do postupu. Nevydané filmy import přeskočí.",
+  "universes": [
+    {
+      "slug": "mcu",
+      "name": "Marvel Cinematic Universe",
+      "description": "The Infinity Saga and the Multiverse Saga – every MCU movie.",
+      "films": [
+        { "title": "Iron Man", "year": 2008, "group": "Phase 1" },
+        { "title": "The Incredible Hulk", "year": 2008, "group": "Phase 1" },
+        { "title": "Iron Man 2", "year": 2010, "group": "Phase 1" },
+        { "title": "Thor", "year": 2011, "group": "Phase 1" },
+        { "title": "Captain America: The First Avenger", "year": 2011, "group": "Phase 1" },
+        { "title": "The Avengers", "year": 2012, "group": "Phase 1" },
+        { "title": "Iron Man 3", "year": 2013, "group": "Phase 2" },
+        { "title": "Thor: The Dark World", "year": 2013, "group": "Phase 2" },
+        { "title": "Captain America: The Winter Soldier", "year": 2014, "group": "Phase 2" },
+        { "title": "Guardians of the Galaxy", "year": 2014, "group": "Phase 2" },
+        { "title": "Avengers: Age of Ultron", "year": 2015, "group": "Phase 2" },
+        { "title": "Ant-Man", "year": 2015, "group": "Phase 2" },
+        { "title": "Captain America: Civil War", "year": 2016, "group": "Phase 3" },
+        { "title": "Doctor Strange", "year": 2016, "group": "Phase 3" },
+        { "title": "Guardians of the Galaxy Vol. 2", "year": 2017, "group": "Phase 3" },
+        { "title": "Spider-Man: Homecoming", "year": 2017, "group": "Phase 3" },
+        { "title": "Thor: Ragnarok", "year": 2017, "group": "Phase 3" },
+        { "title": "Black Panther", "year": 2018, "group": "Phase 3" },
+        { "title": "Avengers: Infinity War", "year": 2018, "group": "Phase 3" },
+        { "title": "Ant-Man and the Wasp", "year": 2018, "group": "Phase 3" },
+        { "title": "Captain Marvel", "year": 2019, "group": "Phase 3" },
+        { "title": "Avengers: Endgame", "year": 2019, "group": "Phase 3" },
+        { "title": "Spider-Man: Far From Home", "year": 2019, "group": "Phase 3" },
+        { "title": "Black Widow", "year": 2021, "group": "Phase 4" },
+        { "title": "Shang-Chi and the Legend of the Ten Rings", "year": 2021, "group": "Phase 4" },
+        { "title": "Eternals", "year": 2021, "group": "Phase 4" },
+        { "title": "Spider-Man: No Way Home", "year": 2021, "group": "Phase 4" },
+        { "title": "Doctor Strange in the Multiverse of Madness", "year": 2022, "group": "Phase 4" },
+        { "title": "Thor: Love and Thunder", "year": 2022, "group": "Phase 4" },
+        { "title": "Black Panther: Wakanda Forever", "year": 2022, "group": "Phase 4" },
+        { "title": "Ant-Man and the Wasp: Quantumania", "year": 2023, "group": "Phase 5" },
+        { "title": "Guardians of the Galaxy Vol. 3", "year": 2023, "group": "Phase 5" },
+        { "title": "The Marvels", "year": 2023, "group": "Phase 5" },
+        { "title": "Deadpool & Wolverine", "year": 2024, "group": "Phase 5" },
+        { "title": "Captain America: Brave New World", "year": 2025, "group": "Phase 5" },
+        { "title": "Thunderbolts*", "year": 2025, "group": "Phase 5" },
+        { "title": "The Fantastic Four: First Steps", "year": 2025, "group": "Phase 6" },
+        { "title": "Spider-Man: Brand New Day", "year": 2026, "group": "Phase 6" },
+        { "title": "Avengers: Doomsday", "year": 2026, "group": "Phase 6" }
+      ]
+    },
+    {
+      "slug": "x-men",
+      "name": "X-Men",
+      "description": "The 20th Century Fox X-Men saga, including Wolverine and Deadpool.",
+      "films": [
+        { "title": "X-Men", "year": 2000, "group": "X-Men" },
+        { "title": "X2", "year": 2003, "group": "X-Men" },
+        { "title": "X-Men: The Last Stand", "year": 2006, "group": "X-Men" },
+        { "title": "X-Men Origins: Wolverine", "year": 2009, "group": "Wolverine" },
+        { "title": "X-Men: First Class", "year": 2011, "group": "X-Men" },
+        { "title": "The Wolverine", "year": 2013, "group": "Wolverine" },
+        { "title": "X-Men: Days of Future Past", "year": 2014, "group": "X-Men" },
+        { "title": "Deadpool", "year": 2016, "group": "Deadpool" },
+        { "title": "X-Men: Apocalypse", "year": 2016, "group": "X-Men" },
+        { "title": "Logan", "year": 2017, "group": "Wolverine" },
+        { "title": "Deadpool 2", "year": 2018, "group": "Deadpool" },
+        { "title": "Dark Phoenix", "year": 2019, "group": "X-Men" },
+        { "title": "The New Mutants", "year": 2020, "group": "Spin-off" },
+        { "title": "Deadpool & Wolverine", "year": 2024, "group": "MCU crossover", "optional": true }
+      ]
+    },
+    {
+      "slug": "spider-man",
+      "name": "Spider-Man",
+      "description": "Every Spider-Man on the big screen – Raimi, Webb, the MCU and the Spider-Verse.",
+      "films": [
+        { "title": "Spider-Man", "year": 2002, "group": "Raimi trilogy" },
+        { "title": "Spider-Man 2", "year": 2004, "group": "Raimi trilogy" },
+        { "title": "Spider-Man 3", "year": 2007, "group": "Raimi trilogy" },
+        { "title": "The Amazing Spider-Man", "year": 2012, "group": "The Amazing Spider-Man" },
+        { "title": "The Amazing Spider-Man 2", "year": 2014, "group": "The Amazing Spider-Man" },
+        { "title": "Spider-Man: Homecoming", "year": 2017, "group": "MCU" },
+        { "title": "Venom", "year": 2018, "group": "Sony's Spider-Man Universe", "optional": true },
+        { "title": "Spider-Man: Into the Spider-Verse", "year": 2018, "group": "Spider-Verse" },
+        { "title": "Spider-Man: Far From Home", "year": 2019, "group": "MCU" },
+        { "title": "Venom: Let There Be Carnage", "year": 2021, "group": "Sony's Spider-Man Universe", "optional": true },
+        { "title": "Spider-Man: No Way Home", "year": 2021, "group": "MCU" },
+        { "title": "Morbius", "year": 2022, "group": "Sony's Spider-Man Universe", "optional": true },
+        { "title": "Spider-Man: Across the Spider-Verse", "year": 2023, "group": "Spider-Verse" },
+        { "title": "Madame Web", "year": 2024, "group": "Sony's Spider-Man Universe", "optional": true },
+        { "title": "Venom: The Last Dance", "year": 2024, "group": "Sony's Spider-Man Universe", "optional": true },
+        { "title": "Kraven the Hunter", "year": 2024, "group": "Sony's Spider-Man Universe", "optional": true },
+        { "title": "Spider-Man: Brand New Day", "year": 2026, "group": "MCU" }
+      ]
+    },
+    {
+      "slug": "dceu",
+      "name": "DC Extended Universe",
+      "description": "From Man of Steel to Aquaman and the Lost Kingdom.",
+      "films": [
+        { "title": "Man of Steel", "year": 2013 },
+        { "title": "Batman v Superman: Dawn of Justice", "year": 2016 },
+        { "title": "Suicide Squad", "year": 2016 },
+        { "title": "Wonder Woman", "year": 2017 },
+        { "title": "Justice League", "year": 2017 },
+        { "title": "Aquaman", "year": 2018 },
+        { "title": "Shazam!", "year": 2019 },
+        { "title": "Birds of Prey", "year": 2020 },
+        { "title": "Wonder Woman 1984", "year": 2020 },
+        { "title": "Zack Snyder's Justice League", "year": 2021, "group": "Director's cut", "optional": true },
+        { "title": "The Suicide Squad", "year": 2021 },
+        { "title": "Black Adam", "year": 2022 },
+        { "title": "Shazam! Fury of the Gods", "year": 2023 },
+        { "title": "The Flash", "year": 2023 },
+        { "title": "Blue Beetle", "year": 2023 },
+        { "title": "Aquaman and the Lost Kingdom", "year": 2023 }
+      ]
+    },
+    {
+      "slug": "dcu",
+      "name": "DC Universe",
+      "description": "The new DC Universe by James Gunn and Peter Safran – Chapter One: Gods and Monsters.",
+      "films": [
+        { "title": "Superman", "year": 2025 },
+        { "title": "Supergirl", "year": 2026 },
+        { "title": "Clayface", "year": 2026 }
+      ]
+    },
+    {
+      "slug": "batman",
+      "name": "Batman",
+      "description": "Nolan's Dark Knight trilogy and Matt Reeves' The Batman.",
+      "films": [
+        { "title": "Batman Begins", "year": 2005, "group": "The Dark Knight Trilogy" },
+        { "title": "The Dark Knight", "year": 2008, "group": "The Dark Knight Trilogy" },
+        { "title": "The Dark Knight Rises", "year": 2012, "group": "The Dark Knight Trilogy" },
+        { "title": "The Batman", "year": 2022, "group": "The Batman" }
+      ]
+    },
+    {
+      "slug": "star-wars",
+      "name": "Star Wars",
+      "description": "The Skywalker Saga and the standalone Star Wars movies.",
+      "films": [
+        { "title": "Star Wars", "year": 1977, "group": "Skywalker Saga" },
+        { "title": "The Empire Strikes Back", "year": 1980, "group": "Skywalker Saga" },
+        { "title": "Return of the Jedi", "year": 1983, "group": "Skywalker Saga" },
+        { "title": "Star Wars: Episode I - The Phantom Menace", "year": 1999, "group": "Skywalker Saga" },
+        { "title": "Star Wars: Episode II - Attack of the Clones", "year": 2002, "group": "Skywalker Saga" },
+        { "title": "Star Wars: Episode III - Revenge of the Sith", "year": 2005, "group": "Skywalker Saga" },
+        { "title": "Star Wars: The Clone Wars", "year": 2008, "group": "Standalone", "optional": true },
+        { "title": "Star Wars: The Force Awakens", "year": 2015, "group": "Skywalker Saga" },
+        { "title": "Rogue One: A Star Wars Story", "year": 2016, "group": "Standalone" },
+        { "title": "Star Wars: The Last Jedi", "year": 2017, "group": "Skywalker Saga" },
+        { "title": "Solo: A Star Wars Story", "year": 2018, "group": "Standalone" },
+        { "title": "Star Wars: The Rise of Skywalker", "year": 2019, "group": "Skywalker Saga" },
+        { "title": "The Mandalorian and Grogu", "year": 2026, "group": "Standalone" }
+      ]
+    },
+    {
+      "slug": "wizarding-world",
+      "name": "Wizarding World",
+      "description": "Harry Potter and Fantastic Beasts.",
+      "films": [
+        { "title": "Harry Potter and the Philosopher's Stone", "year": 2001, "group": "Harry Potter" },
+        { "title": "Harry Potter and the Chamber of Secrets", "year": 2002, "group": "Harry Potter" },
+        { "title": "Harry Potter and the Prisoner of Azkaban", "year": 2004, "group": "Harry Potter" },
+        { "title": "Harry Potter and the Goblet of Fire", "year": 2005, "group": "Harry Potter" },
+        { "title": "Harry Potter and the Order of the Phoenix", "year": 2007, "group": "Harry Potter" },
+        { "title": "Harry Potter and the Half-Blood Prince", "year": 2009, "group": "Harry Potter" },
+        { "title": "Harry Potter and the Deathly Hallows: Part 1", "year": 2010, "group": "Harry Potter" },
+        { "title": "Harry Potter and the Deathly Hallows: Part 2", "year": 2011, "group": "Harry Potter" },
+        { "title": "Fantastic Beasts and Where to Find Them", "year": 2016, "group": "Fantastic Beasts" },
+        { "title": "Fantastic Beasts: The Crimes of Grindelwald", "year": 2018, "group": "Fantastic Beasts" },
+        { "title": "Fantastic Beasts: The Secrets of Dumbledore", "year": 2022, "group": "Fantastic Beasts" }
+      ]
+    },
+    {
+      "slug": "middle-earth",
+      "name": "Middle-earth",
+      "description": "The Lord of the Rings and The Hobbit.",
+      "films": [
+        { "title": "The Lord of the Rings: The Fellowship of the Ring", "year": 2001, "group": "The Lord of the Rings" },
+        { "title": "The Lord of the Rings: The Two Towers", "year": 2002, "group": "The Lord of the Rings" },
+        { "title": "The Lord of the Rings: The Return of the King", "year": 2003, "group": "The Lord of the Rings" },
+        { "title": "The Hobbit: An Unexpected Journey", "year": 2012, "group": "The Hobbit" },
+        { "title": "The Hobbit: The Desolation of Smaug", "year": 2013, "group": "The Hobbit" },
+        { "title": "The Hobbit: The Battle of the Five Armies", "year": 2014, "group": "The Hobbit" },
+        { "title": "The Lord of the Rings: The War of the Rohirrim", "year": 2024, "group": "Animated" }
+      ]
+    },
+    {
+      "slug": "jurassic-park",
+      "name": "Jurassic Park",
+      "description": "Jurassic Park and Jurassic World.",
+      "films": [
+        { "title": "Jurassic Park", "year": 1993, "group": "Jurassic Park" },
+        { "title": "The Lost World: Jurassic Park", "year": 1997, "group": "Jurassic Park" },
+        { "title": "Jurassic Park III", "year": 2001, "group": "Jurassic Park" },
+        { "title": "Jurassic World", "year": 2015, "group": "Jurassic World" },
+        { "title": "Jurassic World: Fallen Kingdom", "year": 2018, "group": "Jurassic World" },
+        { "title": "Jurassic World Dominion", "year": 2022, "group": "Jurassic World" },
+        { "title": "Jurassic World Rebirth", "year": 2025, "group": "Jurassic World" }
+      ]
+    },
+    {
+      "slug": "fast-and-furious",
+      "name": "Fast & Furious",
+      "description": "Family. The whole Fast & Furious saga.",
+      "films": [
+        { "title": "The Fast and the Furious", "year": 2001 },
+        { "title": "2 Fast 2 Furious", "year": 2003 },
+        { "title": "The Fast and the Furious: Tokyo Drift", "year": 2006 },
+        { "title": "Fast & Furious", "year": 2009 },
+        { "title": "Fast Five", "year": 2011 },
+        { "title": "Fast & Furious 6", "year": 2013 },
+        { "title": "Furious 7", "year": 2015 },
+        { "title": "The Fate of the Furious", "year": 2017 },
+        { "title": "Fast & Furious Presents: Hobbs & Shaw", "year": 2019, "group": "Spin-off", "optional": true },
+        { "title": "F9", "year": 2021 },
+        { "title": "Fast X", "year": 2023 }
+      ]
+    },
+    {
+      "slug": "pirates-of-the-caribbean",
+      "name": "Pirates of the Caribbean",
+      "description": "Captain Jack Sparrow's adventures.",
+      "films": [
+        { "title": "Pirates of the Caribbean: The Curse of the Black Pearl", "year": 2003 },
+        { "title": "Pirates of the Caribbean: Dead Man's Chest", "year": 2006 },
+        { "title": "Pirates of the Caribbean: At World's End", "year": 2007 },
+        { "title": "Pirates of the Caribbean: On Stranger Tides", "year": 2011 },
+        { "title": "Pirates of the Caribbean: Dead Men Tell No Tales", "year": 2017 }
+      ]
+    },
+    {
+      "slug": "alien",
+      "name": "Alien",
+      "description": "In space no one can hear you scream – the Alien saga, prequels and crossovers.",
+      "films": [
+        { "title": "Alien", "year": 1979, "group": "Alien" },
+        { "title": "Aliens", "year": 1986, "group": "Alien" },
+        { "title": "Alien³", "year": 1992, "group": "Alien" },
+        { "title": "Alien Resurrection", "year": 1997, "group": "Alien" },
+        { "title": "AVP: Alien vs. Predator", "year": 2004, "group": "Alien vs. Predator", "optional": true },
+        { "title": "Aliens vs Predator: Requiem", "year": 2007, "group": "Alien vs. Predator", "optional": true },
+        { "title": "Prometheus", "year": 2012, "group": "Prequels" },
+        { "title": "Alien: Covenant", "year": 2017, "group": "Prequels" },
+        { "title": "Alien: Romulus", "year": 2024, "group": "Alien" }
+      ]
+    },
+    {
+      "slug": "studio-ghibli",
+      "name": "Studio Ghibli",
+      "description": "The feature films of Studio Ghibli.",
+      "films": [
+        { "title": "Nausicaä of the Valley of the Wind", "year": 1984, "group": "Pre-Ghibli", "optional": true },
+        { "title": "Castle in the Sky", "year": 1986 },
+        { "title": "Grave of the Fireflies", "year": 1988 },
+        { "title": "My Neighbor Totoro", "year": 1988 },
+        { "title": "Kiki's Delivery Service", "year": 1989 },
+        { "title": "Only Yesterday", "year": 1991 },
+        { "title": "Porco Rosso", "year": 1992 },
+        { "title": "Ocean Waves", "year": 1993 },
+        { "title": "Pom Poko", "year": 1994 },
+        { "title": "Whisper of the Heart", "year": 1995 },
+        { "title": "Princess Mononoke", "year": 1997 },
+        { "title": "My Neighbors the Yamadas", "year": 1999 },
+        { "title": "Spirited Away", "year": 2001 },
+        { "title": "The Cat Returns", "year": 2002 },
+        { "title": "Howl's Moving Castle", "year": 2004 },
+        { "title": "Tales from Earthsea", "year": 2006 },
+        { "title": "Ponyo", "year": 2008 },
+        { "title": "Arrietty", "year": 2010 },
+        { "title": "From Up on Poppy Hill", "year": 2011 },
+        { "title": "The Wind Rises", "year": 2013 },
+        { "title": "The Tale of the Princess Kaguya", "year": 2013 },
+        { "title": "When Marnie Was There", "year": 2014 },
+        { "title": "The Red Turtle", "year": 2016, "group": "Co-production", "optional": true },
+        { "title": "Earwig and the Witch", "year": 2020 },
+        { "title": "The Boy and the Heron", "year": 2023 }
+      ]
+    },
+    {
+      "slug": "asterix-and-obelix",
+      "name": "Asterix & Obelix",
+      "description": "The indomitable Gauls – animated and live-action movies.",
+      "films": [
+        { "title": "Asterix the Gaul", "year": 1967, "group": "Animated" },
+        { "title": "Asterix and Cleopatra", "year": 1968, "group": "Animated" },
+        { "title": "The Twelve Tasks of Asterix", "year": 1976, "group": "Animated" },
+        { "title": "Asterix Versus Caesar", "year": 1985, "group": "Animated" },
+        { "title": "Asterix in Britain", "year": 1986, "group": "Animated" },
+        { "title": "Asterix and the Big Fight", "year": 1989, "group": "Animated" },
+        { "title": "Asterix Conquers America", "year": 1994, "group": "Animated" },
+        { "title": "Asterix & Obelix Take On Caesar", "year": 1999, "group": "Live-action" },
+        { "title": "Asterix & Obelix: Mission Cleopatra", "year": 2002, "group": "Live-action" },
+        { "title": "Asterix and the Vikings", "year": 2006, "group": "Animated" },
+        { "title": "Asterix at the Olympic Games", "year": 2008, "group": "Live-action" },
+        { "title": "Asterix & Obelix: God Save Britannia", "year": 2012, "group": "Live-action" },
+        { "title": "Asterix: The Mansions of the Gods", "year": 2014, "group": "Animated" },
+        { "title": "Asterix: The Secret of the Magic Potion", "year": 2018, "group": "Animated" },
+        { "title": "Asterix & Obelix: The Middle Kingdom", "year": 2023, "group": "Live-action" }
+      ]
+    },
+    {
+      "slug": "shrek",
+      "name": "Shrek",
+      "description": "Shrek and Puss in Boots.",
+      "films": [
+        { "title": "Shrek", "year": 2001, "group": "Shrek" },
+        { "title": "Shrek 2", "year": 2004, "group": "Shrek" },
+        { "title": "Shrek the Third", "year": 2007, "group": "Shrek" },
+        { "title": "Shrek Forever After", "year": 2010, "group": "Shrek" },
+        { "title": "Puss in Boots", "year": 2011, "group": "Puss in Boots" },
+        { "title": "Puss in Boots: The Last Wish", "year": 2022, "group": "Puss in Boots" }
+      ]
+    }
+  ]
+}

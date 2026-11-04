@@ -1,0 +1,704 @@
+/* =====================================================================
+   My Movie Diary – vzhled
+   Tmavý „kinový“ motiv, mobil na prvním místě.
+   ===================================================================== */
+
+/* ---------- Barvy a rozměry ---------- */
+:root {
+    --bg: #0f1115;
+    --bg-raised: #171a21;
+    --bg-hover: #1f232c;
+    --border: #2a2f3a;
+    --text: #eceef3;
+    --text-muted: #9aa0ad;
+    --accent: #f2b134;          /* zlatá – jako světla kina */
+    --accent-strong: #ffc54d;
+    --accent-text: #1a1406;
+    --success: #4cc38a;
+    --danger: #ef5b5b;
+
+    --radius: 12px;
+    --radius-small: 8px;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    --content-width: 1100px;
+    --gutter: 16px;
+
+    color-scheme: dark;
+}
+
+/* ---------- Základ ---------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--accent-strong);
+}
+
+h1, h2, h3 {
+    margin: 0;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+button {
+    font: inherit;
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.muted {
+    color: var(--text-muted);
+}
+
+.hint {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* ---------- Hlavička ---------- */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(15, 17, 21, 0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding-top: env(safe-area-inset-top);
+}
+
+.header__inner {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 10px var(--gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 56px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text);
+    font-weight: 800;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.brand:hover {
+    color: var(--text);
+}
+
+.brand__icon {
+    font-size: 1.3rem;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+}
+
+.nav__link {
+    color: var(--text-muted);
+    padding: 6px 10px;
+    border-radius: var(--radius-small);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.nav__link:hover,
+.nav__link--active {
+    color: var(--text);
+    background: var(--bg-hover);
+}
+
+.nav__button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.nav__user {
+    color: var(--accent);
+    font-weight: 600;
+    padding: 0 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 140px;
+}
+
+/* Na úzkém displeji se schová název aplikace, zůstane ikona */
+@media (max-width: 480px) {
+    .brand__name {
+        display: none;
+    }
+}
+
+/* ---------- Obsah ---------- */
+.main {
+    flex: 1;
+    width: 100%;
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 24px var(--gutter) 48px;
+}
+
+.page-header {
+    margin-bottom: 24px;
+    display: grid;
+    gap: 8px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 16px;
+    font-weight: 500;
+}
+
+/* ---------- Tlačítka ---------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: var(--radius-small);
+    border: 1px solid var(--border);
+    background: var(--bg-raised);
+    color: var(--text);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.btn:hover {
+    background: var(--bg-hover);
+    color: var(--text);
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.btn--primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-text);
+}
+
+.btn--primary:hover {
+    background: var(--accent-strong);
+    border-color: var(--accent-strong);
+    color: var(--accent-text);
+}
+
+.btn--ghost {
+    background: transparent;
+}
+
+.btn--small {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+}
+
+.btn--block {
+    width: 100%;
+}
+
+/* ---------- Ukazatel postupu ---------- */
+.progress {
+    height: 6px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress--large {
+    height: 10px;
+}
+
+.progress__bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+    border-radius: inherit;
+    transition: width 0.35s ease;
+}
+
+.universe-progress {
+    display: grid;
+    gap: 6px;
+    max-width: 480px;
+    margin-top: 8px;
+}
+
+.progress-text {
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* ---------- Přehled univerz ---------- */
+.universe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+}
+
+@media (min-width: 720px) {
+    .universe-grid {
+        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+        gap: 20px;
+    }
+}
+
+.universe-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    color: var(--text);
+    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.universe-card:hover {
+    color: var(--text);
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: var(--shadow);
+}
+
+.universe-card--complete {
+    border-color: var(--success);
+}
+
+.universe-card__cover {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    display: block;
+    background: var(--bg-hover);
+}
+
+.universe-card__body {
+    padding: 12px;
+    display: grid;
+    gap: 8px;
+}
+
+.universe-card__title {
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.universe-card__meta {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.universe-card--complete .universe-card__meta {
+    color: var(--success);
+    font-weight: 600;
+}
+
+/* Zástupný blok, když film nemá plakát */
+.poster--empty {
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    text-align: center;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    background: var(--bg-hover);
+}
+
+/* ---------- Seznam filmů ---------- */
+.film-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+}
+
+.film-group {
+    margin-top: 20px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.film-group:first-child {
+    margin-top: 0;
+}
+
+.film {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 10px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.film--watched {
+    border-color: rgba(76, 195, 138, 0.45);
+    background: linear-gradient(90deg, rgba(76, 195, 138, 0.08), var(--bg-raised) 60%);
+}
+
+.film--optional {
+    border-style: dashed;
+}
+
+.film__poster {
+    width: 56px;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 6px;
+    display: block;
+    background: var(--bg-hover);
+}
+
+.film__info {
+    min-width: 0;
+    display: grid;
+    gap: 2px;
+}
+
+.film__title {
+    font-size: 1rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.film__meta,
+.film__status {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.film--watched .film__status {
+    color: var(--success);
+    font-weight: 500;
+}
+
+.badge {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+/* ---------- Counter +1 / −1 ---------- */
+.counter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.counter__btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 1.3rem;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.counter__btn:hover:not(:disabled) {
+    border-color: var(--accent);
+}
+
+.counter__btn:active:not(:disabled) {
+    transform: scale(0.92);
+}
+
+.counter__btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.counter__btn--add {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-text);
+}
+
+.counter__btn--add:hover:not(:disabled) {
+    background: var(--accent-strong);
+}
+
+.counter__value {
+    min-width: 24px;
+    text-align: center;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 480px) {
+    .film {
+        grid-template-columns: 48px 1fr auto;
+        gap: 10px;
+        padding: 8px;
+    }
+
+    .film__poster {
+        width: 48px;
+    }
+
+    .film__title {
+        font-size: 0.95rem;
+    }
+
+    .counter {
+        gap: 4px;
+    }
+
+    .counter__btn {
+        width: 34px;
+        height: 34px;
+        font-size: 1.15rem;
+    }
+
+    .counter__value {
+        min-width: 18px;
+    }
+}
+
+/* ---------- Formuláře ---------- */
+.auth-page {
+    display: flex;
+    justify-content: center;
+    padding-top: 16px;
+}
+
+.auth-form {
+    width: 100%;
+    max-width: 400px;
+    display: grid;
+    gap: 16px;
+    padding: 24px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.auth-form p {
+    margin: 0;
+}
+
+.auth-form__switch {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.field {
+    display: grid;
+    gap: 6px;
+}
+
+.field__label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.field__hint {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.field input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: var(--radius-small);
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    font-size: 16px;   /* menší písmo by na iPhonu přiblížilo stránku */
+}
+
+.field input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.form-error {
+    color: var(--danger);
+    font-size: 0.9rem;
+    min-height: 0;
+}
+
+.form-error:empty {
+    display: none;
+}
+
+/* ---------- Stavy: načítání, chyba, prázdno ---------- */
+.state {
+    display: grid;
+    justify-items: center;
+    gap: 12px;
+    padding: 64px 16px;
+    text-align: center;
+}
+
+.state--error p {
+    color: var(--danger);
+}
+
+.spinner {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ---------- Oznámení ---------- */
+.toasts {
+    position: fixed;
+    left: 50%;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    display: grid;
+    gap: 8px;
+    z-index: 100;
+    width: min(420px, calc(100% - 32px));
+    pointer-events: none;
+}
+
+.toast {
+    padding: 12px 16px;
+    border-radius: var(--radius-small);
+    background: var(--bg-hover);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    font-size: 0.9rem;
+    text-align: center;
+    animation: toast-in 0.2s ease-out;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.toast--error {
+    border-color: var(--danger);
+}
+
+.toast--hide {
+    opacity: 0;
+    transform: translateY(8px);
+}
+
+@keyframes toast-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+}
+
+/* ---------- Patička ---------- */
+.footer {
+    border-top: 1px solid var(--border);
+    padding: 24px var(--gutter) calc(24px + env(safe-area-inset-bottom));
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    display: grid;
+    gap: 6px;
+    justify-items: center;
+}
+
+.footer p {
+    margin: 0;
+}
+
+.footer__tmdb {
+    height: 14px;
+    display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+}

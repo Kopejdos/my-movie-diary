@@ -85,7 +85,7 @@ Supabase
 my-movie-diary/
 ├── .github/workflows/
 │   ├── deploy-pages.yml      nasazení web/ na GitHub Pages
-│   └── keep-alive.yml        pravidelný zápis do databáze (fáze 1)
+│   └── keep-alive.yml        pravidelný zápis do databáze
 ├── docs/
 │   ├── decisions.md          tento dokument
 │   ├── data-model.md         tabulky a pravidla přístupu
@@ -140,7 +140,8 @@ Pravidla:
 | # | Fáze | Co přibude | Co si vyzkoušíš |
 |---|---|---|---|
 | 0 | Infrastruktura ✅ | repozitář, GitHub Pages s testovací stránkou, Supabase projekt, TMDB token v Secrets | web běží na vlastní adrese |
-| 1 | Databáze a data | migrace (tabulky + RLS), Edge Function `tmdb`, seznamy univerz a filmů, keep-alive | v Table Editoru jsou univerza a filmy s plakáty |
+| 1a | Struktura databáze ✅ | migrace (tabulky, RLS, pohledy, funkce), keep-alive | v Table Editoru jsou tabulky, keep-alive zapisuje |
+| 1b | Data o filmech ✅ | Edge Function `tmdb`, seznam 16 univerz (202 filmů), import z TMDB | v tabulkách jsou univerza a filmy s plakáty |
 | 2 | Kostra webu a přihlášení | rozvržení, router, registrace (e-mail, heslo, nickname), přihlášení, odhlášení | přihlásíš se na webu |
 | 2b | Přihlášení přes Google | Google OAuth v Supabase a tlačítko na webu | přihlášení jedním klepnutím |
 | 3 | Univerza a zhlédnutí | přehled univerz s postupem, detail univerza, counter +1 / −1 | odškrtáš si první filmy |
@@ -160,7 +161,35 @@ Později podle chuti: hodnocení a poznámky ke zhlédnutí, historie a statisti
 
 #### Rozhodnutí ve fázi 0
 - **Web ve složce `web/`, dokumentace v `docs/`** – GitHub Pages umí nasazovat i ze složky `docs/`, proto je web oddělený a nasazuje se přes Actions; dokumentace se tak na web nedostane.
-- **Propojení Supabase s GitHubem** (automatické nasazování migrací) se při zakládání neuložilo; nastaví se ve fázi 1, až budou v repozitáři migrace.
+- **Propojení Supabase s GitHubem** (automatické nasazování migrací) se při zakládání neuložilo. *Změněno ve fázi 1a – nezapíná se, migrace se spouštějí ručně.*
+
+### Fáze 1a – struktura databáze ✅ (4. 11. 2026)
+- Migrace `20261104230000_initial_schema.sql`: tabulky `profiles`, `films`, `universes`, `universe_items`, `watches`, `watchlist`, `heartbeat`, pravidla RLS, oprávnění pro Data API.
+- Automatický profil při registraci (trigger na `auth.users`): nickname z registračního formuláře, u přihlášení bez nicku (Google) `user_xxxxxxxx`.
+- Pohledy `universe_progress` (postup v univerzech) a `my_film_counts` (počet a poslední zhlédnutí filmu); funkce `remove_latest_watch` (−1) a `ping` (keep-alive).
+- GitHub Action `keep-alive.yml` volá `ping()` každé 3 dny (ručně: Actions → Keep Supabase awake → Run workflow).
+- Migrace otestovaná předem na lokálním PostgreSQL 16 s napodobeným prostředím Supabase (role, `auth.uid()`).
+
+#### Rozhodnutí ve fázi 1a
+- **Migrace se spouštějí ručně v SQL Editoru**, v repozitáři jsou kvůli historii a zprovoznění od nuly. Automatické nasazování z GitHubu se nezapíná – migrace spuštěná ručně by se zkusila spustit znovu a skončila by chybou.
+- **Názvy migrací ve formátu Supabase CLI** (`RRRRMMDDHHMMSS_popis.sql`) – kdyby se později přešlo na CLI, soubory se nemusí přejmenovávat.
+- **Nepřihlášený uživatel smí číst `watches`** (oprávnění GRANT), ale RLS mu neukáže žádný řádek – pohled `universe_progress` tak funguje i bez přihlášení (0 zhlédnutí).
+- **Funkce běží s `set search_path = ''`** a plně kvalifikovanými názvy (`public.watches`) – ochrana proti podvržení tabulek, doporučení Supabase.
+
+### Fáze 1b – data o filmech ✅ (5. 11. 2026)
+- Edge Function `tmdb` (akce `import`): pro každý film ze seedu najde film v TMDB podle názvu a roku, stáhne detail (název, původní název, datum, délka, plakát, popis), uloží ho do `films` a sestaví univerza a jejich položky.
+- Seed `supabase/seed/universes.json`: 16 univerz, 202 filmů. Import uložil 201 (Avengers: Doomsday ještě nevyšel), import trvá ~20 s.
+- Migrace `20261105000000_service_role_grants.sql`: oprávnění pro `service_role`.
+- Report importu ukáže varování (jiný název / rok v TMDB), nevydané a nenalezené filmy – všech 5 varování při prvním importu byly správné shody.
+
+#### Rozhodnutí ve fázi 1b
+- **Seed podle názvu a roku, ne podle TMDB ID** – ID se nemusí dohledávat ručně. Když hledání nestačí, doplní se do seedu `"tmdb": <id>`.
+- **Seed je zdroj pravdy:** import je opakovatelný (upsert) a z univerza smaže položky, které v seedu nejsou. Úprava univerza = úprava JSON a nový import (lze i jen jedno univerzum přes `&only=<slug>`).
+- **Nevydané filmy se přeskočí** (TMDB status jiný než „Released“) – po premiéře stačí import pustit znovu.
+- **Import chrání správcovský klíč** `MMD_ADMIN_KEY` (Supabase Secrets, hlavička `x-admin-key`); ověřování JWT je u funkce vypnuté, protože publishable key není JWT.
+- **`service_role` potřebuje oprávnění GRANT** – RLS obchází, ale při vypnutém automatickém zpřístupnění tabulek nemá k tabulkám přístup. Výchozí oprávnění (`alter default privileges`) platí i pro budoucí tabulky.
+- **Hlavní obal univerza** = plakát prvního povinného filmu.
+- **Spider-Man obsahuje i filmy z MCU** (Tom Holland) – film může být ve více univerzech. Sony's Spider-Man Universe (Venom…) je volitelné, stejně jako AvP u Alienu, Hobbs & Shaw, Zack Snyder's Justice League, Nausicaä a The Red Turtle.
 
 ## Drobnosti k dořešení
 - GitHub vypne plánované workflow (keep-alive) ve veřejném repozitáři po 60 dnech bez aktivity v repozitáři – přijde e-mail, zapne se jedním kliknutím.
