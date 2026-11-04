@@ -46,9 +46,9 @@ my-movie-diary/
 
 ## Documentation
 
-- [Decisions and roadmap](docs/decisions.md)
-- [Data model](docs/data-model.md)
-- [Setup guide](docs/setup.md)
+- [Decisions and roadmap](Docs/decisions.md)
+- [Data model](Docs/data-model.md)
+- [Setup guide](Docs/setup.md)
 
 ## Credits
 
