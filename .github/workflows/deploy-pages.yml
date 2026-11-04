@@ -1,0 +1,47 @@
+# Nasazení webu na GitHub Pages
+# Spustí se po každém pushi do větve main, který změní složku web/
+# (nebo ručně v záložce Actions → Deploy to GitHub Pages → Run workflow).
+# Nasazuje se jen obsah složky web/, dokumentace v docs/ na web nejde.
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "web/**"
+      - ".github/workflows/deploy-pages.yml"
+  workflow_dispatch:
+
+# Oprávnění potřebná pro nasazení na Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Běží vždy jen jedno nasazení najednou, novější počká
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload web folder
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: web/
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v5
