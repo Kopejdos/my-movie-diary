@@ -1,0 +1,36 @@
+# Keep-alive pro Supabase
+# Bezplatný projekt Supabase se po 7 dnech bez aktivity v databázi uspí.
+# Tahle akce každé 3 dny zavolá databázovou funkci ping(), která zapíše
+# řádek do tabulky heartbeat – to se počítá jako aktivita.
+# Ručně: Actions → Keep Supabase awake → Run workflow.
+#
+# Pozor: GitHub plánované akce ve veřejném repozitáři vypne po 60 dnech
+# bez commitu – přijde e-mail a zapnou se jedním kliknutím.
+
+name: Keep Supabase awake
+
+on:
+  schedule:
+    - cron: "17 6 */3 * *"   # každý 3. den v 6:17 UTC
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    env:
+      # Obě hodnoty jsou veřejné (stejné jako ve web/js/config.js)
+      SUPABASE_URL: https://vvnexfdnfvwbwluazwoo.supabase.co
+      SUPABASE_PUBLISHABLE_KEY: sb_publishable_ECIGAmDLE3Fj8FNTnx0mgw_P1dEBspM
+    steps:
+      - name: Ping database
+        run: |
+          curl --fail-with-body --silent --show-error \
+            --retry 3 --retry-delay 10 \
+            -X POST "$SUPABASE_URL/rest/v1/rpc/ping" \
+            -H "apikey: $SUPABASE_PUBLISHABLE_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{}'
+          echo
+          echo "Supabase is awake."
