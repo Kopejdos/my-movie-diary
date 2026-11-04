@@ -35,7 +35,7 @@ async function loadProfile(user) {
     if (!user) return null;
     const { data, error } = await supabase
         .from("profiles")
-        .select("id, username")
+        .select("id, username, is_admin")
         .eq("id", user.id)
         .maybeSingle();
     if (error) {
@@ -96,6 +96,33 @@ export async function signUp({ username, email, password }) {
 export async function signIn({ email, password }) {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
+}
+
+/** Přihlášení přes Google – přesměruje na Google a zpět na web. */
+export async function signInWithGoogle() {
+    const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: SITE_URL },
+    });
+    if (error) throw new Error(error.message);
+}
+
+/** Má uživatel ještě automaticky vygenerovaný nickname (přihlášení přes Google)? */
+export function hasGeneratedUsername() {
+    return /^user_[0-9a-f]{8}$/.test(state.profile?.username ?? "");
+}
+
+/** Změna nicku přihlášeného uživatele. */
+export async function updateUsername(username) {
+    const { data, error } = await supabase
+        .from("profiles")
+        .update({ username })
+        .eq("id", state.user.id)
+        .select("id, username, is_admin")
+        .single();
+    if (error) throw new Error(error.message);
+    state.profile = data;
+    notify();
 }
 
 export async function signOut() {

@@ -1,6 +1,6 @@
 // Vstupní bod webu: přihlášení, hlavička a router.
 
-import { initAuth, onAuthChange, getUser, getProfile, signOut } from "./auth.js";
+import { initAuth, onAuthChange, getUser, getProfile, signOut, hasGeneratedUsername } from "./auth.js";
 import { addRoute, setNotFound, startRouter, render, navigate, currentPath } from "./router.js";
 import { TEXTS, format } from "./texts.js";
 import { h, mount, toast } from "./dom.js";
@@ -9,6 +9,7 @@ import { universesView } from "./views/universes.js";
 import { universeView } from "./views/universe.js";
 import { loginView } from "./views/login.js";
 import { registerView } from "./views/register.js";
+import { profileView } from "./views/profile.js";
 import { notFoundView } from "./views/not-found.js";
 
 // Cesty v aplikaci
@@ -16,6 +17,7 @@ addRoute("/", universesView);
 addRoute("/universe/:slug", universeView);
 addRoute("/login", loginView);
 addRoute("/register", registerView);
+addRoute("/profile", profileView);
 setNotFound(notFoundView);
 
 const header = document.getElementById("site-header");
@@ -40,7 +42,11 @@ function renderHeader() {
                 navLink("#/", TEXTS.navUniverses, path === "/" || path.startsWith("/universe")),
                 user
                     ? [
-                        h("span", { class: "nav__user" }, profile ? `@${profile.username}` : ""),
+                        h("a", {
+                            class: `nav__user${path === "/profile" ? " nav__user--active" : ""}`,
+                            href: "#/profile",
+                            title: TEXTS.navProfile,
+                        }, profile ? `@${profile.username}` : ""),
                         h("button", { class: "nav__link nav__button", type: "button", onClick: handleSignOut },
                             TEXTS.navSignOut),
                     ]
@@ -77,6 +83,11 @@ onAuthChange(({ user, profile }) => {
     lastUserId = userId;
 
     if (signedInNow) {
+        // Uživatel z Google má zatím automatický nickname → nabídnout volbu vlastního
+        if (hasGeneratedUsername()) {
+            navigate("/profile");
+            return;
+        }
         toast(format("welcome", profile?.username ?? ""));
         const path = currentPath();
         if (path === "/login" || path === "/register") {
@@ -95,4 +106,7 @@ renderHeader();
 await initAuth();
 lastUserId = getUser()?.id ?? null;
 routerStarted = true;
+if (getUser() && hasGeneratedUsername()) {
+    window.location.hash = "/profile";
+}
 await startRouter(main);

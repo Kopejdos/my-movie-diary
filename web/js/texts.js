@@ -10,6 +10,7 @@ export const TEXTS = {
     navSignIn: "Sign in",
     navRegister: "Register",
     navSignOut: "Sign out",
+    navProfile: "Profile",
 
     // Obecné
     loading: "Loading…",
@@ -59,6 +60,17 @@ export const TEXTS = {
     registerCheckEmail: "Almost done! Check your inbox and confirm your email, then sign in.",
     welcome: "Welcome, {0}!",
     signedOut: "You have been signed out.",
+
+    continueWithGoogle: "Continue with Google",
+    or: "or",
+
+    // Profil
+    profileTitle: "Your profile",
+    profileIntro: "Signed in as {0}.",
+    profileChooseNickname: "Pick a nickname – your friends will see it later.",
+    profileSave: "Save nickname",
+    profileSaved: "Nickname saved.",
+    profileAdmin: "Administrator",
 
     // Nenalezeno
     notFoundTitle: "Page not found",

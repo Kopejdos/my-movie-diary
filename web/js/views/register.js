@@ -5,7 +5,7 @@ import { navigate } from "../router.js";
 import { USERNAME_PATTERN, PASSWORD_MIN_LENGTH } from "../config.js";
 import { TEXTS, format } from "../texts.js";
 import { h, mount } from "../dom.js";
-import { field } from "./login.js";
+import { field, googleButton, divider } from "./login.js";
 
 export async function registerView(container) {
     if (isSignedIn()) {
@@ -26,6 +26,8 @@ export async function registerView(container) {
 
     const form = h("form", { class: "auth-form", novalidate: true, onSubmit: handleSubmit },
         h("h1", {}, TEXTS.registerTitle),
+        googleButton(),
+        divider(),
         field(TEXTS.username, username, TEXTS.usernameHint),
         field(TEXTS.email, email),
         field(TEXTS.password, password, format("passwordHint", PASSWORD_MIN_LENGTH)),

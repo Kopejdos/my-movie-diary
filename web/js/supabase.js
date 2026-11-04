@@ -8,6 +8,7 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
     auth: {
         persistSession: true,      // přihlášení přežije zavření prohlížeče
         autoRefreshToken: true,
-        detectSessionInUrl: true,  // návrat z ověřovacího e-mailu
+        detectSessionInUrl: true,  // návrat z Google / ověřovacího e-mailu
+        flowType: "pkce",          // výsledek přihlášení přijde jako ?code=…, ne v # (ten patří routeru)
     },
 });

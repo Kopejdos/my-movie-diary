@@ -154,10 +154,17 @@ button {
     cursor: pointer;
 }
 
+.nav__user:hover,
+.nav__user--active {
+    color: var(--accent-strong);
+    background: var(--bg-hover);
+    border-radius: var(--radius-small);
+}
+
 .nav__user {
     color: var(--accent);
     font-weight: 600;
-    padding: 0 6px;
+    padding: 6px 8px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -533,6 +540,52 @@ button {
     .counter__value {
         min-width: 18px;
     }
+}
+
+/* ---------- Google a oddělovač ---------- */
+.btn--google {
+    background: #ffffff;
+    border-color: #ffffff;
+    color: #1f1f1f;
+    gap: 10px;
+}
+
+.btn--google:hover {
+    background: #f1f3f4;
+    border-color: #f1f3f4;
+    color: #1f1f1f;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+.notice {
+    padding: 10px 12px;
+    border-radius: var(--radius-small);
+    border: 1px solid var(--accent);
+    background: rgba(242, 177, 52, 0.08);
+    font-size: 0.9rem;
+}
+
+.badge--accent {
+    justify-self: start;
+    border-color: var(--accent);
+    color: var(--accent);
 }
 
 /* ---------- Formuláře ---------- */
