@@ -1,0 +1,14 @@
+# Lokální tajemství a nastavení – nikdy do repozitáře
+.env
+.env.*
+supabase/.temp/
+supabase/.branches/
+
+# Editory a systém
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+
+# Node (kdyby se někdy použil kvůli nástrojům)
+node_modules/
