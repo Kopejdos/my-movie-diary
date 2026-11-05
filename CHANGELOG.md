@@ -3,6 +3,9 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V1.7.1 – November 2026
+- Fixed two wrong movie matches (Audition, Hostel)
+
 ## V1.7 – November 2026
 - Final horror wave: Gore & Splatter, Extreme & Torture, Cosmic Horror, Gothic Horror, Giallo, Eco-horror, Elevated Horror
 - Bonus: J-Horror

@@ -581,6 +581,9 @@ Ke každému kroku krátká poznámka, proč ho vidět; postup cestou; XP a achi
 #### Rozhodnutí ve fázi 15
 - **TMDB id připnuté předem** u krátkých názvů (X, Us, Pearl, House, Opera) podle pravidla z V1.5.1 – i v kolekcích
   Slasher a Psychological Horror, kde už X, Us a Pearl byly, aby šlo o tentýž film.
+- **V1.7.1:** import i tak minul **Audition** (našel *Auditions from Beyond*) a **Hostel** (našel *Dr. Rage*) – TMDB je
+  vede s rokem premiéry 2000 a 2006, hledání s rokem 1999 / 2005 je nenašlo. Připnuto (`11075`, `1690`).
+  Ostatní varování (jiný rok premiéry, Tenebrae = Tenebre) byla správná.
 - **Extreme & Torture bez nejkontroverznějších titulů** (např. A Serbian Film) – výběr drží známé a kriticky
   probírané filmy žánru; popis kolekce upozorňuje, že není pro slabé povahy.
 - **Giallo má žlutou barvu** – „giallo“ je italsky žlutá (podle žlutých obálek detektivek).
