@@ -53,6 +53,18 @@ export const TEXTS = {
     watchlistBrowse: "Browse universes",
     watchlistAddedOn: "Added {0}",
 
+    // Aplikace (PWA)
+    install: "Install",
+    installTitle: "Install the app",
+    installText: "Add My Movie Diary to your home screen – it opens full screen like a normal app.",
+    installButton: "Install My Movie Diary",
+    installIos: "On iPhone or iPad: tap Share in Safari, then “Add to Home Screen”.",
+    installOther: "In Chrome or Edge, use the install icon in the address bar or the browser menu → “Install app”.",
+    installDone: "Installed – you are using the app. ✓",
+    installThanks: "Thanks for installing My Movie Diary!",
+    offline: "You are offline – changes will not be saved.",
+    online: "Back online.",
+
     // Up next v detailu univerza
     upNext: "Up next",
     universeComplete: "Universe complete",

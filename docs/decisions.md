@@ -108,6 +108,9 @@ my-movie-diary/
 └── web/
     ├── index.html            jediná stránka aplikace
     ├── privacy.html          zásady ochrany osobních údajů (podmínka Googlu)
+    ├── manifest.webmanifest  PWA – název, ikony, režim na celou obrazovku
+    ├── sw.js                 service worker – aktualizace a spuštění bez internetu
+    ├── icons/                ikony aplikace (filmová klapka „MMD“)
     ├── css/style.css
     └── js/
         ├── app.js            start, hlavička, reakce na přihlášení
@@ -118,6 +121,7 @@ my-movie-diary/
         ├── dom.js            pomocné funkce pro vykreslování
         ├── theme.js          světlý / tmavý režim, barva univerza
         ├── prefs.js          drobné volby v prohlížeči (pořadí, filtr)
+        ├── pwa.js            service worker a instalace na plochu
         ├── auth.js           logika přihlášení (bez vykreslování)
         ├── data.js           logika dat – univerza, zhlédnutí (bez vykreslování)
         ├── admin.js          logika admin panelu (bez vykreslování)
@@ -175,9 +179,9 @@ Pravidla:
 | 5 | Admin panel ✅ | univerza (vytvořit, upravit, smazat), filmy přes hledání v TMDB, uživatelé (seznam, správce, smazání) | spravuješ obsah bez SQL a curl |
 | 6 | Řazení a filtr ✅ | pořadí vydání / příběhu, filtr neviděných | sleduješ univerzum chronologicky |
 | 7 | Watchlist ✅ | „chci vidět“ napříč univerzy | seznam na víkend |
-| 8 | PWA | manifest, ikona, instalace na plochu | MMD jako aplikace v telefonu |
+| 8 | PWA ✅ | manifest, ikona, instalace na plochu | MMD jako aplikace v telefonu |
 
-Později podle chuti: hodnocení a poznámky ke zhlédnutí, historie a statistiky, vlastní univerza, export / import, sdílení postupu s přáteli, české názvy filmů.
+Všechny plánované fáze jsou hotové. Později podle chuti: hodnocení a poznámky ke zhlédnutí, historie a statistiky, vlastní univerza, export / import, sdílení postupu s přáteli, české názvy filmů.
 
 ## Historie fází
 
@@ -317,6 +321,21 @@ Později podle chuti: hodnocení a poznámky ke zhlédnutí, historie a statisti
 - **Odebrání z watchlistu po zhlédnutí řeší databáze (trigger)**, ne web – platí pro všechna místa, kde jde film označit jako viděný, i pro budoucí.
 - **Watchlist napříč univerzy**, ne zvlášť pro každé univerzum – jeden seznam „na víkend“; univerzum filmu je vidět u každé položky.
 - **Hvězdička jde i u viděného filmu** – „chci znovu vidět“; po dalším zhlédnutí z watchlistu opět zmizí.
+
+### Fáze 8 – PWA ✅ (5. 11. 2026)
+- **Instalace na plochu:** `manifest.webmanifest` (název, krátký název „MMD“, barvy, režim `standalone`), ikony 192 / 512 px, maskovatelná ikona pro Android a ikona pro iPhone.
+- **Ikona:** filmová klapka v mosazné barvě s nápisem „MMD“ v písmu Chakra Petch, tmavé pozadí s tečkovanou mřížkou (vygenerovaná skriptem, stejný styl jako web).
+- **Tlačítko „⤓ Install“** v hlavičce (Chrome, Edge, Android – jen když jde aplikace nainstalovat) a karta **Install the app** na profilu: tlačítko, návod pro iPhone (Sdílet → Přidat na plochu), nebo potvrzení, že aplikace běží nainstalovaná.
+- **Service worker** (`sw.js`): soubory webu vždy ověří u serveru (síť první, bez mezipaměti prohlížeče) – **nová verze je po nasazení vidět hned, bez Ctrl+F5**; bez internetu se aplikace otevře z uložené verze. Knihovna Supabase a písma z mezipaměti.
+- Hlášky „You are offline“ / „Back online“.
+- Otestováno v Chromiu: registrace, uložení 29 souborů, otevření a navigace bez internetu.
+
+#### Rozhodnutí ve fázi 8
+- **Síť první pro soubory webu** místo „mezipaměť první“ – u často nasazovaného webu je důležitější aktuálnost; offline je jen záloha. Řeší i problém, kdy prohlížeč držel starý JavaScript.
+- **Data ze Supabase se offline neukládají** – zhlédnutí bez připojení by se musela synchronizovat (složité, zatím zbytečné); offline aplikace jen upozorní.
+- **Obrázky z TMDB service worker neukládá** – načítají se bez CORS a Chrome by si je v mezipaměti počítal po megabajtech; obstará je běžná mezipaměť prohlížeče.
+- **Vlastní tlačítko Install** místo automatické lišty prohlížeče – nabídne se až na vhodném místě (hlavička, profil), ne hned po otevření.
+- **Verze mezipaměti v `sw.js` (`VERSION`)** – při velké změně struktury se zvýší a staré mezipaměti se smažou.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

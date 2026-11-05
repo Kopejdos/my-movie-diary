@@ -5,6 +5,7 @@ import { addRoute, setNotFound, startRouter, render, navigate, currentPath } fro
 import { TEXTS, format } from "./texts.js";
 import { h, mount, toast } from "./dom.js";
 import { currentTheme, toggleTheme } from "./theme.js";
+import { initPwa, canInstall, promptInstall, onInstallChange } from "./pwa.js";
 
 import { universesView } from "./views/universes.js";
 import { universeView } from "./views/universe.js";
@@ -47,6 +48,14 @@ function renderHeader() {
                 h("span", { class: "brand__name" }, TEXTS.appName),
             ),
             h("nav", { class: "nav" },
+                canInstall()
+                    ? h("button", {
+                        class: "nav__link nav__button nav__install", type: "button",
+                        onClick: async () => {
+                            if (await promptInstall()) toast(TEXTS.installThanks);
+                        },
+                    }, `⤓ ${TEXTS.install}`)
+                    : null,
                 themeToggle(),
                 navLink("#/", TEXTS.navUniverses, path === "/" || path.startsWith("/universe/"), " nav__link--home"),
                 user
@@ -134,6 +143,15 @@ onAuthChange(({ user, profile }) => {
 
 // Hlavička se zvýrazněním aktuální sekce i po přechodu na jinou stránku
 document.addEventListener("route-rendered", renderHeader);
+
+// Aplikace na plochu: service worker, tlačítko Install, stav připojení
+initPwa();
+onInstallChange(() => {
+    renderHeader();
+    if (currentPath() === "/profile") render();
+});
+window.addEventListener("offline", () => toast(TEXTS.offline, "error"));
+window.addEventListener("online", () => toast(TEXTS.online));
 
 // Start
 renderHeader();

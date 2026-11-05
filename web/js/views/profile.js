@@ -9,6 +9,7 @@ import { TEXTS, format } from "../texts.js";
 import { setAccent } from "../theme.js";
 import { h, mount, toast } from "../dom.js";
 import { field } from "./login.js";
+import { canInstall, promptInstall, isStandalone, isIos } from "../pwa.js";
 
 export async function profileView(container) {
     setAccent(null);
@@ -53,7 +54,7 @@ export async function profileView(container) {
         }, TEXTS.navSignOut),
     );
 
-    mount(container, h("div", { class: "auth-page" }, form));
+    mount(container, h("div", { class: "auth-page auth-page--stack" }, form, installCard()));
     if (generated) username.focus();
 
     async function handleSubmit(event) {
@@ -85,4 +86,26 @@ export async function profileView(container) {
             submit.disabled = false;
         }
     }
+}
+
+/** Karta „Install the app“ – tlačítko, návod pro iPhone, nebo potvrzení. */
+function installCard() {
+    let body;
+    if (isStandalone()) {
+        body = h("p", { class: "muted" }, TEXTS.installDone);
+    } else if (canInstall()) {
+        body = h("button", {
+            class: "btn btn--primary btn--block", type: "button",
+            onClick: async () => {
+                if (await promptInstall()) toast(TEXTS.installThanks);
+            },
+        }, `⤓ ${TEXTS.installButton}`);
+    } else {
+        body = h("p", { class: "muted" }, isIos() ? TEXTS.installIos : TEXTS.installOther);
+    }
+    return h("section", { class: "auth-form install-card" },
+        h("h2", {}, TEXTS.installTitle),
+        isStandalone() ? null : h("p", {}, TEXTS.installText),
+        body,
+    );
 }

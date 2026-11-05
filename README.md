@@ -6,22 +6,19 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> Status: in development – see [docs/decisions.md](docs/decisions.md) for the roadmap.
+> Status: version 1 complete – see [docs/decisions.md](docs/decisions.md) for decisions and history.
 
 ## Features
 
-**Done**
-- 17 universes and 200+ movies imported from TMDB
-- Universes as cards with a progress bar
-- Movies in each universe with poster, year and a +1 / −1 viewing counter
-- Sign in with email or nickname & password, or with Google
-
-**Planned**
-- Redesign with universe colors, banners and light / dark mode
-- Admin panel for universes, movies and users
-- Release order or story (chronological) order, "Up next" suggestion
+- 17 universes and 200+ movies from TMDB, each universe with its own color and banner
+- +1 / −1 viewing counter – every viewing is logged with a date
+- Progress per universe, **Up next** and **Continue watching** suggestions
+- Release order or story (chronological) order, "unwatched only" filter
 - Watchlist across all universes
-- Installable on a phone (PWA)
+- Sign in with email or nickname & password, or with Google
+- Light and dark mode
+- Admin panel: universes, movies (search TMDB right from the app) and users
+- Installable on a phone or computer (PWA), opens even offline
 
 **Later**
 - Ratings and notes for each viewing, viewing history and statistics

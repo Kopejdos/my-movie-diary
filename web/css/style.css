@@ -1509,6 +1509,35 @@ button {
     box-shadow: var(--shadow);
 }
 
+.auth-page--stack {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.install-card h2 {
+    font-size: 1.3rem;
+}
+
+.nav__install {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+}
+
+/* V nainstalované aplikaci (na celou obrazovku) hlavička respektuje výřez displeje */
+@media (display-mode: standalone) {
+    .header__inner {
+        padding-left: max(var(--gutter), env(safe-area-inset-left));
+        padding-right: max(var(--gutter), env(safe-area-inset-right));
+    }
+}
+
+@media (max-width: 430px) {
+    .nav__install {
+        padding: 6px 8px;
+    }
+}
+
 .auth-form p {
     margin: 0;
 }
