@@ -235,7 +235,7 @@ Opačné pořadí ve V1.2 způsobilo chybu „Could not find the table 'public.c
 | 10 | V1.2 | Kategorie + horory, vlna 1 ✅ | kategorie na přehledu, hororové série, prvních 7 hororových žánrů |
 | 11 | V1.3 | Achievementy ✅ | odznaky za filmy, čas, maratony, dokončené kolekce a kategorie |
 | 12 | V1.4 | Úrovně a XP ✅ | level a filmový titul z XP (filmy, opakování, kolekce, achievementy), odznak v hlavičce, Level up; Insidious: Out of the Further |
-| 13 | V1.5 | Horory, vlna 2 | dalších 7 žánrů |
+| 13 | V1.5 | Horory, vlna 2 ✅ | dalších 7 žánrů |
 | 14 | V1.6 | Vyhledávání | vyhledávací pole – filmy a kolekce |
 | 15 | V1.7 | Horory, vlna 3 | posledních 7 žánrů |
 | 16 | V1.8 | Cesty (paths) | kurátorské trasy krok za krokem – v kolekci, napříč kolekcemi, žánrové; XP za dokončení |
@@ -537,6 +537,15 @@ Ke každému kroku krátká poznámka, proč ho vidět; postup cestou; XP a achi
 - **Knihovna jako soubor v repozitáři, ne z CDN** – jeden požadavek, žádná závislost na cizím serveru, funguje offline; aktualizace ručně (postup v `setup.md`). Verze v názvu souboru = service worker ho nemusí ověřovat.
 - **„Stale-while-revalidate“ + tlačítko Reload** místo „síť první“ pro soubory webu – rychlost při každém otevření; nová verze se nabídne hned po nasazení (porovnání ETag / Last-Modified z GitHub Pages).
 - **Písma s `unicode-range`** – latin-ext (čeština v nickách) se stáhne, jen když je potřeba.
+
+### Fáze 13 – horory, vlna 2 ✅ (5. 11. 2026) – **V1.5**
+- 7 žánrových výběrů (14–15 filmů): **Body Horror**, **Creature Feature**, **Vampire**, **Werewolf**, **Sci-fi Horror** (i v kategorii Sci-fi & Fantasy), **Folk Horror**, **Horror Comedy**.
+- Včetně novinek 2024–2025: The Substance, Together, Nosferatu (2024), Sinners, Wolf Man, Alien: Romulus, Companion, Beetlejuice Beetlejuice.
+- Jen obsah (seed) – web, databáze ani funkce se nemění.
+
+#### Rozhodnutí ve fázi 13
+- **Překryvy jsou v pořádku** – Alien je ve své sérii i v Sci-fi Horror, Shaun of the Dead v Zombie i Horror Comedy, Jaws v Creature Feature (a později možná i Eco-horror); zhlédnutí se počítá všude.
+- **Remaky se stejným názvem odliší rok** (Nosferatu 1922 / 2024, Dracula 1931 / 1958).
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

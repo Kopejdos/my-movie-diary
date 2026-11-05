@@ -3,6 +3,9 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V1.5 – November 2026
+- 7 more horror genre picks: Body Horror, Creature Feature, Vampire, Werewolf, Sci-fi Horror, Folk Horror, Horror Comedy
+
 ## V1.4.1 – November 2026
 - Faster loading: Supabase library and fonts bundled with the app, all modules preloaded at once
 - Instant reopening from cache; "new version available – Reload" prompt after an update
