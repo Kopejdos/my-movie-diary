@@ -6,6 +6,7 @@ import { TEXTS, format } from "./texts.js";
 import { h, mount, toast } from "./dom.js";
 import { currentTheme, toggleTheme } from "./theme.js";
 import { initPwa, canInstall, promptInstall, onInstallChange } from "./pwa.js";
+import { APP_VERSION, APP_UPDATED } from "./config.js";
 
 import { universesView } from "./views/universes.js";
 import { universeView } from "./views/universe.js";
@@ -152,6 +153,10 @@ onInstallChange(() => {
 });
 window.addEventListener("offline", () => toast(TEXTS.offline, "error"));
 window.addEventListener("online", () => toast(TEXTS.online));
+
+// Verze a měsíc poslední aktualizace v patičce
+const versionLabel = document.getElementById("app-version");
+if (versionLabel) versionLabel.textContent = `${APP_VERSION} · ${APP_UPDATED}`;
 
 // Start
 renderHeader();

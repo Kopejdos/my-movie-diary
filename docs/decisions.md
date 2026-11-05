@@ -155,9 +155,14 @@ Pravidla:
 | Fast & Furious | celá série vč. Hobbs & Shaw |
 | Shrek | Shrek 1–4, Puss in Boots |
 | The Maze Runner | trilogie Labyrint (Útěk, Zkouška ohněm, Lék na smrt) |
+| Mad Max | 5 filmů, pořadí příběhu (Furiosa před Fury Road) – V1.1 |
+| Avatar | 3 filmy, další po premiéře – V1.1 |
+| Disney Animation | 65 animovaných filmů Walt Disney Animation Studios ve skupinách podle období + 20 hraných remaků (volitelné) – V1.1 |
+| Pixar | 31 celovečerních filmů ve skupinách podle desetiletí – V1.1 |
+| DreamWorks Animation | 49 animovaných filmů + 2 hrané / hybridní (volitelné) – V1.1 |
 
 - **Jeden film může být ve více univerzech** (Deadpool & Wolverine je v MCU i v X-Men). Zhlédnutí se počítá k filmu, takže se ukáže v obou.
-- Seznamy filmů jsou v `supabase/seed/universes.json` (17 univerz, 205 filmů); ověřené ve fázi 1b včetně filmů z let 2025–2026.
+- Seznamy filmů jsou v `supabase/seed/universes.json` (22 univerz, 380 položek); ověřené ve fázích 1b a 9 včetně filmů z let 2025–2026.
 - Seriály se nesledují – na to slouží jiná služba.
 
 ## Pravidla plánu fází
@@ -211,7 +216,7 @@ Formát **V<hlavní>.<vedlejší>.<oprava>** (např. V1.2.1):
 
 | # | Verze | Fáze | Co přibude |
 |---|---|---|---|
-| 9 | V1.1 | Nová univerza + verze v patičce | Mad Max, Avatar, Disney, Pixar, DreamWorks; verze a měsíc aktualizace v patičce; `CHANGELOG.md` |
+| 9 | V1.1 | Nová univerza + verze v patičce ✅ | Mad Max, Avatar, Disney, Pixar, DreamWorks; verze a měsíc aktualizace v patičce; `CHANGELOG.md` |
 | 10 | V1.2 | Achievementy | odznaky za filmy, čas, maratony, dokončená univerza; zobrazení na profilu, oznámení při odemčení |
 | 11 | V1.3 | Vyhledávání | vyhledávací pole – filmy a univerza v aplikaci |
 | 12 | V1.4 | Statistiky profilu | počet filmů a hodin, nejčastěji viděný film, postup v univerzech |
@@ -413,6 +418,18 @@ Odznaky se počítají ze zhlédnutí, která už jsou v databázi – odemknou 
 - **Obrázky z TMDB service worker neukládá** – načítají se bez CORS a Chrome by si je v mezipaměti počítal po megabajtech; obstará je běžná mezipaměť prohlížeče.
 - **Vlastní tlačítko Install** místo automatické lišty prohlížeče – nabídne se až na vhodném místě (hlavička, profil), ne hned po otevření.
 - **Verze mezipaměti v `sw.js` (`VERSION`)** – při velké změně struktury se zvýší a staré mezipaměti se smažou.
+
+### Fáze 9 – nová univerza ✅ (5. 11. 2026) – **V1.1**
+- Univerza **Mad Max**, **Avatar**, **Disney Animation**, **Pixar**, **DreamWorks Animation** v seedu, import po jednom (`&only=<slug>`).
+- Disney ve skupinách podle období (Golden Age, Wartime Era, Silver Age, Bronze Age, Disney Renaissance, Post-Renaissance, Revival) + skupina **Live-action remakes** (volitelné); Pixar a DreamWorks ve skupinách podle desetiletí.
+- Verze a měsíc aktualizace v patičce (`APP_VERSION`, `APP_UPDATED` v `config.js`), `CHANGELOG.md`.
+
+#### Rozhodnutí ve fázi 9
+- **Disney = Walt Disney Animation Studios** (oficiální řada animovaných filmů), ne vše od Disneyho – Pixar má vlastní univerzum.
+- **Hrané remaky a hrané / hybridní filmy DreamWorks jsou volitelné** – patří k tématu, ale nepočítají se do postupu.
+- **Koprodukce DreamWorks s Aardmanem** (Chicken Run, Wallace & Gromit, Flushed Away) jsou v řadě, protože je DreamWorks Animation oficiálně vede ve své filmografii.
+- **Nevydané filmy** (Hexed – listopad 2026, Avatar 4 a 5) import přeskočí; po premiéře stačí import daného univerza pustit znovu.
+- **Žádné krátkometrážní filmy.**
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

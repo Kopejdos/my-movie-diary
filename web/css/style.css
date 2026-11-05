@@ -1755,6 +1755,13 @@ button {
     margin: 0;
 }
 
+.footer__version {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+}
+
 .footer__tmdb {
     height: 14px;
     display: block;

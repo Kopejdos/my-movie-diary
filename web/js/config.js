@@ -2,6 +2,11 @@
 // Obě hodnoty Supabase jsou veřejné – bezpečnost zajišťují pravidla RLS v databázi.
 // NIKDY sem nepatří secret key ani TMDB token.
 
+// Verze aplikace a měsíc poslední aktualizace – zobrazují se v patičce.
+// Při vydání nové verze změnit tady + záznam do CHANGELOG.md + tag (viz docs/decisions.md → Verzování).
+export const APP_VERSION = "V1.1";
+export const APP_UPDATED = "November 2026";
+
 export const SUPABASE_URL = "https://vvnexfdnfvwbwluazwoo.supabase.co";
 export const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_ECIGAmDLE3Fj8FNTnx0mgw_P1dEBspM";
 

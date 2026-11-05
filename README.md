@@ -6,11 +6,11 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V1.0** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V1.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
-- 17 universes and 200+ movies from TMDB, each universe with its own color and banner
+- 22 universes and 350+ movies from TMDB – MCU, Star Wars, Disney, Pixar, DreamWorks, Studio Ghibli and more, each with its own color and banner
 - +1 / −1 viewing counter – every viewing is logged with a date
 - Progress per universe, **Up next** and **Continue watching** suggestions
 - Release order or story (chronological) order, "unwatched only" filter
@@ -21,7 +21,6 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Installable on a phone or computer (PWA), opens even offline
 
 **Coming next**
-- V1.1 – new universes: Mad Max, Avatar, Disney, Pixar, DreamWorks
 - V1.2 – achievements
 - V1.3 – search
 - V1.4 – profile statistics

@@ -3,6 +3,10 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V1.1 – November 2026
+- New universes: Mad Max, Avatar, Disney Animation (with optional live-action remakes), Pixar, DreamWorks Animation
+- App version and last update shown in the footer
+
 ## V1.0 – November 2026
 - Installable app (PWA): home-screen icon, full-screen mode, opens offline
 - New versions load automatically after a deploy (service worker)
