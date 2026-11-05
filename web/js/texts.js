@@ -18,8 +18,30 @@ export const TEXTS = {
     retry: "Try again",
     back: "← All universes",
 
+    // Režim
+    themeToLight: "Switch to light mode",
+    themeToDark: "Switch to dark mode",
+
+    // Hero karta na přehledu
+    heroGuestEyebrow: "Your movie diary",
+    heroGuestTitle: "Every universe. Every movie.",
+    heroGuestText: "Log what you watch across the MCU, Star Wars, Studio Ghibli and more – and always know what to watch next.",
+    heroWelcomeEyebrow: "Welcome back",
+    heroWelcomeTitle: "Where do we start?",
+    heroWelcomeText: "Pick a universe below and log your first movie.",
+    continueEyebrow: "Continue · {0}",
+    openUniverse: "Open universe",
+    markWatched: "Mark as watched",
+
+    // Up next v detailu univerza
+    upNext: "Up next",
+    universeComplete: "Universe complete",
+    universeCompleteText: "You have seen every movie here. Time for a rewatch?",
+    complete: "Complete",
+
     // Přehled univerz
     universesTitle: "Universes",
+    universesCount: "{0} universes",
     universesIntro: "Pick a universe and start logging what you have watched.",
     universesGuestHint: "Sign in to track your progress.",
     movieCount: "{0} movies",

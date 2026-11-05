@@ -6,10 +6,12 @@ import {
 import { navigate } from "../router.js";
 import { USERNAME_PATTERN } from "../config.js";
 import { TEXTS, format } from "../texts.js";
+import { setAccent } from "../theme.js";
 import { h, mount, toast } from "../dom.js";
 import { field } from "./login.js";
 
 export async function profileView(container) {
+    setAccent(null);
     if (!isSignedIn()) {
         navigate("/login");
         return;

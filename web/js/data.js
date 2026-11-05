@@ -17,7 +17,7 @@ export async function fetchUniverses() {
     const [universes, progress] = await Promise.all([
         supabase
             .from("universes")
-            .select("id, slug, name, description, sort_order, cover:films(title, poster_path)")
+            .select("id, slug, name, description, color, sort_order, cover:films(title, poster_path, backdrop_path)")
             .order("sort_order")
             .then(check),
         supabase
@@ -41,7 +41,7 @@ export async function fetchUniverses() {
 export async function fetchUniverse(slug) {
     const universe = await supabase
         .from("universes")
-        .select("id, slug, name, description")
+        .select("id, slug, name, description, color, cover:films(title, poster_path, backdrop_path)")
         .eq("slug", slug)
         .maybeSingle()
         .then(check);
@@ -51,7 +51,7 @@ export async function fetchUniverse(slug) {
         .from("universe_items")
         .select(`
             release_order, story_order, group_label, is_optional,
-            film:films(tmdb_id, title, original_title, release_date, runtime, poster_path)
+            film:films(tmdb_id, title, original_title, release_date, runtime, poster_path, backdrop_path)
         `)
         .eq("universe_id", universe.id)
         .order("release_order")
@@ -94,6 +94,43 @@ export async function addWatch(tmdbId) {
 /** −1: smaže nejnovější zhlédnutí. Vrací nový počet. */
 export async function removeLatestWatch(tmdbId) {
     return await supabase.rpc("remove_latest_watch", { p_tmdb_id: tmdbId }).then(check);
+}
+
+/** První neviděný povinný film v pořadí vydání, nebo null (univerzum je hotové). */
+export function nextUnwatched(items, counts) {
+    return items.find((item) => !item.is_optional && !counts.has(item.film.tmdb_id)) ?? null;
+}
+
+/**
+ * „Continue watching“: univerzum filmu, který uživatel viděl naposledy,
+ * a další neviděný film v něm. Vrací { universe, next }, nebo null.
+ */
+export async function fetchContinueWatching(counts) {
+    if (counts.size === 0) return null;
+
+    let latestId = null;
+    let latestDate = "";
+    for (const [tmdbId, info] of counts) {
+        if ((info.lastWatchedOn ?? "") > latestDate) {
+            latestDate = info.lastWatchedOn;
+            latestId = tmdbId;
+        }
+    }
+    if (latestId === null) return null;
+
+    const rows = await supabase
+        .from("universe_items")
+        .select("universe:universes(slug)")
+        .eq("tmdb_id", latestId)
+        .limit(1)
+        .then(check);
+    const slug = rows[0]?.universe?.slug;
+    if (!slug) return null;
+
+    const universe = await fetchUniverse(slug);
+    if (!universe) return null;
+    const next = nextUnwatched(universe.items, counts);
+    return next ? { universe, next } : null;
 }
 
 /** Postup v univerzu podle aktuálních počtů (volitelné filmy se nepočítají). */

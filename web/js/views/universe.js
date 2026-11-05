@@ -1,14 +1,18 @@
-// Obrazovka: detail univerza – filmy v pořadí vydání, skupiny a counter zhlédnutí.
+// Obrazovka: detail univerza – banner z filmu, Up next, filmy se skupinami a counterem.
 
 import {
     fetchUniverse, fetchMyFilmCounts, addWatch, removeLatestWatch,
-    computeProgress, percent, todayLocal,
+    computeProgress, percent, todayLocal, nextUnwatched,
 } from "../data.js";
 import { isSignedIn } from "../auth.js";
+import { setAccent } from "../theme.js";
 import { TEXTS, format } from "../texts.js";
-import { h, mount, poster, yearOf, formatDate, toast, loadingView, errorView } from "../dom.js";
+import {
+    h, mount, poster, pill, backdropUrl, yearOf, formatDate, toast, loadingView, errorView,
+} from "../dom.js";
 
-export async function universeView(container, { params, isCurrent }) {
+export async function universeView(container, context) {
+    const { params, isCurrent } = context;
     mount(container, loadingView());
     const signedIn = isSignedIn();
 
@@ -21,12 +25,13 @@ export async function universeView(container, { params, isCurrent }) {
     } catch (error) {
         if (!isCurrent()) return;
         mount(container, errorView(format("errorGeneric", error.message),
-            () => universeView(container, { params, isCurrent })));
+            () => universeView(container, context)));
         return;
     }
     if (!isCurrent()) return;
 
     if (!universe) {
+        setAccent(null);
         mount(container,
             h("a", { class: "back-link", href: "#/" }, TEXTS.back),
             h("div", { class: "state" }, h("p", {}, TEXTS.universeNotFound)),
@@ -35,12 +40,13 @@ export async function universeView(container, { params, isCurrent }) {
     }
 
     document.title = `${universe.name} · ${TEXTS.appName}`;
+    setAccent(universe.color);
     new UniversePage(container, universe, counts, signedIn).render();
 }
 
 /**
  * Stránka univerza drží počty zhlédnutí a po kliknutí na +/− překreslí
- * jen dotčený film a ukazatel postupu, ne celou stránku.
+ * jen dotčený film, Up next a ukazatel postupu, ne celou stránku.
  */
 class UniversePage {
     constructor(container, universe, counts, signedIn) {
@@ -48,8 +54,10 @@ class UniversePage {
         this.universe = universe;
         this.counts = counts;
         this.signedIn = signedIn;
+        this.rows = new Map();          // tmdb_id → prvek řádku
         this.progressBar = null;
         this.progressText = null;
+        this.upNext = h("section", { class: "up-next-slot" });
     }
 
     render() {
@@ -57,24 +65,84 @@ class UniversePage {
         const hasOptional = universe.items.some((item) => item.is_optional);
 
         mount(this.container,
-            h("a", { class: "back-link", href: "#/" }, TEXTS.back),
-            h("section", { class: "page-header" },
-                h("h1", {}, universe.name),
-                universe.description ? h("p", { class: "muted" }, universe.description) : null,
-                this.signedIn ? this.renderProgress() : null,
-                hasOptional ? h("p", { class: "hint" }, TEXTS.optionalHint) : null,
-            ),
+            this.renderBanner(),
+            this.signedIn ? this.upNext : null,
+            hasOptional ? h("p", { class: "hint", style: "margin-top: 18px" }, TEXTS.optionalHint) : null,
             h("ol", { class: "film-list" }, this.renderItems()),
         );
         this.updateProgress();
     }
 
+    /** Banner: záběr z filmu přes celou šířku, přechází do pozadí. */
+    renderBanner() {
+        const { universe } = this;
+        const image = backdropUrl(universe.cover?.backdrop_path ?? this.firstBackdrop());
+        const required = universe.items.filter((item) => !item.is_optional).length;
+
+        const banner = h("section", { class: "banner" },
+            h("a", { class: "back-link", href: "#/" }, TEXTS.back),
+            h("div", { class: "banner__content" },
+                h("h1", { class: "banner__title" }, universe.name),
+                universe.description ? h("p", { class: "banner__description" }, universe.description) : null,
+                h("div", { class: "pills" }, pill(format("movieCount", required), true)),
+                this.signedIn ? this.renderProgress() : null,
+            ),
+        );
+        if (image) banner.style.setProperty("--banner-image", `url("${image}")`);
+        return banner;
+    }
+
+    /** Záložní banner, když obalový film nemá záběr. */
+    firstBackdrop() {
+        return this.universe.items.find((item) => item.film.backdrop_path)?.film.backdrop_path ?? null;
+    }
+
     renderProgress() {
         this.progressBar = h("div", { class: "progress__bar" });
         this.progressText = h("p", { class: "progress-text" });
-        return h("div", { class: "universe-progress" },
+        return h("div", { class: "banner__progress" },
             h("div", { class: "progress progress--large" }, this.progressBar),
             this.progressText,
+        );
+    }
+
+    /** Karta „Up next“ – další neviděný film, nebo gratulace k dokončení. */
+    renderUpNext() {
+        if (!this.signedIn) return;
+        const next = nextUnwatched(this.universe.items, this.counts);
+
+        if (!next) {
+            mount(this.upNext,
+                h("div", { class: "up-next up-next--done" },
+                    h("span", { class: "up-next__trophy", "aria-hidden": "true" }, "🏆"),
+                    h("div", { class: "up-next__info" },
+                        h("span", { class: "eyebrow" }, TEXTS.universeComplete),
+                        h("p", { class: "muted", style: "margin: 0" }, TEXTS.universeCompleteText),
+                    ),
+                ),
+            );
+            return;
+        }
+
+        const { film } = next;
+        mount(this.upNext,
+            h("div", { class: "up-next" },
+                poster(film.poster_path, film.title, "up-next__poster"),
+                h("div", { class: "up-next__info" },
+                    h("span", { class: "eyebrow" }, TEXTS.upNext),
+                    h("h2", { class: "up-next__title" }, film.title),
+                    h("div", { class: "pills" },
+                        pill(yearOf(film.release_date)),
+                        film.runtime ? pill(format("minutes", film.runtime)) : null,
+                        next.group_label ? pill(next.group_label) : null,
+                    ),
+                ),
+                h("button", {
+                    class: "btn btn--universe",
+                    type: "button",
+                    onClick: () => this.change(this.rows.get(film.tmdb_id), next, +1),
+                }, `+ ${TEXTS.markWatched}`),
+            ),
         );
     }
 
@@ -90,6 +158,7 @@ class UniversePage {
 
             const row = h("li", { class: "film" });
             this.fillRow(row, item);
+            this.rows.set(item.film.tmdb_id, row);
             nodes.push(row);
         }
         return nodes;
@@ -103,16 +172,14 @@ class UniversePage {
 
         row.className = `film${count > 0 ? " film--watched" : ""}${item.is_optional ? " film--optional" : ""}`;
 
-        const meta = [yearOf(film.release_date), film.runtime ? format("minutes", film.runtime) : null]
-            .filter(Boolean).join(" · ");
-
         mount(row,
             poster(film.poster_path, film.title, "film__poster"),
             h("div", { class: "film__info" },
                 h("h3", { class: "film__title" }, film.title),
-                h("p", { class: "film__meta" },
-                    meta,
-                    item.is_optional ? h("span", { class: "badge" }, TEXTS.optionalBadge) : null,
+                h("div", { class: "film__meta" },
+                    pill(yearOf(film.release_date)),
+                    film.runtime ? pill(format("minutes", film.runtime)) : null,
+                    item.is_optional ? pill(TEXTS.optionalBadge) : null,
                 ),
                 this.signedIn
                     ? h("p", { class: "film__status" },
@@ -123,7 +190,7 @@ class UniversePage {
             ),
             this.signedIn
                 ? this.renderCounter(row, item, count, busy)
-                : h("a", { class: "btn btn--small btn--ghost", href: "#/login" }, TEXTS.signInToTrack),
+                : h("a", { class: "btn btn--small", href: "#/login" }, TEXTS.signInToTrack),
         );
     }
 
@@ -150,7 +217,6 @@ class UniversePage {
         const tmdbId = item.film.tmdb_id;
         const before = this.counts.get(tmdbId);
         const beforeCount = before?.count ?? 0;
-        const today = todayLocal();
 
         // Optimistická změna – uživatel vidí výsledek hned
         const optimistic = beforeCount + delta;
@@ -159,7 +225,7 @@ class UniversePage {
         } else {
             this.counts.set(tmdbId, {
                 count: optimistic,
-                lastWatchedOn: delta > 0 ? today : before?.lastWatchedOn,
+                lastWatchedOn: delta > 0 ? todayLocal() : before?.lastWatchedOn,
             });
         }
         this.fillRow(row, item, true);
@@ -184,14 +250,16 @@ class UniversePage {
         this.updateProgress();
     }
 
+    /** Ukazatel postupu v banneru a karta Up next. */
     updateProgress() {
+        this.renderUpNext();
         if (!this.progressBar) return;
         const progress = computeProgress(this.universe.items, this.counts);
         const value = percent(progress);
         this.progressBar.style.width = `${value}%`;
         this.progressText.textContent =
             progress.total > 0 && progress.watched === progress.total
-                ? `${TEXTS.progressDone} ${format("progressCount", progress.watched, progress.total)}`
+                ? `🏆 ${TEXTS.progressDone} ${format("progressCount", progress.watched, progress.total)}`
                 : `${format("progressCount", progress.watched, progress.total)} · ${value} %`;
     }
 }

@@ -3,9 +3,11 @@
 import { signIn, signInWithGoogle, isSignedIn } from "../auth.js";
 import { navigate } from "../router.js";
 import { TEXTS } from "../texts.js";
+import { setAccent } from "../theme.js";
 import { h, mount, toast } from "../dom.js";
 
 export async function loginView(container) {
+    setAccent(null);
     if (isSignedIn()) {
         navigate("/");
         return;

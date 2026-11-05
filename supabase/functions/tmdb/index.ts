@@ -35,6 +35,7 @@ interface SeedFilm {
 interface SeedUniverse {
   slug: string;
   name: string;
+  color?: string;      // #rrggbb
   description?: string;
   films: SeedFilm[];
 }
@@ -47,6 +48,7 @@ interface FilmRow {
   release_date: string | null;
   runtime: number | null;
   poster_path: string | null;
+  backdrop_path: string | null;
   overview: string | null;
   updated_at: string;
 }
@@ -186,6 +188,7 @@ interface TmdbMovieDetails {
   release_date: string;
   runtime: number | null;
   poster_path: string | null;
+  backdrop_path: string | null;
   overview: string;
   status: string; // "Released", "Post Production", …
 }
@@ -261,6 +264,7 @@ async function resolveFilm(seed: SeedFilm): Promise<Resolved> {
       release_date: details.release_date || null,
       runtime: details.runtime || null,
       poster_path: details.poster_path,
+      backdrop_path: details.backdrop_path,
       overview: details.overview || null,
       updated_at: new Date().toISOString(),
     };
@@ -295,6 +299,7 @@ async function importUniverse(db: SupabaseClient, universe: SeedUniverse, sortOr
         slug: universe.slug,
         name: universe.name,
         description: universe.description ?? null,
+        color: universe.color ?? null,
         cover_tmdb_id: cover?.film.tmdb_id ?? null,
         sort_order: sortOrder,
       },

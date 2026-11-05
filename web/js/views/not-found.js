@@ -1,9 +1,11 @@
 // Obrazovka: neexistující adresa.
 
 import { TEXTS } from "../texts.js";
+import { setAccent } from "../theme.js";
 import { h, mount } from "../dom.js";
 
 export async function notFoundView(container) {
+    setAccent(null);
     document.title = `${TEXTS.notFoundTitle} · ${TEXTS.appName}`;
     mount(container,
         h("div", { class: "state" },

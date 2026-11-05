@@ -4,6 +4,7 @@ import { initAuth, onAuthChange, getUser, getProfile, signOut, hasGeneratedUsern
 import { addRoute, setNotFound, startRouter, render, navigate, currentPath } from "./router.js";
 import { TEXTS, format } from "./texts.js";
 import { h, mount, toast } from "./dom.js";
+import { currentTheme, toggleTheme } from "./theme.js";
 
 import { universesView } from "./views/universes.js";
 import { universeView } from "./views/universe.js";
@@ -39,6 +40,7 @@ function renderHeader() {
                 h("span", { class: "brand__name" }, TEXTS.appName),
             ),
             h("nav", { class: "nav" },
+                themeToggle(),
                 navLink("#/", TEXTS.navUniverses, path === "/" || path.startsWith("/universe")),
                 user
                     ? [
@@ -57,6 +59,21 @@ function renderHeader() {
             ),
         ),
     );
+}
+
+/** Kulaté tlačítko ☀ / ☾ – přepne světlý a tmavý režim. */
+function themeToggle() {
+    const dark = currentTheme() === "dark";
+    return h("button", {
+        class: "theme-toggle",
+        type: "button",
+        title: dark ? TEXTS.themeToLight : TEXTS.themeToDark,
+        "aria-label": dark ? TEXTS.themeToLight : TEXTS.themeToDark,
+        onClick: () => {
+            toggleTheme();
+            renderHeader();
+        },
+    }, dark ? "☀" : "☾");
 }
 
 async function handleSignOut() {

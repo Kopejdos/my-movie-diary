@@ -1,9 +1,10 @@
 {
-  "_comment": "Seznam univerz a filmů pro import (Edge Function tmdb, action=import). Film se v TMDB hledá podle 'title' a 'year'; když to nestačí, doplní se 'tmdb' (přesné ID). 'optional' = nepočítá se do postupu. Nevydané filmy import přeskočí.",
+  "_comment": "Seznam univerz a filmů pro import (Edge Function tmdb, action=import). Film se v TMDB hledá podle 'title' a 'year'; když to nestačí, doplní se 'tmdb' (přesné ID). 'optional' = nepočítá se do postupu. Nevydané filmy import přeskočí. 'color' = barva univerza (#rrggbb).",
   "universes": [
     {
       "slug": "mcu",
       "name": "Marvel Cinematic Universe",
+      "color": "#e23636",
       "description": "The Infinity Saga and the Multiverse Saga – every MCU movie.",
       "films": [
         { "title": "Iron Man", "year": 2008, "group": "Phase 1" },
@@ -50,6 +51,7 @@
     {
       "slug": "x-men",
       "name": "X-Men",
+      "color": "#ffb000",
       "description": "The 20th Century Fox X-Men saga, including Wolverine and Deadpool.",
       "films": [
         { "title": "X-Men", "year": 2000, "group": "X-Men" },
@@ -71,6 +73,7 @@
     {
       "slug": "spider-man",
       "name": "Spider-Man",
+      "color": "#2f6fed",
       "description": "Every Spider-Man on the big screen – Raimi, Webb, the MCU and the Spider-Verse.",
       "films": [
         { "title": "Spider-Man", "year": 2002, "group": "Raimi trilogy" },
@@ -95,6 +98,7 @@
     {
       "slug": "dceu",
       "name": "DC Extended Universe",
+      "color": "#6366f1",
       "description": "From Man of Steel to Aquaman and the Lost Kingdom.",
       "films": [
         { "title": "Man of Steel", "year": 2013 },
@@ -118,6 +122,7 @@
     {
       "slug": "dcu",
       "name": "DC Universe",
+      "color": "#0ea5e9",
       "description": "The new DC Universe by James Gunn and Peter Safran – Chapter One: Gods and Monsters.",
       "films": [
         { "title": "Superman", "year": 2025 },
@@ -128,6 +133,7 @@
     {
       "slug": "batman",
       "name": "Batman",
+      "color": "#94a3b8",
       "description": "Nolan's Dark Knight trilogy and Matt Reeves' The Batman.",
       "films": [
         { "title": "Batman Begins", "year": 2005, "group": "The Dark Knight Trilogy" },
@@ -139,6 +145,7 @@
     {
       "slug": "star-wars",
       "name": "Star Wars",
+      "color": "#ffe81f",
       "description": "The Skywalker Saga and the standalone Star Wars movies.",
       "films": [
         { "title": "Star Wars", "year": 1977, "group": "Skywalker Saga" },
@@ -159,6 +166,7 @@
     {
       "slug": "wizarding-world",
       "name": "Wizarding World",
+      "color": "#8b5cf6",
       "description": "Harry Potter and Fantastic Beasts.",
       "films": [
         { "title": "Harry Potter and the Philosopher's Stone", "year": 2001, "group": "Harry Potter" },
@@ -177,6 +185,7 @@
     {
       "slug": "middle-earth",
       "name": "Middle-earth",
+      "color": "#c9a227",
       "description": "The Lord of the Rings and The Hobbit.",
       "films": [
         { "title": "The Lord of the Rings: The Fellowship of the Ring", "year": 2001, "group": "The Lord of the Rings" },
@@ -191,6 +200,7 @@
     {
       "slug": "jurassic-park",
       "name": "Jurassic Park",
+      "color": "#e8562a",
       "description": "Jurassic Park and Jurassic World.",
       "films": [
         { "title": "Jurassic Park", "year": 1993, "group": "Jurassic Park" },
@@ -205,6 +215,7 @@
     {
       "slug": "fast-and-furious",
       "name": "Fast & Furious",
+      "color": "#ff2e88",
       "description": "Family. The whole Fast & Furious saga.",
       "films": [
         { "title": "The Fast and the Furious", "year": 2001 },
@@ -223,6 +234,7 @@
     {
       "slug": "pirates-of-the-caribbean",
       "name": "Pirates of the Caribbean",
+      "color": "#14b8a6",
       "description": "Captain Jack Sparrow's adventures.",
       "films": [
         { "title": "Pirates of the Caribbean: The Curse of the Black Pearl", "year": 2003 },
@@ -235,6 +247,7 @@
     {
       "slug": "alien",
       "name": "Alien",
+      "color": "#a3e635",
       "description": "In space no one can hear you scream – the Alien saga, prequels and crossovers.",
       "films": [
         { "title": "Alien", "year": 1979, "group": "Alien" },
@@ -251,6 +264,7 @@
     {
       "slug": "studio-ghibli",
       "name": "Studio Ghibli",
+      "color": "#34d399",
       "description": "The feature films of Studio Ghibli.",
       "films": [
         { "title": "Nausicaä of the Valley of the Wind", "year": 1984, "group": "Pre-Ghibli", "optional": true },
@@ -283,6 +297,7 @@
     {
       "slug": "asterix-and-obelix",
       "name": "Asterix & Obelix",
+      "color": "#fb923c",
       "description": "The indomitable Gauls – animated and live-action movies.",
       "films": [
         { "title": "Asterix the Gaul", "year": 1967, "group": "Animated" },
@@ -305,6 +320,7 @@
     {
       "slug": "shrek",
       "name": "Shrek",
+      "color": "#6b8e23",
       "description": "Shrek and Puss in Boots.",
       "films": [
         { "title": "Shrek", "year": 2001, "group": "Shrek" },
@@ -318,6 +334,7 @@
     {
       "slug": "maze-runner",
       "name": "The Maze Runner",
+      "color": "#a8a29e",
       "description": "Run. Survive. Escape. The Maze Runner trilogy.",
       "films": [
         { "title": "The Maze Runner", "year": 2014 },

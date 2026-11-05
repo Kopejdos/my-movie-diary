@@ -1,29 +1,88 @@
 /* =====================================================================
-   My Movie Diary – vzhled
-   Tmavý „kinový“ motiv, mobil na prvním místě.
+   My Movie Diary – vzhled (fáze 4 – redesign)
+   Základ z RimWorld prezentace (teplé tmavé barvy, mosazný akcent,
+   nadpisy Chakra Petch, fotka přecházející do pozadí) + prvky
+   z rozvrhu (tečkovaná mřížka, barevné záře, lesklé karty, pilulky).
+
+   --u      barva aktuálního univerza (výchozí = mosazný akcent)
+   --u-ink  barva textu na pozadí --u (černá / bílá podle jasu)
+   --c      barva univerza na jednotlivé kartě v přehledu
    ===================================================================== */
 
-/* ---------- Barvy a rozměry ---------- */
+/* ---------- Barvy: tmavý režim (výchozí) ---------- */
 :root {
-    --bg: #0f1115;
-    --bg-raised: #171a21;
-    --bg-hover: #1f232c;
-    --border: #2a2f3a;
-    --text: #eceef3;
-    --text-muted: #9aa0ad;
-    --accent: #f2b134;          /* zlatá – jako světla kina */
-    --accent-strong: #ffc54d;
-    --accent-text: #1a1406;
+    --bg: #12161c;
+    --bg-deep: #0d1015;
+    --panel: #1a1f26;
+    --panel-hover: #222832;
+    --border: #2c333d;
+    --text: #e9e4d8;
+    --heading: #f4e8d2;
+    --muted: #9aa0a9;
+    --accent: #d4a75a;           /* mosaz – jako v RimWorld prezentaci */
+    --accent-strong: #e8bd6d;
+    --accent-ink: #17130b;
     --success: #4cc38a;
-    --danger: #ef5b5b;
+    --danger: #ef6b6b;
+    --dot: rgba(233, 228, 216, 0.07);
+    --shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+    --gloss: rgba(255, 255, 255, 0.07);
 
-    --radius: 12px;
-    --radius-small: 8px;
-    --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-    --content-width: 1100px;
+    --u: var(--accent);
+    --u-ink: var(--accent-ink);
+
+    --radius: 16px;
+    --radius-small: 10px;
+    --content-width: 1140px;
     --gutter: 16px;
+    --font-display: "Chakra Petch", "Inter", system-ui, sans-serif;
+    --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 
     color-scheme: dark;
+}
+
+/* ---------- Světlý režim ---------- */
+:root[data-theme="light"] {
+    --bg: #f1ebe0;
+    --bg-deep: #e7dfd1;
+    --panel: #fffaf2;
+    --panel-hover: #f6efe3;
+    --border: #ddd2c0;
+    --text: #22262c;
+    --heading: #1a1d22;
+    --muted: #646a73;
+    --accent: #a8792b;
+    --accent-strong: #8f6522;
+    --accent-ink: #ffffff;
+    --success: #1f8a5a;
+    --danger: #c53a3a;
+    --dot: rgba(34, 38, 44, 0.09);
+    --shadow: 0 14px 34px rgba(60, 45, 20, 0.14);
+    --gloss: rgba(255, 255, 255, 0.6);
+    color-scheme: light;
+}
+
+/* Bez ručně zvoleného režimu se řídí nastavením systému */
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme]) {
+        --bg: #f1ebe0;
+        --bg-deep: #e7dfd1;
+        --panel: #fffaf2;
+        --panel-hover: #f6efe3;
+        --border: #ddd2c0;
+        --text: #22262c;
+        --heading: #1a1d22;
+        --muted: #646a73;
+        --accent: #a8792b;
+        --accent-strong: #8f6522;
+        --accent-ink: #ffffff;
+        --success: #1f8a5a;
+        --danger: #c53a3a;
+        --dot: rgba(34, 38, 44, 0.09);
+        --shadow: 0 14px 34px rgba(60, 45, 20, 0.14);
+        --gloss: rgba(255, 255, 255, 0.6);
+        color-scheme: light;
+    }
 }
 
 /* ---------- Základ ---------- */
@@ -42,11 +101,28 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: var(--bg);
+    overflow-x: hidden;
     color: var(--text);
-    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-family: var(--font-body);
     font-size: 16px;
-    line-height: 1.5;
+    line-height: 1.55;
+    /* tečkovaná mřížka (z rozvrhu) */
+    background:
+        radial-gradient(var(--dot) 1px, transparent 1.4px) 0 0 / 22px 22px,
+        var(--bg);
+}
+
+/* barevné záře v rozích – v barvě aktuálního univerza */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        radial-gradient(45% 38% at 8% 0%, color-mix(in srgb, var(--u) 20%, transparent), transparent 70%),
+        radial-gradient(38% 34% at 96% 30%, color-mix(in srgb, var(--u) 11%, transparent), transparent 72%),
+        radial-gradient(45% 40% at 70% 100%, color-mix(in srgb, var(--u) 9%, transparent), transparent 70%);
 }
 
 a {
@@ -60,13 +136,15 @@ a:hover {
 
 h1, h2, h3 {
     margin: 0;
-    line-height: 1.2;
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--heading);
 }
 
 h1 {
-    font-size: clamp(1.6rem, 4vw, 2.2rem);
-    font-weight: 800;
-    letter-spacing: -0.02em;
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: -0.01em;
 }
 
 button {
@@ -74,27 +152,70 @@ button {
 }
 
 :focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--u);
     outline-offset: 2px;
 }
 
 .muted {
-    color: var(--text-muted);
+    color: var(--muted);
 }
 
 .hint {
-    color: var(--text-muted);
+    color: var(--muted);
     font-size: 0.85rem;
+    margin: 0;
+}
+
+/* Malý popisek nad nadpisem („UP NEXT“, „CONTINUE“) */
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--u);
+}
+
+/* Pilulka s údajem (rok, délka, počet) */
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--panel) 70%, transparent);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+.pill--accent {
+    border-color: color-mix(in srgb, var(--u) 60%, transparent);
+    color: var(--heading);
+    background: color-mix(in srgb, var(--u) 16%, var(--panel));
+}
+
+.pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
 }
 
 /* ---------- Hlavička ---------- */
 .header {
     position: sticky;
     top: 0;
-    z-index: 10;
-    background: rgba(15, 17, 21, 0.9);
-    backdrop-filter: blur(10px);
+    z-index: 20;
+    background: color-mix(in srgb, var(--bg-deep) 82%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
+    box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--u) 45%, transparent);
     padding-top: env(safe-area-inset-top);
 }
 
@@ -106,75 +227,106 @@ button {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    min-height: 56px;
+    min-height: 60px;
 }
 
 .brand {
     display: flex;
     align-items: center;
-    gap: 8px;
-    color: var(--text);
-    font-weight: 800;
-    font-size: 1.1rem;
+    gap: 10px;
     white-space: nowrap;
 }
 
-.brand:hover {
-    color: var(--text);
+.brand__icon {
+    font-size: 1.4rem;
 }
 
-.brand__icon {
-    font-size: 1.3rem;
+/* Logo s přechodem jako „Rozvrh“ u kamaráda, ale v našich barvách */
+.brand__name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: 0.01em;
+    background: linear-gradient(100deg, var(--heading) 30%, var(--u));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
 .nav {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     min-width: 0;
 }
 
 .nav__link {
-    color: var(--text-muted);
-    padding: 6px 10px;
-    border-radius: var(--radius-small);
-    font-weight: 500;
+    color: var(--muted);
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.92rem;
     white-space: nowrap;
+    border: 1px solid transparent;
 }
 
 .nav__link:hover,
 .nav__link--active {
-    color: var(--text);
-    background: var(--bg-hover);
+    color: var(--heading);
+    border-color: var(--border);
+    background: var(--panel);
 }
 
 .nav__button {
     background: none;
-    border: none;
     cursor: pointer;
+}
+
+.nav__user {
+    color: var(--accent);
+    font-weight: 700;
+    padding: 7px 10px;
+    border-radius: 999px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
 }
 
 .nav__user:hover,
 .nav__user--active {
     color: var(--accent-strong);
-    background: var(--bg-hover);
-    border-radius: var(--radius-small);
+    background: var(--panel);
 }
 
-.nav__user {
-    color: var(--accent);
-    font-weight: 600;
-    padding: 6px 8px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 140px;
+/* Přepínač světlý / tmavý režim */
+.theme-toggle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--heading);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    line-height: 1;
+    flex-shrink: 0;
 }
 
-/* Na úzkém displeji se schová název aplikace, zůstane ikona */
-@media (max-width: 480px) {
+.theme-toggle:hover {
+    border-color: var(--u);
+}
+
+@media (max-width: 560px) {
     .brand__name {
         display: none;
+    }
+
+    .nav__link {
+        padding: 6px 9px;
     }
 }
 
@@ -184,40 +336,47 @@ button {
     width: 100%;
     max-width: var(--content-width);
     margin: 0 auto;
-    padding: 24px var(--gutter) 48px;
+    padding: 24px var(--gutter) 56px;
 }
 
 .page-header {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     display: grid;
-    gap: 8px;
+    gap: 6px;
 }
 
-.back-link {
-    display: inline-block;
-    margin-bottom: 16px;
-    font-weight: 500;
+.section-title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 32px 0 14px;
 }
 
-/* ---------- Tlačítka ---------- */
+.section-title h2 {
+    font-size: 1.5rem;
+}
+
+/* ---------- Tlačítka (pilulky) ---------- */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 8px;
     padding: 10px 18px;
-    border-radius: var(--radius-small);
+    border-radius: 999px;
     border: 1px solid var(--border);
-    background: var(--bg-raised);
-    color: var(--text);
+    background: var(--panel);
+    color: var(--heading);
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s, box-shadow 0.15s;
 }
 
 .btn:hover {
-    background: var(--bg-hover);
-    color: var(--text);
+    background: var(--panel-hover);
+    border-color: color-mix(in srgb, var(--u) 60%, var(--border));
+    color: var(--heading);
 }
 
 .btn:active {
@@ -225,20 +384,34 @@ button {
 }
 
 .btn:disabled {
-    opacity: 0.6;
+    opacity: 0.55;
     cursor: default;
 }
 
 .btn--primary {
     background: var(--accent);
     border-color: var(--accent);
-    color: var(--accent-text);
+    color: var(--accent-ink);
 }
 
 .btn--primary:hover {
     background: var(--accent-strong);
     border-color: var(--accent-strong);
-    color: var(--accent-text);
+    color: var(--accent-ink);
+}
+
+/* Tlačítko v barvě univerza */
+.btn--universe {
+    background: var(--u);
+    border-color: var(--u);
+    color: var(--u-ink);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--u) 35%, transparent);
+}
+
+.btn--universe:hover {
+    background: color-mix(in srgb, var(--u) 88%, #fff);
+    border-color: color-mix(in srgb, var(--u) 88%, #fff);
+    color: var(--u-ink);
 }
 
 .btn--ghost {
@@ -257,7 +430,7 @@ button {
 /* ---------- Ukazatel postupu ---------- */
 .progress {
     height: 6px;
-    background: var(--border);
+    background: color-mix(in srgb, var(--border) 85%, transparent);
     border-radius: 999px;
     overflow: hidden;
 }
@@ -269,58 +442,135 @@ button {
 .progress__bar {
     height: 100%;
     width: 0;
-    background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+    background: linear-gradient(90deg, color-mix(in srgb, var(--u) 75%, #000), var(--u));
     border-radius: inherit;
-    transition: width 0.35s ease;
-}
-
-.universe-progress {
-    display: grid;
-    gap: 6px;
-    max-width: 480px;
-    margin-top: 8px;
+    box-shadow: 0 0 12px color-mix(in srgb, var(--u) 60%, transparent);
+    transition: width 0.4s ease;
 }
 
 .progress-text {
     margin: 0;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 0.9rem;
+    color: var(--heading);
+}
+
+/* ---------- Hero karta na přehledu (Continue watching / vítání) ---------- */
+.hero-card {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 24px;
+    padding: clamp(20px, 4vw, 36px);
+    margin-bottom: 8px;
+    border-radius: 24px;
+    border: 1px solid color-mix(in srgb, var(--hc, var(--u)) 35%, var(--border));
+    background:
+        radial-gradient(60% 120% at 88% 10%, color-mix(in srgb, var(--hc, var(--u)) 38%, transparent), transparent 65%),
+        radial-gradient(50% 100% at 0% 100%, color-mix(in srgb, var(--hc, var(--u)) 22%, transparent), transparent 60%),
+        linear-gradient(160deg, var(--panel), var(--bg-deep));
+    box-shadow: var(--shadow);
+}
+
+/* jemný kruh v pozadí – připomínka kotouče filmu */
+.hero-card::after {
+    content: "";
+    position: absolute;
+    right: -120px;
+    top: -120px;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    border: 40px solid color-mix(in srgb, var(--heading) 4%, transparent);
+    pointer-events: none;
+}
+
+.hero-card__body {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 12px;
+    min-width: 0;
+}
+
+.hero-card__title {
+    font-size: clamp(1.8rem, 5vw, 3.2rem);
+    overflow-wrap: anywhere;
+}
+
+.hero-card__text {
+    margin: 0;
+    color: var(--muted);
+    max-width: 520px;
+}
+
+.hero-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.hero-card__poster {
+    position: relative;
+    z-index: 1;
+    width: clamp(90px, 16vw, 150px);
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    transform: rotate(3deg);
+}
+
+@media (max-width: 560px) {
+    .hero-card {
+        grid-template-columns: 1fr 84px;
+        gap: 14px;
+    }
 }
 
 /* ---------- Přehled univerz ---------- */
 .universe-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 16px;
+    gap: 14px;
 }
 
 @media (min-width: 720px) {
     .universe-grid {
         grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-        gap: 20px;
+        gap: 18px;
     }
 }
 
 .universe-card {
+    --c: var(--accent);
+    position: relative;
     display: flex;
     flex-direction: column;
-    background: var(--bg-raised);
-    border: 1px solid var(--border);
     border-radius: var(--radius);
     overflow: hidden;
     color: var(--text);
-    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+    border: 1px solid var(--border);
+    background:
+        radial-gradient(120% 90% at 0% 0%, var(--gloss), transparent 55%),
+        var(--panel);
+    transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
 }
 
 .universe-card:hover {
     color: var(--text);
-    transform: translateY(-3px);
-    border-color: var(--accent);
-    box-shadow: var(--shadow);
+    transform: translateY(-4px);
+    border-color: var(--c);
+    box-shadow:
+        0 0 0 1px var(--c),
+        0 16px 34px color-mix(in srgb, var(--c) 28%, transparent);
 }
 
-.universe-card--complete {
-    border-color: var(--success);
+.universe-card__media {
+    position: relative;
 }
 
 .universe-card__cover {
@@ -328,43 +578,205 @@ button {
     aspect-ratio: 2 / 3;
     object-fit: cover;
     display: block;
-    background: var(--bg-hover);
+    background: var(--panel-hover);
+}
+
+/* plakát plynule přechází do karty */
+.universe-card__media::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 45%;
+    background: linear-gradient(transparent, var(--panel));
+}
+
+/* barevný proužek univerza nahoře */
+.universe-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    z-index: 2;
+    background: var(--c);
+}
+
+.universe-card__badge {
+    position: absolute;
+    top: 12px;
+    right: 10px;
+    z-index: 2;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--c);
+    color: var(--c-ink, #111);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
 }
 
 .universe-card__body {
-    padding: 12px;
+    position: relative;
+    z-index: 1;
+    margin-top: -36px;
+    padding: 0 12px 14px;
     display: grid;
     gap: 8px;
 }
 
 .universe-card__title {
-    font-size: 0.95rem;
-    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.15;
+}
+
+.universe-card .progress__bar {
+    background: var(--c);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--c) 60%, transparent);
 }
 
 .universe-card__meta {
     margin: 0;
     font-size: 0.8rem;
-    color: var(--text-muted);
-}
-
-.universe-card--complete .universe-card__meta {
-    color: var(--success);
     font-weight: 600;
+    color: var(--muted);
 }
 
 /* Zástupný blok, když film nemá plakát */
 .poster--empty {
-    overflow: hidden;
-    overflow-wrap: anywhere;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 8px;
+    overflow: hidden;
+    overflow-wrap: anywhere;
     text-align: center;
     font-size: 0.65rem;
-    color: var(--text-muted);
-    background: var(--bg-hover);
+    color: var(--muted);
+    background: var(--panel-hover);
+}
+
+/* ---------- Detail univerza: banner ---------- */
+/* Fotka z filmu přes celou šířku, která přechodem zmizí do pozadí
+   (stejný princip jako úvod RimWorld prezentace) */
+.banner {
+    position: relative;
+    margin: -24px calc(50% - 50vw) 0;
+    padding: 0 max(var(--gutter), calc(50vw - var(--content-width) / 2 + var(--gutter)));
+    min-height: clamp(300px, 52vh, 500px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 18px;
+    padding-bottom: 28px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--u) 26%, transparent), transparent 55%),
+        linear-gradient(180deg,
+            color-mix(in srgb, var(--bg) 35%, transparent) 0%,
+            color-mix(in srgb, var(--bg) 55%, transparent) 45%,
+            var(--bg) 96%),
+        var(--banner-image, none) center 25% / cover no-repeat,
+        var(--bg-deep);
+}
+
+.banner__content {
+    display: grid;
+    gap: 12px;
+    max-width: 760px;
+}
+
+.banner__title {
+    font-size: clamp(2.2rem, 7vw, 4.4rem);
+    text-shadow: 0 4px 24px color-mix(in srgb, var(--bg) 70%, transparent);
+}
+
+.banner__description {
+    margin: 0;
+    font-size: 1.05rem;
+    max-width: 600px;
+    color: var(--text);
+}
+
+.banner__progress {
+    display: grid;
+    gap: 8px;
+    max-width: 520px;
+    margin-top: 6px;
+}
+
+.back-link {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg-deep) 65%, transparent);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: var(--heading);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.back-link:hover {
+    color: var(--heading);
+    border-color: var(--u);
+}
+
+/* ---------- Up next ---------- */
+.up-next {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 16px;
+    margin: 20px 0 8px;
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    border: 1px solid color-mix(in srgb, var(--u) 45%, var(--border));
+    background:
+        radial-gradient(80% 140% at 100% 0%, color-mix(in srgb, var(--u) 20%, transparent), transparent 65%),
+        var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.up-next__poster {
+    width: 64px;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+}
+
+.up-next__info {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+}
+
+.up-next__title {
+    font-size: 1.35rem;
+    overflow-wrap: anywhere;
+}
+
+.up-next--done {
+    grid-template-columns: auto 1fr;
+}
+
+.up-next__trophy {
+    font-size: 2.4rem;
+    line-height: 1;
+}
+
+@media (max-width: 560px) {
+    .up-next {
+        grid-template-columns: auto 1fr;
+    }
+
+    .up-next > .btn {
+        grid-column: 1 / -1;
+    }
 }
 
 /* ---------- Seznam filmů ---------- */
@@ -377,18 +789,27 @@ button {
 }
 
 .film-group {
-    margin-top: 20px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid var(--border);
-    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 26px;
+    font-family: var(--font-display);
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    color: var(--u);
+}
+
+.film-group::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--u) 55%, transparent), transparent);
 }
 
 .film-group:first-child {
-    margin-top: 0;
+    margin-top: 8px;
 }
 
 .film {
@@ -396,66 +817,81 @@ button {
     grid-template-columns: 56px 1fr auto;
     align-items: center;
     gap: 14px;
-    padding: 10px;
-    background: var(--bg-raised);
+    padding: 10px 12px 10px 10px;
+    border-radius: 14px;
     border: 1px solid var(--border);
-    border-radius: var(--radius);
-    transition: border-color 0.2s, background 0.2s;
+    background:
+        radial-gradient(120% 90% at 0% 0%, var(--gloss), transparent 55%),
+        var(--panel);
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
 }
 
 .film--watched {
-    border-color: rgba(76, 195, 138, 0.45);
-    background: linear-gradient(90deg, rgba(76, 195, 138, 0.08), var(--bg-raised) 60%);
+    border-color: color-mix(in srgb, var(--u) 55%, var(--border));
+    background:
+        radial-gradient(120% 90% at 0% 0%, var(--gloss), transparent 55%),
+        linear-gradient(90deg, color-mix(in srgb, var(--u) 16%, transparent), transparent 70%),
+        var(--panel);
+    box-shadow: inset 3px 0 0 var(--u);
 }
 
+/* volitelný film – šrafování jako „hodina odpadá“ v rozvrhu */
 .film--optional {
     border-style: dashed;
+    background:
+        repeating-linear-gradient(135deg,
+            transparent 0 10px,
+            color-mix(in srgb, var(--text) 4%, transparent) 10px 20px),
+        var(--panel);
+}
+
+.film--optional.film--watched {
+    background:
+        repeating-linear-gradient(135deg,
+            transparent 0 10px,
+            color-mix(in srgb, var(--u) 10%, transparent) 10px 20px),
+        var(--panel);
 }
 
 .film__poster {
     width: 56px;
     aspect-ratio: 2 / 3;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 8px;
     display: block;
-    background: var(--bg-hover);
+    background: var(--panel-hover);
 }
 
 .film__info {
     min-width: 0;
     display: grid;
-    gap: 2px;
+    gap: 5px;
 }
 
 .film__title {
+    font-family: var(--font-body);
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 700;
+    color: var(--heading);
     overflow-wrap: anywhere;
 }
 
-.film__meta,
-.film__status {
-    margin: 0;
-    font-size: 0.8rem;
-    color: var(--text-muted);
+.film__meta {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
+}
+
+.film__status {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--muted);
 }
 
 .film--watched .film__status {
-    color: var(--success);
-    font-weight: 500;
-}
-
-.badge {
-    display: inline-block;
-    padding: 1px 8px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    font-size: 0.7rem;
-    color: var(--text-muted);
+    color: color-mix(in srgb, var(--u) 70%, var(--heading));
+    font-weight: 600;
 }
 
 /* ---------- Counter +1 / −1 ---------- */
@@ -471,7 +907,7 @@ button {
     border-radius: 50%;
     border: 1px solid var(--border);
     background: var(--bg);
-    color: var(--text);
+    color: var(--heading);
     font-size: 1.3rem;
     font-weight: 600;
     line-height: 1;
@@ -483,11 +919,11 @@ button {
 }
 
 .counter__btn:hover:not(:disabled) {
-    border-color: var(--accent);
+    border-color: var(--u);
 }
 
 .counter__btn:active:not(:disabled) {
-    transform: scale(0.92);
+    transform: scale(0.9);
 }
 
 .counter__btn:disabled {
@@ -496,19 +932,22 @@ button {
 }
 
 .counter__btn--add {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--accent-text);
+    background: var(--u);
+    border-color: var(--u);
+    color: var(--u-ink);
 }
 
 .counter__btn--add:hover:not(:disabled) {
-    background: var(--accent-strong);
+    background: color-mix(in srgb, var(--u) 85%, #fff);
 }
 
 .counter__value {
     min-width: 24px;
     text-align: center;
+    font-family: var(--font-display);
     font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--heading);
     font-variant-numeric: tabular-nums;
 }
 
@@ -542,17 +981,93 @@ button {
     }
 }
 
-/* ---------- Google a oddělovač ---------- */
+/* ---------- Formuláře ---------- */
+.auth-page {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+.auth-form {
+    width: 100%;
+    max-width: 420px;
+    display: grid;
+    gap: 16px;
+    padding: 28px 24px;
+    border-radius: 22px;
+    border: 1px solid var(--border);
+    background:
+        radial-gradient(90% 60% at 100% 0%, color-mix(in srgb, var(--u) 16%, transparent), transparent 65%),
+        var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.auth-form p {
+    margin: 0;
+}
+
+.auth-form h1 {
+    font-size: 2.1rem;
+}
+
+.auth-form__switch {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.field {
+    display: grid;
+    gap: 6px;
+}
+
+.field__label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--heading);
+}
+
+.field__hint {
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.field input {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    font-size: 16px;   /* menší písmo by na iPhonu přiblížilo stránku */
+}
+
+.field input:focus {
+    outline: none;
+    border-color: var(--u);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--u) 25%, transparent);
+}
+
+.form-error {
+    color: var(--danger);
+    font-size: 0.9rem;
+}
+
+.form-error:empty {
+    display: none;
+}
+
 .btn--google {
     background: #ffffff;
-    border-color: #ffffff;
+    border-color: #dadce0;
     color: #1f1f1f;
     gap: 10px;
 }
 
 .btn--google:hover {
     background: #f1f3f4;
-    border-color: #f1f3f4;
+    border-color: #dadce0;
     color: #1f1f1f;
 }
 
@@ -560,10 +1075,10 @@ button {
     display: flex;
     align-items: center;
     gap: 12px;
-    color: var(--text-muted);
-    font-size: 0.8rem;
+    color: var(--muted);
+    font-size: 0.78rem;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
 }
 
 .divider::before,
@@ -576,88 +1091,24 @@ button {
 
 .notice {
     padding: 10px 12px;
-    border-radius: var(--radius-small);
+    border-radius: 12px;
     border: 1px solid var(--accent);
-    background: rgba(242, 177, 52, 0.08);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
     font-size: 0.9rem;
 }
 
 .badge--accent {
     justify-self: start;
-    border-color: var(--accent);
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--accent);
     color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 700;
 }
 
-/* ---------- Formuláře ---------- */
-.auth-page {
-    display: flex;
-    justify-content: center;
-    padding-top: 16px;
-}
-
-.auth-form {
-    width: 100%;
-    max-width: 400px;
-    display: grid;
-    gap: 16px;
-    padding: 24px;
-    background: var(--bg-raised);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-}
-
-.auth-form p {
-    margin: 0;
-}
-
-.auth-form__switch {
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-}
-
-.field {
-    display: grid;
-    gap: 6px;
-}
-
-.field__label {
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-.field__hint {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-}
-
-.field input {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: var(--radius-small);
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--text);
-    font: inherit;
-    font-size: 16px;   /* menší písmo by na iPhonu přiblížilo stránku */
-}
-
-.field input:focus {
-    outline: none;
-    border-color: var(--accent);
-}
-
-.form-error {
-    color: var(--danger);
-    font-size: 0.9rem;
-    min-height: 0;
-}
-
-.form-error:empty {
-    display: none;
-}
-
-/* ---------- Stavy: načítání, chyba, prázdno ---------- */
+/* ---------- Stavy: načítání, chyba ---------- */
 .state {
     display: grid;
     justify-items: center;
@@ -671,11 +1122,11 @@ button {
 }
 
 .spinner {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     border: 3px solid var(--border);
-    border-top-color: var(--accent);
+    border-top-color: var(--u);
     animation: spin 0.8s linear infinite;
 }
 
@@ -700,12 +1151,14 @@ button {
 
 .toast {
     padding: 12px 16px;
-    border-radius: var(--radius-small);
-    background: var(--bg-hover);
+    border-radius: 999px;
+    background: var(--panel);
     border: 1px solid var(--border);
     box-shadow: var(--shadow);
     font-size: 0.9rem;
+    font-weight: 600;
     text-align: center;
+    color: var(--heading);
     animation: toast-in 0.2s ease-out;
     transition: opacity 0.3s, transform 0.3s;
 }
@@ -737,12 +1190,11 @@ button {
 
 .legal h2 {
     margin: 28px 0 8px;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
 }
 
 .legal p,
 .legal li {
-    color: var(--text);
     line-height: 1.65;
 }
 
@@ -753,9 +1205,10 @@ button {
 /* ---------- Patička ---------- */
 .footer {
     border-top: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg-deep) 70%, transparent);
     padding: 24px var(--gutter) calc(24px + env(safe-area-inset-bottom));
     text-align: center;
-    color: var(--text-muted);
+    color: var(--muted);
     font-size: 0.8rem;
     display: grid;
     gap: 6px;

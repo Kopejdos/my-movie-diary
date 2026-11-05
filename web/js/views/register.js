@@ -4,10 +4,12 @@ import { signUp, isUsernameAvailable, isSignedIn } from "../auth.js";
 import { navigate } from "../router.js";
 import { USERNAME_PATTERN, PASSWORD_MIN_LENGTH } from "../config.js";
 import { TEXTS, format } from "../texts.js";
+import { setAccent } from "../theme.js";
 import { h, mount } from "../dom.js";
 import { field, googleButton, divider } from "./login.js";
 
 export async function registerView(container) {
+    setAccent(null);
     if (isSignedIn()) {
         navigate("/");
         return;

@@ -2,7 +2,7 @@
 // Obsah se vkládá přes textContent, nikdy přes innerHTML – názvy filmů
 // ani nicky uživatelů tak nemůžou do stránky podstrčit kód.
 
-import { TMDB_IMAGE_BASE } from "./config.js";
+import { TMDB_IMAGE_BASE, TMDB_BACKDROP_BASE } from "./config.js";
 import { TEXTS } from "./texts.js";
 
 /**
@@ -40,6 +40,16 @@ export function mount(container, ...children) {
 /** Plná adresa plakátu, nebo null. */
 export function posterUrl(posterPath) {
     return posterPath ? TMDB_IMAGE_BASE + posterPath : null;
+}
+
+/** Plná adresa širokoúhlého záběru (banner), nebo null. */
+export function backdropUrl(backdropPath) {
+    return backdropPath ? TMDB_BACKDROP_BASE + backdropPath : null;
+}
+
+/** Pilulka s údajem (rok, délka…). */
+export function pill(text, accent = false) {
+    return text ? h("span", { class: `pill${accent ? " pill--accent" : ""}` }, text) : null;
 }
 
 /** Obrázek plakátu, nebo zástupný blok s názvem filmu. */
