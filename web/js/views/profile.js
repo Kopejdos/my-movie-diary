@@ -10,6 +10,7 @@ import { setAccent } from "../theme.js";
 import { h, mount, toast } from "../dom.js";
 import { field } from "./login.js";
 import { canInstall, promptInstall, isStandalone, isIos } from "../pwa.js";
+import { achievementsSection } from "./achievements.js";
 
 export async function profileView(container) {
     setAccent(null);
@@ -54,7 +55,13 @@ export async function profileView(container) {
         }, TEXTS.navSignOut),
     );
 
-    mount(container, h("div", { class: "auth-page auth-page--stack" }, form, installCard()));
+    // Achievementy nahoře; kdo má ještě automatický nick (Google), vidí nejdřív volbu nicku
+    const settings = h("div", { class: "auth-page auth-page--stack" }, form, installCard());
+    mount(container,
+        generated ? settings : null,
+        achievementsSection(),
+        generated ? null : settings,
+    );
     if (generated) username.focus();
 
     async function handleSubmit(event) {

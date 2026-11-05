@@ -1809,6 +1809,170 @@ button {
     }
 }
 
+/* ---------- Achievementy ---------- */
+.achievements {
+    margin-bottom: 28px;
+}
+
+.achievement-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+}
+
+.achievement {
+    --u: var(--accent);
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 14px;
+    padding: 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--panel);
+    opacity: 0.72;
+}
+
+.achievement--unlocked {
+    opacity: 1;
+    border-color: color-mix(in srgb, var(--u) 55%, var(--border));
+    background:
+        radial-gradient(90% 120% at 0% 0%, color-mix(in srgb, var(--u) 18%, transparent), transparent 65%),
+        var(--panel);
+}
+
+.achievement--complete {
+    box-shadow: 0 0 0 1px var(--u), 0 10px 26px color-mix(in srgb, var(--u) 22%, transparent);
+}
+
+.achievement__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.7rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    filter: grayscale(1);
+}
+
+.achievement--unlocked .achievement__icon {
+    filter: none;
+    border-color: color-mix(in srgb, var(--u) 60%, var(--border));
+    background: color-mix(in srgb, var(--u) 14%, var(--bg));
+}
+
+.achievement__body {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+}
+
+.achievement__name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.05rem;
+}
+
+.achievement__desc,
+.achievement__date {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.achievement__date {
+    font-size: 0.78rem;
+}
+
+.achievement__progress {
+    display: grid;
+    gap: 4px;
+}
+
+.achievement__unit {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+/* úroveň: bronz, stříbro, zlato, platina… */
+.tier {
+    padding: 1px 8px;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #1b1408;
+    background: #c8a36a;
+}
+
+.tier--bronze { background: #cd8a4f; }
+.tier--silver { background: #c9ced6; }
+.tier--gold { background: #f2c14e; }
+.tier--platinum { background: #9fe3e0; }
+.tier--diamond { background: #a5b4fc; }
+.tier--legend { background: #f0abfc; }
+
+.tier-dots {
+    display: flex;
+    gap: 5px;
+}
+
+.tier-dot {
+    width: 22px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--border);
+}
+
+.tier-dot--on {
+    background: var(--u);
+}
+
+.completed-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.completed-badge {
+    --c: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px 7px 8px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--c) 60%, var(--border));
+    background: color-mix(in srgb, var(--c) 14%, var(--panel));
+    color: var(--heading);
+    font-weight: 600;
+    font-size: 0.88rem;
+}
+
+.completed-badge:hover {
+    color: var(--heading);
+    background: color-mix(in srgb, var(--c) 26%, var(--panel));
+}
+
+.completed-badge__date {
+    color: var(--muted);
+    font-weight: 500;
+    font-size: 0.78rem;
+}
+
+.toast--achievement {
+    border-color: var(--accent);
+    background:
+        radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--accent) 28%, transparent), transparent 70%),
+        var(--panel);
+}
+
 /* ---------- Právní stránky (Privacy Policy) ---------- */
 .legal {
     max-width: 760px;

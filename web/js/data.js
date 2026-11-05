@@ -99,14 +99,22 @@ export function todayLocal() {
     return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
 }
 
+/** Oznámí zbytku aplikace, že se změnila zhlédnutí (např. kvůli achievementům). */
+function watchesChanged() {
+    document.dispatchEvent(new CustomEvent("watches-changed"));
+}
+
 /** +1: zapíše nové zhlédnutí (dnes podle hodin uživatele). */
 export async function addWatch(tmdbId) {
     await supabase.from("watches").insert({ tmdb_id: tmdbId, watched_on: todayLocal() }).then(check);
+    watchesChanged();
 }
 
 /** −1: smaže nejnovější zhlédnutí. Vrací nový počet. */
 export async function removeLatestWatch(tmdbId) {
-    return await supabase.rpc("remove_latest_watch", { p_tmdb_id: tmdbId }).then(check);
+    const count = await supabase.rpc("remove_latest_watch", { p_tmdb_id: tmdbId }).then(check);
+    watchesChanged();
+    return count;
 }
 
 // ---------------------------------------------------------------------

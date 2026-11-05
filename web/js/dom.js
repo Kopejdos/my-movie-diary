@@ -78,8 +78,9 @@ export function toast(message, type = "info") {
     if (!container) return;
     const item = h("div", { class: `toast toast--${type}`, role: "status" }, message);
     container.append(item);
-    setTimeout(() => item.classList.add("toast--hide"), 3200);
-    setTimeout(() => item.remove(), 3600);
+    const duration = type === "achievement" ? 5000 : 3200;   // achievement si zaslouží delší pozornost
+    setTimeout(() => item.classList.add("toast--hide"), duration);
+    setTimeout(() => item.remove(), duration + 400);
 }
 
 /** Stav načítání. */

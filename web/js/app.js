@@ -7,6 +7,7 @@ import { h, mount, toast } from "./dom.js";
 import { currentTheme, toggleTheme } from "./theme.js";
 import { initPwa, canInstall, promptInstall, onInstallChange } from "./pwa.js";
 import { APP_VERSION, APP_UPDATED } from "./config.js";
+import { findNewlyUnlocked, ensureBaseline, tierLabel } from "./achievements.js";
 
 import { universesView } from "./views/universes.js";
 import { universeView } from "./views/universe.js";
@@ -132,6 +133,7 @@ onAuthChange(({ user, profile }) => {
     lastUserId = userId;
 
     if (signedInNow) {
+        ensureBaseline(userId).catch((error) => console.warn("Achievement baseline failed", error));
         // Uživatel z Google má zatím automatický nickname → nabídnout volbu vlastního
         if (hasGeneratedUsername()) {
             navigate("/profile");
@@ -159,6 +161,43 @@ onInstallChange(() => {
 window.addEventListener("offline", () => toast(TEXTS.offline, "error"));
 window.addEventListener("online", () => toast(TEXTS.online));
 
+// Achievementy: po změně zhlédnutí (s malým zpožděním, ať se víc kliknutí spojí)
+// spočítat stav a oznámit nově odemčené
+let achievementTimer = null;
+function scheduleAchievementCheck() {
+    clearTimeout(achievementTimer);
+    achievementTimer = setTimeout(async () => {
+        const user = getUser();
+        if (!user) return;
+        try {
+            const { result, fresh } = await findNewlyUnlocked(user.id);
+            for (const key of fresh) toast(achievementMessage(key, result), "achievement");
+        } catch (error) {
+            console.warn("Achievement check failed", error);
+        }
+    }, 1200);
+}
+
+/** Text oznámení podle klíče („collector:50“, „fan-horror:3“, „complete:mcu“). */
+function achievementMessage(key, result) {
+    if (key.startsWith("complete:")) {
+        const done = result.completed.find((c) => `complete:${c.universe.slug}` === key);
+        return format("achievementCollectionDone", done?.universe.name ?? key.slice(9));
+    }
+    const [cardKey, threshold] = key.split(":");
+    const card = result.cards.find((c) => c.key === cardKey);
+    const names = {
+        first: TEXTS.achFirstName, collector: TEXTS.achCollectorName, "screen-time": TEXTS.achScreenTimeName,
+        marathon: TEXTS.achMarathonName, rewatcher: TEXTS.achRewatcherName, completionist: TEXTS.achCompletionistName,
+    };
+    const name = cardKey.startsWith("fan-") ? format("achFanName", card?.category?.name ?? "") : names[cardKey] ?? cardKey;
+    const index = card?.tiers.findIndex((t) => String(t.threshold) === threshold) ?? -1;
+    const label = card ? tierLabel(index, card.tiers.length) : null;
+    return format("achievementUnlocked", label ? `${name} (${label})` : name);
+}
+
+document.addEventListener("watches-changed", scheduleAchievementCheck);
+
 // Verze a měsíc poslední aktualizace v patičce
 const versionLabel = document.getElementById("app-version");
 if (versionLabel) versionLabel.textContent = `${APP_VERSION} · ${APP_UPDATED}`;
@@ -168,6 +207,7 @@ renderHeader();
 await initAuth();
 lastUserId = getUser()?.id ?? null;
 routerStarted = true;
+if (getUser()) ensureBaseline(getUser().id).catch((error) => console.warn("Achievement baseline failed", error));
 if (getUser() && hasGeneratedUsername()) {
     window.location.hash = "/profile";
 }

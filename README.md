@@ -6,7 +6,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V1.2.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V1.3** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
@@ -16,13 +16,13 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Progress per collection, **Up next** and **Continue watching** suggestions
 - Release order or story (chronological) order, "unwatched only" filter
 - Watchlist across all collections
+- Achievements with levels (Bronze → Platinum) and completed-collection badges
 - Sign in with email or nickname & password, or with Google
 - Light and dark mode
 - Admin panel: collections, movies (search TMDB right from the app) and users
 - Installable on a phone or computer (PWA), opens even offline
 
 **Coming next**
-- V1.3 – achievements
 - V1.4 – horror wave 2
 - V1.5 – search
 - V1.6 – horror wave 3

@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V1.3 – November 2026
+- Achievements on your profile: First Steps, Collector, Screen Time, Marathon, Rewatcher, Completionist and a Fan badge for every category
+- Bronze / Silver / Gold / Platinum levels with unlock dates and progress to the next level
+- Completed collections shown as badges
+- "Achievement unlocked" notifications
+
 ## V1.2.1 – November 2026
 - Import script (`scripts/import.sh`) with reports in `import-reports/`
 - "1 collection" instead of "1 collections"

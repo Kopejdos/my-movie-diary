@@ -127,6 +127,7 @@ my-movie-diary/
         ├── auth.js           logika přihlášení (bez vykreslování)
         ├── data.js           logika dat – univerza, zhlédnutí (bez vykreslování)
         ├── admin.js          logika admin panelu (bez vykreslování)
+        ├── achievements.js   výpočet achievementů ze zhlédnutí (bez vykreslování)
         └── views/            obrazovky: universes, universe, login, register, profile,
                               watchlist, admin (univerza, uživatelé), admin-universe, not-found
 ```
@@ -230,7 +231,7 @@ Opačné pořadí ve V1.2 způsobilo chybu „Could not find the table 'public.c
 | 9 | V1.1 | Nová univerza + verze v patičce ✅ | Mad Max, Avatar, Disney, Pixar, DreamWorks; verze v patičce; `CHANGELOG.md` |
 | 9.1 | V1.1.1 | Přejmenování ✅ | Universes → **Collections** v celé aplikaci |
 | 10 | V1.2 | Kategorie + horory, vlna 1 ✅ | kategorie na přehledu, hororové série, prvních 7 hororových žánrů |
-| 11 | V1.3 | Achievementy | odznaky za filmy, čas, maratony, dokončené kolekce a kategorie |
+| 11 | V1.3 | Achievementy ✅ | odznaky za filmy, čas, maratony, dokončené kolekce a kategorie |
 | 12 | V1.4 | Horory, vlna 2 | dalších 7 žánrů |
 | 13 | V1.5 | Vyhledávání | vyhledávací pole – filmy a kolekce |
 | 14 | V1.6 | Horory, vlna 3 | posledních 7 žánrů |
@@ -481,6 +482,22 @@ Odznaky se počítají ze zhlédnutí, která už jsou v databázi – odemknou 
 - Reporty importu ve složce **`import-reports/`** (Git ji ignoruje) – hlavní složka zůstává čistá.
 - Pravidlo **pořadí kroků při vydání** (migrace → funkce → import → push).
 - Opraveno „1 collections“ → „1 collection“.
+
+### Fáze 11 – achievementy ✅ (5. 11. 2026) – **V1.3**
+- Na profilu sekce **Achievements**: First Steps, Collector (10 / 50 / 100 / 200 filmů), Screen Time (24 / 100 / 200 h), Marathon (3 / 5 / 8 za den), Rewatcher (3×), Completionist (1 / 5 / 10 / 20 kolekcí) a **Fan** za každou kategorii (1 / 3 / 5 dokončených kolekcí).
+- Úrovně Bronze → Silver → Gold → Platinum (→ Diamond → Legend pro budoucí rozšíření), u každé datum odemčení; zamčené šedě s postupem k další úrovni.
+- Sekce **Completed collections** – odznaky dokončených kolekcí v jejich barvě, s datem dokončení.
+- **Oznámení** „🏆 Achievement unlocked: …“ a „🏆 Collection complete: …“ po zhlédnutí, odkudkoli (detail, Up next, Continue watching, watchlist).
+- Bez migrace – vše se počítá ze zhlédnutí, která už v databázi jsou.
+
+#### Rozhodnutí ve fázi 11
+- **Achievementy se počítají, neukládají** – odemknou se i zpětně, nemůžou se rozejít s daty a nepotřebují tabulku ani trigger. Datum odemčení se dopočítá z data zhlédnutí.
+- **Hodiny = délka filmu × počet zhlédnutí** (i opakovaná zhlédnutí); „filmy“ u Collectora = různé filmy.
+- **Úrovně se škálují v jednom místě** (`ACHIEVEMENTS` v `achievements.js`) – další stupeň = další číslo v seznamu.
+- **Fanoušek kategorie** má úrovně jen do počtu kolekcí v kategorii; menší kategorie má jako nejvyšší úroveň „dokonči všechny“.
+- **Oznámení se hlídají v prohlížeči** (localStorage, klíč podle uživatele). Při prvním přihlášení v prohlížeči se jen uloží výchozí stav, aby nepřišla lavina oznámení za všechno dřívější; každé další odemčení se oznámí. Kontrola běží s malým zpožděním po změně zhlédnutí (víc kliknutí = jedna kontrola).
+- **Zhlédnutí se načítají po částech po 1000** (limit Supabase), aby výpočet fungoval i pro velké deníky.
+- **„Patha“ od kamaráda zůstává otevřená** – achievementy na ní nezávisí; úrovně / XP by šly postavit nad stejnými daty.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).
