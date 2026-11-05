@@ -50,6 +50,7 @@ const SHELL = [
     "js/views/stats.js",
     "js/views/public-profile.js",
     "js/views/about.js",
+    "js/views/password.js",
     "js/views/achievements.js",
     "js/views/login.js",
     "js/views/register.js",

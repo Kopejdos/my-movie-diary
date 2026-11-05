@@ -3,6 +3,11 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V2.5 – November 2026
+- Forgot password? – get a link by email and choose a new password
+- Change password on your profile (Google accounts can set one too)
+- Stronger passwords: at least 8 characters with a letter and a number
+
 ## V2.4 – November 2026
 - Emails now come from My Movie Diary with a new design (confirm email, reset password, change email)
 - After confirming your email you're signed in right away – or taken to sign in if you opened the link elsewhere

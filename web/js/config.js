@@ -4,7 +4,7 @@
 
 // Verze aplikace a měsíc poslední aktualizace – zobrazují se v patičce.
 // Při vydání nové verze změnit tady + záznam do CHANGELOG.md + tag (viz docs/decisions.md → Verzování).
-export const APP_VERSION = "V2.4";
+export const APP_VERSION = "V2.5";
 export const APP_UPDATED = "November 2026";
 
 export const SUPABASE_URL = "https://vvnexfdnfvwbwluazwoo.supabase.co";
@@ -38,3 +38,5 @@ export const MIN_AGE = 15;
 // Pravidla pro registraci (stejná jako v databázi)
 export const USERNAME_PATTERN = /^[A-Za-z0-9_-]{3,24}$/;
 export const PASSWORD_MIN_LENGTH = 8;
+// Heslo musí obsahovat písmeno i číslici (stejně jako nastavení Supabase → Email → Password requirements, V2.5)
+export const PASSWORD_NEEDS_LETTER_AND_DIGIT = true;

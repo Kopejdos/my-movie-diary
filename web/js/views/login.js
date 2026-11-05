@@ -40,6 +40,7 @@ export async function loginView(container) {
         divider(),
         field(TEXTS.emailOrNickname, login),
         field(TEXTS.password, password),
+        h("p", { class: "auth-form__forgot" }, h("a", { href: "#/forgot" }, TEXTS.forgotLink)),
         error,
         submit,
         resend,

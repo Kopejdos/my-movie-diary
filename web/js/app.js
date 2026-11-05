@@ -1,6 +1,8 @@
 // Vstupní bod webu: přihlášení, hlavička a router.
 
-import { initAuth, onAuthChange, getUser, getProfile, signOut, hasGeneratedUsername, authRedirectResult } from "./auth.js";
+import {
+    initAuth, onAuthChange, getUser, getProfile, signOut, hasGeneratedUsername, authRedirectResult, isRecoverySession,
+} from "./auth.js";
 import { addRoute, setNotFound, startRouter, render, navigate, currentPath } from "./router.js";
 import { TEXTS, format } from "./texts.js";
 import { h, mount, toast, loadingView } from "./dom.js";
@@ -37,6 +39,8 @@ const adminUsersView = lazy(() => import("./views/admin.js"), "adminUsersView");
 const adminWordsView = lazy(() => import("./views/admin.js"), "adminWordsView");
 const adminUniverseView = lazy(() => import("./views/admin-universe.js"), "adminUniverseView");
 const aboutView = lazy(() => import("./views/about.js"), "aboutView");
+const forgotPasswordView = lazy(() => import("./views/password.js"), "forgotPasswordView");
+const resetPasswordView = lazy(() => import("./views/password.js"), "resetPasswordView");
 
 // Data přehledu se začnou stahovat hned – souběžně s přihlášením a profilem
 if (currentPath() === "/") warmOverview();
@@ -56,6 +60,8 @@ addRoute("/search", searchView);
 addRoute("/stats", statsView);
 addRoute("/u/:username", publicProfileView);
 addRoute("/about", aboutView);
+addRoute("/forgot", forgotPasswordView);
+addRoute("/reset-password", resetPasswordView);
 addRoute("/admin", adminUniversesView);
 addRoute("/admin/users", adminUsersView);
 addRoute("/admin/words", adminWordsView);
@@ -264,15 +270,27 @@ document.addEventListener("watches-changed", scheduleProgressCheck);
  * Potvrzení funguje automaticky jen v prohlížeči, kde proběhla registrace (PKCE);
  * jinde je e-mail potvrzený, ale uživatel se musí přihlásit sám.
  */
-function handleAuthRedirect() {
+async function handleAuthRedirect() {
     const result = authRedirectResult();
+    // Událost PASSWORD_RECOVERY přichází s malým zpožděním po startu – počkat na ni
+    if (result) await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // Obnova hesla (V2.5): přihlášený díky odkazu → rovnou formulář pro nové heslo
+    if (isRecoverySession() || (result?.type === "recovery" && getUser())) {
+        window.history.replaceState(window.history.state, "", window.location.pathname + "#/reset-password");
+        return;
+    }
     if (!result) return;
 
     // Uklidit adresu: ?code= / ?error= pryč, chyba v # by router četl jako stránku
     const hash = window.location.hash.startsWith("#error") ? "#/" : window.location.hash;
     window.history.replaceState(window.history.state, "", window.location.pathname + hash);
 
-    if (result.type === "email-confirmed") {
+    if (result.type === "recovery") {
+        // Odkaz z jiného prohlížeče – PKCE kód se tu vyměnit nedá
+        toast(TEXTS.resetOtherBrowser, "error");
+        window.location.hash = "/forgot";
+    } else if (result.type === "email-confirmed") {
         if (getUser()) {
             toast(TEXTS.emailConfirmedWelcome, "achievement");
         } else {
@@ -281,8 +299,13 @@ function handleAuthRedirect() {
         }
     } else if (result.type === "error") {
         const expired = /expired|invalid|otp/i.test(`${result.code} ${result.message}`);
-        toast(expired ? TEXTS.authLinkExpired : format("authLinkError", result.message || result.code), "error");
-        if (!getUser()) window.location.hash = "/login";
+        if (result.recovery) {
+            toast(expired ? TEXTS.resetLinkExpired : format("authLinkError", result.message || result.code), "error");
+            window.location.hash = "/forgot";
+        } else {
+            toast(expired ? TEXTS.authLinkExpired : format("authLinkError", result.message || result.code), "error");
+            if (!getUser()) window.location.hash = "/login";
+        }
     }
 }
 
@@ -306,11 +329,11 @@ renderHeader();
 await initAuth();
 lastUserId = getUser()?.id ?? null;
 routerStarted = true;
-handleAuthRedirect();
+await handleAuthRedirect();
 // Achievementy a level se spočítají až po prvním vykreslení, ve chvíli, kdy je
 // prohlížeč volný – nezdržují start ani první interakci (V2.1.1)
 if (getUser()) whenIdle(() => refreshProgress({ announce: false }), 2500);
-if (getUser() && hasGeneratedUsername()) {
+if (getUser() && hasGeneratedUsername() && !isRecoverySession()) {
     window.location.hash = "/profile";
 }
 await startRouter(main);

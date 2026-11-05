@@ -261,7 +261,7 @@ Hororové vlny se střídají s funkcemi, aby každá verze přinesla něco nov�
 | 20 | V2.2 | O aplikaci a pravidla ✅ | stránka **About** (co je MMD, kdo ho dělá, TMDB, verze), **kontakt**, nová **patička** (About · Terms · Privacy · Contact · GitHub), **Terms of Service** a **pravidla komunity** (nicky, minimální věk 15 let, právo smazat / přejmenovat účet), souhlas při registraci, aktualizace zásad ochrany soukromí (co se ukládá, admin vidí e-mail, propojení účtů) |
 | 21 | V2.3 | Nicky a moderace ✅ | **filtr nicků v databázi** (zakázaná slova česky i anglicky, obcházení typu `f4gg0t` a podtržítek, rezervovaná jména admin / support / moderator), seznam zakázaných slov spravovaný v adminu, **Reset nickname** v adminu, **Delete my account** pro uživatele (Edge Function, právo na výmaz) |
 | 22 | V2.4 | E-mail ✅ | **vlastní SMTP** (samostatný Gmail + heslo aplikace), **vlastní vzhled mailů** v designu MMD (potvrzení, obnova hesla, změna e-mailu), po potvrzení hláška a přesměrování na přihlášení, „Please confirm your email“ i u přihlášení nickem, **Resend confirmation** |
-| 23 | V2.5 | Hesla | **Forgot password** (stránka pro nové heslo), **změna hesla v profilu**, přísnější pravidla hesla (délka, povinné znaky) i v Supabase |
+| 23 | V2.5 | Hesla ✅ | **Forgot password** (stránka pro nové heslo), **změna hesla v profilu**, přísnější pravidla hesla (délka, povinné znaky) i v Supabase |
 | 24 | V2.6 | CAPTCHA | Cloudflare Turnstile – registrace, přihlášení (i nickem přes funkci `login`), obnova hesla, Resend confirmation; zmínka v zásadách (zpracovává Cloudflare) |
 | 25 | V2.7 | Optimalizace 2 | druhé kolo měření a zrychlení (Lighthouse, případně minifikace) – poslední verze kapitoly |
 
@@ -817,6 +817,25 @@ přihlášení a databáze, bez realtime a storage), případně minifikace.
   (`launchUrl` v `supabase.js`).
 - **Resend u nicku jen po správném hesle** – jinak by šlo nickem zahlcovat cizí schránku; Supabase hlásí nepotvrzený
   e-mail až po ověření hesla, takže se nic neprozradí.
+
+### Fáze 23 – hesla ✅ (6. 11. 2026) – **V2.5**
+- **Forgot password?** na přihlášení → `#/forgot`: e-mail → odkaz pro nové heslo (šablona z V2.4). Odpověď je
+  vždy stejná, ať účet existuje, nebo ne. U účtu z Googlu nápověda „použij Continue with Google“.
+- **Návrat z odkazu** → `#/reset-password` s formulářem pro nové heslo; v jiném prohlížeči hláška „otevři odkaz ve
+  stejném prohlížeči“ a formulář pro nový odkaz; vypršený odkaz → hláška a nový odkaz.
+- **Change password** na profilu – nejdřív ověření současného hesla (nové přihlášení), pak změna; účet jen z Googlu
+  si heslo může nastavit poprvé (*Set a password*) a pak se přihlašovat i e-mailem.
+- **Pravidla hesla:** aspoň 8 znaků, písmeno i číslice – web (`passwordProblem`) i Supabase (Password requirements).
+  Srozumitelné hlášky: krátké, slabé, stejné jako staré, špatné současné heslo, příliš častá žádost.
+
+#### Rozhodnutí ve fázi 23
+- **Obnova jen podle e-mailu, ne nicku** – odkaz musí vzniknout v prohlížeči uživatele (PKCE); serverová funkce
+  by ho vytvořila jinde a odkaz by nefungoval. Nick se navíc nesmí prozradit spojením s e-mailem.
+- **Rozpoznání obnovy hesla** – knihovna Supabase po výměně kódu vyšle `PASSWORD_RECOVERY` (typ uložený u PKCE
+  verifieru jako `/recovery`); posluchač je zaregistrovaný hned při načtení modulu, protože událost přichází se
+  zpožděním po startu. Značka `?reset=1` v adrese odkazu navíc pozná odkaz i v jiném prohlížeči.
+- **Ověření současného hesla před změnou** – kdo si nechá otevřený počítač, nezmění heslo jen tak.
+- **Kontrola uniklých hesel (HaveIBeenPwned)** je v Supabase jen v placeném plánu – nepoužívá se.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

@@ -3206,3 +3206,10 @@ button {
 [hidden] {
     display: none !important;
 }
+
+/* Odkaz „Forgot password?“ pod polem hesla (V2.5) */
+.auth-form__forgot {
+    margin: -6px 0 0;
+    text-align: right;
+    font-size: 0.85rem;
+}

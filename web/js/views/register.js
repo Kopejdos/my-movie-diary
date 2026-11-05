@@ -1,6 +1,8 @@
 // Obrazovka: registrace (nickname, e-mail, heslo).
 
-import { signUp, isUsernameAvailable, isUsernameAllowed, isSignedIn, resendConfirmation } from "../auth.js";
+import {
+    signUp, isUsernameAvailable, isUsernameAllowed, isSignedIn, resendConfirmation, passwordProblem,
+} from "../auth.js";
 import { navigate } from "../router.js";
 import { USERNAME_PATTERN, PASSWORD_MIN_LENGTH, MIN_AGE } from "../config.js";
 import { TEXTS, format } from "../texts.js";
@@ -51,7 +53,8 @@ export async function registerView(container) {
     function validate() {
         if (!USERNAME_PATTERN.test(username.value.trim())) return TEXTS.errorUsernameFormat;
         if (!email.value.trim() || !email.checkValidity()) return TEXTS.errorEmail;
-        if (password.value.length < PASSWORD_MIN_LENGTH) return format("errorPasswordShort", PASSWORD_MIN_LENGTH);
+        const weak = passwordProblem(password.value);
+        if (weak) return format(weak, PASSWORD_MIN_LENGTH);
         if (password.value !== passwordRepeat.value) return TEXTS.errorPasswordMismatch;
         if (!consent.checked) return TEXTS.errorTermsRequired;
         return null;

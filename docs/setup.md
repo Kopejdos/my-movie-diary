@@ -124,6 +124,12 @@ Po změně kódu funkce: v dashboardu otevřít funkci → Code → vložit nov�
 U každé: Subject přepsat, do **Message body** vložit celý obsah souboru → Save. Proměnné `{{ .ConfirmationURL }}`,
 `{{ .Data.username }}`, `{{ .Email }}`, `{{ .NewEmail }}` doplní Supabase.
 
+**Hesla (V2.5):**
+- **Sign In / Providers → Email:** *Minimum password length* `8`, *Password requirements* **Letters and digits**
+  (stejné pravidlo kontroluje web).
+- **URL Configuration → Redirect URLs:** přidat `https://kopejdos.github.io/my-movie-diary/**` – odkaz pro obnovu
+  hesla vede na `…/?reset=1` (bez téhle položky obnova funguje taky, jen v jiném prohlížeči by se ukázala obecnější hláška).
+
 **Test:** registrace v anonymním okně s `adiskop987+test@gmail.com` → mail od My Movie Diary (zkontrolovat i spam)
 → odkaz → přihlášení → zkušební účet smazat v Admin → Users.
 

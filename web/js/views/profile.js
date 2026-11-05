@@ -3,7 +3,10 @@
 import {
     getUser, getProfile, isSignedIn, updateUsername, isUsernameAvailable, hasGeneratedUsername, signOut,
     setProfilePublic, isUsernameAllowed, deleteMyAccount, signOutLocal,
+    changePassword, hasPassword, passwordProblem,
 } from "../auth.js";
+import { passwordErrorText } from "./password.js";
+import { PASSWORD_MIN_LENGTH } from "../config.js";
 import { profileUrl, shareProfile } from "../social.js";
 import { navigate } from "../router.js";
 import { USERNAME_PATTERN } from "../config.js";
@@ -59,7 +62,8 @@ export async function profileView(container) {
     );
 
     // Achievementy nahoře; kdo má ještě automatický nick (Google), vidí nejdřív volbu nicku
-    const settings = h("div", { class: "auth-page auth-page--stack" }, form, installCard(), deleteAccountCard());
+    const settings = h("div", { class: "auth-page auth-page--stack" },
+        form, changePasswordCard(), installCard(), deleteAccountCard());
     mount(container,
         generated ? settings : null,
         profileTabs("profile"),
@@ -161,6 +165,60 @@ function publicProfileCard() {
 
     render();
     return card;
+}
+
+/**
+ * Karta „Change password“ (V2.5). Účet s heslem zadá současné heslo; účet jen z Googlu
+ * si heslo nastaví poprvé (pak se může přihlásit i e-mailem).
+ */
+function changePasswordCard() {
+    const withPassword = hasPassword();
+    const current = withPassword
+        ? h("input", { type: "password", name: "current-password", autocomplete: "current-password" })
+        : null;
+    const next = h("input", { type: "password", name: "new-password", autocomplete: "new-password" });
+    const repeat = h("input", { type: "password", name: "new-password-repeat", autocomplete: "new-password" });
+    const error = h("p", { class: "form-error", role: "alert" });
+    const submit = h("button", { class: "btn btn--primary btn--block", type: "submit" },
+        withPassword ? TEXTS.changePasswordSubmit : TEXTS.setPasswordSubmit);
+
+    const form = h("form", { class: "auth-form", novalidate: true, onSubmit: handleSubmit },
+        h("h2", {}, withPassword ? TEXTS.changePasswordTitle : TEXTS.setPasswordTitle),
+        withPassword ? null : h("p", { class: "muted" }, TEXTS.setPasswordText),
+        current ? field(TEXTS.currentPassword, current) : null,
+        field(TEXTS.newPassword, next, format("passwordHintRules", PASSWORD_MIN_LENGTH)),
+        field(TEXTS.passwordRepeat, repeat),
+        error,
+        submit,
+    );
+    return form;
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+        error.textContent = "";
+        if (current && !current.value) {
+            error.textContent = TEXTS.errorPasswordWrong;
+            return;
+        }
+        const problem = passwordProblem(next.value);
+        if (problem) {
+            error.textContent = passwordErrorText(problem);
+            return;
+        }
+        if (next.value !== repeat.value) {
+            error.textContent = TEXTS.errorPasswordMismatch;
+            return;
+        }
+        submit.disabled = true;
+        try {
+            await changePassword({ current: current?.value, next: next.value });
+            toast(TEXTS.passwordChanged);
+            form.reset();
+        } catch (e) {
+            error.textContent = passwordErrorText(e.code, format("errorGeneric", e.message));
+        }
+        submit.disabled = false;
+    }
 }
 
 /**

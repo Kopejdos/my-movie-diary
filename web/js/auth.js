@@ -2,10 +2,44 @@
 // Čistá logika – nic nevykresluje, obrazovky se jen přihlásí k odběru změn (onAuthChange).
 
 import { supabase, launchUrl } from "./supabase.js";
-import { SITE_URL, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./config.js";
+import {
+    SITE_URL, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, PASSWORD_MIN_LENGTH, PASSWORD_NEEDS_LETTER_AND_DIGIT,
+} from "./config.js";
 
 /** Aktuální stav: user = účet Supabase, profile = řádek z tabulky profiles. */
 const state = { user: null, profile: null };
+
+// Návrat z odkazu pro obnovu hesla: knihovna po startu vyšle PASSWORD_RECOVERY (s malým
+// zpožděním) – posluchač musí existovat dřív, než přihlášení doběhne (V2.5)
+let recoveryPending = false;
+supabase.auth.onAuthStateChange((event) => {
+    if (event === "PASSWORD_RECOVERY") recoveryPending = true;
+});
+
+/** Přišel uživatel z odkazu pro obnovu hesla (a je díky němu přihlášený)? */
+export function isRecoverySession() {
+    return recoveryPending;
+}
+
+/**
+ * Kontrola hesla podle pravidel aplikace – vrací klíč textu chyby, nebo null.
+ * Stejná pravidla nastavená v Supabase hlídají i server.
+ */
+export function passwordProblem(password) {
+    if (password.length < PASSWORD_MIN_LENGTH) return "errorPasswordShort";
+    if (PASSWORD_NEEDS_LETTER_AND_DIGIT && !(/[A-Za-z]/.test(password) && /\d/.test(password))) return "errorPasswordWeak";
+    return null;
+}
+
+/** Chyba Supabase u hesla → výjimka s kódem pro srozumitelnou hlášku. */
+function passwordError(error) {
+    const wrapped = new Error(error.message);
+    // Nejdřív „stejné heslo“ – jeho text („New password should be different…“) by jinak chytilo i pravidlo pro slabé heslo
+    if (error.code === "same_password" || /different from the old/i.test(error.message)) wrapped.code = "same_password";
+    else if (error.code === "weak_password" || /password should|weak/i.test(error.message)) wrapped.code = "weak_password";
+    else if (error.status === 429 || /rate limit|security purposes/i.test(error.message)) wrapped.code = "rate_limited";
+    return wrapped;
+}
 const listeners = new Set();
 
 export function getUser() {
@@ -177,6 +211,45 @@ export async function resendConfirmation({ login, password }) {
     }
 }
 
+/**
+ * Odkaz pro nastavení nového hesla na e-mail (V2.5). Supabase odpoví stejně, ať účet
+ * existuje, nebo ne – nedá se tak zjistit, kdo má účet. Odkaz vede na web s ?reset=1.
+ */
+export async function requestPasswordReset(email) {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${SITE_URL}?reset=1` });
+    if (error) throw passwordError(error);
+}
+
+/** Nové heslo po návratu z odkazu pro obnovu (uživatel je díky odkazu přihlášený). */
+export async function setNewPassword(password) {
+    const { error } = await supabase.auth.updateUser({ password });
+    if (error) throw passwordError(error);
+    recoveryPending = false;
+}
+
+/** Má účet heslo? (registrace e-mailem; účet jen z Googlu heslo nemá) */
+export function hasPassword() {
+    return (state.user?.identities ?? []).some((identity) => identity.provider === "email")
+        || state.user?.app_metadata?.provider === "email";
+}
+
+/**
+ * Změna hesla v profilu (V2.5). Účet s heslem musí zadat současné – ověří se novým
+ * přihlášením; účet z Googlu si heslo nastaví poprvé (pak se může přihlásit i e-mailem).
+ */
+export async function changePassword({ current, next }) {
+    if (hasPassword()) {
+        const { error } = await supabase.auth.signInWithPassword({ email: state.user.email, password: current ?? "" });
+        if (error) {
+            const wrapped = new Error(error.message);
+            wrapped.code = "wrong_password";
+            throw wrapped;
+        }
+    }
+    const { error } = await supabase.auth.updateUser({ password: next });
+    if (error) throw passwordError(error);
+}
+
 const OAUTH_FLAG = "mmd-oauth-pending";
 
 /**
@@ -203,10 +276,12 @@ export function authRedirectResult() {
     if (errorParams) {
         return {
             type: "error",
+            recovery: query.has("reset"),
             code: errorParams.get("error_code") ?? errorParams.get("error") ?? "unknown",
             message: errorParams.get("error_description") ?? "",
         };
     }
+    if (query.has("reset")) return { type: "recovery" };          // odkaz pro obnovu hesla (V2.5)
     if (query.has("code")) return { type: oauth ? "oauth" : "email-confirmed" };
     return null;
 }
