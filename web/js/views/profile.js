@@ -2,7 +2,9 @@
 
 import {
     getUser, getProfile, isSignedIn, updateUsername, isUsernameAvailable, hasGeneratedUsername, signOut,
+    setProfilePublic,
 } from "../auth.js";
+import { profileUrl, shareProfile } from "../social.js";
 import { navigate } from "../router.js";
 import { USERNAME_PATTERN } from "../config.js";
 import { TEXTS, format } from "../texts.js";
@@ -61,6 +63,7 @@ export async function profileView(container) {
     mount(container,
         generated ? settings : null,
         profileTabs("profile"),
+        publicProfileCard(),
         achievementsSection(),
         generated ? null : settings,
     );
@@ -95,6 +98,64 @@ export async function profileView(container) {
             submit.disabled = false;
         }
     }
+}
+
+/**
+ * Karta „Public profile“: přepínač viditelnosti, odkaz ke sdílení a náhled.
+ * Překreslí se sama po změně (bez nového načtení stránky).
+ */
+function publicProfileCard() {
+    const card = h("section", { class: "public-card" });
+
+    function render() {
+        const profile = getProfile();
+        const isPublic = Boolean(profile?.is_public);
+        const blocked = hasGeneratedUsername();     // nejdřív vlastní nick, pak sdílení
+
+        const toggle = h("button", {
+            class: "switch", type: "button", role: "switch",
+            "aria-checked": String(isPublic), disabled: blocked,
+            onClick: async () => {
+                toggle.disabled = true;
+                try {
+                    await setProfilePublic(!isPublic);
+                    toast(isPublic ? TEXTS.publicMadePrivate : TEXTS.publicMadePublic);
+                } catch (error) {
+                    toast(format("errorGeneric", error.message), "error");
+                }
+                render();
+            },
+        }, h("span", { class: "switch__track", "aria-hidden": "true" }), TEXTS.publicToggle);
+
+        const url = profile ? profileUrl(profile.username) : "";
+        mount(card,
+            h("div", { class: "public-card__head" },
+                h("div", {},
+                    h("h2", { class: "public-card__title" }, `🌐 ${TEXTS.publicCardTitle}`),
+                    h("p", { class: "muted public-card__text" }, blocked ? TEXTS.publicNeedsNickname : TEXTS.publicCardText)),
+                toggle),
+            isPublic
+                ? h("div", { class: "public-card__link" },
+                    h("input", { class: "admin-input admin-input--grow", type: "text", value: url, readonly: true,
+                        "aria-label": TEXTS.publicLinkLabel, onFocus: (e) => e.target.select() }),
+                    h("button", {
+                        class: "btn btn--primary btn--small", type: "button",
+                        onClick: async () => {
+                            try {
+                                const result = await shareProfile(profile.username, format("publicShareTitle", profile.username));
+                                if (result === "copied") toast(TEXTS.publicLinkCopied);
+                            } catch (error) {
+                                toast(format("errorGeneric", error.message), "error");
+                            }
+                        },
+                    }, `↗ ${TEXTS.publicShare}`),
+                    h("a", { class: "btn btn--small", href: `#/u/${encodeURIComponent(profile.username)}` }, TEXTS.publicView))
+                : null,
+        );
+    }
+
+    render();
+    return card;
 }
 
 /** Karta „Install the app“ – tlačítko, návod pro iPhone, nebo potvrzení. */

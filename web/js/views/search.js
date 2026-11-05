@@ -16,6 +16,7 @@ import { loadPref, savePref } from "../prefs.js";
 import { TEXTS, format, movies, collections } from "../texts.js";
 import { h, mount, poster, pill, yearOf, formatDate, toast, loadingView, errorView } from "../dom.js";
 import { universeCard } from "./universes.js";
+import { searchUsers } from "../social.js";
 
 const FILTERS = ["all", "unwatched", "watched"];
 
@@ -126,6 +127,7 @@ class SearchPage {
         this.signedIn = signedIn;
         this.text = "";
         this.onExample = () => {};
+        this.users = [];
         this.filter = signedIn && FILTERS.includes(loadPref("searchFilter", "all"))
             ? loadPref("searchFilter", "all")
             : "all";
@@ -133,7 +135,26 @@ class SearchPage {
 
     search(text) {
         this.text = text;
+        this.users = [];
         this.render();
+        this.searchUsers(text);
+    }
+
+    /**
+     * Uživatelé se hledají v databázi (jen veřejné profily) – výsledek dorazí později;
+     * odpověď na starší dotaz se zahodí, když už uživatel píše dál.
+     */
+    async searchUsers(text) {
+        const ticket = (this.userTicket = (this.userTicket ?? 0) + 1);
+        if (text.trim().length < 2) return;
+        try {
+            const users = await searchUsers(text);
+            if (ticket !== this.userTicket) return;
+            this.users = users;
+            if (users.length > 0) this.render();
+        } catch (error) {
+            console.warn("User search failed", error);
+        }
     }
 
     render() {
@@ -147,7 +168,8 @@ class SearchPage {
         const allFilms = searchFilms(this.index, query);
         const films = filterByWatched(allFilms, this.filter, this.counts);
 
-        if (foundCollections.length === 0 && allFilms.length === 0) {
+        const users = this.users ?? [];
+        if (foundCollections.length === 0 && allFilms.length === 0 && users.length === 0) {
             mount(this.container,
                 h("div", { class: "empty-filter" },
                     h("p", { style: "margin: 0 0 6px" }, format("searchNoResults", this.text)),
@@ -166,8 +188,25 @@ class SearchPage {
                             .map((r) => universeCard(r.universe, this.signedIn))),
                 ]
                 : null,
+            users.length > 0 ? this.renderUsers(users) : null,
             allFilms.length > 0 ? this.renderFilms(films) : null,
         );
+    }
+
+    /** Veřejné profily – odkaz na #/u/<nick>. */
+    renderUsers(users) {
+        return [
+            h("div", { class: "section-title" },
+                h("h2", {}, TEXTS.searchUsers),
+                h("span", { class: "muted" }, String(users.length))),
+            h("div", { class: "user-results" },
+                users.map((u) => h("a", { class: "user-result", href: `#/u/${encodeURIComponent(u.username)}` },
+                    h("span", { class: "user-result__avatar", "aria-hidden": "true" }, u.username.charAt(0).toUpperCase()),
+                    h("span", { class: "user-result__info" },
+                        h("strong", {}, `@${u.username}`),
+                        h("span", { class: "muted" }, format("publicMemberSince",
+                            new Date(u.memberSince).toLocaleDateString("en-GB", { month: "long", year: "numeric" }))))))),
+        ];
     }
 
     /** Prázdné pole – nápověda s příklady (klikací). */

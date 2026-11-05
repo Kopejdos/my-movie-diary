@@ -68,6 +68,11 @@ Aktualizuje se na konci každé fáze.
 
 Nastavení projektu Supabase: Data API zapnuté, automatické zpřístupnění nových tabulek **vypnuté**, automatické RLS **zapnuté**. Každá tabulka tak začíná zamčená a přístup se jí povoluje výslovně v migraci.
 
+**Veřejné profily (V2.0):** pravidla RLS u `profiles` a `watches` zůstala „jen vlastní řádky“. Data cizích uživatelů vrací
+jen funkce `public_profile` a `search_public_profiles` (`security definer`, `search_path = ''`) a jen u profilů, které
+uživatel sám zveřejnil. Ven jde nick, měsíc registrace a zhlédnutí (film + datum) – nikdy e-mail, id účtu, admin,
+watchlist, hodnocení ani poznámky.
+
 ## Architektura
 
 ```
@@ -132,7 +137,8 @@ my-movie-diary/
         ├── achievements.js   výpočet achievementů ze zhlédnutí (bez vykreslování)
         ├── search.js         vyhledávání – normalizace textu a pořadí výsledků (bez vykreslování)
         ├── stats.js          statistiky profilu ze zhlédnutí (bez vykreslování)
-        └── views/            obrazovky: universes, universe, search, stats, login, register, profile,
+        ├── social.js         veřejné profily, hledání lidí, sdílení odkazu (bez vykreslování)
+        └── views/            obrazovky: universes, universe, search, stats, public-profile, login, register, profile,
                               watchlist, achievements, admin (univerza, uživatelé), admin-universe, not-found
 ```
 
@@ -242,7 +248,7 @@ Opačné pořadí ve V1.2 způsobilo chybu „Could not find the table 'public.c
 | 15 | V1.7 | Horory, vlna 3 ✅ | posledních 7 žánrů + J-Horror |
 | 16 | V1.8 | Cesty (paths) ✅ | 6 kurátorských tras krok za krokem s poznámkami, achievement Pathfinder, správa v adminu |
 | 17 | V1.9 | Statistiky profilu ✅ | stránka Stats – souhrn, aktivita, nejčastěji viděné, dekády, kategorie, skoro hotové kolekce, zajímavosti |
-| 18 | **V2.0** | Sdílení profilu | veřejný profil (level, achievementy, statistiky), hledání uživatelů – z osobního deníku sociální aplikace |
+| 18 | **V2.0** | Sdílení profilu ✅ | veřejný profil (level, achievementy, statistiky), odkaz ke sdílení, hledání lidí – z osobního deníku sociální aplikace |
 
 Hororové vlny se střídají s funkcemi, aby každá verze přinesla něco nového. Později podle chuti: hodnocení a poznámky ke zhlédnutí, vlastní kolekce uživatelů, export / import, české názvy filmů.
 
@@ -284,9 +290,6 @@ Odznaky se počítají ze zhlédnutí, která už jsou v databázi – odemknou 
 - Úrovně jdou **škálovat** – další stupně se jen připíšou do seznamu.
 - Na profilu: odemčené barevně, zamčené šedě s postupem. Při odemčení oznámení.
 - „Patha“ od kamaráda → vyřešeno: **obojí** – úrovně a XP (V1.4) i cesty (V1.8).
-
-### Fáze 18 – sdílení profilu (V2.0)
-- Veřejný profil `#/u/<nick>` se statistikami a achievementy; uživatel si zvolí, jestli je veřejný. Hledání uživatelů, odkaz ke sdílení.
 
 ## Historie fází
 
@@ -632,6 +635,37 @@ Nápad kamaráda („dal bych nějakou pathu a achievementy“ → „a co oboj�
   popsaný vždy, popis grafu pro čtečky obrazovky.
 - **Volitelné filmy se do postupu kolekcí nepočítají** (stejně jako v detailu kolekce).
 - **„Nejrušnější den“ se ukáže až od 2 filmů za den** – s jedním filmem nic neříká.
+
+### Fáze 18 – sdílení profilu ✅ (5. 11. 2026) – **V2.0**
+Z osobního deníku sociální aplikace.
+- **Veřejný profil `#/u/<nick>`** – funguje i pro nepřihlášené: iniciála, nick, úroveň a titul, „Member since“,
+  počet filmů a dokončených kolekcí, tlačítko **Share**; pod tím přepínač **Achievements | Stats** se stejnými
+  kartami a grafy jako vlastní profil (bez watchlistu).
+- **Karta Public profile** na vlastním profilu: přepínač Public, odkaz, **Share** (na telefonu systémová nabídka,
+  jinak kopie do schránky) a **View**. Uživatel s automatickým nickem z Googlu musí nejdřív zvolit vlastní.
+- **Hledání lidí** – v hledání sekce **People** (jen veřejné profily, od 2 znaků), vede na `#/u/<nick>`.
+- Migrace `20261105090000_public_profiles.sql`: sloupec `profiles.is_public` (výchozí soukromý), funkce
+  `public_profile` a `search_public_profiles`.
+- Zásady ochrany soukromí doplněné o sekci **Public profile (optional)**.
+- Nové soubory: `web/js/social.js`, `web/js/views/public-profile.js`; achievementy a statistiky jdou vykreslit
+  i pro cizí data (`achievementsContent`, `statsContent`), katalog kolekcí se načítá zvlášť (`fetchCatalogData`).
+- Načítání po stránkách má nově stabilní řazení (podle `id`) – při víc než 1000 řádcích se stránky nepřekrývají.
+
+#### Rozhodnutí ve fázi 18
+- **Soukromý profil je výchozí** (opt-in) – deník je osobní; zveřejnění je vědomé rozhodnutí s vysvětlením, co bude vidět.
+- **Funkce místo otevření tabulek** – RLS u `profiles` a `watches` se neměnila; přesně definovaný výstup funkce
+  je bezpečnější než pravidlo „smí číst řádky veřejných uživatelů“ (to by pustilo ven všechny sloupce včetně
+  hodnocení a poznámek, až se začnou používat).
+- **Soukromý a neexistující profil vypadají stejně** – nedá se zjistit, jestli účet s daným nickem existuje.
+- **Jeden JSON s celou historií** místo řádků – žádný limit 1000 řádků API; výpočet achievementů, XP a statistik
+  pak běží v prohlížeči stejným kódem jako na vlastním profilu.
+- **Odkaz je podle nicku** – je čitelný; po změně nicku starý odkaz přestane fungovat (je to vidět v nastavení).
+- **Hledání lidí přes `strpos`, ne `LIKE`** – podtržítko v nicku není zástupný znak; minimum 2 znaky a 10 výsledků
+  brání vypsání všech uživatelů.
+- Ověřeno na lokálním Postgresu: anonym ani jiný uživatel nevidí tabulky, soukromý profil vrací `null`,
+  zapnutí admina selže, cizí profil zveřejnit nejde, hodnocení a poznámky se do JSONu nedostanou.
+
+**Plán fází 0–18 je tím dokončený.** Další nápady se přidají jako nové verze (V2.x).
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

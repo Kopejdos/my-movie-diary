@@ -35,7 +35,7 @@ async function loadProfile(user) {
     if (!user) return null;
     const { data, error } = await supabase
         .from("profiles")
-        .select("id, username, is_admin")
+        .select("id, username, is_admin, is_public")
         .eq("id", user.id)
         .maybeSingle();
     if (error) {
@@ -143,7 +143,20 @@ export async function updateUsername(username) {
         .from("profiles")
         .update({ username })
         .eq("id", state.user.id)
-        .select("id, username, is_admin")
+        .select("id, username, is_admin, is_public")
+        .single();
+    if (error) throw new Error(error.message);
+    state.profile = data;
+    notify();
+}
+
+/** Zveřejnění / skrytí profilu přihlášeného uživatele (V2.0). */
+export async function setProfilePublic(isPublic) {
+    const { data, error } = await supabase
+        .from("profiles")
+        .update({ is_public: isPublic })
+        .eq("id", state.user.id)
+        .select("id, username, is_admin, is_public")
         .single();
     if (error) throw new Error(error.message);
     state.profile = data;

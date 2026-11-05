@@ -3,6 +3,13 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V2.0 – November 2026
+- Public profiles: make your diary public and share a link – level, achievements and stats, viewable even without an account
+- Share button: system share sheet on phones, copy link on desktop
+- Find friends: People in search (public profiles only)
+- Profiles stay private unless you switch them to Public; your watchlist and email are never shown
+- Privacy policy updated
+
 ## V1.9 – November 2026
 - Stats page on your profile: movies seen, viewings, time watched, collections done and your longest streak
 - Activity over the last 12 months and per year, most watched movies, movies by release decade and by category

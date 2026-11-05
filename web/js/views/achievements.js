@@ -46,8 +46,15 @@ async function load(section) {
     }
     const user = getUser();
     if (user) markSeen(user.id, result.unlockedKeys);
+    mount(section, achievementsContent(result));
+}
 
-    mount(section,
+/**
+ * Úroveň, karty achievementů a dokončené kolekce z hotového výpočtu
+ * (vlastní profil i veřejný profil kohokoli jiného).
+ */
+export function achievementsContent(result) {
+    return [
         levelCard(result),
         h("div", { class: "section-title" },
             h("h2", {}, TEXTS.achievementsTitle),
@@ -61,7 +68,7 @@ async function load(section) {
         result.completed.length > 0
             ? h("div", { class: "completed-list" }, [...result.completed].reverse().map(completedBadge))
             : h("p", { class: "muted" }, TEXTS.achievementsCompletedEmpty),
-    );
+    ];
 }
 
 /** Karta úrovně: číslo, titul, XP do další úrovně a rozpad podle zdroje. */

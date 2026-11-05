@@ -40,8 +40,15 @@ export async function statsView(container, context) {
         return;
     }
 
-    mount(container,
-        profileTabs("stats"),
+    mount(container, profileTabs("stats"), statsContent(stats, watchlistCount));
+}
+
+/**
+ * Dlaždice a panely z hotových statistik (vlastní i veřejný profil).
+ * watchlistCount = null → dlaždice watchlistu se nezobrazí (watchlist je soukromý).
+ */
+export function statsContent(stats, watchlistCount = null) {
+    return [
         tiles(stats, watchlistCount),
         h("div", { class: "stats-grid" },
             panel(TEXTS.statsActivity, monthChart(stats.months), yearList(stats.years)),
@@ -51,7 +58,7 @@ export async function statsView(container, context) {
             panel(TEXTS.statsAlmostThere, almostThere(stats.almostThere)),
             panel(TEXTS.statsFacts, factList(stats)),
         ),
-    );
+    ];
 }
 
 /** Přepínač „Achievements | Stats“ nad profilem a statistikami. */
@@ -91,7 +98,7 @@ function tiles({ totals, streaks }, watchlistCount) {
         tile(`${totals.completed} / ${totals.collections}`, TEXTS.statsCompleted, format("statsStarted", totals.started)),
         tile(format("statsStreakDays", streaks.longest), TEXTS.statsLongestStreak,
             streaks.current > 0 ? format("statsCurrentStreak", streaks.current) : null),
-        tile(String(watchlistCount), TEXTS.navWatchlist),
+        watchlistCount === null ? null : tile(String(watchlistCount), TEXTS.navWatchlist),
     );
 }
 

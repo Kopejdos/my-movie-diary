@@ -69,20 +69,28 @@ async function fetchAll(buildQuery) {
     }
 }
 
-/** Vše, co je k výpočtu potřeba: zhlédnutí, kolekce, jejich filmy a kategorie. */
+/** Vše, co je k výpočtu potřeba: vlastní zhlédnutí + katalog (kolekce, filmy, kategorie). */
 export async function fetchAchievementData() {
-    const [watches, universes, items, categories, links] = await Promise.all([
+    const [watches, catalog] = await Promise.all([
         fetchAll(() => supabase
             .from("watches")
             .select("tmdb_id, watched_on, created_at, film:films(title, poster_path, release_date, runtime)")
             .order("watched_on")
             .order("created_at")),
-        fetchAll(() => supabase.from("universes").select("id, slug, name, color, kind").order("sort_order")),
-        fetchAll(() => supabase.from("universe_items").select("universe_id, tmdb_id, is_optional")),
-        fetchAll(() => supabase.from("categories").select("id, slug, name, color, sort_order").order("sort_order")),
-        fetchAll(() => supabase.from("universe_categories").select("universe_id, category_id")),
+        fetchCatalogData(),
     ]);
-    return { watches, universes, items, categories, links };
+    return { watches, ...catalog };
+}
+
+/** Katalog: kolekce, jejich filmy a kategorie (stejný pro všechny uživatele, i veřejné profily). */
+export async function fetchCatalogData() {
+    const [universes, items, categories, links] = await Promise.all([
+        fetchAll(() => supabase.from("universes").select("id, slug, name, color, kind").order("sort_order").order("id")),
+        fetchAll(() => supabase.from("universe_items").select("universe_id, tmdb_id, is_optional").order("id")),
+        fetchAll(() => supabase.from("categories").select("id, slug, name, color, sort_order").order("sort_order").order("id")),
+        fetchAll(() => supabase.from("universe_categories").select("universe_id, category_id").order("universe_id").order("category_id")),
+    ]);
+    return { universes, items, categories, links };
 }
 
 // ---------------------------------------------------------------------

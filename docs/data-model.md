@@ -30,6 +30,7 @@ films ◄──── universe_items ────► universes
 | `id` | `uuid` PK | = `auth.users.id`, vzniká automaticky při registraci (trigger) |
 | `username` | `text` unique | nickname, 3–24 znaků: písmena, číslice, `_`, `-`; unikátní i bez ohledu na velikost písmen |
 | `is_admin` | `boolean` | správce (nastavuje se jen v SQL, uživatel si ho změnit nemůže) |
+| `is_public` | `boolean` | veřejný profil (od V2.0); výchozí `false` = soukromý, mění ho jen uživatel sám |
 | `created_at` | `timestamptz` | |
 
 ### `films` – cache údajů z TMDB
@@ -129,6 +130,11 @@ Zapisuje do ní jen GitHub Action přes databázovou funkci `ping()`; drží se 
 - **`email_for_username(username)`** – e-mail k nicku pro přihlášení nickem; smí ji volat **jen `service_role`** (Edge Function `login`).
 - **`remove_watched_from_watchlist()`** (trigger na `watches`) – po zhlédnutí film zmizí z watchlistu.
 - **`is_admin()`** – je přihlášený uživatel správce? (používají ji pravidla RLS admin panelu)
+- **`public_profile(username)`** (V2.0) – veřejný profil jako JSON `{ username, member_since, watches: [{ tmdb_id, watched_on, created_at, film }] }`,
+  nebo `null`, když profil neexistuje **nebo je soukromý** (navenek se neliší). Smí i nepřihlášený. Nevrací e-mail, id,
+  admin, watchlist ani hodnocení a poznámky ke zhlédnutí.
+- **`search_public_profiles(query)`** (V2.0) – veřejné profily, jejichž nick obsahuje dotaz (od 2 znaků, max. 10,
+  začínající dotazem první). Vrací jen `username` a `member_since`.
 - **`handle_new_user()`** (trigger na `auth.users`) – založí profil s nickem z registrace, u Google `user_xxxxxxxx`.
 
 Výpočty běží v databázi, ne v prohlížeči – web dostane hotová čísla jedním dotazem.
@@ -139,8 +145,9 @@ Výpočty běží v databázi, ne v prohlížeči – web dostane hotová čísl
 |---|---|---|
 | `films` | kdokoli (i nepřihlášený – náhled univerz) | jen Edge Functions (`tmdb`, `admin`) |
 | `universes`, `universe_items`, `categories`, `universe_categories` | kdokoli (i nepřihlášený – náhled kolekcí) | správce (`is_admin()`), Edge Function `tmdb` |
-| `profiles` | jen vlastní řádek (sdílení postupu později) | jen vlastní řádek, jen sloupec `username` |
-| `watches`, `watchlist` | jen vlastní řádky | jen vlastní řádky |
+| `profiles` | jen vlastní řádek; veřejné profily ostatních jen přes funkce `public_profile` / `search_public_profiles` | jen vlastní řádek, jen sloupce `username` a `is_public` |
+| `watches` | jen vlastní řádky; zhlédnutí veřejných profilů (film + datum) jen přes `public_profile` | jen vlastní řádky |
+| `watchlist` | jen vlastní řádky (vždy soukromý) | jen vlastní řádky |
 | `heartbeat` | nikdo | jen funkce `ping()` |
 
 Vlastní univerza uživatelů (později) se přidají jako další pravidlo: řádky s `owner_id` vidí a mění jen jejich vlastník.

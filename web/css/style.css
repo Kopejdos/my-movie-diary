@@ -2863,3 +2863,181 @@ button {
 .almost-list__top strong {
     color: var(--heading);
 }
+
+/* =====================================================================
+   Veřejné profily (V2.0)
+   ===================================================================== */
+
+/* Karta „Public profile“ na vlastním profilu */
+.public-card {
+    display: grid;
+    gap: 14px;
+    margin: 0 0 20px;
+    padding: 18px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background:
+        radial-gradient(120% 90% at 0% 0%, var(--gloss), transparent 55%),
+        var(--panel);
+}
+
+.public-card__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.public-card__title {
+    font-size: 1.15rem;
+    margin: 0 0 4px;
+}
+
+.public-card__text {
+    margin: 0;
+    font-size: 0.88rem;
+    max-width: 62ch;
+}
+
+.public-card__head .switch {
+    flex-shrink: 0;
+}
+
+.public-card__link {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.public-card__link .admin-input {
+    min-width: 0;
+    flex: 1 1 240px;
+    font-size: 0.85rem;
+}
+
+/* Hlavička veřejného profilu */
+.profile-hero {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 20px;
+    margin: 0 0 20px;
+    padding: 22px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background:
+        radial-gradient(80% 120% at 100% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 60%),
+        radial-gradient(120% 90% at 0% 0%, var(--gloss), transparent 55%),
+        var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.profile-hero__avatar,
+.user-result__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: var(--font-display);
+    font-weight: 700;
+}
+
+.profile-hero__avatar {
+    width: 84px;
+    height: 84px;
+    font-size: 2.4rem;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.profile-hero__body {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+}
+
+.profile-hero__name {
+    margin: 0;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    overflow-wrap: anywhere;
+}
+
+.profile-hero__meta {
+    margin: 0;
+}
+
+.profile-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+@media (max-width: 480px) {
+    .profile-hero {
+        grid-template-columns: 1fr;
+        justify-items: start;
+        padding: 18px;
+    }
+
+    .profile-hero__avatar {
+        width: 64px;
+        height: 64px;
+        font-size: 1.8rem;
+    }
+}
+
+/* Lidé ve výsledcích hledání */
+.user-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+}
+
+.user-result {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+    transition: border-color 0.15s;
+}
+
+.user-result:hover {
+    border-color: var(--accent);
+}
+
+.user-result__avatar {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    font-size: 1.1rem;
+}
+
+.user-result__info {
+    display: grid;
+    min-width: 0;
+}
+
+.user-result__info strong {
+    color: var(--heading);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-result__info .muted {
+    font-size: 0.78rem;
+}
+
+@media (max-width: 480px) {
+    /* na telefonu text karty přes celou šířku, přepínač pod ním */
+    .public-card__head {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
