@@ -59,6 +59,10 @@ Aktualizuje se na konci každé fáze.
 | Project URL Supabase | `web/js/config.js` v repozitáři | ano |
 | Publishable key Supabase (`sb_publishable_…`) | `web/js/config.js` v repozitáři | ano – bezpečnost zajišťuje RLS |
 | TMDB Read Access Token | Supabase → Edge Functions → Secrets (`TMDB_READ_TOKEN`) | **ne** |
+| Správcovský klíč pro import | Supabase → Edge Functions → Secrets (`MMD_ADMIN_KEY`) + správce hesel | **ne** |
+| Google Client ID | Google Cloud + Supabase → Authentication → Google | ano (je vidět při přihlášení) |
+| Google Client secret | jen Supabase → Authentication → Google | **ne** |
+| Heslo admin účtu | jen správce hesel | **ne** |
 | Heslo k databázi | jen ve správci hesel | **ne** |
 | Secret key Supabase | nikde – kód ho nepotřebuje | **ne** |
 
@@ -73,10 +77,13 @@ Prohlížeč (web/ na GitHub Pages)
 Supabase
    ├── Auth            přihlášení (e-mail + heslo, Google)
    ├── PostgreSQL      tabulky + Row Level Security
-   └── Edge Function   tmdb – dotahuje data z TMDB do tabulky films
+   ├── Edge Function   login – přihlášení nickem (k nicku dohledá e-mail na serveru)
+   └── Edge Function   tmdb  – dotahuje data z TMDB do tabulky films
                           │  TMDB_READ_TOKEN
                           ▼
                        TMDB API
+
+Google (OAuth) ──► Supabase Auth ──► zpět na web (?code=… → relace)
 ```
 
 ### Struktura repozitáře
@@ -93,12 +100,23 @@ my-movie-diary/
 ├── supabase/
 │   ├── migrations/           SQL skripty (struktura databáze, verzovaná v Gitu)
 │   ├── seed/                 seznamy univerz a filmů
-│   └── functions/tmdb/       Edge Function pro TMDB
+│   └── functions/
+│       ├── tmdb/             import filmů z TMDB
+│       └── login/            přihlášení nickem
 └── web/
-    ├── index.html
-    ├── css/
-    ├── js/                   config.js, router, obrazovky, práce s daty
-    └── manifest.webmanifest  PWA (fáze 6)
+    ├── index.html            jediná stránka aplikace
+    ├── privacy.html          zásady ochrany osobních údajů (podmínka Googlu)
+    ├── css/style.css
+    └── js/
+        ├── app.js            start, hlavička, reakce na přihlášení
+        ├── config.js         veřejné adresy a klíče, pravidla registrace
+        ├── supabase.js       klient Supabase (z CDN)
+        ├── router.js         navigace přes #/…
+        ├── texts.js          všechny texty rozhraní
+        ├── dom.js            pomocné funkce pro vykreslování
+        ├── auth.js           logika přihlášení (bez vykreslování)
+        ├── data.js           logika dat – univerza, zhlédnutí (bez vykreslování)
+        └── views/            obrazovky: universes, universe, login, register, profile, not-found
 ```
 
 Pravidla:
@@ -126,9 +144,10 @@ Pravidla:
 | Jurassic Park | Jurassic Park + Jurassic World |
 | Fast & Furious | celá série vč. Hobbs & Shaw |
 | Shrek | Shrek 1–4, Puss in Boots |
+| The Maze Runner | trilogie Labyrint (Útěk, Zkouška ohněm, Lék na smrt) |
 
 - **Jeden film může být ve více univerzech** (Deadpool & Wolverine je v MCU i v X-Men). Zhlédnutí se počítá k filmu, takže se ukáže v obou.
-- Přesné seznamy filmů se dohledají a ověří ve fázi 1 (od roku 2024 vyšla spousta nových filmů).
+- Seznamy filmů jsou v `supabase/seed/universes.json` (17 univerz, 205 filmů); ověřené ve fázi 1b včetně filmů z let 2025–2026.
 - Seriály se nesledují – na to slouží jiná služba.
 
 ## Pravidla plánu fází
@@ -142,12 +161,15 @@ Pravidla:
 | 0 | Infrastruktura ✅ | repozitář, GitHub Pages s testovací stránkou, Supabase projekt, TMDB token v Secrets | web běží na vlastní adrese |
 | 1a | Struktura databáze ✅ | migrace (tabulky, RLS, pohledy, funkce), keep-alive | v Table Editoru jsou tabulky, keep-alive zapisuje |
 | 1b | Data o filmech ✅ | Edge Function `tmdb`, seznam 16 univerz (202 filmů), import z TMDB | v tabulkách jsou univerza a filmy s plakáty |
-| 2 | Kostra webu a přihlášení | rozvržení, router, registrace (e-mail, heslo, nickname), přihlášení, odhlášení | přihlásíš se na webu |
-| 2b | Přihlášení přes Google | Google OAuth v Supabase a tlačítko na webu | přihlášení jedním klepnutím |
-| 3 | Univerza a zhlédnutí | přehled univerz s postupem, detail univerza, counter +1 / −1 | odškrtáš si první filmy |
-| 4 | Řazení a „co dál“ | pořadí vydání / příběhu, skupiny, filtr neviděných, Up next | víš, co si pustit příště |
-| 5 | Watchlist | „chci vidět“ napříč univerzy | seznam na víkend |
-| 6 | PWA a vzhled | manifest, ikona, instalace na plochu, doladění na mobilu | MMD jako aplikace v telefonu |
+| 2 | Kostra webu a přihlášení ✅ | rozvržení, router, registrace (e-mail, heslo, nickname), přihlášení, odhlášení | přihlásíš se na webu |
+| 2b | Přihlášení přes Google ✅ | Google OAuth, Privacy Policy, aplikace zveřejněná pro všechny | přihlášení jedním klepnutím |
+| 2c | Účty ✅ | přihlášení nickem nebo e-mailem, profil se změnou nicku, admin účet, Labyrint | přihlásíš se nickem |
+| 3 | Univerza a zhlédnutí ✅ | přehled univerz s postupem, detail univerza, counter +1 / −1 | odškrtáš si první filmy |
+| 4 | Redesign | styl podle RimWorld prezentace + prvky z rozvrhu kamaráda: písmo Chakra Petch, tečkované pozadí, barvy univerz, banner s backdropem, Up next / Continue watching, světlý a tmavý režim | web vypadá jako hotová aplikace |
+| 5 | Admin panel | univerza (vytvořit, upravit, smazat), filmy přes hledání v TMDB, uživatelé (seznam, správce, smazání) | spravuješ obsah bez SQL a curl |
+| 6 | Řazení a „co dál“ | pořadí vydání / příběhu, filtr neviděných | sleduješ univerzum chronologicky |
+| 7 | Watchlist | „chci vidět“ napříč univerzy | seznam na víkend |
+| 8 | PWA | manifest, ikona, instalace na plochu | MMD jako aplikace v telefonu |
 
 Později podle chuti: hodnocení a poznámky ke zhlédnutí, historie a statistiky, vlastní univerza, export / import, sdílení postupu s přáteli, české názvy filmů.
 
@@ -191,5 +213,53 @@ Později podle chuti: hodnocení a poznámky ke zhlédnutí, historie a statisti
 - **Hlavní obal univerza** = plakát prvního povinného filmu.
 - **Spider-Man obsahuje i filmy z MCU** (Tom Holland) – film může být ve více univerzech. Sony's Spider-Man Universe (Venom…) je volitelné, stejně jako AvP u Alienu, Hobbs & Shaw, Zack Snyder's Justice League, Nausicaä a The Red Turtle.
 
+### Fáze 2 – kostra webu a přihlášení ✅ (5. 11. 2026)
+- Web v `web/`: jedna stránka `index.html`, ES moduly bez build kroku, `supabase-js` z CDN jsDelivr.
+- Hash router (`#/`, `#/universe/<slug>`, `#/login`, `#/register`, `#/profile`), stránka 404.
+- Registrace (nickname, e-mail, heslo), přihlášení, odhlášení; nickname v hlavičce.
+- Migrace `20261105010000_username_check.sql`: unikátní nickname bez ohledu na velikost písmen a funkce `is_username_available` (registrace se ptá dřív, než účet založí).
+- Před nasazením otestováno v Chromiu (Playwright) proti napodobenému Supabase – registrace, přihlášení, counter, odhlášení, 404.
+
+#### Rozhodnutí ve fázi 2
+- **Čistý JavaScript bez frameworku**, prvky se skládají funkcí `h()` přes `textContent` – nikdy `innerHTML`, názvy filmů ani nicky nemůžou do stránky podstrčit kód.
+- **Logika (`auth.js`, `data.js`) oddělená od obrazovek (`views/`)**, texty rozhraní v `texts.js`.
+- **Potvrzování e-mailu je vypnuté** (Supabase → Authentication → Email → Confirm email). Bezplatná e-mailová služba Supabase posílá jen členům projektu a jen pár e-mailů za hodinu – kamarádi by se nezaregistrovali. Kdyby bylo potřeba, napojí se vlastní SMTP (např. Resend).
+- **Site URL a Redirect URLs** v Supabase = adresa webu – jinak odkazy z e-mailů a návrat z Google vedou na `localhost:3000`.
+
+### Fáze 2b – přihlášení přes Google ✅ (5. 11. 2026)
+- Tlačítko „Continue with Google“ na přihlášení i registraci.
+- Google Cloud projekt „My Movie Diary“: OAuth klient (Web application), origin `https://kopejdos.github.io`, redirect `https://<projekt>.supabase.co/auth/v1/callback`; aplikace zveřejněná (In production) – přihlásit se může kdokoli.
+- Stránka `web/privacy.html` (zásady ochrany osobních údajů) – Google ji vyžaduje pro zveřejnění; odkaz v patičce.
+
+#### Rozhodnutí ve fázi 2b
+- **PKCE** (`flowType: "pkce"`): výsledek přihlášení se vrací jako `?code=…`, ne v `#…` – hash patří routeru.
+- **Google uživatel dostane nickname `user_xxxxxxxx`** a web ho po prvním přihlášení pošle na profil zvolit si vlastní.
+- **Bez loga aplikace v Google Cloud** – logo by vyžadovalo ruční ověření aplikace Googlem (několik dní).
+- **Kontakt pro smazání účtu v Privacy Policy = GitHub Issues**, ne osobní e-mail (stránka je veřejná).
+
+### Fáze 2c – účty ✅ (5. 11. 2026)
+- Přihlášení **nickem nebo e-mailem** v jednom poli (s `@` = e-mail).
+- Edge Function `login` + migrace `20261105030000_login_by_username.sql`: funkce `email_for_username`, kterou smí volat jen `service_role`.
+- Profil (`#/profile`): změna nicku; štítek Administrator.
+- Migrace `20261105020000_profiles_admin.sql`: sloupec `profiles.is_admin`; uživatel smí ve svém profilu měnit jen `username`.
+- Admin účet (`admin`, e-mail `adiskop987+admin@gmail.com`) založený ručně v Authentication → Users, `is_admin` nastavený v SQL.
+- Nové univerzum **The Maze Runner** (Labyrint), import jen jednoho univerza přes `&only=maze-runner`.
+
+#### Rozhodnutí ve fázi 2c
+- **Přihlášení nickem přes Edge Function**, ne přes veřejnou databázovou funkci – jinak by šlo z nicku zjistit cizí e-mail. Funkce vrací stejnou chybu pro neexistující nick i špatné heslo.
+- **Oprávnění na sloupec** (`grant update (username)`) – pravidlo RLS omezí řádek na vlastní profil, oprávnění omezí sloupce; `is_admin` si nikdo nenastaví sám.
+- **Heslo admin účtu není v repozitáři ani v migracích**, účet se zakládá ručně.
+
+### Fáze 3 – univerza a zhlédnutí ✅ (5. 11. 2026)
+- Přehled univerz: kartičky s plakátem prvního filmu a ukazatelem postupu (nepřihlášený vidí počet filmů).
+- Detail univerza: filmy v pořadí vydání, nadpisy skupin, rok, délka, stav („Watched 2× · Last: 5 Nov 2026“), counter − / +, ukazatel postupu; volitelné filmy čárkovaně a mimo postup.
+
+#### Rozhodnutí ve fázi 3
+- **Optimistický counter:** číslo i postup se změní hned po kliknutí, dotaz běží na pozadí; při chybě se změna vrátí a ukáže se hláška.
+- **Datum zhlédnutí posílá web podle hodin uživatele** – databáze běží v UTC a po půlnoci by zapsala včerejšek.
+- **Po −1 se počty načtou znovu** – může se změnit datum posledního zhlédnutí.
+
 ## Drobnosti k dořešení
+- Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).
+- Správcovský klíč `MMD_ADMIN_KEY` byl vidět na screenshotu – po dokončení importů vygenerovat nový.
 - GitHub vypne plánované workflow (keep-alive) ve veřejném repozitáři po 60 dnech bez aktivity v repozitáři – přijde e-mail, zapne se jedním kliknutím.

@@ -28,7 +28,8 @@ films ◄──── universe_items ────► universes
 | Sloupec | Typ | Poznámka |
 |---|---|---|
 | `id` | `uuid` PK | = `auth.users.id`, vzniká automaticky při registraci (trigger) |
-| `username` | `text` unique | nickname, 3–24 znaků: písmena, číslice, `_`, `-` |
+| `username` | `text` unique | nickname, 3–24 znaků: písmena, číslice, `_`, `-`; unikátní i bez ohledu na velikost písmen |
+| `is_admin` | `boolean` | správce (nastavuje se jen v SQL, uživatel si ho změnit nemůže) |
 | `created_at` | `timestamptz` | |
 
 ### `films` – cache údajů z TMDB
@@ -104,6 +105,10 @@ Zapisuje do ní jen GitHub Action přes databázovou funkci `ping()`; drží se 
 - **`universe_progress`** (pohled) – pro přihlášeného uživatele u každého univerza: počet filmů (bez volitelných), počet viděných, procento.
 - **`my_film_counts`** (pohled) – počet zhlédnutí a datum posledního zhlédnutí pro každý film uživatele.
 - **`ping()`** (funkce) – zapíše řádek do `heartbeat` a smaže staré.
+- **`remove_latest_watch(tmdb_id)`** – −1: smaže nejnovější zhlédnutí a vrátí nový počet.
+- **`is_username_available(username)`** – je nickname volný? (smí i nepřihlášený, vrací jen ano / ne)
+- **`email_for_username(username)`** – e-mail k nicku pro přihlášení nickem; smí ji volat **jen `service_role`** (Edge Function `login`).
+- **`handle_new_user()`** (trigger na `auth.users`) – založí profil s nickem z registrace, u Google `user_xxxxxxxx`.
 
 Výpočty běží v databázi, ne v prohlížeči – web dostane hotová čísla jedním dotazem.
 
@@ -112,7 +117,7 @@ Výpočty běží v databázi, ne v prohlížeči – web dostane hotová čísl
 | Tabulka | Čtení | Zápis |
 |---|---|---|
 | `films`, `universes`, `universe_items` | kdokoli (i nepřihlášený – náhled univerz) | jen Edge Function / migrace |
-| `profiles` | jen vlastní řádek (sdílení postupu později) | jen vlastní řádek |
+| `profiles` | jen vlastní řádek (sdílení postupu později) | jen vlastní řádek, jen sloupec `username` |
 | `watches`, `watchlist` | jen vlastní řádky | jen vlastní řádky |
 | `heartbeat` | nikdo | jen funkce `ping()` |
 

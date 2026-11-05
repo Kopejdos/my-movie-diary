@@ -82,9 +82,37 @@ s GitHubem (automatické migrace) se nezapíná.
 5. V reportu zkontrolovat `warnings` (jiný název / rok) a `notFound`. Chybnou shodu opravit
    doplněním `"tmdb": <id>` k filmu v seedu a import pustit znovu.
 
-Po změně kódu funkce: v dashboardu otevřít funkci `tmdb` → Code → vložit nový obsah → Deploy.
+Po změně kódu funkce: v dashboardu otevřít funkci → Code → vložit nový obsah → Deploy.
 
-## 6. Keep-alive
+## 6. Přihlašování (Supabase → Authentication)
+
+1. **URL Configuration:** Site URL `https://kopejdos.github.io/my-movie-diary/`, stejná adresa i v Redirect URLs.
+2. **Sign In / Providers → Email:** vypnout **Confirm email**.
+3. **Přihlášení nickem:** Edge Function `login` (Deploy a new function → Via Editor, obsah
+   `supabase/functions/login/index.ts`) a u ní **vypnout Verify JWT**.
+4. **Google:**
+   1. Google Cloud Console → nový projekt → **Google Auth Platform → Get started**
+      (app name, support e-mail, Audience: External).
+   2. **Clients → Create client:** Web application; origin `https://kopejdos.github.io`;
+      redirect `https://vvnexfdnfvwbwluazwoo.supabase.co/auth/v1/callback` (pozor na mezery při kopírování).
+      Client secret se zobrazí jen jednou – hned uložit.
+   3. **Branding:** home page `https://kopejdos.github.io/my-movie-diary/`,
+      privacy policy `https://kopejdos.github.io/my-movie-diary/privacy.html`; logo nenahrávat.
+   4. **Audience → Publish app.**
+   5. Supabase → **Sign In / Providers → Google:** zapnout, vložit Client ID a Client secret.
+
+## 7. Admin účet
+
+1. Supabase → **Authentication → Users → Add user → Create new user**: e-mail
+   `adiskop987+admin@gmail.com`, heslo ze správce hesel, **Auto Confirm User**.
+2. SQL Editor:
+   ```sql
+   update public.profiles
+   set username = 'admin', is_admin = true
+   where id = (select id from auth.users where email = 'adiskop987+admin@gmail.com');
+   ```
+
+## 8. Keep-alive
 
 GitHub Action `keep-alive.yml` volá každé 3 dny databázovou funkci `ping()`.
 Ruční spuštění: **Actions → Keep Supabase awake → Run workflow**; výsledek je vidět
