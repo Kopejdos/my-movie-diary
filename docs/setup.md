@@ -68,19 +68,17 @@ s GitHubem (automatické migrace) se nezapíná.
 2. **Edge Functions → Deploy a new function → Via Editor**, název `tmdb`, obsah
    `supabase/functions/tmdb/index.ts` → **Deploy**.
 3. V nastavení funkce **vypnout Verify JWT**.
-4. Import (ve složce repozitáře):
+4. Import (Git Bash, ve složce repozitáře) – skript se zeptá na klíč (zadává se skrytě):
    ```bash
-   curl -X POST "https://vvnexfdnfvwbwluazwoo.supabase.co/functions/v1/tmdb?action=import" \
-     -H "apikey: sb_publishable_ECIGAmDLE3Fj8FNTnx0mgw_P1dEBspM" \
-     -H "x-admin-key: <MMD_ADMIN_KEY>" \
-     -H "Content-Type: application/json" \
-     --data-binary @supabase/seed/universes.json \
-     -o import-report.json
-   cat import-report.json
+   ./scripts/import.sh mad-max              # jedna kolekce
+   ./scripts/import.sh saw scream halloween # víc kolekcí
+   ./scripts/import.sh --all                # všechny – přepíše úpravy z admin panelu, chce potvrzení
    ```
-   Jen jedno univerzum: na konec adresy přidat `&only=mcu`.
+   Reporty se uloží do `import-reports/<slug>.json`.
 5. V reportu zkontrolovat `warnings` (jiný název / rok) a `notFound`. Chybnou shodu opravit
-   doplněním `"tmdb": <id>` k filmu v seedu a import pustit znovu.
+   doplněním `"tmdb": <id>` k filmu v seedu a import pustit znovu, nebo ji opravit v admin panelu.
+
+**Nová verze funkce `tmdb` musí být nasazená před importem**, jinak import poběží se starou verzí.
 
 Po změně kódu funkce: v dashboardu otevřít funkci → Code → vložit nový obsah → Deploy.
 

@@ -6,7 +6,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V1.2** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V1.2.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
@@ -44,6 +44,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 my-movie-diary/
 ├── .github/workflows/   GitHub Actions (Pages deployment, keep-alive)
 ├── docs/                project documentation
+├── scripts/             helper scripts (movie import)
 ├── supabase/            database migrations and Edge Functions
 └── web/                 the website itself (deployed to GitHub Pages)
 ```

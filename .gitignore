@@ -5,6 +5,7 @@ supabase/.temp/
 supabase/.branches/
 
 # Výstupy importu filmů (jen pro kontrolu, nepatří do repozitáře)
+import-reports/
 import-report*.json
 
 # Editory a systém

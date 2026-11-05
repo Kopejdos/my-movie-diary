@@ -6,7 +6,7 @@ import {
 import { loadPref, savePref } from "../prefs.js";
 import { isSignedIn } from "../auth.js";
 import { setAccent, inkFor } from "../theme.js";
-import { TEXTS, format, movies } from "../texts.js";
+import { TEXTS, format, movies, collections } from "../texts.js";
 import { h, mount, poster, posterUrl, pill, yearOf, toast, loadingView, errorView } from "../dom.js";
 
 export async function universesView(container, context) {
@@ -54,7 +54,7 @@ export async function universesView(container, context) {
                 .filter(({ n }) => n > 0)
                 .map(({ c, n }) => chip(c.slug, c.name, c.color, n)),
         );
-        count.textContent = format("universesCount", visible.length);
+        count.textContent = collections(visible.length);
 
         // Seskupení podle typu (série, studia, žánrové výběry); nadpisy jen když je typů víc
         const groups = KIND_ORDER

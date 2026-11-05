@@ -6,7 +6,7 @@ import {
     listUsers, setUserAdmin, deleteUser,
 } from "../admin.js";
 import { setAccent } from "../theme.js";
-import { TEXTS, format, movies } from "../texts.js";
+import { TEXTS, format, movies, collections } from "../texts.js";
 import { h, mount, pill, formatDate, toast, loadingView, errorView } from "../dom.js";
 import { field } from "./login.js";
 
@@ -63,7 +63,7 @@ export async function adminUniversesView(container, context) {
         newUniverseForm(),
         h("div", { class: "section-title" },
             h("h2", {}, TEXTS.adminTabUniverses),
-            h("span", { class: "muted" }, format("universesCount", universes.length)),
+            h("span", { class: "muted" }, collections(universes.length)),
         ),
         h("ol", { class: "admin-list" },
             universes.map((universe, index) => universeRow(universe, universes[index - 1], universes[index + 1], reload)),

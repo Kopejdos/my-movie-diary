@@ -196,6 +196,11 @@ export const TEXTS = {
     tmdbAttribution: "This product uses the TMDB API but is not endorsed or certified by TMDB.",
 };
 
+/** „1 collection“ / „12 collections“. */
+export function collections(count) {
+    return count === 1 ? "1 collection" : `${count} collections`;
+}
+
 /** „1 movie“ / „12 movies“ – správné číslo podle počtu. */
 export function movies(count) {
     return count === 1 ? "1 movie" : `${count} movies`;

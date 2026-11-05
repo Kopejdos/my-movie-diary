@@ -3,6 +3,10 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V1.2.1 – November 2026
+- Import script (`scripts/import.sh`) with reports in `import-reports/`
+- "1 collection" instead of "1 collections"
+
 ## V1.2 – November 2026
 - Categories on the overview: Superhero, Sci-fi & Fantasy, Animation, Action & Adventure, Horror
 - Collections grouped into Series, Studios and Genre picks

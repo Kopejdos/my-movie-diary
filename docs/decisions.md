@@ -94,6 +94,8 @@ my-movie-diary/
 ├── .github/workflows/
 │   ├── deploy-pages.yml      nasazení web/ na GitHub Pages
 │   └── keep-alive.yml        pravidelný zápis do databáze
+├── scripts/
+│   └── import.sh             import kolekcí ze seedu (reporty do import-reports/)
 ├── docs/
 │   ├── decisions.md          tento dokument
 │   ├── data-model.md         tabulky a pravidla přístupu
@@ -182,6 +184,15 @@ Formát **V<hlavní>.<vedlejší>.<oprava>** (např. V1.2.1):
 
 - Verze a **měsíc poslední aktualizace** jsou v patičce webu (např. „V1.1 · November 2026“). Obojí je v `web/js/config.js` (`APP_VERSION`, `APP_UPDATED`) – při vydání nové verze se změní tam.
 - Při vydání: úprava `config.js`, záznam do `CHANGELOG.md`, commit a **tag verze** (`git tag v1.1`, `git push --tags`). Tagy `faze-N` z verzí V0.x zůstávají, od V1.1 se používají jen tagy `vX.Y`.
+
+### Pořadí kroků při vydání (důležité!)
+Web se po pushi nasadí do minuty, takže databáze a funkce musí být připravené **dřív**:
+1. **migrace** v SQL Editoru (nové tabulky, sloupce),
+2. **Edge Functions** – nasadit nové verze,
+3. **import** nových kolekcí (`./scripts/import.sh …`),
+4. teprve pak **commit, push a tag** (nasazení webu).
+
+Opačné pořadí ve V1.2 způsobilo chybu „Could not find the table 'public.categories'“ (web byl napřed před databází) a import se starou funkcí, který neuložil kategorie.
 - Zpětné přiřazení verzí:
 
 | Verze | Fáze | Tag |
@@ -464,6 +475,12 @@ Odznaky se počítají ze zhlédnutí, která už jsou v databázi – odemknou 
 - **Žánrové výběry jsou kurátorské** (zhruba 15 klíčových filmů) – žánr má stovky filmů a kolekce musí jít dokončit. Film může být v sérii i ve výběru (Scream, The Conjuring…).
 - **Žánrové výběry řazené podle roku vydání**, bez skupin a bez pořadí příběhu.
 - **Bez Saw XI** (stažen z plánu Lionsgate) a **Insidious 6** (zatím bez názvu a data) – přidají se po premiéře.
+
+### V1.2.1 – úklid ✅ (5. 11. 2026)
+- Skript **`scripts/import.sh`** místo dlouhého `curl`: `./scripts/import.sh saw scream`, klíč se zadá skrytě, krátké shrnutí ke každé kolekci; `--all` jen s potvrzením (přepíše úpravy z admin panelu).
+- Reporty importu ve složce **`import-reports/`** (Git ji ignoruje) – hlavní složka zůstává čistá.
+- Pravidlo **pořadí kroků při vydání** (migrace → funkce → import → push).
+- Opraveno „1 collections“ → „1 collection“.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).
