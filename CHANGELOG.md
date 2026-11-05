@@ -3,6 +3,11 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V1.6 – November 2026
+- Search: find movies and collections by title, original title or year – instant results as you type
+- Results show every collection a movie belongs to, plus the viewing counter and watchlist star
+- All / Unwatched / Watched filter, search icon in the header, search bar on the overview, press / to search
+
 ## V1.5.1 – November 2026
 - Body Horror: fixed two wrong movie matches (Society, Raw)
 

@@ -39,6 +39,25 @@ export const TEXTS = {
     unwatchedOnly: "Unwatched only",
     filterEmpty: "Nothing left to watch here. 🎉",
 
+    // Vyhledávání
+    navSearch: "Search",
+    searchTitle: "Search",
+    searchPlaceholder: "Search movies and collections…",
+    searchClear: "Clear search",
+    searchIntro: "Find any of the {0} in {1} – by title, collection or year.",
+    searchExamples: ["alien", "ghibli", "spiderman", "harry potter", "2024"],
+    searchShortcutHint: "Tip: press / anywhere in the app to search.",
+    searchShortcut: "Search (press /)",
+    searchCollections: "Collections",
+    searchMovies: "Movies",
+    searchNoResults: "Nothing found for “{0}”.",
+    searchNoResultsHint: "Only movies that are part of a collection can be found.",
+    searchMore: "Showing the first {0} of {1} movies – keep typing to narrow it down.",
+    searchFilterAll: "All",
+    searchFilterUnwatched: "Unwatched",
+    searchFilterWatched: "Watched",
+    searchFilterEmpty: "No movies match this filter.",
+
     // Watchlist
     navWatchlist: "Watchlist",
     watchlistTitle: "Watchlist",

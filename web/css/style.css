@@ -2238,3 +2238,175 @@ button {
         animation: none !important;
     }
 }
+
+/* =====================================================================
+   Vyhledávání (V1.6)
+   ===================================================================== */
+
+/* Lupa nakreslená v CSS – kroužek + rukojeť, barva podle textu */
+.search-icon {
+    position: relative;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}
+
+.search-icon::before {
+    content: "";
+    position: absolute;
+    inset: 0 3px 3px 0;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+}
+
+.search-icon::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 1px;
+    width: 6px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transform: rotate(45deg);
+    transform-origin: right center;
+}
+
+/* Odkaz v hlavičce: lupa + „Search“ (na telefonu jen lupa) */
+.nav__search {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+/* Lišta na přehledu – vypadá jako pole, vede na stránku hledání */
+.search-entry {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 14px;
+    padding: 12px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background:
+        radial-gradient(120% 90% at 0% 0%, var(--gloss), transparent 55%),
+        var(--panel);
+    color: var(--muted);
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.search-entry:hover {
+    border-color: color-mix(in srgb, var(--accent) 60%, var(--border));
+    color: var(--heading);
+}
+
+.search-entry__text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* klávesová zkratka „/“ */
+.kbd {
+    padding: 1px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    border-bottom-width: 2px;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+@media (hover: none) {
+    .kbd {
+        display: none;          /* telefon klávesnici nemá */
+    }
+}
+
+/* Pole na stránce hledání */
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 8px 0 18px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--muted);
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.search-box:focus-within {
+    border-color: var(--u);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--u) 25%, transparent);
+    color: var(--heading);
+}
+
+.search-box__input {
+    flex: 1;
+    min-width: 0;
+    padding: 14px 0;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 16px;            /* menší písmo by na iPhonu přiblížilo stránku */
+    outline: none;
+}
+
+/* vlastní křížek místo prohlížečového */
+.search-box__input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.search-box__clear {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 0;
+    background: var(--panel-hover);
+    color: var(--muted);
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.search-box__clear:hover {
+    color: var(--heading);
+}
+
+.search-box__clear[hidden] {
+    display: none;
+}
+
+.search-page .section-title:first-child {
+    margin-top: 8px;
+}
+
+.chips--wrap {
+    flex-wrap: wrap;
+    overflow: visible;
+    margin: 0;
+}
+
+.search-more {
+    margin: 14px 0 0;
+    text-align: center;
+}
+
+@media (max-width: 560px) {
+    /* na telefonu řádek: plakát + info, ovládání pod nimi (kolekcí může být víc) */
+    .film--search {
+        grid-template-columns: 48px 1fr;
+    }
+
+    .film--search .film__actions {
+        grid-column: 1 / -1;
+        justify-content: flex-end;
+    }
+}

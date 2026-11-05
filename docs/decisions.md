@@ -119,8 +119,8 @@ my-movie-diary/
     └── js/
         ├── app.js            start, hlavička, reakce na přihlášení
         ├── config.js         veřejné adresy a klíče, pravidla registrace
-        ├── supabase.js       klient Supabase (z CDN)
-        ├── router.js         navigace přes #/…
+        ├── supabase.js       klient Supabase (z vendor/)
+        ├── router.js         navigace přes #/… (i s ?parametry)
         ├── texts.js          všechny texty rozhraní
         ├── dom.js            pomocné funkce pro vykreslování
         ├── theme.js          světlý / tmavý režim, barva univerza
@@ -130,8 +130,9 @@ my-movie-diary/
         ├── data.js           logika dat – univerza, zhlédnutí (bez vykreslování)
         ├── admin.js          logika admin panelu (bez vykreslování)
         ├── achievements.js   výpočet achievementů ze zhlédnutí (bez vykreslování)
-        └── views/            obrazovky: universes, universe, login, register, profile,
-                              watchlist, admin (univerza, uživatelé), admin-universe, not-found
+        ├── search.js         vyhledávání – normalizace textu a pořadí výsledků (bez vykreslování)
+        └── views/            obrazovky: universes, universe, search, login, register, profile,
+                              watchlist, achievements, admin (univerza, uživatelé), admin-universe, not-found
 ```
 
 Pravidla:
@@ -236,7 +237,7 @@ Opačné pořadí ve V1.2 způsobilo chybu „Could not find the table 'public.c
 | 11 | V1.3 | Achievementy ✅ | odznaky za filmy, čas, maratony, dokončené kolekce a kategorie |
 | 12 | V1.4 | Úrovně a XP ✅ | level a filmový titul z XP (filmy, opakování, kolekce, achievementy), odznak v hlavičce, Level up; Insidious: Out of the Further |
 | 13 | V1.5 | Horory, vlna 2 ✅ | dalších 7 žánrů |
-| 14 | V1.6 | Vyhledávání | vyhledávací pole – filmy a kolekce |
+| 14 | V1.6 | Vyhledávání ✅ | stránka hledání – filmy a kolekce, i bez diakritiky a podle roku; klávesa / |
 | 15 | V1.7 | Horory, vlna 3 | posledních 7 žánrů |
 | 16 | V1.8 | Cesty (paths) | kurátorské trasy krok za krokem – v kolekci, napříč kolekcemi, žánrové; XP za dokončení |
 | 17 | V1.9 | Statistiky profilu | filmy, hodiny, nejčastěji viděný film, postup v kolekcích |
@@ -281,9 +282,6 @@ Odznaky se počítají ze zhlédnutí, která už jsou v databázi – odemknou 
 - Úrovně jdou **škálovat** – další stupně se jen připíšou do seznamu.
 - Na profilu: odemčené barevně, zamčené šedě s postupem. Při odemčení oznámení.
 - „Patha“ od kamaráda → vyřešeno: **obojí** – úrovně a XP (V1.4) i cesty (V1.8).
-
-### Fáze 14 – vyhledávání (V1.6)
-- Vyhledávací pole v hlavičce: filmy a kolekce v aplikaci (i podle původního názvu), výsledek vede do kolekce k danému filmu.
 
 ### Fáze 16 – cesty / paths (V1.8)
 Nápad kamaráda („dal bych nějakou pathu a achievementy“ → „a co obojí?“). Cesta = nový typ kolekce (`kind = 'path'`), kurátorská trasa krok za krokem:
@@ -549,6 +547,30 @@ Ke každému kroku krátká poznámka, proč ho vidět; postup cestou; XP a achi
 - **Krátké a obecné názvy připnout TMDB id rovnou v seedu** – import u Society našel *Dead Poets Society*
   a u Raw dokument *Raw Footage*. Opraveno ve **V1.5.1** (`"tmdb": 22244` a `393519`). Ostatní varování
   (The Cabin in the Woods 2012, Splice 2010, Blood on Satan's Claw bez „The“) byla správná.
+
+### Fáze 14 – vyhledávání ✅ (5. 11. 2026) – **V1.6**
+- Nová stránka **`#/search?q=…`** – vstup přes lupu v hlavičce, lištu „Search movies and collections…“ na přehledu
+  a klávesu **/** odkudkoli (mimo textová pole).
+- Hledá **filmy** (název i původní název) a **kolekce** (název, zkratka v adrese, slabší shoda podle popisu).
+- U filmu: rok, délka, **všechny kolekce, ve kterých je** (odkazy), počet zhlédnutí, ☆ watchlist a +1 / −1.
+- Filtr **All / Unwatched / Watched** (pamatuje se), nejvýš 60 filmů a 6 kolekcí – víc chce upřesnit dotaz.
+- Klikací příklady v prázdném hledání, Esc smaže pole, Enter na telefonu schová klávesnici.
+- Nové soubory: `web/js/search.js` (logika), `web/js/views/search.js` (obrazovka); router umí `?parametry`.
+
+#### Rozhodnutí ve fázi 14
+- **Hledá se v prohlížeči, ne v databázi** – ~650 filmů je pár desítek kB; jedno načtení (drží se 5 minut
+  v paměti) a pak výsledky při každém úhozu bez čekání na síť. Databáze ani funkce se nemění. Při tisících
+  filmů by se přešlo na fulltext v Postgresu.
+- **Načítání po stránkách po 1000 řádcích** (`fetchAllRows`) – Supabase vrací nejvýš 1000 řádků na dotaz
+  a s vlnou 3 hororů by se k limitu blížilo.
+- **Normalizace textu** – malá písmena, bez diakritiky (NFKD, takže i „Alien³“ → „alien3“), bez interpunkce
+  a apostrofů; navíc „slepená“ podoba bez mezer, takže „spiderman“ najde „Spider-Man“.
+- **Pořadí výsledků** – přesná shoda → slepená shoda → název tak začíná → všechna slova sedí na začátky slov
+  → shoda uvnitř slova; při shodě starší film dřív (série jdou přirozeně za sebou).
+- **Rok v dotazu se porovná s rokem filmu** – „alien 1979“ najde jen původní Vetřelec, „2024“ všechny filmy roku.
+- **Psaní nepřidává záznamy do historie** (`history.replaceState`) – tlačítko Zpět vede zpět na předchozí stránku,
+  ale adresa s `?q=` se dá poslat nebo uložit.
+- **Hledá se jen v kolekcích aplikace**, ne v celé TMDB – přidávání filmů zůstává na adminovi.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

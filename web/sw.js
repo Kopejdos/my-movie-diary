@@ -1,5 +1,5 @@
 // =====================================================================
-// My Movie Diary – service worker (PWA, V1.4.1 – rychlé načítání)
+// My Movie Diary – service worker (PWA; rychlé načítání od V1.4.1)
 //
 // • Stránky (index.html, privacy.html): síť první, při výpadku / pomalé
 //   síti (> 3 s) poslední uložená verze.
@@ -38,9 +38,11 @@ const SHELL = [
     "js/data.js",
     "js/admin.js",
     "js/achievements.js",
+    "js/search.js",
     "js/views/universes.js",
     "js/views/universe.js",
     "js/views/watchlist.js",
+    "js/views/search.js",
     "js/views/achievements.js",
     "js/views/login.js",
     "js/views/register.js",

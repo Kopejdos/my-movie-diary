@@ -10,6 +10,19 @@ function check({ data, error }) {
 }
 
 /**
+ * Načte všechny řádky po stránkách – Supabase vrací nejvýš 1000 řádků na dotaz.
+ * buildQuery musí řadit podle jednoznačného sloupce, jinak by se stránky překrývaly.
+ */
+async function fetchAllRows(buildQuery, pageSize = 1000) {
+    const rows = [];
+    for (let from = 0; ; from += pageSize) {
+        const page = await buildQuery().range(from, from + pageSize - 1).then(check);
+        rows.push(...page);
+        if (page.length < pageSize) return rows;
+    }
+}
+
+/**
  * Všechna univerza seřazená pro hlavní obrazovku, včetně obalu a postupu.
  * Nepřihlášený uživatel dostane watchedCount = 0.
  */
@@ -45,6 +58,28 @@ export async function fetchCategories() {
         .select("id, slug, name, color, sort_order")
         .order("sort_order")
         .then(check);
+}
+
+/**
+ * Podklady pro vyhledávání: kolekce (s postupem) a všechny filmy s tím,
+ * do kterých kolekcí patří. Seznam filmů se mění zřídka – drží se 5 minut v paměti.
+ */
+let searchItemsCache = null;
+const SEARCH_CACHE_MS = 5 * 60 * 1000;
+
+export async function fetchSearchData() {
+    const cached = searchItemsCache && Date.now() - searchItemsCache.at < SEARCH_CACHE_MS
+        ? searchItemsCache.items
+        : null;
+    const [universes, items] = await Promise.all([
+        fetchUniverses(),
+        cached ?? fetchAllRows(() => supabase
+            .from("universe_items")
+            .select("id, universe_id, film:films(tmdb_id, title, original_title, release_date, runtime, poster_path)")
+            .order("id")),
+    ]);
+    if (!cached) searchItemsCache = { at: Date.now(), items };
+    return { universes, items };
 }
 
 /** Pořadí typů kolekcí na přehledu. */

@@ -15,6 +15,7 @@ import { loginView } from "./views/login.js";
 import { registerView } from "./views/register.js";
 import { profileView } from "./views/profile.js";
 import { watchlistView } from "./views/watchlist.js";
+import { searchView } from "./views/search.js";
 import { adminUniversesView, adminUsersView } from "./views/admin.js";
 import { adminUniverseView } from "./views/admin-universe.js";
 import { notFoundView } from "./views/not-found.js";
@@ -30,6 +31,7 @@ addRoute("/login", loginView);
 addRoute("/register", registerView);
 addRoute("/profile", profileView);
 addRoute("/watchlist", watchlistView);
+addRoute("/search", searchView);
 addRoute("/admin", adminUniversesView);
 addRoute("/admin/users", adminUsersView);
 addRoute("/admin/collection/:slug", adminUniverseView);
@@ -66,6 +68,12 @@ function renderHeader() {
                     : null,
                 themeToggle(),
                 navLink("#/", TEXTS.navUniverses, path === "/" || path.startsWith("/collection/"), " nav__link--home"),
+                h("a", {
+                    class: `nav__link nav__search${path === "/search" ? " nav__link--active" : ""}`,
+                    href: "#/search",
+                    title: TEXTS.searchShortcut,
+                    "aria-label": TEXTS.navSearch,
+                }, h("span", { class: "search-icon", "aria-hidden": "true" }), h("span", { class: "nav__label" }, TEXTS.navSearch)),
                 user
                     ? h("a", {
                         class: `nav__link${path === "/watchlist" ? " nav__link--active" : ""}`,
@@ -215,6 +223,17 @@ function achievementMessage(key, result) {
 }
 
 document.addEventListener("watches-changed", scheduleProgressCheck);
+
+// Klávesa „/“ kdekoli (mimo pole pro psaní) otevře hledání
+document.addEventListener("keydown", (event) => {
+    if (event.key !== "/" || event.ctrlKey || event.metaKey || event.altKey) return;
+    const target = event.target;
+    if (target instanceof HTMLElement
+        && (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName))) return;
+    event.preventDefault();
+    const field = document.querySelector(".search-box__input");
+    if (field) field.focus(); else navigate("/search");
+});
 
 // Verze a měsíc poslední aktualizace v patičce
 const versionLabel = document.getElementById("app-version");

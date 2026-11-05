@@ -6,7 +6,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V1.5.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V1.6** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
@@ -15,6 +15,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - +1 / −1 viewing counter – every viewing is logged with a date
 - Progress per collection, **Up next** and **Continue watching** suggestions
 - Release order or story (chronological) order, "unwatched only" filter
+- Instant search across all movies and collections (by title, original title or year)
 - Watchlist across all collections
 - Achievements with levels (Bronze → Platinum) and completed-collection badges
 - XP and levels with movie-themed titles – from Extra to Legend
@@ -24,7 +25,6 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Installable on a phone or computer (PWA), opens even offline
 
 **Coming next**
-- V1.6 – search
 - V1.7 – horror wave 3
 - V1.8 – curated paths
 - V1.9 – profile statistics

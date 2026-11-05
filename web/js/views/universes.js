@@ -103,10 +103,20 @@ export async function universesView(container, context) {
             h("h2", {}, TEXTS.universesTitle),
             count,
         ),
+        searchEntry(),
         chips,
         grid,
     );
     renderCollections();
+}
+
+/** Lišta „Search movies and collections…“ – vede na stránku hledání. */
+function searchEntry() {
+    return h("a", { class: "search-entry", href: "#/search" },
+        h("span", { class: "search-icon", "aria-hidden": "true" }),
+        h("span", { class: "search-entry__text" }, TEXTS.searchPlaceholder),
+        h("span", { class: "kbd", "aria-hidden": "true" }, "/"),
+    );
 }
 
 /** Nadpis skupiny podle typu kolekce. */
@@ -192,8 +202,8 @@ function heroCard(signedIn, continueWatching, refresh) {
     return card;
 }
 
-/** Kartička univerza – odkaz na detail. */
-function universeCard(universe, signedIn, eager = false) {
+/** Kartička univerza – odkaz na detail (používá ji i vyhledávání). */
+export function universeCard(universe, signedIn, eager = false) {
     const progress = { total: universe.totalCount, watched: universe.watchedCount };
     const value = percent(progress);
     const complete = signedIn && progress.total > 0 && progress.watched === progress.total;

@@ -22,15 +22,32 @@ export function setNotFound(view) {
     notFoundView = view;
 }
 
-/** Aktuální cesta bez # (prázdná = "/"). */
+/** Aktuální cesta bez # a bez parametrů (prázdná = "/"). */
 export function currentPath() {
-    const hash = window.location.hash.replace(/^#/, "");
+    const hash = window.location.hash.replace(/^#/, "").split("?")[0];
     return hash === "" ? "/" : hash;
 }
 
-/** Přejde na jinou cestu. */
+/** Parametry za otazníkem: #/search?q=alien → URLSearchParams { q: "alien" }. */
+export function currentQuery() {
+    const hash = window.location.hash;
+    const index = hash.indexOf("?");
+    return new URLSearchParams(index === -1 ? "" : hash.slice(index + 1));
+}
+
+/**
+ * Změní parametry v adrese bez nového vykreslení a bez záznamu v historii
+ * (psaní do hledání nemá zaplnit tlačítko Zpět).
+ */
+export function replaceQuery(params) {
+    const query = new URLSearchParams(params).toString();
+    window.history.replaceState(window.history.state, "", `#${currentPath()}${query ? `?${query}` : ""}`);
+}
+
+/** Přejde na jinou cestu (může obsahovat i ?parametry). */
 export function navigate(path) {
-    if (currentPath() === path) {
+    const current = window.location.hash.replace(/^#/, "") || "/";
+    if (current === path) {
         render();
     } else {
         window.location.hash = path;
@@ -52,11 +69,11 @@ export async function render() {
         const params = Object.fromEntries(
             route.names.map((name, index) => [name, decodeURIComponent(match[index + 1])]),
         );
-        await route.view(container, { params, isCurrent });
+        await route.view(container, { params, query: currentQuery(), isCurrent });
         afterRender();
         return;
     }
-    if (notFoundView) await notFoundView(container, { params: {}, isCurrent });
+    if (notFoundView) await notFoundView(container, { params: {}, query: currentQuery(), isCurrent });
     afterRender();
 }
 
