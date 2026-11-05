@@ -6,7 +6,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> Status: version 1 complete – see [docs/decisions.md](docs/decisions.md) for decisions and history.
+> **V1.0** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
@@ -20,11 +20,12 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Admin panel: universes, movies (search TMDB right from the app) and users
 - Installable on a phone or computer (PWA), opens even offline
 
-**Later**
-- Ratings and notes for each viewing, viewing history and statistics
-- Custom universes
-- Data export / import
-- Sharing progress with friends
+**Coming next**
+- V1.1 – new universes: Mad Max, Avatar, Disney, Pixar, DreamWorks
+- V1.2 – achievements
+- V1.3 – search
+- V1.4 – profile statistics
+- V1.5 – shareable profiles
 
 ## Tech stack
 
@@ -47,6 +48,7 @@ my-movie-diary/
 
 ## Documentation
 
+- [Changelog](CHANGELOG.md)
 - [Decisions and roadmap](docs/decisions.md)
 - [Data model](docs/data-model.md)
 - [Setup guide](docs/setup.md)

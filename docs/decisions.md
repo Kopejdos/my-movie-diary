@@ -8,7 +8,7 @@ Aktualizuje se na konci každé fáze.
 | Co | Rozhodnutí |
 |---|---|
 | Název | **My Movie Diary** (zkráceně **MMD**) |
-| Repozitář | `github.com/Kopejdos/my-movie-diary` (veřejný), větev `main`, každá dokončená fáze má tag `faze-N` |
+| Repozitář | `github.com/Kopejdos/my-movie-diary` (veřejný), větev `main`, každá dokončená fáze má tag verze (`faze-N` do V1.0, od V1.1 `vX.Y`) |
 | Web | `https://kopejdos.github.io/my-movie-diary/` |
 | Typ aplikace | webová stránka jako **PWA** – na telefonu jde přidat na plochu a chová se jako aplikace |
 | Frontend | HTML, CSS, čistý JavaScript (ES moduly), **bez build kroku** |
@@ -163,25 +163,102 @@ Pravidla:
 ## Pravidla plánu fází
 - Každá fáze je **malá** (zhruba jeden až dva večery) a končí **funkční, nasazenou** verzí webu.
 - Fáze, která se ukáže jako příliš velká, se rozdělí na „a“ a „b“.
+- **Každá dokončená fáze = nová verze aplikace** (viz Verzování).
+
+## Verzování
+
+Formát **V<hlavní>.<vedlejší>.<oprava>** (např. V1.2.1):
+
+| Část | Kdy se zvyšuje | Příklad |
+|---|---|---|
+| hlavní | velký milník – aplikace je „hotová“ v nové podobě | V0.7 → **V1.0** (fáze 8, PWA) |
+| vedlejší | dokončená fáze (nové funkce) | V1.0 → **V1.1** (fáze 9) |
+| oprava | oprava chyby nebo drobnost bez nové funkce | V1.1 → **V1.1.1** |
+
+- Verze a **měsíc poslední aktualizace** jsou v patičce webu (např. „V1.1 · November 2026“). Obojí je v `web/js/config.js` (`APP_VERSION`, `APP_UPDATED`) – při vydání nové verze se změní tam.
+- Při vydání: úprava `config.js`, záznam do `CHANGELOG.md`, commit a **tag verze** (`git tag v1.1`, `git push --tags`). Tagy `faze-N` z verzí V0.x zůstávají, od V1.1 se používají jen tagy `vX.Y`.
+- Zpětné přiřazení verzí:
+
+| Verze | Fáze | Tag |
+|---|---|---|
+| V0.0 | 0 – infrastruktura | `faze-0` |
+| V0.1 | 1a, 1b – databáze a data | `faze-1`, `faze-1a` |
+| V0.2 | 2, 2b, 2c – web, přihlášení, Google, účty | `faze-2` |
+| V0.3 | 3 – univerza a zhlédnutí | `faze-3` |
+| V0.4 | 4 – redesign | `faze-4` |
+| V0.5 | 5 – admin panel | `faze-5` |
+| V0.6 | 6 – řazení a filtr | `faze-6` |
+| V0.7 | 7 – watchlist | `faze-7` |
+| **V1.0** | 8 – PWA | `faze-8` (+ doplnit `v1.0`) |
 
 ## Plán fází
 
-| # | Fáze | Co přibude | Co si vyzkoušíš |
-|---|---|---|---|
-| 0 | Infrastruktura ✅ | repozitář, GitHub Pages s testovací stránkou, Supabase projekt, TMDB token v Secrets | web běží na vlastní adrese |
-| 1a | Struktura databáze ✅ | migrace (tabulky, RLS, pohledy, funkce), keep-alive | v Table Editoru jsou tabulky, keep-alive zapisuje |
-| 1b | Data o filmech ✅ | Edge Function `tmdb`, seznam 16 univerz (202 filmů), import z TMDB | v tabulkách jsou univerza a filmy s plakáty |
-| 2 | Kostra webu a přihlášení ✅ | rozvržení, router, registrace (e-mail, heslo, nickname), přihlášení, odhlášení | přihlásíš se na webu |
-| 2b | Přihlášení přes Google ✅ | Google OAuth, Privacy Policy, aplikace zveřejněná pro všechny | přihlášení jedním klepnutím |
-| 2c | Účty ✅ | přihlášení nickem nebo e-mailem, profil se změnou nicku, admin účet, Labyrint | přihlásíš se nickem |
-| 3 | Univerza a zhlédnutí ✅ | přehled univerz s postupem, detail univerza, counter +1 / −1 | odškrtáš si první filmy |
-| 4 | Redesign ✅ | styl podle RimWorld prezentace + prvky z rozvrhu kamaráda: písmo Chakra Petch, tečkované pozadí, barvy univerz, banner s backdropem, Up next / Continue watching, světlý a tmavý režim | web vypadá jako hotová aplikace |
-| 5 | Admin panel ✅ | univerza (vytvořit, upravit, smazat), filmy přes hledání v TMDB, uživatelé (seznam, správce, smazání) | spravuješ obsah bez SQL a curl |
-| 6 | Řazení a filtr ✅ | pořadí vydání / příběhu, filtr neviděných | sleduješ univerzum chronologicky |
-| 7 | Watchlist ✅ | „chci vidět“ napříč univerzy | seznam na víkend |
-| 8 | PWA ✅ | manifest, ikona, instalace na plochu | MMD jako aplikace v telefonu |
+### Verze 0.x a 1.0 (hotovo)
 
-Všechny plánované fáze jsou hotové. Později podle chuti: hodnocení a poznámky ke zhlédnutí, historie a statistiky, vlastní univerza, export / import, sdílení postupu s přáteli, české názvy filmů.
+| # | Verze | Fáze | Co přibylo |
+|---|---|---|---|
+| 0 | V0.0 | Infrastruktura ✅ | repozitář, GitHub Pages, Supabase, TMDB token |
+| 1a, 1b | V0.1 | Databáze a data ✅ | tabulky, RLS, keep-alive, Edge Function `tmdb`, 16 univerz z TMDB |
+| 2, 2b, 2c | V0.2 | Web a přihlášení ✅ | registrace, přihlášení e-mailem / nickem / Googlem, profil, admin účet, Labyrint |
+| 3 | V0.3 | Univerza a zhlédnutí ✅ | přehled s postupem, detail se skupinami, counter +1 / −1 |
+| 4 | V0.4 | Redesign ✅ | Chakra Petch, barvy univerz, banner, Up next, Continue watching, světlý / tmavý režim |
+| 5 | V0.5 | Admin panel ✅ | univerza, filmy přes hledání v TMDB, uživatelé |
+| 6 | V0.6 | Řazení a filtr ✅ | pořadí vydání / příběhu, Unwatched only |
+| 7 | V0.7 | Watchlist ✅ | hvězdička ☆, stránka Watchlist |
+| 8 | **V1.0** | PWA ✅ | instalace na plochu, ikona, service worker, offline |
+
+### Verze 1.x (plán)
+
+| # | Verze | Fáze | Co přibude |
+|---|---|---|---|
+| 9 | V1.1 | Nová univerza + verze v patičce | Mad Max, Avatar, Disney, Pixar, DreamWorks; verze a měsíc aktualizace v patičce; `CHANGELOG.md` |
+| 10 | V1.2 | Achievementy | odznaky za filmy, čas, maratony, dokončená univerza; zobrazení na profilu, oznámení při odemčení |
+| 11 | V1.3 | Vyhledávání | vyhledávací pole – filmy a univerza v aplikaci |
+| 12 | V1.4 | Statistiky profilu | počet filmů a hodin, nejčastěji viděný film, postup v univerzech |
+| 13 | V1.5 | Sdílení profilu | veřejný profil (statistiky + achievementy), hledání uživatelů – spojení fází 11 a 12 |
+
+Později podle chuti: hodnocení a poznámky ke zhlédnutí, vlastní univerza uživatelů, export / import, české názvy filmů.
+
+### Fáze 9 – nová univerza (V1.1)
+| Univerzum | Obsah |
+|---|---|
+| Mad Max | 5 filmů (Mad Max, The Road Warrior, Beyond Thunderdome, Fury Road, Furiosa); pořadí příběhu – Furiosa před Fury Road |
+| Avatar | hrané filmy Jamese Camerona – zatím 3, další 2 se přidají po premiéře |
+| Disney | **Walt Disney Animation Studios** – celovečerní animované filmy, skupiny podle období (Golden Age, Wartime, Silver Age, Bronze Age, Renaissance, Post-Renaissance, Revival); **hrané remaky jako volitelné** (samostatná skupina, nepočítají se do postupu) |
+| Pixar | celovečerní filmy Pixar Animation Studios |
+| DreamWorks | celovečerní filmy DreamWorks Animation |
+
+- **Jen celovečerní filmy, žádné krátkometrážní.**
+- Film může být ve více univerzech (Shrek je ve „Shrek“ i v „DreamWorks“) – zhlédnutí se počítá v obou.
+- Univerza se přidají do seedu a naimportují **jednotlivě** (`&only=<slug>`) – import sáhne jen na dané univerzum, úpravy z admin panelu u ostatních zůstanou.
+- Patička: „V1.1 · November 2026“.
+
+### Fáze 10 – achievementy (V1.2)
+Odznaky se počítají ze zhlédnutí, která už jsou v databázi – odemknou se i zpětně.
+
+| Achievement | Úrovně |
+|---|---|
+| První krok | první zhlédnutý film |
+| Sběratel | 10 / 50 / 100 / 200 filmů |
+| Čas u filmů | 24 / 100 / 200 hodin |
+| Maraton | 3 / 5 / 8 filmů za jeden den |
+| Rewatcher | jeden film viděný 3× |
+| Completionist | dokončené univerzum – zvlášť pro každé (název podle univerza, např. „Avenger“ za MCU) |
+
+- Úrovně jdou **škálovat** – další stupně (500 filmů, 500 hodin…) se jen připíšou do seznamu.
+- Na profilu: odemčené barevně, zamčené šedě s ukazatelem postupu („37 / 50 films“). Při odemčení oznámení.
+- **Otevřená otázka:** návrh kamaráda na „pathu“ – úrovně / XP (Extra → Kaskadér → Herec → Režisér), nebo doporučená cesta po univerzech? Upřesnit před fází 10.
+
+### Fáze 11 – vyhledávání (V1.3)
+- Vyhledávací pole v hlavičce: filmy a univerza v aplikaci (podle názvu, i původního), výsledek vede do univerza k danému filmu.
+- Připraví půdu pro hledání uživatelů ve fázi 13.
+
+### Fáze 12 – statistiky profilu (V1.4)
+- Na profilu: počet viděných filmů, celkový čas (hodiny), počet zhlédnutí, **nejčastěji viděný film**, postup ve všech univerzech, filmy podle roku zhlédnutí.
+
+### Fáze 13 – sdílení profilu (V1.5)
+- Veřejný profil `#/u/<nick>` se statistikami a achievementy; uživatel si zvolí, jestli je profil veřejný.
+- Hledání uživatelů (navazuje na fázi 11), odkaz na profil ke sdílení.
 
 ## Historie fází
 
@@ -322,7 +399,7 @@ Všechny plánované fáze jsou hotové. Později podle chuti: hodnocení a pozn
 - **Watchlist napříč univerzy**, ne zvlášť pro každé univerzum – jeden seznam „na víkend“; univerzum filmu je vidět u každé položky.
 - **Hvězdička jde i u viděného filmu** – „chci znovu vidět“; po dalším zhlédnutí z watchlistu opět zmizí.
 
-### Fáze 8 – PWA ✅ (5. 11. 2026)
+### Fáze 8 – PWA ✅ (5. 11. 2026) – **V1.0**
 - **Instalace na plochu:** `manifest.webmanifest` (název, krátký název „MMD“, barvy, režim `standalone`), ikony 192 / 512 px, maskovatelná ikona pro Android a ikona pro iPhone.
 - **Ikona:** filmová klapka v mosazné barvě s nápisem „MMD“ v písmu Chakra Petch, tmavé pozadí s tečkovanou mřížkou (vygenerovaná skriptem, stejný styl jako web).
 - **Tlačítko „⤓ Install“** v hlavičce (Chrome, Edge, Android – jen když jde aplikace nainstalovat) a karta **Install the app** na profilu: tlačítko, návod pro iPhone (Sdílet → Přidat na plochu), nebo potvrzení, že aplikace běží nainstalovaná.
