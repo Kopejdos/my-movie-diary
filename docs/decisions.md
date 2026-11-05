@@ -131,7 +131,8 @@ my-movie-diary/
         ├── admin.js          logika admin panelu (bez vykreslování)
         ├── achievements.js   výpočet achievementů ze zhlédnutí (bez vykreslování)
         ├── search.js         vyhledávání – normalizace textu a pořadí výsledků (bez vykreslování)
-        └── views/            obrazovky: universes, universe, search, login, register, profile,
+        ├── stats.js          statistiky profilu ze zhlédnutí (bez vykreslování)
+        └── views/            obrazovky: universes, universe, search, stats, login, register, profile,
                               watchlist, achievements, admin (univerza, uživatelé), admin-universe, not-found
 ```
 
@@ -240,7 +241,7 @@ Opačné pořadí ve V1.2 způsobilo chybu „Could not find the table 'public.c
 | 14 | V1.6 | Vyhledávání ✅ | stránka hledání – filmy a kolekce, i bez diakritiky a podle roku; klávesa / |
 | 15 | V1.7 | Horory, vlna 3 ✅ | posledních 7 žánrů + J-Horror |
 | 16 | V1.8 | Cesty (paths) ✅ | 6 kurátorských tras krok za krokem s poznámkami, achievement Pathfinder, správa v adminu |
-| 17 | V1.9 | Statistiky profilu | filmy, hodiny, nejčastěji viděný film, postup v kolekcích |
+| 17 | V1.9 | Statistiky profilu ✅ | stránka Stats – souhrn, aktivita, nejčastěji viděné, dekády, kategorie, skoro hotové kolekce, zajímavosti |
 | 18 | **V2.0** | Sdílení profilu | veřejný profil (level, achievementy, statistiky), hledání uživatelů – z osobního deníku sociální aplikace |
 
 Hororové vlny se střídají s funkcemi, aby každá verze přinesla něco nového. Později podle chuti: hodnocení a poznámky ke zhlédnutí, vlastní kolekce uživatelů, export / import, české názvy filmů.
@@ -283,9 +284,6 @@ Odznaky se počítají ze zhlédnutí, která už jsou v databázi – odemknou 
 - Úrovně jdou **škálovat** – další stupně se jen připíšou do seznamu.
 - Na profilu: odemčené barevně, zamčené šedě s postupem. Při odemčení oznámení.
 - „Patha“ od kamaráda → vyřešeno: **obojí** – úrovně a XP (V1.4) i cesty (V1.8).
-
-### Fáze 17 – statistiky profilu (V1.9)
-- Počet viděných filmů, celkový čas, počet zhlédnutí, **nejčastěji viděný film**, postup ve všech kolekcích, filmy podle roku zhlédnutí.
 
 ### Fáze 18 – sdílení profilu (V2.0)
 - Veřejný profil `#/u/<nick>` se statistikami a achievementy; uživatel si zvolí, jestli je veřejný. Hledání uživatelů, odkaz ke sdílení.
@@ -611,6 +609,29 @@ Nápad kamaráda („dal bych nějakou pathu a achievementy“ → „a co oboj�
 - **Pořadí cesty je pevné** – žádné „story order“; o pořadí rozhoduje kurátor (Star Wars: First Watch záměrně
   není chronologicky).
 - **Úrovně Pathfinderu se přizpůsobí počtu cest** (stejná funkce `scaledTiers` jako u fanoušků kategorií).
+
+### Fáze 17 – statistiky profilu ✅ (5. 11. 2026) – **V1.9**
+- Nová stránka **`#/stats`**; na profilu i ve statistikách přepínač **Achievements | Stats** (hlavička beze změny,
+  odkaz @nick je aktivní na obou).
+- **Dlaždice:** viděné filmy, zhlédnutí (+ opakování), čas (hodiny, od 24 h i „dní v kuse“), dokončené kolekce
+  (+ rozkoukané), nejdelší série dní za sebou (+ aktuální 🔥), watchlist.
+- **Activity:** sloupcový graf zhlédnutí po měsících za posledních 12 měsíců + přehled po rocích (zhlédnutí, nové filmy).
+- **Most watched:** 5 nejčastěji viděných filmů s plakátem a počtem.
+- **By release decade** a **By category** (viděné filmy z kolekcí kategorie / všechny, v barvě kategorie).
+- **Almost there:** rozkoukané kolekce s nejmenším počtem zbývajících filmů (odkaz rovnou do kolekce).
+- **Fun facts:** první zaznamenaný film, nejdelší / nejkratší, nejstarší / nejnovější, nejrušnější den, oblíbený den v týdnu.
+- Nové soubory: `web/js/stats.js` (výpočet), `web/js/views/stats.js` (obrazovka).
+
+#### Rozhodnutí ve fázi 17
+- **Počítá se v prohlížeči ze stejných dat jako achievementy** (`fetchAchievementData`, jen dotaz na zhlédnutí
+  vrací navíc název, plakát a datum vydání filmu) – žádná migrace, žádná funkce, jeden průchod daty.
+- **Samostatná stránka, ne další sekce profilu** – profil by byl moc dlouhý; ve V2.0 se obojí spojí do veřejného profilu
+  (logika ve `stats.js` je na tohle připravená – dostane data a vrátí čísla).
+- **Grafy čistě v CSS** (bez knihovny) podle pravidel pro vizualizace: jedna barva pro velikost (akcent),
+  kategorie v jejich barvách vždy s popiskem, hodnoty v barvě textu, hodnota při najetí myší, nejvyšší měsíc
+  popsaný vždy, popis grafu pro čtečky obrazovky.
+- **Volitelné filmy se do postupu kolekcí nepočítají** (stejně jako v detailu kolekce).
+- **„Nejrušnější den“ se ukáže až od 2 filmů za den** – s jedním filmem nic neříká.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

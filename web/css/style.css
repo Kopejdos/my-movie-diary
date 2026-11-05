@@ -2535,3 +2535,331 @@ button {
         left: 24px;                  /* padding 10 + 28 / 2 */
     }
 }
+
+/* =====================================================================
+   Statistiky profilu (V1.9)
+   ===================================================================== */
+
+.profile-tabs {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 20px;
+}
+
+.profile-tabs .segmented__option {
+    text-decoration: none;
+}
+
+/* odkazy mají vlastní barvu – aktivní záložka musí mít kontrastní text */
+.profile-tabs .segmented__option--active,
+.profile-tabs .segmented__option--active:hover {
+    color: var(--u-ink);
+}
+
+/* Dlaždice s hlavními čísly */
+.stat-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.stat-tile {
+    display: grid;
+    gap: 2px;
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background:
+        radial-gradient(120% 90% at 0% 0%, var(--gloss), transparent 55%),
+        var(--panel);
+}
+
+.stat-tile__value {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.9rem;
+    line-height: 1.1;
+    color: var(--heading);
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-tile__label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text);
+}
+
+.stat-tile__sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+}
+
+/* Panely ve dvou sloupcích (na telefonu pod sebou) */
+.stats-grid {
+    display: grid;
+    align-items: start;          /* krátký panel se nenatahuje podle souseda */
+    gap: 14px;
+}
+
+@media (min-width: 820px) {
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.stats-panel {
+    display: grid;
+    align-content: start;
+    gap: 14px;
+    padding: 18px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--panel);
+    min-width: 0;
+}
+
+.stats-panel__title {
+    font-size: 1.15rem;
+    margin: 0;
+}
+
+/* Měsíce: svislé sloupce, jedna barva (akcent); hodnota nad sloupcem při najetí,
+   nejvyšší měsíc má hodnotu vidět vždy */
+.chart {
+    margin: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.month-chart {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    align-items: end;
+    gap: 6px;
+    height: 150px;
+    padding-top: 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.month-chart__col {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.month-chart__bar {
+    width: 100%;
+    max-width: 26px;
+    min-height: 2px;
+    border-radius: 4px 4px 0 0;
+    background: color-mix(in srgb, var(--accent) 70%, transparent);
+    transition: background 0.15s;
+}
+
+.month-chart__col:hover .month-chart__bar,
+.month-chart__col--max .month-chart__bar {
+    background: var(--accent);
+}
+
+.month-chart__value {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--heading);
+    opacity: 0;
+    transition: opacity 0.15s;
+    margin-bottom: 3px;
+}
+
+.month-chart__col:hover .month-chart__value,
+.month-chart__col--max .month-chart__value {
+    opacity: 1;
+}
+
+.month-chart__label {
+    position: absolute;
+    bottom: -20px;
+    font-size: 0.68rem;
+    color: var(--muted);
+}
+
+.chart figcaption {
+    margin-top: 18px;
+}
+
+/* Vodorovné sloupce: popisek · stopa · hodnota */
+.bar-rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.bar-rows__row {
+    display: grid;
+    grid-template-columns: minmax(70px, 120px) 1fr auto;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+}
+
+.bar-rows__label {
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bar-rows__track {
+    height: 10px;
+    border-radius: 999px;
+    background: var(--panel-hover);
+}
+
+.bar-rows__bar {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--bar, var(--accent));
+}
+
+.bar-rows__row:hover .bar-rows__bar {
+    filter: brightness(1.12);
+}
+
+.bar-rows__value {
+    font-weight: 700;
+    color: var(--heading);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Textové seznamy (roky, zajímavosti) */
+.stats-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.stats-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--border);
+}
+
+.stats-list li:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.stats-list--facts li > .muted {
+    flex-basis: 100%;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.stats-list--facts strong {
+    color: var(--heading);
+}
+
+/* Nejčastěji viděné */
+.top-films {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.top-films__item {
+    display: grid;
+    grid-template-columns: 22px 38px 1fr auto;
+    align-items: center;
+    gap: 10px;
+}
+
+.top-films__rank {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--muted);
+    text-align: center;
+}
+
+.top-films__poster {
+    width: 38px;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 6px;
+    display: block;
+    background: var(--panel-hover);
+    font-size: 0.5rem;
+    overflow: hidden;
+}
+
+.top-films__info {
+    display: grid;
+    min-width: 0;
+    font-size: 0.9rem;
+}
+
+.top-films__info strong {
+    color: var(--heading);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.top-films__info .muted {
+    font-size: 0.78rem;
+}
+
+.top-films__count {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--accent);
+}
+
+/* Skoro hotovo – kolekce v jejich barvě */
+.almost-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+}
+
+.almost-list__item {
+    display: grid;
+    gap: 6px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    transition: border-color 0.15s;
+}
+
+.almost-list__item:hover {
+    border-color: var(--u);
+}
+
+.almost-list__top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+
+.almost-list__top strong {
+    color: var(--heading);
+}

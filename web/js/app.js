@@ -16,6 +16,7 @@ import { registerView } from "./views/register.js";
 import { profileView } from "./views/profile.js";
 import { watchlistView } from "./views/watchlist.js";
 import { searchView } from "./views/search.js";
+import { statsView } from "./views/stats.js";
 import { adminUniversesView, adminUsersView } from "./views/admin.js";
 import { adminUniverseView } from "./views/admin-universe.js";
 import { notFoundView } from "./views/not-found.js";
@@ -32,6 +33,7 @@ addRoute("/register", registerView);
 addRoute("/profile", profileView);
 addRoute("/watchlist", watchlistView);
 addRoute("/search", searchView);
+addRoute("/stats", statsView);
 addRoute("/admin", adminUniversesView);
 addRoute("/admin/users", adminUsersView);
 addRoute("/admin/collection/:slug", adminUniverseView);
@@ -87,7 +89,7 @@ function renderHeader() {
                 user
                     ? [
                         h("a", {
-                            class: `nav__user${path === "/profile" ? " nav__user--active" : ""}`,
+                            class: `nav__user${path === "/profile" || path === "/stats" ? " nav__user--active" : ""}`,
                             href: "#/profile",
                             title: TEXTS.navProfile,
                         },

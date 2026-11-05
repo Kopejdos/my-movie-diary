@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V1.9 – November 2026
+- Stats page on your profile: movies seen, viewings, time watched, collections done and your longest streak
+- Activity over the last 12 months and per year, most watched movies, movies by release decade and by category
+- "Almost there" – collections you're closest to finishing, plus fun facts (longest, oldest, busiest day…)
+- Achievements | Stats switch on the profile
+
 ## V1.8 – November 2026
 - Paths: curated routes you watch step by step, with a short note on why each movie matters
 - 6 paths: MCU Essentials, Star Wars: First Watch, Superhero Hall of Fame, Fantasy Starter, Animation Essentials, Horror 101

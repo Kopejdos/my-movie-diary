@@ -74,7 +74,7 @@ export async function fetchAchievementData() {
     const [watches, universes, items, categories, links] = await Promise.all([
         fetchAll(() => supabase
             .from("watches")
-            .select("tmdb_id, watched_on, created_at, film:films(runtime)")
+            .select("tmdb_id, watched_on, created_at, film:films(title, poster_path, release_date, runtime)")
             .order("watched_on")
             .order("created_at")),
         fetchAll(() => supabase.from("universes").select("id, slug, name, color, kind").order("sort_order")),

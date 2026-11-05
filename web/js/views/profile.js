@@ -11,6 +11,7 @@ import { h, mount, toast } from "../dom.js";
 import { field } from "./login.js";
 import { canInstall, promptInstall, isStandalone, isIos } from "../pwa.js";
 import { achievementsSection } from "./achievements.js";
+import { profileTabs } from "./stats.js";
 
 export async function profileView(container) {
     setAccent(null);
@@ -59,6 +60,7 @@ export async function profileView(container) {
     const settings = h("div", { class: "auth-page auth-page--stack" }, form, installCard());
     mount(container,
         generated ? settings : null,
+        profileTabs("profile"),
         achievementsSection(),
         generated ? null : settings,
     );
