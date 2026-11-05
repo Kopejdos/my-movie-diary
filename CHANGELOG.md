@@ -3,6 +3,9 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V1.5.1 – November 2026
+- Body Horror: fixed two wrong movie matches (Society, Raw)
+
 ## V1.5 – November 2026
 - 7 more horror genre picks: Body Horror, Creature Feature, Vampire, Werewolf, Sci-fi Horror, Folk Horror, Horror Comedy
 

@@ -546,6 +546,9 @@ Ke každému kroku krátká poznámka, proč ho vidět; postup cestou; XP a achi
 #### Rozhodnutí ve fázi 13
 - **Překryvy jsou v pořádku** – Alien je ve své sérii i v Sci-fi Horror, Shaun of the Dead v Zombie i Horror Comedy, Jaws v Creature Feature (a později možná i Eco-horror); zhlédnutí se počítá všude.
 - **Remaky se stejným názvem odliší rok** (Nosferatu 1922 / 2024, Dracula 1931 / 1958).
+- **Krátké a obecné názvy připnout TMDB id rovnou v seedu** – import u Society našel *Dead Poets Society*
+  a u Raw dokument *Raw Footage*. Opraveno ve **V1.5.1** (`"tmdb": 22244` a `393519`). Ostatní varování
+  (The Cabin in the Woods 2012, Splice 2010, Blood on Satan's Claw bez „The“) byla správná.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).
