@@ -137,6 +137,7 @@ export function computeAchievements({ watches, universes, items, categories, lin
     reachDates.completedCollections = completed.map((c) => c.date);
 
     const values = {
+        totalWatches: watches.length,
         distinctFilms: firstWatched.size,
         hours: Math.floor(minutes / 60),
         bestDay,
@@ -190,7 +191,72 @@ export function computeAchievements({ watches, universes, items, categories, lin
     }
     for (const c of completed) unlockedKeys.add(`complete:${c.universe.slug}`);
 
-    return { cards, completed, unlockedKeys, unlockedCount, totalCount, values };
+    const result = { cards, completed, unlockedKeys, unlockedCount, totalCount, values };
+    result.xp = computeXp(result);
+    result.level = levelFromXp(result.xp.total);
+    return result;
+}
+
+// ---------------------------------------------------------------------
+// XP a úrovně
+// ---------------------------------------------------------------------
+
+/** Kolik XP dává která aktivita. */
+export const XP_RULES = {
+    newFilm: 10,                       // poprvé viděný film
+    rewatch: 3,                        // každé další zhlédnutí
+    completedCollection: 100,          // dokončená kolekce
+    tier: [25, 50, 100, 200],          // úroveň achievementu: Bronze, Silver, Gold, Platinum (a výš)
+};
+
+/** Filmové tituly podle úrovně: [od úrovně, titul]. */
+export const LEVEL_TITLES = [
+    [1, "Extra"],
+    [3, "Stand-in"],
+    [5, "Stunt Double"],
+    [7, "Supporting Actor"],
+    [10, "Lead Actor"],
+    [13, "Director"],
+    [16, "Producer"],
+    [20, "Studio Head"],
+    [25, "Legend"],
+];
+
+/** XP potřebné k dosažení úrovně: 1 → 0, 2 → 100, 3 → 300, 4 → 600, 5 → 1000… */
+export function xpForLevel(level) {
+    return 50 * level * (level - 1);
+}
+
+/** Rozpad XP podle zdroje + součet. */
+export function computeXp({ values, completed, cards }) {
+    const films = values.distinctFilms * XP_RULES.newFilm;
+    const rewatches = (values.totalWatches - values.distinctFilms) * XP_RULES.rewatch;
+    const collections = completed.length * XP_RULES.completedCollection;
+    let achievements = 0;
+    for (const card of cards) {
+        card.tiers.forEach((tier, index) => {
+            if (tier.unlockedOn) achievements += XP_RULES.tier[Math.min(index, XP_RULES.tier.length - 1)];
+        });
+    }
+    return { films, rewatches, collections, achievements, total: films + rewatches + collections + achievements };
+}
+
+/** Úroveň, titul a postup k další úrovni. */
+export function levelFromXp(xp) {
+    let level = 1;
+    while (xp >= xpForLevel(level + 1)) level++;
+    const title = [...LEVEL_TITLES].reverse().find(([from]) => level >= from)[1];
+    const floor = xpForLevel(level);
+    const next = xpForLevel(level + 1);
+    return {
+        level,
+        title,
+        xp,
+        intoLevel: xp - floor,            // XP v rámci aktuální úrovně
+        levelSize: next - floor,          // kolik XP má celá úroveň
+        toNext: next - xp,
+        progress: Math.floor(((xp - floor) / (next - floor)) * 100),
+    };
 }
 
 /**
@@ -244,22 +310,12 @@ function saveSeen(userId, keys) {
  * Spočítá achievementy a vrátí klíče, které jsou nově odemčené od minula.
  * Napoprvé (v tomto prohlížeči) jen zapamatuje stav – žádná lavina oznámení.
  */
-export async function findNewlyUnlocked(userId) {
+export async function refreshAchievements(userId) {
     const result = computeAchievements(await fetchAchievementData());
     const seen = loadSeen(userId);
     saveSeen(userId, result.unlockedKeys);
     if (!seen) return { result, fresh: [] };
     return { result, fresh: [...result.unlockedKeys].filter((key) => !seen.has(key)) };
-}
-
-/**
- * Při přihlášení: když tento prohlížeč ještě nemá uložený stav, uloží ho hned
- * (bez oznámení). Pak už se oznámí každý nově odemčený achievement – i ten první.
- */
-export async function ensureBaseline(userId) {
-    if (loadSeen(userId)) return;
-    const result = computeAchievements(await fetchAchievementData());
-    if (!loadSeen(userId)) saveSeen(userId, result.unlockedKeys);
 }
 
 /** Po zobrazení stránky s achievementy: aktuální stav je „viděný“. */

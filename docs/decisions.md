@@ -232,11 +232,13 @@ Opačné pořadí ve V1.2 způsobilo chybu „Could not find the table 'public.c
 | 9.1 | V1.1.1 | Přejmenování ✅ | Universes → **Collections** v celé aplikaci |
 | 10 | V1.2 | Kategorie + horory, vlna 1 ✅ | kategorie na přehledu, hororové série, prvních 7 hororových žánrů |
 | 11 | V1.3 | Achievementy ✅ | odznaky za filmy, čas, maratony, dokončené kolekce a kategorie |
-| 12 | V1.4 | Horory, vlna 2 | dalších 7 žánrů |
-| 13 | V1.5 | Vyhledávání | vyhledávací pole – filmy a kolekce |
-| 14 | V1.6 | Horory, vlna 3 | posledních 7 žánrů |
-| 15 | V1.7 | Statistiky profilu | filmy, hodiny, nejčastěji viděný film, postup v kolekcích |
-| 16 | V1.8 | Sdílení profilu | veřejný profil, hledání uživatelů – spojení fází 13 a 15 |
+| 12 | V1.4 | Úrovně a XP ✅ | level a filmový titul z XP (filmy, opakování, kolekce, achievementy), odznak v hlavičce, Level up; Insidious: Out of the Further |
+| 13 | V1.5 | Horory, vlna 2 | dalších 7 žánrů |
+| 14 | V1.6 | Vyhledávání | vyhledávací pole – filmy a kolekce |
+| 15 | V1.7 | Horory, vlna 3 | posledních 7 žánrů |
+| 16 | V1.8 | Cesty (paths) | kurátorské trasy krok za krokem – v kolekci, napříč kolekcemi, žánrové; XP za dokončení |
+| 17 | V1.9 | Statistiky profilu | filmy, hodiny, nejčastěji viděný film, postup v kolekcích |
+| 18 | **V2.0** | Sdílení profilu | veřejný profil (level, achievementy, statistiky), hledání uživatelů – z osobního deníku sociální aplikace |
 
 Hororové vlny se střídají s funkcemi, aby každá verze přinesla něco nového. Později podle chuti: hodnocení a poznámky ke zhlédnutí, vlastní kolekce uživatelů, export / import, české názvy filmů.
 
@@ -255,8 +257,8 @@ Superhero · Sci-fi & Fantasy · Animation · Action & Adventure · Horror (+ da
 | Vlna | Verze | Žánry |
 |---|---|---|
 | 1 | V1.2 | Slasher · Supernatural & Paranormal · Haunted House · Demonic & Exorcism · Psychological · Found Footage · Zombie |
-| 2 | V1.4 | Body Horror · Creature Feature · Vampire · Werewolf · Sci-fi Horror · Folk Horror · Horror Comedy |
-| 3 | V1.6 | Gore & Splatter · Extreme / Torture · Cosmic (Lovecraftian) · Gothic · Giallo · Eco-horror · Elevated Horror |
+| 2 | V1.5 | Body Horror · Creature Feature · Vampire · Werewolf · Sci-fi Horror · Folk Horror · Horror Comedy |
+| 3 | V1.7 | Gore & Splatter · Extreme / Torture · Cosmic (Lovecraftian) · Gothic · Giallo · Eco-horror · Elevated Horror |
 
 - Kamarád zmínil i **J-Horror** (japonský horor) – zařadit jako bonus do některé vlny.
 - Výběry filmů sestavuje a spravuje jen správce (Adam); návrhy od ostatních vítány, admin práva ne.
@@ -276,15 +278,22 @@ Odznaky se počítají ze zhlédnutí, která už jsou v databázi – odemknou 
 
 - Úrovně jdou **škálovat** – další stupně se jen připíšou do seznamu.
 - Na profilu: odemčené barevně, zamčené šedě s postupem. Při odemčení oznámení.
-- **Otevřená otázka:** „patha“ od kamaráda – úrovně / XP, nebo doporučená cesta po kolekcích? Upřesnit před fází 11.
+- „Patha“ od kamaráda → vyřešeno: **obojí** – úrovně a XP (V1.4) i cesty (V1.8).
 
-### Fáze 13 – vyhledávání (V1.5)
+### Fáze 14 – vyhledávání (V1.6)
 - Vyhledávací pole v hlavičce: filmy a kolekce v aplikaci (i podle původního názvu), výsledek vede do kolekce k danému filmu.
 
-### Fáze 15 – statistiky profilu (V1.7)
+### Fáze 16 – cesty / paths (V1.8)
+Nápad kamaráda („dal bych nějakou pathu a achievementy“ → „a co obojí?“). Cesta = nový typ kolekce (`kind = 'path'`), kurátorská trasa krok za krokem:
+- **v rámci kolekce** – „MCU Essentials: 12 filmů, které stačí“,
+- **napříč kolekcemi** – „Fantasy starter: Pán prstenů → Harry Potter → Star Wars“,
+- **žánrová** – „Horror 101: od klasik po moderní“.
+Ke každému kroku krátká poznámka, proč ho vidět; postup cestou; XP a achievement za dokončení. Správa v admin panelu.
+
+### Fáze 17 – statistiky profilu (V1.9)
 - Počet viděných filmů, celkový čas, počet zhlédnutí, **nejčastěji viděný film**, postup ve všech kolekcích, filmy podle roku zhlédnutí.
 
-### Fáze 16 – sdílení profilu (V1.8)
+### Fáze 18 – sdílení profilu (V2.0)
 - Veřejný profil `#/u/<nick>` se statistikami a achievementy; uživatel si zvolí, jestli je veřejný. Hledání uživatelů, odkaz ke sdílení.
 
 ## Historie fází
@@ -497,7 +506,21 @@ Odznaky se počítají ze zhlédnutí, která už jsou v databázi – odemknou 
 - **Fanoušek kategorie** má úrovně jen do počtu kolekcí v kategorii; menší kategorie má jako nejvyšší úroveň „dokonči všechny“.
 - **Oznámení se hlídají v prohlížeči** (localStorage, klíč podle uživatele). Při prvním přihlášení v prohlížeči se jen uloží výchozí stav, aby nepřišla lavina oznámení za všechno dřívější; každé další odemčení se oznámí. Kontrola běží s malým zpožděním po změně zhlédnutí (víc kliknutí = jedna kontrola).
 - **Zhlédnutí se načítají po částech po 1000** (limit Supabase), aby výpočet fungoval i pro velké deníky.
-- **„Patha“ od kamaráda zůstává otevřená** – achievementy na ní nezávisí; úrovně / XP by šly postavit nad stejnými daty.
+- **„Patha“ od kamaráda** – rozhodnuto později: obojí, úrovně / XP (V1.4) a cesty (V1.8).
+
+### Fáze 12 – úrovně a XP ✅ (5. 11. 2026) – **V1.4**
+- **XP:** +10 za nový film, +3 za opakované zhlédnutí, +100 za dokončenou kolekci, za úroveň achievementu +25 (Bronze) / +50 (Silver) / +100 (Gold) / +200 (Platinum a výš).
+- **Úroveň:** potřeba XP roste (2 → 100, 3 → 300, 4 → 600, 5 → 1000, 10 → 4500, 25 → 30 000); bez stropu.
+- **Filmové tituly:** Extra (1) → Stand-in (3) → Stunt Double (5) → Supporting Actor (7) → Lead Actor (10) → Director (13) → Producer (16) → Studio Head (20) → Legend (25+).
+- Na profilu **karta úrovně** (číslo, titul, XP do další úrovně, rozpad podle zdroje); v hlavičce **odznak úrovně** u nicku; oznámení **„⬆️ Level up!“**.
+- Na obrazovce nejvýš 4 oznámení najednou.
+- Do kolekce Insidious doplněn **Insidious: Out of the Further** (2026) – tip od kamaráda.
+
+#### Rozhodnutí ve fázi 12
+- **XP se počítají, neukládají** – stejně jako achievementy (zpětně, bez tabulky); pravidla a tituly na jednom místě (`XP_RULES`, `LEVEL_TITLES` v `achievements.js`).
+- **Úroveň roste kvadraticky** – první úrovně rychle, vyšší pomaleji; běžný deník (stovky filmů, desítky kolekcí) se pohybuje kolem úrovně 10 (Lead Actor), Legend je pro opravdové nadšence.
+- **Opakované zhlédnutí dává méně XP** než nový film – motivace objevovat nové filmy.
+- **Výpočet úrovně a achievementů jedním dotazem** po přihlášení a po každé změně zhlédnutí; hlavička jen zobrazí uložený výsledek.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

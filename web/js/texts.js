@@ -53,6 +53,17 @@ export const TEXTS = {
     watchlistBrowse: "Browse collections",
     watchlistAddedOn: "Added {0}",
 
+    // Úrovně a XP
+    levelLabel: "Level {0}",
+    levelXp: "{0} XP",
+    levelToNext: "{0} XP to level {1}",
+    levelBreakdownFilms: "Movies",
+    levelBreakdownRewatches: "Rewatches",
+    levelBreakdownCollections: "Collections",
+    levelBreakdownAchievements: "Achievements",
+    levelUp: "⬆️ Level up! Level {0} – {1}",
+    levelHowTo: "+10 XP per new movie · +3 per rewatch · +100 per completed collection · +25 to +200 per achievement level",
+
     // Achievementy
     achievementsTitle: "Achievements",
     achievementsSummary: "{0} / {1} unlocked",

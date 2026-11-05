@@ -3,6 +3,11 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V1.4 – November 2026
+- Levels and XP: earn XP for movies, rewatches, completed collections and achievements
+- Movie-themed titles from Extra to Legend, level badge next to your nickname, level-up notifications
+- Insidious: Out of the Further added to the Insidious collection
+
 ## V1.3 – November 2026
 - Achievements on your profile: First Steps, Collector, Screen Time, Marathon, Rewatcher, Completionist and a Fan badge for every category
 - Bronze / Silver / Gold / Platinum levels with unlock dates and progress to the next level

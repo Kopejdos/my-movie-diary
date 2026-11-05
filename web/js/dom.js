@@ -78,6 +78,8 @@ export function toast(message, type = "info") {
     if (!container) return;
     const item = h("div", { class: `toast toast--${type}`, role: "status" }, message);
     container.append(item);
+    // Nejvýš 4 oznámení najednou – nejstarší ustoupí
+    while (container.children.length > 4) container.firstElementChild.remove();
     const duration = type === "achievement" ? 5000 : 3200;   // achievement si zaslouží delší pozornost
     setTimeout(() => item.classList.add("toast--hide"), duration);
     setTimeout(() => item.remove(), duration + 400);

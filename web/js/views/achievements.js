@@ -47,6 +47,7 @@ async function load(section) {
     if (user) markSeen(user.id, result.unlockedKeys);
 
     mount(section,
+        levelCard(result),
         h("div", { class: "section-title" },
             h("h2", {}, TEXTS.achievementsTitle),
             h("span", { class: "muted" }, format("achievementsSummary", result.unlockedCount, result.totalCount)),
@@ -59,6 +60,34 @@ async function load(section) {
         result.completed.length > 0
             ? h("div", { class: "completed-list" }, [...result.completed].reverse().map(completedBadge))
             : h("p", { class: "muted" }, TEXTS.achievementsCompletedEmpty),
+    );
+}
+
+/** Karta úrovně: číslo, titul, XP do další úrovně a rozpad podle zdroje. */
+function levelCard({ level, xp }) {
+    const part = (label, value) => h("div", { class: "xp-part" },
+        h("span", { class: "xp-part__value" }, `+${value}`),
+        h("span", { class: "xp-part__label" }, label));
+
+    return h("section", { class: "level-card" },
+        h("div", { class: "level-card__badge", "aria-hidden": "true" },
+            h("span", { class: "level-card__number" }, String(level.level))),
+        h("div", { class: "level-card__body" },
+            h("span", { class: "eyebrow" }, format("levelLabel", level.level)),
+            h("h2", { class: "level-card__title" }, level.title),
+            h("div", { class: "progress progress--large" },
+                h("div", { class: "progress__bar", style: `width: ${level.progress}%` })),
+            h("p", { class: "level-card__next" },
+                h("strong", {}, format("levelXp", level.xp)),
+                " · ",
+                format("levelToNext", level.toNext, level.level + 1)),
+            h("div", { class: "xp-parts" },
+                part(TEXTS.levelBreakdownFilms, xp.films),
+                part(TEXTS.levelBreakdownRewatches, xp.rewatches),
+                part(TEXTS.levelBreakdownCollections, xp.collections),
+                part(TEXTS.levelBreakdownAchievements, xp.achievements)),
+            h("p", { class: "hint" }, TEXTS.levelHowTo),
+        ),
     );
 }
 

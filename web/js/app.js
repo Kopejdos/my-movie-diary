@@ -7,7 +7,7 @@ import { h, mount, toast } from "./dom.js";
 import { currentTheme, toggleTheme } from "./theme.js";
 import { initPwa, canInstall, promptInstall, onInstallChange } from "./pwa.js";
 import { APP_VERSION, APP_UPDATED } from "./config.js";
-import { findNewlyUnlocked, ensureBaseline, tierLabel } from "./achievements.js";
+import { refreshAchievements, tierLabel } from "./achievements.js";
 
 import { universesView } from "./views/universes.js";
 import { universeView } from "./views/universe.js";
@@ -37,6 +37,7 @@ addRoute("/admin/universe/:slug", (container, { params }) => redirect(`/admin/co
 setNotFound(notFoundView);
 
 const header = document.getElementById("site-header");
+let level = null;                 // úroveň přihlášeného uživatele (odznak v hlavičce), viz refreshProgress()
 const main = document.getElementById("app");
 
 /** Hlavička: logo, navigace a přihlášený uživatel. */
@@ -81,7 +82,9 @@ function renderHeader() {
                             class: `nav__user${path === "/profile" ? " nav__user--active" : ""}`,
                             href: "#/profile",
                             title: TEXTS.navProfile,
-                        }, profile ? `@${profile.username}` : ""),
+                        },
+                            level ? h("span", { class: "nav__level", title: `${level.title} · ${level.xp} XP` }, String(level.level)) : null,
+                            h("span", { class: "nav__nick" }, profile ? `@${profile.username}` : "")),
                         h("button", { class: "nav__link nav__button nav__signout", type: "button", onClick: handleSignOut },
                             TEXTS.navSignOut),
                     ]
@@ -131,9 +134,10 @@ onAuthChange(({ user, profile }) => {
     if (userId === lastUserId) return;   // jen obnova tokenu nebo načtení profilu
     const signedInNow = userId !== null && lastUserId === null;
     lastUserId = userId;
+    if (!userId) level = null;     // po odhlášení zmizí odznak úrovně
 
     if (signedInNow) {
-        ensureBaseline(userId).catch((error) => console.warn("Achievement baseline failed", error));
+        refreshProgress({ announce: false });
         // Uživatel z Google má zatím automatický nickname → nabídnout volbu vlastního
         if (hasGeneratedUsername()) {
             navigate("/profile");
@@ -161,21 +165,31 @@ onInstallChange(() => {
 window.addEventListener("offline", () => toast(TEXTS.offline, "error"));
 window.addEventListener("online", () => toast(TEXTS.online));
 
-// Achievementy: po změně zhlédnutí (s malým zpožděním, ať se víc kliknutí spojí)
-// spočítat stav a oznámit nově odemčené
-let achievementTimer = null;
-function scheduleAchievementCheck() {
-    clearTimeout(achievementTimer);
-    achievementTimer = setTimeout(async () => {
-        const user = getUser();
-        if (!user) return;
-        try {
-            const { result, fresh } = await findNewlyUnlocked(user.id);
+// Achievementy a úroveň (XP): spočítají se po přihlášení a po každé změně
+// zhlédnutí (s malým zpožděním, ať se víc kliknutí spojí do jedné kontroly)
+let progressTimer = null;
+
+async function refreshProgress({ announce }) {
+    const user = getUser();
+    if (!user) return;
+    try {
+        const { result, fresh } = await refreshAchievements(user.id);
+        if (announce) {
             for (const key of fresh) toast(achievementMessage(key, result), "achievement");
-        } catch (error) {
-            console.warn("Achievement check failed", error);
+            if (level && result.level.level > level.level) {
+                toast(format("levelUp", result.level.level, result.level.title), "achievement");
+            }
         }
-    }, 1200);
+        level = result.level;
+        renderHeader();
+    } catch (error) {
+        console.warn("Progress check failed", error);
+    }
+}
+
+function scheduleProgressCheck() {
+    clearTimeout(progressTimer);
+    progressTimer = setTimeout(() => refreshProgress({ announce: true }), 1200);
 }
 
 /** Text oznámení podle klíče („collector:50“, „fan-horror:3“, „complete:mcu“). */
@@ -196,7 +210,7 @@ function achievementMessage(key, result) {
     return format("achievementUnlocked", label ? `${name} (${label})` : name);
 }
 
-document.addEventListener("watches-changed", scheduleAchievementCheck);
+document.addEventListener("watches-changed", scheduleProgressCheck);
 
 // Verze a měsíc poslední aktualizace v patičce
 const versionLabel = document.getElementById("app-version");
@@ -207,7 +221,7 @@ renderHeader();
 await initAuth();
 lastUserId = getUser()?.id ?? null;
 routerStarted = true;
-if (getUser()) ensureBaseline(getUser().id).catch((error) => console.warn("Achievement baseline failed", error));
+if (getUser()) refreshProgress({ announce: false });
 if (getUser() && hasGeneratedUsername()) {
     window.location.hash = "/profile";
 }
