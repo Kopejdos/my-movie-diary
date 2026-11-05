@@ -148,7 +148,12 @@ class UniversePage {
             h("div", { class: "banner__content" },
                 h("h1", { class: "banner__title" }, universe.name),
                 universe.description ? h("p", { class: "banner__description" }, universe.description) : null,
-                h("div", { class: "pills" }, pill(movies(required), true)),
+                h("div", { class: "pills" },
+                    pill(movies(required), true),
+                    universe.kind === "genre" ? pill(TEXTS.kindGenre) : null,
+                    (universe.categories ?? [])
+                        .sort((a, b) => a.sort_order - b.sort_order)
+                        .map((c) => pill(c.name))),
                 this.signedIn ? this.renderProgress() : null,
             ),
         );

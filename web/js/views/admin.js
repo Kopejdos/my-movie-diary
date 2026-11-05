@@ -89,7 +89,12 @@ function universeRow(universe, previous, next, reload) {
         h("span", { class: "color-dot", style: `background: ${universe.color ?? "var(--accent)"}` }),
         h("div", { class: "admin-row__info" },
             h("strong", {}, universe.name),
-            h("div", { class: "pills" }, pill(universe.slug), pill(movies(count))),
+            h("div", { class: "pills" },
+                pill(universe.slug),
+                pill(movies(count)),
+                universe.kind && universe.kind !== "series"
+                    ? pill(universe.kind === "studio" ? TEXTS.kindStudio : TEXTS.kindGenre, true)
+                    : null),
         ),
         h("div", { class: "admin-row__actions" },
             h("button", {

@@ -73,6 +73,11 @@ export const TEXTS = {
 
     // Přehled univerz
     universesTitle: "Collections",
+    categoryAll: "All",
+    kindSeries: "Series",
+    kindStudio: "Studios",
+    kindGenre: "Genre picks",
+    kindGenreHint: "Hand-picked essentials of the genre.",
     universesCount: "{0} collections",
     universesIntro: "Pick a collection and start logging what you have watched.",
     universesGuestHint: "Sign in to track your progress.",
@@ -137,6 +142,9 @@ export const TEXTS = {
     adminName: "Name",
     adminNameRequired: "Enter a name.",
     adminSlug: "Address (slug)",
+    adminKind: "Type",
+    adminCategories: "Categories",
+    adminCategoriesHint: "Where the collection shows up on the overview. It can be in more than one.",
     adminSlugHint: "Lowercase letters, numbers and dashes – used in the link, e.g. star-wars",
     adminColor: "Color",
     adminDescription: "Description",

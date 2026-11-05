@@ -36,6 +36,8 @@ interface SeedUniverse {
   slug: string;
   name: string;
   color?: string;      // #rrggbb
+  kind?: "series" | "studio" | "genre";
+  categories?: string[];  // slugy kategorií (tabulka categories)
   description?: string;
   films: SeedFilm[];
 }
@@ -300,6 +302,7 @@ async function importUniverse(db: SupabaseClient, universe: SeedUniverse, sortOr
         name: universe.name,
         description: universe.description ?? null,
         color: universe.color ?? null,
+        kind: universe.kind ?? "series",
         cover_tmdb_id: cover?.film.tmdb_id ?? null,
         sort_order: sortOrder,
       },
@@ -308,6 +311,26 @@ async function importUniverse(db: SupabaseClient, universe: SeedUniverse, sortOr
     .select("id")
     .single();
   if (universeError) throw new Error(`universe upsert (${universe.slug}): ${universeError.message}`);
+
+  // 2b. Kategorie – když je seed uvádí, nahradí přiřazení kolekce
+  if (universe.categories) {
+    const { data: categoryRows, error: categoryError } = await db
+      .from("categories")
+      .select("id, slug")
+      .in("slug", universe.categories);
+    if (categoryError) throw new Error(`categories (${universe.slug}): ${categoryError.message}`);
+
+    const missing = universe.categories.filter((slug) => !categoryRows?.some((c) => c.slug === slug));
+    if (missing.length > 0) throw new Error(`Unknown categories (${universe.slug}): ${missing.join(", ")}`);
+
+    const { error: clearError } = await db.from("universe_categories").delete().eq("universe_id", universeRow.id);
+    if (clearError) throw new Error(`categories clear (${universe.slug}): ${clearError.message}`);
+    if (categoryRows.length > 0) {
+      const { error: linkError } = await db.from("universe_categories")
+        .insert(categoryRows.map((c) => ({ universe_id: universeRow.id, category_id: c.id })));
+      if (linkError) throw new Error(`categories link (${universe.slug}): ${linkError.message}`);
+    }
+  }
 
   // 3. Položky univerza v pořadí ze seedu (pořadí vydání)
   const items = ok.map((r, index) => ({

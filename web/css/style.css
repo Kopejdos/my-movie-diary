@@ -669,6 +669,100 @@ button {
     background: var(--panel-hover);
 }
 
+/* ---------- Kategorie a typy kolekcí na přehledu ---------- */
+.chips {
+    display: flex;
+    gap: 8px;
+    margin: 0 0 18px;
+    padding-bottom: 4px;
+    overflow-x: auto;              /* na telefonu se dají posouvat do strany */
+    scrollbar-width: none;
+}
+
+.chips::-webkit-scrollbar {
+    display: none;
+}
+
+.chip {
+    --c: var(--accent);
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.chip:hover {
+    color: var(--heading);
+    border-color: color-mix(in srgb, var(--c) 60%, var(--border));
+}
+
+.chip--active {
+    background: var(--c);
+    border-color: var(--c);
+    color: var(--c-ink, var(--accent-ink));
+}
+
+.chip--active:hover {
+    color: var(--c-ink, var(--accent-ink));
+}
+
+.chip__count {
+    min-width: 22px;
+    padding: 1px 7px;
+    border-radius: 999px;
+    background: color-mix(in srgb, currentColor 16%, transparent);
+    font-size: 0.75rem;
+    text-align: center;
+}
+
+.collection-sections {
+    display: grid;
+    gap: 28px;
+}
+
+.kind-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 12px;
+    margin-bottom: 12px;
+}
+
+.kind-heading h3 {
+    font-size: 1.15rem;
+    letter-spacing: 0.04em;
+}
+
+.kind-heading .muted {
+    font-size: 0.85rem;
+}
+
+/* ---------- Admin: kategorie ---------- */
+.admin-select {
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 16px;
+}
+
+.category-checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+}
+
+.category-check input {
+    accent-color: var(--c, var(--u));
+}
+
 /* ---------- Detail univerza: banner ---------- */
 /* Fotka z filmu přes celou šířku, která přechodem zmizí do pozadí
    (stejný princip jako úvod RimWorld prezentace) */

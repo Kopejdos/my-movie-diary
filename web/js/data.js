@@ -17,7 +17,7 @@ export async function fetchUniverses() {
     const [universes, progress] = await Promise.all([
         supabase
             .from("universes")
-            .select("id, slug, name, description, color, sort_order, cover:films(title, poster_path, backdrop_path)")
+            .select("id, slug, name, description, color, kind, sort_order, cover:films(title, poster_path, backdrop_path), universe_categories(category_id)")
             .order("sort_order")
             .then(check),
         supabase
@@ -31,17 +31,30 @@ export async function fetchUniverses() {
         const p = progressById.get(universe.id);
         return {
             ...universe,
+            categoryIds: (universe.universe_categories ?? []).map((uc) => uc.category_id),
             totalCount: p?.total_count ?? 0,
             watchedCount: p?.watched_count ?? 0,
         };
     });
 }
 
+/** Všechny kategorie (sekce přehledu) v pořadí. */
+export async function fetchCategories() {
+    return await supabase
+        .from("categories")
+        .select("id, slug, name, color, sort_order")
+        .order("sort_order")
+        .then(check);
+}
+
+/** Pořadí typů kolekcí na přehledu. */
+export const KIND_ORDER = ["series", "studio", "genre"];
+
 /** Jedno univerzum podle adresy (slug) včetně filmů v pořadí vydání, nebo null. */
 export async function fetchUniverse(slug) {
     const universe = await supabase
         .from("universes")
-        .select("id, slug, name, description, color, cover_tmdb_id, cover:films(title, poster_path, backdrop_path)")
+        .select("id, slug, name, description, color, kind, cover_tmdb_id, cover:films(title, poster_path, backdrop_path), categories(id, slug, name, color, sort_order)")
         .eq("slug", slug)
         .maybeSingle()
         .then(check);

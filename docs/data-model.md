@@ -55,9 +55,25 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 | `name` | `text` | „Marvel Cinematic Universe“ |
 | `description` | `text` | |
 | `color` | `text` | barva univerza `#rrggbb` (záře, karty, tlačítka) |
+| `kind` | `text` | typ kolekce: `series` / `studio` / `genre` (žánrový výběr) |
 | `cover_tmdb_id` | `integer` FK → `films` | film, jehož plakát je na kartičce |
 | `sort_order` | `integer` | pořadí na hlavní obrazovce |
 | `owner_id` | `uuid` FK → `profiles`, null | `null` = oficiální univerzum; vyplněné = vlastní univerzum uživatele (později) |
+
+### `categories` – kategorie (sekce přehledu)
+| Sloupec | Typ | Poznámka |
+|---|---|---|
+| `id` | `bigint` PK | |
+| `slug` | `text` unique | `superhero`, `horror`… |
+| `name` | `text` | „Sci-fi & Fantasy“ |
+| `color` | `text` | barva filtru `#rrggbb` |
+| `sort_order` | `integer` | pořadí ve filtru |
+
+### `universe_categories` – kolekce v kategoriích (M:N)
+| Sloupec | Typ | Poznámka |
+|---|---|---|
+| `universe_id` | `bigint` FK → `universes` | PK spolu s `category_id` |
+| `category_id` | `bigint` FK → `categories` | |
 
 ### `universe_items` – filmy v univerzu
 | Sloupec | Typ | Poznámka |
@@ -121,7 +137,7 @@ Výpočty běží v databázi, ne v prohlížeči – web dostane hotová čísl
 | Tabulka | Čtení | Zápis |
 |---|---|---|
 | `films` | kdokoli (i nepřihlášený – náhled univerz) | jen Edge Functions (`tmdb`, `admin`) |
-| `universes`, `universe_items` | kdokoli (i nepřihlášený – náhled univerz) | správce (`is_admin()`), Edge Function `tmdb` |
+| `universes`, `universe_items`, `categories`, `universe_categories` | kdokoli (i nepřihlášený – náhled kolekcí) | správce (`is_admin()`), Edge Function `tmdb` |
 | `profiles` | jen vlastní řádek (sdílení postupu později) | jen vlastní řádek, jen sloupec `username` |
 | `watches`, `watchlist` | jen vlastní řádky | jen vlastní řádky |
 | `heartbeat` | nikdo | jen funkce `ping()` |

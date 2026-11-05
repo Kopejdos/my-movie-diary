@@ -1,9 +1,11 @@
 {
-  "_comment": "Seznam univerz a filmů pro import (Edge Function tmdb, action=import). Film se v TMDB hledá podle 'title' a 'year'; když to nestačí, doplní se 'tmdb' (přesné ID). 'optional' = nepočítá se do postupu. Nevydané filmy import přeskočí. 'color' = barva univerza (#rrggbb). 'story' = pořadí v příběhu (chronologicky), když se liší od pořadí vydání.",
+  "_comment": "Seznam univerz a filmů pro import (Edge Function tmdb, action=import). Film se v TMDB hledá podle 'title' a 'year'; když to nestačí, doplní se 'tmdb' (přesné ID). 'optional' = nepočítá se do postupu. Nevydané filmy import přeskočí. 'color' = barva univerza (#rrggbb). 'story' = pořadí v příběhu (chronologicky), když se liší od pořadí vydání. 'kind' = series / studio / genre; 'categories' = slugy kategorií (tabulka categories).",
   "universes": [
     {
       "slug": "mcu",
       "name": "Marvel Cinematic Universe",
+      "kind": "series",
+      "categories": ["superhero"],
       "color": "#e23636",
       "description": "The Infinity Saga and the Multiverse Saga – every MCU movie.",
       "films": [
@@ -51,6 +53,8 @@
     {
       "slug": "x-men",
       "name": "X-Men",
+      "kind": "series",
+      "categories": ["superhero"],
       "color": "#ffb000",
       "description": "The 20th Century Fox X-Men saga, including Wolverine and Deadpool.",
       "films": [
@@ -73,6 +77,8 @@
     {
       "slug": "spider-man",
       "name": "Spider-Man",
+      "kind": "series",
+      "categories": ["superhero"],
       "color": "#2f6fed",
       "description": "Every Spider-Man on the big screen – Raimi, Webb, the MCU and the Spider-Verse.",
       "films": [
@@ -98,6 +104,8 @@
     {
       "slug": "dceu",
       "name": "DC Extended Universe",
+      "kind": "series",
+      "categories": ["superhero"],
       "color": "#6366f1",
       "description": "From Man of Steel to Aquaman and the Lost Kingdom.",
       "films": [
@@ -122,6 +130,8 @@
     {
       "slug": "dcu",
       "name": "DC Universe",
+      "kind": "series",
+      "categories": ["superhero"],
       "color": "#0ea5e9",
       "description": "The new DC Universe by James Gunn and Peter Safran – Chapter One: Gods and Monsters.",
       "films": [
@@ -133,6 +143,8 @@
     {
       "slug": "batman",
       "name": "Batman",
+      "kind": "series",
+      "categories": ["superhero"],
       "color": "#94a3b8",
       "description": "Nolan's Dark Knight trilogy and Matt Reeves' The Batman.",
       "films": [
@@ -145,6 +157,8 @@
     {
       "slug": "star-wars",
       "name": "Star Wars",
+      "kind": "series",
+      "categories": ["scifi-fantasy"],
       "color": "#ffe81f",
       "description": "The Skywalker Saga and the standalone Star Wars movies.",
       "films": [
@@ -166,6 +180,8 @@
     {
       "slug": "wizarding-world",
       "name": "Wizarding World",
+      "kind": "series",
+      "categories": ["scifi-fantasy"],
       "color": "#8b5cf6",
       "description": "Harry Potter and Fantastic Beasts.",
       "films": [
@@ -185,6 +201,8 @@
     {
       "slug": "middle-earth",
       "name": "Middle-earth",
+      "kind": "series",
+      "categories": ["scifi-fantasy"],
       "color": "#c9a227",
       "description": "The Lord of the Rings and The Hobbit.",
       "films": [
@@ -200,6 +218,8 @@
     {
       "slug": "jurassic-park",
       "name": "Jurassic Park",
+      "kind": "series",
+      "categories": ["scifi-fantasy", "action-adventure"],
       "color": "#e8562a",
       "description": "Jurassic Park and Jurassic World.",
       "films": [
@@ -215,6 +235,8 @@
     {
       "slug": "fast-and-furious",
       "name": "Fast & Furious",
+      "kind": "series",
+      "categories": ["action-adventure"],
       "color": "#ff2e88",
       "description": "Family. The whole Fast & Furious saga.",
       "films": [
@@ -234,6 +256,8 @@
     {
       "slug": "pirates-of-the-caribbean",
       "name": "Pirates of the Caribbean",
+      "kind": "series",
+      "categories": ["action-adventure"],
       "color": "#14b8a6",
       "description": "Captain Jack Sparrow's adventures.",
       "films": [
@@ -247,6 +271,8 @@
     {
       "slug": "alien",
       "name": "Alien",
+      "kind": "series",
+      "categories": ["scifi-fantasy", "horror"],
       "color": "#a3e635",
       "description": "In space no one can hear you scream – the Alien saga, prequels and crossovers.",
       "films": [
@@ -264,6 +290,8 @@
     {
       "slug": "studio-ghibli",
       "name": "Studio Ghibli",
+      "kind": "studio",
+      "categories": ["animation"],
       "color": "#34d399",
       "description": "The feature films of Studio Ghibli.",
       "films": [
@@ -297,6 +325,8 @@
     {
       "slug": "asterix-and-obelix",
       "name": "Asterix & Obelix",
+      "kind": "series",
+      "categories": ["animation"],
       "color": "#fb923c",
       "description": "The indomitable Gauls – animated and live-action movies.",
       "films": [
@@ -320,6 +350,8 @@
     {
       "slug": "shrek",
       "name": "Shrek",
+      "kind": "series",
+      "categories": ["animation"],
       "color": "#6b8e23",
       "description": "Shrek and Puss in Boots.",
       "films": [
@@ -334,6 +366,8 @@
     {
       "slug": "maze-runner",
       "name": "The Maze Runner",
+      "kind": "series",
+      "categories": ["scifi-fantasy", "action-adventure"],
       "color": "#a8a29e",
       "description": "Run. Survive. Escape. The Maze Runner trilogy.",
       "films": [
@@ -345,6 +379,8 @@
     {
       "slug": "mad-max",
       "name": "Mad Max",
+      "kind": "series",
+      "categories": ["action-adventure"],
       "color": "#ea580c",
       "description": "Oh, what a day! What a lovely day! The wasteland saga of Max Rockatansky.",
       "films": [
@@ -358,6 +394,8 @@
     {
       "slug": "avatar",
       "name": "Avatar",
+      "kind": "series",
+      "categories": ["scifi-fantasy"],
       "color": "#22d3ee",
       "description": "James Cameron's journey to Pandora.",
       "films": [
@@ -369,6 +407,8 @@
     {
       "slug": "disney",
       "name": "Disney Animation",
+      "kind": "studio",
+      "categories": ["animation"],
       "color": "#e879f9",
       "description": "The Walt Disney Animation Studios classics – from Snow White to today. Live-action remakes are optional.",
       "films": [
@@ -462,6 +502,8 @@
     {
       "slug": "pixar",
       "name": "Pixar",
+      "kind": "studio",
+      "categories": ["animation"],
       "color": "#60a5fa",
       "description": "To infinity and beyond – every Pixar feature film.",
       "films": [
@@ -501,6 +543,8 @@
     {
       "slug": "dreamworks",
       "name": "DreamWorks Animation",
+      "kind": "studio",
+      "categories": ["animation"],
       "color": "#fcd34d",
       "description": "Shrek, Kung Fu Panda, How to Train Your Dragon and every other DreamWorks Animation feature.",
       "films": [
@@ -555,6 +599,329 @@
         { "title": "Forgotten Island", "year": 2026, "group": "2020s" },
         { "title": "How to Train Your Dragon", "year": 2025, "group": "Live-action & hybrid", "optional": true },
         { "title": "Gabby's Dollhouse: The Movie", "year": 2025, "group": "Live-action & hybrid", "optional": true }
+      ]
+    },
+    {
+      "slug": "conjuring",
+      "name": "The Conjuring Universe",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#a16207",
+      "description": "Ed and Lorraine Warren's case files – The Conjuring, Annabelle, The Nun and more.",
+      "films": [
+        { "title": "The Conjuring", "year": 2013, "story": 5 },
+        { "title": "Annabelle", "year": 2014, "story": 4 },
+        { "title": "The Conjuring 2", "year": 2016, "story": 8 },
+        { "title": "Annabelle: Creation", "year": 2017, "story": 2 },
+        { "title": "The Nun", "year": 2018, "story": 1 },
+        { "title": "The Curse of La Llorona", "year": 2019, "story": 7, "optional": true },
+        { "title": "Annabelle Comes Home", "year": 2019, "story": 6 },
+        { "title": "The Conjuring: The Devil Made Me Do It", "year": 2021, "story": 9 },
+        { "title": "The Nun II", "year": 2023, "story": 3 },
+        { "title": "The Conjuring: Last Rites", "year": 2025, "story": 10 }
+      ]
+    },
+    {
+      "slug": "saw",
+      "name": "Saw",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#be123c",
+      "description": "I want to play a game.",
+      "films": [
+        { "title": "Saw", "year": 2004, "story": 1 },
+        { "title": "Saw II", "year": 2005, "story": 3 },
+        { "title": "Saw III", "year": 2006, "story": 4 },
+        { "title": "Saw IV", "year": 2007, "story": 5 },
+        { "title": "Saw V", "year": 2008, "story": 6 },
+        { "title": "Saw VI", "year": 2009, "story": 7 },
+        { "title": "Saw 3D", "year": 2010, "story": 8 },
+        { "title": "Jigsaw", "year": 2017, "story": 9 },
+        { "title": "Spiral: From the Book of Saw", "year": 2021, "story": 10 },
+        { "title": "Saw X", "year": 2023, "story": 2 }
+      ]
+    },
+    {
+      "slug": "scream",
+      "name": "Scream",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#e5e7eb",
+      "description": "What's your favorite scary movie?",
+      "films": [
+        { "title": "Scream", "year": 1996 },
+        { "title": "Scream 2", "year": 1997 },
+        { "title": "Scream 3", "year": 2000 },
+        { "title": "Scream 4", "year": 2011 },
+        { "title": "Scream", "year": 2022 },
+        { "title": "Scream VI", "year": 2023 },
+        { "title": "Scream 7", "year": 2026 }
+      ]
+    },
+    {
+      "slug": "halloween",
+      "name": "Halloween",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#ea580c",
+      "description": "The night HE came home – Michael Myers in every timeline.",
+      "films": [
+        { "title": "Halloween", "year": 1978, "group": "Original timeline" },
+        { "title": "Halloween II", "year": 1981, "group": "Original timeline" },
+        { "title": "Halloween III: Season of the Witch", "year": 1982, "group": "Original timeline", "optional": true },
+        { "title": "Halloween 4: The Return of Michael Myers", "year": 1988, "group": "Original timeline" },
+        { "title": "Halloween 5: The Revenge of Michael Myers", "year": 1989, "group": "Original timeline" },
+        { "title": "Halloween: The Curse of Michael Myers", "year": 1995, "group": "Original timeline" },
+        { "title": "Halloween H20: 20 Years Later", "year": 1998, "group": "Original timeline" },
+        { "title": "Halloween: Resurrection", "year": 2002, "group": "Original timeline" },
+        { "title": "Halloween", "year": 2007, "group": "Rob Zombie remakes", "optional": true },
+        { "title": "Halloween II", "year": 2009, "group": "Rob Zombie remakes", "optional": true },
+        { "title": "Halloween", "year": 2018, "group": "2018 trilogy" },
+        { "title": "Halloween Kills", "year": 2021, "group": "2018 trilogy" },
+        { "title": "Halloween Ends", "year": 2022, "group": "2018 trilogy" }
+      ]
+    },
+    {
+      "slug": "final-destination",
+      "name": "Final Destination",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#0891b2",
+      "description": "You can't cheat death.",
+      "films": [
+        { "title": "Final Destination", "year": 2000, "story": 2 },
+        { "title": "Final Destination 2", "year": 2003, "story": 3 },
+        { "title": "Final Destination 3", "year": 2006, "story": 4 },
+        { "title": "The Final Destination", "year": 2009, "story": 5 },
+        { "title": "Final Destination 5", "year": 2011, "story": 1 },
+        { "title": "Final Destination Bloodlines", "year": 2025, "story": 6 }
+      ]
+    },
+    {
+      "slug": "insidious",
+      "name": "Insidious",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#6d28d9",
+      "description": "The Further is waiting – the Lambert family and Elise Rainier.",
+      "films": [
+        { "title": "Insidious", "year": 2011, "story": 3 },
+        { "title": "Insidious: Chapter 2", "year": 2013, "story": 4 },
+        { "title": "Insidious: Chapter 3", "year": 2015, "story": 1 },
+        { "title": "Insidious: The Last Key", "year": 2018, "story": 2 },
+        { "title": "Insidious: The Red Door", "year": 2023, "story": 5 }
+      ]
+    },
+    {
+      "slug": "nightmare-on-elm-street",
+      "name": "A Nightmare on Elm Street",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#b45309",
+      "description": "One, two, Freddy's coming for you.",
+      "films": [
+        { "title": "A Nightmare on Elm Street", "year": 1984 },
+        { "title": "A Nightmare on Elm Street 2: Freddy's Revenge", "year": 1985 },
+        { "title": "A Nightmare on Elm Street 3: Dream Warriors", "year": 1987 },
+        { "title": "A Nightmare on Elm Street 4: The Dream Master", "year": 1988 },
+        { "title": "A Nightmare on Elm Street 5: The Dream Child", "year": 1989 },
+        { "title": "Freddy's Dead: The Final Nightmare", "year": 1991 },
+        { "title": "Wes Craven's New Nightmare", "year": 1994 },
+        { "title": "Freddy vs. Jason", "year": 2003, "group": "Crossover", "optional": true },
+        { "title": "A Nightmare on Elm Street", "year": 2010, "group": "Remake", "optional": true }
+      ]
+    },
+    {
+      "slug": "friday-the-13th",
+      "name": "Friday the 13th",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#2563eb",
+      "description": "Camp Crystal Lake and Jason Voorhees.",
+      "films": [
+        { "title": "Friday the 13th", "year": 1980 },
+        { "title": "Friday the 13th Part 2", "year": 1981 },
+        { "title": "Friday the 13th Part III", "year": 1982 },
+        { "title": "Friday the 13th: The Final Chapter", "year": 1984 },
+        { "title": "Friday the 13th: A New Beginning", "year": 1985 },
+        { "title": "Friday the 13th Part VI: Jason Lives", "year": 1986 },
+        { "title": "Friday the 13th Part VII: The New Blood", "year": 1988 },
+        { "title": "Friday the 13th Part VIII: Jason Takes Manhattan", "year": 1989 },
+        { "title": "Jason Goes to Hell: The Final Friday", "year": 1993 },
+        { "title": "Jason X", "year": 2001 },
+        { "title": "Freddy vs. Jason", "year": 2003, "group": "Crossover", "optional": true },
+        { "title": "Friday the 13th", "year": 2009, "group": "Remake", "optional": true }
+      ]
+    },
+    {
+      "slug": "horror-slasher",
+      "name": "Slasher",
+      "kind": "genre",
+      "categories": ["horror"],
+      "color": "#dc2626",
+      "description": "Masked killers, final girls and body counts – the essential slashers.",
+      "films": [
+        { "title": "Black Christmas", "year": 1974 },
+        { "title": "The Texas Chain Saw Massacre", "year": 1974 },
+        { "title": "Halloween", "year": 1978 },
+        { "title": "Friday the 13th", "year": 1980 },
+        { "title": "My Bloody Valentine", "year": 1981 },
+        { "title": "Sleepaway Camp", "year": 1983 },
+        { "title": "A Nightmare on Elm Street", "year": 1984 },
+        { "title": "Child's Play", "year": 1988 },
+        { "title": "Candyman", "year": 1992 },
+        { "title": "Scream", "year": 1996 },
+        { "title": "I Know What You Did Last Summer", "year": 1997 },
+        { "title": "Urban Legend", "year": 1998 },
+        { "title": "Hatchet", "year": 2006 },
+        { "title": "You're Next", "year": 2011 },
+        { "title": "Terrifier", "year": 2016 },
+        { "title": "Happy Death Day", "year": 2017 },
+        { "title": "X", "year": 2022 }
+      ]
+    },
+    {
+      "slug": "horror-supernatural",
+      "name": "Supernatural & Paranormal",
+      "kind": "genre",
+      "categories": ["horror"],
+      "color": "#7c3aed",
+      "description": "Curses, entities and things that should not exist.",
+      "films": [
+        { "title": "The Sixth Sense", "year": 1999 },
+        { "title": "The Ring", "year": 2002 },
+        { "title": "Drag Me to Hell", "year": 2009 },
+        { "title": "Insidious", "year": 2011 },
+        { "title": "Sinister", "year": 2012 },
+        { "title": "Oculus", "year": 2013 },
+        { "title": "It Follows", "year": 2014 },
+        { "title": "The Babadook", "year": 2014 },
+        { "title": "Lights Out", "year": 2016 },
+        { "title": "Hereditary", "year": 2018 },
+        { "title": "Smile", "year": 2022 },
+        { "title": "Talk to Me", "year": 2023 },
+        { "title": "Longlegs", "year": 2024 },
+        { "title": "Weapons", "year": 2025 }
+      ]
+    },
+    {
+      "slug": "horror-haunted-house",
+      "name": "Haunted House",
+      "kind": "genre",
+      "categories": ["horror"],
+      "color": "#64748b",
+      "description": "Creaking floors, cold spots and houses that don't want you to leave.",
+      "films": [
+        { "title": "The Innocents", "year": 1961 },
+        { "title": "The Haunting", "year": 1963 },
+        { "title": "The Legend of Hell House", "year": 1973 },
+        { "title": "The Amityville Horror", "year": 1979 },
+        { "title": "The Changeling", "year": 1980 },
+        { "title": "The Shining", "year": 1980 },
+        { "title": "Poltergeist", "year": 1982 },
+        { "title": "The Others", "year": 2001 },
+        { "title": "1408", "year": 2007 },
+        { "title": "The Orphanage", "year": 2007 },
+        { "title": "The Woman in Black", "year": 2012 },
+        { "title": "The Conjuring", "year": 2013 },
+        { "title": "Crimson Peak", "year": 2015 },
+        { "title": "His House", "year": 2020 }
+      ]
+    },
+    {
+      "slug": "horror-demonic",
+      "name": "Demonic & Exorcism",
+      "kind": "genre",
+      "categories": ["horror"],
+      "color": "#991b1b",
+      "description": "Possessions, exorcisms and the devil himself.",
+      "films": [
+        { "title": "Rosemary's Baby", "year": 1968 },
+        { "title": "The Exorcist", "year": 1973 },
+        { "title": "The Omen", "year": 1976 },
+        { "title": "The Evil Dead", "year": 1981 },
+        { "title": "Evil Dead II", "year": 1987 },
+        { "title": "The Exorcist III", "year": 1990 },
+        { "title": "The Exorcism of Emily Rose", "year": 2005 },
+        { "title": "The Last Exorcism", "year": 2010 },
+        { "title": "The Rite", "year": 2011 },
+        { "title": "The Conjuring 2", "year": 2016 },
+        { "title": "Incantation", "year": 2022 },
+        { "title": "The Pope's Exorcist", "year": 2023 },
+        { "title": "Evil Dead Rise", "year": 2023 },
+        { "title": "Late Night with the Devil", "year": 2024 }
+      ]
+    },
+    {
+      "slug": "horror-psychological",
+      "name": "Psychological Horror",
+      "kind": "genre",
+      "categories": ["horror"],
+      "color": "#db2777",
+      "description": "When the scariest place is your own mind.",
+      "films": [
+        { "title": "Psycho", "year": 1960 },
+        { "title": "Repulsion", "year": 1965 },
+        { "title": "Don't Look Now", "year": 1973 },
+        { "title": "Jacob's Ladder", "year": 1990 },
+        { "title": "Misery", "year": 1990 },
+        { "title": "The Silence of the Lambs", "year": 1991 },
+        { "title": "Black Swan", "year": 2010 },
+        { "title": "Get Out", "year": 2017 },
+        { "title": "The Lighthouse", "year": 2019 },
+        { "title": "Us", "year": 2019 },
+        { "title": "Saint Maud", "year": 2020 },
+        { "title": "Pearl", "year": 2022 },
+        { "title": "Speak No Evil", "year": 2022 }
+      ]
+    },
+    {
+      "slug": "horror-found-footage",
+      "name": "Found Footage",
+      "kind": "genre",
+      "categories": ["horror"],
+      "color": "#65a30d",
+      "description": "Shaky cameras, night vision and tapes that should never have been found.",
+      "films": [
+        { "title": "The Blair Witch Project", "year": 1999 },
+        { "title": "Paranormal Activity", "year": 2007 },
+        { "title": "[REC]", "year": 2007 },
+        { "title": "Cloverfield", "year": 2008 },
+        { "title": "Lake Mungo", "year": 2008 },
+        { "title": "Trollhunter", "year": 2010 },
+        { "title": "Grave Encounters", "year": 2011 },
+        { "title": "V/H/S", "year": 2012 },
+        { "title": "Creep", "year": 2014 },
+        { "title": "Unfriended", "year": 2014 },
+        { "title": "Hell House LLC", "year": 2015 },
+        { "title": "The Visit", "year": 2015 },
+        { "title": "Gonjiam: Haunted Asylum", "year": 2018 },
+        { "title": "Host", "year": 2020 }
+      ]
+    },
+    {
+      "slug": "horror-zombie",
+      "name": "Zombie",
+      "kind": "genre",
+      "categories": ["horror"],
+      "color": "#4d7c0f",
+      "description": "From Romero's ghouls to rage-infected sprinters.",
+      "films": [
+        { "title": "Night of the Living Dead", "year": 1968 },
+        { "title": "Dawn of the Dead", "year": 1978 },
+        { "title": "Day of the Dead", "year": 1985 },
+        { "title": "The Return of the Living Dead", "year": 1985 },
+        { "title": "Braindead", "year": 1992 },
+        { "title": "28 Days Later", "year": 2002 },
+        { "title": "Dawn of the Dead", "year": 2004 },
+        { "title": "Shaun of the Dead", "year": 2004 },
+        { "title": "28 Weeks Later", "year": 2007 },
+        { "title": "Zombieland", "year": 2009 },
+        { "title": "World War Z", "year": 2013 },
+        { "title": "Train to Busan", "year": 2016 },
+        { "title": "The Girl with All the Gifts", "year": 2016 },
+        { "title": "One Cut of the Dead", "year": 2017 },
+        { "title": "28 Years Later", "year": 2025 }
       ]
     }
   ]

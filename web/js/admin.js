@@ -48,7 +48,7 @@ export const deleteUser = (userId) => callAdmin("delete-user", { user_id: userId
 export async function listUniversesForAdmin() {
     return await supabase
         .from("universes")
-        .select("id, slug, name, description, color, sort_order, items:universe_items(count)")
+        .select("id, slug, name, description, color, kind, sort_order, items:universe_items(count)")
         .order("sort_order")
         .then(check);
 }
@@ -126,6 +126,16 @@ export async function swapItemOrder(a, b) {
         supabase.from("universe_items").update({ release_order: b.release_order }).eq("id", a.id).then(check),
         supabase.from("universe_items").update({ release_order: a.release_order }).eq("id", b.id).then(check),
     ]);
+}
+
+/** Nahradí kategorie kolekce (smaže stávající přiřazení a vloží nová). */
+export async function setUniverseCategories(universeId, categoryIds) {
+    await supabase.from("universe_categories").delete().eq("universe_id", universeId).then(check);
+    if (categoryIds.length > 0) {
+        await supabase.from("universe_categories")
+            .insert(categoryIds.map((categoryId) => ({ universe_id: universeId, category_id: categoryId })))
+            .then(check);
+    }
 }
 
 /** Nastaví film jako obal univerza (plakát na kartě, záběr v banneru). */

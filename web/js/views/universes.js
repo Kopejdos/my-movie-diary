@@ -1,6 +1,9 @@
 // Obrazovka: přehled – hero karta (Continue watching / vítání) a mřížka univerz.
 
-import { fetchUniverses, fetchMyFilmCounts, fetchContinueWatching, addWatch, percent } from "../data.js";
+import {
+    fetchUniverses, fetchCategories, fetchMyFilmCounts, fetchContinueWatching, addWatch, percent, KIND_ORDER,
+} from "../data.js";
+import { loadPref, savePref } from "../prefs.js";
 import { isSignedIn } from "../auth.js";
 import { setAccent, inkFor } from "../theme.js";
 import { TEXTS, format, movies } from "../texts.js";
@@ -13,11 +16,12 @@ export async function universesView(container, context) {
     mount(container, loadingView());
 
     const signedIn = isSignedIn();
-    let universes, continueWatching;
+    let universes, categories, continueWatching;
     try {
         const counts = await fetchMyFilmCounts(signedIn);
-        [universes, continueWatching] = await Promise.all([
+        [universes, categories, continueWatching] = await Promise.all([
             fetchUniverses(),
+            fetchCategories(),
             signedIn ? fetchContinueWatching(counts) : Promise.resolve(null),
         ]);
     } catch (error) {
@@ -28,15 +32,77 @@ export async function universesView(container, context) {
     }
     if (!isCurrent()) return;
 
+    // Zvolená kategorie se pamatuje; neexistující (smazaná) = vše
+    let selected = loadPref("category", "all");
+    if (selected !== "all" && !categories.some((c) => c.slug === selected)) selected = "all";
+
+    const chips = h("div", { class: "chips", role: "tablist" });
+    const count = h("span", { class: "muted" });
+    const grid = h("div", { class: "collection-sections" });
+
+    /** Překreslí filtr a mřížku podle zvolené kategorie (bez nového načítání). */
+    function renderCollections() {
+        const category = categories.find((c) => c.slug === selected);
+        const visible = category
+            ? universes.filter((u) => u.categoryIds.includes(category.id))
+            : universes;
+
+        mount(chips,
+            chip("all", TEXTS.categoryAll, null, universes.length),
+            categories
+                .map((c) => ({ c, n: universes.filter((u) => u.categoryIds.includes(c.id)).length }))
+                .filter(({ n }) => n > 0)
+                .map(({ c, n }) => chip(c.slug, c.name, c.color, n)),
+        );
+        count.textContent = format("universesCount", visible.length);
+
+        // Seskupení podle typu (série, studia, žánrové výběry); nadpisy jen když je typů víc
+        const groups = KIND_ORDER
+            .map((kind) => ({ kind, items: visible.filter((u) => (u.kind ?? "series") === kind) }))
+            .filter((g) => g.items.length > 0);
+        mount(grid, groups.map((g) => h("section", { class: "collection-section" },
+            groups.length > 1 ? kindHeading(g.kind) : null,
+            h("div", { class: "universe-grid" }, g.items.map((u) => universeCard(u, signedIn))),
+        )));
+    }
+
+    /** Tlačítko filtru kategorie. */
+    function chip(slug, label, color, n) {
+        const active = selected === slug;
+        const button = h("button", {
+            class: `chip${active ? " chip--active" : ""}`,
+            type: "button", role: "tab", "aria-selected": String(active),
+            onClick: () => {
+                selected = slug;
+                savePref("category", slug);
+                renderCollections();
+            },
+        }, label, h("span", { class: "chip__count" }, String(n)));
+        if (color) {
+            button.style.setProperty("--c", color);
+            button.style.setProperty("--c-ink", inkFor(color));
+        }
+        return button;
+    }
+
     mount(container,
         heroCard(signedIn, continueWatching, () => universesView(container, context)),
         h("div", { class: "section-title" },
             h("h2", {}, TEXTS.universesTitle),
-            h("span", { class: "muted" }, format("universesCount", universes.length)),
+            count,
         ),
-        h("div", { class: "universe-grid" },
-            universes.map((universe) => universeCard(universe, signedIn)),
-        ),
+        chips,
+        grid,
+    );
+    renderCollections();
+}
+
+/** Nadpis skupiny podle typu kolekce. */
+function kindHeading(kind) {
+    const label = { series: TEXTS.kindSeries, studio: TEXTS.kindStudio, genre: TEXTS.kindGenre }[kind] ?? kind;
+    return h("div", { class: "kind-heading" },
+        h("h3", {}, label),
+        kind === "genre" ? h("span", { class: "muted" }, TEXTS.kindGenreHint) : null,
     );
 }
 

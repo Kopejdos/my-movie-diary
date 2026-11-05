@@ -3,6 +3,13 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V1.2 – November 2026
+- Categories on the overview: Superhero, Sci-fi & Fantasy, Animation, Action & Adventure, Horror
+- Collections grouped into Series, Studios and Genre picks
+- 8 horror series: The Conjuring Universe, Saw, Scream, Halloween, Final Destination, Insidious, A Nightmare on Elm Street, Friday the 13th
+- 7 horror genre picks: Slasher, Supernatural & Paranormal, Haunted House, Demonic & Exorcism, Psychological Horror, Found Footage, Zombie
+- Admin panel: collection type and categories
+
 ## V1.1.1 – November 2026
 - "Universes" are now called "Collections" (they include studios and genre picks too); old links still work
 

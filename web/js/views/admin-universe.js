@@ -1,9 +1,9 @@
 // Obrazovka admin panelu: úprava jednoho univerza (#/admin/collection/<slug>).
 
-import { fetchUniverse } from "../data.js";
+import { fetchUniverse, fetchCategories } from "../data.js";
 import {
     updateUniverse, addUniverseItem, updateUniverseItem, removeUniverseItem, swapItemOrder,
-    setUniverseCover, searchTmdb, addFilmFromTmdb,
+    setUniverseCover, searchTmdb, addFilmFromTmdb, setUniverseCategories,
 } from "../admin.js";
 import { setAccent } from "../theme.js";
 import { TEXTS, format, movies } from "../texts.js";
@@ -15,9 +15,9 @@ export async function adminUniverseView(container, context) {
     if (!requireAdminView(container)) return;
     mount(container, loadingView());
 
-    let universe;
+    let universe, categories;
     try {
-        universe = await fetchUniverse(context.params.slug);
+        [universe, categories] = await Promise.all([fetchUniverse(context.params.slug), fetchCategories()]);
     } catch (error) {
         if (!context.isCurrent()) return;
         mount(container, errorView(format("errorGeneric", error.message),
@@ -44,7 +44,7 @@ export async function adminUniverseView(container, context) {
             h("span", { class: "eyebrow" }, TEXTS.navAdmin),
             h("h1", {}, universe.name),
         ),
-        detailsForm(universe, reload),
+        detailsForm(universe, categories, reload),
         addMoviePanel(universe, reload),
         h("div", { class: "section-title" },
             h("h2", {}, TEXTS.adminMoviesInUniverse),
@@ -69,12 +69,24 @@ async function run(action, reload, message) {
     }
 }
 
-/** Název, popis a barva univerza. */
-function detailsForm(universe, reload) {
+/** Název, popis, barva, typ a kategorie kolekce. */
+function detailsForm(universe, categories, reload) {
     const name = h("input", { type: "text", value: universe.name, maxlength: 80, required: true });
     const description = h("input", { type: "text", value: universe.description ?? "", maxlength: 200 });
     const color = h("input", { type: "color", value: universe.color ?? "#d4a75a", class: "color-input" });
     const submit = h("button", { class: "btn btn--primary", type: "submit" }, TEXTS.adminSave);
+
+    const kind = h("select", { class: "admin-input admin-select" },
+        [["series", TEXTS.kindSeries], ["studio", TEXTS.kindStudio], ["genre", TEXTS.kindGenre]]
+            .map(([value, label]) => h("option", { value, selected: (universe.kind ?? "series") === value }, label)));
+
+    const assigned = new Set((universe.categories ?? []).map((c) => c.id));
+    const categoryBoxes = categories.map((c) => ({
+        id: c.id,
+        input: h("input", { type: "checkbox", checked: assigned.has(c.id) }),
+        label: c.name,
+        color: c.color,
+    }));
 
     // Náhled barvy hned při výběru
     color.addEventListener("input", () => setAccent(color.value));
@@ -88,11 +100,16 @@ function detailsForm(universe, reload) {
                     return;
                 }
                 submit.disabled = true;
-                run(() => updateUniverse(universe.id, {
-                    name: name.value.trim(),
-                    description: description.value.trim() || null,
-                    color: color.value,
-                }), reload, TEXTS.adminSaved);
+                run(async () => {
+                    await updateUniverse(universe.id, {
+                        name: name.value.trim(),
+                        description: description.value.trim() || null,
+                        color: color.value,
+                        kind: kind.value,
+                    });
+                    await setUniverseCategories(universe.id,
+                        categoryBoxes.filter((box) => box.input.checked).map((box) => box.id));
+                }, reload, TEXTS.adminSaved);
             },
         },
         h("h2", { class: "admin-form__title" }, TEXTS.adminUniverseDetails),
@@ -101,6 +118,15 @@ function detailsForm(universe, reload) {
             field(TEXTS.adminDescription, description),
             field(TEXTS.adminColor, color),
             field(TEXTS.adminSlug, h("input", { type: "text", value: universe.slug, disabled: true })),
+            field(TEXTS.adminKind, kind),
+        ),
+        h("div", { class: "field" },
+            h("span", { class: "field__label" }, TEXTS.adminCategories),
+            h("div", { class: "category-checks" },
+                categoryBoxes.map((box) => h("label", { class: "mini-check category-check",
+                        style: box.color ? `--c: ${box.color}` : null },
+                    box.input, h("span", {}, box.label)))),
+            h("span", { class: "field__hint" }, TEXTS.adminCategoriesHint),
         ),
         submit,
     );

@@ -218,7 +218,7 @@ Formát **V<hlavní>.<vedlejší>.<oprava>** (např. V1.2.1):
 |---|---|---|---|
 | 9 | V1.1 | Nová univerza + verze v patičce ✅ | Mad Max, Avatar, Disney, Pixar, DreamWorks; verze v patičce; `CHANGELOG.md` |
 | 9.1 | V1.1.1 | Přejmenování ✅ | Universes → **Collections** v celé aplikaci |
-| 10 | V1.2 | Kategorie + horory, vlna 1 | kategorie na přehledu, hororové série, prvních 7 hororových žánrů |
+| 10 | V1.2 | Kategorie + horory, vlna 1 ✅ | kategorie na přehledu, hororové série, prvních 7 hororových žánrů |
 | 11 | V1.3 | Achievementy | odznaky za filmy, čas, maratony, dokončené kolekce a kategorie |
 | 12 | V1.4 | Horory, vlna 2 | dalších 7 žánrů |
 | 13 | V1.5 | Vyhledávání | vyhledávací pole – filmy a kolekce |
@@ -236,7 +236,7 @@ Superhero · Sci-fi & Fantasy · Animation · Action & Adventure · Horror (+ da
 - **série** (MCU, Saw…) – uzavřený seznam filmů,
 - **žánrové výběry** (Slasher, Haunted House…) – kurátorský výběr zhruba 15–20 klíčových filmů žánru, aby šel dokončit; film může být v sérii i ve výběru (Scream je v „Scream“ i ve „Slasher“).
 
-**Hororové série:** The Conjuring Universe, Saw, Scream, Halloween, Final Destination, Insidious, A Nightmare on Elm Street, Friday the 13th (výběr se upřesní).
+**Hororové série:** The Conjuring Universe, Saw, Scream, Halloween, Final Destination, Insidious, A Nightmare on Elm Street, Friday the 13th.
 
 **Hororové žánry – podle návrhu kamaráda, ve třech vlnách po sedmi:**
 
@@ -448,6 +448,22 @@ Odznaky se počítají ze zhlédnutí, která už jsou v databázi – odemknou 
 #### Rozhodnutí ve V1.1.1
 - **„Collection“ sedí na všechno** – série (MCU), studia (Pixar) i žánrové výběry (Slasher); „universe“ sedělo jen na série.
 - **Interní název zůstává „universe“** – tabulky `universes`, `universe_items`, pohled `universe_progress`, názvy souborů a funkcí v kódu. Přejmenování databáze by znamenalo migraci a úpravy všech funkcí bez viditelného přínosu. V dokumentaci a kódu tedy „universe“ = kolekce.
+
+### Fáze 10 – kategorie a horory, vlna 1 ✅ (5. 11. 2026) – **V1.2**
+- **Kategorie** (tabulky `categories`, `universe_categories`): Superhero, Sci-fi & Fantasy, Animation, Action & Adventure, Horror. Na přehledu **filtr** (pilulky, posouvatelné do strany na telefonu, volba se pamatuje) s počtem kolekcí.
+- **Typ kolekce** (`universes.kind`): série / studio / žánrový výběr. Přehled se seskupí do sekcí **Series / Studios / Genre picks** (nadpisy jen když je typů víc).
+- V detailu kolekce pilulky s kategoriemi a štítek „Genre pick“.
+- Admin panel: v editoru kolekce **typ** a **kategorie** (zaškrtávací pole); v seznamu štítek Studio / Genre pick.
+- **8 hororových sérií** (Conjuring – s pořadím příběhu, Saw – Saw X mezi Saw a Saw II, Scream, Halloween – skupiny podle časových linií, Final Destination – pětka jako prequel, Insidious, A Nightmare on Elm Street, Friday the 13th; remaky a crossover Freddy vs. Jason volitelné).
+- **7 žánrových výběrů, vlna 1** (13–17 filmů): Slasher, Supernatural & Paranormal, Haunted House, Demonic & Exorcism, Psychological Horror, Found Footage, Zombie.
+- Migrace `20261105070000_categories.sql` (vytvoří kategorie a přiřadí stávající kolekce), nová verze funkce `tmdb` (typ a kategorie ze seedu).
+
+#### Rozhodnutí ve fázi 10
+- **Kategorie jako vazba M:N** – kolekce může být ve více kategoriích (Alien = Sci-fi i Horror, Jurassic Park = Sci-fi i Action).
+- **Stávající kolekce přiřazuje migrace**, ne import – plný import by přepsal úpravy z admin panelu. Import (s `&only=`) nastaví typ a kategorie jen u importované kolekce.
+- **Žánrové výběry jsou kurátorské** (zhruba 15 klíčových filmů) – žánr má stovky filmů a kolekce musí jít dokončit. Film může být v sérii i ve výběru (Scream, The Conjuring…).
+- **Žánrové výběry řazené podle roku vydání**, bez skupin a bez pořadí příběhu.
+- **Bez Saw XI** (stažen z plánu Lionsgate) a **Insidious 6** (zatím bez názvu a data) – přidají se po premiéře.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).
