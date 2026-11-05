@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V2.1 – November 2026
+- Faster: posters and banners load in the right size (much less data on phones)
+- Collections, categories and movies are kept in memory – going back and forth is instant
+- Opening a collection needs one request instead of two, and starts loading as soon as you hover or touch its card
+- After every +1 only your viewings are reloaded, not the whole catalog
+
 ## V2.0 – November 2026
 - Public profiles: make your diary public and share a link – level, achievements and stats, viewable even without an account
 - Share button: system share sheet on phones, copy link on desktop

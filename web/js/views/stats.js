@@ -178,7 +178,7 @@ function topFilms(films) {
     return h("ol", { class: "top-films" },
         films.map((f, index) => h("li", { class: "top-films__item" },
             h("span", { class: "top-films__rank" }, String(index + 1)),
-            poster(f.film.poster_path, f.film.title, "top-films__poster"),
+            poster(f.film.poster_path, f.film.title, "top-films__poster", false, "tiny"),
             h("div", { class: "top-films__info" },
                 h("strong", {}, f.film.title),
                 h("span", { class: "muted" }, format("lastWatched", formatDate(f.last)))),

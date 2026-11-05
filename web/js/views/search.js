@@ -272,7 +272,7 @@ class SearchPage {
         row.className = `film film--search${count > 0 ? " film--watched" : ""}`;
 
         mount(row,
-            poster(film.poster_path, film.title, "film__poster"),
+            poster(film.poster_path, film.title, "film__poster", false, "small"),
             h("div", { class: "film__info" },
                 h("h3", { class: "film__title" }, film.title),
                 h("div", { class: "film__meta" },

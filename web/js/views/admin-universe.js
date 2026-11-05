@@ -1,6 +1,7 @@
 // Obrazovka admin panelu: úprava jednoho univerza (#/admin/collection/<slug>).
 
 import { fetchUniverse, fetchCategories } from "../data.js";
+import { clearDataCache } from "../cache.js";
 import {
     updateUniverse, addUniverseItem, updateUniverseItem, removeUniverseItem, swapItemOrder,
     setUniverseCover, searchTmdb, addFilmFromTmdb, setUniverseCategories,
@@ -14,6 +15,7 @@ import { requireAdminView } from "./admin.js";
 export async function adminUniverseView(container, context) {
     if (!requireAdminView(container)) return;
     mount(container, loadingView());
+    clearDataCache();               // admin vždy pracuje s čerstvými daty
 
     let universe, categories;
     try {
@@ -168,7 +170,7 @@ function itemRow(universe, item, previous, next, reload) {
 
     return h("li", { class: `admin-row admin-row--film${item.is_optional ? " film--optional" : ""}` },
         h("span", { class: "admin-row__order" }, String(item.release_order)),
-        poster(film.poster_path, film.title, "film__poster"),
+        poster(film.poster_path, film.title, "film__poster", false, "small"),
         h("div", { class: "admin-row__info" },
             h("strong", {}, film.title),
             h("div", { class: "pills" },
@@ -258,7 +260,7 @@ function addMoviePanel(universe, reload) {
         });
 
         return h("div", { class: "search-result" },
-            poster(movie.poster_path, movie.title, "film__poster"),
+            poster(movie.poster_path, movie.title, "film__poster", false, "small"),
             h("div", { class: "admin-row__info" },
                 h("strong", {}, movie.title),
                 h("div", { class: "pills" }, pill(movie.year ?? "—"),

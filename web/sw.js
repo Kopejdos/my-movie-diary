@@ -38,6 +38,7 @@ const SHELL = [
     "js/data.js",
     "js/admin.js",
     "js/achievements.js",
+    "js/cache.js",
     "js/search.js",
     "js/stats.js",
     "js/social.js",

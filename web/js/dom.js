@@ -2,7 +2,7 @@
 // Obsah se vkládá přes textContent, nikdy přes innerHTML – názvy filmů
 // ani nicky uživatelů tak nemůžou do stránky podstrčit kód.
 
-import { TMDB_IMAGE_BASE, TMDB_BACKDROP_BASE } from "./config.js";
+import { TMDB_IMAGE_ROOT, POSTER_SIZES, BACKDROP_SIZES } from "./config.js";
 import { TEXTS } from "./texts.js";
 
 /**
@@ -37,14 +37,19 @@ export function mount(container, ...children) {
     container.replaceChildren(...children.flat().filter(Boolean));
 }
 
-/** Plná adresa plakátu, nebo null. */
-export function posterUrl(posterPath) {
-    return posterPath ? TMDB_IMAGE_BASE + posterPath : null;
+/** Plná adresa plakátu v dané velikosti ("tiny" / "small" / "large"), nebo null. */
+export function posterUrl(posterPath, size = "large") {
+    return posterPath ? TMDB_IMAGE_ROOT + (POSTER_SIZES[size] ?? POSTER_SIZES.large) + posterPath : null;
 }
 
-/** Plná adresa širokoúhlého záběru (banner), nebo null. */
+/**
+ * Plná adresa širokoúhlého záběru (banner), nebo null.
+ * Telefon (do ~1000 skutečných pixelů šířky) dostane menší verzi.
+ */
 export function backdropUrl(backdropPath) {
-    return backdropPath ? TMDB_BACKDROP_BASE + backdropPath : null;
+    if (!backdropPath) return null;
+    const pixels = window.innerWidth * (window.devicePixelRatio || 1);
+    return TMDB_IMAGE_ROOT + (pixels <= 1000 ? BACKDROP_SIZES.phone : BACKDROP_SIZES.desktop) + backdropPath;
 }
 
 /** Pilulka s údajem (rok, délka…). */
@@ -55,9 +60,10 @@ export function pill(text, accent = false) {
 /**
  * Obrázek plakátu, nebo zástupný blok s názvem filmu.
  * eager = plakát je vidět hned po načtení (první řada) → stáhne se přednostně.
+ * size = "tiny" / "small" / "large" (viz POSTER_SIZES v config.js).
  */
-export function poster(posterPath, title, className = "poster", eager = false) {
-    const url = posterUrl(posterPath);
+export function poster(posterPath, title, className = "poster", eager = false, size = "large") {
+    const url = posterUrl(posterPath, size);
     if (!url) return h("div", { class: `${className} poster--empty` }, title);
     return h("img", {
         class: className, src: url, alt: title, decoding: "async",

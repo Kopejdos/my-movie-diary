@@ -3,10 +3,13 @@
 // Čistá logika – nic nevykresluje.
 
 import { supabase } from "./supabase.js";
+import { clearDataCache } from "./cache.js";
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./config.js";
 
 function check({ data, error }) {
     if (error) throw new Error(error.message);
+    // Admin mění katalog → mezipaměť webu by byla zastaralá (V2.1)
+    clearDataCache();
     return data;
 }
 

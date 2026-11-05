@@ -79,7 +79,7 @@ export async function watchlistView(container, context) {
         });
 
         return h("li", { class: "film film--watchlist" },
-            poster(film.poster_path, film.title, "film__poster"),
+            poster(film.poster_path, film.title, "film__poster", false, "small"),
             h("div", { class: "film__info" },
                 h("h3", { class: "film__title" }, film.title),
                 h("div", { class: "film__meta" },

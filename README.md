@@ -6,7 +6,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V2.0** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V2.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
@@ -26,6 +26,12 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Light and dark mode
 - Admin panel: collections, movies (search TMDB right from the app) and users
 - Installable on a phone or computer (PWA), opens even offline
+
+**Coming next** – optimization & security
+- V2.2 – nickname rules, Terms of Service, delete your account
+- V2.3 – email confirmation, forgot password
+- V2.4 – CAPTCHA
+- V2.5 – optimization, round two
 
 ## Tech stack
 

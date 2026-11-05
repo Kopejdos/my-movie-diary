@@ -2,6 +2,8 @@
 // Čistá logika – vrací data, nic nevykresluje.
 
 import { supabase } from "./supabase.js";
+import { cached } from "./cache.js";
+import { backdropUrl } from "./dom.js";
 
 /** Převede chybu Supabase na běžnou výjimku. */
 function check({ data, error }) {
@@ -27,12 +29,13 @@ async function fetchAllRows(buildQuery, pageSize = 1000) {
  * Nepřihlášený uživatel dostane watchedCount = 0.
  */
 export async function fetchUniverses() {
+    // Seznam kolekcí z mezipaměti (mění se jen v adminu); postup vždy čerstvý
     const [universes, progress] = await Promise.all([
-        supabase
+        cached("universes", () => supabase
             .from("universes")
             .select("id, slug, name, description, color, kind, sort_order, cover:films(title, poster_path, backdrop_path), universe_categories(category_id)")
             .order("sort_order")
-            .then(check),
+            .then(check)),
         supabase
             .from("universe_progress")
             .select("universe_id, total_count, watched_count")
@@ -52,60 +55,70 @@ export async function fetchUniverses() {
 }
 
 /** Všechny kategorie (sekce přehledu) v pořadí. */
-export async function fetchCategories() {
-    return await supabase
+export function fetchCategories() {
+    return cached("categories", () => supabase
         .from("categories")
         .select("id, slug, name, color, sort_order")
         .order("sort_order")
-        .then(check);
+        .then(check));
 }
 
 /**
  * Podklady pro vyhledávání: kolekce (s postupem) a všechny filmy s tím,
- * do kterých kolekcí patří. Seznam filmů se mění zřídka – drží se 5 minut v paměti.
+ * do kterých kolekcí patří. Seznam filmů se mění zřídka – drží se v mezipaměti.
  */
-let searchItemsCache = null;
-const SEARCH_CACHE_MS = 5 * 60 * 1000;
-
 export async function fetchSearchData() {
-    const cached = searchItemsCache && Date.now() - searchItemsCache.at < SEARCH_CACHE_MS
-        ? searchItemsCache.items
-        : null;
     const [universes, items] = await Promise.all([
         fetchUniverses(),
-        cached ?? fetchAllRows(() => supabase
+        cached("search-items", () => fetchAllRows(() => supabase
             .from("universe_items")
             .select("id, universe_id, film:films(tmdb_id, title, original_title, release_date, runtime, poster_path)")
-            .order("id")),
+            .order("id"))),
     ]);
-    if (!cached) searchItemsCache = { at: Date.now(), items };
     return { universes, items };
 }
 
 /** Pořadí typů kolekcí na přehledu – cesty první (kurátorský vstup pro nováčky). */
 export const KIND_ORDER = ["path", "series", "studio", "genre"];
 
-/** Jedno univerzum podle adresy (slug) včetně filmů v pořadí vydání, nebo null. */
-export async function fetchUniverse(slug) {
-    const universe = await supabase
-        .from("universes")
-        .select("id, slug, name, description, color, kind, cover_tmdb_id, cover:films(title, poster_path, backdrop_path), categories(id, slug, name, color, sort_order)")
-        .eq("slug", slug)
-        .maybeSingle()
-        .then(check);
-    if (!universe) return null;
+/**
+ * Jedno univerzum podle adresy (slug) včetně filmů v pořadí vydání, nebo null.
+ * Jeden dotaz (filmy vnořené v kolekci) místo dvou po sobě; výsledek je v mezipaměti.
+ */
+export function fetchUniverse(slug) {
+    return cached(`universe:${slug}`, async () => {
+        const universe = await supabase
+            .from("universes")
+            .select(`
+                id, slug, name, description, color, kind, cover_tmdb_id,
+                cover:films(title, poster_path, backdrop_path),
+                categories(id, slug, name, color, sort_order),
+                universe_items(
+                    id, release_order, story_order, group_label, is_optional, note,
+                    film:films(tmdb_id, title, original_title, release_date, runtime, poster_path, backdrop_path)
+                )
+            `)
+            .eq("slug", slug)
+            .order("release_order", { referencedTable: "universe_items" })
+            .maybeSingle()
+            .then(check);
+        if (!universe) return null;
+        const { universe_items: items, ...rest } = universe;
+        return { ...rest, items: items ?? [] };
+    });
+}
 
-    const items = await supabase
-        .from("universe_items")
-        .select(`
-            id, release_order, story_order, group_label, is_optional, note,
-            film:films(tmdb_id, title, original_title, release_date, runtime, poster_path, backdrop_path)
-        `)
-        .eq("universe_id", universe.id)
-        .order("release_order")
-        .then(check);
-
-    return { ...universe, items };
+/**
+ * Přednačtení kolekce, než na ni uživatel klikne (najetí myší / dotyk na kartu):
+ * data do mezipaměti a banner do mezipaměti prohlížeče. Chyby se ignorují.
+ */
+const prefetched = new Set();
+export function prefetchUniverse(slug, backdropPath = null) {
+    if (prefetched.has(slug)) return;
+    prefetched.add(slug);
+    fetchUniverse(slug).catch(() => prefetched.delete(slug));
+    const image = backdropUrl(backdropPath);
+    if (image) new Image().src = image;
 }
 
 /**

@@ -5,6 +5,7 @@
 // Úrovně jdou škálovat – stačí připsat další číslo do `tiers`.
 
 import { supabase } from "./supabase.js";
+import { cached } from "./cache.js";
 
 // ---------------------------------------------------------------------
 // Definice
@@ -82,8 +83,15 @@ export async function fetchAchievementData() {
     return { watches, ...catalog };
 }
 
-/** Katalog: kolekce, jejich filmy a kategorie (stejný pro všechny uživatele, i veřejné profily). */
-export async function fetchCatalogData() {
+/**
+ * Katalog: kolekce, jejich filmy a kategorie (stejný pro všechny uživatele, i veřejné profily).
+ * V mezipaměti – po každém +1 se tak znovu stahují jen zhlédnutí, ne celý katalog.
+ */
+export function fetchCatalogData() {
+    return cached("catalog", loadCatalogData);
+}
+
+async function loadCatalogData() {
     const [universes, items, categories, links] = await Promise.all([
         fetchAll(() => supabase.from("universes").select("id, slug, name, color, kind").order("sort_order").order("id")),
         fetchAll(() => supabase.from("universe_items").select("universe_id, tmdb_id, is_optional").order("id")),

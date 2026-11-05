@@ -2,6 +2,7 @@
 
 import {
     fetchUniverses, fetchCategories, fetchMyFilmCounts, fetchContinueWatching, addWatch, percent, KIND_ORDER,
+    prefetchUniverse,
 } from "../data.js";
 import { loadPref, savePref } from "../prefs.js";
 import { isSignedIn } from "../auth.js";
@@ -236,5 +237,11 @@ export function universeCard(universe, signedIn, eager = false) {
         card.style.setProperty("--c", universe.color);
         card.style.setProperty("--c-ink", inkFor(universe.color));
     }
+    // Přednačtení: data a banner se začnou stahovat už při najetí / dotyku,
+    // takže detail je po kliknutí hned hotový (V2.1)
+    const warm = () => prefetchUniverse(universe.slug, universe.cover?.backdrop_path ?? null);
+    card.addEventListener("pointerenter", warm);
+    card.addEventListener("focus", warm);
+    card.addEventListener("touchstart", warm, { passive: true });
     return card;
 }

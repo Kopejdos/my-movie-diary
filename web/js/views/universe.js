@@ -203,7 +203,7 @@ class UniversePage {
         const { film } = next;
         mount(this.upNext,
             h("div", { class: "up-next" },
-                poster(film.poster_path, film.title, "up-next__poster"),
+                poster(film.poster_path, film.title, "up-next__poster", false, "small"),
                 h("div", { class: "up-next__info" },
                     h("span", { class: "eyebrow" }, this.isPath ? TEXTS.nextStep : TEXTS.upNext),
                     h("h2", { class: "up-next__title" }, film.title),
@@ -266,7 +266,7 @@ class UniversePage {
                 ? h("span", { class: "film__step", "aria-label": format("stepOf", this.stepNumbers.get(film.tmdb_id), this.universe.items.length) },
                     count > 0 ? "✓" : String(this.stepNumbers.get(film.tmdb_id)))
                 : null,
-            poster(film.poster_path, film.title, "film__poster"),
+            poster(film.poster_path, film.title, "film__poster", false, "small"),
             h("div", { class: "film__info" },
                 h("h3", { class: "film__title" }, film.title),
                 h("div", { class: "film__meta" },

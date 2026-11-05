@@ -138,6 +138,7 @@ my-movie-diary/
         ├── search.js         vyhledávání – normalizace textu a pořadí výsledků (bez vykreslování)
         ├── stats.js          statistiky profilu ze zhlédnutí (bez vykreslování)
         ├── social.js         veřejné profily, hledání lidí, sdílení odkazu (bez vykreslování)
+        ├── cache.js          mezipaměť katalogu v paměti (V2.1)
         └── views/            obrazovky: universes, universe, search, stats, public-profile, login, register, profile,
                               watchlist, achievements, admin (univerza, uživatelé), admin-universe, not-found
 ```
@@ -251,6 +252,24 @@ Opačné pořadí ve V1.2 způsobilo chybu „Could not find the table 'public.c
 | 18 | **V2.0** | Sdílení profilu ✅ | veřejný profil (level, achievementy, statistiky), odkaz ke sdílení, hledání lidí – z osobního deníku sociální aplikace |
 
 Hororové vlny se střídají s funkcemi, aby každá verze přinesla něco nového. Později podle chuti: hodnocení a poznámky ke zhlédnutí, vlastní kolekce uživatelů, export / import, české názvy filmů.
+
+### Kapitola V2.x – optimalizace a bezpečnost
+
+| # | Verze | Fáze | Co přibude |
+|---|---|---|---|
+| 19 | V2.1 | Optimalizace ✅ | plakáty a banner ve správné velikosti, mezipaměť katalogu, detail kolekce jedním dotazem, přednačtení po najetí na kartu |
+| 20 | V2.2 | Nicky, pravidla, účet | filtr nicků v databázi (zakázaná slova, obcházení typu `f4gg0t`, rezervovaná jména), **Reset nickname** v adminu, **Terms of Service + pravidla komunity**, souhlas při registraci, aktualizace zásad (co se ukládá, admin vidí e-mail), **Delete my account** |
+| 21 | V2.3 | E-mail a hesla | **ověření e-mailu** přes vlastní SMTP (Gmail + heslo aplikace), hláška a přesměrování po potvrzení, „Please confirm your email“, **Resend confirmation**, **Forgot password**, přísnější pravidla hesla |
+| 22 | V2.4 | CAPTCHA | Cloudflare Turnstile – registrace, přihlášení (i nickem přes funkci `login`), obnova hesla |
+| 23 | V2.5 | Optimalizace 2 | druhé kolo měření a zrychlení |
+
+**E-maily (zjištěno 5. 11. 2026, podklad pro V2.3):** výchozí e-mailová služba Supabase od září 2024 posílá **jen na adresy
+členů organizace projektu** (ostatní dostanou `email_address_not_authorized`) a nejvýš **2 maily za hodinu** – platí pro
+všechny plány, placený Supabase to neřeší. Kontrola člena týmu ignoruje část za `+` (`adiskop987+test@gmail.com` = tým).
+Pro skutečné uživatele je nutné **vlastní SMTP**. Bez domény: **samostatný Gmail účet** pro aplikaci + dvoufázové ověření +
+**heslo aplikace** (`smtp.gmail.com`, port 465, odesílatel = ten Gmail, limit 500 mailů / den). S doménou později Resend
+(3 000 / měsíc). Heslo aplikace patří jen do Supabase a správce hesel. Pozor: hodně nedoručitelných mailů (vymyšlené
+adresy) může Gmail účet dočasně zablokovat → CAPTCHA (V2.4) a limit 20–30 mailů za hodinu.
 
 ### Fáze 10 – kategorie a horory, vlna 1 (V1.2)
 **Kategorie** – sekce / filtr na přehledu; kolekce může být ve více kategoriích (Alien = Sci-fi i Horror), přiřazení v admin panelu:
@@ -665,7 +684,35 @@ Z osobního deníku sociální aplikace.
 - Ověřeno na lokálním Postgresu: anonym ani jiný uživatel nevidí tabulky, soukromý profil vrací `null`,
   zapnutí admina selže, cizí profil zveřejnit nejde, hodnocení a poznámky se do JSONu nedostanou.
 
-**Plán fází 0–18 je tím dokončený.** Další nápady se přidají jako nové verze (V2.x).
+**Plán fází 0–18 je tím dokončený.** Pokračuje kapitola V2.x – optimalizace a bezpečnost.
+
+### Fáze 19 – optimalizace ✅ (5. 11. 2026) – **V2.1**
+Měřeno na telefonu (390 px, 2× hustota) s daty ze seedu, před → po:
+
+| Krok | Dotazy do databáze | Obrázky |
+|---|---|---|
+| Otevření detailu MCU | 2 → **1** | plakáty v seznamu 748 kB → **126 kB** |
+| Zpět na přehled | 3 → **1** | – |
+| Detail podruhé | 2 → **0** | – |
+| Banner na telefonu | – | 210 kB → **95 kB** |
+
+- **Plakáty ve velikosti podle místa:** `w92` žebříček ve statistikách, `w154` řádky filmů a Up next, `w342` karty a hero
+  (`POSTER_SIZES` v `config.js`). **Banner** `w780` na telefonu, `w1280` na velké obrazovce (podle šířky × hustoty displeje).
+- **Mezipaměť katalogu** (`web/js/cache.js`, 5 minut): seznam kolekcí, kategorie, detail kolekce, katalog pro
+  achievementy a statistiky, filmy pro hledání. Ukládá se slib, takže souběžné dotazy sdílí jeden požadavek.
+  Zhlédnutí, watchlist a postup se načítají vždy čerstvé.
+- **Po každém +1** se kvůli achievementům a levelu stahují jen zhlédnutí, ne celý katalog (~900 řádků).
+- **Detail kolekce jedním dotazem** – filmy vnořené v kolekci (`universe_items.order=release_order.asc`) místo dvou
+  dotazů po sobě = o jedno čekání na síť méně.
+- **Přednačtení** – najetí myší, fokus nebo dotyk na kartu kolekce začne stahovat její data a banner; po kliknutí je
+  detail hotový.
+
+#### Rozhodnutí ve fázi 19
+- **Mezipaměť jen v paměti, ne v localStorage** – po zavření aplikace se načte čerstvý katalog; žádné riziko
+  zastaralých dat mezi verzemi.
+- **Admin mezipaměť maže** při každé operaci a při otevření úprav kolekce – změny z admin panelu jsou vidět hned.
+- **Bez build kroku (minifikace)** – GitHub Pages soubory komprimuje (gzip/brotli); přínos by byl malý a projekt by
+  ztratil jednoduchost „co je v repozitáři, to běží“. Případně ve V2.5.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).
