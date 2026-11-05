@@ -52,11 +52,18 @@ export function pill(text, accent = false) {
     return text ? h("span", { class: `pill${accent ? " pill--accent" : ""}` }, text) : null;
 }
 
-/** Obrázek plakátu, nebo zástupný blok s názvem filmu. */
-export function poster(posterPath, title, className = "poster") {
+/**
+ * Obrázek plakátu, nebo zástupný blok s názvem filmu.
+ * eager = plakát je vidět hned po načtení (první řada) → stáhne se přednostně.
+ */
+export function poster(posterPath, title, className = "poster", eager = false) {
     const url = posterUrl(posterPath);
     if (!url) return h("div", { class: `${className} poster--empty` }, title);
-    return h("img", { class: className, src: url, alt: title, loading: "lazy" });
+    return h("img", {
+        class: className, src: url, alt: title, decoding: "async",
+        loading: eager ? "eager" : "lazy",
+        fetchpriority: eager ? "high" : null,
+    });
 }
 
 /** Rok z data "2008-05-02" → "2008". */
@@ -72,14 +79,21 @@ export function formatDate(date) {
     });
 }
 
-/** Krátké oznámení dole na obrazovce. */
-export function toast(message, type = "info") {
+/**
+ * Krátké oznámení dole na obrazovce.
+ * action = { label, onClick } → tlačítko v oznámení; takové oznámení samo nezmizí.
+ */
+export function toast(message, type = "info", action = null) {
     const container = document.getElementById("toasts");
     if (!container) return;
-    const item = h("div", { class: `toast toast--${type}`, role: "status" }, message);
+    const item = h("div", { class: `toast toast--${type}${action ? " toast--action" : ""}`, role: "status" },
+        h("span", {}, message),
+        action ? h("button", { class: "toast__button", type: "button", onClick: action.onClick }, action.label) : null,
+    );
     container.append(item);
     // Nejvýš 4 oznámení najednou – nejstarší ustoupí
     while (container.children.length > 4) container.firstElementChild.remove();
+    if (action) return;                                      // s tlačítkem zůstává, dokud se neklikne
     const duration = type === "achievement" ? 5000 : 3200;   // achievement si zaslouží delší pozornost
     setTimeout(() => item.classList.add("toast--hide"), duration);
     setTimeout(() => item.remove(), duration + 400);

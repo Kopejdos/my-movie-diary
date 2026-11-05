@@ -5,7 +5,7 @@ import { addRoute, setNotFound, startRouter, render, navigate, currentPath } fro
 import { TEXTS, format } from "./texts.js";
 import { h, mount, toast } from "./dom.js";
 import { currentTheme, toggleTheme } from "./theme.js";
-import { initPwa, canInstall, promptInstall, onInstallChange } from "./pwa.js";
+import { initPwa, canInstall, promptInstall, onInstallChange, onUpdateAvailable } from "./pwa.js";
 import { APP_VERSION, APP_UPDATED } from "./config.js";
 import { refreshAchievements, tierLabel } from "./achievements.js";
 
@@ -162,6 +162,10 @@ onInstallChange(() => {
     renderHeader();
     if (currentPath() === "/profile") render();
 });
+onUpdateAvailable(() => toast(TEXTS.updateAvailable, "info", {
+    label: TEXTS.updateReload,
+    onClick: () => window.location.reload(),
+}));
 window.addEventListener("offline", () => toast(TEXTS.offline, "error"));
 window.addEventListener("online", () => toast(TEXTS.online));
 
@@ -221,7 +225,8 @@ renderHeader();
 await initAuth();
 lastUserId = getUser()?.id ?? null;
 routerStarted = true;
-if (getUser()) refreshProgress({ announce: false });
+// Achievementy a level se spočítají až po prvním vykreslení – nezdržují start
+if (getUser()) setTimeout(() => refreshProgress({ announce: false }), 1500);
 if (getUser() && hasGeneratedUsername()) {
     window.location.hash = "/profile";
 }

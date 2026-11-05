@@ -16,10 +16,11 @@
 
     <link rel="icon" type="image/png" href="icons/favicon.png">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Písma z projektu: latinka se přednačte hned, ať text neproblikne -->
+    <link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/chakra-petch-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preconnect" href="https://image.tmdb.org">
+    <link rel="preconnect" href="https://vvnexfdnfvwbwluazwoo.supabase.co">
 
     <script>
         // Uložený režim nastavit dřív, než se stránka vykreslí (jinak by problikla)
@@ -29,6 +30,31 @@
         } catch { }
     </script>
     <link rel="stylesheet" href="css/style.css">
+    <!-- Všechny moduly aplikace se stahují najednou (jinak by je prohlížeč objevoval postupně) -->
+    <link rel="modulepreload" href="vendor/supabase-js-2.119.0.min.js">
+    <link rel="modulepreload" href="js/achievements.js">
+    <link rel="modulepreload" href="js/admin.js">
+    <link rel="modulepreload" href="js/app.js">
+    <link rel="modulepreload" href="js/auth.js">
+    <link rel="modulepreload" href="js/config.js">
+    <link rel="modulepreload" href="js/data.js">
+    <link rel="modulepreload" href="js/dom.js">
+    <link rel="modulepreload" href="js/prefs.js">
+    <link rel="modulepreload" href="js/pwa.js">
+    <link rel="modulepreload" href="js/router.js">
+    <link rel="modulepreload" href="js/supabase.js">
+    <link rel="modulepreload" href="js/texts.js">
+    <link rel="modulepreload" href="js/theme.js">
+    <link rel="modulepreload" href="js/views/achievements.js">
+    <link rel="modulepreload" href="js/views/admin-universe.js">
+    <link rel="modulepreload" href="js/views/admin.js">
+    <link rel="modulepreload" href="js/views/login.js">
+    <link rel="modulepreload" href="js/views/not-found.js">
+    <link rel="modulepreload" href="js/views/profile.js">
+    <link rel="modulepreload" href="js/views/register.js">
+    <link rel="modulepreload" href="js/views/universe.js">
+    <link rel="modulepreload" href="js/views/universes.js">
+    <link rel="modulepreload" href="js/views/watchlist.js">
     <script type="module" src="js/app.js"></script>
 </head>
 <body>

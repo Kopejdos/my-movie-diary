@@ -41,9 +41,20 @@ export async function promptInstall() {
     return outcome === "accepted";
 }
 
+/** Odběr zprávy „je nová verze aplikace“ (service worker ji pošle po nasazení). */
+const updateListeners = new Set();
+export function onUpdateAvailable(listener) {
+    updateListeners.add(listener);
+}
+
 /** Registrace service workeru a sledování instalace. */
 export function initPwa() {
     if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.addEventListener("message", (event) => {
+            if (event.data?.type === "update-available") {
+                for (const listener of updateListeners) listener();
+            }
+        });
         window.addEventListener("load", () => {
             navigator.serviceWorker.register("sw.js").catch((error) => {
                 console.warn("Service worker registration failed", error);

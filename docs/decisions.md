@@ -36,7 +36,7 @@ Aktualizuje se na konci každé fáze.
 
 ### Proč GitHub Pages a bez build kroku
 - Zdarma, nasazení po každém `git push`, žádný server.
-- Bez npm a bundleru: soubory ve `web/` se nasazují přesně tak, jak jsou. Knihovna `supabase-js` se načítá jako ES modul z CDN (jsDelivr).
+- Bez npm a bundleru: soubory ve `web/` se nasazují přesně tak, jak jsou. Knihovna `supabase-js` je uložená v projektu jako jeden předpřipravený soubor (`web/vendor/`, od V1.4.1; dřív z CDN jsDelivr).
 - Navigace v aplikaci přes **hash router** (`#/universe/mcu`) – GitHub Pages neumí přesměrovat neznámé adresy na `index.html`, s hashem to není potřeba.
 - Pages z privátního repozitáře je placená funkce, proto je repozitář veřejný – nesmí v něm být žádné tajné klíče (viz Bezpečnost).
 
@@ -113,6 +113,8 @@ my-movie-diary/
     ├── manifest.webmanifest  PWA – název, ikony, režim na celou obrazovku
     ├── sw.js                 service worker – aktualizace a spuštění bez internetu
     ├── icons/                ikony aplikace (filmová klapka „MMD“)
+    ├── fonts/                písma Inter a Chakra Petch (woff2, latinka + latin-ext)
+    ├── vendor/               knihovna supabase-js jako jeden soubor (verze v názvu)
     ├── css/style.css
     └── js/
         ├── app.js            start, hlavička, reakce na přihlášení
@@ -521,6 +523,20 @@ Ke každému kroku krátká poznámka, proč ho vidět; postup cestou; XP a achi
 - **Úroveň roste kvadraticky** – první úrovně rychle, vyšší pomaleji; běžný deník (stovky filmů, desítky kolekcí) se pohybuje kolem úrovně 10 (Lead Actor), Legend je pro opravdové nadšence.
 - **Opakované zhlédnutí dává méně XP** než nový film – motivace objevovat nové filmy.
 - **Výpočet úrovně a achievementů jedním dotazem** po přihlášení a po každé změně zhlédnutí; hlavička jen zobrazí uložený výsledek.
+
+### V1.4.1 – rychlost načítání ✅ (5. 11. 2026)
+- **Knihovna Supabase v projektu** (`web/vendor/supabase-js-2.119.0.min.js`, jeden minifikovaný soubor ~225 kB, po kompresi ~60 kB) místo řetězu desítek souborů z CDN.
+- **Písma v projektu** (`web/fonts/`) místo Google Fonts – bez blokování prvního vykreslení a bez spojení na dva další servery; latinka se přednačítá.
+- **`modulepreload`** všech modulů v `index.html` – prohlížeč je stáhne najednou, ne postupně podle importů.
+- **Nový service worker** (`mmd-v2`): soubory webu okamžitě z mezipaměti a ověření na pozadí; při nové verzi na serveru oznámení **„A new version is available · Reload“**; stránky síť první s limitem 3 s; soubory s verzí v názvu (vendor, písma) jen z mezipaměti.
+- **Přehled:** kolekce a kategorie se načítají souběžně, mřížka se vykreslí hned a „Continue watching“ se doplní do hero karty, až bude hotové; plakáty první řady přednostně.
+- **Achievementy a level** se po startu počítají až po prvním vykreslení (nezdržují dotazy na data).
+- Měření (Chromium, 100 ms latence): opakované otevření ~180 ms, 27 z 28 souborů z mezipaměti.
+
+#### Rozhodnutí ve V1.4.1
+- **Knihovna jako soubor v repozitáři, ne z CDN** – jeden požadavek, žádná závislost na cizím serveru, funguje offline; aktualizace ručně (postup v `setup.md`). Verze v názvu souboru = service worker ho nemusí ověřovat.
+- **„Stale-while-revalidate“ + tlačítko Reload** místo „síť první“ pro soubory webu – rychlost při každém otevření; nová verze se nabídne hned po nasazení (porovnání ETag / Last-Modified z GitHub Pages).
+- **Písma s `unicode-range`** – latin-ext (čeština v nickách) se stáhne, jen když je potřeba.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

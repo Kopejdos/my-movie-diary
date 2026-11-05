@@ -120,7 +120,18 @@ Po změně kódu funkce: v dashboardu otevřít funkci → Code → vložit nov�
 **Pozor:** plný import ze seedu přepíše změny z admin panelu u univerz, která jsou v `universes.json`
 (a smaže z nich filmy, které v seedu nejsou). Nová univerza a filmy přidávat přes admin panel.
 
-## 9. Keep-alive
+## 9. Aktualizace knihovny Supabase (web/vendor)
+
+Web používá `supabase-js` jako jeden předpřipravený soubor. Nová verze (jednou za čas, není nutné):
+```bash
+mkdir /tmp/sb && cd /tmp/sb && npm init -y && npm install @supabase/supabase-js esbuild
+echo 'export { createClient } from "@supabase/supabase-js";' > entry.js
+npx esbuild entry.js --bundle --format=esm --minify --target=es2020 --outfile=supabase-js-<verze>.min.js
+```
+Soubor dát do `web/vendor/`, starý smazat a název upravit v `web/js/supabase.js`, `web/index.html`
+(modulepreload) a `web/sw.js` (seznam SHELL).
+
+## 10. Keep-alive
 
 GitHub Action `keep-alive.yml` volá každé 3 dny databázovou funkci `ping()`.
 Ruční spuštění: **Actions → Keep Supabase awake → Run workflow**; výsledek je vidět

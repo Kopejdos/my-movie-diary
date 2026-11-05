@@ -104,6 +104,8 @@ export const TEXTS = {
     installDone: "Installed – you are using the app. ✓",
     installThanks: "Thanks for installing My Movie Diary!",
     offline: "You are offline – changes will not be saved.",
+    updateAvailable: "A new version of My Movie Diary is available.",
+    updateReload: "Reload",
     online: "Back online.",
 
     // Up next v detailu univerza

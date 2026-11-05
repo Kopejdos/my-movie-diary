@@ -6,7 +6,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V1.4** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V1.4.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
@@ -35,7 +35,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 | Part | Technology |
 |---|---|
-| Frontend | HTML, CSS, vanilla JavaScript (ES modules, no build step) |
+| Frontend | HTML, CSS, vanilla JavaScript (ES modules, no build step), self-hosted fonts and supabase-js bundle |
 | Hosting | GitHub Pages (deployed by GitHub Actions) |
 | Database & auth | [Supabase](https://supabase.com) (PostgreSQL, Row Level Security) |
 | Movie data | [TMDB API](https://www.themoviedb.org) via a Supabase Edge Function |

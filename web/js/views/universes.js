@@ -16,14 +16,16 @@ export async function universesView(container, context) {
     mount(container, loadingView());
 
     const signedIn = isSignedIn();
-    let universes, categories, continueWatching;
+    // Kolekce a kategorie se načtou souběžně; „Continue watching“ (potřebuje zhlédnutí
+    // a další dotazy) se doplní do hero karty později – nezdržuje vykreslení mřížky
+    const continuePromise = signedIn
+        ? fetchMyFilmCounts(true).then(fetchContinueWatching)
+        : Promise.resolve(null);
+    continuePromise.catch(() => null);
+
+    let universes, categories;
     try {
-        const counts = await fetchMyFilmCounts(signedIn);
-        [universes, categories, continueWatching] = await Promise.all([
-            fetchUniverses(),
-            fetchCategories(),
-            signedIn ? fetchContinueWatching(counts) : Promise.resolve(null),
-        ]);
+        [universes, categories] = await Promise.all([fetchUniverses(), fetchCategories()]);
     } catch (error) {
         if (!isCurrent()) return;
         mount(container, errorView(format("errorGeneric", error.message),
@@ -62,7 +64,7 @@ export async function universesView(container, context) {
             .filter((g) => g.items.length > 0);
         mount(grid, groups.map((g) => h("section", { class: "collection-section" },
             groups.length > 1 ? kindHeading(g.kind) : null,
-            h("div", { class: "universe-grid" }, g.items.map((u) => universeCard(u, signedIn))),
+            h("div", { class: "universe-grid" }, g.items.map((u, i) => universeCard(u, signedIn, groups.indexOf(g) === 0 && i < 5))),
         )));
     }
 
@@ -85,8 +87,18 @@ export async function universesView(container, context) {
         return button;
     }
 
+    const heroSlot = h("div", { class: "hero-slot" },
+        signedIn ? h("div", { class: "hero-card hero-card--loading", "aria-hidden": "true" }) : heroCard(false, null));
+    if (signedIn) {
+        continuePromise
+            .then((continueWatching) => {
+                if (isCurrent()) mount(heroSlot, heroCard(true, continueWatching, () => universesView(container, context)));
+            })
+            .catch(() => { if (isCurrent()) mount(heroSlot, heroCard(true, null)); });
+    }
+
     mount(container,
-        heroCard(signedIn, continueWatching, () => universesView(container, context)),
+        heroSlot,
         h("div", { class: "section-title" },
             h("h2", {}, TEXTS.universesTitle),
             count,
@@ -181,14 +193,14 @@ function heroCard(signedIn, continueWatching, refresh) {
 }
 
 /** Kartička univerza – odkaz na detail. */
-function universeCard(universe, signedIn) {
+function universeCard(universe, signedIn, eager = false) {
     const progress = { total: universe.totalCount, watched: universe.watchedCount };
     const value = percent(progress);
     const complete = signedIn && progress.total > 0 && progress.watched === progress.total;
 
     const card = h("a", { class: "universe-card", href: `#/collection/${universe.slug}` },
         h("div", { class: "universe-card__media" },
-            poster(universe.cover?.poster_path, universe.name, "universe-card__cover"),
+            poster(universe.cover?.poster_path, universe.name, "universe-card__cover", eager),
         ),
         complete ? h("span", { class: "universe-card__badge" }, `✓ ${TEXTS.complete}`) : null,
         h("div", { class: "universe-card__body" },

@@ -1,7 +1,8 @@
 // Jediný klient Supabase pro celý web.
-// Knihovna se načítá jako ES modul z CDN – web nepotřebuje npm ani build.
 
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+// Knihovna je uložená v projektu jako jeden soubor (vendor/) – dřív se z CDN
+// skládala z desítek malých souborů za sebou, což zdržovalo start aplikace.
+import { createClient } from "../vendor/supabase-js-2.119.0.min.js";
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./config.js";
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {

@@ -3,6 +3,11 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V1.4.1 – November 2026
+- Faster loading: Supabase library and fonts bundled with the app, all modules preloaded at once
+- Instant reopening from cache; "new version available – Reload" prompt after an update
+- The overview shows collections right away and fills in "Continue watching" when ready
+
 ## V1.4 – November 2026
 - Levels and XP: earn XP for movies, rewatches, completed collections and achievements
 - Movie-themed titles from Extra to Legend, level badge next to your nickname, level-up notifications
