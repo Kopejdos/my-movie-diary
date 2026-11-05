@@ -273,6 +273,8 @@ button {
     border-bottom: 1px solid var(--border);
     box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--u) 45%, transparent);
     padding-top: env(safe-area-inset-top);
+    /* Výška i před vykreslením obsahu JavaScriptem – stránka pak neposkočí (CLS, V2.1.1) */
+    min-height: calc(61px + env(safe-area-inset-top, 0px));
 }
 
 .header__inner {
@@ -406,6 +408,8 @@ button {
     max-width: var(--content-width);
     margin: 0 auto;
     padding: 24px var(--gutter) 56px;
+    /* Patička začíná pod okrajem obrazovky – při načítání obsahu tak neposkočí (CLS, V2.1.1) */
+    min-height: 100vh;
 }
 
 .page-header {
@@ -558,8 +562,41 @@ button {
 
 /* Místo pro hero kartu, dokud se nenačte „Continue watching“ (stejná výška, nic neposkakuje) */
 .hero-card--loading {
-    min-height: clamp(220px, 30vw, 300px);
     animation: hero-pulse 1.4s ease-in-out infinite;
+}
+
+/* Zástupná i hotová hero karta mají stejnou minimální výšku (nejčastější výška karty
+   „Continue watching“ podle šířky) – po načtení se obsah pod ní neposune (CLS, V2.1.1) */
+.hero-slot {
+    --hero-min: 300px;
+}
+
+.hero-slot > .hero-card {
+    min-height: var(--hero-min);
+}
+
+@media (max-width: 900px) {
+    .hero-slot {
+        --hero-min: 250px;
+    }
+}
+
+@media (max-width: 560px) {
+    .hero-slot {
+        --hero-min: 315px;
+    }
+}
+
+@media (max-width: 400px) {
+    .hero-slot {
+        --hero-min: 380px;
+    }
+}
+
+/* Sekce kolekcí mimo obrazovku se vykreslí, až k nim uživatel doroluje (méně práce při startu) */
+.collection-section + .collection-section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
 }
 
 @keyframes hero-pulse {

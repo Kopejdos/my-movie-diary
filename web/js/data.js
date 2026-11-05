@@ -2,7 +2,7 @@
 // Čistá logika – vrací data, nic nevykresluje.
 
 import { supabase } from "./supabase.js";
-import { cached } from "./cache.js";
+import { cached, invalidate } from "./cache.js";
 import { backdropUrl } from "./dom.js";
 
 /** Převede chybu Supabase na běžnou výjimku. */
@@ -36,10 +36,12 @@ export async function fetchUniverses() {
             .select("id, slug, name, description, color, kind, sort_order, cover:films(title, poster_path, backdrop_path), universe_categories(category_id)")
             .order("sort_order")
             .then(check)),
-        supabase
+        // Postup jen na pár sekund – sdílí ho přednačtení při startu a první vykreslení;
+        // po zhlédnutí nebo přihlášení se zahodí (invalidateProgress)
+        cached("progress", () => supabase
             .from("universe_progress")
             .select("universe_id, total_count, watched_count")
-            .then(check),
+            .then(check), 10_000),
     ]);
 
     const progressById = new Map(progress.map((p) => [p.universe_id, p]));
@@ -147,9 +149,24 @@ export function todayLocal() {
     return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
 }
 
+/** Zahodí uložený postup (po zhlédnutí, přihlášení, odhlášení). */
+export function invalidateProgress() {
+    invalidate("progress");
+}
+
 /** Oznámí zbytku aplikace, že se změnila zhlédnutí (např. kvůli achievementům). */
 function watchesChanged() {
+    invalidateProgress();
     document.dispatchEvent(new CustomEvent("watches-changed"));
+}
+
+/**
+ * Přednačtení dat přehledu hned při startu – souběžně s přihlášením a načtením profilu
+ * (dřív se na ně čekalo). Chyby se ignorují, zopakuje je samotná obrazovka.
+ */
+export function warmOverview() {
+    fetchUniverses().catch(() => {});
+    fetchCategories().catch(() => {});
 }
 
 /** +1: zapíše nové zhlédnutí (dnes podle hodin uživatele). */

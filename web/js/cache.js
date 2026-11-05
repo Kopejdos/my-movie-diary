@@ -24,6 +24,11 @@ export function cached(key, loader, ttlMs = DEFAULT_TTL_MS) {
     return promise;
 }
 
+/** Zahodí jednu položku (např. postup po novém zhlédnutí). */
+export function invalidate(key) {
+    entries.delete(key);
+}
+
 /** Zahodí celou mezipaměť (po změně v admin panelu). */
 export function clearDataCache() {
     entries.clear();

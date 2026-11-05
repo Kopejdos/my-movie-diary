@@ -3,24 +3,41 @@
 import { initAuth, onAuthChange, getUser, getProfile, signOut, hasGeneratedUsername } from "./auth.js";
 import { addRoute, setNotFound, startRouter, render, navigate, currentPath } from "./router.js";
 import { TEXTS, format } from "./texts.js";
-import { h, mount, toast } from "./dom.js";
+import { h, mount, toast, loadingView } from "./dom.js";
 import { currentTheme, toggleTheme } from "./theme.js";
 import { initPwa, canInstall, promptInstall, onInstallChange, onUpdateAvailable } from "./pwa.js";
 import { APP_VERSION, APP_UPDATED } from "./config.js";
 import { refreshAchievements, tierLabel } from "./achievements.js";
+import { warmOverview, invalidateProgress } from "./data.js";
 
+// Přehled a detail kolekce se načítají hned (první, co uživatel uvidí);
+// ostatní obrazovky až při prvním otevření – méně JavaScriptu při startu (V2.1.1)
 import { universesView } from "./views/universes.js";
 import { universeView } from "./views/universe.js";
-import { loginView } from "./views/login.js";
-import { registerView } from "./views/register.js";
-import { profileView } from "./views/profile.js";
-import { watchlistView } from "./views/watchlist.js";
-import { searchView } from "./views/search.js";
-import { statsView } from "./views/stats.js";
-import { publicProfileView } from "./views/public-profile.js";
-import { adminUniversesView, adminUsersView } from "./views/admin.js";
-import { adminUniverseView } from "./views/admin-universe.js";
 import { notFoundView } from "./views/not-found.js";
+
+/** Obrazovka načtená až při prvním použití (dynamický import). */
+function lazy(load, name) {
+    return async (container, context) => {
+        mount(container, loadingView());
+        const module = await load();
+        return module[name](container, context);
+    };
+}
+
+const loginView = lazy(() => import("./views/login.js"), "loginView");
+const registerView = lazy(() => import("./views/register.js"), "registerView");
+const profileView = lazy(() => import("./views/profile.js"), "profileView");
+const watchlistView = lazy(() => import("./views/watchlist.js"), "watchlistView");
+const searchView = lazy(() => import("./views/search.js"), "searchView");
+const statsView = lazy(() => import("./views/stats.js"), "statsView");
+const publicProfileView = lazy(() => import("./views/public-profile.js"), "publicProfileView");
+const adminUniversesView = lazy(() => import("./views/admin.js"), "adminUniversesView");
+const adminUsersView = lazy(() => import("./views/admin.js"), "adminUsersView");
+const adminUniverseView = lazy(() => import("./views/admin-universe.js"), "adminUniverseView");
+
+// Data přehledu se začnou stahovat hned – souběžně s přihlášením a profilem
+if (currentPath() === "/") warmOverview();
 
 // Cesty v aplikaci
 addRoute("/", universesView);
@@ -146,6 +163,7 @@ onAuthChange(({ user, profile }) => {
     if (userId === lastUserId) return;   // jen obnova tokenu nebo načtení profilu
     const signedInNow = userId !== null && lastUserId === null;
     lastUserId = userId;
+    invalidateProgress();          // postup patří jinému (nebo žádnému) uživateli
     if (!userId) level = null;     // po odhlášení zmizí odznak úrovně
 
     if (signedInNow) {
@@ -203,6 +221,14 @@ async function refreshProgress({ announce }) {
     }
 }
 
+/** Spustí úlohu po `delay` ms, až bude prohlížeč volný (bez requestIdleCallback hned po delay). */
+function whenIdle(task, delay) {
+    setTimeout(() => {
+        if ("requestIdleCallback" in window) window.requestIdleCallback(task, { timeout: 3000 });
+        else task();
+    }, delay);
+}
+
 function scheduleProgressCheck() {
     clearTimeout(progressTimer);
     progressTimer = setTimeout(() => refreshProgress({ announce: true }), 1200);
@@ -249,8 +275,9 @@ renderHeader();
 await initAuth();
 lastUserId = getUser()?.id ?? null;
 routerStarted = true;
-// Achievementy a level se spočítají až po prvním vykreslení – nezdržují start
-if (getUser()) setTimeout(() => refreshProgress({ announce: false }), 1500);
+// Achievementy a level se spočítají až po prvním vykreslení, ve chvíli, kdy je
+// prohlížeč volný – nezdržují start ani první interakci (V2.1.1)
+if (getUser()) whenIdle(() => refreshProgress({ announce: false }), 2500);
 if (getUser() && hasGeneratedUsername()) {
     window.location.hash = "/profile";
 }

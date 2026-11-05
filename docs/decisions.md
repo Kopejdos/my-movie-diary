@@ -258,18 +258,24 @@ Hororové vlny se střídají s funkcemi, aby každá verze přinesla něco nov�
 | # | Verze | Fáze | Co přibude |
 |---|---|---|---|
 | 19 | V2.1 | Optimalizace ✅ | plakáty a banner ve správné velikosti, mezipaměť katalogu, detail kolekce jedním dotazem, přednačtení po najetí na kartu |
-| 20 | V2.2 | Nicky, pravidla, účet | filtr nicků v databázi (zakázaná slova, obcházení typu `f4gg0t`, rezervovaná jména), **Reset nickname** v adminu, **Terms of Service + pravidla komunity**, souhlas při registraci, aktualizace zásad (co se ukládá, admin vidí e-mail), **Delete my account** |
-| 21 | V2.3 | E-mail a hesla | **ověření e-mailu** přes vlastní SMTP (Gmail + heslo aplikace), hláška a přesměrování po potvrzení, „Please confirm your email“, **Resend confirmation**, **Forgot password**, přísnější pravidla hesla |
-| 22 | V2.4 | CAPTCHA | Cloudflare Turnstile – registrace, přihlášení (i nickem přes funkci `login`), obnova hesla |
-| 23 | V2.5 | Optimalizace 2 | druhé kolo měření a zrychlení |
+| 20 | V2.2 | O aplikaci a pravidla | stránka **About** (co je MMD, kdo ho dělá, TMDB, verze), **kontakt**, nová **patička** (About · Terms · Privacy · Contact · GitHub), **Terms of Service** a **pravidla komunity** (nicky, minimální věk 15 let, právo smazat / přejmenovat účet), souhlas při registraci, aktualizace zásad ochrany soukromí (co se ukládá, admin vidí e-mail, propojení účtů) |
+| 21 | V2.3 | Nicky a moderace | **filtr nicků v databázi** (zakázaná slova česky i anglicky, obcházení typu `f4gg0t` a podtržítek, rezervovaná jména admin / support / moderator), seznam zakázaných slov spravovaný v adminu, **Reset nickname** v adminu, **Delete my account** pro uživatele (Edge Function, právo na výmaz) |
+| 22 | V2.4 | E-mail | **vlastní SMTP** (samostatný Gmail + heslo aplikace), **vlastní vzhled mailů** v designu MMD (potvrzení, obnova hesla, změna e-mailu), po potvrzení hláška a přesměrování na přihlášení, „Please confirm your email“ i u přihlášení nickem, **Resend confirmation** |
+| 23 | V2.5 | Hesla | **Forgot password** (stránka pro nové heslo), **změna hesla v profilu**, přísnější pravidla hesla (délka, povinné znaky) i v Supabase |
+| 24 | V2.6 | CAPTCHA | Cloudflare Turnstile – registrace, přihlášení (i nickem přes funkci `login`), obnova hesla, Resend confirmation; zmínka v zásadách (zpracovává Cloudflare) |
+| 25 | V2.7 | Optimalizace 2 | druhé kolo měření a zrychlení (Lighthouse, případně minifikace) – poslední verze kapitoly |
 
-**E-maily (zjištěno 5. 11. 2026, podklad pro V2.3):** výchozí e-mailová služba Supabase od září 2024 posílá **jen na adresy
+**Test 5. 11. 2026:** po zapnutí *Confirm email* s výchozí službou Supabase přišel potvrzovací mail i na soukromou adresu
+kamaráda (mimo tým projektu) – v rozporu s dokumentací. Nedá se na to spoléhat a limit 2 maily / hod platí dál, proto
+vlastní SMTP ve V2.4.
+
+**E-maily (zjištěno 5. 11. 2026, podklad pro V2.4):** výchozí e-mailová služba Supabase od září 2024 posílá **jen na adresy
 členů organizace projektu** (ostatní dostanou `email_address_not_authorized`) a nejvýš **2 maily za hodinu** – platí pro
 všechny plány, placený Supabase to neřeší. Kontrola člena týmu ignoruje část za `+` (`adiskop987+test@gmail.com` = tým).
 Pro skutečné uživatele je nutné **vlastní SMTP**. Bez domény: **samostatný Gmail účet** pro aplikaci + dvoufázové ověření +
 **heslo aplikace** (`smtp.gmail.com`, port 465, odesílatel = ten Gmail, limit 500 mailů / den). S doménou později Resend
 (3 000 / měsíc). Heslo aplikace patří jen do Supabase a správce hesel. Pozor: hodně nedoručitelných mailů (vymyšlené
-adresy) může Gmail účet dočasně zablokovat → CAPTCHA (V2.4) a limit 20–30 mailů za hodinu.
+adresy) může Gmail účet dočasně zablokovat → CAPTCHA (V2.6) a limit 20–30 mailů za hodinu.
 
 ### Fáze 10 – kategorie a horory, vlna 1 (V1.2)
 **Kategorie** – sekce / filtr na přehledu; kolekce může být ve více kategoriích (Alien = Sci-fi i Horror), přiřazení v admin panelu:
@@ -712,7 +718,33 @@ Měřeno na telefonu (390 px, 2× hustota) s daty ze seedu, před → po:
   zastaralých dat mezi verzemi.
 - **Admin mezipaměť maže** při každé operaci a při otevření úprav kolekce – změny z admin panelu jsou vidět hned.
 - **Bez build kroku (minifikace)** – GitHub Pages soubory komprimuje (gzip/brotli); přínos by byl malý a projekt by
-  ztratil jednoduchost „co je v repozitáři, to běží“. Případně ve V2.5.
+  ztratil jednoduchost „co je v repozitáři, to běží“. Případně ve V2.7.
+
+#### V2.1.1 – stabilní rozložení a rychlejší start
+Lighthouse po V2.1 (telefon, přihlášený): Performance 62 – CLS 0,267, TBT 330 ms, LCP 4,5 s. Vlastní měření stejného
+scénáře (telefon, CPU 4×, pomalá síť, data ze seedu, průměr 3 běhů):
+
+| Metrika | V2.1 | V2.1.1 |
+|---|---|---|
+| CLS (posun obsahu) | 0,283 | **0,000** |
+| LCP (první plakát) | 3,66 s | **3,09 s** |
+| Blokování hlavního vlákna | 79 ms | **48 ms** |
+
+- **Patička** byla při načítání vidět hned pod spinnerem a obsah ji odsunul (největší část CLS) → `main` má
+  `min-height: 100vh`.
+- **Hlavička** měla před spuštěním JavaScriptu výšku 0 a pak 61 px → pevná `min-height`.
+- **Hero karta** – zástupná i hotová mají stejnou minimální výšku podle šířky obrazovky (`--hero-min`).
+- **Data přehledu se stahují hned při startu** (`warmOverview`), souběžně s přihlášením a načtením profilu; postup
+  se drží 10 s v mezipaměti, aby ho přednačtení a první vykreslení sdílely, a zahodí se po zhlédnutí a změně přihlášení.
+- **Obrazovky na vyžádání** – přehled a detail kolekce se načítají hned, ostatní (admin, hledání, statistiky, profil,
+  přihlášení, watchlist, veřejný profil) dynamickým importem až při prvním otevření; `modulepreload` jen pro startovní
+  moduly (17 místo 31). Offline dál fungují všechny (service worker je má uložené).
+- **Achievementy a level** se po startu počítají až ve volné chvíli prohlížeče (`requestIdleCallback`).
+- **Sekce kolekcí mimo obrazovku** se vykreslí, až k nim uživatel doroluje (`content-visibility: auto`).
+
+Nedá se ovlivnit: „Use efficient cache lifetimes“ – GitHub Pages posílá všem souborům `max-age=600`; opakované
+návštěvy to řeší service worker (Lighthouse ho nezapočítává). Na V2.7 zůstává: menší knihovna Supabase (jen
+přihlášení a databáze, bez realtime a storage), případně minifikace.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

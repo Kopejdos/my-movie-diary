@@ -3,6 +3,11 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V2.1.1 – November 2026
+- Nothing jumps around while the page loads anymore
+- The overview starts loading right away, in parallel with signing in
+- Less JavaScript at startup: admin, search, stats and profile load when you first open them
+
 ## V2.1 – November 2026
 - Faster: posters and banners load in the right size (much less data on phones)
 - Collections, categories and movies are kept in memory – going back and forth is instant
