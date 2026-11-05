@@ -110,6 +110,7 @@ Zapisuje do ní jen GitHub Action přes databázovou funkci `ping()`; drží se 
 - **`remove_latest_watch(tmdb_id)`** – −1: smaže nejnovější zhlédnutí a vrátí nový počet.
 - **`is_username_available(username)`** – je nickname volný? (smí i nepřihlášený, vrací jen ano / ne)
 - **`email_for_username(username)`** – e-mail k nicku pro přihlášení nickem; smí ji volat **jen `service_role`** (Edge Function `login`).
+- **`remove_watched_from_watchlist()`** (trigger na `watches`) – po zhlédnutí film zmizí z watchlistu.
 - **`is_admin()`** – je přihlášený uživatel správce? (používají ji pravidla RLS admin panelu)
 - **`handle_new_user()`** (trigger na `auth.users`) – založí profil s nickem z registrace, u Google `user_xxxxxxxx`.
 

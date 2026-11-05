@@ -39,6 +39,20 @@ export const TEXTS = {
     unwatchedOnly: "Unwatched only",
     filterEmpty: "Nothing left to watch here. 🎉",
 
+    // Watchlist
+    navWatchlist: "Watchlist",
+    watchlistTitle: "Watchlist",
+    watchlistIntro: "Movies you want to watch. Once you mark one as watched, it leaves the list on its own.",
+    watchlistEmpty: "Your watchlist is empty. Tap ☆ next to any movie to add it here.",
+    watchlistCount: "{0} movies",
+    watchlistAdd: "Add to watchlist",
+    watchlistRemove: "Remove from watchlist",
+    watchlistAdded: "Added to your watchlist.",
+    watchlistRemoved: "Removed from your watchlist.",
+    watchlistWatched: "Marked as watched.",
+    watchlistBrowse: "Browse universes",
+    watchlistAddedOn: "Added {0}",
+
     // Up next v detailu univerza
     upNext: "Up next",
     universeComplete: "Universe complete",
@@ -161,6 +175,11 @@ export const TEXTS = {
     // Patička (podmínka TMDB)
     tmdbAttribution: "This product uses the TMDB API but is not endorsed or certified by TMDB.",
 };
+
+/** „1 movie“ / „12 movies“ – správné číslo podle počtu. */
+export function movies(count) {
+    return count === 1 ? "1 movie" : `${count} movies`;
+}
 
 /** Vrátí text podle klíče a dosadí parametry: format("movieCount", 12) → "12 movies". */
 export function format(key, ...args) {

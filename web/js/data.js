@@ -96,6 +96,56 @@ export async function removeLatestWatch(tmdbId) {
     return await supabase.rpc("remove_latest_watch", { p_tmdb_id: tmdbId }).then(check);
 }
 
+// ---------------------------------------------------------------------
+// Watchlist („chci vidět“)
+// ---------------------------------------------------------------------
+
+/** ID filmů ve watchlistu přihlášeného uživatele (prázdné pro nepřihlášeného). */
+export async function fetchWatchlistIds(signedIn) {
+    if (!signedIn) return new Set();
+    const rows = await supabase.from("watchlist").select("tmdb_id").then(check);
+    return new Set(rows.map((r) => r.tmdb_id));
+}
+
+/**
+ * Watchlist s údaji o filmech a univerzy, ve kterých film je.
+ * Seřazený od naposledy přidaného.
+ */
+export async function fetchWatchlist() {
+    const rows = await supabase
+        .from("watchlist")
+        .select("tmdb_id, added_at, film:films(tmdb_id, title, release_date, runtime, poster_path)")
+        .order("added_at", { ascending: false })
+        .then(check);
+    if (rows.length === 0) return [];
+
+    const memberships = await supabase
+        .from("universe_items")
+        .select("tmdb_id, universe:universes(slug, name, color, sort_order)")
+        .in("tmdb_id", rows.map((r) => r.tmdb_id))
+        .then(check);
+
+    const universesByFilm = new Map();
+    for (const m of memberships) {
+        if (!m.universe) continue;
+        const list = universesByFilm.get(m.tmdb_id) ?? [];
+        list.push(m.universe);
+        universesByFilm.set(m.tmdb_id, list);
+    }
+    return rows.map((r) => ({
+        ...r,
+        universes: (universesByFilm.get(r.tmdb_id) ?? []).sort((a, b) => a.sort_order - b.sort_order),
+    }));
+}
+
+export async function addToWatchlist(tmdbId) {
+    await supabase.from("watchlist").insert({ tmdb_id: tmdbId }).then(check);
+}
+
+export async function removeFromWatchlist(tmdbId) {
+    await supabase.from("watchlist").delete().eq("tmdb_id", tmdbId).then(check);
+}
+
 /** První neviděný povinný film v pořadí vydání, nebo null (univerzum je hotové). */
 export function nextUnwatched(items, counts) {
     return items.find((item) => !item.is_optional && !counts.has(item.film.tmdb_id)) ?? null;

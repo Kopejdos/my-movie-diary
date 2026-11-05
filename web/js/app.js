@@ -11,6 +11,7 @@ import { universeView } from "./views/universe.js";
 import { loginView } from "./views/login.js";
 import { registerView } from "./views/register.js";
 import { profileView } from "./views/profile.js";
+import { watchlistView } from "./views/watchlist.js";
 import { adminUniversesView, adminUsersView } from "./views/admin.js";
 import { adminUniverseView } from "./views/admin-universe.js";
 import { notFoundView } from "./views/not-found.js";
@@ -21,6 +22,7 @@ addRoute("/universe/:slug", universeView);
 addRoute("/login", loginView);
 addRoute("/register", registerView);
 addRoute("/profile", profileView);
+addRoute("/watchlist", watchlistView);
 addRoute("/admin", adminUniversesView);
 addRoute("/admin/users", adminUsersView);
 addRoute("/admin/universe/:slug", adminUniverseView);
@@ -47,6 +49,13 @@ function renderHeader() {
             h("nav", { class: "nav" },
                 themeToggle(),
                 navLink("#/", TEXTS.navUniverses, path === "/" || path.startsWith("/universe/"), " nav__link--home"),
+                user
+                    ? h("a", {
+                        class: `nav__link${path === "/watchlist" ? " nav__link--active" : ""}`,
+                        href: "#/watchlist",
+                        title: TEXTS.navWatchlist,
+                    }, h("span", { "aria-hidden": "true" }, "★ "), h("span", { class: "nav__label" }, TEXTS.navWatchlist))
+                    : null,
                 user && profile?.is_admin
                     ? navLink("#/admin", TEXTS.navAdmin, path.startsWith("/admin"))
                     : null,
@@ -57,7 +66,7 @@ function renderHeader() {
                             href: "#/profile",
                             title: TEXTS.navProfile,
                         }, profile ? `@${profile.username}` : ""),
-                        h("button", { class: "nav__link nav__button", type: "button", onClick: handleSignOut },
+                        h("button", { class: "nav__link nav__button nav__signout", type: "button", onClick: handleSignOut },
                             TEXTS.navSignOut),
                     ]
                     : [

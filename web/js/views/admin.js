@@ -6,7 +6,7 @@ import {
     listUsers, setUserAdmin, deleteUser,
 } from "../admin.js";
 import { setAccent } from "../theme.js";
-import { TEXTS, format } from "../texts.js";
+import { TEXTS, format, movies } from "../texts.js";
 import { h, mount, pill, formatDate, toast, loadingView, errorView } from "../dom.js";
 import { field } from "./login.js";
 
@@ -89,7 +89,7 @@ function universeRow(universe, previous, next, reload) {
         h("span", { class: "color-dot", style: `background: ${universe.color ?? "var(--accent)"}` }),
         h("div", { class: "admin-row__info" },
             h("strong", {}, universe.name),
-            h("div", { class: "pills" }, pill(universe.slug), pill(format("adminMovies", count))),
+            h("div", { class: "pills" }, pill(universe.slug), pill(movies(count))),
         ),
         h("div", { class: "admin-row__actions" },
             h("button", {

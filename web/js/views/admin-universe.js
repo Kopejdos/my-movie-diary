@@ -6,7 +6,7 @@ import {
     setUniverseCover, searchTmdb, addFilmFromTmdb,
 } from "../admin.js";
 import { setAccent } from "../theme.js";
-import { TEXTS, format } from "../texts.js";
+import { TEXTS, format, movies } from "../texts.js";
 import { h, mount, poster, pill, yearOf, toast, loadingView, errorView } from "../dom.js";
 import { field } from "./login.js";
 import { requireAdminView } from "./admin.js";
@@ -48,7 +48,7 @@ export async function adminUniverseView(container, context) {
         addMoviePanel(universe, reload),
         h("div", { class: "section-title" },
             h("h2", {}, TEXTS.adminMoviesInUniverse),
-            h("span", { class: "muted" }, format("adminMovies", universe.items.length)),
+            h("span", { class: "muted" }, movies(universe.items.length)),
         ),
         h("p", { class: "hint" }, TEXTS.adminStoryHint),
         h("ol", { class: "admin-list" },

@@ -1,7 +1,7 @@
 // Obrazovka: profil – změna nicku (hlavně pro uživatele přihlášené přes Google).
 
 import {
-    getUser, getProfile, isSignedIn, updateUsername, isUsernameAvailable, hasGeneratedUsername,
+    getUser, getProfile, isSignedIn, updateUsername, isUsernameAvailable, hasGeneratedUsername, signOut,
 } from "../auth.js";
 import { navigate } from "../router.js";
 import { USERNAME_PATTERN } from "../config.js";
@@ -38,6 +38,19 @@ export async function profileView(container) {
         field(TEXTS.username, username, TEXTS.usernameHint),
         error,
         submit,
+        h("div", { class: "divider" }),
+        h("button", {
+            class: "btn btn--block btn--danger", type: "button",
+            onClick: async () => {
+                try {
+                    await signOut();
+                    toast(TEXTS.signedOut);
+                    navigate("/");
+                } catch (e) {
+                    toast(format("errorGeneric", e.message), "error");
+                }
+            },
+        }, TEXTS.navSignOut),
     );
 
     mount(container, h("div", { class: "auth-page" }, form));

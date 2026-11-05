@@ -3,7 +3,7 @@
 import { fetchUniverses, fetchMyFilmCounts, fetchContinueWatching, addWatch, percent } from "../data.js";
 import { isSignedIn } from "../auth.js";
 import { setAccent, inkFor } from "../theme.js";
-import { TEXTS, format } from "../texts.js";
+import { TEXTS, format, movies } from "../texts.js";
 import { h, mount, poster, posterUrl, pill, yearOf, toast, loadingView, errorView } from "../dom.js";
 
 export async function universesView(container, context) {
@@ -136,7 +136,7 @@ function universeCard(universe, signedIn) {
                     h("p", { class: "universe-card__meta" },
                         format("progressCount", progress.watched, progress.total)),
                 ]
-                : h("p", { class: "universe-card__meta" }, format("movieCount", progress.total)),
+                : h("p", { class: "universe-card__meta" }, movies(progress.total)),
         ),
     );
     if (universe.color) {

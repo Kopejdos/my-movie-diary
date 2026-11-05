@@ -3,11 +3,12 @@
 import {
     fetchUniverse, fetchMyFilmCounts, addWatch, removeLatestWatch,
     computeProgress, percent, todayLocal, nextUnwatched,
+    fetchWatchlistIds, addToWatchlist, removeFromWatchlist,
 } from "../data.js";
 import { isSignedIn } from "../auth.js";
 import { setAccent } from "../theme.js";
 import { loadPref, savePref } from "../prefs.js";
-import { TEXTS, format } from "../texts.js";
+import { TEXTS, format, movies } from "../texts.js";
 import {
     h, mount, poster, pill, backdropUrl, yearOf, formatDate, toast, loadingView, errorView,
 } from "../dom.js";
@@ -17,11 +18,12 @@ export async function universeView(container, context) {
     mount(container, loadingView());
     const signedIn = isSignedIn();
 
-    let universe, counts;
+    let universe, counts, watchlist;
     try {
-        [universe, counts] = await Promise.all([
+        [universe, counts, watchlist] = await Promise.all([
             fetchUniverse(params.slug),
             fetchMyFilmCounts(signedIn),
+            fetchWatchlistIds(signedIn),
         ]);
     } catch (error) {
         if (!isCurrent()) return;
@@ -42,7 +44,7 @@ export async function universeView(container, context) {
 
     document.title = `${universe.name} · ${TEXTS.appName}`;
     setAccent(universe.color);
-    new UniversePage(container, universe, counts, signedIn).render();
+    new UniversePage(container, universe, counts, watchlist, signedIn).render();
 }
 
 /**
@@ -50,10 +52,11 @@ export async function universeView(container, context) {
  * jen dotčený film, Up next a ukazatel postupu, ne celou stránku.
  */
 class UniversePage {
-    constructor(container, universe, counts, signedIn) {
+    constructor(container, universe, counts, watchlist, signedIn) {
         this.container = container;
         this.universe = universe;
         this.counts = counts;
+        this.watchlist = watchlist;     // Set tmdb_id filmů ve watchlistu
         this.signedIn = signedIn;
         this.rows = new Map();          // tmdb_id → prvek řádku
         this.progressBar = null;
@@ -145,7 +148,7 @@ class UniversePage {
             h("div", { class: "banner__content" },
                 h("h1", { class: "banner__title" }, universe.name),
                 universe.description ? h("p", { class: "banner__description" }, universe.description) : null,
-                h("div", { class: "pills" }, pill(format("movieCount", required), true)),
+                h("div", { class: "pills" }, pill(movies(required), true)),
                 this.signedIn ? this.renderProgress() : null,
             ),
         );
@@ -257,9 +260,39 @@ class UniversePage {
                     : null,
             ),
             this.signedIn
-                ? this.renderCounter(row, item, count, busy)
+                ? h("div", { class: "film__actions" },
+                    this.renderWatchlistButton(row, item),
+                    this.renderCounter(row, item, count, busy))
                 : h("a", { class: "btn btn--small", href: "#/login" }, TEXTS.signInToTrack),
         );
+    }
+
+    /** Hvězdička ☆ / ★ – přidá film do watchlistu nebo ho odebere. */
+    renderWatchlistButton(row, item) {
+        const tmdbId = item.film.tmdb_id;
+        const inList = this.watchlist.has(tmdbId);
+        const label = inList ? TEXTS.watchlistRemove : TEXTS.watchlistAdd;
+
+        return h("button", {
+            class: `star-btn${inList ? " star-btn--active" : ""}`,
+            type: "button",
+            title: label,
+            "aria-label": label,
+            "aria-pressed": String(inList),
+            onClick: async () => {
+                // Optimisticky – hvězdička se změní hned
+                if (inList) this.watchlist.delete(tmdbId); else this.watchlist.add(tmdbId);
+                this.fillRow(row, item);
+                try {
+                    if (inList) await removeFromWatchlist(tmdbId); else await addToWatchlist(tmdbId);
+                    toast(inList ? TEXTS.watchlistRemoved : TEXTS.watchlistAdded);
+                } catch (error) {
+                    if (inList) this.watchlist.add(tmdbId); else this.watchlist.delete(tmdbId);
+                    this.fillRow(row, item);
+                    toast(format("errorGeneric", error.message), "error");
+                }
+            },
+        }, inList ? "★" : "☆");
     }
 
     renderCounter(row, item, count, busy) {
@@ -302,6 +335,7 @@ class UniversePage {
         try {
             if (delta > 0) {
                 await addWatch(tmdbId);
+                this.watchlist.delete(tmdbId);   // viděný film opustí watchlist (trigger v databázi)
             } else {
                 await removeLatestWatch(tmdbId);
                 // Po smazání se může změnit datum posledního zhlédnutí – načíst přesně

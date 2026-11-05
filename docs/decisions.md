@@ -122,7 +122,7 @@ my-movie-diary/
         ├── data.js           logika dat – univerza, zhlédnutí (bez vykreslování)
         ├── admin.js          logika admin panelu (bez vykreslování)
         └── views/            obrazovky: universes, universe, login, register, profile,
-                              admin (univerza, uživatelé), admin-universe, not-found
+                              watchlist, admin (univerza, uživatelé), admin-universe, not-found
 ```
 
 Pravidla:
@@ -174,7 +174,7 @@ Pravidla:
 | 4 | Redesign ✅ | styl podle RimWorld prezentace + prvky z rozvrhu kamaráda: písmo Chakra Petch, tečkované pozadí, barvy univerz, banner s backdropem, Up next / Continue watching, světlý a tmavý režim | web vypadá jako hotová aplikace |
 | 5 | Admin panel ✅ | univerza (vytvořit, upravit, smazat), filmy přes hledání v TMDB, uživatelé (seznam, správce, smazání) | spravuješ obsah bez SQL a curl |
 | 6 | Řazení a filtr ✅ | pořadí vydání / příběhu, filtr neviděných | sleduješ univerzum chronologicky |
-| 7 | Watchlist | „chci vidět“ napříč univerzy | seznam na víkend |
+| 7 | Watchlist ✅ | „chci vidět“ napříč univerzy | seznam na víkend |
 | 8 | PWA | manifest, ikona, instalace na plochu | MMD jako aplikace v telefonu |
 
 Později podle chuti: hodnocení a poznámky ke zhlédnutí, historie a statistiky, vlastní univerza, export / import, sdílení postupu s přáteli, české názvy filmů.
@@ -305,6 +305,18 @@ Později podle chuti: hodnocení a poznámky ke zhlédnutí, historie a statisti
 - **Film bez čísla v příběhu jde v pořadí příběhu na konec** (podle vydání) – univerzum nemusí být očíslované celé.
 - **Volby se pamatují v prohlížeči** (`prefs.js`, localStorage) společně pro všechna univerza.
 - **Pořadí příběhu je přibližné** – chronologie MCU a X-Men se mezi zdroji liší; slouží jako vodítko, ne jako oficiální timeline.
+
+### Fáze 7 – watchlist ✅ (5. 11. 2026)
+- **Hvězdička ☆ / ★** u každého filmu v detailu univerza – přidá film do watchlistu nebo ho odebere.
+- Stránka **Watchlist** (`#/watchlist`, odkaz ★ v hlavičce): filmy od naposledy přidaného, s rokem, délkou, datem přidání a barevnými odkazy na univerza, ve kterých film je; tlačítka „+ Mark as watched“ a „Remove from watchlist“.
+- Migrace `20261105060000_watchlist.sql`: trigger – **film označený jako viděný sám zmizí z watchlistu**, ať se zhlédnutí zapíše odkudkoli (detail, Up next, Continue watching, watchlist).
+- Na úzkém telefonu se v hlavičce schová odkaz „Universes“ (na přehled vede logo) a „Sign out“ (odhlášení je na stránce profilu); u odkazu Watchlist zůstane jen ★.
+- Správné jednotné číslo („1 movie“).
+
+#### Rozhodnutí ve fázi 7
+- **Odebrání z watchlistu po zhlédnutí řeší databáze (trigger)**, ne web – platí pro všechna místa, kde jde film označit jako viděný, i pro budoucí.
+- **Watchlist napříč univerzy**, ne zvlášť pro každé univerzum – jeden seznam „na víkend“; univerzum filmu je vidět u každé položky.
+- **Hvězdička jde i u viděného filmu** – „chci znovu vidět“; po dalším zhlédnutí z watchlistu opět zmizí.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).
