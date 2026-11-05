@@ -314,6 +314,16 @@
         { "title": "Puss in Boots", "year": 2011, "group": "Puss in Boots" },
         { "title": "Puss in Boots: The Last Wish", "year": 2022, "group": "Puss in Boots" }
       ]
+    },
+    {
+      "slug": "maze-runner",
+      "name": "The Maze Runner",
+      "description": "Run. Survive. Escape. The Maze Runner trilogy.",
+      "films": [
+        { "title": "The Maze Runner", "year": 2014 },
+        { "title": "Maze Runner: The Scorch Trials", "year": 2015 },
+        { "title": "Maze Runner: The Death Cure", "year": 2018 }
+      ]
     }
   ]
 }

@@ -1,4 +1,4 @@
-// Obrazovka: přihlášení e-mailem a heslem.
+// Obrazovka: přihlášení e-mailem nebo nickem, nebo přes Google.
 
 import { signIn, signInWithGoogle, isSignedIn } from "../auth.js";
 import { navigate } from "../router.js";
@@ -12,7 +12,9 @@ export async function loginView(container) {
     }
     document.title = `${TEXTS.signInTitle} · ${TEXTS.appName}`;
 
-    const email = h("input", { type: "email", name: "email", required: true, autocomplete: "email" });
+    // Jedno pole pro e-mail i nickname (s @ = e-mail)
+    const login = h("input", { type: "text", name: "login", required: true,
+        autocomplete: "username", autocapitalize: "none", spellcheck: "false" });
     const password = h("input", { type: "password", name: "password", required: true, autocomplete: "current-password" });
     const error = h("p", { class: "form-error", role: "alert" });
     const submit = h("button", { class: "btn btn--primary btn--block", type: "submit" }, TEXTS.submitSignIn);
@@ -21,7 +23,7 @@ export async function loginView(container) {
         h("h1", {}, TEXTS.signInTitle),
         googleButton(),
         divider(),
-        field(TEXTS.email, email),
+        field(TEXTS.emailOrNickname, login),
         field(TEXTS.password, password),
         error,
         submit,
@@ -30,14 +32,14 @@ export async function loginView(container) {
     );
 
     mount(container, h("div", { class: "auth-page" }, form));
-    email.focus();
+    login.focus();
 
     async function handleSubmit(event) {
         event.preventDefault();
         error.textContent = "";
         submit.disabled = true;
         try {
-            await signIn({ email: email.value.trim(), password: password.value });
+            await signIn({ login: login.value.trim(), password: password.value });
             // Přesměrování na přehled zařídí app.js po změně přihlášení
         } catch (e) {
             error.textContent = e?.code === "invalid_credentials" || /invalid login/i.test(e?.message)

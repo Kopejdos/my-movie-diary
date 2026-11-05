@@ -2,7 +2,7 @@
 // Čistá logika – nic nevykresluje, obrazovky se jen přihlásí k odběru změn (onAuthChange).
 
 import { supabase } from "./supabase.js";
-import { SITE_URL } from "./config.js";
+import { SITE_URL, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./config.js";
 
 /** Aktuální stav: user = účet Supabase, profile = řádek z tabulky profiles. */
 const state = { user: null, profile: null };
@@ -92,9 +92,34 @@ export async function signUp({ username, email, password }) {
     return { needsConfirmation: !data.session };
 }
 
-/** Přihlášení e-mailem a heslem. */
-export async function signIn({ email, password }) {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+/**
+ * Přihlášení e-mailem NEBO nickem.
+ * E-mail jde rovnou do Supabase Auth; nick přes Edge Function "login",
+ * která k němu na serveru dohledá e-mail a vrátí tokeny relace.
+ */
+export async function signIn({ login, password }) {
+    if (login.includes("@")) {
+        const { error } = await supabase.auth.signInWithPassword({ email: login, password });
+        if (error) throw error;
+        return;
+    }
+
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", apikey: SUPABASE_PUBLISHABLE_KEY },
+        body: JSON.stringify({ login, password }),
+    });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) {
+        const error = new Error(body.error ?? `HTTP ${response.status}`);
+        error.code = body.error;
+        throw error;
+    }
+
+    const { error } = await supabase.auth.setSession({
+        access_token: body.access_token,
+        refresh_token: body.refresh_token,
+    });
     if (error) throw error;
 }
 
