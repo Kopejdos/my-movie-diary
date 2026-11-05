@@ -55,7 +55,7 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 | `name` | `text` | „Marvel Cinematic Universe“ |
 | `description` | `text` | |
 | `color` | `text` | barva univerza `#rrggbb` (záře, karty, tlačítka) |
-| `kind` | `text` | typ kolekce: `series` / `studio` / `genre` (žánrový výběr) |
+| `kind` | `text` | typ kolekce: `series` / `studio` / `genre` (žánrový výběr) / `path` (cesta, od V1.8) |
 | `cover_tmdb_id` | `integer` FK → `films` | film, jehož plakát je na kartičce |
 | `sort_order` | `integer` | pořadí na hlavní obrazovce |
 | `owner_id` | `uuid` FK → `profiles`, null | `null` = oficiální univerzum; vyplněné = vlastní univerzum uživatele (později) |
@@ -85,6 +85,7 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 | `story_order` | `integer`, null | chronologické pořadí příběhu; `null` = stejné jako vydání |
 | `group_label` | `text`, null | skupina, např. „Phase 1“, „Animated“, „Sony's Spider-Man Universe“ |
 | `is_optional` | `boolean` | vedlejší film (crossover, spin-off) – nepočítá se do postupu |
+| `note` | `text`, null | poznámka ke kroku cesty – proč film vidět (max. 300 znaků, od V1.8) |
 
 Unikátní dvojice (`universe_id`, `tmdb_id`) – jeden film je v univerzu nejvýš jednou,
 ale může být ve více univerzech.

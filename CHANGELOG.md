@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V1.8 – November 2026
+- Paths: curated routes you watch step by step, with a short note on why each movie matters
+- 6 paths: MCU Essentials, Star Wars: First Watch, Superhero Hall of Fame, Fantasy Starter, Animation Essentials, Horror 101
+- Numbered steps, "Next step" card and a Pathfinder achievement
+- Admin panel: Path type and step notes
+
 ## V1.7.1 – November 2026
 - Fixed two wrong movie matches (Audition, Hostel)
 

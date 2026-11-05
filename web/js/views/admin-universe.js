@@ -77,7 +77,7 @@ function detailsForm(universe, categories, reload) {
     const submit = h("button", { class: "btn btn--primary", type: "submit" }, TEXTS.adminSave);
 
     const kind = h("select", { class: "admin-input admin-select" },
-        [["series", TEXTS.kindSeries], ["studio", TEXTS.kindStudio], ["genre", TEXTS.kindGenre]]
+        [["series", TEXTS.kindSeries], ["studio", TEXTS.kindStudio], ["genre", TEXTS.kindGenre], ["path", TEXTS.kindPathOption]]
             .map(([value, label]) => h("option", { value, selected: (universe.kind ?? "series") === value }, label)));
 
     const assigned = new Set((universe.categories ?? []).map((c) => c.id));
@@ -156,6 +156,16 @@ function itemRow(universe, item, previous, next, reload) {
     const optional = h("input", { type: "checkbox", checked: item.is_optional });
     optional.addEventListener("change", () => save({ is_optional: optional.checked }));
 
+    // Poznámka ke kroku – jen u cest (jinde se nezobrazuje)
+    const isPath = universe.kind === "path";
+    const note = isPath
+        ? h("input", {
+            type: "text", class: "admin-input admin-input--grow", value: item.note ?? "",
+            placeholder: TEXTS.adminNotePlaceholder, "aria-label": TEXTS.adminNote, maxlength: 300,
+        })
+        : null;
+    note?.addEventListener("change", () => save({ note: note.value.trim() || null }));
+
     return h("li", { class: `admin-row admin-row--film${item.is_optional ? " film--optional" : ""}` },
         h("span", { class: "admin-row__order" }, String(item.release_order)),
         poster(film.poster_path, film.title, "film__poster"),
@@ -170,6 +180,7 @@ function itemRow(universe, item, previous, next, reload) {
                 h("label", { class: "mini-field" }, h("span", {}, TEXTS.adminStoryOrder), story),
                 h("label", { class: "mini-check" }, optional, h("span", {}, TEXTS.adminOptional)),
             ),
+            note ? h("label", { class: "mini-field mini-field--wide" }, h("span", {}, TEXTS.adminNote), note) : null,
         ),
         h("div", { class: "admin-row__actions" },
             h("button", {

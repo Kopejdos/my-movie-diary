@@ -82,8 +82,8 @@ export async function fetchSearchData() {
     return { universes, items };
 }
 
-/** Pořadí typů kolekcí na přehledu. */
-export const KIND_ORDER = ["series", "studio", "genre"];
+/** Pořadí typů kolekcí na přehledu – cesty první (kurátorský vstup pro nováčky). */
+export const KIND_ORDER = ["path", "series", "studio", "genre"];
 
 /** Jedno univerzum podle adresy (slug) včetně filmů v pořadí vydání, nebo null. */
 export async function fetchUniverse(slug) {
@@ -98,7 +98,7 @@ export async function fetchUniverse(slug) {
     const items = await supabase
         .from("universe_items")
         .select(`
-            id, release_order, story_order, group_label, is_optional,
+            id, release_order, story_order, group_label, is_optional, note,
             film:films(tmdb_id, title, original_title, release_date, runtime, poster_path, backdrop_path)
         `)
         .eq("universe_id", universe.id)

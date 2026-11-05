@@ -6,7 +6,7 @@ import {
 import { loadPref, savePref } from "../prefs.js";
 import { isSignedIn } from "../auth.js";
 import { setAccent, inkFor } from "../theme.js";
-import { TEXTS, format, movies, collections } from "../texts.js";
+import { TEXTS, format, movies, collections, steps } from "../texts.js";
 import { h, mount, poster, posterUrl, pill, yearOf, toast, loadingView, errorView } from "../dom.js";
 
 export async function universesView(container, context) {
@@ -121,10 +121,13 @@ function searchEntry() {
 
 /** Nadpis skupiny podle typu kolekce. */
 function kindHeading(kind) {
-    const label = { series: TEXTS.kindSeries, studio: TEXTS.kindStudio, genre: TEXTS.kindGenre }[kind] ?? kind;
+    const label = {
+        path: TEXTS.kindPath, series: TEXTS.kindSeries, studio: TEXTS.kindStudio, genre: TEXTS.kindGenre,
+    }[kind] ?? kind;
+    const hint = { genre: TEXTS.kindGenreHint, path: TEXTS.kindPathHint }[kind];
     return h("div", { class: "kind-heading" },
         h("h3", {}, label),
-        kind === "genre" ? h("span", { class: "muted" }, TEXTS.kindGenreHint) : null,
+        hint ? h("span", { class: "muted" }, hint) : null,
     );
 }
 
@@ -213,6 +216,7 @@ export function universeCard(universe, signedIn, eager = false) {
             poster(universe.cover?.poster_path, universe.name, "universe-card__cover", eager),
         ),
         complete ? h("span", { class: "universe-card__badge" }, `✓ ${TEXTS.complete}`) : null,
+        universe.kind === "path" ? h("span", { class: "universe-card__kind" }, `🧭 ${TEXTS.kindPathBadge}`) : null,
         h("div", { class: "universe-card__body" },
             h("h2", { class: "universe-card__title" }, universe.name),
             signedIn
@@ -224,7 +228,8 @@ export function universeCard(universe, signedIn, eager = false) {
                     h("p", { class: "universe-card__meta" },
                         format("progressCount", progress.watched, progress.total)),
                 ]
-                : h("p", { class: "universe-card__meta" }, movies(progress.total)),
+                : h("p", { class: "universe-card__meta" },
+                    universe.kind === "path" ? steps(progress.total) : movies(progress.total)),
         ),
     );
     if (universe.color) {

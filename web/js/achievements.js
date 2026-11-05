@@ -26,6 +26,9 @@ export const ACHIEVEMENTS = [
 /** Fanoušek kategorie – úrovně podle počtu dokončených kolekcí v kategorii. */
 export const CATEGORY_FAN_TIERS = [1, 3, 5];
 
+/** Pathfinder – úrovně podle počtu dokončených cest (V1.8). */
+export const PATHFINDER_TIERS = [1, 3, 5];
+
 /** Ikony kategorií (neznámá kategorie dostane hvězdu). */
 export const CATEGORY_ICONS = {
     superhero: "🦸",
@@ -38,6 +41,16 @@ export const CATEGORY_ICONS = {
 export function tierLabel(index, count) {
     if (count <= 1) return null;
     return TIER_LABELS[index] ?? `Tier ${index + 1}`;
+}
+
+/**
+ * Úrovně omezené počtem dostupných kolekcí: úrovně nad počet nemají smysl a menší
+ * skupina má jako nejvyšší úroveň „dokonči všechny“ (např. 2 kolekce → úrovně 1 a 2).
+ */
+function scaledTiers(tiers, available) {
+    const result = tiers.filter((t) => t <= available);
+    if (available < tiers.at(-1) && !result.includes(available)) result.push(available);
+    return result;
 }
 
 // ---------------------------------------------------------------------
@@ -64,7 +77,7 @@ export async function fetchAchievementData() {
             .select("tmdb_id, watched_on, created_at, film:films(runtime)")
             .order("watched_on")
             .order("created_at")),
-        fetchAll(() => supabase.from("universes").select("id, slug, name, color").order("sort_order")),
+        fetchAll(() => supabase.from("universes").select("id, slug, name, color, kind").order("sort_order")),
         fetchAll(() => supabase.from("universe_items").select("universe_id, tmdb_id, is_optional")),
         fetchAll(() => supabase.from("categories").select("id, slug, name, color, sort_order").order("sort_order")),
         fetchAll(() => supabase.from("universe_categories").select("universe_id, category_id")),
@@ -154,6 +167,19 @@ export function computeAchievements({ watches, universes, items, categories, lin
         reached: reachDates[a.measure],
     }));
 
+    // Pathfinder – dokončené cesty; úrovně nad počet cest nemají smysl (jako u fanoušků)
+    const pathCount = universes.filter((u) => u.kind === "path" && requiredByUniverse.has(u.id)).length;
+    if (pathCount > 0) {
+        const donePaths = completed.filter((c) => c.universe.kind === "path");
+        cards.push(buildCard({
+            key: "pathfinder",
+            icon: "🧭",
+            tiers: scaledTiers(PATHFINDER_TIERS, pathCount),
+            value: donePaths.length,
+            reached: donePaths.map((c) => c.date),
+        }));
+    }
+
     // Fanoušci kategorií – jen kategorie, které mají nějakou kolekci
     for (const category of categories) {
         const inCategory = new Set(links.filter((l) => l.category_id === category.id).map((l) => l.universe_id));
@@ -161,15 +187,10 @@ export function computeAchievements({ watches, universes, items, categories, lin
         if (collectionCount === 0) continue;
 
         const done = completed.filter((c) => inCategory.has(c.universe.id));
-        // Úrovně nad počet kolekcí v kategorii nemají smysl; menší kategorie má jako
-        // nejvyšší úroveň „dokonči všechny“ (např. 2 kolekce → úrovně 1 a 2)
-        const tiers = CATEGORY_FAN_TIERS.filter((t) => t <= collectionCount);
-        if (collectionCount < CATEGORY_FAN_TIERS.at(-1) && !tiers.includes(collectionCount)) tiers.push(collectionCount);
-
         cards.push(buildCard({
             key: `fan-${category.slug}`,
             icon: CATEGORY_ICONS[category.slug] ?? "⭐",
-            tiers,
+            tiers: scaledTiers(CATEGORY_FAN_TIERS, collectionCount),
             value: done.length,
             reached: done.map((c) => c.date),
             category,

@@ -29,6 +29,7 @@ interface SeedFilm {
   group?: string;
   optional?: boolean;
   story?: number;      // pořadí v příběhu (fáze 4)
+  note?: string;       // poznámka ke kroku cesty (fáze 16 – V1.8)
 }
 
 /** Univerzum v seed souboru */
@@ -36,7 +37,7 @@ interface SeedUniverse {
   slug: string;
   name: string;
   color?: string;      // #rrggbb
-  kind?: "series" | "studio" | "genre";
+  kind?: "series" | "studio" | "genre" | "path";
   categories?: string[];  // slugy kategorií (tabulka categories)
   description?: string;
   films: SeedFilm[];
@@ -340,6 +341,7 @@ async function importUniverse(db: SupabaseClient, universe: SeedUniverse, sortOr
     story_order: r.seed.story ?? null,
     group_label: r.seed.group ?? null,
     is_optional: r.seed.optional ?? false,
+    note: r.seed.note ?? null,
   }));
   const uniqueItems = [...new Map(items.map((i) => [i.tmdb_id, i])).values()];
 

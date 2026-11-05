@@ -239,7 +239,7 @@ Opačné pořadí ve V1.2 způsobilo chybu „Could not find the table 'public.c
 | 13 | V1.5 | Horory, vlna 2 ✅ | dalších 7 žánrů |
 | 14 | V1.6 | Vyhledávání ✅ | stránka hledání – filmy a kolekce, i bez diakritiky a podle roku; klávesa / |
 | 15 | V1.7 | Horory, vlna 3 ✅ | posledních 7 žánrů + J-Horror |
-| 16 | V1.8 | Cesty (paths) | kurátorské trasy krok za krokem – v kolekci, napříč kolekcemi, žánrové; XP za dokončení |
+| 16 | V1.8 | Cesty (paths) ✅ | 6 kurátorských tras krok za krokem s poznámkami, achievement Pathfinder, správa v adminu |
 | 17 | V1.9 | Statistiky profilu | filmy, hodiny, nejčastěji viděný film, postup v kolekcích |
 | 18 | **V2.0** | Sdílení profilu | veřejný profil (level, achievementy, statistiky), hledání uživatelů – z osobního deníku sociální aplikace |
 
@@ -277,18 +277,12 @@ Odznaky se počítají ze zhlédnutí, která už jsou v databázi – odemknou 
 | Maraton | 3 / 5 / 8 filmů za jeden den |
 | Rewatcher | jeden film viděný 3× |
 | Completionist | dokončená kolekce – zvlášť pro každou (název podle kolekce, např. „Avenger“ za MCU) |
+| Pathfinder (V1.8) | 1 / 3 / 5 dokončených cest |
 | Fanoušek kategorie | dokončené kolekce v kategorii (např. „Horror fan“) |
 
 - Úrovně jdou **škálovat** – další stupně se jen připíšou do seznamu.
 - Na profilu: odemčené barevně, zamčené šedě s postupem. Při odemčení oznámení.
 - „Patha“ od kamaráda → vyřešeno: **obojí** – úrovně a XP (V1.4) i cesty (V1.8).
-
-### Fáze 16 – cesty / paths (V1.8)
-Nápad kamaráda („dal bych nějakou pathu a achievementy“ → „a co obojí?“). Cesta = nový typ kolekce (`kind = 'path'`), kurátorská trasa krok za krokem:
-- **v rámci kolekce** – „MCU Essentials: 12 filmů, které stačí“,
-- **napříč kolekcemi** – „Fantasy starter: Pán prstenů → Harry Potter → Star Wars“,
-- **žánrová** – „Horror 101: od klasik po moderní“.
-Ke každému kroku krátká poznámka, proč ho vidět; postup cestou; XP a achievement za dokončení. Správa v admin panelu.
 
 ### Fáze 17 – statistiky profilu (V1.9)
 - Počet viděných filmů, celkový čas, počet zhlédnutí, **nejčastěji viděný film**, postup ve všech kolekcích, filmy podle roku zhlédnutí.
@@ -587,6 +581,36 @@ Ke každému kroku krátká poznámka, proč ho vidět; postup cestou; XP a achi
 - **Extreme & Torture bez nejkontroverznějších titulů** (např. A Serbian Film) – výběr drží známé a kriticky
   probírané filmy žánru; popis kolekce upozorňuje, že není pro slabé povahy.
 - **Giallo má žlutou barvu** – „giallo“ je italsky žlutá (podle žlutých obálek detektivek).
+
+### Fáze 16 – cesty / paths ✅ (5. 11. 2026) – **V1.8**
+Nápad kamaráda („dal bych nějakou pathu a achievementy“ → „a co obojí?“).
+- **Cesta = nový typ kolekce** (`kind = 'path'`): kurátorská trasa krok za krokem, pořadí = `release_order`,
+  u každého kroku krátká poznámka, proč film vidět (`universe_items.note`).
+- **6 cest** (jen z filmů, které už v aplikaci jsou):
+  - *MCU Essentials* (12) – v rámci jedné kolekce,
+  - *Star Wars: First Watch* (10) – pořadí pro první zhlédnutí (Rogue One před sequely),
+  - *Superhero Hall of Fame* (14) – napříč Marvel, DC, X-Men, Spider-Man,
+  - *Fantasy Starter* (11) – Harry Potter → Ghibli → Pán prstenů → Avatar,
+  - *Animation Essentials* (15) – od Sněhurky (1937) po The Boy and the Heron,
+  - *Horror 101* (16) – od Nosferatu po Hereditary.
+- **Přehled:** sekce **Paths** jako první, karta se štítkem „🧭 Path“ a počtem kroků.
+- **Detail cesty:** očíslované kroky spojené čarou (viděný krok = ✓), poznámky, karta **Next step** se „Step 4 of 12“
+  a poznámkou; bez přepínače pořadí; na konci „Path complete“.
+- **Achievement Pathfinder** 🧭 – 1 / 3 / 5 dokončených cest. Dokončená cesta je zároveň dokončená kolekce
+  (+100 XP, odznak, započítá se i do Completionist a fanouška kategorie).
+- **Admin panel:** typ *Path* a u kroků cesty pole **Step note**.
+- Migrace `20261105080000_paths.sql`, nová verze funkce `tmdb` (předává `note` ze seedu).
+- Oprava seedu: *Talk to Me* sjednoceno na rok 2023 s připnutým id `1008042` (Supernatural i Elevated),
+  *Saint Maud* na 2020.
+
+#### Rozhodnutí ve fázi 16
+- **Cesta je kolekce, ne nová tabulka** – postup (`universe_progress`), dokončení, XP, hledání, watchlist i admin
+  fungují bez dalšího kódu; nový je jen typ a sloupec `note`.
+- **Cesty první na přehledu** – jsou to vstupní body pro nováčky („nevím, kde začít“).
+- **Poznámky bez spoilerů**, jedna věta, anglicky jako zbytek obsahu.
+- **Pořadí cesty je pevné** – žádné „story order“; o pořadí rozhoduje kurátor (Star Wars: First Watch záměrně
+  není chronologicky).
+- **Úrovně Pathfinderu se přizpůsobí počtu cest** (stejná funkce `scaledTiers` jako u fanoušků kategorií).
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

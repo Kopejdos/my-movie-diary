@@ -112,6 +112,9 @@ export const TEXTS = {
     achUnitDay: "best day: {0} / {1}",
     achUnitRewatch: "most watched: {0}× / {1}×",
     achUnitCollections: "{0} / {1} collections",
+    achUnitPaths: "{0} / {1} paths",
+    achPathfinderName: "Pathfinder",
+    achPathfinderDesc: "Complete {0} paths.",
 
     // Aplikace (PWA)
     install: "Install",
@@ -140,6 +143,14 @@ export const TEXTS = {
     kindStudio: "Studios",
     kindGenre: "Genre picks",
     kindGenreHint: "Hand-picked essentials of the genre.",
+    kindPath: "Paths",
+    kindPathHint: "Curated routes – watch them step by step.",
+    kindPathBadge: "Path",
+    kindPathOption: "Path",
+    stepOf: "Step {0} of {1}",
+    nextStep: "Next step",
+    pathComplete: "Path complete",
+    pathCompleteText: "You've walked the whole path. Pick another one?",
     universesCount: "{0} collections",
     universesIntro: "Pick a collection and start logging what you have watched.",
     universesGuestHint: "Sign in to track your progress.",
@@ -230,6 +241,8 @@ export const TEXTS = {
     adminStoryOrder: "Story #",
     adminStoryHint: "Story # = position in the chronological (story) order. Leave empty to use the release order.",
     adminOptional: "Optional",
+    adminNote: "Step note",
+    adminNotePlaceholder: "Why watch it? (shown on paths)",
     adminSetCover: "Use as cover",
     adminIsCover: "Cover",
     adminRemove: "Remove",
@@ -261,6 +274,11 @@ export const TEXTS = {
 /** „1 collection“ / „12 collections“. */
 export function collections(count) {
     return count === 1 ? "1 collection" : `${count} collections`;
+}
+
+/** „1 step“ / „12 steps“ – kroky cesty. */
+export function steps(count) {
+    return count === 1 ? "1 step" : `${count} steps`;
 }
 
 /** „1 movie“ / „12 movies“ – správné číslo podle počtu. */

@@ -800,7 +800,7 @@
         { "title": "Lights Out", "year": 2016 },
         { "title": "Hereditary", "year": 2018 },
         { "title": "Smile", "year": 2022 },
-        { "title": "Talk to Me", "year": 2023 },
+        { "title": "Talk to Me", "year": 2023, "tmdb": 1008042 },
         { "title": "Longlegs", "year": 2024 },
         { "title": "Weapons", "year": 2025 }
       ]
@@ -1256,12 +1256,12 @@
         { "title": "Hereditary", "year": 2018 },
         { "title": "Us", "year": 2019, "tmdb": 458723 },
         { "title": "Midsommar", "year": 2019 },
-        { "title": "Saint Maud", "year": 2019 },
+        { "title": "Saint Maud", "year": 2020 },
         { "title": "His House", "year": 2020 },
         { "title": "Relic", "year": 2020 },
         { "title": "X", "year": 2022, "tmdb": 760104 },
         { "title": "Pearl", "year": 2022, "tmdb": 949423 },
-        { "title": "Talk to Me", "year": 2022 },
+        { "title": "Talk to Me", "year": 2023, "tmdb": 1008042 },
         { "title": "Longlegs", "year": 2024 },
         { "title": "Weapons", "year": 2025 }
       ]
@@ -1288,6 +1288,144 @@
         { "title": "One Missed Call", "year": 2003 },
         { "title": "Marebito", "year": 2004 },
         { "title": "Noroi: The Curse", "year": 2005 }
+      ]
+    },
+    {
+      "slug": "path-mcu-essentials",
+      "name": "MCU Essentials",
+      "kind": "path",
+      "categories": ["superhero"],
+      "color": "#e23636",
+      "description": "The 12 movies you need for the Infinity Saga – everything else is a bonus.",
+      "films": [
+        { "title": "Iron Man", "year": 2008, "note": "Where it all began: Tony Stark builds the suit – and the MCU along with it." },
+        { "title": "Captain America: The First Avenger", "year": 2011, "note": "Steve Rogers' origin – the heart of the Avengers and the first Infinity Stone." },
+        { "title": "Thor", "year": 2011, "note": "Brings in Asgard, Loki and the cosmic side of the universe." },
+        { "title": "The Avengers", "year": 2012, "note": "The first team-up – the moment the shared universe paid off." },
+        { "title": "Captain America: The Winter Soldier", "year": 2014, "note": "A tense spy thriller that shakes S.H.I.E.L.D. to its core." },
+        { "title": "Guardians of the Galaxy", "year": 2014, "note": "A ragtag crew, a great soundtrack and a first look at Thanos' plans." },
+        { "title": "Captain America: Civil War", "year": 2016, "note": "The Avengers split apart – and Black Panther and Spider-Man arrive." },
+        { "title": "Doctor Strange", "year": 2016, "note": "Magic, the multiverse and the Time Stone." },
+        { "title": "Thor: Ragnarok", "year": 2017, "note": "Thor reinvented as a cosmic comedy – and it leads straight into the finale." },
+        { "title": "Black Panther", "year": 2018, "note": "Meet Wakanda, which becomes a key battleground soon after." },
+        { "title": "Avengers: Infinity War", "year": 2018, "note": "Everything builds to this: Thanos comes for the stones." },
+        { "title": "Avengers: Endgame", "year": 2019, "note": "The finale of the Infinity Saga. Bring tissues." }
+      ]
+    },
+    {
+      "slug": "path-star-wars-first-watch",
+      "name": "Star Wars: First Watch",
+      "kind": "path",
+      "categories": ["scifi-fantasy"],
+      "color": "#ffe81f",
+      "description": "The best order for a first-time viewer – the big twists land the way they were meant to.",
+      "films": [
+        { "title": "Star Wars", "year": 1977, "note": "Start where audiences did in 1977: a farm boy, a princess and a smuggler." },
+        { "title": "The Empire Strikes Back", "year": 1980, "note": "Darker and bigger – widely considered the best of the saga." },
+        { "title": "Return of the Jedi", "year": 1983, "note": "The original trilogy's grand finale." },
+        { "title": "Star Wars: Episode I - The Phantom Menace", "year": 1999, "note": "Back in time: a gifted boy is found on Tatooine." },
+        { "title": "Star Wars: Episode II - Attack of the Clones", "year": 2002, "note": "The Republic edges toward war." },
+        { "title": "Star Wars: Episode III - Revenge of the Sith", "year": 2005, "note": "The fall that the original trilogy only hinted at." },
+        { "title": "Rogue One: A Star Wars Story", "year": 2016, "note": "A war movie that leads straight into the very first film – best once you know it." },
+        { "title": "Star Wars: The Force Awakens", "year": 2015, "note": "A new generation, decades after Return of the Jedi." },
+        { "title": "Star Wars: The Last Jedi", "year": 2017, "note": "The sequel trilogy takes its boldest turn." },
+        { "title": "Star Wars: The Rise of Skywalker", "year": 2019, "note": "The end of the Skywalker saga." }
+      ]
+    },
+    {
+      "slug": "path-superhero-hall-of-fame",
+      "name": "Superhero Hall of Fame",
+      "kind": "path",
+      "categories": ["superhero"],
+      "color": "#f59e0b",
+      "description": "The genre's landmarks across Marvel, DC and beyond – from 2000 to today.",
+      "films": [
+        { "title": "X-Men", "year": 2000, "note": "The movie that kicked off the modern superhero era." },
+        { "title": "Spider-Man", "year": 2002, "note": "Sam Raimi's earnest, colorful take that made superheroes blockbusters." },
+        { "title": "Spider-Man 2", "year": 2004, "note": "Still one of the best sequels the genre has produced." },
+        { "title": "Batman Begins", "year": 2005, "note": "A grounded reboot that took its hero seriously." },
+        { "title": "Iron Man", "year": 2008, "note": "The start of the MCU – and Robert Downey Jr.'s defining role." },
+        { "title": "The Dark Knight", "year": 2008, "note": "A crime epic with one of cinema's greatest villains." },
+        { "title": "The Avengers", "year": 2012, "note": "Proof that a shared universe could work on screen." },
+        { "title": "Logan", "year": 2017, "note": "A brutal, moving western that says goodbye to Wolverine." },
+        { "title": "Wonder Woman", "year": 2017, "note": "The first big female-led superhero hit of the modern era." },
+        { "title": "Black Panther", "year": 2018, "note": "A cultural phenomenon and a Best Picture nominee." },
+        { "title": "Spider-Man: Into the Spider-Verse", "year": 2018, "note": "Animation that changed what superhero movies could look like." },
+        { "title": "Avengers: Endgame", "year": 2019, "note": "The biggest crossover event in film history." },
+        { "title": "The Batman", "year": 2022, "note": "A noir detective story in a rain-soaked Gotham." },
+        { "title": "Superman", "year": 2025, "note": "A hopeful new start for the DC Universe." }
+      ]
+    },
+    {
+      "slug": "path-fantasy-starter",
+      "name": "Fantasy Starter",
+      "kind": "path",
+      "categories": ["scifi-fantasy"],
+      "color": "#a78bfa",
+      "description": "From first steps into magic to epic battles – a gentle ramp into fantasy.",
+      "films": [
+        { "title": "Harry Potter and the Philosopher's Stone", "year": 2001, "note": "The perfect first step: a boy discovers he's a wizard." },
+        { "title": "Shrek", "year": 2001, "note": "A fairy-tale parody that loves the genre it pokes fun at." },
+        { "title": "Spirited Away", "year": 2001, "note": "Miyazaki's masterpiece about a girl lost in a world of spirits." },
+        { "title": "Pirates of the Caribbean: The Curse of the Black Pearl", "year": 2003, "note": "Swashbuckling adventure, cursed gold and Captain Jack Sparrow." },
+        { "title": "Harry Potter and the Prisoner of Azkaban", "year": 2004, "note": "The series grows up – darker, stranger and more beautiful." },
+        { "title": "Howl's Moving Castle", "year": 2004, "note": "A walking castle, a vain wizard and a young woman under a curse." },
+        { "title": "The Lord of the Rings: The Fellowship of the Ring", "year": 2001, "note": "Now you're ready for the big one: the journey to Mordor begins." },
+        { "title": "The Lord of the Rings: The Two Towers", "year": 2002, "note": "The fellowship is scattered and war comes to Helm's Deep." },
+        { "title": "The Lord of the Rings: The Return of the King", "year": 2003, "note": "The epic conclusion – and the winner of 11 Oscars." },
+        { "title": "Princess Mononoke", "year": 1997, "note": "Gods, forests and humans at war – Ghibli at its most epic." },
+        { "title": "Avatar", "year": 2009, "note": "Fantasy in sci-fi clothing: a whole new world on Pandora." }
+      ]
+    },
+    {
+      "slug": "path-animation-essentials",
+      "name": "Animation Essentials",
+      "kind": "path",
+      "categories": ["animation"],
+      "color": "#60a5fa",
+      "description": "Landmarks of animation from 1937 to today – Disney, Pixar, Ghibli, DreamWorks and more.",
+      "films": [
+        { "title": "Snow White and the Seven Dwarfs", "year": 1937, "note": "The first feature-length cel-animated film – where it all started." },
+        { "title": "My Neighbor Totoro", "year": 1988, "note": "Gentle, magical – and the reason Studio Ghibli's logo is a big fluffy spirit." },
+        { "title": "The Little Mermaid", "year": 1989, "note": "The movie that kicked off the Disney Renaissance." },
+        { "title": "Beauty and the Beast", "year": 1991, "note": "The first animated film ever nominated for Best Picture." },
+        { "title": "The Lion King", "year": 1994, "note": "Disney's sweeping epic about a young lion and his destiny." },
+        { "title": "Toy Story", "year": 1995, "note": "The first fully computer-animated feature film." },
+        { "title": "Spirited Away", "year": 2001, "note": "Studio Ghibli's masterpiece and an Oscar winner." },
+        { "title": "Shrek", "year": 2001, "note": "DreamWorks' irreverent hit – the first winner of the Oscar for Animated Feature." },
+        { "title": "Finding Nemo", "year": 2003, "note": "An ocean-sized adventure and one of Pixar's best-loved films." },
+        { "title": "WALL·E", "year": 2008, "note": "A nearly wordless first act that tells a whole story." },
+        { "title": "Up", "year": 2009, "note": "Famous for the most moving opening minutes in animation." },
+        { "title": "How to Train Your Dragon", "year": 2010, "note": "DreamWorks' soaring tale of a boy and his dragon." },
+        { "title": "Coco", "year": 2017, "note": "A vibrant trip to the Land of the Dead about family and memory." },
+        { "title": "Spider-Man: Into the Spider-Verse", "year": 2018, "note": "A comic book brought to life in a style all its own." },
+        { "title": "The Boy and the Heron", "year": 2023, "note": "Miyazaki's late-career Oscar winner." }
+      ]
+    },
+    {
+      "slug": "path-horror-101",
+      "name": "Horror 101",
+      "kind": "path",
+      "categories": ["horror"],
+      "color": "#b91c1c",
+      "description": "A century of fear in 16 movies – from silent classics to modern hits.",
+      "films": [
+        { "title": "Nosferatu", "year": 1922, "note": "The silent vampire film whose shadows still haunt the genre." },
+        { "title": "Frankenstein", "year": 1931, "note": "Universal's monster classic that defined the look of horror." },
+        { "title": "Psycho", "year": 1960, "note": "Hitchcock's shocker that rewrote the rules – and ruined showers forever." },
+        { "title": "Night of the Living Dead", "year": 1968, "note": "The birth of the modern zombie." },
+        { "title": "The Exorcist", "year": 1973, "note": "Often called the scariest film ever made." },
+        { "title": "The Texas Chain Saw Massacre", "year": 1974, "note": "Raw, grimy terror made on a tiny budget." },
+        { "title": "Halloween", "year": 1978, "note": "The template for every slasher that followed." },
+        { "title": "Alien", "year": 1979, "note": "A haunted house in space." },
+        { "title": "The Shining", "year": 1980, "note": "Kubrick, Nicholson and the Overlook Hotel." },
+        { "title": "The Thing", "year": 1982, "note": "Paranoia and groundbreaking practical effects in Antarctica." },
+        { "title": "A Nightmare on Elm Street", "year": 1984, "note": "A killer who strikes in your dreams." },
+        { "title": "Scream", "year": 1996, "note": "A slasher that knows all the rules – and revived the genre." },
+        { "title": "The Blair Witch Project", "year": 1999, "note": "The found-footage phenomenon." },
+        { "title": "The Conjuring", "year": 2013, "note": "Old-school haunted-house scares done right." },
+        { "title": "Get Out", "year": 2017, "note": "Social horror that won an Oscar for its screenplay." },
+        { "title": "Hereditary", "year": 2018, "note": "Modern grief horror that gets under your skin." }
       ]
     }
   ]

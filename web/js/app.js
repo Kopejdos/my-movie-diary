@@ -215,6 +215,7 @@ function achievementMessage(key, result) {
     const names = {
         first: TEXTS.achFirstName, collector: TEXTS.achCollectorName, "screen-time": TEXTS.achScreenTimeName,
         marathon: TEXTS.achMarathonName, rewatcher: TEXTS.achRewatcherName, completionist: TEXTS.achCompletionistName,
+        pathfinder: TEXTS.achPathfinderName,
     };
     const name = cardKey.startsWith("fan-") ? format("achFanName", card?.category?.name ?? "") : names[cardKey] ?? cardKey;
     const index = card?.tiers.findIndex((t) => String(t.threshold) === threshold) ?? -1;

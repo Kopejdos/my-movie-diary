@@ -2410,3 +2410,128 @@ button {
         justify-content: flex-end;
     }
 }
+
+/* =====================================================================
+   Cesty / paths (V1.8)
+   ===================================================================== */
+
+/* Štítek „Path“ na kartě (vlevo nahoře, „Complete“ je vpravo) */
+.universe-card__kind {
+    position: absolute;
+    top: 12px;
+    left: 10px;
+    z-index: 2;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg-deep) 78%, transparent);
+    border: 1px solid color-mix(in srgb, var(--c) 60%, transparent);
+    color: var(--heading);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    backdrop-filter: blur(6px);
+}
+
+/* Seznam kroků: svislá čára spojuje čísla kroků (vidět je v mezerách mezi řádky) */
+.film-list--path {
+    position: relative;
+}
+
+.film-list--path::before {
+    content: "";
+    position: absolute;
+    top: 24px;
+    bottom: 24px;
+    left: 27px;                      /* střed sloupce s číslem (padding 10 + 34 / 2) */
+    width: 2px;
+    background: linear-gradient(var(--u), color-mix(in srgb, var(--u) 25%, transparent));
+    border-radius: 2px;
+}
+
+.film-list--path > li {
+    position: relative;              /* řádky leží nad čárou */
+}
+
+.film--step {
+    grid-template-columns: 34px 56px 1fr auto;
+}
+
+.film__step {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid color-mix(in srgb, var(--u) 70%, var(--border));
+    background: var(--bg);
+    color: var(--heading);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.film--watched .film__step {
+    background: var(--u);
+    border-color: var(--u);
+    color: var(--u-ink);
+}
+
+/* Poznámka „proč to vidět“ */
+.film__note,
+.up-next__note {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    color: var(--text);
+    opacity: 0.85;
+}
+
+.up-next__note {
+    margin-top: 4px;
+    font-style: italic;
+}
+
+/* Admin: poznámka ke kroku přes celou šířku */
+.mini-field--wide {
+    display: flex;
+    width: 100%;
+    margin-top: 6px;
+}
+
+.mini-field--wide .admin-input:not(.admin-input--number) {
+    width: auto;
+    flex: 1;
+}
+
+@media (max-width: 560px) {
+    /* na telefonu: číslo + plakát + text, ovládání pod nimi */
+    .film--step {
+        grid-template-columns: 28px 48px 1fr;
+        gap: 10px;
+    }
+
+    .film--step .film__actions {
+        grid-column: 2 / -1;
+        justify-content: flex-end;
+    }
+
+    .film__step {
+        width: 28px;
+        height: 28px;
+        font-size: 0.85rem;
+    }
+
+    .film-list--path::before {
+        left: 22px;                  /* padding 8 + 28 / 2 */
+    }
+}
+
+@media (min-width: 481px) and (max-width: 560px) {
+    .film-list--path::before {
+        left: 24px;                  /* padding 10 + 28 / 2 */
+    }
+}

@@ -8,7 +8,7 @@ import {
 import { isSignedIn } from "../auth.js";
 import { setAccent } from "../theme.js";
 import { loadPref, savePref } from "../prefs.js";
-import { TEXTS, format, movies } from "../texts.js";
+import { TEXTS, format, movies, steps } from "../texts.js";
 import {
     h, mount, poster, pill, backdropUrl, yearOf, formatDate, toast, loadingView, errorView,
 } from "../dom.js";
@@ -65,8 +65,13 @@ class UniversePage {
         this.list = h("ol", { class: "film-list" });
         this.toolbar = h("div", { class: "toolbar" });
 
+        // Cesta = pevné pořadí kroků s poznámkami (bez přepínače pořadí)
+        this.isPath = universe.kind === "path";
+        this.stepNumbers = new Map(universe.items.map((item, index) => [item.film.tmdb_id, index + 1]));
+        this.list.classList.toggle("film-list--path", this.isPath);
+
         // Pořadí příběhu má smysl jen tam, kde ho některý film má vyplněné
-        this.hasStory = universe.items.some((item) => item.story_order !== null);
+        this.hasStory = !this.isPath && universe.items.some((item) => item.story_order !== null);
         this.order = this.hasStory ? loadPref("order", "release") : "release";
         this.unwatchedOnly = signedIn && loadPref("unwatched", "0") === "1";
     }
@@ -149,8 +154,9 @@ class UniversePage {
                 h("h1", { class: "banner__title" }, universe.name),
                 universe.description ? h("p", { class: "banner__description" }, universe.description) : null,
                 h("div", { class: "pills" },
-                    pill(movies(required), true),
+                    pill(this.isPath ? steps(required) : movies(required), true),
                     universe.kind === "genre" ? pill(TEXTS.kindGenre) : null,
+                    this.isPath ? pill(`🧭 ${TEXTS.kindPathBadge}`) : null,
                     (universe.categories ?? [])
                         .sort((a, b) => a.sort_order - b.sort_order)
                         .map((c) => pill(c.name))),
@@ -185,8 +191,9 @@ class UniversePage {
                 h("div", { class: "up-next up-next--done" },
                     h("span", { class: "up-next__trophy", "aria-hidden": "true" }, "🏆"),
                     h("div", { class: "up-next__info" },
-                        h("span", { class: "eyebrow" }, TEXTS.universeComplete),
-                        h("p", { class: "muted", style: "margin: 0" }, TEXTS.universeCompleteText),
+                        h("span", { class: "eyebrow" }, this.isPath ? TEXTS.pathComplete : TEXTS.universeComplete),
+                        h("p", { class: "muted", style: "margin: 0" },
+                            this.isPath ? TEXTS.pathCompleteText : TEXTS.universeCompleteText),
                     ),
                 ),
             );
@@ -198,13 +205,17 @@ class UniversePage {
             h("div", { class: "up-next" },
                 poster(film.poster_path, film.title, "up-next__poster"),
                 h("div", { class: "up-next__info" },
-                    h("span", { class: "eyebrow" }, TEXTS.upNext),
+                    h("span", { class: "eyebrow" }, this.isPath ? TEXTS.nextStep : TEXTS.upNext),
                     h("h2", { class: "up-next__title" }, film.title),
                     h("div", { class: "pills" },
+                        this.isPath
+                            ? pill(format("stepOf", this.stepNumbers.get(film.tmdb_id), this.universe.items.length), true)
+                            : null,
                         pill(yearOf(film.release_date)),
                         film.runtime ? pill(format("minutes", film.runtime)) : null,
                         next.group_label ? pill(next.group_label) : null,
                     ),
+                    this.isPath && next.note ? h("p", { class: "up-next__note" }, next.note) : null,
                 ),
                 h("button", {
                     class: "btn btn--universe",
@@ -246,9 +257,15 @@ class UniversePage {
         const info = this.counts.get(film.tmdb_id);
         const count = info?.count ?? 0;
 
-        row.className = `film${count > 0 ? " film--watched" : ""}${item.is_optional ? " film--optional" : ""}`;
+        row.className = `film${count > 0 ? " film--watched" : ""}${item.is_optional ? " film--optional" : ""}`
+            + (this.isPath ? " film--step" : "");
 
         mount(row,
+            // Číslo kroku cesty (viděný krok = ✓)
+            this.isPath
+                ? h("span", { class: "film__step", "aria-label": format("stepOf", this.stepNumbers.get(film.tmdb_id), this.universe.items.length) },
+                    count > 0 ? "✓" : String(this.stepNumbers.get(film.tmdb_id)))
+                : null,
             poster(film.poster_path, film.title, "film__poster"),
             h("div", { class: "film__info" },
                 h("h3", { class: "film__title" }, film.title),
@@ -257,6 +274,7 @@ class UniversePage {
                     film.runtime ? pill(format("minutes", film.runtime)) : null,
                     item.is_optional ? pill(TEXTS.optionalBadge) : null,
                 ),
+                this.isPath && item.note ? h("p", { class: "film__note" }, item.note) : null,
                 this.signedIn
                     ? h("p", { class: "film__status" },
                         count > 0

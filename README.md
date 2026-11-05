@@ -6,16 +6,17 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V1.7.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V1.8** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
-- 52 collections and 700+ movies from TMDB – MCU, Star Wars, Disney, Pixar, DreamWorks, Studio Ghibli, horror series and hand-picked horror genres, each with its own color and banner
+- 52 collections, 6 curated paths and 700+ movies from TMDB – MCU, Star Wars, Disney, Pixar, DreamWorks, Studio Ghibli, horror series and hand-picked horror genres, each with its own color and banner
 - Categories (Superhero, Animation, Horror…) and collection types (series, studios, genre picks)
 - +1 / −1 viewing counter – every viewing is logged with a date
 - Progress per collection, **Up next** and **Continue watching** suggestions
 - Release order or story (chronological) order, "unwatched only" filter
 - Instant search across all movies and collections (by title, original title or year)
+- Curated paths – step-by-step routes like MCU Essentials or Horror 101, with a note for every step
 - Watchlist across all collections
 - Achievements with levels (Bronze → Platinum) and completed-collection badges
 - XP and levels with movie-themed titles – from Extra to Legend
@@ -25,7 +26,6 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Installable on a phone or computer (PWA), opens even offline
 
 **Coming next**
-- V1.8 – curated paths
 - V1.9 – profile statistics
 - V2.0 – shareable profiles
 
