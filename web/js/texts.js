@@ -3,10 +3,10 @@
 
 export const TEXTS = {
     appName: "My Movie Diary",
-    tagline: "Track every movie universe you love.",
+    tagline: "Track every movie collection you love.",
 
     // Navigace
-    navUniverses: "Universes",
+    navUniverses: "Collections",
     navSignIn: "Sign in",
     navRegister: "Register",
     navSignOut: "Sign out",
@@ -16,7 +16,7 @@ export const TEXTS = {
     loading: "Loading…",
     errorGeneric: "Something went wrong: {0}",
     retry: "Try again",
-    back: "← All universes",
+    back: "← All collections",
 
     // Režim
     themeToLight: "Switch to light mode",
@@ -24,13 +24,13 @@ export const TEXTS = {
 
     // Hero karta na přehledu
     heroGuestEyebrow: "Your movie diary",
-    heroGuestTitle: "Every universe. Every movie.",
+    heroGuestTitle: "Every collection. Every movie.",
     heroGuestText: "Log what you watch across the MCU, Star Wars, Studio Ghibli and more – and always know what to watch next.",
     heroWelcomeEyebrow: "Welcome back",
     heroWelcomeTitle: "Where do we start?",
-    heroWelcomeText: "Pick a universe below and log your first movie.",
+    heroWelcomeText: "Pick a collection below and log your first movie.",
     continueEyebrow: "Continue · {0}",
-    openUniverse: "Open universe",
+    openUniverse: "Open collection",
     markWatched: "Mark as watched",
 
     // Řazení a filtr v detailu univerza
@@ -50,7 +50,7 @@ export const TEXTS = {
     watchlistAdded: "Added to your watchlist.",
     watchlistRemoved: "Removed from your watchlist.",
     watchlistWatched: "Marked as watched.",
-    watchlistBrowse: "Browse universes",
+    watchlistBrowse: "Browse collections",
     watchlistAddedOn: "Added {0}",
 
     // Aplikace (PWA)
@@ -67,14 +67,14 @@ export const TEXTS = {
 
     // Up next v detailu univerza
     upNext: "Up next",
-    universeComplete: "Universe complete",
+    universeComplete: "Collection complete",
     universeCompleteText: "You have seen every movie here. Time for a rewatch?",
     complete: "Complete",
 
     // Přehled univerz
-    universesTitle: "Universes",
-    universesCount: "{0} universes",
-    universesIntro: "Pick a universe and start logging what you have watched.",
+    universesTitle: "Collections",
+    universesCount: "{0} collections",
+    universesIntro: "Pick a collection and start logging what you have watched.",
     universesGuestHint: "Sign in to track your progress.",
     movieCount: "{0} movies",
     progressCount: "{0} / {1} watched",
@@ -90,7 +90,7 @@ export const TEXTS = {
     removeWatch: "Remove the latest viewing",
     signInToTrack: "Sign in to track",
     minutes: "{0} min",
-    universeNotFound: "This universe doesn't exist.",
+    universeNotFound: "This collection doesn't exist.",
 
     // Přihlášení a registrace
     signInTitle: "Sign in",
@@ -130,18 +130,18 @@ export const TEXTS = {
     // Admin panel
     navAdmin: "Admin",
     adminTitle: "Admin panel",
-    adminTabUniverses: "Universes",
+    adminTabUniverses: "Collections",
     adminTabUsers: "Users",
     adminOnly: "This page is for administrators only.",
-    adminNewUniverse: "New universe",
+    adminNewUniverse: "New collection",
     adminName: "Name",
     adminNameRequired: "Enter a name.",
     adminSlug: "Address (slug)",
     adminSlugHint: "Lowercase letters, numbers and dashes – used in the link, e.g. star-wars",
     adminColor: "Color",
     adminDescription: "Description",
-    adminCreate: "Create universe",
-    adminCreated: "Universe created.",
+    adminCreate: "Create collection",
+    adminCreated: "Collection created.",
     adminSave: "Save",
     adminSaved: "Saved.",
     adminEdit: "Edit",
@@ -149,12 +149,12 @@ export const TEXTS = {
     adminMoveUp: "Move up",
     adminMoveDown: "Move down",
     adminMovies: "{0} movies",
-    adminConfirmDeleteUniverse: "Delete the universe \"{0}\"? Movies stay in the database, only the universe and its list are removed.",
+    adminConfirmDeleteUniverse: "Delete the collection \"{0}\"? Movies stay in the database, only the collection and its list are removed.",
     adminDeleted: "Deleted.",
     adminBackToPanel: "← Admin panel",
-    adminOpenUniverse: "View universe",
-    adminUniverseDetails: "Universe details",
-    adminMoviesInUniverse: "Movies in this universe",
+    adminOpenUniverse: "View collection",
+    adminUniverseDetails: "Collection details",
+    adminMoviesInUniverse: "Movies in this collection",
     adminGroup: "Group",
     adminGroupPlaceholder: "e.g. Phase 1",
     adminStoryOrder: "Story #",
@@ -163,7 +163,7 @@ export const TEXTS = {
     adminSetCover: "Use as cover",
     adminIsCover: "Cover",
     adminRemove: "Remove",
-    adminConfirmRemoveMovie: "Remove \"{0}\" from this universe?",
+    adminConfirmRemoveMovie: "Remove \"{0}\" from this collection?",
     adminAddMovie: "Add a movie",
     adminSearchPlaceholder: "Search TMDB, e.g. Iron Man",
     adminSearch: "Search",

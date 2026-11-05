@@ -1,4 +1,4 @@
-// Jednoduchý router podle části adresy za # (např. #/universe/mcu).
+// Jednoduchý router podle části adresy za # (např. #/collection/mcu).
 // GitHub Pages neumí přesměrovat neznámé adresy na index.html, s hashem to není potřeba.
 
 const routes = [];
@@ -6,7 +6,7 @@ let notFoundView = null;
 let container = null;
 let renderCounter = 0;
 
-/** Zaregistruje cestu: addRoute("/universe/:slug", view). */
+/** Zaregistruje cestu: addRoute("/collection/:slug", view). */
 export function addRoute(path, view) {
     const names = [];
     const pattern = new RegExp(

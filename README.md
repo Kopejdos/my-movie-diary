@@ -1,30 +1,33 @@
 # 🎬 My Movie Diary
 
-**My Movie Diary (MMD)** is a personal web app for tracking movies across film universes – MCU, X-Men, DC, Alien, Studio Ghibli, Pirates of the Caribbean, Asterix & Obelix and more.
+**My Movie Diary (MMD)** is a personal web app for tracking movies across film collections – MCU, X-Men, DC, Alien, Studio Ghibli, Pirates of the Caribbean, Asterix & Obelix and more.
 
-Instead of a simple checkbox, every viewing is logged, so you can see how many times you have watched a movie, when you watched it last, and how far you are through each universe.
+Instead of a simple checkbox, every viewing is logged, so you can see how many times you have watched a movie, when you watched it last, and how far you are through each collection.
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V1.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V1.1.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
-- 22 universes and 350+ movies from TMDB – MCU, Star Wars, Disney, Pixar, DreamWorks, Studio Ghibli and more, each with its own color and banner
+- 22 collections and 350+ movies from TMDB – MCU, Star Wars, Disney, Pixar, DreamWorks, Studio Ghibli and more, each with its own color and banner
 - +1 / −1 viewing counter – every viewing is logged with a date
-- Progress per universe, **Up next** and **Continue watching** suggestions
+- Progress per collection, **Up next** and **Continue watching** suggestions
 - Release order or story (chronological) order, "unwatched only" filter
-- Watchlist across all universes
+- Watchlist across all collections
 - Sign in with email or nickname & password, or with Google
 - Light and dark mode
-- Admin panel: universes, movies (search TMDB right from the app) and users
+- Admin panel: collections, movies (search TMDB right from the app) and users
 - Installable on a phone or computer (PWA), opens even offline
 
 **Coming next**
-- V1.2 – achievements
-- V1.3 – search
-- V1.4 – profile statistics
-- V1.5 – shareable profiles
+- V1.2 – categories and horror collections (wave 1)
+- V1.3 – achievements
+- V1.4 – horror wave 2
+- V1.5 – search
+- V1.6 – horror wave 3
+- V1.7 – profile statistics
+- V1.8 – shareable profiles
 
 ## Tech stack
 

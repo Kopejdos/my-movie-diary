@@ -1,7 +1,7 @@
 {
   "name": "My Movie Diary",
   "short_name": "MMD",
-  "description": "Track every movie universe you love – MCU, Star Wars, Studio Ghibli and more.",
+  "description": "Track every movie collection you love – MCU, Star Wars, Disney, Pixar, Studio Ghibli and more.",
   "id": "./",
   "start_url": "./",
   "scope": "./",

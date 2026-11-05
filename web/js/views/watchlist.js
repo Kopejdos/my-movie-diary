@@ -107,7 +107,7 @@ export async function watchlistView(container, context) {
 
 /** Barevná pilulka s odkazem na univerzum. */
 function universeLink(universe) {
-    const link = h("a", { class: "pill pill--universe", href: `#/universe/${universe.slug}` }, universe.name);
+    const link = h("a", { class: "pill pill--universe", href: `#/collection/${universe.slug}` }, universe.name);
     if (universe.color) {
         link.style.setProperty("--c", universe.color);
         link.style.setProperty("--c-ink", inkFor(universe.color));

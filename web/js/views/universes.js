@@ -98,7 +98,7 @@ function heroCard(signedIn, continueWatching, refresh) {
             ),
             h("div", { class: "hero-card__actions" },
                 markButton,
-                h("a", { class: "btn", href: `#/universe/${universe.slug}` }, TEXTS.openUniverse),
+                h("a", { class: "btn", href: `#/collection/${universe.slug}` }, TEXTS.openUniverse),
             ),
         ),
         posterUrl(film.poster_path)
@@ -120,7 +120,7 @@ function universeCard(universe, signedIn) {
     const value = percent(progress);
     const complete = signedIn && progress.total > 0 && progress.watched === progress.total;
 
-    const card = h("a", { class: "universe-card", href: `#/universe/${universe.slug}` },
+    const card = h("a", { class: "universe-card", href: `#/collection/${universe.slug}` },
         h("div", { class: "universe-card__media" },
             poster(universe.cover?.poster_path, universe.name, "universe-card__cover"),
         ),

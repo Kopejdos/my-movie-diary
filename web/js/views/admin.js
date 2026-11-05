@@ -102,7 +102,7 @@ function universeRow(universe, previous, next, reload) {
                 disabled: !next,
                 onClick: () => run(() => swapUniverseOrder(universe, next)),
             }, "↓"),
-            h("a", { class: "btn btn--small", href: `#/admin/universe/${universe.slug}` }, TEXTS.adminEdit),
+            h("a", { class: "btn btn--small", href: `#/admin/collection/${universe.slug}` }, TEXTS.adminEdit),
             h("button", {
                 class: "btn btn--small btn--danger", type: "button",
                 onClick: () => {
@@ -160,7 +160,7 @@ function newUniverseForm() {
                 color: color.value,
             });
             toast(TEXTS.adminCreated);
-            window.location.hash = `/admin/universe/${created.slug}`;
+            window.location.hash = `/admin/collection/${created.slug}`;
         } catch (e) {
             error.textContent = e.message;
             submit.disabled = false;

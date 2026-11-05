@@ -1,4 +1,4 @@
-// Obrazovka admin panelu: úprava jednoho univerza (#/admin/universe/<slug>).
+// Obrazovka admin panelu: úprava jednoho univerza (#/admin/collection/<slug>).
 
 import { fetchUniverse } from "../data.js";
 import {
@@ -38,7 +38,7 @@ export async function adminUniverseView(container, context) {
     mount(container,
         h("div", { class: "admin-top" },
             h("a", { class: "back-link", href: "#/admin" }, TEXTS.adminBackToPanel),
-            h("a", { class: "btn btn--small", href: `#/universe/${universe.slug}` }, TEXTS.adminOpenUniverse),
+            h("a", { class: "btn btn--small", href: `#/collection/${universe.slug}` }, TEXTS.adminOpenUniverse),
         ),
         h("section", { class: "page-header" },
             h("span", { class: "eyebrow" }, TEXTS.navAdmin),

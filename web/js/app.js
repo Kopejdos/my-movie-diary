@@ -20,14 +20,19 @@ import { notFoundView } from "./views/not-found.js";
 
 // Cesty v aplikaci
 addRoute("/", universesView);
-addRoute("/universe/:slug", universeView);
+addRoute("/collection/:slug", universeView);
+// Staré odkazy z doby „universes“ (do V1.1) se přesměrují na novou adresu.
+// replace = stará adresa nezůstane v historii (tlačítko Zpět by jinak cyklilo)
+const redirect = (path) => () => window.location.replace(`#${path}`);
+addRoute("/universe/:slug", (container, { params }) => redirect(`/collection/${params.slug}`)());
 addRoute("/login", loginView);
 addRoute("/register", registerView);
 addRoute("/profile", profileView);
 addRoute("/watchlist", watchlistView);
 addRoute("/admin", adminUniversesView);
 addRoute("/admin/users", adminUsersView);
-addRoute("/admin/universe/:slug", adminUniverseView);
+addRoute("/admin/collection/:slug", adminUniverseView);
+addRoute("/admin/universe/:slug", (container, { params }) => redirect(`/admin/collection/${params.slug}`)());
 setNotFound(notFoundView);
 
 const header = document.getElementById("site-header");
@@ -58,7 +63,7 @@ function renderHeader() {
                     }, `⤓ ${TEXTS.install}`)
                     : null,
                 themeToggle(),
-                navLink("#/", TEXTS.navUniverses, path === "/" || path.startsWith("/universe/"), " nav__link--home"),
+                navLink("#/", TEXTS.navUniverses, path === "/" || path.startsWith("/collection/"), " nav__link--home"),
                 user
                     ? h("a", {
                         class: `nav__link${path === "/watchlist" ? " nav__link--active" : ""}`,

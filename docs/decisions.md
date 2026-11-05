@@ -212,33 +212,44 @@ Formát **V<hlavní>.<vedlejší>.<oprava>** (např. V1.2.1):
 | 7 | V0.7 | Watchlist ✅ | hvězdička ☆, stránka Watchlist |
 | 8 | **V1.0** | PWA ✅ | instalace na plochu, ikona, service worker, offline |
 
-### Verze 1.x (plán)
+### Verze 1.x
 
 | # | Verze | Fáze | Co přibude |
 |---|---|---|---|
-| 9 | V1.1 | Nová univerza + verze v patičce ✅ | Mad Max, Avatar, Disney, Pixar, DreamWorks; verze a měsíc aktualizace v patičce; `CHANGELOG.md` |
-| 10 | V1.2 | Achievementy | odznaky za filmy, čas, maratony, dokončená univerza; zobrazení na profilu, oznámení při odemčení |
-| 11 | V1.3 | Vyhledávání | vyhledávací pole – filmy a univerza v aplikaci |
-| 12 | V1.4 | Statistiky profilu | počet filmů a hodin, nejčastěji viděný film, postup v univerzech |
-| 13 | V1.5 | Sdílení profilu | veřejný profil (statistiky + achievementy), hledání uživatelů – spojení fází 11 a 12 |
+| 9 | V1.1 | Nová univerza + verze v patičce ✅ | Mad Max, Avatar, Disney, Pixar, DreamWorks; verze v patičce; `CHANGELOG.md` |
+| 9.1 | V1.1.1 | Přejmenování ✅ | Universes → **Collections** v celé aplikaci |
+| 10 | V1.2 | Kategorie + horory, vlna 1 | kategorie na přehledu, hororové série, prvních 7 hororových žánrů |
+| 11 | V1.3 | Achievementy | odznaky za filmy, čas, maratony, dokončené kolekce a kategorie |
+| 12 | V1.4 | Horory, vlna 2 | dalších 7 žánrů |
+| 13 | V1.5 | Vyhledávání | vyhledávací pole – filmy a kolekce |
+| 14 | V1.6 | Horory, vlna 3 | posledních 7 žánrů |
+| 15 | V1.7 | Statistiky profilu | filmy, hodiny, nejčastěji viděný film, postup v kolekcích |
+| 16 | V1.8 | Sdílení profilu | veřejný profil, hledání uživatelů – spojení fází 13 a 15 |
 
-Později podle chuti: hodnocení a poznámky ke zhlédnutí, vlastní univerza uživatelů, export / import, české názvy filmů.
+Hororové vlny se střídají s funkcemi, aby každá verze přinesla něco nového. Později podle chuti: hodnocení a poznámky ke zhlédnutí, vlastní kolekce uživatelů, export / import, české názvy filmů.
 
-### Fáze 9 – nová univerza (V1.1)
-| Univerzum | Obsah |
-|---|---|
-| Mad Max | 5 filmů (Mad Max, The Road Warrior, Beyond Thunderdome, Fury Road, Furiosa); pořadí příběhu – Furiosa před Fury Road |
-| Avatar | hrané filmy Jamese Camerona – zatím 3, další 2 se přidají po premiéře |
-| Disney | **Walt Disney Animation Studios** – celovečerní animované filmy, skupiny podle období (Golden Age, Wartime, Silver Age, Bronze Age, Renaissance, Post-Renaissance, Revival); **hrané remaky jako volitelné** (samostatná skupina, nepočítají se do postupu) |
-| Pixar | celovečerní filmy Pixar Animation Studios |
-| DreamWorks | celovečerní filmy DreamWorks Animation |
+### Fáze 10 – kategorie a horory, vlna 1 (V1.2)
+**Kategorie** – sekce / filtr na přehledu; kolekce může být ve více kategoriích (Alien = Sci-fi i Horror), přiřazení v admin panelu:
+Superhero · Sci-fi & Fantasy · Animation · Action & Adventure · Horror (+ další podle potřeby).
 
-- **Jen celovečerní filmy, žádné krátkometrážní.**
-- Film může být ve více univerzech (Shrek je ve „Shrek“ i v „DreamWorks“) – zhlédnutí se počítá v obou.
-- Univerza se přidají do seedu a naimportují **jednotlivě** (`&only=<slug>`) – import sáhne jen na dané univerzum, úpravy z admin panelu u ostatních zůstanou.
-- Patička: „V1.1 · November 2026“.
+**Dva typy kolekcí:**
+- **série** (MCU, Saw…) – uzavřený seznam filmů,
+- **žánrové výběry** (Slasher, Haunted House…) – kurátorský výběr zhruba 15–20 klíčových filmů žánru, aby šel dokončit; film může být v sérii i ve výběru (Scream je v „Scream“ i ve „Slasher“).
 
-### Fáze 10 – achievementy (V1.2)
+**Hororové série:** The Conjuring Universe, Saw, Scream, Halloween, Final Destination, Insidious, A Nightmare on Elm Street, Friday the 13th (výběr se upřesní).
+
+**Hororové žánry – podle návrhu kamaráda, ve třech vlnách po sedmi:**
+
+| Vlna | Verze | Žánry |
+|---|---|---|
+| 1 | V1.2 | Slasher · Supernatural & Paranormal · Haunted House · Demonic & Exorcism · Psychological · Found Footage · Zombie |
+| 2 | V1.4 | Body Horror · Creature Feature · Vampire · Werewolf · Sci-fi Horror · Folk Horror · Horror Comedy |
+| 3 | V1.6 | Gore & Splatter · Extreme / Torture · Cosmic (Lovecraftian) · Gothic · Giallo · Eco-horror · Elevated Horror |
+
+- Kamarád zmínil i **J-Horror** (japonský horor) – zařadit jako bonus do některé vlny.
+- Výběry filmů sestavuje a spravuje jen správce (Adam); návrhy od ostatních vítány, admin práva ne.
+
+### Fáze 11 – achievementy (V1.3)
 Odznaky se počítají ze zhlédnutí, která už jsou v databázi – odemknou se i zpětně.
 
 | Achievement | Úrovně |
@@ -248,22 +259,21 @@ Odznaky se počítají ze zhlédnutí, která už jsou v databázi – odemknou 
 | Čas u filmů | 24 / 100 / 200 hodin |
 | Maraton | 3 / 5 / 8 filmů za jeden den |
 | Rewatcher | jeden film viděný 3× |
-| Completionist | dokončené univerzum – zvlášť pro každé (název podle univerza, např. „Avenger“ za MCU) |
+| Completionist | dokončená kolekce – zvlášť pro každou (název podle kolekce, např. „Avenger“ za MCU) |
+| Fanoušek kategorie | dokončené kolekce v kategorii (např. „Horror fan“) |
 
-- Úrovně jdou **škálovat** – další stupně (500 filmů, 500 hodin…) se jen připíšou do seznamu.
-- Na profilu: odemčené barevně, zamčené šedě s ukazatelem postupu („37 / 50 films“). Při odemčení oznámení.
-- **Otevřená otázka:** návrh kamaráda na „pathu“ – úrovně / XP (Extra → Kaskadér → Herec → Režisér), nebo doporučená cesta po univerzech? Upřesnit před fází 10.
+- Úrovně jdou **škálovat** – další stupně se jen připíšou do seznamu.
+- Na profilu: odemčené barevně, zamčené šedě s postupem. Při odemčení oznámení.
+- **Otevřená otázka:** „patha“ od kamaráda – úrovně / XP, nebo doporučená cesta po kolekcích? Upřesnit před fází 11.
 
-### Fáze 11 – vyhledávání (V1.3)
-- Vyhledávací pole v hlavičce: filmy a univerza v aplikaci (podle názvu, i původního), výsledek vede do univerza k danému filmu.
-- Připraví půdu pro hledání uživatelů ve fázi 13.
+### Fáze 13 – vyhledávání (V1.5)
+- Vyhledávací pole v hlavičce: filmy a kolekce v aplikaci (i podle původního názvu), výsledek vede do kolekce k danému filmu.
 
-### Fáze 12 – statistiky profilu (V1.4)
-- Na profilu: počet viděných filmů, celkový čas (hodiny), počet zhlédnutí, **nejčastěji viděný film**, postup ve všech univerzech, filmy podle roku zhlédnutí.
+### Fáze 15 – statistiky profilu (V1.7)
+- Počet viděných filmů, celkový čas, počet zhlédnutí, **nejčastěji viděný film**, postup ve všech kolekcích, filmy podle roku zhlédnutí.
 
-### Fáze 13 – sdílení profilu (V1.5)
-- Veřejný profil `#/u/<nick>` se statistikami a achievementy; uživatel si zvolí, jestli je profil veřejný.
-- Hledání uživatelů (navazuje na fázi 11), odkaz na profil ke sdílení.
+### Fáze 16 – sdílení profilu (V1.8)
+- Veřejný profil `#/u/<nick>` se statistikami a achievementy; uživatel si zvolí, jestli je veřejný. Hledání uživatelů, odkaz ke sdílení.
 
 ## Historie fází
 
@@ -430,6 +440,14 @@ Odznaky se počítají ze zhlédnutí, která už jsou v databázi – odemknou 
 - **Koprodukce DreamWorks s Aardmanem** (Chicken Run, Wallace & Gromit, Flushed Away) jsou v řadě, protože je DreamWorks Animation oficiálně vede ve své filmografii.
 - **Nevydané filmy** (Hexed – listopad 2026, Avatar 4 a 5) import přeskočí; po premiéře stačí import daného univerza pustit znovu.
 - **Žádné krátkometrážní filmy.**
+
+### V1.1.1 – přejmenování na Collections ✅ (5. 11. 2026)
+- „Universes“ → **„Collections“** ve všech textech (přehled, detail, watchlist, admin panel, popis webu a aplikace).
+- Adresy `#/collection/<slug>` a `#/admin/collection/<slug>`; staré `#/universe/…` se přesměrují (bez záznamu v historii, Zpět necyklí).
+
+#### Rozhodnutí ve V1.1.1
+- **„Collection“ sedí na všechno** – série (MCU), studia (Pixar) i žánrové výběry (Slasher); „universe“ sedělo jen na série.
+- **Interní název zůstává „universe“** – tabulky `universes`, `universe_items`, pohled `universe_progress`, názvy souborů a funkcí v kódu. Přejmenování databáze by znamenalo migraci a úpravy všech funkcí bez viditelného přínosu. V dokumentaci a kódu tedy „universe“ = kolekce.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).
