@@ -7,6 +7,7 @@ import { navigate } from "../router.js";
 import { USERNAME_PATTERN, PASSWORD_MIN_LENGTH, MIN_AGE } from "../config.js";
 import { TEXTS, format } from "../texts.js";
 import { setAccent } from "../theme.js";
+import { createCaptcha, captchaErrorText } from "../captcha.js";
 import { h, mount, toast } from "../dom.js";
 import { field, googleButton, divider, termsLinks } from "./login.js";
 
@@ -28,6 +29,7 @@ export async function registerView(container) {
     const consent = h("input", { type: "checkbox", name: "terms", required: true });
     const error = h("p", { class: "form-error", role: "alert" });
     const submit = h("button", { class: "btn btn--primary btn--block", type: "submit" }, TEXTS.submitRegister);
+    const captcha = createCaptcha();       // ochrana proti robotům (V2.6)
 
     const form = h("form", { class: "auth-form", novalidate: true, onSubmit: handleSubmit },
         h("h1", {}, TEXTS.registerTitle),
@@ -40,6 +42,7 @@ export async function registerView(container) {
         h("label", { class: "consent" },
             consent,
             h("span", {}, format("termsConsent", MIN_AGE), " ", termsLinks())),
+        captcha.element,
         error,
         submit,
         h("p", { class: "auth-form__switch" },
@@ -84,22 +87,30 @@ export async function registerView(container) {
                 return;
             }
 
+            const captchaToken = await captcha.token();
             const { needsConfirmation } = await signUp({
                 username: name,
                 email: email.value.trim(),
                 password: password.value,
+                captchaToken,
             });
 
             if (needsConfirmation) {
                 const address = email.value.trim();
                 const resend = h("button", { class: "btn btn--block", type: "button" }, TEXTS.resendConfirmation);
+                // Nový widget – ten z formuláře zmizí spolu s ním (načte se až při kliknutí)
+                const resendCaptcha = createCaptcha({ lazy: true });
                 resend.addEventListener("click", async () => {
                     resend.disabled = true;
                     try {
-                        await resendConfirmation({ login: address });
+                        const captchaToken = await resendCaptcha.token();
+                        await resendConfirmation({ login: address, captchaToken });
                         toast(TEXTS.resendDone);
                     } catch (e) {
-                        toast(e.code === "rate_limited" ? TEXTS.resendRateLimited : format("errorGeneric", e.message), "error");
+                        toast(captchaErrorText(e)
+                            ?? (e.code === "rate_limited" ? TEXTS.resendRateLimited : format("errorGeneric", e.message)), "error");
+                    } finally {
+                        resendCaptcha.reset();
                     }
                     resend.disabled = false;
                 });
@@ -110,14 +121,16 @@ export async function registerView(container) {
                         h("p", {}, TEXTS.registerCheckEmail),
                         h("p", { class: "muted" }, address),
                         h("a", { class: "btn btn--primary btn--block", href: "#/login" }, TEXTS.navSignIn),
+                        resendCaptcha.element,
                         resend,
                     ),
                 ));
             }
             // Bez potvrzování e-mailu je uživatel rovnou přihlášený – přesměruje app.js
         } catch (e) {
-            error.textContent = e.message;
+            error.textContent = captchaErrorText(e) ?? e.message;
             submit.disabled = false;
+            captcha.reset();        // token platí jen jednou
         }
     }
 }

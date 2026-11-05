@@ -3,6 +3,11 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V2.6 – November 2026
+- Bot protection (Cloudflare Turnstile) on sign-up, sign-in and password forms – usually invisible
+- Forgot password fills in the email you typed on the sign-in page
+- The new-password screen shows which account you're changing the password for
+
 ## V2.5 – November 2026
 - Forgot password? – get a link by email and choose a new password
 - Change password on your profile (Google accounts can set one too)

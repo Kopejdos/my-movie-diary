@@ -8,6 +8,11 @@
 // do prohlížeče), přihlásí uživatele a vrátí tokeny relace.
 // Web si je uloží přes supabase.auth.setSession().
 //
+// CAPTCHA (V2.6): web posílá i { "captchaToken": "…" } z Cloudflare Turnstile.
+// Supabase Auth u požadavků se serverovým klíčem CAPTCHA NEkontroluje – proto token
+// ověřuje funkce sama (tajemství TURNSTILE_SECRET_KEY v Edge Functions → Secrets),
+// a to dřív, než cokoli dohledá. Bez tajemství se kontrola přeskočí (CAPTCHA vypnutá).
+//
 // Přihlášení e-mailem jde rovnou přes Supabase Auth, tuhle funkci nepotřebuje.
 // V nastavení funkce musí být vypnuté "Verify JWT" (volá ji nepřihlášený uživatel).
 // =====================================================================
@@ -40,6 +45,27 @@ function getServiceKey(): string {
   throw new Error("No service key available in the Edge Function environment");
 }
 
+const TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+
+/** Ověří token Turnstile u Cloudflare. Bez nastaveného tajemství vždy true. */
+async function captchaPassed(token: unknown, request: Request): Promise<boolean> {
+  const secret = Deno.env.get("TURNSTILE_SECRET_KEY");
+  if (!secret) return true;
+  if (typeof token !== "string" || token.length === 0 || token.length > 2048) return false;
+
+  const form = new FormData();
+  form.append("secret", secret);
+  form.append("response", token);
+  const ip = request.headers.get("cf-connecting-ip")
+    ?? request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  if (ip) form.append("remoteip", ip);
+
+  const response = await fetch(TURNSTILE_VERIFY_URL, { method: "POST", body: form });
+  if (!response.ok) throw new Error(`Turnstile verify failed: HTTP ${response.status}`);
+  const result = await response.json() as { success?: boolean };
+  return result.success === true;
+}
+
 // Stejná odpověď pro neexistující nick i špatné heslo – nedá se zjistit, kdo má účet
 const INVALID_LOGIN = { error: "invalid_credentials" };
 
@@ -48,10 +74,15 @@ Deno.serve(async (request) => {
   if (request.method !== "POST") return json({ error: "Use POST" }, 405);
 
   try {
-    const { login, password, resend } = await request.json() as { login?: string; password?: string; resend?: boolean };
+    const { login, password, resend, captchaToken } = await request.json() as {
+      login?: string; password?: string; resend?: boolean; captchaToken?: string;
+    };
     if (!login || !password || typeof login !== "string" || typeof password !== "string") {
       return json(INVALID_LOGIN, 400);
     }
+
+    // 0. Ochrana proti robotům – před jakýmkoli dotazem do databáze
+    if (!(await captchaPassed(captchaToken, request))) return json({ error: "captcha_failed" }, 400);
 
     const db = createClient(Deno.env.get("SUPABASE_URL")!, getServiceKey(), {
       auth: { persistSession: false, autoRefreshToken: false },

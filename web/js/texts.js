@@ -304,7 +304,9 @@ export const TEXTS = {
     // Hesla (V2.5)
     forgotLink: "Forgot password?",
     forgotTitle: "Reset your password",
-    forgotIntro: "Enter the email you registered with and we'll send you a link to choose a new password.",
+    forgotIntro: "Enter the email of your account and we'll send you a link to choose a new password.",
+    forgotNicknameNote: "You typed the nickname \"{0}\" – enter the email address of that account.",
+    forgotOnlyInbox: "The link goes only to this inbox, so only whoever can open it can change the password.",
     forgotEmailHint: "Signed up with Google? Just use Continue with Google – no password needed.",
     forgotSubmit: "Send reset link",
     forgotSentTitle: "Check your email",
@@ -314,6 +316,7 @@ export const TEXTS = {
     resetTitle: "Choose a new password",
     resetIntro: "You're almost done – pick a new password for your account.",
     resetIntroSignedIn: "Pick a new password for your account.",
+    resetForAccount: "Account",
     resetNeedsLink: "To choose a new password, open the link from the reset email – or ask for a new one.",
     resetSubmit: "Save new password",
     resetOtherBrowser: "Open the reset link in the same browser where you asked for it – or ask for a new link here.",
@@ -333,6 +336,10 @@ export const TEXTS = {
     resendConfirmation: "Resend confirmation email",
     resendDone: "Confirmation email sent again. Check your inbox (and spam).",
     resendRateLimited: "Please wait a minute before asking for another email.",
+
+    // Ochrana proti robotům – Cloudflare Turnstile (V2.6)
+    errorCaptcha: "The security check didn't go through. Please try again.",
+    errorCaptchaUnavailable: "The security check couldn't load. Check your connection, allow challenges.cloudflare.com (ad blockers) and reload the page.",
     emailConfirmedWelcome: "Email confirmed – welcome to My Movie Diary! 🎉",
     emailConfirmedSignIn: "Email confirmed! Now sign in.",
     authLinkExpired: "This link has expired or was already used. Sign in – if your email isn't confirmed yet, you can ask for a new link there.",

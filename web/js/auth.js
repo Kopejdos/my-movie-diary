@@ -38,7 +38,13 @@ function passwordError(error) {
     if (error.code === "same_password" || /different from the old/i.test(error.message)) wrapped.code = "same_password";
     else if (error.code === "weak_password" || /password should|weak/i.test(error.message)) wrapped.code = "weak_password";
     else if (error.status === 429 || /rate limit|security purposes/i.test(error.message)) wrapped.code = "rate_limited";
+    else if (isCaptchaFailure(error)) wrapped.code = "captcha_failed";
     return wrapped;
+}
+
+/** Odmítla Supabase požadavek kvůli neplatné / chybějící CAPTCHA (V2.6)? */
+function isCaptchaFailure(error) {
+    return error?.code === "captcha_failed" || /captcha/i.test(error?.message ?? "");
 }
 const listeners = new Set();
 
@@ -129,17 +135,23 @@ export async function isUsernameAvailable(username) {
 /**
  * Registrace. Nickname se předá v metadatech, profil založí trigger v databázi.
  * Vrací { needsConfirmation: true }, když je zapnuté potvrzování e-mailu.
+ * captchaToken = token z Turnstile (V2.6; bez zapnuté CAPTCHA undefined).
  */
-export async function signUp({ username, email, password }) {
+export async function signUp({ username, email, password, captchaToken }) {
     const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
             data: { username },
             emailRedirectTo: SITE_URL,
+            captchaToken,
         },
     });
-    if (error) throw new Error(error.message);
+    if (error) {
+        const wrapped = new Error(error.message);
+        if (isCaptchaFailure(error)) wrapped.code = "captcha_failed";
+        throw wrapped;
+    }
     return { needsConfirmation: !data.session };
 }
 
@@ -148,23 +160,26 @@ export async function signUp({ username, email, password }) {
  * E-mail jde rovnou do Supabase Auth; nick přes Edge Function "login",
  * která k němu na serveru dohledá e-mail a vrátí tokeny relace.
  */
-export async function signIn({ login, password }) {
+export async function signIn({ login, password, captchaToken }) {
     if (login.includes("@")) {
-        const { error } = await supabase.auth.signInWithPassword({ email: login, password });
+        const { error } = await supabase.auth.signInWithPassword({ email: login, password, options: { captchaToken } });
         if (error) {
             // Nepotvrzený e-mail → kód pro srozumitelnou hlášku a tlačítko „poslat znovu“
             if (error.code === "email_not_confirmed" || /email not confirmed/i.test(error.message)) {
                 error.code = "email_not_confirmed";
+            } else if (isCaptchaFailure(error)) {
+                error.code = "captcha_failed";
             }
             throw error;
         }
         return;
     }
 
+    // Funkce „login“ si token ověří sama u Cloudflare (V2.6)
     const response = await fetch(`${SUPABASE_URL}/functions/v1/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json", apikey: SUPABASE_PUBLISHABLE_KEY },
-        body: JSON.stringify({ login, password }),
+        body: JSON.stringify({ login, password, captchaToken }),
     });
     const body = await response.json().catch(() => ({}));
     if (!response.ok) {
@@ -185,14 +200,15 @@ export async function signIn({ login, password }) {
  * E-mail jde rovnou přes Supabase Auth; u nicku přes funkci „login“ (vyžaduje správné heslo,
  * e-mail se do prohlížeče nedostane). Při příliš častém posílání chyba s kódem rate_limited.
  */
-export async function resendConfirmation({ login, password }) {
+export async function resendConfirmation({ login, password, captchaToken }) {
     if (login.includes("@")) {
         const { error } = await supabase.auth.resend({
-            type: "signup", email: login, options: { emailRedirectTo: SITE_URL },
+            type: "signup", email: login, options: { emailRedirectTo: SITE_URL, captchaToken },
         });
         if (error) {
             const wrapped = new Error(error.message);
             if (error.status === 429 || /rate limit|security purposes/i.test(error.message)) wrapped.code = "rate_limited";
+            else if (isCaptchaFailure(error)) wrapped.code = "captcha_failed";
             throw wrapped;
         }
         return;
@@ -201,7 +217,7 @@ export async function resendConfirmation({ login, password }) {
     const response = await fetch(`${SUPABASE_URL}/functions/v1/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json", apikey: SUPABASE_PUBLISHABLE_KEY },
-        body: JSON.stringify({ login, password, resend: true }),
+        body: JSON.stringify({ login, password, resend: true, captchaToken }),
     });
     const body = await response.json().catch(() => ({}));
     if (!response.ok || !body.resent) {
@@ -215,8 +231,8 @@ export async function resendConfirmation({ login, password }) {
  * Odkaz pro nastavení nového hesla na e-mail (V2.5). Supabase odpoví stejně, ať účet
  * existuje, nebo ne – nedá se tak zjistit, kdo má účet. Odkaz vede na web s ?reset=1.
  */
-export async function requestPasswordReset(email) {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${SITE_URL}?reset=1` });
+export async function requestPasswordReset(email, captchaToken) {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${SITE_URL}?reset=1`, captchaToken });
     if (error) throw passwordError(error);
 }
 
@@ -235,14 +251,17 @@ export function hasPassword() {
 
 /**
  * Změna hesla v profilu (V2.5). Účet s heslem musí zadat současné – ověří se novým
- * přihlášením; účet z Googlu si heslo nastaví poprvé (pak se může přihlásit i e-mailem).
+ * přihlášením (to chce CAPTCHA token, V2.6); účet z Googlu si heslo nastaví poprvé
+ * (pak se může přihlásit i e-mailem).
  */
-export async function changePassword({ current, next }) {
+export async function changePassword({ current, next, captchaToken }) {
     if (hasPassword()) {
-        const { error } = await supabase.auth.signInWithPassword({ email: state.user.email, password: current ?? "" });
+        const { error } = await supabase.auth.signInWithPassword({
+            email: state.user.email, password: current ?? "", options: { captchaToken },
+        });
         if (error) {
             const wrapped = new Error(error.message);
-            wrapped.code = "wrong_password";
+            wrapped.code = isCaptchaFailure(error) ? "captcha_failed" : "wrong_password";
             throw wrapped;
         }
     }

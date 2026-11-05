@@ -6,6 +6,7 @@ import {
     changePassword, hasPassword, passwordProblem,
 } from "../auth.js";
 import { passwordErrorText } from "./password.js";
+import { createCaptcha, captchaErrorText } from "../captcha.js";
 import { PASSWORD_MIN_LENGTH } from "../config.js";
 import { profileUrl, shareProfile } from "../social.js";
 import { navigate } from "../router.js";
@@ -181,6 +182,9 @@ function changePasswordCard() {
     const error = h("p", { class: "form-error", role: "alert" });
     const submit = h("button", { class: "btn btn--primary btn--block", type: "submit" },
         withPassword ? TEXTS.changePasswordSubmit : TEXTS.setPasswordSubmit);
+    // Ověření současného hesla je přihlášení → chce CAPTCHA (V2.6). Načte se až při
+    // prvním kliknutí do karty – většina návštěv profilu heslo nemění.
+    const captcha = withPassword ? createCaptcha({ lazy: true }) : null;
 
     const form = h("form", { class: "auth-form", novalidate: true, onSubmit: handleSubmit },
         h("h2", {}, withPassword ? TEXTS.changePasswordTitle : TEXTS.setPasswordTitle),
@@ -188,9 +192,11 @@ function changePasswordCard() {
         current ? field(TEXTS.currentPassword, current) : null,
         field(TEXTS.newPassword, next, format("passwordHintRules", PASSWORD_MIN_LENGTH)),
         field(TEXTS.passwordRepeat, repeat),
+        captcha?.element,
         error,
         submit,
     );
+    if (captcha) form.addEventListener("focusin", captcha.prepare, { once: true });
     return form;
 
     async function handleSubmit(event) {
@@ -211,11 +217,14 @@ function changePasswordCard() {
         }
         submit.disabled = true;
         try {
-            await changePassword({ current: current?.value, next: next.value });
+            const captchaToken = captcha ? await captcha.token() : undefined;
+            await changePassword({ current: current?.value, next: next.value, captchaToken });
             toast(TEXTS.passwordChanged);
             form.reset();
         } catch (e) {
-            error.textContent = passwordErrorText(e.code, format("errorGeneric", e.message));
+            error.textContent = captchaErrorText(e) ?? passwordErrorText(e.code, format("errorGeneric", e.message));
+        } finally {
+            captcha?.reset();      // token platí jen jednou
         }
         submit.disabled = false;
     }

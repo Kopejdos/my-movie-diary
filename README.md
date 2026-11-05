@@ -6,7 +6,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V2.5** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V2.6** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
@@ -22,13 +22,12 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Achievements with levels (Bronze → Platinum) and completed-collection badges
 - XP and levels with movie-themed titles – from Extra to Legend
 - Personal stats – activity, most watched movies, decades, categories, streaks and collections you're closest to finishing
-- Sign in with email or nickname & password, or with Google
+- Sign in with email or nickname & password, or with Google; password reset and bot protection (Cloudflare Turnstile)
 - Light and dark mode
 - Admin panel: collections, movies (search TMDB right from the app) and users
 - Installable on a phone or computer (PWA), opens even offline
 
 **Coming next** – optimization & security
-- V2.6 – CAPTCHA
 - V2.7 – optimization, round two
 
 ## Tech stack

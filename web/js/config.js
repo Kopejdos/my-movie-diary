@@ -4,7 +4,7 @@
 
 // Verze aplikace a měsíc poslední aktualizace – zobrazují se v patičce.
 // Při vydání nové verze změnit tady + záznam do CHANGELOG.md + tag (viz docs/decisions.md → Verzování).
-export const APP_VERSION = "V2.5";
+export const APP_VERSION = "V2.6";
 export const APP_UPDATED = "November 2026";
 
 export const SUPABASE_URL = "https://vvnexfdnfvwbwluazwoo.supabase.co";
@@ -40,3 +40,9 @@ export const USERNAME_PATTERN = /^[A-Za-z0-9_-]{3,24}$/;
 export const PASSWORD_MIN_LENGTH = 8;
 // Heslo musí obsahovat písmeno i číslici (stejně jako nastavení Supabase → Email → Password requirements, V2.5)
 export const PASSWORD_NEEDS_LETTER_AND_DIGIT = true;
+
+// Ochrana proti robotům – Cloudflare Turnstile (V2.6).
+// Site key je veřejný (patří do webu); SECRET key sem NIKDY – ten patří jen do Supabase
+// (Attack Protection) a do tajemství Edge Functions (TURNSTILE_SECRET_KEY).
+// Prázdný řetězec = ochrana vypnutá.
+export const TURNSTILE_SITE_KEY = "0x4AAAAAAF1iO11Mh0prkHNd";

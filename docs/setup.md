@@ -130,6 +130,23 @@ U každé: Subject přepsat, do **Message body** vložit celý obsah souboru →
 - **URL Configuration → Redirect URLs:** přidat `https://kopejdos.github.io/my-movie-diary/**` – odkaz pro obnovu
   hesla vede na `…/?reset=1` (bez téhle položky obnova funguje taky, jen v jiném prohlížeči by se ukázala obecnější hláška).
 
+### 6c. CAPTCHA – Cloudflare Turnstile (V2.6)
+
+**Pořadí je důležité** – kdyby se CAPTCHA zapnula v Supabase dřív, než web posílá tokeny, nikdo se nepřihlásí.
+
+1. **Cloudflare:** účet zdarma na dash.cloudflare.com → **Turnstile → Add widget**: název `My Movie Diary`,
+   hostname `kopejdos.github.io` (pro testy na počítači případně i `localhost`), Widget mode **Managed**,
+   pre-clearance **No** → Create. Zobrazí se **Site key** (veřejný) a **Secret key** (tajný – jen do správce hesel).
+2. **Web:** site key do `web/js/config.js` → `TURNSTILE_SITE_KEY = "…"`.
+3. **Funkce `login`:** Supabase → **Edge Functions → Secrets** → `TURNSTILE_SECRET_KEY` = secret key;
+   pak nasadit novou verzi funkce `login` (Verify JWT zůstává vypnuté).
+4. **Push** webu, počkat na nasazení a vyzkoušet přihlášení – CAPTCHA už běží, Supabase ji zatím nevyžaduje.
+5. **Supabase → Authentication → Attack Protection** (dříve *Bot and Abuse Protection*) → **Enable CAPTCHA
+   protection** → provider **Turnstile by Cloudflare** → Secret key → Save.
+6. **Test:** přihlášení e-mailem i nickem, registrace, Forgot password, změna hesla v profilu.
+
+Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny posílá zbytečně, nevadí).
+
 **Test:** registrace v anonymním okně s `adiskop987+test@gmail.com` → mail od My Movie Diary (zkontrolovat i spam)
 → odkaz → přihlášení → zkušební účet smazat v Admin → Users.
 

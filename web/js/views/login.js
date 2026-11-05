@@ -5,7 +5,14 @@ import { navigate } from "../router.js";
 import { TEXTS, format } from "../texts.js";
 import { MIN_AGE } from "../config.js";
 import { setAccent } from "../theme.js";
+import { createCaptcha, captchaErrorText } from "../captcha.js";
 import { h, mount, toast } from "../dom.js";
+
+/**
+ * Co uživatel naposledy napsal do pole „Email or nickname“ (V2.6).
+ * Obrazovka Forgot password si z toho předvyplní e-mail.
+ */
+export let lastLoginInput = "";
 
 export async function loginView(container) {
     setAccent(null);
@@ -23,13 +30,21 @@ export async function loginView(container) {
     const submit = h("button", { class: "btn btn--primary btn--block", type: "submit" }, TEXTS.submitSignIn);
     // Tlačítko „poslat potvrzení znovu“ – ukáže se jen u nepotvrzeného e-mailu (V2.4)
     const resend = h("button", { class: "btn btn--block", type: "button", hidden: true }, TEXTS.resendConfirmation);
+    // Ochrana proti robotům (V2.6) – jeden widget pro přihlášení i „poslat znovu“
+    const captcha = createCaptcha();
+    login.addEventListener("input", () => { lastLoginInput = login.value.trim(); });
+    login.value = lastLoginInput;
     resend.addEventListener("click", async () => {
         resend.disabled = true;
         try {
-            await resendConfirmation({ login: login.value.trim(), password: password.value });
+            const captchaToken = await captcha.token();
+            await resendConfirmation({ login: login.value.trim(), password: password.value, captchaToken });
             toast(TEXTS.resendDone);
         } catch (e) {
-            toast(e.code === "rate_limited" ? TEXTS.resendRateLimited : format("errorGeneric", e.message), "error");
+            toast(captchaErrorText(e)
+                ?? (e.code === "rate_limited" ? TEXTS.resendRateLimited : format("errorGeneric", e.message)), "error");
+        } finally {
+            captcha.reset();
         }
         resend.disabled = false;
     });
@@ -41,6 +56,7 @@ export async function loginView(container) {
         field(TEXTS.emailOrNickname, login),
         field(TEXTS.password, password),
         h("p", { class: "auth-form__forgot" }, h("a", { href: "#/forgot" }, TEXTS.forgotLink)),
+        captcha.element,
         error,
         submit,
         resend,
@@ -49,7 +65,7 @@ export async function loginView(container) {
     );
 
     mount(container, h("div", { class: "auth-page" }, form));
-    login.focus();
+    (login.value ? password : login).focus();
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -57,10 +73,14 @@ export async function loginView(container) {
         resend.hidden = true;
         submit.disabled = true;
         try {
-            await signIn({ login: login.value.trim(), password: password.value });
+            const captchaToken = await captcha.token();
+            await signIn({ login: login.value.trim(), password: password.value, captchaToken });
             // Přesměrování na přehled zařídí app.js po změně přihlášení
         } catch (e) {
-            if (e?.code === "email_not_confirmed") {
+            const captchaText = captchaErrorText(e);
+            if (captchaText) {
+                error.textContent = captchaText;
+            } else if (e?.code === "email_not_confirmed") {
                 error.textContent = TEXTS.errorEmailNotConfirmed;
                 resend.hidden = false;
             } else {
@@ -69,6 +89,8 @@ export async function loginView(container) {
                     : e.message;
             }
             submit.disabled = false;
+        } finally {
+            captcha.reset();     // token platí jen jednou – pro další pokus nový
         }
     }
 }

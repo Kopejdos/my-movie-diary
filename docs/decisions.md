@@ -262,7 +262,7 @@ Hororové vlny se střídají s funkcemi, aby každá verze přinesla něco nov�
 | 21 | V2.3 | Nicky a moderace ✅ | **filtr nicků v databázi** (zakázaná slova česky i anglicky, obcházení typu `f4gg0t` a podtržítek, rezervovaná jména admin / support / moderator), seznam zakázaných slov spravovaný v adminu, **Reset nickname** v adminu, **Delete my account** pro uživatele (Edge Function, právo na výmaz) |
 | 22 | V2.4 | E-mail ✅ | **vlastní SMTP** (samostatný Gmail + heslo aplikace), **vlastní vzhled mailů** v designu MMD (potvrzení, obnova hesla, změna e-mailu), po potvrzení hláška a přesměrování na přihlášení, „Please confirm your email“ i u přihlášení nickem, **Resend confirmation** |
 | 23 | V2.5 | Hesla ✅ | **Forgot password** (stránka pro nové heslo), **změna hesla v profilu**, přísnější pravidla hesla (délka, povinné znaky) i v Supabase |
-| 24 | V2.6 | CAPTCHA | Cloudflare Turnstile – registrace, přihlášení (i nickem přes funkci `login`), obnova hesla, Resend confirmation; zmínka v zásadách (zpracovává Cloudflare) |
+| 24 | V2.6 | CAPTCHA ✅ | Cloudflare Turnstile – registrace, přihlášení (i nickem přes funkci `login`), obnova hesla, Resend confirmation, změna hesla; zmínka v zásadách (zpracovává Cloudflare); předvyplnění e-mailu u Forgot password a rámeček s účtem u nového hesla |
 | 25 | V2.7 | Optimalizace 2 | druhé kolo měření a zrychlení (Lighthouse, případně minifikace) – poslední verze kapitoly |
 
 **Test 5. 11. 2026:** po zapnutí *Confirm email* s výchozí službou Supabase přišel potvrzovací mail i na soukromou adresu
@@ -836,6 +836,30 @@ přihlášení a databáze, bez realtime a storage), případně minifikace.
   zpožděním po startu. Značka `?reset=1` v adrese odkazu navíc pozná odkaz i v jiném prohlížeči.
 - **Ověření současného hesla před změnou** – kdo si nechá otevřený počítač, nezmění heslo jen tak.
 - **Kontrola uniklých hesel (HaveIBeenPwned)** je v Supabase jen v placeném plánu – nepoužívá se.
+
+### Fáze 24 – CAPTCHA ✅ (6. 11. 2026) – **V2.6**
+- **Cloudflare Turnstile** (`web/js/captcha.js`) ve všech formulářích, které posílají heslo nebo e-mail: registrace,
+  přihlášení (e-mailem i nickem), Forgot password, Resend confirmation (přihlášení i obrazovka po registraci) a
+  Change password v profilu (ověření současného hesla je přihlášení).
+- Režim **interaction-only** – většinou neviditelný; políčko „Verify you are human“ jen při podezření.
+- Token platí jednou → po každém odeslání `reset()` a widget si na pozadí vezme nový.
+- Skript Cloudflare se načítá jen na stránkách s formulářem; v profilu až po kliknutí do karty změny hesla.
+- **Funkce `login`** ověřuje token sama (`TURNSTILE_SECRET_KEY`) před dohledáním nicku.
+- **Forgot password:** e-mail se předvyplní z pole na přihlášení; zadaný nick → upozornění „zadej e-mail toho účtu“.
+  Formulář nového hesla ukazuje rámeček **Account: nick + e-mail**, ať je jasné, čí heslo se mění.
+- Zásady ochrany soukromí: nová sekce *Bot protection* (Cloudflare zpracovává IP a údaje o prohlížeči).
+
+#### Rozhodnutí ve fázi 24
+- **Turnstile místo hCaptcha / reCAPTCHA** – zdarma, bez skládaček s obrázky, bez reklamních cookies; Supabase ho
+  podporuje přímo (Attack Protection).
+- **Token ověřuje i funkce `login`** – Supabase Auth u požadavků se serverovým klíčem (service_role) CAPTCHA
+  přeskakuje, takže bez vlastní kontroly by přihlášení nickem ochranu obcházelo.
+- **Bez klíče = vypnuto** – prázdný `TURNSTILE_SITE_KEY` / chybějící `TURNSTILE_SECRET_KEY` ochranu vypne;
+  díky tomu jde nasadit nejdřív web a funkci a teprve pak CAPTCHA zapnout v Supabase (opačné pořadí by
+  zablokovalo přihlašování).
+- **Žádná kontrola „nick a e-mail k sobě nepatří“ u obnovy hesla** – odkaz přijde jen do schránky zadaného
+  e-mailu, cizí heslo tak změnit nejde. Hláška o nesouladu by naopak komukoli umožnila zjistit, jaký e-mail má
+  který veřejný nick. Srozumitelnost řeší předvyplnění e-mailu a rámeček s účtem.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

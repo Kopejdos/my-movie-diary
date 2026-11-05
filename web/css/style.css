@@ -3213,3 +3213,40 @@ button {
     text-align: right;
     font-size: 0.85rem;
 }
+
+/* Ochrana proti robotům (V2.6) – Turnstile je většinou neviditelný (prázdný prvek by
+   v mřížce formuláře přidal mezeru navíc, záporné okraje ji vyrovnají); když chce
+   kliknutí, ukáže se políčko na střed. */
+.captcha {
+    display: flex;
+    justify-content: center;
+    margin: -8px 0;
+}
+
+/* Na koho se nové heslo vztahuje (V2.6) */
+.account-box {
+    display: grid;
+    gap: 2px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--accent) 7%, transparent);
+}
+
+.account-box__label {
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.account-box__name {
+    font-size: 1.1rem;
+    overflow-wrap: anywhere;
+}
+
+.account-box__email {
+    font-size: 0.85rem;
+    color: var(--muted);
+    overflow-wrap: anywhere;
+}
