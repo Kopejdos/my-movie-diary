@@ -112,6 +112,15 @@ ale může být ve více univerzech.
 | `tmdb_id` | `integer` FK → `films` | |
 | `added_at` | `timestamptz` | |
 
+### `blocked_words` – zakázaná slova v nickách (V2.3)
+
+| Sloupec | Typ | Popis |
+|---|---|---|
+| `id` | `bigint` | identifikátor |
+| `word` | `text` | slovo – malá písmena a číslice, 2–30 znaků |
+| `match_mode` | `text` | `contains` = kdekoli v nicku, `exact` = celý nick (pro slova, která by blokovala nevinné nicky) |
+| `created_at` | `timestamptz` | kdy bylo přidáno |
+
 ### `heartbeat` – keep-alive
 | Sloupec | Typ | Poznámka |
 |---|---|---|
@@ -139,6 +148,18 @@ Zapisuje do ní jen GitHub Action přes databázovou funkci `ping()`; drží se 
 
 Výpočty běží v databázi, ne v prohlížeči – web dostane hotová čísla jedním dotazem.
 
+**Moderace nicků (V2.3):**
+- **`normalize_username(text)`** – malá písmena, `0→o 1→i 3→e 4→a 5→s 7→t 8→b @→a $→s`, bez ostatních znaků,
+  sloučená opakovaná písmena (`F_u-u-uck` → `fuck`, `k0k0t` → `kokot`).
+- **`is_username_allowed(username)`** – neobsahuje nick zakázané slovo? (smí i nepřihlášený; automatický nick
+  `user_xxxxxxxx` je vždy povolený).
+- **Trigger `profiles_username_allowed`** – při každém vložení nebo změně nicku; zakázaný nick skončí chybou
+  `username_not_allowed`.
+- **`handle_new_user()`** – při registraci se zakázaným, neplatným nebo obsazeným nickem dostane účet automatický
+  nick (uživatel si pak zvolí jiný).
+- **`flagged_profile_ids()`** – účty (mimo správce), jejichž nick porušuje pravidla; jen `service_role`
+  (Edge Function `admin`).
+
 ## Pravidla přístupu (Row Level Security)
 
 | Tabulka | Čtení | Zápis |
@@ -148,6 +169,7 @@ Výpočty běží v databázi, ne v prohlížeči – web dostane hotová čísl
 | `profiles` | jen vlastní řádek; veřejné profily ostatních jen přes funkce `public_profile` / `search_public_profiles` | jen vlastní řádek, jen sloupce `username` a `is_public` |
 | `watches` | jen vlastní řádky; zhlédnutí veřejných profilů (film + datum) jen přes `public_profile` | jen vlastní řádky |
 | `watchlist` | jen vlastní řádky (vždy soukromý) | jen vlastní řádky |
+| `blocked_words` | jen správce | jen správce |
 | `heartbeat` | nikdo | jen funkce `ping()` |
 
 Vlastní univerza uživatelů (později) se přidají jako další pravidlo: řádky s `owner_id` vidí a mění jen jejich vlastník.

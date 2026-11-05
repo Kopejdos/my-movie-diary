@@ -42,6 +42,29 @@ export const addFilmFromTmdb = (tmdbId) => callAdmin("add-film", { tmdb_id: tmdb
 export const listUsers = () => callAdmin("users");
 export const setUserAdmin = (userId, isAdmin) => callAdmin("set-admin", { user_id: userId, is_admin: isAdmin });
 export const deleteUser = (userId) => callAdmin("delete-user", { user_id: userId });
+export const resetUsername = (userId) => callAdmin("reset-username", { user_id: userId });
+
+// ---------------------------------------------------------------------
+// Zakázaná slova v nickách (V2.3)
+// ---------------------------------------------------------------------
+
+/** Seznam zakázaných slov (jen pro správce – pravidla RLS). */
+export async function listBlockedWords() {
+    return await supabase
+        .from("blocked_words")
+        .select("id, word, match_mode, created_at")
+        .order("word")
+        .then(check);
+}
+
+/** Přidá slovo; word = malá písmena a číslice, mode = "contains" | "exact". */
+export async function addBlockedWord(word, mode) {
+    await supabase.from("blocked_words").insert({ word, match_mode: mode }).then(check);
+}
+
+export async function removeBlockedWord(id) {
+    await supabase.from("blocked_words").delete().eq("id", id).then(check);
+}
 
 // ---------------------------------------------------------------------
 // Univerza

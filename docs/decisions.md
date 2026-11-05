@@ -259,7 +259,7 @@ Hororové vlny se střídají s funkcemi, aby každá verze přinesla něco nov�
 |---|---|---|---|
 | 19 | V2.1 | Optimalizace ✅ | plakáty a banner ve správné velikosti, mezipaměť katalogu, detail kolekce jedním dotazem, přednačtení po najetí na kartu |
 | 20 | V2.2 | O aplikaci a pravidla ✅ | stránka **About** (co je MMD, kdo ho dělá, TMDB, verze), **kontakt**, nová **patička** (About · Terms · Privacy · Contact · GitHub), **Terms of Service** a **pravidla komunity** (nicky, minimální věk 15 let, právo smazat / přejmenovat účet), souhlas při registraci, aktualizace zásad ochrany soukromí (co se ukládá, admin vidí e-mail, propojení účtů) |
-| 21 | V2.3 | Nicky a moderace | **filtr nicků v databázi** (zakázaná slova česky i anglicky, obcházení typu `f4gg0t` a podtržítek, rezervovaná jména admin / support / moderator), seznam zakázaných slov spravovaný v adminu, **Reset nickname** v adminu, **Delete my account** pro uživatele (Edge Function, právo na výmaz) |
+| 21 | V2.3 | Nicky a moderace ✅ | **filtr nicků v databázi** (zakázaná slova česky i anglicky, obcházení typu `f4gg0t` a podtržítek, rezervovaná jména admin / support / moderator), seznam zakázaných slov spravovaný v adminu, **Reset nickname** v adminu, **Delete my account** pro uživatele (Edge Function, právo na výmaz) |
 | 22 | V2.4 | E-mail | **vlastní SMTP** (samostatný Gmail + heslo aplikace), **vlastní vzhled mailů** v designu MMD (potvrzení, obnova hesla, změna e-mailu), po potvrzení hláška a přesměrování na přihlášení, „Please confirm your email“ i u přihlášení nickem, **Resend confirmation** |
 | 23 | V2.5 | Hesla | **Forgot password** (stránka pro nové heslo), **změna hesla v profilu**, přísnější pravidla hesla (délka, povinné znaky) i v Supabase |
 | 24 | V2.6 | CAPTCHA | Cloudflare Turnstile – registrace, přihlášení (i nickem přes funkci `login`), obnova hesla, Resend confirmation; zmínka v zásadách (zpracovává Cloudflare) |
@@ -770,6 +770,30 @@ přihlášení a databáze, bez realtime a storage), případně minifikace.
 - **Terms a Privacy jako statické stránky** (ne obrazovky aplikace) – fungují bez JavaScriptu a mají stálou adresu
   pro nastavení přihlášení přes Google (Branding → Terms of service).
 - **Souhlas se neukládá do databáze** – registrace bez zaškrtnutí neprojde; případné ukládání data souhlasu později.
+
+### Fáze 21 – nicky a moderace ✅ (6. 11. 2026) – **V2.3**
+- **Filtr nicků v databázi** (migrace `20261106000000_nickname_moderation.sql`): tabulka `blocked_words`,
+  normalizace nicku (malá písmena, čísla a znaky za písmena, bez `_` `-`, sloučená opakovaná písmena) a trigger
+  při každém uložení nicku – nedá se obejít voláním API mimo web.
+- **Výchozí seznam** – 57 slov: vulgarity a sexuální výrazy, nenávist a urážky, česká sprostá slova, vydávání se za
+  správce / aplikaci (admin, moderator, support, mymoviediary…).
+- **Registrace** – web nick předem ověří (`is_username_allowed`) a ukáže hlášku; kdyby se kontrola obešla, účet
+  vznikne s automatickým nickem a uživatel si musí zvolit jiný. Totéž při obsazeném nicku (dřív by registrace spadla).
+- **Profil** – změna na zakázaný nick skončí srozumitelnou hláškou.
+- **Admin → Nicknames** (`#/admin/words`) – seznam slov, přidání (anywhere / whole nickname), odebrání.
+- **Admin → Users** – štítek **⚠ Nickname breaks the rules** a tlačítko **Reset nickname** (automatický nick +
+  skrytý veřejný profil; uživatel si při dalším otevření musí zvolit nový).
+- **Delete my account** na profilu – potvrzení opsáním vlastního nicku; nová Edge Function `account` smaže účet
+  přes admin API (profil, zhlédnutí a watchlist zmizí díky `on delete cascade`). Správce se takhle smazat nemůže.
+
+#### Rozhodnutí ve fázi 21
+- **Dva režimy slova** – `contains` pro jednoznačná slova, `exact` pro ta, která jsou součástí běžných slov
+  (rape → grape, pica → Picasso, dick → Dickens, cum → document, anal → canal, mod → modern).
+- **Slova jako „gay“ nebo „furry“ se neblokují** – sama o sobě nejsou urážlivá a blokovala by běžné uživatele;
+  nevhodné kombinace řeší admin resetem nicku.
+- **Správci se neoznačují** – účet „admin“ vznikl před zavedením pravidel (rezervované slovo).
+- **Smazání účtu přes Edge Function, ne SQL** – oficiální admin API Supabase uklidí i relace a propojené identity.
+- **Žádný filtr není dokonalý** – kombinace: seznam slov + pravidla v Terms + reset nicku + smazání účtu.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

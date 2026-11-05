@@ -3,6 +3,11 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V2.3 – November 2026
+- Nicknames are checked against community rules – also with numbers and symbols instead of letters
+- Delete your account and all your data from your profile page
+- Admin: blocked words list, "nickname breaks the rules" flag and Reset nickname
+
 ## V2.2 – November 2026
 - About page with community rules and contact
 - New footer: About · Terms · Privacy · Contact · GitHub

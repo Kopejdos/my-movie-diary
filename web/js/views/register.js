@@ -1,6 +1,6 @@
 // Obrazovka: registrace (nickname, e-mail, heslo).
 
-import { signUp, isUsernameAvailable, isSignedIn } from "../auth.js";
+import { signUp, isUsernameAvailable, isUsernameAllowed, isSignedIn } from "../auth.js";
 import { navigate } from "../router.js";
 import { USERNAME_PATTERN, PASSWORD_MIN_LENGTH, MIN_AGE } from "../config.js";
 import { TEXTS, format } from "../texts.js";
@@ -70,6 +70,11 @@ export async function registerView(container) {
         submit.disabled = true;
         try {
             const name = username.value.trim();
+            if (!(await isUsernameAllowed(name))) {
+                error.textContent = TEXTS.errorUsernameNotAllowed;
+                submit.disabled = false;
+                return;
+            }
             if (!(await isUsernameAvailable(name))) {
                 error.textContent = TEXTS.errorUsernameTaken;
                 submit.disabled = false;

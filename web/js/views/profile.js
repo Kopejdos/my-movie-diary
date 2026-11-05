@@ -2,7 +2,7 @@
 
 import {
     getUser, getProfile, isSignedIn, updateUsername, isUsernameAvailable, hasGeneratedUsername, signOut,
-    setProfilePublic,
+    setProfilePublic, isUsernameAllowed, deleteMyAccount, signOutLocal,
 } from "../auth.js";
 import { profileUrl, shareProfile } from "../social.js";
 import { navigate } from "../router.js";
@@ -59,7 +59,7 @@ export async function profileView(container) {
     );
 
     // Achievementy nahoře; kdo má ještě automatický nick (Google), vidí nejdřív volbu nicku
-    const settings = h("div", { class: "auth-page auth-page--stack" }, form, installCard());
+    const settings = h("div", { class: "auth-page auth-page--stack" }, form, installCard(), deleteAccountCard());
     mount(container,
         generated ? settings : null,
         profileTabs("profile"),
@@ -85,6 +85,11 @@ export async function profileView(container) {
 
         submit.disabled = true;
         try {
+            if (!(await isUsernameAllowed(name))) {
+                error.textContent = TEXTS.errorUsernameNotAllowed;
+                submit.disabled = false;
+                return;
+            }
             if (!(await isUsernameAvailable(name))) {
                 error.textContent = TEXTS.errorUsernameTaken;
                 submit.disabled = false;
@@ -94,7 +99,7 @@ export async function profileView(container) {
             toast(TEXTS.profileSaved);
             navigate("/");
         } catch (e) {
-            error.textContent = e.message;
+            error.textContent = e.code === "username_not_allowed" ? TEXTS.errorUsernameNotAllowed : e.message;
             submit.disabled = false;
         }
     }
@@ -155,6 +160,48 @@ function publicProfileCard() {
     }
 
     render();
+    return card;
+}
+
+/**
+ * Karta „Delete account“ (V2.3): smazání účtu po opsání vlastního nicku.
+ * Správce místo tlačítka vidí vysvětlení (nejdřív musí předat roli).
+ */
+function deleteAccountCard() {
+    const profile = getProfile();
+    const card = h("section", { class: "auth-form danger-card" }, h("h2", {}, TEXTS.deleteTitle));
+
+    if (profile?.is_admin) {
+        card.append(h("p", { class: "muted" }, TEXTS.deleteAdmin));
+        return card;
+    }
+
+    const confirm = h("input", {
+        type: "text", autocomplete: "off", spellcheck: "false",
+        placeholder: profile?.username ?? "", "aria-label": TEXTS.deleteConfirmLabel,
+    });
+    const button = h("button", { class: "btn btn--block btn--danger", type: "button", disabled: true }, TEXTS.deleteButton);
+    confirm.addEventListener("input", () => {
+        button.disabled = confirm.value.trim() !== (getProfile()?.username ?? "\u0000");
+    });
+    button.addEventListener("click", async () => {
+        button.disabled = true;
+        try {
+            await deleteMyAccount();
+            navigate("/");                 // nejdřív pryč z profilu, ať po odhlášení nepřesměruje na login
+            await signOutLocal();
+            toast(TEXTS.deleteDone);
+        } catch (e) {
+            toast(e.code === "admin_cannot_delete" ? TEXTS.deleteAdmin : format("errorGeneric", e.message), "error");
+            button.disabled = false;
+        }
+    });
+
+    card.append(
+        h("p", { class: "muted" }, TEXTS.deleteText),
+        field(TEXTS.deleteConfirmLabel, confirm),
+        button,
+    );
     return card;
 }
 

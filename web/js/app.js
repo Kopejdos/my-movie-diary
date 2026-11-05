@@ -34,6 +34,7 @@ const statsView = lazy(() => import("./views/stats.js"), "statsView");
 const publicProfileView = lazy(() => import("./views/public-profile.js"), "publicProfileView");
 const adminUniversesView = lazy(() => import("./views/admin.js"), "adminUniversesView");
 const adminUsersView = lazy(() => import("./views/admin.js"), "adminUsersView");
+const adminWordsView = lazy(() => import("./views/admin.js"), "adminWordsView");
 const adminUniverseView = lazy(() => import("./views/admin-universe.js"), "adminUniverseView");
 const aboutView = lazy(() => import("./views/about.js"), "aboutView");
 
@@ -57,6 +58,7 @@ addRoute("/u/:username", publicProfileView);
 addRoute("/about", aboutView);
 addRoute("/admin", adminUniversesView);
 addRoute("/admin/users", adminUsersView);
+addRoute("/admin/words", adminWordsView);
 addRoute("/admin/collection/:slug", adminUniverseView);
 addRoute("/admin/universe/:slug", (container, { params }) => redirect(`/admin/collection/${params.slug}`)());
 setNotFound(notFoundView);

@@ -11,6 +11,7 @@
 //   users        {}                     → seznam uživatelů (nick, e-mail, správce, počet zhlédnutí)
 //   set-admin    { user_id, is_admin }  → udělí / odebere správce (ne sám sobě)
 //   delete-user  { user_id }            → smaže účet i všechna jeho data (ne sám sebe)
+//   reset-username { user_id }          → automatický nick + skrytý profil (V2.3, ne sám sobě)
 //
 // V nastavení funkce musí být vypnuté "Verify JWT" (ověřuje si přístup sama).
 // =====================================================================
@@ -159,12 +160,19 @@ async function listUsers(db: SupabaseClient) {
   const { data, error } = await db.auth.admin.listUsers({ page: 1, perPage: 1000 });
   if (error) throw new Error(error.message);
 
-  const [{ data: profiles, error: profileError }, { data: watches, error: watchError }] = await Promise.all([
-    db.from("profiles").select("id, username, is_admin, created_at"),
+  const [
+    { data: profiles, error: profileError },
+    { data: watches, error: watchError },
+    { data: flagged, error: flaggedError },
+  ] = await Promise.all([
+    db.from("profiles").select("id, username, is_admin, is_public, created_at"),
     db.from("watches").select("user_id"),
+    db.rpc("flagged_profile_ids"),
   ]);
   if (profileError) throw new Error(profileError.message);
   if (watchError) throw new Error(watchError.message);
+  if (flaggedError) throw new Error(flaggedError.message);
+  const flaggedIds = new Set((flagged ?? []) as string[]);
 
   const profileById = new Map((profiles ?? []).map((p) => [p.id, p]));
   const watchCount = new Map<string, number>();
@@ -178,6 +186,8 @@ async function listUsers(db: SupabaseClient) {
         email: user.email ?? null,
         username: profile?.username ?? null,
         is_admin: profile?.is_admin ?? false,
+        is_public: profile?.is_public ?? false,
+        flagged: flaggedIds.has(user.id),        // nick porušuje pravidla (V2.3)
         provider: (user.app_metadata?.provider as string | undefined) ?? "email",
         created_at: user.created_at,
         last_sign_in_at: user.last_sign_in_at ?? null,
@@ -200,6 +210,18 @@ async function deleteUser(db: SupabaseClient, selfId: string, userId: string) {
   const { error } = await db.auth.admin.deleteUser(userId);
   if (error) throw new Error(error.message);
   return { ok: true };
+}
+
+/**
+ * Reset nicku (V2.3): automatický nick user_xxxxxxxx a skrytý veřejný profil.
+ * Uživatel si při dalším otevření webu musí zvolit nový nick (web ho pošle do profilu).
+ */
+async function resetUsername(db: SupabaseClient, selfId: string, userId: string) {
+  if (userId === selfId) throw new HttpError(400, "You cannot reset your own nickname here");
+  const generated = "user_" + userId.replaceAll("-", "").slice(0, 8);
+  const { error } = await db.from("profiles").update({ username: generated, is_public: false }).eq("id", userId);
+  if (error) throw new Error(error.message);
+  return { ok: true, username: generated };
 }
 
 // ---------------------------------------------------------------------
@@ -228,6 +250,8 @@ Deno.serve(async (request) => {
         return json(await setAdmin(db, selfId, String(body.user_id), body.is_admin === true));
       case "delete-user":
         return json(await deleteUser(db, selfId, String(body.user_id)));
+      case "reset-username":
+        return json(await resetUsername(db, selfId, String(body.user_id)));
       default:
         return json({ error: `Unknown action: ${body.action}` }, 400);
     }

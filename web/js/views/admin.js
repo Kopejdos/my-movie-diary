@@ -1,9 +1,11 @@
-// Obrazovky admin panelu: přehled univerz (#/admin) a uživatelé (#/admin/users).
+// Obrazovky admin panelu: přehled univerz (#/admin), uživatelé (#/admin/users)
+// a zakázaná slova v nickách (#/admin/words).
 
 import { getProfile, getUser, isSignedIn } from "../auth.js";
 import {
     listUniversesForAdmin, createUniverse, deleteUniverse, swapUniverseOrder, slugify,
-    listUsers, setUserAdmin, deleteUser,
+    listUsers, setUserAdmin, deleteUser, resetUsername,
+    listBlockedWords, addBlockedWord, removeBlockedWord,
 } from "../admin.js";
 import { setAccent } from "../theme.js";
 import { TEXTS, format, movies, collections } from "../texts.js";
@@ -32,6 +34,7 @@ export function adminHeader(active) {
         h("nav", { class: "tabs" },
             tab("#/admin", TEXTS.adminTabUniverses, "universes"),
             tab("#/admin/users", TEXTS.adminTabUsers, "users"),
+            tab("#/admin/words", TEXTS.adminTabWords, "words"),
         ),
     );
 }
@@ -230,8 +233,10 @@ function userRow(user, isSelf, reload) {
             h("strong", {}, `@${user.username ?? "—"}`),
             h("span", { class: "muted admin-row__email" }, user.email ?? ""),
             h("div", { class: "pills" },
+                user.flagged ? h("span", { class: "pill pill--danger", title: TEXTS.adminFlaggedHint }, `⚠ ${TEXTS.adminFlagged}`) : null,
                 user.is_admin ? pill(TEXTS.profileAdmin, true) : null,
                 isSelf ? pill(TEXTS.adminYou, true) : null,
+                user.is_public ? pill(TEXTS.adminPublic) : null,
                 pill(user.provider === "google" ? "Google" : "Email"),
                 pill(format("adminWatches", user.watch_count)),
                 pill(format("adminJoined", formatDate(user.created_at?.slice(0, 10)))),
@@ -243,6 +248,14 @@ function userRow(user, isSelf, reload) {
                 onClick: () => run(() => setUserAdmin(user.id, !user.is_admin), TEXTS.adminSaved),
             }, user.is_admin ? TEXTS.adminRemoveAdmin : TEXTS.adminMakeAdmin),
             h("button", {
+                class: `btn btn--small${user.flagged ? " btn--primary" : ""}`, type: "button",
+                title: TEXTS.adminResetNicknameHint,
+                onClick: () => {
+                    if (!window.confirm(format("adminConfirmResetNickname", name))) return;
+                    run(() => resetUsername(user.id), TEXTS.adminNicknameReset);
+                },
+            }, TEXTS.adminResetNickname),
+            h("button", {
                 class: "btn btn--small btn--danger", type: "button",
                 onClick: () => {
                     if (!window.confirm(format("adminConfirmDeleteUser", name))) return;
@@ -250,5 +263,87 @@ function userRow(user, isSelf, reload) {
                 },
             }, TEXTS.adminDelete),
         ),
+    );
+}
+
+// =====================================================================
+// Zakázaná slova v nickách (V2.3)
+// =====================================================================
+
+export async function adminWordsView(container, context) {
+    if (!requireAdminView(container)) return;
+    document.title = `${TEXTS.adminTabWords} · ${TEXTS.appName}`;
+    mount(container, adminHeader("words"), loadingView());
+
+    let words;
+    try {
+        words = await listBlockedWords();
+    } catch (error) {
+        if (!context.isCurrent()) return;
+        mount(container, adminHeader("words"), errorView(format("errorGeneric", error.message),
+            () => adminWordsView(container, context)));
+        return;
+    }
+    if (!context.isCurrent()) return;
+
+    const reload = () => adminWordsView(container, context);
+    const word = h("input", {
+        type: "text", class: "admin-input admin-input--grow", maxlength: 30, required: true,
+        placeholder: TEXTS.adminWordPlaceholder, "aria-label": TEXTS.adminWord, spellcheck: "false",
+    });
+    const mode = h("select", { class: "admin-input admin-select", "aria-label": TEXTS.adminWordMode },
+        h("option", { value: "contains" }, TEXTS.adminWordContains),
+        h("option", { value: "exact" }, TEXTS.adminWordExact));
+    const submit = h("button", { class: "btn btn--primary", type: "submit" }, TEXTS.adminAdd);
+
+    async function add(event) {
+        event.preventDefault();
+        const value = word.value.trim().toLowerCase();
+        if (!/^[a-z0-9]{2,30}$/.test(value)) {
+            toast(TEXTS.adminWordInvalid, "error");
+            return;
+        }
+        submit.disabled = true;
+        try {
+            await addBlockedWord(value, mode.value);
+            toast(format("adminWordAdded", value));
+            reload();
+        } catch (error) {
+            toast(format("errorGeneric", error.message), "error");
+            submit.disabled = false;
+        }
+    }
+
+    const row = (w) => h("li", { class: "admin-row admin-row--word" },
+        h("div", { class: "admin-row__info" },
+            h("strong", {}, w.word),
+            h("div", { class: "pills" },
+                pill(w.match_mode === "exact" ? TEXTS.adminWordExact : TEXTS.adminWordContains))),
+        h("div", { class: "admin-row__actions" },
+            h("button", {
+                class: "btn btn--small btn--danger", type: "button",
+                onClick: async (event) => {
+                    event.currentTarget.disabled = true;
+                    try {
+                        await removeBlockedWord(w.id);
+                        toast(format("adminWordRemoved", w.word));
+                        reload();
+                    } catch (error) {
+                        toast(format("errorGeneric", error.message), "error");
+                    }
+                },
+            }, TEXTS.adminRemove)));
+
+    mount(container,
+        adminHeader("words"),
+        h("form", { class: "admin-form", onSubmit: add },
+            h("h2", { class: "admin-form__title" }, TEXTS.adminWordsTitle),
+            h("p", { class: "hint", style: "margin: 0" }, TEXTS.adminWordsHint),
+            h("div", { class: "admin-search" }, word, mode, submit),
+        ),
+        h("div", { class: "section-title" },
+            h("h2", {}, TEXTS.adminTabWords),
+            h("span", { class: "muted" }, String(words.length))),
+        h("ul", { class: "admin-list admin-list--words" }, words.map(row)),
     );
 }

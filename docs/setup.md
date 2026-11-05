@@ -118,6 +118,9 @@ Po změně kódu funkce: v dashboardu otevřít funkci → Code → vložit nov�
    a u ní **vypnout Verify JWT** – funkce si ověřuje přihlášení a správce sama.
 3. Na webu se správci ukáže v hlavičce odkaz **Admin**.
 
+4. **Smazání vlastního účtu (V2.3):** Edge Function `account` (Deploy a new function → Via Editor, obsah
+   `supabase/functions/account/index.ts`) a u ní **vypnout Verify JWT** – ověřuje si přihlášení sama.
+
 **Pozor:** plný import ze seedu přepíše změny z admin panelu u univerz, která jsou v `universes.json`
 (a smaže z nich filmy, které v seedu nejsou). Nová univerza a filmy přidávat přes admin panel.
 

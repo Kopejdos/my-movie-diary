@@ -68,6 +68,23 @@ export async function initAuth() {
     });
 }
 
+/**
+ * Je nickname povolený pravidly komunity? (zakázaná slova – funkce v databázi, V2.3)
+ * Databáze to kontroluje i při uložení; tohle je jen včasná hláška ve formuláři.
+ */
+export async function isUsernameAllowed(username) {
+    const { data, error } = await supabase.rpc("is_username_allowed", { p_username: username });
+    if (error) throw new Error(error.message);
+    return data === true;
+}
+
+/** Chyba z databáze „nick porušuje pravidla“ → srozumitelná výjimka s kódem. */
+function usernameError(error) {
+    const wrapped = new Error(error.message);
+    if (/username_not_allowed/.test(error.message)) wrapped.code = "username_not_allowed";
+    return wrapped;
+}
+
 /** Je nickname volný? (funkce v databázi, funguje i bez přihlášení) */
 export async function isUsernameAvailable(username) {
     const { data, error } = await supabase.rpc("is_username_available", { p_username: username });
@@ -145,7 +162,7 @@ export async function updateUsername(username) {
         .eq("id", state.user.id)
         .select("id, username, is_admin, is_public")
         .single();
-    if (error) throw new Error(error.message);
+    if (error) throw usernameError(error);
     state.profile = data;
     notify();
 }
@@ -161,6 +178,38 @@ export async function setProfilePublic(isPublic) {
     if (error) throw new Error(error.message);
     state.profile = data;
     notify();
+}
+
+/**
+ * Smazání vlastního účtu i všech dat (Edge Function „account“, V2.3).
+ * Relaci v prohlížeči zahodí až signOutLocal() – obrazovka mezitím přejde jinam.
+ * Správce se takhle smazat nemůže (chyba s kódem admin_cannot_delete).
+ */
+export async function deleteMyAccount() {
+    const { data } = await supabase.auth.getSession();
+    const token = data.session?.access_token;
+    if (!token) throw new Error("Not signed in");
+
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/account`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            apikey: SUPABASE_PUBLISHABLE_KEY,
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ action: "delete" }),
+    });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) {
+        const error = new Error(body.error ?? `HTTP ${response.status}`);
+        error.code = body.error;
+        throw error;
+    }
+}
+
+/** Zahodí relaci jen v tomto prohlížeči (po smazání účtu už na serveru není co odhlašovat). */
+export async function signOutLocal() {
+    await supabase.auth.signOut({ scope: "local" }).catch(() => {});
 }
 
 export async function signOut() {
