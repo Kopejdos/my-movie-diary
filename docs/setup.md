@@ -100,6 +100,33 @@ Po změně kódu funkce: v dashboardu otevřít funkci → Code → vložit nov�
    4. **Audience → Publish app.**
    5. Supabase → **Sign In / Providers → Google:** zapnout, vložit Client ID a Client secret.
 
+### 6b. E-maily – vlastní SMTP a šablony (V2.4)
+
+**Odesílání přes Gmail aplikace** (`mymoviediary.support@gmail.com`):
+1. Google účet aplikace → **Zabezpečení → Dvoufázové ověření** zapnout (telefon).
+2. myaccount.google.com/apppasswords → název `Supabase` → **Vytvořit** → 16 znaků uložit do správce hesel
+   (do chatu ani do repozitáře nepatří). Google je ukáže jen jednou.
+3. Supabase → **Authentication → Emails → SMTP Settings**: sender `mymoviediary.support@gmail.com`, name
+   `My Movie Diary`, host `smtp.gmail.com`, port `465`, username = ta adresa, password = heslo aplikace **bez mezer**
+   → **Enable custom SMTP** → Save. Limit odesílání se tím zvedne na 30 mailů / hod (Rate Limits).
+4. **Sign In / Providers → Email:** zapnout **Confirm email**.
+5. Upozornění „designed for sending personal email“ u hostu je v pořádku – pro malý počet uživatelů stačí;
+   při problémech s doručováním vlastní doména + Resend.
+
+**Šablony** (`supabase/templates/`) → Supabase → **Authentication → Emails → Templates**:
+
+| Šablona v Supabase | Soubor | Subject |
+|---|---|---|
+| Confirm signup | `confirm-signup.html` | `Confirm your email – My Movie Diary` |
+| Reset password | `reset-password.html` | `Reset your password – My Movie Diary` |
+| Change email address | `change-email.html` | `Confirm your new email – My Movie Diary` |
+
+U každé: Subject přepsat, do **Message body** vložit celý obsah souboru → Save. Proměnné `{{ .ConfirmationURL }}`,
+`{{ .Data.username }}`, `{{ .Email }}`, `{{ .NewEmail }}` doplní Supabase.
+
+**Test:** registrace v anonymním okně s `adiskop987+test@gmail.com` → mail od My Movie Diary (zkontrolovat i spam)
+→ odkaz → přihlášení → zkušební účet smazat v Admin → Users.
+
 ## 7. Admin účet
 
 1. Supabase → **Authentication → Users → Add user → Create new user**: e-mail

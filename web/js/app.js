@@ -1,6 +1,6 @@
 // Vstupní bod webu: přihlášení, hlavička a router.
 
-import { initAuth, onAuthChange, getUser, getProfile, signOut, hasGeneratedUsername } from "./auth.js";
+import { initAuth, onAuthChange, getUser, getProfile, signOut, hasGeneratedUsername, authRedirectResult } from "./auth.js";
 import { addRoute, setNotFound, startRouter, render, navigate, currentPath } from "./router.js";
 import { TEXTS, format } from "./texts.js";
 import { h, mount, toast, loadingView } from "./dom.js";
@@ -259,6 +259,33 @@ function achievementMessage(key, result) {
 
 document.addEventListener("watches-changed", scheduleProgressCheck);
 
+/**
+ * Návrat z odkazu v e-mailu (V2.4): hláška a případně přihlášení.
+ * Potvrzení funguje automaticky jen v prohlížeči, kde proběhla registrace (PKCE);
+ * jinde je e-mail potvrzený, ale uživatel se musí přihlásit sám.
+ */
+function handleAuthRedirect() {
+    const result = authRedirectResult();
+    if (!result) return;
+
+    // Uklidit adresu: ?code= / ?error= pryč, chyba v # by router četl jako stránku
+    const hash = window.location.hash.startsWith("#error") ? "#/" : window.location.hash;
+    window.history.replaceState(window.history.state, "", window.location.pathname + hash);
+
+    if (result.type === "email-confirmed") {
+        if (getUser()) {
+            toast(TEXTS.emailConfirmedWelcome, "achievement");
+        } else {
+            toast(TEXTS.emailConfirmedSignIn);
+            window.location.hash = "/login";
+        }
+    } else if (result.type === "error") {
+        const expired = /expired|invalid|otp/i.test(`${result.code} ${result.message}`);
+        toast(expired ? TEXTS.authLinkExpired : format("authLinkError", result.message || result.code), "error");
+        if (!getUser()) window.location.hash = "/login";
+    }
+}
+
 // Klávesa „/“ kdekoli (mimo pole pro psaní) otevře hledání
 document.addEventListener("keydown", (event) => {
     if (event.key !== "/" || event.ctrlKey || event.metaKey || event.altKey) return;
@@ -279,6 +306,7 @@ renderHeader();
 await initAuth();
 lastUserId = getUser()?.id ?? null;
 routerStarted = true;
+handleAuthRedirect();
 // Achievementy a level se spočítají až po prvním vykreslení, ve chvíli, kdy je
 // prohlížeč volný – nezdržují start ani první interakci (V2.1.1)
 if (getUser()) whenIdle(() => refreshProgress({ announce: false }), 2500);

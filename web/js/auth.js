@@ -1,7 +1,7 @@
 // Přihlášení, registrace a stav přihlášeného uživatele.
 // Čistá logika – nic nevykresluje, obrazovky se jen přihlásí k odběru změn (onAuthChange).
 
-import { supabase } from "./supabase.js";
+import { supabase, launchUrl } from "./supabase.js";
 import { SITE_URL, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./config.js";
 
 /** Aktuální stav: user = účet Supabase, profile = řádek z tabulky profiles. */
@@ -117,7 +117,13 @@ export async function signUp({ username, email, password }) {
 export async function signIn({ login, password }) {
     if (login.includes("@")) {
         const { error } = await supabase.auth.signInWithPassword({ email: login, password });
-        if (error) throw error;
+        if (error) {
+            // Nepotvrzený e-mail → kód pro srozumitelnou hlášku a tlačítko „poslat znovu“
+            if (error.code === "email_not_confirmed" || /email not confirmed/i.test(error.message)) {
+                error.code = "email_not_confirmed";
+            }
+            throw error;
+        }
         return;
     }
 
@@ -140,8 +146,78 @@ export async function signIn({ login, password }) {
     if (error) throw error;
 }
 
+/**
+ * Znovu pošle potvrzovací e-mail (V2.4).
+ * E-mail jde rovnou přes Supabase Auth; u nicku přes funkci „login“ (vyžaduje správné heslo,
+ * e-mail se do prohlížeče nedostane). Při příliš častém posílání chyba s kódem rate_limited.
+ */
+export async function resendConfirmation({ login, password }) {
+    if (login.includes("@")) {
+        const { error } = await supabase.auth.resend({
+            type: "signup", email: login, options: { emailRedirectTo: SITE_URL },
+        });
+        if (error) {
+            const wrapped = new Error(error.message);
+            if (error.status === 429 || /rate limit|security purposes/i.test(error.message)) wrapped.code = "rate_limited";
+            throw wrapped;
+        }
+        return;
+    }
+
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", apikey: SUPABASE_PUBLISHABLE_KEY },
+        body: JSON.stringify({ login, password, resend: true }),
+    });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok || !body.resent) {
+        const error = new Error(body.error ?? `HTTP ${response.status}`);
+        error.code = body.error;
+        throw error;
+    }
+}
+
+const OAUTH_FLAG = "mmd-oauth-pending";
+
+/**
+ * Co přineslo otevření webu z odkazu (V2.4):
+ * { type: "email-confirmed" } – návrat z potvrzovacího e-mailu,
+ * { type: "oauth" } – návrat z Googlu,
+ * { type: "error", code, message } – vypršený / použitý odkaz apod.,
+ * nebo null (běžné otevření). Vyhodnotí se jednou, při startu.
+ */
+export function authRedirectResult() {
+    const query = launchUrl.searchParams;
+    // Chyba může přijít v ?… i v #… (pak by #error=… četl router jako adresu stránky)
+    const hash = launchUrl.hash.startsWith("#error") ? new URLSearchParams(launchUrl.hash.slice(1)) : null;
+    const errorParams = query.has("error") || query.has("error_description") ? query : hash;
+
+    let oauth = false;
+    try {
+        oauth = sessionStorage.getItem(OAUTH_FLAG) === "1";
+        sessionStorage.removeItem(OAUTH_FLAG);
+    } catch {
+        // bez úložiště se návrat z Googlu nepozná – jen se neukáže hláška
+    }
+
+    if (errorParams) {
+        return {
+            type: "error",
+            code: errorParams.get("error_code") ?? errorParams.get("error") ?? "unknown",
+            message: errorParams.get("error_description") ?? "",
+        };
+    }
+    if (query.has("code")) return { type: oauth ? "oauth" : "email-confirmed" };
+    return null;
+}
+
 /** Přihlášení přes Google – přesměruje na Google a zpět na web. */
 export async function signInWithGoogle() {
+    try {
+        sessionStorage.setItem(OAUTH_FLAG, "1");   // návrat s ?code= pak není potvrzení e-mailu
+    } catch {
+        // nevadí
+    }
     const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: { redirectTo: SITE_URL },

@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V2.4 – November 2026
+- Emails now come from My Movie Diary with a new design (confirm email, reset password, change email)
+- After confirming your email you're signed in right away – or taken to sign in if you opened the link elsewhere
+- "Please confirm your email first" instead of a generic error, plus a Resend confirmation email button
+- Clear message when a link has expired or was already used
+
 ## V2.3 – November 2026
 - Nicknames are checked against community rules – also with numbers and symbols instead of letters
 - Delete your account and all your data from your profile page

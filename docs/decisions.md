@@ -260,7 +260,7 @@ Hororové vlny se střídají s funkcemi, aby každá verze přinesla něco nov�
 | 19 | V2.1 | Optimalizace ✅ | plakáty a banner ve správné velikosti, mezipaměť katalogu, detail kolekce jedním dotazem, přednačtení po najetí na kartu |
 | 20 | V2.2 | O aplikaci a pravidla ✅ | stránka **About** (co je MMD, kdo ho dělá, TMDB, verze), **kontakt**, nová **patička** (About · Terms · Privacy · Contact · GitHub), **Terms of Service** a **pravidla komunity** (nicky, minimální věk 15 let, právo smazat / přejmenovat účet), souhlas při registraci, aktualizace zásad ochrany soukromí (co se ukládá, admin vidí e-mail, propojení účtů) |
 | 21 | V2.3 | Nicky a moderace ✅ | **filtr nicků v databázi** (zakázaná slova česky i anglicky, obcházení typu `f4gg0t` a podtržítek, rezervovaná jména admin / support / moderator), seznam zakázaných slov spravovaný v adminu, **Reset nickname** v adminu, **Delete my account** pro uživatele (Edge Function, právo na výmaz) |
-| 22 | V2.4 | E-mail | **vlastní SMTP** (samostatný Gmail + heslo aplikace), **vlastní vzhled mailů** v designu MMD (potvrzení, obnova hesla, změna e-mailu), po potvrzení hláška a přesměrování na přihlášení, „Please confirm your email“ i u přihlášení nickem, **Resend confirmation** |
+| 22 | V2.4 | E-mail ✅ | **vlastní SMTP** (samostatný Gmail + heslo aplikace), **vlastní vzhled mailů** v designu MMD (potvrzení, obnova hesla, změna e-mailu), po potvrzení hláška a přesměrování na přihlášení, „Please confirm your email“ i u přihlášení nickem, **Resend confirmation** |
 | 23 | V2.5 | Hesla | **Forgot password** (stránka pro nové heslo), **změna hesla v profilu**, přísnější pravidla hesla (délka, povinné znaky) i v Supabase |
 | 24 | V2.6 | CAPTCHA | Cloudflare Turnstile – registrace, přihlášení (i nickem přes funkci `login`), obnova hesla, Resend confirmation; zmínka v zásadách (zpracovává Cloudflare) |
 | 25 | V2.7 | Optimalizace 2 | druhé kolo měření a zrychlení (Lighthouse, případně minifikace) – poslední verze kapitoly |
@@ -794,6 +794,29 @@ přihlášení a databáze, bez realtime a storage), případně minifikace.
 - **Správci se neoznačují** – účet „admin“ vznikl před zavedením pravidel (rezervované slovo).
 - **Smazání účtu přes Edge Function, ne SQL** – oficiální admin API Supabase uklidí i relace a propojené identity.
 - **Žádný filtr není dokonalý** – kombinace: seznam slov + pravidla v Terms + reset nicku + smazání účtu.
+
+### Fáze 22 – e-mail ✅ (6. 11. 2026) – **V2.4**
+- **Vlastní SMTP** – maily odchází z `mymoviediary.support@gmail.com` (Gmail + heslo aplikace), limit 30 / hod;
+  **Confirm email** zapnuté. Nastavení v setup.md (6b).
+- **Šablony v designu MMD** (`supabase/templates/`): potvrzení registrace, obnova hesla (připravená pro V2.5),
+  změna e-mailu – tmavá hlavička s klapkou, mosazné tlačítko, oslovení nickem, záložní odkaz, patička s důvodem
+  mailu a kontaktem. Tabulkové rozložení a styly přímo v HTML (jinak by je e-mailové programy ignorovaly).
+- **Návrat z odkazu v mailu:** ve stejném prohlížeči rovnou přihlášení + „Email confirmed – welcome…“; v jiném
+  prohlížeči (PKCE) hláška „Email confirmed! Now sign in.“ a formulář přihlášení; vypršený / použitý odkaz →
+  srozumitelná hláška a přihlášení (chyba v `?…` i v `#…`, adresa se uklidí).
+- **Nepotvrzený e-mail při přihlášení** – „Please confirm your email first“ místo obecné chyby, i u nicku; tlačítko
+  **Resend confirmation email** (u nicku přes funkci `login`, jen se správným heslem, e-mail se neprozradí);
+  po registraci obrazovka s adresou a tlačítkem pro znovuposlání. Limit Supabase 1 mail / 60 s → hláška „wait a minute“.
+
+#### Rozhodnutí ve fázi 22
+- **Gmail místo domény** – zdarma a hned; Supabase upozorňuje na horší doručitelnost (osobní schránka), pro pár
+  uživatelů stačí. První mail u Adama skončil ve spamu (nový odesílatel + výchozí šablona), u kamaráda v doručené
+  poště – vlastní šablona a historie odesílatele pomohou; při problémech doména + Resend.
+- **Návrat z Googlu vs. z mailu** – oba přijdou s `?code=`; před odchodem na Google se uloží značka do
+  sessionStorage, návrat bez ní = potvrzení e-mailu. Adresa se čte dřív, než ji knihovna Supabase zpracuje
+  (`launchUrl` v `supabase.js`).
+- **Resend u nicku jen po správném hesle** – jinak by šlo nickem zahlcovat cizí schránku; Supabase hlásí nepotvrzený
+  e-mail až po ověření hesla, takže se nic neprozradí.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

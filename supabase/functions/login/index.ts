@@ -2,6 +2,8 @@
 // My Movie Diary – Edge Function "login"
 //
 // Přihlášení nickem: POST { "login": "kopejdos", "password": "…" }
+// Nepotvrzený e-mail (V2.4): odpověď { error: "email_not_confirmed" } – jen při správném
+// hesle; s { …, "resend": true } funkce pošle potvrzovací mail znovu (e-mail se neprozradí).
 // Funkce dohledá k nicku e-mail (jen na serveru – e-mail nikdy neodejde
 // do prohlížeče), přihlásí uživatele a vrátí tokeny relace.
 // Web si je uloží přes supabase.auth.setSession().
@@ -46,7 +48,7 @@ Deno.serve(async (request) => {
   if (request.method !== "POST") return json({ error: "Use POST" }, 405);
 
   try {
-    const { login, password } = await request.json() as { login?: string; password?: string };
+    const { login, password, resend } = await request.json() as { login?: string; password?: string; resend?: boolean };
     if (!login || !password || typeof login !== "string" || typeof password !== "string") {
       return json(INVALID_LOGIN, 400);
     }
@@ -64,6 +66,17 @@ Deno.serve(async (request) => {
 
     // 2. Přihlášení – Supabase Auth ověří heslo a vrátí relaci
     const { data, error } = await db.auth.signInWithPassword({ email, password });
+
+    // Heslo sedí, ale e-mail není potvrzený (Supabase to hlásí až po ověření hesla)
+    if (error && (error.code === "email_not_confirmed" || /email not confirmed/i.test(error.message))) {
+      if (resend !== true) return json({ error: "email_not_confirmed" }, 400);
+      const { error: resendError } = await db.auth.resend({ type: "signup", email });
+      if (resendError) {
+        const limited = resendError.status === 429 || /rate limit|security purposes/i.test(resendError.message);
+        return json({ error: limited ? "rate_limited" : "resend_failed" }, limited ? 429 : 500);
+      }
+      return json({ ok: true, resent: true });
+    }
     if (error || !data.session) return json(INVALID_LOGIN, 400);
 
     return json({

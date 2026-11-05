@@ -1,6 +1,6 @@
 // Obrazovka: přihlášení e-mailem nebo nickem, nebo přes Google.
 
-import { signIn, signInWithGoogle, isSignedIn } from "../auth.js";
+import { signIn, signInWithGoogle, isSignedIn, resendConfirmation } from "../auth.js";
 import { navigate } from "../router.js";
 import { TEXTS, format } from "../texts.js";
 import { MIN_AGE } from "../config.js";
@@ -21,6 +21,18 @@ export async function loginView(container) {
     const password = h("input", { type: "password", name: "password", required: true, autocomplete: "current-password" });
     const error = h("p", { class: "form-error", role: "alert" });
     const submit = h("button", { class: "btn btn--primary btn--block", type: "submit" }, TEXTS.submitSignIn);
+    // Tlačítko „poslat potvrzení znovu“ – ukáže se jen u nepotvrzeného e-mailu (V2.4)
+    const resend = h("button", { class: "btn btn--block", type: "button", hidden: true }, TEXTS.resendConfirmation);
+    resend.addEventListener("click", async () => {
+        resend.disabled = true;
+        try {
+            await resendConfirmation({ login: login.value.trim(), password: password.value });
+            toast(TEXTS.resendDone);
+        } catch (e) {
+            toast(e.code === "rate_limited" ? TEXTS.resendRateLimited : format("errorGeneric", e.message), "error");
+        }
+        resend.disabled = false;
+    });
 
     const form = h("form", { class: "auth-form", novalidate: true, onSubmit: handleSubmit },
         h("h1", {}, TEXTS.signInTitle),
@@ -30,6 +42,7 @@ export async function loginView(container) {
         field(TEXTS.password, password),
         error,
         submit,
+        resend,
         h("p", { class: "auth-form__switch" },
             `${TEXTS.noAccount} `, h("a", { href: "#/register" }, TEXTS.navRegister)),
     );
@@ -40,14 +53,20 @@ export async function loginView(container) {
     async function handleSubmit(event) {
         event.preventDefault();
         error.textContent = "";
+        resend.hidden = true;
         submit.disabled = true;
         try {
             await signIn({ login: login.value.trim(), password: password.value });
             // Přesměrování na přehled zařídí app.js po změně přihlášení
         } catch (e) {
-            error.textContent = e?.code === "invalid_credentials" || /invalid login/i.test(e?.message)
-                ? TEXTS.errorInvalidLogin
-                : e.message;
+            if (e?.code === "email_not_confirmed") {
+                error.textContent = TEXTS.errorEmailNotConfirmed;
+                resend.hidden = false;
+            } else {
+                error.textContent = e?.code === "invalid_credentials" || /invalid login/i.test(e?.message)
+                    ? TEXTS.errorInvalidLogin
+                    : e.message;
+            }
             submit.disabled = false;
         }
     }

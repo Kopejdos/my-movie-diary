@@ -3201,3 +3201,8 @@ button {
     flex: 1 1 220px;
     min-width: 0;
 }
+
+/* Atribut hidden má vždy přednost (tlačítka mají jinak display: inline-flex) – V2.4 */
+[hidden] {
+    display: none !important;
+}

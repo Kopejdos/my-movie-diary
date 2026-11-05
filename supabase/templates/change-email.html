@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!-- My Movie Diary – e-mailová šablona: Confirm your new email (V2.4)
+     Vkládá se do Supabase → Authentication → Emails → Templates (Message body).
+     Proměnné {{ .ConfirmationURL }} apod. doplní Supabase. Styly jsou přímo v HTML
+     a rozložení v tabulkách – jinak by je část e-mailových programů ignorovala. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <title>Confirm your new email</title>
+</head>
+<body style="margin:0; padding:0; background-color:#efe7da;">
+  <!-- Text náhledu v seznamu zpráv (skrytý) -->
+  <div style="display:none; max-height:0; overflow:hidden; opacity:0;">Confirm the new email address for your My Movie Diary account.</div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#efe7da;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;">
+          <!-- Hlavička: logo a název -->
+          <tr>
+            <td style="background-color:#12161c; border-radius:16px 16px 0 0; padding:22px 28px; border-bottom:3px solid #d4a75a;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding-right:12px; vertical-align:middle;">
+                    <img src="https://kopejdos.github.io/my-movie-diary/icons/icon-192.png" width="40" height="40" alt="🎬" style="display:block; border-radius:10px; border:0;">
+                  </td>
+                  <td style="vertical-align:middle; font-family:'Segoe UI', Arial, Helvetica, sans-serif; font-size:20px; font-weight:700; color:#f4e8d2; letter-spacing:0.3px;">
+                    My Movie <span style="color:#d4a75a;">Diary</span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Obsah -->
+          <tr>
+            <td style="background-color:#fffaf2; padding:32px 28px 28px; font-family:'Segoe UI', Arial, Helvetica, sans-serif; color:#22262c; font-size:16px; line-height:1.55;">
+              <h1 style="margin:0 0 16px; font-size:24px; line-height:1.25; color:#1a1d22;">Confirm your new email address</h1>
+              <p style="margin:0 0 12px;">{{ if .Data.username }}Hi {{ .Data.username }},{{ else }}Hi,{{ end }}</p>
+              <p style="margin:0;">you asked to change the email address of your My Movie Diary account from <strong>{{ .Email }}</strong> to <strong>{{ .NewEmail }}</strong>. Confirm the change with the button below.</p>
+              <!-- Tlačítko -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0;">
+                <tr>
+                  <td style="border-radius:999px; background-color:#d4a75a;">
+                    <a href="{{ .ConfirmationURL }}" style="display:inline-block; padding:14px 30px; font-family:'Segoe UI', Arial, Helvetica, sans-serif; font-size:16px; font-weight:700; color:#17130b; text-decoration:none; border-radius:999px;">Confirm new email</a>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:0; font-size:14px; color:#646a73;">If you didn't ask for this change, ignore this email and let us know – your account keeps its current address.</p>
+              <p style="margin:24px 0 0; font-size:13px; color:#646a73;">
+                Button not working? Copy this link into your browser:<br>
+                <a href="{{ .ConfirmationURL }}" style="color:#a8792b; word-break:break-all;">{{ .ConfirmationURL }}</a>
+              </p>
+            </td>
+          </tr>
+          <!-- Patička -->
+          <tr>
+            <td style="background-color:#f6efe3; border-radius:0 0 16px 16px; padding:20px 28px; font-family:'Segoe UI', Arial, Helvetica, sans-serif; font-size:12px; line-height:1.5; color:#646a73; border-top:1px solid #ddd2c0;">
+              You're getting this email because an email change was requested for your My Movie Diary account.<br>
+              Questions? Write to <a href="mailto:mymoviediary.support@gmail.com" style="color:#a8792b;">mymoviediary.support@gmail.com</a>.<br>
+              <a href="https://kopejdos.github.io/my-movie-diary/" style="color:#a8792b;">My Movie Diary</a> ·
+              <a href="https://kopejdos.github.io/my-movie-diary/terms.html" style="color:#a8792b;">Terms</a> ·
+              <a href="https://kopejdos.github.io/my-movie-diary/privacy.html" style="color:#a8792b;">Privacy</a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

@@ -1,11 +1,11 @@
 // Obrazovka: registrace (nickname, e-mail, heslo).
 
-import { signUp, isUsernameAvailable, isUsernameAllowed, isSignedIn } from "../auth.js";
+import { signUp, isUsernameAvailable, isUsernameAllowed, isSignedIn, resendConfirmation } from "../auth.js";
 import { navigate } from "../router.js";
 import { USERNAME_PATTERN, PASSWORD_MIN_LENGTH, MIN_AGE } from "../config.js";
 import { TEXTS, format } from "../texts.js";
 import { setAccent } from "../theme.js";
-import { h, mount } from "../dom.js";
+import { h, mount, toast } from "../dom.js";
 import { field, googleButton, divider, termsLinks } from "./login.js";
 
 export async function registerView(container) {
@@ -88,11 +88,26 @@ export async function registerView(container) {
             });
 
             if (needsConfirmation) {
+                const address = email.value.trim();
+                const resend = h("button", { class: "btn btn--block", type: "button" }, TEXTS.resendConfirmation);
+                resend.addEventListener("click", async () => {
+                    resend.disabled = true;
+                    try {
+                        await resendConfirmation({ login: address });
+                        toast(TEXTS.resendDone);
+                    } catch (e) {
+                        toast(e.code === "rate_limited" ? TEXTS.resendRateLimited : format("errorGeneric", e.message), "error");
+                    }
+                    resend.disabled = false;
+                });
                 mount(container, h("div", { class: "auth-page" },
                     h("div", { class: "auth-form" },
+                        h("span", { class: "eyebrow" }, "✉️"),
                         h("h1", {}, TEXTS.registerTitle),
                         h("p", {}, TEXTS.registerCheckEmail),
+                        h("p", { class: "muted" }, address),
                         h("a", { class: "btn btn--primary btn--block", href: "#/login" }, TEXTS.navSignIn),
+                        resend,
                     ),
                 ));
             }
