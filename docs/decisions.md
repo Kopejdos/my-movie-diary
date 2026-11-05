@@ -78,6 +78,7 @@ Supabase
    ├── Auth            přihlášení (e-mail + heslo, Google)
    ├── PostgreSQL      tabulky + Row Level Security
    ├── Edge Function   login – přihlášení nickem (k nicku dohledá e-mail na serveru)
+   ├── Edge Function   admin – hledání v TMDB, přidání filmu, správa uživatelů (jen správce)
    └── Edge Function   tmdb  – dotahuje data z TMDB do tabulky films
                           │  TMDB_READ_TOKEN
                           ▼
@@ -101,8 +102,9 @@ my-movie-diary/
 │   ├── migrations/           SQL skripty (struktura databáze, verzovaná v Gitu)
 │   ├── seed/                 seznamy univerz a filmů
 │   └── functions/
-│       ├── tmdb/             import filmů z TMDB
-│       └── login/            přihlášení nickem
+│       ├── tmdb/             import filmů z TMDB (ze seedu)
+│       ├── login/            přihlášení nickem
+│       └── admin/            akce admin panelu (TMDB, uživatelé)
 └── web/
     ├── index.html            jediná stránka aplikace
     ├── privacy.html          zásady ochrany osobních údajů (podmínka Googlu)
@@ -114,9 +116,13 @@ my-movie-diary/
         ├── router.js         navigace přes #/…
         ├── texts.js          všechny texty rozhraní
         ├── dom.js            pomocné funkce pro vykreslování
+        ├── theme.js          světlý / tmavý režim, barva univerza
+        ├── prefs.js          drobné volby v prohlížeči (pořadí, filtr)
         ├── auth.js           logika přihlášení (bez vykreslování)
         ├── data.js           logika dat – univerza, zhlédnutí (bez vykreslování)
-        └── views/            obrazovky: universes, universe, login, register, profile, not-found
+        ├── admin.js          logika admin panelu (bez vykreslování)
+        └── views/            obrazovky: universes, universe, login, register, profile,
+                              admin (univerza, uživatelé), admin-universe, not-found
 ```
 
 Pravidla:
@@ -165,9 +171,9 @@ Pravidla:
 | 2b | Přihlášení přes Google ✅ | Google OAuth, Privacy Policy, aplikace zveřejněná pro všechny | přihlášení jedním klepnutím |
 | 2c | Účty ✅ | přihlášení nickem nebo e-mailem, profil se změnou nicku, admin účet, Labyrint | přihlásíš se nickem |
 | 3 | Univerza a zhlédnutí ✅ | přehled univerz s postupem, detail univerza, counter +1 / −1 | odškrtáš si první filmy |
-| 4 | Redesign | styl podle RimWorld prezentace + prvky z rozvrhu kamaráda: písmo Chakra Petch, tečkované pozadí, barvy univerz, banner s backdropem, Up next / Continue watching, světlý a tmavý režim | web vypadá jako hotová aplikace |
-| 5 | Admin panel | univerza (vytvořit, upravit, smazat), filmy přes hledání v TMDB, uživatelé (seznam, správce, smazání) | spravuješ obsah bez SQL a curl |
-| 6 | Řazení a „co dál“ | pořadí vydání / příběhu, filtr neviděných | sleduješ univerzum chronologicky |
+| 4 | Redesign ✅ | styl podle RimWorld prezentace + prvky z rozvrhu kamaráda: písmo Chakra Petch, tečkované pozadí, barvy univerz, banner s backdropem, Up next / Continue watching, světlý a tmavý režim | web vypadá jako hotová aplikace |
+| 5 | Admin panel ✅ | univerza (vytvořit, upravit, smazat), filmy přes hledání v TMDB, uživatelé (seznam, správce, smazání) | spravuješ obsah bez SQL a curl |
+| 6 | Řazení a filtr ✅ | pořadí vydání / příběhu, filtr neviděných | sleduješ univerzum chronologicky |
 | 7 | Watchlist | „chci vidět“ napříč univerzy | seznam na víkend |
 | 8 | PWA | manifest, ikona, instalace na plochu | MMD jako aplikace v telefonu |
 
@@ -258,6 +264,47 @@ Později podle chuti: hodnocení a poznámky ke zhlédnutí, historie a statisti
 - **Optimistický counter:** číslo i postup se změní hned po kliknutí, dotaz běží na pozadí; při chybě se změna vrátí a ukáže se hláška.
 - **Datum zhlédnutí posílá web podle hodin uživatele** – databáze běží v UTC a po půlnoci by zapsala včerejšek.
 - **Po −1 se počty načtou znovu** – může se změnit datum posledního zhlédnutí.
+
+### Fáze 4 – redesign ✅ (5. 11. 2026)
+- **Kombinace dvou vzorů:** základ z vlastní RimWorld prezentace (teplé tmavé barvy, mosazný akcent, nadpisy **Chakra Petch**, fotka přecházející do pozadí) + prvky z rozvrhu spolužáka (tečkovaná mřížka, barevné záře v rozích, lesklé karty, pilulková tlačítka, šrafování). Kód rozvrhu se nepřebíral, jen styl.
+- **Barva každého univerza** (`universes.color`, v seedu `"color"`): záře pozadí, proužek a záře karty, tlačítka, ukazatel postupu, nadpisy skupin.
+- **Banner v detailu univerza:** širokoúhlý záběr z filmu (TMDB backdrop, `films.backdrop_path`) přes celou šířku, ztmavený a v dolní části zprůhledněný do tečkovaného pozadí.
+- **Up next** v detailu (další neviděný povinný film, tlačítko „+ Mark as watched“; po dokončení 🏆) a **Continue watching** na přehledu (další film z univerza, které uživatel sledoval naposledy).
+- **Světlý a tmavý režim** s přepínačem ☀ / ☾ v hlavičce; bez volby podle systému, volba se pamatuje v prohlížeči.
+- Migrace `20261105040000_universe_color_backdrop.sql`, nová verze funkce `tmdb` (ukládá backdrop a barvu) a nový import všech univerz.
+
+#### Rozhodnutí ve fázi 4
+- **Vlastní písmo z prezentace, ne písmo spolužáka** – web má vlastní rukopis; text zůstává v Inter (čitelnost).
+- **Barva univerza jako proměnná CSS `--u`** na celé stránce (nastavuje `theme.js`), barva textu na ní (`--u-ink`) se dopočítá podle jasu – na žluté je černý text, na modré bílý.
+- **Backdrop místo plakátu pro banner** – plakát je na výšku a v širokém banneru by se ořízl.
+- **Banner jako samostatná vrstva s maskou** (`mask-image`) – dole zprůhlední, takže mezi bannerem a tečkovaným pozadím není předěl.
+- **Režim se nastaví malým skriptem v `<head>` ještě před vykreslením** – jinak by stránka při načtení problikla tmavým režimem.
+- **Tematické barvy univerz** (MCU červená, Ghibli mátová…) místo náhodné palety; admin je později může změnit.
+
+### Fáze 5 – admin panel ✅ (5. 11. 2026)
+- Odkaz **Admin** v hlavičce (jen pro správce), záložky **Universes** a **Users**.
+- **Univerza:** seznam s barvou, adresou a počtem filmů; posun nahoru / dolů (pořadí na přehledu); nové univerzum (název, adresa se doplní z názvu, popis, barva); smazání s potvrzením.
+- **Editor univerza** (`#/admin/universe/<slug>`): název, popis, barva (náhled hned při výběru); filmy – skupina, číslo v příběhu, volitelný, „Use as cover“, posun, odebrání; **přidání filmu hledáním v TMDB** přímo z webu.
+- **Uživatelé:** nick, e-mail, způsob přihlášení (Email / Google), počet zhlédnutí, datum registrace; udělit / odebrat správce; smazat účet (i se všemi zhlédnutími). Sám sebe správce měnit ani smazat nemůže.
+- Migrace `20261105050000_admin_panel.sql`: funkce `is_admin()` a pravidla RLS – univerza a jejich položky smí zakládat, měnit a mazat jen správce.
+- Edge Function `admin`: `search`, `add-film`, `users`, `set-admin`, `delete-user`.
+
+#### Rozhodnutí ve fázi 5
+- **Univerza a položky upravuje web přímo přes Supabase** – pravidla RLS s `is_admin()` pustí jen správce, není potřeba serverový kód.
+- **TMDB a uživatelé přes Edge Function `admin`** – TMDB token a serverový klíč (seznam účtů, mazání) nesmí do prohlížeče. Funkce si sama ověří přístupový token a příznak správce.
+- **Úpravy filmu se ukládají hned po opuštění pole** (událost `change`) – bez tlačítka Uložit u každého řádku.
+- **Potvrzení mazání přes `window.confirm`** – jednoduché a funguje na telefonu.
+- **Seed vs. admin panel:** import ze seedu je dál zdroj pravdy pro univerza v `universes.json` – **přepíše změny z admin panelu a smaže filmy, které v seedu nejsou**. Univerza založená v admin panelu (nejsou v seedu) import nechá být. Po zavedení admin panelu se plný import nespouští; nová univerza a filmy se přidávají přes panel.
+
+### Fáze 6 – řazení a filtr ✅ (5. 11. 2026)
+- V detailu univerza přepínač **Release order / Story order** (jen u univerz, kde má aspoň jeden film číslo v příběhu) a přepínač **Unwatched only**.
+- V pořadí příběhu se neukazují nadpisy skupin (rozházely by se); **Up next** se řídí zvoleným pořadím.
+- Pořadí příběhu v seedu (`"story"`) pro MCU, Star Wars, X-Men a Alien; ostatní univerza mají příběh shodný s vydáním. Dá se upravit i v admin panelu (Story #).
+
+#### Rozhodnutí ve fázi 6
+- **Film bez čísla v příběhu jde v pořadí příběhu na konec** (podle vydání) – univerzum nemusí být očíslované celé.
+- **Volby se pamatují v prohlížeči** (`prefs.js`, localStorage) společně pro všechna univerza.
+- **Pořadí příběhu je přibližné** – chronologie MCU a X-Men se mezi zdroji liší; slouží jako vodítko, ne jako oficiální timeline.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

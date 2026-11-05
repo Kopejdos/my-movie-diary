@@ -112,7 +112,17 @@ Po změně kódu funkce: v dashboardu otevřít funkci → Code → vložit nov�
    where id = (select id from auth.users where email = 'adiskop987+admin@gmail.com');
    ```
 
-## 8. Keep-alive
+## 8. Admin panel
+
+1. Migrace `20261105050000_admin_panel.sql` (pravidla pro správce).
+2. Edge Function `admin` (Deploy a new function → Via Editor, obsah `supabase/functions/admin/index.ts`)
+   a u ní **vypnout Verify JWT** – funkce si ověřuje přihlášení a správce sama.
+3. Na webu se správci ukáže v hlavičce odkaz **Admin**.
+
+**Pozor:** plný import ze seedu přepíše změny z admin panelu u univerz, která jsou v `universes.json`
+(a smaže z nich filmy, které v seedu nejsou). Nová univerza a filmy přidávat přes admin panel.
+
+## 9. Keep-alive
 
 GitHub Action `keep-alive.yml` volá každé 3 dny databázovou funkci `ping()`.
 Ruční spuštění: **Actions → Keep Supabase awake → Run workflow**; výsledek je vidět

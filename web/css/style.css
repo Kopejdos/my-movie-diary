@@ -328,6 +328,17 @@ button {
     .nav__link {
         padding: 6px 9px;
     }
+
+    .nav__user {
+        max-width: 110px;
+    }
+}
+
+/* Na úzkém telefonu vede na přehled logo – odkaz „Universes“ se schová */
+@media (max-width: 430px) {
+    .nav__link--home {
+        display: none;
+    }
 }
 
 /* ---------- Obsah ---------- */
@@ -661,22 +672,32 @@ button {
    (stejný princip jako úvod RimWorld prezentace) */
 .banner {
     position: relative;
+    isolation: isolate;
     margin: -24px calc(50% - 50vw) 0;
-    padding: 0 max(var(--gutter), calc(50vw - var(--content-width) / 2 + var(--gutter)));
+    padding: 18px max(var(--gutter), calc(50vw - var(--content-width) / 2 + var(--gutter))) 28px;
     min-height: clamp(300px, 52vh, 500px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding-top: 18px;
-    padding-bottom: 28px;
+}
+
+/* Obrázek je ve vlastní vrstvě, která dole zprůhlední – banner tak
+   splyne s tečkovaným pozadím bez viditelného předělu */
+.banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--u) 26%, transparent), transparent 55%),
         linear-gradient(180deg,
             color-mix(in srgb, var(--bg) 35%, transparent) 0%,
             color-mix(in srgb, var(--bg) 55%, transparent) 45%,
-            var(--bg) 96%),
+            color-mix(in srgb, var(--bg) 85%, transparent) 85%),
         var(--banner-image, none) center 25% / cover no-repeat,
         var(--bg-deep);
+    -webkit-mask-image: linear-gradient(180deg, #000 65%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 65%, transparent 100%);
 }
 
 .banner__content {
@@ -979,6 +1000,406 @@ button {
     .counter__value {
         min-width: 18px;
     }
+}
+
+/* ---------- Admin panel ---------- */
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.tab {
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.tab:hover {
+    color: var(--heading);
+}
+
+.tab--active {
+    background: var(--u);
+    border-color: var(--u);
+    color: var(--u-ink);
+}
+
+.tab--active:hover {
+    color: var(--u-ink);
+}
+
+.admin-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.admin-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.admin-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background:
+        radial-gradient(120% 90% at 0% 0%, var(--gloss), transparent 55%),
+        var(--panel);
+}
+
+.admin-row--film {
+    grid-template-columns: 28px 48px 1fr auto;
+}
+
+.admin-row--film .film__poster {
+    width: 48px;
+}
+
+.admin-row__order {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--u);
+    text-align: center;
+}
+
+.admin-row__info {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+}
+
+.admin-row__info strong {
+    color: var(--heading);
+    overflow-wrap: anywhere;
+}
+
+.admin-row__email {
+    font-size: 0.85rem;
+    overflow-wrap: anywhere;
+}
+
+.admin-row__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 6px;
+}
+
+.admin-row__fields {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    margin-top: 2px;
+}
+
+@media (max-width: 640px) {
+    .admin-row,
+    .admin-row--film {
+        grid-template-columns: auto 1fr;
+    }
+
+    .admin-row--film {
+        grid-template-columns: 24px 44px 1fr;
+    }
+
+    .admin-row__actions {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+    }
+}
+
+.icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--heading);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.icon-btn:hover:not(:disabled) {
+    border-color: var(--u);
+}
+
+.icon-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.btn--danger {
+    color: var(--danger);
+}
+
+.btn--danger:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.color-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--text) 10%, transparent);
+}
+
+.avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    border: 1px solid var(--border);
+}
+
+.panel-details {
+    margin: 8px 0 4px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--panel);
+}
+
+.panel-details > summary {
+    cursor: pointer;
+    padding: 14px 18px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--heading);
+    list-style: none;
+}
+
+.panel-details > summary::-webkit-details-marker {
+    display: none;
+}
+
+.panel-details[open] > summary {
+    border-bottom: 1px solid var(--border);
+}
+
+.panel-details > .admin-form {
+    border: none;
+    margin: 0;
+    background: none;
+}
+
+.admin-form {
+    display: grid;
+    gap: 14px;
+    padding: 18px;
+    margin: 8px 0 4px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--panel);
+}
+
+.admin-form > .btn {
+    justify-self: start;
+}
+
+.admin-form__title {
+    font-size: 1.2rem;
+}
+
+.admin-form__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+}
+
+.admin-form input:disabled {
+    opacity: 0.6;
+}
+
+.color-input {
+    height: 44px;
+    padding: 4px !important;
+    cursor: pointer;
+}
+
+.admin-input {
+    padding: 7px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.9rem;
+    min-width: 0;
+}
+
+.admin-input:focus {
+    outline: none;
+    border-color: var(--u);
+}
+
+.admin-input--number {
+    width: 70px;
+}
+
+.admin-input--grow {
+    flex: 1;
+    font-size: 16px;
+    padding: 10px 14px;
+}
+
+.mini-field {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.mini-field .admin-input:not(.admin-input--number) {
+    width: 150px;
+}
+
+.mini-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    cursor: pointer;
+}
+
+.mini-check input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--u);
+}
+
+.admin-search {
+    display: flex;
+    gap: 8px;
+}
+
+.search-results {
+    display: grid;
+    gap: 8px;
+}
+
+.search-result {
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+}
+
+.search-result .film__poster {
+    width: 48px;
+}
+
+/* ---------- Řazení a filtr v detailu univerza ---------- */
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 22px 0 6px;
+}
+
+.segmented {
+    display: inline-flex;
+    padding: 3px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+}
+
+.segmented__option {
+    padding: 7px 14px;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+}
+
+.segmented__option--active {
+    background: var(--u);
+    color: var(--u-ink);
+}
+
+/* přepínač jako v rozvrhu („Přednášky“) */
+.switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px 6px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--heading);
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+}
+
+.switch__track {
+    position: relative;
+    width: 38px;
+    height: 22px;
+    border-radius: 999px;
+    background: var(--border);
+    transition: background 0.2s;
+}
+
+.switch__track::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 0.2s;
+}
+
+.switch[aria-checked="true"] .switch__track {
+    background: var(--u);
+}
+
+.switch[aria-checked="true"] .switch__track::after {
+    transform: translateX(16px);
+}
+
+.empty-filter {
+    padding: 28px 16px;
+    text-align: center;
+    color: var(--muted);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
 }
 
 /* ---------- Formuláře ---------- */

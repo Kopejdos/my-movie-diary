@@ -41,6 +41,7 @@ films ◄──── universe_items ────► universes
 | `release_date` | `date` | |
 | `runtime` | `integer` | délka v minutách (pro statistiky) |
 | `poster_path` | `text` | cesta k plakátu na CDN TMDB (`/abc.jpg`) |
+| `backdrop_path` | `text` | širokoúhlý záběr z filmu – banner v detailu univerza |
 | `overview` | `text` | krátký popis |
 | `updated_at` | `timestamptz` | kdy se naposledy obnovilo z TMDB |
 
@@ -53,6 +54,7 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 | `slug` | `text` unique | adresa v aplikaci, např. `mcu` → `#/universe/mcu` |
 | `name` | `text` | „Marvel Cinematic Universe“ |
 | `description` | `text` | |
+| `color` | `text` | barva univerza `#rrggbb` (záře, karty, tlačítka) |
 | `cover_tmdb_id` | `integer` FK → `films` | film, jehož plakát je na kartičce |
 | `sort_order` | `integer` | pořadí na hlavní obrazovce |
 | `owner_id` | `uuid` FK → `profiles`, null | `null` = oficiální univerzum; vyplněné = vlastní univerzum uživatele (později) |
@@ -108,6 +110,7 @@ Zapisuje do ní jen GitHub Action přes databázovou funkci `ping()`; drží se 
 - **`remove_latest_watch(tmdb_id)`** – −1: smaže nejnovější zhlédnutí a vrátí nový počet.
 - **`is_username_available(username)`** – je nickname volný? (smí i nepřihlášený, vrací jen ano / ne)
 - **`email_for_username(username)`** – e-mail k nicku pro přihlášení nickem; smí ji volat **jen `service_role`** (Edge Function `login`).
+- **`is_admin()`** – je přihlášený uživatel správce? (používají ji pravidla RLS admin panelu)
 - **`handle_new_user()`** (trigger na `auth.users`) – založí profil s nickem z registrace, u Google `user_xxxxxxxx`.
 
 Výpočty běží v databázi, ne v prohlížeči – web dostane hotová čísla jedním dotazem.
@@ -116,7 +119,8 @@ Výpočty běží v databázi, ne v prohlížeči – web dostane hotová čísl
 
 | Tabulka | Čtení | Zápis |
 |---|---|---|
-| `films`, `universes`, `universe_items` | kdokoli (i nepřihlášený – náhled univerz) | jen Edge Function / migrace |
+| `films` | kdokoli (i nepřihlášený – náhled univerz) | jen Edge Functions (`tmdb`, `admin`) |
+| `universes`, `universe_items` | kdokoli (i nepřihlášený – náhled univerz) | správce (`is_admin()`), Edge Function `tmdb` |
 | `profiles` | jen vlastní řádek (sdílení postupu později) | jen vlastní řádek, jen sloupec `username` |
 | `watches`, `watchlist` | jen vlastní řádky | jen vlastní řádky |
 | `heartbeat` | nikdo | jen funkce `ping()` |

@@ -11,6 +11,8 @@ import { universeView } from "./views/universe.js";
 import { loginView } from "./views/login.js";
 import { registerView } from "./views/register.js";
 import { profileView } from "./views/profile.js";
+import { adminUniversesView, adminUsersView } from "./views/admin.js";
+import { adminUniverseView } from "./views/admin-universe.js";
 import { notFoundView } from "./views/not-found.js";
 
 // Cesty v aplikaci
@@ -19,6 +21,9 @@ addRoute("/universe/:slug", universeView);
 addRoute("/login", loginView);
 addRoute("/register", registerView);
 addRoute("/profile", profileView);
+addRoute("/admin", adminUniversesView);
+addRoute("/admin/users", adminUsersView);
+addRoute("/admin/universe/:slug", adminUniverseView);
 setNotFound(notFoundView);
 
 const header = document.getElementById("site-header");
@@ -30,8 +35,8 @@ function renderHeader() {
     const profile = getProfile();
     const path = currentPath();
 
-    const navLink = (href, label, active) =>
-        h("a", { class: `nav__link${active ? " nav__link--active" : ""}`, href }, label);
+    const navLink = (href, label, active, extraClass = "") =>
+        h("a", { class: `nav__link${active ? " nav__link--active" : ""}${extraClass}`, href }, label);
 
     mount(header,
         h("div", { class: "header__inner" },
@@ -41,7 +46,10 @@ function renderHeader() {
             ),
             h("nav", { class: "nav" },
                 themeToggle(),
-                navLink("#/", TEXTS.navUniverses, path === "/" || path.startsWith("/universe")),
+                navLink("#/", TEXTS.navUniverses, path === "/" || path.startsWith("/universe/"), " nav__link--home"),
+                user && profile?.is_admin
+                    ? navLink("#/admin", TEXTS.navAdmin, path.startsWith("/admin"))
+                    : null,
                 user
                     ? [
                         h("a", {

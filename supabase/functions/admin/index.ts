@@ -1,0 +1,239 @@
+// =====================================================================
+// My Movie Diary – Edge Function "admin"
+//
+// Správcovské akce, které potřebují serverový klíč nebo TMDB token.
+// Volá ji jen přihlášený správce (profiles.is_admin = true) – funkce si
+// sama ověří přístupový token z hlavičky Authorization.
+//
+// POST { "action": "…", … }
+//   search       { query }              → hledání filmů v TMDB
+//   add-film     { tmdb_id }            → uloží film do tabulky films (detail z TMDB)
+//   users        {}                     → seznam uživatelů (nick, e-mail, správce, počet zhlédnutí)
+//   set-admin    { user_id, is_admin }  → udělí / odebere správce (ne sám sobě)
+//   delete-user  { user_id }            → smaže účet i všechna jeho data (ne sám sebe)
+//
+// V nastavení funkce musí být vypnuté "Verify JWT" (ověřuje si přístup sama).
+// =====================================================================
+
+import { createClient, SupabaseClient } from "npm:@supabase/supabase-js@2";
+
+const TMDB_BASE = "https://api.themoviedb.org/3";
+
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+
+function json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
+  });
+}
+
+/** Chyba, která se pošle správci s daným HTTP kódem. */
+class HttpError extends Error {
+  constructor(public status: number, message: string) {
+    super(message);
+  }
+}
+
+function requireEnv(name: string): string {
+  const value = Deno.env.get(name);
+  if (!value) throw new Error(`Missing secret: ${name}`);
+  return value;
+}
+
+/** Klíč s plnými právy (starší projekty: SUPABASE_SERVICE_ROLE_KEY, novější: SUPABASE_SECRET_KEYS). */
+function getServiceKey(): string {
+  const legacy = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (legacy) return legacy;
+  const secretKeys = Deno.env.get("SUPABASE_SECRET_KEYS");
+  if (secretKeys) {
+    const parsed = JSON.parse(secretKeys) as Record<string, string>;
+    const key = parsed["default"] ?? Object.values(parsed)[0];
+    if (key) return key;
+  }
+  throw new Error("No service key available in the Edge Function environment");
+}
+
+// ---------------------------------------------------------------------
+// Ověření správce
+// ---------------------------------------------------------------------
+
+/** Z hlavičky Authorization zjistí uživatele a ověří, že je správce. Vrací jeho id. */
+async function requireAdmin(db: SupabaseClient, request: Request): Promise<string> {
+  const token = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
+  if (!token) throw new HttpError(401, "Not signed in");
+
+  const { data, error } = await db.auth.getUser(token);
+  if (error || !data.user) throw new HttpError(401, "Invalid session");
+
+  const { data: profile } = await db
+    .from("profiles")
+    .select("is_admin")
+    .eq("id", data.user.id)
+    .maybeSingle();
+  if (!profile?.is_admin) throw new HttpError(403, "Administrators only");
+
+  return data.user.id;
+}
+
+// ---------------------------------------------------------------------
+// TMDB
+// ---------------------------------------------------------------------
+
+async function tmdbGet<T>(path: string, params: Record<string, string> = {}): Promise<T> {
+  const url = new URL(TMDB_BASE + path);
+  for (const [key, value] of Object.entries(params)) url.searchParams.set(key, value);
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${requireEnv("TMDB_READ_TOKEN")}`,
+      Accept: "application/json",
+    },
+  });
+  if (!response.ok) throw new HttpError(502, `TMDB ${response.status}`);
+  return (await response.json()) as T;
+}
+
+interface TmdbSearchResult {
+  id: number;
+  title: string;
+  original_title: string;
+  release_date: string;
+  poster_path: string | null;
+  overview: string;
+}
+
+interface TmdbMovieDetails extends TmdbSearchResult {
+  runtime: number | null;
+  backdrop_path: string | null;
+  status: string;
+}
+
+/** Hledání filmů podle názvu (prvních 12 výsledků). */
+async function search(query: string) {
+  if (!query?.trim()) return [];
+  const data = await tmdbGet<{ results: TmdbSearchResult[] }>("/search/movie", {
+    query: query.trim(),
+    include_adult: "false",
+    language: "en-US",
+  });
+  return data.results.slice(0, 12).map((r) => ({
+    tmdb_id: r.id,
+    title: r.title,
+    original_title: r.original_title,
+    year: r.release_date ? r.release_date.slice(0, 4) : null,
+    poster_path: r.poster_path,
+    overview: r.overview,
+  }));
+}
+
+/** Stáhne detail filmu z TMDB a uloží ho do tabulky films. */
+async function addFilm(db: SupabaseClient, tmdbId: number) {
+  if (!Number.isInteger(tmdbId) || tmdbId <= 0) throw new HttpError(400, "Invalid tmdb_id");
+  const d = await tmdbGet<TmdbMovieDetails>(`/movie/${tmdbId}`, { language: "en-US" });
+
+  const film = {
+    tmdb_id: d.id,
+    title: d.title,
+    original_title: d.original_title || null,
+    release_date: d.release_date || null,
+    runtime: d.runtime || null,
+    poster_path: d.poster_path,
+    backdrop_path: d.backdrop_path,
+    overview: d.overview || null,
+    updated_at: new Date().toISOString(),
+  };
+  const { error } = await db.from("films").upsert(film, { onConflict: "tmdb_id" });
+  if (error) throw new Error(error.message);
+  return { ...film, status: d.status };
+}
+
+// ---------------------------------------------------------------------
+// Uživatelé
+// ---------------------------------------------------------------------
+
+async function listUsers(db: SupabaseClient) {
+  const { data, error } = await db.auth.admin.listUsers({ page: 1, perPage: 1000 });
+  if (error) throw new Error(error.message);
+
+  const [{ data: profiles, error: profileError }, { data: watches, error: watchError }] = await Promise.all([
+    db.from("profiles").select("id, username, is_admin, created_at"),
+    db.from("watches").select("user_id"),
+  ]);
+  if (profileError) throw new Error(profileError.message);
+  if (watchError) throw new Error(watchError.message);
+
+  const profileById = new Map((profiles ?? []).map((p) => [p.id, p]));
+  const watchCount = new Map<string, number>();
+  for (const w of watches ?? []) watchCount.set(w.user_id, (watchCount.get(w.user_id) ?? 0) + 1);
+
+  return data.users
+    .map((user) => {
+      const profile = profileById.get(user.id);
+      return {
+        id: user.id,
+        email: user.email ?? null,
+        username: profile?.username ?? null,
+        is_admin: profile?.is_admin ?? false,
+        provider: (user.app_metadata?.provider as string | undefined) ?? "email",
+        created_at: user.created_at,
+        last_sign_in_at: user.last_sign_in_at ?? null,
+        watch_count: watchCount.get(user.id) ?? 0,
+      };
+    })
+    .sort((a, b) => (a.username ?? "").localeCompare(b.username ?? ""));
+}
+
+async function setAdmin(db: SupabaseClient, selfId: string, userId: string, isAdmin: boolean) {
+  if (userId === selfId) throw new HttpError(400, "You cannot change your own administrator role");
+  const { error } = await db.from("profiles").update({ is_admin: isAdmin === true }).eq("id", userId);
+  if (error) throw new Error(error.message);
+  return { ok: true };
+}
+
+async function deleteUser(db: SupabaseClient, selfId: string, userId: string) {
+  if (userId === selfId) throw new HttpError(400, "You cannot delete your own account here");
+  // Smazání účtu smaže díky cizím klíčům (on delete cascade) i profil, zhlédnutí a watchlist
+  const { error } = await db.auth.admin.deleteUser(userId);
+  if (error) throw new Error(error.message);
+  return { ok: true };
+}
+
+// ---------------------------------------------------------------------
+// Vstupní bod
+// ---------------------------------------------------------------------
+
+Deno.serve(async (request) => {
+  if (request.method === "OPTIONS") return new Response("ok", { headers: CORS_HEADERS });
+  if (request.method !== "POST") return json({ error: "Use POST" }, 405);
+
+  try {
+    const db = createClient(requireEnv("SUPABASE_URL"), getServiceKey(), {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    const selfId = await requireAdmin(db, request);
+    const body = await request.json().catch(() => ({})) as Record<string, unknown>;
+
+    switch (body.action) {
+      case "search":
+        return json(await search(String(body.query ?? "")));
+      case "add-film":
+        return json(await addFilm(db, Number(body.tmdb_id)));
+      case "users":
+        return json(await listUsers(db));
+      case "set-admin":
+        return json(await setAdmin(db, selfId, String(body.user_id), body.is_admin === true));
+      case "delete-user":
+        return json(await deleteUser(db, selfId, String(body.user_id)));
+      default:
+        return json({ error: `Unknown action: ${body.action}` }, 400);
+    }
+  } catch (error) {
+    if (error instanceof HttpError) return json({ error: error.message }, error.status);
+    console.error(error);
+    return json({ error: String(error) }, 500);
+  }
+});

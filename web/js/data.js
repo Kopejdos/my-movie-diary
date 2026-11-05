@@ -41,7 +41,7 @@ export async function fetchUniverses() {
 export async function fetchUniverse(slug) {
     const universe = await supabase
         .from("universes")
-        .select("id, slug, name, description, color, cover:films(title, poster_path, backdrop_path)")
+        .select("id, slug, name, description, color, cover_tmdb_id, cover:films(title, poster_path, backdrop_path)")
         .eq("slug", slug)
         .maybeSingle()
         .then(check);
@@ -50,7 +50,7 @@ export async function fetchUniverse(slug) {
     const items = await supabase
         .from("universe_items")
         .select(`
-            release_order, story_order, group_label, is_optional,
+            id, release_order, story_order, group_label, is_optional,
             film:films(tmdb_id, title, original_title, release_date, runtime, poster_path, backdrop_path)
         `)
         .eq("universe_id", universe.id)

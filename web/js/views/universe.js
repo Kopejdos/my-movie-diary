@@ -6,6 +6,7 @@ import {
 } from "../data.js";
 import { isSignedIn } from "../auth.js";
 import { setAccent } from "../theme.js";
+import { loadPref, savePref } from "../prefs.js";
 import { TEXTS, format } from "../texts.js";
 import {
     h, mount, poster, pill, backdropUrl, yearOf, formatDate, toast, loadingView, errorView,
@@ -58,6 +59,21 @@ class UniversePage {
         this.progressBar = null;
         this.progressText = null;
         this.upNext = h("section", { class: "up-next-slot" });
+        this.list = h("ol", { class: "film-list" });
+        this.toolbar = h("div", { class: "toolbar" });
+
+        // Pořadí příběhu má smysl jen tam, kde ho některý film má vyplněné
+        this.hasStory = universe.items.some((item) => item.story_order !== null);
+        this.order = this.hasStory ? loadPref("order", "release") : "release";
+        this.unwatchedOnly = signedIn && loadPref("unwatched", "0") === "1";
+    }
+
+    /** Filmy v aktuálně zvoleném pořadí. */
+    sortedItems() {
+        if (this.order !== "story") return this.universe.items;
+        // Film bez čísla v příběhu jde za ty očíslované, v pořadí vydání
+        const key = (item) => item.story_order ?? 10000 + item.release_order;
+        return [...this.universe.items].sort((a, b) => key(a) - key(b));
     }
 
     render() {
@@ -67,10 +83,55 @@ class UniversePage {
         mount(this.container,
             this.renderBanner(),
             this.signedIn ? this.upNext : null,
-            hasOptional ? h("p", { class: "hint", style: "margin-top: 18px" }, TEXTS.optionalHint) : null,
-            h("ol", { class: "film-list" }, this.renderItems()),
+            this.toolbar,
+            hasOptional ? h("p", { class: "hint", style: "margin: 0 0 8px" }, TEXTS.optionalHint) : null,
+            this.list,
         );
+        this.renderToolbar();
+        this.renderList();
         this.updateProgress();
+    }
+
+    /** Přepínač pořadí (jen když univerzum má pořadí příběhu) a filtr neviděných. */
+    renderToolbar() {
+        const option = (value, label) => h("button", {
+            class: `segmented__option${this.order === value ? " segmented__option--active" : ""}`,
+            type: "button",
+            "aria-pressed": String(this.order === value),
+            onClick: () => {
+                this.order = value;
+                savePref("order", value);
+                this.renderToolbar();
+                this.renderList();
+                this.renderUpNext();
+            },
+        }, label);
+
+        mount(this.toolbar,
+            this.hasStory
+                ? h("div", { class: "segmented", role: "group" },
+                    option("release", TEXTS.orderRelease),
+                    option("story", TEXTS.orderStory))
+                : h("span"),
+            this.signedIn
+                ? h("button", {
+                    class: "switch", type: "button", role: "switch",
+                    "aria-checked": String(this.unwatchedOnly),
+                    onClick: () => {
+                        this.unwatchedOnly = !this.unwatchedOnly;
+                        savePref("unwatched", this.unwatchedOnly ? "1" : "0");
+                        this.renderToolbar();
+                        this.renderList();
+                    },
+                }, h("span", { class: "switch__track", "aria-hidden": "true" }), TEXTS.unwatchedOnly)
+                : null,
+        );
+    }
+
+    /** Seznam filmů podle pořadí a filtru. */
+    renderList() {
+        const nodes = this.renderItems();
+        mount(this.list, nodes.length > 0 ? nodes : h("li", { class: "empty-filter" }, TEXTS.filterEmpty));
     }
 
     /** Banner: záběr z filmu přes celou šířku, přechází do pozadí. */
@@ -106,10 +167,10 @@ class UniversePage {
         );
     }
 
-    /** Karta „Up next“ – další neviděný film, nebo gratulace k dokončení. */
+    /** Karta „Up next“ – další neviděný film (v aktuálním pořadí), nebo gratulace. */
     renderUpNext() {
         if (!this.signedIn) return;
-        const next = nextUnwatched(this.universe.items, this.counts);
+        const next = nextUnwatched(this.sortedItems(), this.counts);
 
         if (!next) {
             mount(this.upNext,
@@ -140,18 +201,25 @@ class UniversePage {
                 h("button", {
                     class: "btn btn--universe",
                     type: "button",
-                    onClick: () => this.change(this.rows.get(film.tmdb_id), next, +1),
+                    onClick: () => this.change(this.rows.get(film.tmdb_id) ?? null, next, +1),
                 }, `+ ${TEXTS.markWatched}`),
             ),
         );
     }
 
-    /** Filmy s nadpisy skupin (nadpis se vloží při každé změně skupiny). */
+    /**
+     * Řádky filmů. V pořadí vydání s nadpisy skupin (nadpis při každé změně skupiny);
+     * v pořadí příběhu bez nich – skupiny by se rozházely.
+     */
     renderItems() {
         const nodes = [];
+        const showGroups = this.order === "release";
+        this.rows.clear();
         let lastGroup;
-        for (const item of this.universe.items) {
-            if (item.group_label && item.group_label !== lastGroup) {
+        for (const item of this.sortedItems()) {
+            if (this.unwatchedOnly && this.counts.has(item.film.tmdb_id)) continue;
+
+            if (showGroups && item.group_label && item.group_label !== lastGroup) {
                 nodes.push(h("li", { class: "film-group" }, item.group_label));
             }
             lastGroup = item.group_label;
@@ -228,7 +296,7 @@ class UniversePage {
                 lastWatchedOn: delta > 0 ? todayLocal() : before?.lastWatchedOn,
             });
         }
-        this.fillRow(row, item, true);
+        if (row) this.fillRow(row, item, true);
         this.updateProgress();
 
         try {
@@ -246,7 +314,11 @@ class UniversePage {
             if (before) this.counts.set(tmdbId, before); else this.counts.delete(tmdbId);
             toast(format("errorGeneric", error.message), "error");
         }
-        this.fillRow(row, item, false);
+        if (this.unwatchedOnly) {
+            this.renderList();          // viděný film z filtru zmizí
+        } else if (row) {
+            this.fillRow(row, item, false);
+        }
         this.updateProgress();
     }
 
