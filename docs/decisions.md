@@ -238,7 +238,7 @@ Opačné pořadí ve V1.2 způsobilo chybu „Could not find the table 'public.c
 | 12 | V1.4 | Úrovně a XP ✅ | level a filmový titul z XP (filmy, opakování, kolekce, achievementy), odznak v hlavičce, Level up; Insidious: Out of the Further |
 | 13 | V1.5 | Horory, vlna 2 ✅ | dalších 7 žánrů |
 | 14 | V1.6 | Vyhledávání ✅ | stránka hledání – filmy a kolekce, i bez diakritiky a podle roku; klávesa / |
-| 15 | V1.7 | Horory, vlna 3 | posledních 7 žánrů |
+| 15 | V1.7 | Horory, vlna 3 ✅ | posledních 7 žánrů + J-Horror |
 | 16 | V1.8 | Cesty (paths) | kurátorské trasy krok za krokem – v kolekci, napříč kolekcemi, žánrové; XP za dokončení |
 | 17 | V1.9 | Statistiky profilu | filmy, hodiny, nejčastěji viděný film, postup v kolekcích |
 | 18 | **V2.0** | Sdílení profilu | veřejný profil (level, achievementy, statistiky), hledání uživatelů – z osobního deníku sociální aplikace |
@@ -261,9 +261,9 @@ Superhero · Sci-fi & Fantasy · Animation · Action & Adventure · Horror (+ da
 |---|---|---|
 | 1 | V1.2 | Slasher · Supernatural & Paranormal · Haunted House · Demonic & Exorcism · Psychological · Found Footage · Zombie |
 | 2 | V1.5 | Body Horror · Creature Feature · Vampire · Werewolf · Sci-fi Horror · Folk Horror · Horror Comedy |
-| 3 | V1.7 | Gore & Splatter · Extreme / Torture · Cosmic (Lovecraftian) · Gothic · Giallo · Eco-horror · Elevated Horror |
+| 3 | V1.7 | Gore & Splatter · Extreme & Torture · Cosmic Horror · Gothic Horror · Giallo · Eco-horror · Elevated Horror + bonus **J-Horror** |
 
-- Kamarád zmínil i **J-Horror** (japonský horor) – zařadit jako bonus do některé vlny.
+- **J-Horror** (japonský horor, nápad kamaráda) přibyl jako bonus ve vlně 3 – hororů je tak 8 sérií a 22 žánrových výběrů.
 - Výběry filmů sestavuje a spravuje jen správce (Adam); návrhy od ostatních vítány, admin práva ne.
 
 ### Fáze 11 – achievementy (V1.3)
@@ -571,6 +571,19 @@ Ke každému kroku krátká poznámka, proč ho vidět; postup cestou; XP a achi
 - **Psaní nepřidává záznamy do historie** (`history.replaceState`) – tlačítko Zpět vede zpět na předchozí stránku,
   ale adresa s `?q=` se dá poslat nebo uložit.
 - **Hledá se jen v kolekcích aplikace**, ne v celé TMDB – přidávání filmů zůstává na adminovi.
+
+### Fáze 15 – horory, vlna 3 ✅ (5. 11. 2026) – **V1.7**
+- 8 žánrových výběrů (14–15 filmů): **Gore & Splatter**, **Extreme & Torture**, **Cosmic Horror**, **Gothic Horror**,
+  **Giallo**, **Eco-horror**, **Elevated Horror** a bonus **J-Horror**. Hororová kategorie je tím kompletní.
+- Novinky: Terrifier 3, Frankenstein (2025, del Toro), Longlegs, Weapons.
+- Jen obsah (seed) – web, databáze ani funkce se nemění.
+
+#### Rozhodnutí ve fázi 15
+- **TMDB id připnuté předem** u krátkých názvů (X, Us, Pearl, House, Opera) podle pravidla z V1.5.1 – i v kolekcích
+  Slasher a Psychological Horror, kde už X, Us a Pearl byly, aby šlo o tentýž film.
+- **Extreme & Torture bez nejkontroverznějších titulů** (např. A Serbian Film) – výběr drží známé a kriticky
+  probírané filmy žánru; popis kolekce upozorňuje, že není pro slabé povahy.
+- **Giallo má žlutou barvu** – „giallo“ je italsky žlutá (podle žlutých obálek detektivek).
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

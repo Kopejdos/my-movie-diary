@@ -778,7 +778,7 @@
         { "title": "You're Next", "year": 2011 },
         { "title": "Terrifier", "year": 2016 },
         { "title": "Happy Death Day", "year": 2017 },
-        { "title": "X", "year": 2022 }
+        { "title": "X", "year": 2022, "tmdb": 760104 }
       ]
     },
     {
@@ -870,9 +870,9 @@
         { "title": "Black Swan", "year": 2010 },
         { "title": "Get Out", "year": 2017 },
         { "title": "The Lighthouse", "year": 2019 },
-        { "title": "Us", "year": 2019 },
+        { "title": "Us", "year": 2019, "tmdb": 458723 },
         { "title": "Saint Maud", "year": 2020 },
-        { "title": "Pearl", "year": 2022 },
+        { "title": "Pearl", "year": 2022, "tmdb": 949423 },
         { "title": "Speak No Evil", "year": 2022 }
       ]
     },
@@ -1094,6 +1094,200 @@
         { "title": "Ready or Not", "year": 2019 },
         { "title": "Freaky", "year": 2020 },
         { "title": "Beetlejuice Beetlejuice", "year": 2024 }
+      ]
+    },
+    {
+      "slug": "horror-gore",
+      "name": "Gore & Splatter",
+      "kind": "genre",
+      "categories": ["horror"],
+      "color": "#7f1d1d",
+      "description": "Buckets of blood – practical effects pushed to the limit.",
+      "films": [
+        { "title": "Blood Feast", "year": 1963 },
+        { "title": "The Evil Dead", "year": 1981 },
+        { "title": "The Beyond", "year": 1981 },
+        { "title": "Day of the Dead", "year": 1985 },
+        { "title": "Bad Taste", "year": 1987 },
+        { "title": "Evil Dead II", "year": 1987 },
+        { "title": "Hellraiser", "year": 1987 },
+        { "title": "Braindead", "year": 1992 },
+        { "title": "Ichi the Killer", "year": 2001 },
+        { "title": "Tokyo Gore Police", "year": 2008 },
+        { "title": "Evil Dead", "year": 2013 },
+        { "title": "Terrifier", "year": 2016 },
+        { "title": "Terrifier 2", "year": 2022 },
+        { "title": "Evil Dead Rise", "year": 2023 },
+        { "title": "Terrifier 3", "year": 2024 }
+      ]
+    },
+    {
+      "slug": "horror-extreme",
+      "name": "Extreme & Torture",
+      "kind": "genre",
+      "categories": ["horror"],
+      "color": "#57534e",
+      "description": "The most brutal and disturbing corners of the genre. Not for the faint-hearted.",
+      "films": [
+        { "title": "The Last House on the Left", "year": 1972 },
+        { "title": "Cannibal Holocaust", "year": 1980 },
+        { "title": "Funny Games", "year": 1997 },
+        { "title": "Audition", "year": 1999 },
+        { "title": "High Tension", "year": 2003 },
+        { "title": "Saw", "year": 2004 },
+        { "title": "Hostel", "year": 2005 },
+        { "title": "The Devil's Rejects", "year": 2005 },
+        { "title": "Wolf Creek", "year": 2005 },
+        { "title": "Frontier(s)", "year": 2007 },
+        { "title": "Martyrs", "year": 2008 },
+        { "title": "The Human Centipede (First Sequence)", "year": 2009 },
+        { "title": "I Saw the Devil", "year": 2010 },
+        { "title": "The Green Inferno", "year": 2013 }
+      ]
+    },
+    {
+      "slug": "horror-cosmic",
+      "name": "Cosmic Horror",
+      "kind": "genre",
+      "categories": ["horror"],
+      "color": "#4338ca",
+      "description": "Lovecraftian dread – forces too vast and ancient to understand.",
+      "films": [
+        { "title": "The Dunwich Horror", "year": 1970 },
+        { "title": "The Thing", "year": 1982 },
+        { "title": "From Beyond", "year": 1986 },
+        { "title": "Prince of Darkness", "year": 1987 },
+        { "title": "In the Mouth of Madness", "year": 1994 },
+        { "title": "Event Horizon", "year": 1997 },
+        { "title": "Dagon", "year": 2001 },
+        { "title": "The Mist", "year": 2007 },
+        { "title": "The Void", "year": 2016 },
+        { "title": "The Endless", "year": 2017 },
+        { "title": "Annihilation", "year": 2018 },
+        { "title": "Color Out of Space", "year": 2019 },
+        { "title": "The Lighthouse", "year": 2019 },
+        { "title": "Underwater", "year": 2020 }
+      ]
+    },
+    {
+      "slug": "horror-gothic",
+      "name": "Gothic Horror",
+      "kind": "genre",
+      "categories": ["horror"],
+      "color": "#831843",
+      "description": "Crumbling castles, candlelight and dark romance.",
+      "films": [
+        { "title": "Frankenstein", "year": 1931 },
+        { "title": "Bride of Frankenstein", "year": 1935 },
+        { "title": "House of Usher", "year": 1960 },
+        { "title": "Black Sunday", "year": 1960 },
+        { "title": "The Innocents", "year": 1961 },
+        { "title": "The Masque of the Red Death", "year": 1964 },
+        { "title": "Bram Stoker's Dracula", "year": 1992 },
+        { "title": "Mary Shelley's Frankenstein", "year": 1994 },
+        { "title": "Sleepy Hollow", "year": 1999 },
+        { "title": "The Others", "year": 2001 },
+        { "title": "The Woman in Black", "year": 2012 },
+        { "title": "Crimson Peak", "year": 2015 },
+        { "title": "Nosferatu", "year": 2024 },
+        { "title": "Frankenstein", "year": 2025 }
+      ]
+    },
+    {
+      "slug": "horror-giallo",
+      "name": "Giallo",
+      "kind": "genre",
+      "categories": ["horror"],
+      "color": "#facc15",
+      "description": "Italian thrillers – black gloves, razors and lurid colors.",
+      "films": [
+        { "title": "The Girl Who Knew Too Much", "year": 1963 },
+        { "title": "Blood and Black Lace", "year": 1964 },
+        { "title": "The Bird with the Crystal Plumage", "year": 1970 },
+        { "title": "A Lizard in a Woman's Skin", "year": 1971 },
+        { "title": "The Cat o' Nine Tails", "year": 1971 },
+        { "title": "Don't Torture a Duckling", "year": 1972 },
+        { "title": "What Have You Done to Solange?", "year": 1972 },
+        { "title": "Torso", "year": 1973 },
+        { "title": "Deep Red", "year": 1975 },
+        { "title": "The House with Laughing Windows", "year": 1976 },
+        { "title": "Suspiria", "year": 1977 },
+        { "title": "Tenebrae", "year": 1982 },
+        { "title": "Opera", "year": 1987, "tmdb": 20115 },
+        { "title": "Amer", "year": 2009 }
+      ]
+    },
+    {
+      "slug": "horror-eco",
+      "name": "Eco-horror",
+      "kind": "genre",
+      "categories": ["horror"],
+      "color": "#059669",
+      "description": "Nature strikes back – animals, plants and the planet itself.",
+      "films": [
+        { "title": "The Birds", "year": 1963 },
+        { "title": "Frogs", "year": 1972 },
+        { "title": "Jaws", "year": 1975 },
+        { "title": "Squirm", "year": 1976 },
+        { "title": "Long Weekend", "year": 1978 },
+        { "title": "Piranha", "year": 1978 },
+        { "title": "Prophecy", "year": 1979 },
+        { "title": "Alligator", "year": 1980 },
+        { "title": "Cujo", "year": 1983 },
+        { "title": "The Happening", "year": 2008 },
+        { "title": "The Bay", "year": 2012 },
+        { "title": "Crawl", "year": 2019 },
+        { "title": "In the Earth", "year": 2021 },
+        { "title": "Cocaine Bear", "year": 2023 }
+      ]
+    },
+    {
+      "slug": "horror-elevated",
+      "name": "Elevated Horror",
+      "kind": "genre",
+      "categories": ["horror"],
+      "color": "#c084fc",
+      "description": "Slow-burn, arthouse horror about grief, trauma and everything in between.",
+      "films": [
+        { "title": "The Babadook", "year": 2014 },
+        { "title": "It Follows", "year": 2014 },
+        { "title": "The Witch", "year": 2015 },
+        { "title": "Get Out", "year": 2017 },
+        { "title": "Hereditary", "year": 2018 },
+        { "title": "Us", "year": 2019, "tmdb": 458723 },
+        { "title": "Midsommar", "year": 2019 },
+        { "title": "Saint Maud", "year": 2019 },
+        { "title": "His House", "year": 2020 },
+        { "title": "Relic", "year": 2020 },
+        { "title": "X", "year": 2022, "tmdb": 760104 },
+        { "title": "Pearl", "year": 2022, "tmdb": 949423 },
+        { "title": "Talk to Me", "year": 2022 },
+        { "title": "Longlegs", "year": 2024 },
+        { "title": "Weapons", "year": 2025 }
+      ]
+    },
+    {
+      "slug": "horror-j-horror",
+      "name": "J-Horror",
+      "kind": "genre",
+      "categories": ["horror"],
+      "color": "#7dd3fc",
+      "description": "Japanese horror – vengeful spirits, cursed tapes and quiet dread.",
+      "films": [
+        { "title": "Kwaidan", "year": 1964 },
+        { "title": "Onibaba", "year": 1964 },
+        { "title": "Kuroneko", "year": 1968 },
+        { "title": "House", "year": 1977, "tmdb": 25623 },
+        { "title": "Cure", "year": 1997 },
+        { "title": "Ring", "year": 1998 },
+        { "title": "Audition", "year": 1999 },
+        { "title": "Uzumaki", "year": 2000 },
+        { "title": "Pulse", "year": 2001 },
+        { "title": "Dark Water", "year": 2002 },
+        { "title": "Ju-on: The Grudge", "year": 2002 },
+        { "title": "One Missed Call", "year": 2003 },
+        { "title": "Marebito", "year": 2004 },
+        { "title": "Noroi: The Curse", "year": 2005 }
       ]
     }
   ]
