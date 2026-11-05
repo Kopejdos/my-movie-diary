@@ -6,7 +6,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V2.1.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V2.2** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
@@ -28,7 +28,6 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Installable on a phone or computer (PWA), opens even offline
 
 **Coming next** – optimization & security
-- V2.2 – About page, contact, Terms of Service and community rules
 - V2.3 – nickname rules, moderation, delete your account
 - V2.4 – email confirmation with custom-designed emails
 - V2.5 – forgot password, change password
@@ -62,6 +61,7 @@ my-movie-diary/
 - [Data model](docs/data-model.md)
 - [Setup guide](docs/setup.md)
 - [Privacy policy](https://kopejdos.github.io/my-movie-diary/privacy.html)
+- [Terms of Service](https://kopejdos.github.io/my-movie-diary/terms.html)
 
 ## Credits
 

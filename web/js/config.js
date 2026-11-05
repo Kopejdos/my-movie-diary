@@ -4,7 +4,7 @@
 
 // Verze aplikace a měsíc poslední aktualizace – zobrazují se v patičce.
 // Při vydání nové verze změnit tady + záznam do CHANGELOG.md + tag (viz docs/decisions.md → Verzování).
-export const APP_VERSION = "V2.1.1";
+export const APP_VERSION = "V2.2";
 export const APP_UPDATED = "November 2026";
 
 export const SUPABASE_URL = "https://vvnexfdnfvwbwluazwoo.supabase.co";
@@ -25,6 +25,15 @@ export const BACKDROP_SIZES = {
     phone: "w780",     // banner na telefonu
     desktop: "w1280",  // banner na velké obrazovce
 };
+
+// Provozovatel a kontakt (patička, About, Terms of Service, zásady ochrany soukromí).
+// Kontakt je i ve statických stránkách privacy.html a terms.html a v patičce index.html.
+export const OPERATOR_NAME = "Adam Kopecký (Kopejdos)";
+export const CONTACT_EMAIL = "mymoviediary.support@gmail.com";
+export const GITHUB_URL = "https://github.com/Kopejdos/my-movie-diary";
+
+// Minimální věk pro účet (hranice pro souhlas se zpracováním údajů online v Česku)
+export const MIN_AGE = 15;
 
 // Pravidla pro registraci (stejná jako v databázi)
 export const USERNAME_PATTERN = /^[A-Za-z0-9_-]{3,24}$/;

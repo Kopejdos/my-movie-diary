@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V2.2 – November 2026
+- About page with community rules and contact
+- New footer: About · Terms · Privacy · Contact · GitHub
+- Terms of Service with community rules; updated, more detailed Privacy Policy
+- Registration asks you to confirm you are at least 15 and agree to the Terms and Privacy Policy
+
 ## V2.1.1 – November 2026
 - Nothing jumps around while the page loads anymore
 - The overview starts loading right away, in parallel with signing in

@@ -117,6 +117,46 @@ export const TEXTS = {
     publicOpenSettings: "Open my profile",
     publicNoActivity: "No movies logged yet.",
 
+    // O aplikaci (V2.2)
+    aboutTitle: "About My Movie Diary",
+    aboutIntro: "A personal diary for movie collections – log every viewing and always know what to watch next.",
+    aboutWhatTitle: "What it is",
+    aboutWhatText: "My Movie Diary tracks the movies you watch across film collections – from the MCU and Star Wars to Studio Ghibli and hand-picked horror genres.",
+    aboutFeatures: [
+        "Every viewing logged with a date – rewatches included",
+        "Progress per collection, Up next and curated paths",
+        "Watchlist, search, achievements, levels and stats",
+        "Optional public profile you can share with friends",
+    ],
+    aboutWhoTitle: "Who makes it",
+    aboutWhoText: "A free, non-commercial hobby project by {0} from the Czech Republic.",
+    aboutStack: "Built with plain HTML, CSS and JavaScript, Supabase and GitHub Pages.",
+    aboutRulesTitle: "Community rules",
+    aboutRulesText: "You need to be at least {0} to have an account. Nicknames and public profiles are visible to others, so:",
+    aboutRules: [
+        "No offensive, hateful or sexually explicit nicknames",
+        "No impersonating others, the admin or staff",
+        "No fake accounts, bots or spam",
+    ],
+    aboutReadTerms: "Read the Terms of Service →",
+    aboutContactTitle: "Contact",
+    aboutContactText: "Questions, ideas, a missing movie or a report of rule-breaking? Write to:",
+    aboutContactGithub: "Bugs and feature ideas are also welcome on",
+    aboutDataTitle: "Your data",
+    aboutDataText: "Your diary is private by default. We store only what the app needs to work, never sell it, and you can have your account deleted at any time.",
+    aboutReadPrivacy: "Read the Privacy Policy →",
+    aboutCreditsTitle: "Credits",
+    aboutCreditsText: "Movie titles, posters and backdrops come from TMDB. Fonts: Inter and Chakra Petch.",
+    aboutChangelog: "What's new",
+
+    // Souhlas s podmínkami (registrace, Google)
+    termsConsent: "I am at least {0} and I agree to the",
+    termsLink: "Terms of Service",
+    termsAnd: "and the",
+    privacyLink: "Privacy Policy",
+    errorTermsRequired: "Please confirm that you agree to the Terms of Service and Privacy Policy.",
+    googleConsent: "By continuing with Google you confirm you are at least {0} and agree to the",
+
     // Watchlist
     navWatchlist: "Watchlist",
     watchlistTitle: "Watchlist",

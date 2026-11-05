@@ -258,7 +258,7 @@ Hororové vlny se střídají s funkcemi, aby každá verze přinesla něco nov�
 | # | Verze | Fáze | Co přibude |
 |---|---|---|---|
 | 19 | V2.1 | Optimalizace ✅ | plakáty a banner ve správné velikosti, mezipaměť katalogu, detail kolekce jedním dotazem, přednačtení po najetí na kartu |
-| 20 | V2.2 | O aplikaci a pravidla | stránka **About** (co je MMD, kdo ho dělá, TMDB, verze), **kontakt**, nová **patička** (About · Terms · Privacy · Contact · GitHub), **Terms of Service** a **pravidla komunity** (nicky, minimální věk 15 let, právo smazat / přejmenovat účet), souhlas při registraci, aktualizace zásad ochrany soukromí (co se ukládá, admin vidí e-mail, propojení účtů) |
+| 20 | V2.2 | O aplikaci a pravidla ✅ | stránka **About** (co je MMD, kdo ho dělá, TMDB, verze), **kontakt**, nová **patička** (About · Terms · Privacy · Contact · GitHub), **Terms of Service** a **pravidla komunity** (nicky, minimální věk 15 let, právo smazat / přejmenovat účet), souhlas při registraci, aktualizace zásad ochrany soukromí (co se ukládá, admin vidí e-mail, propojení účtů) |
 | 21 | V2.3 | Nicky a moderace | **filtr nicků v databázi** (zakázaná slova česky i anglicky, obcházení typu `f4gg0t` a podtržítek, rezervovaná jména admin / support / moderator), seznam zakázaných slov spravovaný v adminu, **Reset nickname** v adminu, **Delete my account** pro uživatele (Edge Function, právo na výmaz) |
 | 22 | V2.4 | E-mail | **vlastní SMTP** (samostatný Gmail + heslo aplikace), **vlastní vzhled mailů** v designu MMD (potvrzení, obnova hesla, změna e-mailu), po potvrzení hláška a přesměrování na přihlášení, „Please confirm your email“ i u přihlášení nickem, **Resend confirmation** |
 | 23 | V2.5 | Hesla | **Forgot password** (stránka pro nové heslo), **změna hesla v profilu**, přísnější pravidla hesla (délka, povinné znaky) i v Supabase |
@@ -745,6 +745,31 @@ scénáře (telefon, CPU 4×, pomalá síť, data ze seedu, průměr 3 běhů):
 Nedá se ovlivnit: „Use efficient cache lifetimes“ – GitHub Pages posílá všem souborům `max-age=600`; opakované
 návštěvy to řeší service worker (Lighthouse ho nezapočítává). Na V2.7 zůstává: menší knihovna Supabase (jen
 přihlášení a databáze, bez realtime a storage), případně minifikace.
+
+### Fáze 20 – o aplikaci a pravidla ✅ (5. 11. 2026) – **V2.2**
+- Stránka **About** (`#/about`): co je MMD, kdo ho dělá, pravidla komunity ve zkratce, kontakt, data, poděkování a verze.
+- **Patička** na všech stránkách: About · Terms · Privacy · Contact · GitHub, verze a povinné uvedení TMDB.
+- **Terms of Service** (`terms.html`): provozovatel, účet (věk **15+**, vlastní e-mail, jeden účet na osobu),
+  **pravidla komunity** (žádné urážlivé nicky ani obcházení čísly a symboly, žádné vydávání se za jiné nebo za admina,
+  žádné boty a falešné účty, žádné útoky), moderace (reset nicku, skrytí profilu, smazání účtu i bez upozornění),
+  data, TMDB, „as is“, změny, české právo, kontakt.
+- **Zásady ochrany soukromí** přepsané: kdo aplikaci provozuje, co přesně se ukládá (včetně údajů, které si při přihlášení
+  Googlem uloží Supabase, a záznamů o přihlášení s IP adresou), jak jsou data propojená (náhodné ID, e-mail jen pro
+  přihlášení, propojení účtů se stejným e-mailem), kdo co vidí (admin vidí seznam účtů s e-mailem), proč, jak dlouho,
+  práva (přístup, oprava, výmaz, stížnost u ÚOOÚ), věk.
+- **Souhlas při registraci** – povinné zaškrtnutí „I am at least 15 and I agree to the Terms of Service and the Privacy
+  Policy“; pod tlačítkem Google věta, že pokračováním uživatel souhlasí (účet z Googlu vzniká bez formuláře).
+- Provozovatel, kontakt a minimální věk na jednom místě v `config.js` (`OPERATOR_NAME`, `CONTACT_EMAIL`, `MIN_AGE`);
+  kontakt je i ve statických stránkách a v patičce `index.html`.
+
+#### Rozhodnutí ve fázi 20
+- **Kontakt `mymoviediary.support@gmail.com`** – samostatný Gmail jen pro aplikaci (osobní e-mail se nezveřejňuje);
+  stejný účet poslouží ve V2.4 jako odesílatel mailů (SMTP). Adresa typu `support@…` by vyžadovala vlastní doménu.
+- **Podepsáno „Adam Kopecký (Kopejdos)“** – u podmínek je vhodné uvést, kdo službu provozuje.
+- **Minimální věk 15 let** – hranice pro souhlas se zpracováním osobních údajů online v Česku.
+- **Terms a Privacy jako statické stránky** (ne obrazovky aplikace) – fungují bez JavaScriptu a mají stálou adresu
+  pro nastavení přihlášení přes Google (Branding → Terms of service).
+- **Souhlas se neukládá do databáze** – registrace bez zaškrtnutí neprojde; případné ukládání data souhlasu později.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

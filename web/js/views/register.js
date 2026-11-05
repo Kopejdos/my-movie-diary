@@ -2,11 +2,11 @@
 
 import { signUp, isUsernameAvailable, isSignedIn } from "../auth.js";
 import { navigate } from "../router.js";
-import { USERNAME_PATTERN, PASSWORD_MIN_LENGTH } from "../config.js";
+import { USERNAME_PATTERN, PASSWORD_MIN_LENGTH, MIN_AGE } from "../config.js";
 import { TEXTS, format } from "../texts.js";
 import { setAccent } from "../theme.js";
 import { h, mount } from "../dom.js";
-import { field, googleButton, divider } from "./login.js";
+import { field, googleButton, divider, termsLinks } from "./login.js";
 
 export async function registerView(container) {
     setAccent(null);
@@ -23,6 +23,7 @@ export async function registerView(container) {
         autocomplete: "new-password", minlength: PASSWORD_MIN_LENGTH });
     const passwordRepeat = h("input", { type: "password", name: "password-repeat", required: true,
         autocomplete: "new-password" });
+    const consent = h("input", { type: "checkbox", name: "terms", required: true });
     const error = h("p", { class: "form-error", role: "alert" });
     const submit = h("button", { class: "btn btn--primary btn--block", type: "submit" }, TEXTS.submitRegister);
 
@@ -34,6 +35,9 @@ export async function registerView(container) {
         field(TEXTS.email, email),
         field(TEXTS.password, password, format("passwordHint", PASSWORD_MIN_LENGTH)),
         field(TEXTS.passwordRepeat, passwordRepeat),
+        h("label", { class: "consent" },
+            consent,
+            h("span", {}, format("termsConsent", MIN_AGE), " ", termsLinks())),
         error,
         submit,
         h("p", { class: "auth-form__switch" },
@@ -49,6 +53,7 @@ export async function registerView(container) {
         if (!email.value.trim() || !email.checkValidity()) return TEXTS.errorEmail;
         if (password.value.length < PASSWORD_MIN_LENGTH) return format("errorPasswordShort", PASSWORD_MIN_LENGTH);
         if (password.value !== passwordRepeat.value) return TEXTS.errorPasswordMismatch;
+        if (!consent.checked) return TEXTS.errorTermsRequired;
         return null;
     }
 

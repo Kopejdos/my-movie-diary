@@ -95,7 +95,8 @@ Po změně kódu funkce: v dashboardu otevřít funkci → Code → vložit nov�
       redirect `https://vvnexfdnfvwbwluazwoo.supabase.co/auth/v1/callback` (pozor na mezery při kopírování).
       Client secret se zobrazí jen jednou – hned uložit.
    3. **Branding:** home page `https://kopejdos.github.io/my-movie-diary/`,
-      privacy policy `https://kopejdos.github.io/my-movie-diary/privacy.html`; logo nenahrávat.
+      privacy policy `https://kopejdos.github.io/my-movie-diary/privacy.html`,
+      terms of service `https://kopejdos.github.io/my-movie-diary/terms.html` (od V2.2); logo nenahrávat.
    4. **Audience → Publish app.**
    5. Supabase → **Sign In / Providers → Google:** zapnout, vložit Client ID a Client secret.
 

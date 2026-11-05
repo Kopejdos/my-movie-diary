@@ -35,6 +35,7 @@ const publicProfileView = lazy(() => import("./views/public-profile.js"), "publi
 const adminUniversesView = lazy(() => import("./views/admin.js"), "adminUniversesView");
 const adminUsersView = lazy(() => import("./views/admin.js"), "adminUsersView");
 const adminUniverseView = lazy(() => import("./views/admin-universe.js"), "adminUniverseView");
+const aboutView = lazy(() => import("./views/about.js"), "aboutView");
 
 // Data přehledu se začnou stahovat hned – souběžně s přihlášením a profilem
 if (currentPath() === "/") warmOverview();
@@ -53,6 +54,7 @@ addRoute("/watchlist", watchlistView);
 addRoute("/search", searchView);
 addRoute("/stats", statsView);
 addRoute("/u/:username", publicProfileView);
+addRoute("/about", aboutView);
 addRoute("/admin", adminUniversesView);
 addRoute("/admin/users", adminUsersView);
 addRoute("/admin/collection/:slug", adminUniverseView);

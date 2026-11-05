@@ -2,7 +2,8 @@
 
 import { signIn, signInWithGoogle, isSignedIn } from "../auth.js";
 import { navigate } from "../router.js";
-import { TEXTS } from "../texts.js";
+import { TEXTS, format } from "../texts.js";
+import { MIN_AGE } from "../config.js";
 import { setAccent } from "../theme.js";
 import { h, mount, toast } from "../dom.js";
 
@@ -52,8 +53,25 @@ export async function loginView(container) {
     }
 }
 
-/** Tlačítko „Continue with Google“ – sdílí ho přihlášení i registrace. */
+/** Odkazy „Terms of Service and the Privacy Policy.“ (souhlas při registraci a u Googlu). */
+export function termsLinks() {
+    return [
+        h("a", { href: "terms.html", target: "_blank", rel: "noopener" }, TEXTS.termsLink),
+        ` ${TEXTS.termsAnd} `,
+        h("a", { href: "privacy.html", target: "_blank", rel: "noopener" }, TEXTS.privacyLink),
+        ".",
+    ];
+}
+
+/**
+ * Tlačítko „Continue with Google“ – sdílí ho přihlášení i registrace.
+ * Pod ním věta o souhlasu s podmínkami (u Googlu se účet založí rovnou, bez formuláře).
+ */
 export function googleButton() {
+    return [googleButtonOnly(), h("p", { class: "consent-note" }, format("googleConsent", MIN_AGE), " ", termsLinks())];
+}
+
+function googleButtonOnly() {
     return h("button", {
             class: "btn btn--block btn--google",
             type: "button",

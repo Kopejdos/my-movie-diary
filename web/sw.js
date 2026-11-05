@@ -1,7 +1,7 @@
 // =====================================================================
 // My Movie Diary – service worker (PWA; rychlé načítání od V1.4.1)
 //
-// • Stránky (index.html, privacy.html): síť první, při výpadku / pomalé
+// • Stránky (index.html, privacy.html, terms.html): síť první, při výpadku / pomalé
 //   síti (> 3 s) poslední uložená verze.
 // • Soubory webu (JS, CSS, ikony): OKAMŽITĚ z mezipaměti, na pozadí se
 //   ověří u serveru. Když se soubor změnil (nové nasazení), stránka dostane
@@ -19,6 +19,7 @@ const SHELL = [
     "./",
     "index.html",
     "privacy.html",
+    "terms.html",
     "manifest.webmanifest",
     "css/style.css",
     "vendor/supabase-js-2.119.0.min.js",
@@ -48,6 +49,7 @@ const SHELL = [
     "js/views/search.js",
     "js/views/stats.js",
     "js/views/public-profile.js",
+    "js/views/about.js",
     "js/views/achievements.js",
     "js/views/login.js",
     "js/views/register.js",
