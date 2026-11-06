@@ -127,6 +127,20 @@ ale může být ve více univerzech.
 - **`film_rating_stats(p_ids integer[])`** (security definer, i pro nepřihlášené) vrací pro seznam filmů jen
   `average` (0,5–5, zaokrouhleno na desetiny) a `votes` – nikdy, kdo jak hodnotil. Nejvýš 1000 filmů na volání.
 
+### `friendships` – přátelé (V3.4.1)
+| Sloupec | Typ | Poznámka |
+|---|---|---|
+| `requester_id` | `uuid` FK → `profiles` | kdo žádost poslal; PK spolu s `addressee_id` |
+| `addressee_id` | `uuid` FK → `profiles` | komu |
+| `status` | `text` | `pending` (čeká na odpověď) / `accepted` (přátelé) |
+| `created_at` | `timestamptz` | kdy byla žádost odeslána |
+| `responded_at` | `timestamptz`, null | kdy byla přijata |
+
+- Jedna dvojice jen jednou (unikátní index na `least/greatest` obou ID), sám sebe požádat nejde.
+- RLS: číst jde **jen vlastní** řádky; **zápis přímo do tabulky nejde** – jen přes funkce níže (pracují s nickem,
+  ID účtů web nedostane). Smazání účtu smaže i přátelství (cascade).
+- Ochrana proti spamu: nejvýš 50 nevyřízených odeslaných žádostí a 500 přátel.
+
 ### `blocked_words` – zakázaná slova v nickách (V2.3)
 
 | Sloupec | Typ | Popis |
@@ -157,8 +171,19 @@ Zapisuje do ní jen GitHub Action přes databázovou funkci `ping()`; drží se 
 - **`public_profile(username)`** (V2.0) – veřejný profil jako JSON `{ username, member_since, watches: [{ tmdb_id, watched_on, created_at, film }] }`,
   nebo `null`, když profil neexistuje **nebo je soukromý** (navenek se neliší). Smí i nepřihlášený. Nevrací e-mail, id,
   admin, watchlist ani hodnocení a poznámky ke zhlédnutí.
+  **Od V3.4.1:** plná data vrací i **příteli** (i u soukromého profilu) a navíc `is_public` a `friendship`
+  (`none` / `friend` / `incoming` / `outgoing` / `self`). Cizí soukromý profil vrací přihlášenému jen
+  `{ username, private: true, friendship }` – žádná další data; nepřihlášenému dál `null`.
 - **`search_public_profiles(query)`** (V2.0) – veřejné profily, jejichž nick obsahuje dotaz (od 2 znaků, max. 10,
-  začínající dotazem první). Vrací jen `username` a `member_since`.
+  začínající dotazem první). Vrací jen `username` a `member_since`. Od V3.4.1 ji web nepoužívá (nahradila ji `search_people`).
+- **`search_people(query)`** (V3.4.1) – veřejné profily a přátelé podle části nicku, soukromý účet jen podle
+  **přesného** nicku (a jen pro přihlášené). Vrací `username`, `member_since` (jen u profilů, které smím vidět),
+  `visible`, `friendship`.
+- **Přátelé (V3.4.1, jen přihlášený):** `send_friend_request(username)` (když mi ten druhý už žádost poslal, rovnou se
+  přijme; vrací `sent` / `accepted` / `already_friends` / `already_sent` / `not_found` / `self` / `limit`),
+  `respond_friend_request(username, accept)`, `remove_friend(username)` (odebrání přítele, zrušení i odmítnutí
+  žádosti), `my_friends()` → `username`, `state` (`friend` / `incoming` / `outgoing`), `since`.
+  Pomocné `are_friends()` a `friendship_state()` web volat nesmí.
 - **`handle_new_user()`** (trigger na `auth.users`) – založí profil s nickem z registrace, u Google `user_xxxxxxxx`.
 
 Výpočty běží v databázi, ne v prohlížeči – web dostane hotová čísla jedním dotazem.
@@ -181,8 +206,9 @@ Výpočty běží v databázi, ne v prohlížeči – web dostane hotová čísl
 |---|---|---|
 | `films` | kdokoli (i nepřihlášený – náhled univerz) | jen Edge Functions (`tmdb`, `admin`) |
 | `universes`, `universe_items`, `categories`, `universe_categories` | kdokoli (i nepřihlášený – náhled kolekcí) | správce (`is_admin()`), Edge Function `tmdb` |
-| `profiles` | jen vlastní řádek; veřejné profily ostatních jen přes funkce `public_profile` / `search_public_profiles` | jen vlastní řádek, jen sloupce `username` a `is_public` |
-| `watches` | jen vlastní řádky; zhlédnutí veřejných profilů (film + datum) jen přes `public_profile` | jen vlastní řádky |
+| `profiles` | jen vlastní řádek; profily ostatních jen přes funkce `public_profile` / `search_people` (veřejné a přátelé) | jen vlastní řádek, jen sloupce `username` a `is_public` |
+| `watches` | jen vlastní řádky; zhlédnutí veřejných profilů a přátel (film + datum) jen přes `public_profile` | jen vlastní řádky |
+| `friendships` | jen vlastní řádky (kde jsem jedna ze stran) | nikdo přímo – jen funkce přátel (V3.4.1) |
 | `watchlist` | jen vlastní řádky (vždy soukromý) | jen vlastní řádky |
 | `blocked_words` | jen správce | jen správce |
 | `heartbeat` | nikdo | jen funkce `ping()` |

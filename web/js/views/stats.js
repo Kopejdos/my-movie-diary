@@ -4,6 +4,7 @@
 import { fetchAchievementData } from "../achievements.js";
 import { fetchWatchlistIds, todayLocal } from "../data.js";
 import { computeStats, computeRatingStats } from "../stats.js";
+import { getPendingCount } from "../social.js";
 import { fetchMyRatings, starsText } from "../ratings.js";
 import { starsView } from "./rating.js";
 import { isSignedIn } from "../auth.js";
@@ -68,8 +69,9 @@ export function statsContent(stats, watchlistCount = null, ratingStats = null) {
     ];
 }
 
-/** Přepínač „Achievements | Stats“ nad profilem a statistikami. */
+/** Přepínač „Achievements | Stats | Friends“ nad profilem, statistikami a přáteli (V3.4.1). */
 export function profileTabs(active) {
+    const pending = getPendingCount();
     const tab = (key, href, label) => h("a", {
         class: `segmented__option${active === key ? " segmented__option--active" : ""}`,
         href,
@@ -78,7 +80,9 @@ export function profileTabs(active) {
     return h("nav", { class: "profile-tabs" },
         h("div", { class: "segmented" },
             tab("profile", "#/profile", TEXTS.profileTabAchievements),
-            tab("stats", "#/stats", TEXTS.profileTabStats)));
+            tab("stats", "#/stats", TEXTS.profileTabStats),
+            tab("friends", "#/friends", [TEXTS.profileTabFriends,
+                pending > 0 ? h("span", { class: "tab-badge", "aria-label": format("friendsPendingAria", pending) }, String(pending)) : null])));
 }
 
 /** Sekce s nadpisem. */

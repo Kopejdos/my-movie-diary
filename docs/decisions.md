@@ -142,7 +142,7 @@ my-movie-diary/
         ├── captcha.js        CAPTCHA Cloudflare Turnstile (V2.6)
         ├── ratings.js        hodnocení filmů – data (V3.2)
         ├── today.js          „Co dneska?“ – výběr tří tipů (V3.3, bez vykreslování)
-        └── views/            obrazovky: universes, universe, search, upcoming (Coming soon), stats, public-profile, login,
+        └── views/            obrazovky: universes, universe, search, upcoming (Coming soon), friends, stats, public-profile, login,
                               register, profile, watchlist, achievements, admin (univerza, uživatelé), admin-universe, not-found;
                               části: rating (hvězdičky), today (panel Co dneska?), coming-soon (oddíl Coming soon)
 ```
@@ -288,9 +288,11 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 33 | V3.2 | Hodnocení ✅ | **0,5–5 ★** (po půlhvězdách) u každého filmu, vlastní hodnocení + průměr uživatelů MMD, nejlépe hodnocené ve statistikách |
 | 34 | V3.3 | Co dneska? + Coming soon ✅ | panel **What to watch today?** se třemi tipy (watchlist / další v rozkoukané kolekci / něco nového podle oblíbených žánrů) + Shuffle; **Coming soon** – oznámené filmy dole v kolekci (do 5 let dopředu), nepočítají se do postupu |
 | 34b | V3.3.1–2 | Stránka Coming soon ✅ | záložka **Coming soon** v menu – všechny chystané filmy po čtvrtletích; hranice 5 let a přepnutí v den premiéry automaticky; chystaný podle data, ne stavu v TMDB (V3.3.2) |
-| 35 | V3.4 | Porovnání s kamarádem | společně viděné filmy, co viděl jen jeden z vás, shoda v % (přes veřejné profily) |
-| 36 | V3.5 | Hledání všech filmů | search sahá do TMDB (jako admin panel) – zapsat jde **jakýkoli film**, nejen ten z kolekce |
-| 37 | V3.6 | Wrapped | rok v kostce – podoba se domyslí, až na něj přijde řada |
+| 35 | V3.4.1 | Přátelé ✅ | vzájemné přátelství (žádost → přijetí), přidání podle nicku, odznak žádostí v hlavičce, záložka **Friends** u profilu; přítel vidí i soukromý profil |
+| 36 | V3.4.2 | Porovnání s kamarádem | společně viděné filmy, co viděl jen jeden z vás, shoda v % a v hodnocení (přátelé a veřejné profily) |
+| 37 | V3.5.1 | Hledání všech filmů | search sahá do TMDB (jako admin panel) – zapsat jde **jakýkoli film**, nejen ten z kolekce |
+| 38 | V3.5.2 | Návrhy do kolekcí | filmy, které uživatelé zapíšou a podle TMDB patří do existující série nebo studia, se adminovi ukážou jako návrh – přidání jedním klikem |
+| 39 | V3.6 | Wrapped | rok v kostce – podoba se domyslí, až na něj přijde řada |
 
 **Později / nápady:** **kapitola V4.x – seriály** (TMDB má seriály, řady i epizody se stejným klíčem; sledování
 po epizodách, řady jako skupiny, běžící seriály „čeká na novou řadu“ – po dokončení filmové části V3.6);
@@ -1235,6 +1237,34 @@ bez data rozhodne příznak `is_upcoming`. Pravidlo má pohled `universe_progres
 `20261106180000_coming_soon_by_date.sql`) i web (`isUpcoming()`); import nastaví příznak i podle data. Stránka
 Coming soon se proto skládá ze stejného seznamu filmů jako hledání (dotaz jen na `is_upcoming` by takový film minul).
 Opraví se hned po migraci a nasazení webu, bez importu.
+
+### Fáze 35 – přátelé ✅ (6. 11. 2026) – **V3.4.1**
+- **Vzájemné přátelství:** žádost → druhý ji přijme nebo odmítne; zrušit ho může kdokoli z dvojice. Když mi ten
+  druhý už žádost poslal a já pošlu svoji, rovnou se přijme.
+- **Bez veřejného profilu:** požádat jde i soukromý účet – najde se podle **přesného nicku** (formulář *Add a friend*
+  nebo hledání). Cizí soukromý profil ukáže jen nick, „🔒 Private profile“ a tlačítko přátelství – žádná čísla.
+  **Přátelé vidí profil toho druhého** (achievementy, statistiky) i když je soukromý. Veřejný profil dál slouží ke
+  sdílení s ostatními lidmi; u soukromého profilu přítele se tlačítko *Share* schová.
+- **Stránka `#/friends`** (třetí záložka u profilu: Achievements | Stats | **Friends**): přidání podle nicku, přijaté
+  žádosti (Accept / Decline), seznam přátel (odkaz na profil, Remove s potvrzením přímo v řádku), odeslané žádosti
+  (Cancel). **Odznak** s počtem žádostí v záložce i v rohu tlačítka s nickem v hlavičce – s žádostí vede nick
+  rovnou na Friends. Žádosti se kontrolují po přihlášení a při přechodu mezi stránkami (nejvýš jednou za minutu).
+- **Profil (`#/u/<nick>`):** tlačítko podle stavu – *+ Add friend*, *⏳ Request sent · Cancel request*,
+  *Accept / Decline*, *✓ Friends* (klik → „Remove @nick from friends?“).
+- **Hledání lidí:** veřejné profily a přátelé podle části nicku, soukromý účet jen podle přesného nicku;
+  pilulka *✓ Friends* / *Request sent* / *Wants to be friends*.
+- Migrace `20261106190000_friends.sql` – tabulka `friendships` (zápis jen přes funkce), funkce `send_friend_request`,
+  `respond_friend_request`, `remove_friend`, `my_friends`, `search_people`, rozšířená `public_profile`.
+  Ověřeno na lokálním Postgresu (přímý zápis do tabulky neprojde, cizí řádky nejsou vidět, nepřihlášený nemůže
+  žádat ani vidět soukromý účet).
+- Opravy mimo plán: na úzkém telefonu se zkracuje jen nick v hlavičce (odznaky se neusekávají).
+
+#### Rozhodnutí ve fázi 35
+- **Vzájemné, ne „follow“** – přátelství otevírá soukromý profil, musí s ním souhlasit oba.
+- **Soukromý účet jen podle přesného nicku** – jinak by šlo procházet seznam všech účtů; kamarád ti nick řekne.
+  Prozradí to jen, že účet s tím nickem existuje, nic víc.
+- **Žádný chat ani zprávy** – jen seznam přátel a porovnání (V3.4.2).
+- **Žádné ID účtů ven** – všechny akce podle nicku přes funkce v databázi.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

@@ -6,7 +6,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V3.3.2** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V3.4.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
@@ -20,6 +20,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Release order or story (chronological) order, "unwatched only" filter
 - Instant search across all movies, collections and series inside them (by title, original title or year), plus people search
 - Public profiles you can share with a link – opt-in, private by default
+- Friends – mutual friend requests by nickname; friends can see each other's profile even when it's private
 - Curated paths – step-by-step routes like MCU Essentials or Horror 101, with a note for every step
 - Watchlist across all collections
 - Achievements with levels (Bronze → Platinum) and completed-collection badges
@@ -31,7 +32,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Installable on a phone or computer (PWA), opens even offline
 
 **Coming next** – collections & new features
-- V3.4 – compare with a friend, then search across all TMDB movies and a yearly Wrapped
+- V3.4.2 – compare with a friend, then search across all TMDB movies and a yearly Wrapped
 
 ## Tech stack
 

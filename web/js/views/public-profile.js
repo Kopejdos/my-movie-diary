@@ -1,6 +1,8 @@
 // Obrazovka: veřejný profil uživatele (#/u/<nick>) – funguje i pro nepřihlášené.
 // Achievementy a statistiky se počítají stejně jako na vlastním profilu,
 // jen ze zhlédnutí, která vrátí funkce public_profile.
+// Přátelé (V3.4.1): tlačítko Add friend / Accept / ✓ Friends; přítel vidí i soukromý profil,
+// cizí soukromý profil ukáže jen nick a tlačítko přátelství.
 
 import { fetchPublicProfile, shareProfile } from "../social.js";
 import { computeAchievements } from "../achievements.js";
@@ -12,6 +14,7 @@ import { TEXTS, format, movies, collections } from "../texts.js";
 import { h, mount, toast, loadingView, errorView } from "../dom.js";
 import { achievementsContent } from "./achievements.js";
 import { statsContent } from "./stats.js";
+import { friendButton } from "./friends.js";
 
 export async function publicProfileView(container, context) {
     const { params, isCurrent } = context;
@@ -39,6 +42,25 @@ export async function publicProfileView(container, context) {
             h("div", { class: "state" },
                 h("p", {}, isOwn ? TEXTS.publicOwnPrivate : TEXTS.publicNotFound),
                 isOwn ? h("a", { class: "btn btn--primary", href: "#/profile" }, TEXTS.publicOpenSettings) : null));
+        return;
+    }
+
+    // Cizí soukromý profil (přihlášený uživatel) – jen nick a přátelství, žádná data
+    const reload = () => publicProfileView(container, context);
+    if (found.private) {
+        mount(container,
+            h("a", { class: "back-link", href: "#/" }, TEXTS.back),
+            h("section", { class: "profile-hero profile-hero--private" },
+                h("div", { class: "profile-hero__avatar", "aria-hidden": "true" }, found.profile.username.charAt(0).toUpperCase()),
+                h("div", { class: "profile-hero__body" },
+                    h("span", { class: "eyebrow" }, `🔒 ${TEXTS.friendsPrivateEyebrow}`),
+                    h("h1", { class: "profile-hero__name" }, `@${found.profile.username}`),
+                    h("p", { class: "muted profile-hero__meta" }, TEXTS.friendsPrivateText),
+                    h("div", { class: "profile-hero__actions" },
+                        // Po přijetí přátelství se profil načte znovu – přítel už data uvidí
+                        friendButton(found.profile.username, found.friendship, (state) => { if (state === "friend") reload(); })),
+                ),
+            ));
         return;
     }
 
@@ -75,7 +97,7 @@ export async function publicProfileView(container, context) {
     }
 
     mount(container,
-        profileHero(profile, achievements.level, stats.totals, isOwn),
+        profileHero(profile, achievements.level, stats.totals, isOwn, found.friendship, reload),
         tabs,
         body,
     );
@@ -83,7 +105,7 @@ export async function publicProfileView(container, context) {
 }
 
 /** Hlavička profilu: iniciála, nick, úroveň, členství a sdílení. */
-function profileHero(profile, level, totals, isOwn) {
+function profileHero(profile, level, totals, isOwn, friendship, reload) {
     const share = h("button", { class: "btn btn--primary", type: "button" }, `↗ ${TEXTS.publicShare}`);
     share.addEventListener("click", async () => {
         try {
@@ -104,8 +126,11 @@ function profileHero(profile, level, totals, isOwn) {
                 " · ",
                 format("publicSummary", movies(totals.films), collections(totals.completed))),
             h("div", { class: "profile-hero__actions" },
-                share,
-                isOwn ? h("a", { class: "btn", href: "#/profile" }, TEXTS.publicEdit) : null),
+                // Soukromý profil přítele: odkaz by ostatním nic neukázal – sdílení se schová
+                profile.isPublic ? share : null,
+                isOwn ? h("a", { class: "btn", href: "#/profile" }, TEXTS.publicEdit) : null,
+                // Po zrušení přátelství se soukromý profil přítele schová – načíst znovu
+                isOwn ? null : friendButton(profile.username, friendship, (state) => { if (state === "none") reload(); })),
         ),
     );
 }

@@ -360,10 +360,9 @@ button {
     font-weight: 700;
     padding: 7px 10px;
     border-radius: 999px;
-    overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
     max-width: 150px;
+    min-width: 0;          /* smí se zúžit – zkrátí se nick (viz .nav__nick) */
 }
 
 .nav__user:hover,
@@ -2599,7 +2598,9 @@ button {
     gap: 6px;
 }
 
+/* zkracuje se jen nick (ne celé tlačítko) – odznak žádostí v rohu tak nikdy neusekne */
 .nav__nick {
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -3957,4 +3958,219 @@ button {
     font-size: 0.85rem;
     color: var(--muted);
     overflow-wrap: anywhere;
+}
+
+/* ---------- Přátelé (V3.4.1) ---------- */
+
+/* počet žádostí v záložce Friends a v hlavičce */
+.tab-badge,
+.nav__badge {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--danger);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.tab-badge {
+    margin-left: 6px;
+}
+
+/* odznak žádostí v rohu tlačítka s nickem – nebere místo nicku (na telefonu je úzký) */
+.nav__user {
+    position: relative;
+}
+
+.nav__badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    box-shadow: 0 0 0 2px var(--bg);
+}
+
+.friends,
+.friends__lists {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    max-width: 760px;
+    min-width: 0;
+}
+
+.friends-add {
+    display: grid;
+    gap: 10px;
+    padding: 18px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background:
+        radial-gradient(120% 90% at 0% 0%, var(--gloss), transparent 55%),
+        var(--panel);
+}
+
+.friends-add__title {
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+.friends-add__row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.friends-add__at {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--muted);
+}
+
+.friends-add__row input {
+    flex: 1;
+    width: 0;              /* jinak by výchozí šířka pole roztáhla stránku na úzkém telefonu */
+    min-width: 0;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg-deep);
+    color: var(--text);
+    font: inherit;
+}
+
+.friends-add__row input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.friends-add__message {
+    margin: 0;
+    min-height: 1.3em;
+    font-size: 0.9rem;
+    color: var(--success);
+}
+
+.friends-add__message:empty {
+    display: none;
+}
+
+.friends-add__message--error {
+    color: var(--danger);
+}
+
+.friends__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 10px;
+    font-size: 1.15rem;
+}
+
+.friends__count {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--muted);
+}
+
+.friends__section--requests .friend-row {
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+}
+
+.friends__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.friend-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+}
+
+.friend-row__info {
+    display: grid;
+    min-width: 0;
+    flex: 1;
+}
+
+.friend-row__name {
+    color: var(--heading);
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+a.friend-row__name:hover {
+    color: var(--accent);
+}
+
+.friend-row__info .muted {
+    font-size: 0.82rem;
+}
+
+.friend-row__actions,
+.friend-row__confirm {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+@media (max-width: 480px) {
+    .friend-row {
+        flex-wrap: wrap;
+    }
+
+    .friend-row__actions {
+        width: 100%;
+        justify-content: flex-start;
+        padding-left: 52px;
+    }
+}
+
+/* tlačítko přátelství na profilu */
+.friend-button {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.friend-button__note {
+    font-size: 0.88rem;
+    color: var(--muted);
+}
+
+.btn--friend {
+    border-color: color-mix(in srgb, var(--success) 60%, var(--border));
+    color: var(--success);
+}
+
+.btn--friend:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.user-result__badge {
+    margin-left: auto;
+}
+
+.profile-hero--private .profile-hero__avatar {
+    opacity: 0.6;
 }

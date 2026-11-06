@@ -217,8 +217,17 @@ class SearchPage {
         ];
     }
 
-    /** Veřejné profily – odkaz na #/u/<nick>. */
+    /**
+     * Lidé – odkaz na #/u/<nick>. Veřejné profily a přátelé s datem registrace,
+     * soukromý účet (jen přesný nick) jako „Private profile“; přítel má pilulku (V3.4.1).
+     */
     renderUsers(users) {
+        const meta = (u) => u.visible && u.memberSince
+            ? format("publicMemberSince", new Date(u.memberSince).toLocaleDateString("en-GB", { month: "long", year: "numeric" }))
+            : `🔒 ${TEXTS.friendsPrivateEyebrow}`;
+        const badge = (u) => ({
+            friend: `✓ ${TEXTS.friendsIsFriend}`, incoming: TEXTS.friendsBadgeIncoming, outgoing: TEXTS.friendsRequestSent,
+        })[u.friendship] ?? null;
         return [
             h("div", { class: "section-title" },
                 h("h2", {}, TEXTS.searchUsers),
@@ -228,8 +237,8 @@ class SearchPage {
                     h("span", { class: "user-result__avatar", "aria-hidden": "true" }, u.username.charAt(0).toUpperCase()),
                     h("span", { class: "user-result__info" },
                         h("strong", {}, `@${u.username}`),
-                        h("span", { class: "muted" }, format("publicMemberSince",
-                            new Date(u.memberSince).toLocaleDateString("en-GB", { month: "long", year: "numeric" }))))))),
+                        h("span", { class: "muted" }, meta(u))),
+                    badge(u) ? h("span", { class: "pill user-result__badge" }, badge(u)) : null))),
         ];
     }
 

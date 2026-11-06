@@ -11,6 +11,7 @@ import { initPwa, canInstall, promptInstall, onInstallChange, onUpdateAvailable 
 import { APP_VERSION, APP_UPDATED } from "./config.js";
 import { refreshAchievements, tierLabel } from "./achievements.js";
 import { warmOverview, invalidateProgress } from "./data.js";
+import { getPendingCount, refreshPendingCount, resetFriends } from "./social.js";
 
 // Přehled a detail kolekce se načítají hned (první, co uživatel uvidí);
 // ostatní obrazovky až při prvním otevření – méně JavaScriptu při startu (V2.1.1)
@@ -33,6 +34,7 @@ const profileView = lazy(() => import("./views/profile.js"), "profileView");
 const watchlistView = lazy(() => import("./views/watchlist.js"), "watchlistView");
 const searchView = lazy(() => import("./views/search.js"), "searchView");
 const comingSoonView = lazy(() => import("./views/upcoming.js"), "comingSoonView");
+const friendsView = lazy(() => import("./views/friends.js"), "friendsView");
 const statsView = lazy(() => import("./views/stats.js"), "statsView");
 const publicProfileView = lazy(() => import("./views/public-profile.js"), "publicProfileView");
 const adminUniversesView = lazy(() => import("./views/admin.js"), "adminUniversesView");
@@ -60,6 +62,7 @@ addRoute("/watchlist", watchlistView);
 addRoute("/search", searchView);
 addRoute("/coming-soon", comingSoonView);
 addRoute("/stats", statsView);
+addRoute("/friends", friendsView);
 addRoute("/u/:username", publicProfileView);
 addRoute("/about", aboutView);
 addRoute("/forgot", forgotPasswordView);
@@ -80,6 +83,7 @@ function renderHeader() {
     const user = getUser();
     const profile = getProfile();
     const path = currentPath();
+    const pending = user ? getPendingCount() : 0;     // přijaté žádosti o přátelství
 
     const navLink = (href, label, active, extraClass = "") =>
         h("a", { class: `nav__link${active ? " nav__link--active" : ""}${extraClass}`, href }, label);
@@ -126,13 +130,15 @@ function renderHeader() {
                     : null,
                 user
                     ? [
+                        // S nevyřízenou žádostí o přátelství vede nick rovnou na Friends (V3.4.1)
                         h("a", {
-                            class: `nav__user${path === "/profile" || path === "/stats" ? " nav__user--active" : ""}`,
-                            href: "#/profile",
-                            title: TEXTS.navProfile,
+                            class: `nav__user${["/profile", "/stats", "/friends"].includes(path) ? " nav__user--active" : ""}`,
+                            href: pending > 0 ? "#/friends" : "#/profile",
+                            title: pending > 0 ? format("friendsPendingAria", pending) : TEXTS.navProfile,
                         },
                             level ? h("span", { class: "nav__level", title: `${level.title} · ${level.xp} XP` }, String(level.level)) : null,
-                            h("span", { class: "nav__nick" }, profile ? `@${profile.username}` : "")),
+                            h("span", { class: "nav__nick" }, profile ? `@${profile.username}` : ""),
+                            pending > 0 ? h("span", { class: "nav__badge", "aria-hidden": "true" }, String(pending)) : null),
                         h("button", { class: "nav__link nav__button nav__signout", type: "button", onClick: handleSignOut },
                             TEXTS.navSignOut),
                     ]
@@ -183,10 +189,14 @@ onAuthChange(({ user, profile }) => {
     const signedInNow = userId !== null && lastUserId === null;
     lastUserId = userId;
     invalidateProgress();          // postup patří jinému (nebo žádnému) uživateli
-    if (!userId) level = null;     // po odhlášení zmizí odznak úrovně
+    if (!userId) {
+        level = null;              // po odhlášení zmizí odznak úrovně
+        resetFriends();            // i odznak žádostí o přátelství
+    }
 
     if (signedInNow) {
         refreshProgress({ announce: false });
+        refreshPendingCount();
         // Uživatel z Google má zatím automatický nickname → nabídnout volbu vlastního
         if (hasGeneratedUsername()) {
             navigate("/profile");
@@ -204,6 +214,16 @@ onAuthChange(({ user, profile }) => {
 
 // Hlavička se zvýrazněním aktuální sekce i po přechodu na jinou stránku
 document.addEventListener("route-rendered", renderHeader);
+// Změna počtu žádostí o přátelství → odznak v hlavičce (V3.4.1)
+document.addEventListener("friends-changed", renderHeader);
+
+// Žádosti o přátelství se kontrolují při přechodu mezi stránkami – nejvýš jednou za minutu
+let friendsCheckedAt = 0;
+document.addEventListener("route-rendered", () => {
+    if (!getUser() || Date.now() - friendsCheckedAt < 60_000 || currentPath() === "/friends") return;
+    friendsCheckedAt = Date.now();
+    whenIdle(refreshPendingCount, 500);
+});
 
 // Aplikace na plochu: service worker, tlačítko Install, stav připojení
 initPwa();

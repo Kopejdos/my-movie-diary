@@ -3,6 +3,11 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.4.1 – November 2026
+- **Friends** – add friends by nickname, accept or decline requests, see all your friends in the new Friends tab
+- No public profile needed: friends can see each other's profile even when it's private
+- A badge in the header shows new friend requests
+
 ## V3.3.2 – November 2026
 - Fixed: movies that TMDB marks as released ahead of their premiere (like The Hunger Games: Sunrise on the Reaping) now show up in Coming soon until their release day
 
