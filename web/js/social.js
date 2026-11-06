@@ -16,7 +16,8 @@ function check({ data, error }) {
 
 /**
  * Profil podle nicku:
- *   • veřejný nebo přítel → { profile: { username, memberSince }, friendship, data } (achievementy, statistiky),
+ *   • veřejný nebo přítel → { profile: { username, memberSince, isPublic }, friendship, data, ratings }
+ *     (achievementy, statistiky; ratings = Map tmdb_id → score jen u přítele, jinak null),
  *   • cizí soukromý (jen pro přihlášené) → { profile: { username }, friendship, private: true } – žádná data,
  *   • neexistuje / soukromý pro nepřihlášeného / vlastní soukromý → null.
  * friendship = "none" | "friend" | "incoming" | "outgoing" | "self".
@@ -35,6 +36,8 @@ export async function fetchPublicProfile(username) {
         profile: { username: profile.username, memberSince: profile.member_since, isPublic: profile.is_public !== false },
         friendship,
         data: { watches: profile.watches ?? [], ...catalog },
+        // Hodnocení vidí jen přítel (V3.4.2); jinak null
+        ratings: Array.isArray(profile.ratings) ? new Map(profile.ratings.map((r) => [r.tmdb_id, r.score])) : null,
     };
 }
 

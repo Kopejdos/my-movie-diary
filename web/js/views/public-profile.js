@@ -8,7 +8,7 @@ import { fetchPublicProfile, shareProfile } from "../social.js";
 import { computeAchievements } from "../achievements.js";
 import { computeStats } from "../stats.js";
 import { todayLocal } from "../data.js";
-import { getProfile } from "../auth.js";
+import { getProfile, isSignedIn } from "../auth.js";
 import { setAccent } from "../theme.js";
 import { TEXTS, format, movies, collections } from "../texts.js";
 import { h, mount, toast, loadingView, errorView } from "../dom.js";
@@ -129,6 +129,10 @@ function profileHero(profile, level, totals, isOwn, friendship, reload) {
                 // Soukromý profil přítele: odkaz by ostatním nic neukázal – sdílení se schová
                 profile.isPublic ? share : null,
                 isOwn ? h("a", { class: "btn", href: "#/profile" }, TEXTS.publicEdit) : null,
+                // Porovnání (V3.4.2) – přihlášený u cizího profilu, který vidí
+                !isOwn && isSignedIn()
+                    ? h("a", { class: "btn", href: `#/compare/${encodeURIComponent(profile.username)}` }, `⇄ ${TEXTS.compareButton}`)
+                    : null,
                 // Po zrušení přátelství se soukromý profil přítele schová – načíst znovu
                 isOwn ? null : friendButton(profile.username, friendship, (state) => { if (state === "none") reload(); })),
         ),

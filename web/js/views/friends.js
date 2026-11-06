@@ -53,8 +53,11 @@ export async function friendsView(container, context) {
                 : null,
             section(TEXTS.friendsListTitle, friends.length,
                 friends.length > 0
-                    ? friends.map((f) => personRow(f, format("friendsSince", formatDate(f.since?.slice(0, 10))),
-                        removeAction(f.username, TEXTS.friendsRemove, TEXTS.friendsRemoveConfirm, reload), true))
+                    ? friends.map((f) => personRow(f, format("friendsSince", formatDate(f.since?.slice(0, 10))), [
+                        // Porovnání (V3.4.2)
+                        h("a", { class: "btn btn--small btn--primary", href: `#/compare/${encodeURIComponent(f.username)}` }, `⇄ ${TEXTS.compareButton}`),
+                        removeAction(f.username, TEXTS.friendsRemove, TEXTS.friendsRemoveConfirm, reload),
+                    ], true))
                     : h("li", { class: "empty-filter" }, TEXTS.friendsEmpty)),
             outgoing.length > 0
                 ? section(TEXTS.friendsSent, outgoing.length,

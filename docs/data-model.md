@@ -174,6 +174,7 @@ Zapisuje do ní jen GitHub Action přes databázovou funkci `ping()`; drží se 
   **Od V3.4.1:** plná data vrací i **příteli** (i u soukromého profilu) a navíc `is_public` a `friendship`
   (`none` / `friend` / `incoming` / `outgoing` / `self`). Cizí soukromý profil vrací přihlášenému jen
   `{ username, private: true, friendship }` – žádná další data; nepřihlášenému dál `null`.
+  **Od V3.4.2:** příteli navíc `ratings: [{ tmdb_id, score }]` (porovnání); ostatním `ratings = null`.
 - **`search_public_profiles(query)`** (V2.0) – veřejné profily, jejichž nick obsahuje dotaz (od 2 znaků, max. 10,
   začínající dotazem první). Vrací jen `username` a `member_since`. Od V3.4.1 ji web nepoužívá (nahradila ji `search_people`).
 - **`search_people(query)`** (V3.4.1) – veřejné profily a přátelé podle části nicku, soukromý účet jen podle

@@ -142,7 +142,8 @@ my-movie-diary/
         ├── captcha.js        CAPTCHA Cloudflare Turnstile (V2.6)
         ├── ratings.js        hodnocení filmů – data (V3.2)
         ├── today.js          „Co dneska?“ – výběr tří tipů (V3.3, bez vykreslování)
-        └── views/            obrazovky: universes, universe, search, upcoming (Coming soon), friends, stats, public-profile, login,
+        ├── compare.js        porovnání s kamarádem (V3.4.2, bez vykreslování)
+        └── views/            obrazovky: universes, universe, search, upcoming (Coming soon), friends, compare, stats, public-profile, login,
                               register, profile, watchlist, achievements, admin (univerza, uživatelé), admin-universe, not-found;
                               části: rating (hvězdičky), today (panel Co dneska?), coming-soon (oddíl Coming soon)
 ```
@@ -289,15 +290,26 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 34 | V3.3 | Co dneska? + Coming soon ✅ | panel **What to watch today?** se třemi tipy (watchlist / další v rozkoukané kolekci / něco nového podle oblíbených žánrů) + Shuffle; **Coming soon** – oznámené filmy dole v kolekci (do 5 let dopředu), nepočítají se do postupu |
 | 34b | V3.3.1–2 | Stránka Coming soon ✅ | záložka **Coming soon** v menu – všechny chystané filmy po čtvrtletích; hranice 5 let a přepnutí v den premiéry automaticky; chystaný podle data, ne stavu v TMDB (V3.3.2) |
 | 35 | V3.4.1 | Přátelé ✅ | vzájemné přátelství (žádost → přijetí), přidání podle nicku, odznak žádostí v hlavičce, záložka **Friends** u profilu; přítel vidí i soukromý profil |
-| 36 | V3.4.2 | Porovnání s kamarádem | společně viděné filmy, co viděl jen jeden z vás, shoda v % a v hodnocení (přátelé a veřejné profily) |
+| 36 | V3.4.2 | Porovnání s kamarádem ✅ | společně viděné filmy, co viděl jen jeden z vás, shoda v % a v hodnocení (hodnocení jen u přátel), kolekce vedle sebe, doporučení |
 | 37 | V3.5.1 | Hledání všech filmů | search sahá do TMDB (jako admin panel) – zapsat jde **jakýkoli film**, nejen ten z kolekce |
 | 38 | V3.5.2 | Návrhy do kolekcí | filmy, které uživatelé zapíšou a podle TMDB patří do existující série nebo studia, se adminovi ukážou jako návrh – přidání jedním klikem |
-| 39 | V3.6 | Wrapped | rok v kostce – podoba se domyslí, až na něj přijde řada |
+| 39 | V3.6 | Optimalizace a úklid | sdílené kousky kódu místo kopií (hvězdička watchlistu, pilulka kolekce, `check()`), úklid `style.css`, testy do repozitáře (`tests/`), Lighthouse, indexy v databázi, přístupnost |
 
-**Později / nápady:** **kapitola V4.x – seriály** (TMDB má seriály, řady i epizody se stejným klíčem; sledování
-po epizodách, řady jako skupiny, běžící seriály „čeká na novou řadu“ – po dokončení filmové části V3.6);
-neoficiální kolekce uživatelů (vlastní seznamy, oddělené od oficiálních, dohledatelné jako
-podkategorie) nebo návrhy kolekcí, které schvaluje správce; export / import; české názvy filmů.
+#### Kapitola V4.x – přizpůsobení (plán 7. 11. 2026)
+| Fáze | Verze | Název | Obsah |
+|---|---|---|---|
+| 40 | V4.0 | Nastavení ⚙ | tlačítko ⚙ místo ☾ v hlavičce s panelem: **režim** Light / Dark / System, **styl** Modern / Paper classic, **barva** Collection colors (dnešní) nebo pevná (mosazná, růžová, modrá, zelená, fialová), drobnosti (výchozí pořadí, hustota seznamu, méně animací); rozdělení **Profil** (achievementy, statistiky, přátelé) × **Nastavení** (účet + vzhled) |
+| 41 | V4.1 | Wrapped | rok v kostce – podoba se domyslí, až na něj přijde řada (první celý rok dat = 2027) |
+
+**Později / nápady:** **kapitola V5.x – seriály** (TMDB má seriály, řady i epizody se stejným klíčem; sledování
+po epizodách, řady jako skupiny, běžící seriály „čeká na novou řadu“); neoficiální kolekce uživatelů (vlastní
+seznamy, oddělené od oficiálních, dohledatelné jako podkategorie) nebo návrhy kolekcí, které schvaluje správce;
+export / import; české názvy filmů; nastavení uložené k účtu (stejný vzhled na všech zařízeních).
+
+#### Rozhodnutí k plánu (7. 11. 2026)
+- **Wrapped z V3.6 do kapitoly 4** – teď by nic důležitého neřešil; V3.6 místo něj úklid kódu.
+- **Nová kapitola V4 = přizpůsobení** (nastavení, vzhled, Wrapped), **seriály posunuté na V5** – kapitola 4 má
+  jedno téma.
 
 #### Pravidla řazení kolekcí (od V3.0)
 - **Release** (rok vydání) má **každá** kolekce a je **výchozí všude** – série, studia, žánry. Pokud má kolekce
@@ -1265,6 +1277,28 @@ Opraví se hned po migraci a nasazení webu, bez importu.
   Prozradí to jen, že účet s tím nickem existuje, nic víc.
 - **Žádný chat ani zprávy** – jen seznam přátel a porovnání (V3.4.2).
 - **Žádné ID účtů ven** – všechny akce podle nicku přes funkce v databázi.
+
+### Fáze 36 – porovnání s kamarádem ✅ (7. 11. 2026) – **V3.4.2**
+- **Stránka `#/compare/<nick>`** – tlačítko **⇄ Compare** na profilu (přihlášený, cizí profil, který vidí) a u každého
+  přítele v seznamu Friends.
+- **Hlavička:** obě iniciály, **shoda ve viděných filmech v %** (společné / všechny filmy, které viděl aspoň jeden),
+  počet filmů a hodin každého, pruh *jen ty · oba · jen kamarád*.
+- **Taste match** (jen u přátel): shoda v hodnocení u filmů, které hodnotili oba (100 % = stejně, 0 % = rozdíl
+  4,5 ★), od 3 společně hodnocených filmů; seznamy **You both loved** (oba od 4 ★) a **Biggest differences**
+  (rozdíl aspoň 1,5 ★).
+- **@kamarád recommends:** filmy, které viděl jen on – s hodnocením od 4 ★ (přítel), u veřejného profilu bez
+  hodnocení ty, které viděl víckrát.
+- **Collections head to head:** až 8 kolekcí, které rozkoukal aspoň jeden, se dvěma pruhy postupu (cesty se
+  nepočítají).
+- **Movies:** záložky *Both · Only you · Only @kamarád* s mřížkou plakátů (48 + *Show all*).
+- Migrace `20261107000000_compare.sql` – `public_profile` vrací **hodnocení jen příteli** (cizímu u veřejného profilu
+  `ratings = null`). Výpočet v prohlížeči (`web/js/compare.js`), vykreslení `web/js/views/compare.js`.
+
+#### Rozhodnutí ve fázi 36
+- **Porovnat jde přítele i veřejný profil** – data veřejného profilu jsou stejně vidět; jen hodnocení zůstávají
+  mezi přáteli (u veřejného profilu výzva „add as a friend to compare tastes too“).
+- **Shoda = Jaccard**, ne „kolik z mých filmů viděl on“ – je souměrná, oběma vyjde stejné číslo.
+- **Taste match až od 3 společně hodnocených filmů** – z jednoho nebo dvou by procento nic neznamenalo.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

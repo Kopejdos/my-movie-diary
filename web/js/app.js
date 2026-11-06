@@ -35,6 +35,7 @@ const watchlistView = lazy(() => import("./views/watchlist.js"), "watchlistView"
 const searchView = lazy(() => import("./views/search.js"), "searchView");
 const comingSoonView = lazy(() => import("./views/upcoming.js"), "comingSoonView");
 const friendsView = lazy(() => import("./views/friends.js"), "friendsView");
+const compareView = lazy(() => import("./views/compare.js"), "compareView");
 const statsView = lazy(() => import("./views/stats.js"), "statsView");
 const publicProfileView = lazy(() => import("./views/public-profile.js"), "publicProfileView");
 const adminUniversesView = lazy(() => import("./views/admin.js"), "adminUniversesView");
@@ -63,6 +64,7 @@ addRoute("/search", searchView);
 addRoute("/coming-soon", comingSoonView);
 addRoute("/stats", statsView);
 addRoute("/friends", friendsView);
+addRoute("/compare/:username", compareView);
 addRoute("/u/:username", publicProfileView);
 addRoute("/about", aboutView);
 addRoute("/forgot", forgotPasswordView);
@@ -132,7 +134,7 @@ function renderHeader() {
                     ? [
                         // S nevyřízenou žádostí o přátelství vede nick rovnou na Friends (V3.4.1)
                         h("a", {
-                            class: `nav__user${["/profile", "/stats", "/friends"].includes(path) ? " nav__user--active" : ""}`,
+                            class: `nav__user${(["/profile", "/stats", "/friends"].includes(path) || path.startsWith("/compare/")) ? " nav__user--active" : ""}`,
                             href: pending > 0 ? "#/friends" : "#/profile",
                             title: pending > 0 ? format("friendsPendingAria", pending) : TEXTS.navProfile,
                         },
