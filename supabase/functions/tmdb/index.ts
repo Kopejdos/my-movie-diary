@@ -262,9 +262,11 @@ async function resolveFilm(seed: SeedFilm): Promise<Resolved> {
     if (details.status === "Canceled") {
       return { status: "skipped", seed, title: details.title, releaseDate: details.release_date || null, reason: "canceled" };
     }
-    // Ještě nevyšlo → Coming soon (V3.3). V den premiéry ho web i postup berou jako vydaný
-    // samy podle release_date (V3.3.1); další import jen obnoví údaje a srovná příznak.
-    const upcoming = details.status !== "Released";
+    // Ještě nevyšlo → Coming soon (V3.3). Rozhoduje i datum (V3.3.2): TMDB občas hlásí
+    // „Released“ dřív, než je premiéra. V den premiéry ho web i postup berou jako vydaný samy
+    // podle release_date; další import jen obnoví údaje a srovná příznak.
+    const today = new Date().toISOString().slice(0, 10);
+    const upcoming = details.status !== "Released" || Boolean(details.release_date && details.release_date > today);
 
     const film: FilmRow = {
       tmdb_id: details.id,

@@ -3,6 +3,9 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.3.2 – November 2026
+- Fixed: movies that TMDB marks as released ahead of their premiere (like The Hunger Games: Sunrise on the Reaping) now show up in Coming soon until their release day
+
 ## V3.3.1 – November 2026
 - New **Coming soon** page in the menu – every announced movie from all collections, soonest first, split by quarter
 - Upcoming movies switch to regular ones automatically on their release day – no waiting for an update

@@ -287,7 +287,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 32 | V3.1.5 | Nové série ✅ | James Bond, Mission: Impossible, John Wick, Indiana Jones… – podle standardu V3.0 |
 | 33 | V3.2 | Hodnocení ✅ | **0,5–5 ★** (po půlhvězdách) u každého filmu, vlastní hodnocení + průměr uživatelů MMD, nejlépe hodnocené ve statistikách |
 | 34 | V3.3 | Co dneska? + Coming soon ✅ | panel **What to watch today?** se třemi tipy (watchlist / další v rozkoukané kolekci / něco nového podle oblíbených žánrů) + Shuffle; **Coming soon** – oznámené filmy dole v kolekci (do 5 let dopředu), nepočítají se do postupu |
-| 34b | V3.3.1 | Stránka Coming soon ✅ | záložka **Coming soon** v menu – všechny chystané filmy po čtvrtletích; hranice 5 let a přepnutí v den premiéry automaticky |
+| 34b | V3.3.1–2 | Stránka Coming soon ✅ | záložka **Coming soon** v menu – všechny chystané filmy po čtvrtletích; hranice 5 let a přepnutí v den premiéry automaticky; chystaný podle data, ne stavu v TMDB (V3.3.2) |
 | 35 | V3.4 | Porovnání s kamarádem | společně viděné filmy, co viděl jen jeden z vás, shoda v % (přes veřejné profily) |
 | 36 | V3.5 | Hledání všech filmů | search sahá do TMDB (jako admin panel) – zapsat jde **jakýkoli film**, nejen ten z kolekce |
 | 37 | V3.6 | Wrapped | rok v kostce – podoba se domyslí, až na něj přijde řada |
@@ -1227,6 +1227,14 @@ s tlačítkem Reload se už nepoužívá. Jednorázově: po nasazení téhle opr
 - **Čtvrtletí místo měsíců** – měsíců by bylo moc a většinou s jedním filmem.
 - **Hranice po celých rocích**, ne den po dni – jednodušší a stejně se posouvá sama.
 - **Data jsou z TMDB = hlavní (většinou americká) premiéra**, ne česká – rozdíl bývá den až pár týdnů.
+
+**Oprava V3.3.2 – chystaný film podle data:** *Hunger Games: Sunrise on the Reaping* měl v TMDB 6. 11. stav
+„Released“, ale premiéru 18. 11. – import ho uložil jako vydaný (v seznamu filmů s délkou, ne v Coming soon).
+Teď rozhoduje **datum premiéry**: se známým datem je film chystaný, dokud premiéra nebyla (stav z TMDB se ignoruje);
+bez data rozhodne příznak `is_upcoming`. Pravidlo má pohled `universe_progress` (migrace
+`20261106180000_coming_soon_by_date.sql`) i web (`isUpcoming()`); import nastaví příznak i podle data. Stránka
+Coming soon se proto skládá ze stejného seznamu filmů jako hledání (dotaz jen na `is_upcoming` by takový film minul).
+Opraví se hned po migraci a nasazení webu, bez importu.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

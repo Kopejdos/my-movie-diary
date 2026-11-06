@@ -141,11 +141,13 @@ export function isUnreleased(film) {
 }
 
 /**
- * Je položka kolekce chystaný film? Příznak z importu a premiéra ještě nebyla.
- * V den premiéry se film přepne sám, bez nového importu (stejné pravidlo má pohled universe_progress).
+ * Je položka kolekce chystaný film? Rozhoduje datum premiéry (V3.3.2): dokud nebyla, je chystaný –
+ * i když TMDB už hlásí „Released“. Bez data rozhodne příznak is_upcoming z importu.
+ * V den premiéry se film přepne sám (stejné pravidlo má pohled universe_progress).
  */
 export function isUpcoming(item) {
-    return Boolean(item?.is_upcoming) && isUnreleased(item.film);
+    const date = item?.film?.release_date;
+    return date ? date > todayLocal() : Boolean(item?.is_upcoming);
 }
 
 /** Poslední rok, který Coming soon ukazuje: letos + 5 (v roce 2026 → celý rok 2031). */
@@ -163,30 +165,30 @@ export function inComingSoonWindow(film) {
  * Všechny chystané filmy ze všech kolekcí pro stránku Coming soon (V3.3.1):
  * [{ film, universes }] seřazené podle premiéry (bez data na konci).
  * Film ve více kolekcích je jednou a nese seznam kolekcí (série první).
+ * Bere se ze stejného seznamu filmů jako hledání (V3.3.2) – chystaný se pozná podle data,
+ * ne jen podle příznaku, takže dotaz na is_upcoming nestačí.
  */
-export function fetchComingSoon() {
-    return cached("coming-soon", async () => {
-        const rows = await fetchAllRows(() => supabase
-            .from("universe_items")
-            .select("id, is_upcoming, film:films(tmdb_id, title, release_date, poster_path), universe:universes(slug, name, color, kind, sort_order)")
-            .eq("is_upcoming", true)
-            .order("id"));
+export async function fetchComingSoon() {
+    const { universes, items } = await fetchSearchData();
+    const universeById = new Map(universes.map((u) => [u.id, u]));
 
-        const byFilm = new Map();
-        for (const row of rows) {
-            if (!row.film || !isUpcoming(row) || !inComingSoonWindow(row.film)) continue;
-            const entry = byFilm.get(row.film.tmdb_id) ?? { film: row.film, universes: [] };
-            if (row.universe && !entry.universes.some((u) => u.slug === row.universe.slug)) entry.universes.push(row.universe);
-            byFilm.set(row.film.tmdb_id, entry);
-        }
-        const kindRank = (u) => Math.max(0, KIND_ORDER.indexOf(u.kind ?? "series"));
-        for (const entry of byFilm.values()) {
-            entry.universes.sort((a, b) => kindRank(a) - kindRank(b) || a.sort_order - b.sort_order);
-        }
-        return [...byFilm.values()].sort((a, b) =>
-            (a.film.release_date ?? "9999").localeCompare(b.film.release_date ?? "9999")
-            || a.film.title.localeCompare(b.film.title));
-    });
+    const byFilm = new Map();
+    for (const item of items) {
+        const universe = universeById.get(item.universe_id);
+        if (!item.film || !universe || !isUpcoming(item) || !inComingSoonWindow(item.film)) continue;
+        const entry = byFilm.get(item.film.tmdb_id) ?? { film: item.film, universes: [] };
+        if (!entry.universes.includes(universe)) entry.universes.push(universe);
+        byFilm.set(item.film.tmdb_id, entry);
+    }
+
+    // Kolekce u filmu: série první, pak studia a výběry; filmy podle premiéry, bez data na konci
+    const kindRank = (u) => Math.max(0, KIND_ORDER.indexOf(u.kind ?? "series"));
+    for (const entry of byFilm.values()) {
+        entry.universes.sort((a, b) => kindRank(a) - kindRank(b) || a.sort_order - b.sort_order);
+    }
+    return [...byFilm.values()].sort((a, b) =>
+        (a.film.release_date ?? "9999").localeCompare(b.film.release_date ?? "9999")
+        || a.film.title.localeCompare(b.film.title));
 }
 
 /**
@@ -322,7 +324,7 @@ export async function fetchWatchlist() {
     }
     return rows.map((r) => ({
         ...r,
-        upcoming: upcomingIds.has(r.tmdb_id) && isUnreleased(r.film),
+        upcoming: isUpcoming({ is_upcoming: upcomingIds.has(r.tmdb_id), film: r.film }),
         universes: (universesByFilm.get(r.tmdb_id) ?? []).sort((a, b) => a.sort_order - b.sort_order),
     }));
 }

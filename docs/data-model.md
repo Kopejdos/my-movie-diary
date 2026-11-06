@@ -88,7 +88,7 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 | `franchise` | `text`, null | série uvnitř kolekce pro pohled **By series**, např. „Iron Man“, „Toy Story“; `null` = film bez série (skupina *Standalone* na konci); max. 60 znaků (od V3.0.1) |
 | `label` | `text`, null | krátký popisek u názvu, např. „Episode IV – A New Hope“, „Part 2“; max. 60 znaků (od V3.0.1) |
 | `is_optional` | `boolean` | vedlejší film (crossover, spin-off) – nepočítá se do postupu |
-| `is_upcoming` | `boolean` | film ještě nevyšel (V3.3) – oddíl **Coming soon**, nepočítá se do počtu filmů ani postupu; nastavuje import. Od V3.3.1 platí jen do dne premiéry (`films.release_date <= dnešek` → film se počítá jako vydaný i bez nového importu); hranici „do konce roku letos + 5“ počítá web |
+| `is_upcoming` | `boolean` | film ještě nevyšel (V3.3) – oddíl **Coming soon**, nepočítá se do počtu filmů ani postupu; nastavuje import. Od V3.3.2 rozhoduje hlavně datum: se známým `films.release_date` je film chystaný, dokud premiéra nebyla (v den premiéry se počítá jako vydaný, i když import neproběhl, a naopak budoucí premiéra je chystaná, i když TMDB hlásí „Released“); bez data rozhodne tento příznak. Hranici „do konce roku letos + 5“ počítá web |
 | `note` | `text`, null | poznámka ke kroku cesty – proč film vidět (max. 300 znaků, od V1.8) |
 
 Unikátní dvojice (`universe_id`, `tmdb_id`) – jeden film je v univerzu nejvýš jednou,
