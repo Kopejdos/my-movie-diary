@@ -276,7 +276,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 |---|---|---|---|
 | 26 | V3.0.1 | Organizace kolekcí 1 – zobrazení ✅ | **tři pohledy na kolekci** (Release / Story / Groups), nové údaje u filmu v kolekci (**skupina** a **popisek**), import + admin panel, hledání najde i skupinu (*Pixar › Cars*), cesty na přehledu níž; ukázková data (MCU podle hrdinů, Star Wars s čísly epizod) |
 | 27 | V3.0.2 | Organizace kolekcí 2 – obsah ✅ | Pixar, DreamWorks, Disney, MCU a další série přeskupené podle sérií, popisky (Episode IV, Part 2…), **zrušení kolekce Shrek**, **cesty přepsané na skutečně doporučené pořadí** |
-| 28 | V3.1.1 | Kontrola kolekcí | projít **všechny existující kolekce** a doplnit chybějící filmy (jen filmy, ne seriály), sjednotit série a popisky podle standardu V3.0 |
+| 28 | V3.1.1 | Kontrola kolekcí ✅ | projít **všechny existující kolekce** a doplnit chybějící filmy (jen filmy, ne seriály), sjednotit série a popisky podle standardu V3.0 |
 | 29 | V3.1.2 | Nové kolekce | nové série, studia (Illumination, Laika, Aardman, A24…), **režiséři** (nový druh kolekce), Christmas Movies, české pohádky a klasika – už podle standardu z V3.0 |
 | 30 | V3.2 | Hodnocení | **0,5–5 ★** (po půlhvězdách) u každého filmu, vlastní hodnocení + průměr uživatelů MMD, nejlépe hodnocené ve statistikách |
 | 31 | V3.3 | Co dneska? + Coming soon | náhodný výběr z watchlistu / rozkoukaných kolekcí; filmy z kolekcí, které teprve vyjdou |
@@ -284,7 +284,9 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 33 | V3.5 | Hledání všech filmů | search sahá do TMDB (jako admin panel) – zapsat jde **jakýkoli film**, nejen ten z kolekce |
 | 34 | V3.6 | Wrapped | rok v kostce – podoba se domyslí, až na něj přijde řada |
 
-**Později / nápady:** neoficiální kolekce uživatelů (vlastní seznamy, oddělené od oficiálních, dohledatelné jako
+**Později / nápady:** **kapitola V4.x – seriály** (TMDB má seriály, řady i epizody se stejným klíčem; sledování
+po epizodách, řady jako skupiny, běžící seriály „čeká na novou řadu“ – po dokončení filmové části V3.6);
+neoficiální kolekce uživatelů (vlastní seznamy, oddělené od oficiálních, dohledatelné jako
 podkategorie) nebo návrhy kolekcí, které schvaluje správce; export / import; české názvy filmů.
 
 #### Pravidla řazení kolekcí (od V3.0)
@@ -992,6 +994,31 @@ přihlášení a databáze, bez realtime a storage), případně minifikace.
   - *Animation Essentials* – od rodinných hitů přes klasiku Disney a Ghibli po Spider-Verse,
   - *Horror 101* – od zábavných vstupních hororů (Scream) po nejtěžší (The Exorcist, Hereditary), klasika cestou,
   - *Fantasy Starter* – pořadí už bylo vlastní (rampa k Pánovi prstenů), beze změny.
+
+### Fáze 28 – kontrola existujících kolekcí ✅ (6. 11. 2026) – **V3.1.1**
+Pravidlo: do kolekce patří každý **film**, který s ní aspoň trochu souvisí; okrajové kusy jako **volitelné**
+(nepočítají se do postupu) a s popiskem. Doplněno 29 filmů:
+- **Batman** – celá historie: Burton & Schumacher (1989–1997), Dark Knight Trilogy, The Batman (+ Part II, 2028);
+  volitelně Batman (1966), Mask of the Phantasm, The Lego Batman Movie, Joker a Joker: Folie à Deux.
+  Kolekce přešla z oddílů na série (By series).
+- **Middle-earth** – volitelně klasické animované filmy (The Hobbit 1977, The Lord of the Rings 1978, The Return
+  of the King 1980) + The Hunt for Gollum (2027); přešla na série (The Lord of the Rings / The Hobbit / Animated).
+- **Star Wars** – volitelně TV filmy (Holiday Special, dva filmy o Ewocích) + Star Wars: Starfighter (2027).
+- **Wizarding World** – volitelně Return to Hogwarts (oddíl Specials).
+- **Studio Ghibli** – volitelně The Castle of Cagliostro (Miyazaki před založením studia, popisek Pre-Ghibli).
+- **Disney** – hrané remaky The Jungle Book (1994), 101 a 102 Dalmatians, Christopher Robin; Frozen III (2027).
+- **Ohlášené filmy** – Avengers: Secret Wars, Spider-Man: Beyond the Spider-Verse, Man of Tomorrow (DCU),
+  Shrek 5 (vše 2027). Import je přeskočí a nahlásí jako *upcoming*; další import je doplní sám.
+- Dvojznačné názvy mají připnuté TMDB ID (Batman 1966 / 1989, The Hobbit 1977, The Jungle Book 1994…).
+
+#### Rozhodnutí ve fázi 28
+- **Žánrové výběry (horory) se nedoplňují** – jsou to kurátorské výběry, ne úplné série; případné rozšíření ve V3.1.2.
+- **Disney jen kánon studia + hrané remaky** – pokračování přímo na video (Lion King II, Aladdin a další) by
+  kolekci zdvojnásobila; zatím ne.
+- **Marvel mimo MCU** (Hulk 2003, Blade, Fantastic Four 2005, Daredevil, Ghost Rider…) do MCU nepatří – kandidát na
+  novou kolekci ve V3.1.2. Stejně tak **Predator** (souvisí s Alien vs. Predator).
+- Seriály (She-Hulk, Andor, The Mandalorian…) se nepřidávají – viz kapitola V4.x.
+- **Postup se může změnit:** kdo měl dokončený Batman (4 filmy), teď uvidí 6 povinných – nové filmy se počítají.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

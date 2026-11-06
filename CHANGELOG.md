@@ -3,6 +3,11 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.1.1 – November 2026
+- 29 movies added to existing collections: the full Batman history (Burton, Schumacher, Joker…), classic animated Middle-earth films, Star Wars TV films, more Disney remakes
+- Upcoming movies like Avengers: Secret Wars, Shrek 5 and Frozen III are ready and will appear once they're out
+- Batman and Middle-earth can now be browsed by series
+
 ## V3.0.2 – November 2026
 - Pixar, DreamWorks, Disney, X-Men, Spider-Man, Alien, Asterix and The Conjuring can be browsed by series
 - Labels like "Spin-off", "Prequel" or "Live-action remake" next to movie titles

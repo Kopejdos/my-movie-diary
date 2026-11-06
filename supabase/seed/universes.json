@@ -47,7 +47,8 @@
         { "title": "Thunderbolts*", "year": 2025, "group": "Phase 5", "story": 36 },
         { "title": "The Fantastic Four: First Steps", "year": 2025, "group": "Phase 6", "story": 37 },
         { "title": "Spider-Man: Brand New Day", "year": 2026, "group": "Phase 6", "story": 38, "franchise": "Spider-Man" },
-        { "title": "Avengers: Doomsday", "year": 2026, "group": "Phase 6", "story": 39, "franchise": "The Avengers" }
+        { "title": "Avengers: Doomsday", "year": 2026, "group": "Phase 6", "story": 39, "franchise": "The Avengers" },
+        { "title": "Avengers: Secret Wars", "year": 2027, "group": "Phase 6", "story": 40, "franchise": "The Avengers" }
       ]
     },
     {
@@ -98,7 +99,8 @@
         { "title": "Madame Web", "year": 2024, "optional": true, "franchise": "Sony's Spider-Man Universe" },
         { "title": "Venom: The Last Dance", "year": 2024, "optional": true, "franchise": "Sony's Spider-Man Universe" },
         { "title": "Kraven the Hunter", "year": 2024, "optional": true, "franchise": "Sony's Spider-Man Universe" },
-        { "title": "Spider-Man: Brand New Day", "year": 2026, "franchise": "MCU" }
+        { "title": "Spider-Man: Brand New Day", "year": 2026, "franchise": "MCU" },
+        { "title": "Spider-Man: Beyond the Spider-Verse", "year": 2027, "franchise": "Spider-Verse" }
       ]
     },
     {
@@ -137,7 +139,8 @@
       "films": [
         { "title": "Superman", "year": 2025 },
         { "title": "Supergirl", "year": 2026 },
-        { "title": "Clayface", "year": 2026 }
+        { "title": "Clayface", "year": 2026 },
+        { "title": "Man of Tomorrow", "year": 2027 }
       ]
     },
     {
@@ -146,12 +149,22 @@
       "kind": "series",
       "categories": ["superhero"],
       "color": "#94a3b8",
-      "description": "Nolan's Dark Knight trilogy and Matt Reeves' The Batman.",
+      "description": "Every big-screen Batman saga – Burton & Schumacher, Nolan's Dark Knight trilogy and Matt Reeves' The Batman, with Joker and animated films as extras.",
       "films": [
-        { "title": "Batman Begins", "year": 2005, "group": "The Dark Knight Trilogy" },
-        { "title": "The Dark Knight", "year": 2008, "group": "The Dark Knight Trilogy" },
-        { "title": "The Dark Knight Rises", "year": 2012, "group": "The Dark Knight Trilogy" },
-        { "title": "The Batman", "year": 2022, "group": "The Batman" }
+        { "title": "Batman", "year": 1966, "optional": true, "label": "1966 movie", "tmdb": 2661 },
+        { "title": "Batman", "year": 1989, "franchise": "Burton & Schumacher", "tmdb": 268 },
+        { "title": "Batman Returns", "year": 1992, "franchise": "Burton & Schumacher" },
+        { "title": "Batman: Mask of the Phantasm", "year": 1993, "optional": true, "label": "Animated", "tmdb": 14919 },
+        { "title": "Batman Forever", "year": 1995, "franchise": "Burton & Schumacher" },
+        { "title": "Batman & Robin", "year": 1997, "franchise": "Burton & Schumacher" },
+        { "title": "Batman Begins", "year": 2005, "franchise": "The Dark Knight Trilogy" },
+        { "title": "The Dark Knight", "year": 2008, "franchise": "The Dark Knight Trilogy" },
+        { "title": "The Dark Knight Rises", "year": 2012, "franchise": "The Dark Knight Trilogy" },
+        { "title": "The Lego Batman Movie", "year": 2017, "optional": true, "label": "Animated" },
+        { "title": "Joker", "year": 2019, "optional": true, "franchise": "Joker" },
+        { "title": "The Batman", "year": 2022, "franchise": "The Batman" },
+        { "title": "Joker: Folie à Deux", "year": 2024, "optional": true, "franchise": "Joker" },
+        { "title": "The Batman Part II", "year": 2028, "franchise": "The Batman" }
       ]
     },
     {
@@ -160,11 +173,14 @@
       "kind": "series",
       "categories": ["scifi-fantasy"],
       "color": "#ffe81f",
-      "description": "The Skywalker Saga and the standalone Star Wars movies.",
+      "description": "The Skywalker Saga and the standalone Star Wars movies – with the TV films as extras.",
       "films": [
         { "title": "Star Wars", "year": 1977, "story": 7, "franchise": "Skywalker Saga", "label": "Episode IV – A New Hope" },
+        { "title": "The Star Wars Holiday Special", "year": 1978, "optional": true, "label": "TV special", "tmdb": 74849 },
         { "title": "The Empire Strikes Back", "year": 1980, "story": 8, "franchise": "Skywalker Saga", "label": "Episode V" },
         { "title": "Return of the Jedi", "year": 1983, "story": 9, "franchise": "Skywalker Saga", "label": "Episode VI" },
+        { "title": "Caravan of Courage: An Ewok Adventure", "year": 1984, "optional": true, "label": "TV film" },
+        { "title": "Ewoks: The Battle for Endor", "year": 1985, "optional": true, "label": "TV film" },
         { "title": "Star Wars: Episode I - The Phantom Menace", "year": 1999, "story": 1, "franchise": "Skywalker Saga", "label": "Episode I" },
         { "title": "Star Wars: Episode II - Attack of the Clones", "year": 2002, "story": 2, "franchise": "Skywalker Saga", "label": "Episode II" },
         { "title": "Star Wars: Episode III - Revenge of the Sith", "year": 2005, "story": 4, "franchise": "Skywalker Saga", "label": "Episode III" },
@@ -174,7 +190,8 @@
         { "title": "Star Wars: The Last Jedi", "year": 2017, "story": 12, "franchise": "Skywalker Saga", "label": "Episode VIII" },
         { "title": "Solo: A Star Wars Story", "year": 2018, "story": 5 },
         { "title": "Star Wars: The Rise of Skywalker", "year": 2019, "story": 13, "franchise": "Skywalker Saga", "label": "Episode IX" },
-        { "title": "The Mandalorian and Grogu", "year": 2026, "story": 10 }
+        { "title": "The Mandalorian and Grogu", "year": 2026, "story": 10 },
+        { "title": "Star Wars: Starfighter", "year": 2027 }
       ]
     },
     {
@@ -195,7 +212,8 @@
         { "title": "Harry Potter and the Deathly Hallows: Part 2", "year": 2011, "group": "Harry Potter" },
         { "title": "Fantastic Beasts and Where to Find Them", "year": 2016, "group": "Fantastic Beasts" },
         { "title": "Fantastic Beasts: The Crimes of Grindelwald", "year": 2018, "group": "Fantastic Beasts" },
-        { "title": "Fantastic Beasts: The Secrets of Dumbledore", "year": 2022, "group": "Fantastic Beasts" }
+        { "title": "Fantastic Beasts: The Secrets of Dumbledore", "year": 2022, "group": "Fantastic Beasts" },
+        { "title": "Harry Potter 20th Anniversary: Return to Hogwarts", "year": 2022, "group": "Specials", "optional": true, "label": "Reunion special" }
       ]
     },
     {
@@ -204,15 +222,19 @@
       "kind": "series",
       "categories": ["scifi-fantasy"],
       "color": "#c9a227",
-      "description": "The Lord of the Rings and The Hobbit.",
+      "description": "The Lord of the Rings and The Hobbit – plus the classic animated films as extras.",
       "films": [
-        { "title": "The Lord of the Rings: The Fellowship of the Ring", "year": 2001, "group": "The Lord of the Rings" },
-        { "title": "The Lord of the Rings: The Two Towers", "year": 2002, "group": "The Lord of the Rings" },
-        { "title": "The Lord of the Rings: The Return of the King", "year": 2003, "group": "The Lord of the Rings" },
-        { "title": "The Hobbit: An Unexpected Journey", "year": 2012, "group": "The Hobbit" },
-        { "title": "The Hobbit: The Desolation of Smaug", "year": 2013, "group": "The Hobbit" },
-        { "title": "The Hobbit: The Battle of the Five Armies", "year": 2014, "group": "The Hobbit" },
-        { "title": "The Lord of the Rings: The War of the Rohirrim", "year": 2024, "group": "Animated" }
+        { "title": "The Hobbit", "year": 1977, "optional": true, "franchise": "Animated", "label": "Rankin/Bass", "tmdb": 1362 },
+        { "title": "The Lord of the Rings", "year": 1978, "optional": true, "franchise": "Animated", "label": "Ralph Bakshi", "tmdb": 123 },
+        { "title": "The Return of the King", "year": 1980, "optional": true, "franchise": "Animated", "label": "Rankin/Bass", "tmdb": 1361 },
+        { "title": "The Lord of the Rings: The Fellowship of the Ring", "year": 2001, "franchise": "The Lord of the Rings" },
+        { "title": "The Lord of the Rings: The Two Towers", "year": 2002, "franchise": "The Lord of the Rings" },
+        { "title": "The Lord of the Rings: The Return of the King", "year": 2003, "franchise": "The Lord of the Rings" },
+        { "title": "The Hobbit: An Unexpected Journey", "year": 2012, "franchise": "The Hobbit" },
+        { "title": "The Hobbit: The Desolation of Smaug", "year": 2013, "franchise": "The Hobbit" },
+        { "title": "The Hobbit: The Battle of the Five Armies", "year": 2014, "franchise": "The Hobbit" },
+        { "title": "The Lord of the Rings: The War of the Rohirrim", "year": 2024, "franchise": "Animated" },
+        { "title": "The Lord of the Rings: The Hunt for Gollum", "year": 2027, "franchise": "The Lord of the Rings" }
       ]
     },
     {
@@ -295,6 +317,7 @@
       "color": "#34d399",
       "description": "The feature films of Studio Ghibli.",
       "films": [
+        { "title": "The Castle of Cagliostro", "year": 1979, "optional": true, "label": "Pre-Ghibli" },
         { "title": "Nausicaä of the Valley of the Wind", "year": 1984, "optional": true, "label": "Pre-Ghibli" },
         { "title": "Castle in the Sky", "year": 1986 },
         { "title": "Grave of the Fireflies", "year": 1988 },
@@ -461,12 +484,17 @@
         { "title": "Moana 2", "year": 2024, "group": "Revival", "franchise": "Moana" },
         { "title": "Zootopia 2", "year": 2025, "group": "Revival", "franchise": "Zootopia" },
         { "title": "Hexed", "year": 2026, "group": "Revival" },
+        { "title": "Frozen III", "year": 2027, "group": "Revival", "franchise": "Frozen" },
+        { "title": "The Jungle Book", "year": 1994, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes", "tmdb": 10714 },
+        { "title": "101 Dalmatians", "year": 1996, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes" },
+        { "title": "102 Dalmatians", "year": 2000, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes" },
         { "title": "Alice in Wonderland", "year": 2010, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes" },
         { "title": "Maleficent", "year": 2014, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes" },
         { "title": "Cinderella", "year": 2015, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes" },
         { "title": "The Jungle Book", "year": 2016, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes" },
         { "title": "Alice Through the Looking Glass", "year": 2016, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes" },
         { "title": "Beauty and the Beast", "year": 2017, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes" },
+        { "title": "Christopher Robin", "year": 2018, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes" },
         { "title": "Dumbo", "year": 2019, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes" },
         { "title": "Aladdin", "year": 2019, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes" },
         { "title": "The Lion King", "year": 2019, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes" },
@@ -581,6 +609,7 @@
         { "title": "The Wild Robot", "year": 2024, "group": "2020s" },
         { "title": "The Bad Guys 2", "year": 2025, "group": "2020s", "franchise": "The Bad Guys" },
         { "title": "Forgotten Island", "year": 2026, "group": "2020s" },
+        { "title": "Shrek 5", "year": 2027, "group": "2020s", "franchise": "Shrek" },
         { "title": "How to Train Your Dragon", "year": 2025, "group": "Live-action & hybrid", "optional": true, "franchise": "How to Train Your Dragon", "label": "Live-action remake" },
         { "title": "Gabby's Dollhouse: The Movie", "year": 2025, "group": "Live-action & hybrid", "optional": true }
       ]
