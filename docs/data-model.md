@@ -84,7 +84,9 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 | `tmdb_id` | `integer` FK → `films` | |
 | `release_order` | `integer` | pořadí podle vydání |
 | `story_order` | `integer`, null | chronologické pořadí příběhu; `null` = stejné jako vydání |
-| `group_label` | `text`, null | skupina, např. „Phase 1“, „Animated“, „Sony's Spider-Man Universe“ |
+| `group_label` | `text`, null | oddíl v pořadí vydání (nadpis v pohledu Release), např. „Phase 1“, „Golden Age“ |
+| `franchise` | `text`, null | série uvnitř kolekce pro pohled **By series**, např. „Iron Man“, „Toy Story“; `null` = film bez série (skupina *Standalone* na konci); max. 60 znaků (od V3.0.1) |
+| `label` | `text`, null | krátký popisek u názvu, např. „Episode IV – A New Hope“, „Part 2“; max. 60 znaků (od V3.0.1) |
 | `is_optional` | `boolean` | vedlejší film (crossover, spin-off) – nepočítá se do postupu |
 | `note` | `text`, null | poznámka ke kroku cesty – proč film vidět (max. 300 znaků, od V1.8) |
 

@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.0.1 – November 2026
+- Collections can be viewed three ways: by release, in story order, or by series (Iron Man, Thor, Captain America…)
+- Movie labels like "Episode IV – A New Hope" next to the title
+- Search finds series inside collections too, e.g. "Iron Man" in the Marvel Cinematic Universe
+- Paths moved to the end of the overview
+
 ## V2.7 – November 2026
 - Faster start: a lighter sign-in library, smaller JavaScript and CSS, and text that shows right away
 - First content appears about 30 % sooner on a slow phone connection

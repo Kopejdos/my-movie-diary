@@ -1034,6 +1034,28 @@ button {
     margin-top: 8px;
 }
 
+/* Skupina, na kterou vede odkaz z hledání (V3.0.1) – krátce se zvýrazní */
+.film-group--focus {
+    scroll-margin-top: 80px;
+    animation: group-focus 1.6s ease-out;
+}
+
+@keyframes group-focus {
+    0%, 40% { background: color-mix(in srgb, var(--u) 18%, transparent); }
+    100% { background: transparent; }
+}
+
+/* Popisek filmu v kolekci – Episode IV, Part 2… (V3.0.1) */
+.film__label {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--u, var(--accent));
+}
+
 .film {
     display: grid;
     grid-template-columns: 56px 1fr auto;
@@ -1628,6 +1650,14 @@ button {
     font-weight: 600;
     font-size: 0.88rem;
     cursor: pointer;
+}
+
+/* Tři pohledy na kolekci (V3.0.1) se musí vejít i na úzký telefon */
+@media (max-width: 400px) {
+    .segmented__option {
+        padding: 7px 10px;
+        font-size: 0.82rem;
+    }
 }
 
 .segmented__option--active {
@@ -3027,6 +3057,57 @@ button {
 }
 
 /* Lidé ve výsledcích hledání */
+/* Série uvnitř kolekcí ve výsledcích hledání (V3.0.1) */
+.group-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.group-result {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+    transition: border-color 0.15s;
+}
+
+.group-result:hover,
+.group-result:focus-visible {
+    border-color: var(--c, var(--accent));
+}
+
+.group-result__dot {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--c, var(--accent));
+}
+
+.group-result__info {
+    display: grid;
+    min-width: 0;
+    flex: 1;
+}
+
+.group-result__info strong,
+.group-result__info .muted {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.group-result__arrow {
+    color: var(--muted);
+    font-size: 1.3rem;
+}
+
 .user-results {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));

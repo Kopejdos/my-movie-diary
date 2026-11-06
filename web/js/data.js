@@ -74,14 +74,14 @@ export async function fetchSearchData() {
         fetchUniverses(),
         cached("search-items", () => fetchAllRows(() => supabase
             .from("universe_items")
-            .select("id, universe_id, film:films(tmdb_id, title, original_title, release_date, runtime, poster_path)")
+            .select("id, universe_id, franchise, film:films(tmdb_id, title, original_title, release_date, runtime, poster_path)")
             .order("id"))),
     ]);
     return { universes, items };
 }
 
-/** Pořadí typů kolekcí na přehledu – cesty první (kurátorský vstup pro nováčky). */
-export const KIND_ORDER = ["path", "series", "studio", "genre"];
+/** Pořadí typů kolekcí na přehledu – cesty až na konci (V3.0.1; dřív byly první). */
+export const KIND_ORDER = ["series", "studio", "genre", "path"];
 
 /**
  * Jedno univerzum podle adresy (slug) včetně filmů v pořadí vydání, nebo null.
@@ -96,7 +96,7 @@ export function fetchUniverse(slug) {
                 cover:films(title, poster_path, backdrop_path),
                 categories(id, slug, name, color, sort_order),
                 universe_items(
-                    id, release_order, story_order, group_label, is_optional, note,
+                    id, release_order, story_order, group_label, franchise, label, is_optional, note,
                     film:films(tmdb_id, title, original_title, release_date, runtime, poster_path, backdrop_path)
                 )
             `)

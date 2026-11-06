@@ -1,4 +1,12 @@
-// Obrazovka: detail univerza – banner z filmu, Up next, filmy se skupinami a counterem.
+// Obrazovka: detail kolekce – banner z filmu, Up next, filmy se skupinami a counterem.
+//
+// Pohledy (V3.0.1):
+//   release – podle roku vydání; má ho každá kolekce a je výchozí; nadpisy z group_label
+//             (oddíly v čase: MCU Phase 1–6, Disney Golden Age…),
+//   story   – pořadí v příběhu (jen když ho některý film má),
+//   groups  – po sériích z franchise (Iron Man, Hulk… / Toy Story, Cars…), uvnitř podle roku.
+// Odkaz #/collection/<slug>?view=groups&group=Cars otevře rovnou daný pohled a skupinu
+// (používá ho hledání).
 
 import {
     fetchUniverse, fetchMyFilmCounts, addWatch, removeLatestWatch,
@@ -44,7 +52,7 @@ export async function universeView(container, context) {
 
     document.title = `${universe.name} · ${TEXTS.appName}`;
     setAccent(universe.color);
-    new UniversePage(container, universe, counts, watchlist, signedIn).render();
+    new UniversePage(container, universe, counts, watchlist, signedIn, context.query ?? new URLSearchParams()).render();
 }
 
 /**
@@ -52,7 +60,7 @@ export async function universeView(container, context) {
  * jen dotčený film, Up next a ukazatel postupu, ne celou stránku.
  */
 class UniversePage {
-    constructor(container, universe, counts, watchlist, signedIn) {
+    constructor(container, universe, counts, watchlist, signedIn, query = new URLSearchParams()) {
         this.container = container;
         this.universe = universe;
         this.counts = counts;
@@ -70,18 +78,44 @@ class UniversePage {
         this.stepNumbers = new Map(universe.items.map((item, index) => [item.film.tmdb_id, index + 1]));
         this.list.classList.toggle("film-list--path", this.isPath);
 
-        // Pořadí příběhu má smysl jen tam, kde ho některý film má vyplněné
-        this.hasStory = !this.isPath && universe.items.some((item) => item.story_order !== null);
-        this.order = this.hasStory ? loadPref("order", "release") : "release";
+        // Dostupné pohledy: Release vždy, Story a Groups jen když na to kolekce má data
+        this.views = ["release"];
+        if (!this.isPath && universe.items.some((item) => item.story_order !== null)) this.views.push("story");
+        if (!this.isPath && universe.items.some((item) => item.franchise)) this.views.push("groups");
+
+        // Pohled z odkazu (hledání) → zapamatovaný → Release, když ho kolekce nemá
+        const wanted = query.get("view") ?? loadPref("order", "release");
+        this.order = this.views.includes(wanted) ? wanted : "release";
+        this.focusGroup = query.get("group");       // skupina, na kterou se má po otevření posunout (nebo null)
         this.unwatchedOnly = signedIn && loadPref("unwatched", "0") === "1";
     }
 
-    /** Filmy v aktuálně zvoleném pořadí. */
+    /** Filmy v aktuálně zvoleném pohledu. */
     sortedItems() {
-        if (this.order !== "story") return this.universe.items;
-        // Film bez čísla v příběhu jde za ty očíslované, v pořadí vydání
-        const key = (item) => item.story_order ?? 10000 + item.release_order;
-        return [...this.universe.items].sort((a, b) => key(a) - key(b));
+        const { items } = this.universe;
+        if (this.order === "story") {
+            // Film bez čísla v příběhu jde za ty očíslované, v pořadí vydání
+            const key = (item) => item.story_order ?? 10000 + item.release_order;
+            return [...items].sort((a, b) => key(a) - key(b));
+        }
+        if (this.order === "groups") {
+            // Skupiny v pořadí svého prvního filmu, filmy bez série až na konci
+            const firstRelease = new Map();
+            for (const item of items) {
+                if (!item.franchise) continue;
+                firstRelease.set(item.franchise, Math.min(firstRelease.get(item.franchise) ?? Infinity, item.release_order));
+            }
+            const rank = (item) => (item.franchise ? firstRelease.get(item.franchise) : Infinity);
+            return [...items].sort((a, b) => rank(a) - rank(b) || a.release_order - b.release_order);
+        }
+        return items;
+    }
+
+    /** Nadpis skupiny nad filmem v aktuálním pohledu (null = bez nadpisu). */
+    headingOf(item) {
+        if (this.order === "release") return item.group_label ?? null;
+        if (this.order === "groups") return item.franchise ?? TEXTS.groupStandalone;
+        return null;    // v pořadí příběhu by se skupiny rozházely
     }
 
     render() {
@@ -98,9 +132,21 @@ class UniversePage {
         this.renderToolbar();
         this.renderList();
         this.updateProgress();
+        this.scrollToFocusGroup();
     }
 
-    /** Přepínač pořadí (jen když univerzum má pořadí příběhu) a filtr neviděných. */
+    /** Po otevření z hledání („Pixar › Cars“) posune stránku na nadpis skupiny. */
+    scrollToFocusGroup() {
+        if (!this.focusGroup) return;
+        const heading = [...this.list.querySelectorAll(".film-group")]
+            .find((node) => node.dataset.group === this.focusGroup);
+        this.focusGroup = null;
+        if (!heading) return;
+        heading.classList.add("film-group--focus");
+        requestAnimationFrame(() => heading.scrollIntoView({ block: "start", behavior: "smooth" }));
+    }
+
+    /** Přepínač pohledů (jen když jich kolekce má víc) a filtr neviděných. */
     renderToolbar() {
         const option = (value, label) => h("button", {
             class: `segmented__option${this.order === value ? " segmented__option--active" : ""}`,
@@ -115,11 +161,11 @@ class UniversePage {
             },
         }, label);
 
+        const labels = { release: TEXTS.orderRelease, story: TEXTS.orderStory, groups: TEXTS.orderGroups };
         mount(this.toolbar,
-            this.hasStory
-                ? h("div", { class: "segmented", role: "group" },
-                    option("release", TEXTS.orderRelease),
-                    option("story", TEXTS.orderStory))
+            this.views.length > 1
+                ? h("div", { class: "segmented", role: "group", "aria-label": TEXTS.orderLabel },
+                    this.views.map((view) => option(view, labels[view])))
                 : h("span"),
             this.signedIn
                 ? h("button", {
@@ -206,6 +252,7 @@ class UniversePage {
                 poster(film.poster_path, film.title, "up-next__poster", false, "small"),
                 h("div", { class: "up-next__info" },
                     h("span", { class: "eyebrow" }, this.isPath ? TEXTS.nextStep : TEXTS.upNext),
+                    next.label ? h("span", { class: "film__label" }, next.label) : null,
                     h("h2", { class: "up-next__title" }, film.title),
                     h("div", { class: "pills" },
                         this.isPath
@@ -213,6 +260,7 @@ class UniversePage {
                             : null,
                         pill(yearOf(film.release_date)),
                         film.runtime ? pill(format("minutes", film.runtime)) : null,
+                        next.franchise ? pill(next.franchise) : null,
                         next.group_label ? pill(next.group_label) : null,
                     ),
                     this.isPath && next.note ? h("p", { class: "up-next__note" }, next.note) : null,
@@ -227,21 +275,21 @@ class UniversePage {
     }
 
     /**
-     * Řádky filmů. V pořadí vydání s nadpisy skupin (nadpis při každé změně skupiny);
-     * v pořadí příběhu bez nich – skupiny by se rozházely.
+     * Řádky filmů s nadpisem při každé změně skupiny (viz headingOf):
+     * Release → oddíly v čase, Groups → série, Story → bez nadpisů.
      */
     renderItems() {
         const nodes = [];
-        const showGroups = this.order === "release";
         this.rows.clear();
-        let lastGroup;
+        let lastHeading = null;
         for (const item of this.sortedItems()) {
             if (this.unwatchedOnly && this.counts.has(item.film.tmdb_id)) continue;
 
-            if (showGroups && item.group_label && item.group_label !== lastGroup) {
-                nodes.push(h("li", { class: "film-group" }, item.group_label));
+            const heading = this.headingOf(item);
+            if (heading && heading !== lastHeading) {
+                nodes.push(h("li", { class: "film-group", "data-group": heading }, heading));
             }
-            lastGroup = item.group_label;
+            lastHeading = heading;
 
             const row = h("li", { class: "film" });
             this.fillRow(row, item);
@@ -268,6 +316,7 @@ class UniversePage {
                 : null,
             poster(film.poster_path, film.title, "film__poster", false, "small"),
             h("div", { class: "film__info" },
+                item.label ? h("span", { class: "film__label" }, item.label) : null,
                 h("h3", { class: "film__title" }, film.title),
                 h("div", { class: "film__meta" },
                     pill(yearOf(film.release_date)),

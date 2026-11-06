@@ -134,7 +134,7 @@ function detailsForm(universe, categories, reload) {
     );
 }
 
-/** Řádek filmu: skupina, pořadí v příběhu, volitelný, obal, posun, odebrání. */
+/** Řádek filmu: oddíl, série, popisek, pořadí v příběhu, volitelný, obal, posun, odebrání. */
 function itemRow(universe, item, previous, next, reload) {
     const { film } = item;
     const isCover = universe.cover_tmdb_id === film.tmdb_id;
@@ -147,6 +147,19 @@ function itemRow(universe, item, previous, next, reload) {
         placeholder: TEXTS.adminGroupPlaceholder, "aria-label": TEXTS.adminGroup, maxlength: 60,
     });
     group.addEventListener("change", () => save({ group_label: group.value.trim() || null }));
+
+    // Série pro pohled „By series“ a popisek u názvu (V3.0.1)
+    const franchise = h("input", {
+        type: "text", class: "admin-input", value: item.franchise ?? "",
+        placeholder: TEXTS.adminFranchisePlaceholder, "aria-label": TEXTS.adminFranchise, maxlength: 60,
+    });
+    franchise.addEventListener("change", () => save({ franchise: franchise.value.trim() || null }));
+
+    const label = h("input", {
+        type: "text", class: "admin-input", value: item.label ?? "",
+        placeholder: TEXTS.adminLabelPlaceholder, "aria-label": TEXTS.adminLabel, maxlength: 60,
+    });
+    label.addEventListener("change", () => save({ label: label.value.trim() || null }));
 
     const story = h("input", {
         type: "number", class: "admin-input admin-input--number", min: 1, max: 999,
@@ -179,6 +192,8 @@ function itemRow(universe, item, previous, next, reload) {
             ),
             h("div", { class: "admin-row__fields" },
                 h("label", { class: "mini-field" }, h("span", {}, TEXTS.adminGroup), group),
+                isPath ? null : h("label", { class: "mini-field" }, h("span", {}, TEXTS.adminFranchise), franchise),
+                h("label", { class: "mini-field" }, h("span", {}, TEXTS.adminLabel), label),
                 h("label", { class: "mini-field" }, h("span", {}, TEXTS.adminStoryOrder), story),
                 h("label", { class: "mini-check" }, optional, h("span", {}, TEXTS.adminOptional)),
             ),

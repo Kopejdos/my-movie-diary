@@ -6,16 +6,16 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V2.7** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V3.0.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
 - 52 collections, 6 curated paths and 700+ movies from TMDB – MCU, Star Wars, Disney, Pixar, DreamWorks, Studio Ghibli, horror series and hand-picked horror genres, each with its own color and banner
-- Categories (Superhero, Animation, Horror…) and collection types (series, studios, genre picks)
+- Categories (Superhero, Animation, Horror…) and collection types (series, studios, genre picks); view a collection by release, in story order or by series
 - +1 / −1 viewing counter – every viewing is logged with a date
 - Progress per collection, **Up next** and **Continue watching** suggestions
 - Release order or story (chronological) order, "unwatched only" filter
-- Instant search across all movies and collections (by title, original title or year), plus people search
+- Instant search across all movies, collections and series inside them (by title, original title or year), plus people search
 - Public profiles you can share with a link – opt-in, private by default
 - Curated paths – step-by-step routes like MCU Essentials or Horror 101, with a note for every step
 - Watchlist across all collections
@@ -28,7 +28,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Installable on a phone or computer (PWA), opens even offline
 
 **Coming next** – collections & new features
-- V3.0 – better organized collections: view by release, story or series (Toy Story, Cars… inside Pixar)
+- V3.0.2 – Pixar, DreamWorks, Disney and more regrouped by series; rewritten paths
 - V3.1 – new collections, then ratings, "What tonight?", Coming soon and comparing with friends
 
 ## Tech stack

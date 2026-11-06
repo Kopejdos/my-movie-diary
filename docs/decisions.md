@@ -274,7 +274,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 
 | # | Verze | Fáze | Co přibude |
 |---|---|---|---|
-| 26 | V3.0.1 | Organizace kolekcí 1 – zobrazení | **tři pohledy na kolekci** (Release / Story / Groups), nové údaje u filmu v kolekci (**skupina** a **popisek**), import + admin panel, hledání najde i skupinu (*Pixar › Cars*), cesty na přehledu níž; ukázková data (MCU podle hrdinů, Star Wars s čísly epizod) |
+| 26 | V3.0.1 | Organizace kolekcí 1 – zobrazení ✅ | **tři pohledy na kolekci** (Release / Story / Groups), nové údaje u filmu v kolekci (**skupina** a **popisek**), import + admin panel, hledání najde i skupinu (*Pixar › Cars*), cesty na přehledu níž; ukázková data (MCU podle hrdinů, Star Wars s čísly epizod) |
 | 27 | V3.0.2 | Organizace kolekcí 2 – obsah | Pixar, DreamWorks, Disney, MCU a další série přeskupené podle sérií, popisky (Episode IV, Part 2…), **zrušení kolekce Shrek**, **cesty přepsané na skutečně doporučené pořadí** |
 | 28 | V3.1 | Nové kolekce | nové série, studia (Illumination, Laika, Aardman, A24…), **režiséři** (nový druh kolekce), Christmas Movies, české pohádky a klasika – už podle standardu z V3.0 |
 | 29 | V3.2 | Hodnocení | **0,5–5 ★** (po půlhvězdách) u každého filmu, vlastní hodnocení + průměr uživatelů MMD, nejlépe hodnocené ve statistikách |
@@ -938,6 +938,31 @@ přihlášení a databáze, bez realtime a storage), případně minifikace.
   víc, ale chování přihlášení (obnova tokenu, hlavičky) by se muselo psát znovu. Takhle běží původní kód
   supabase-js.
 - **Kapitola V2.x je tímto uzavřená.** Správcovský klíč `MMD_ADMIN_KEY` vyměněn (6. 11.). Pokračuje kapitola V3.x.
+
+### Fáze 26 – organizace kolekcí 1: zobrazení ✅ (6. 11. 2026) – **V3.0.1**
+- **Tři pohledy na kolekci** (`views/universe.js`): **Release order** (výchozí, má ho každá kolekce, nadpisy
+  z `group_label`), **Story order** (jen když je vyplněné `story_order`) a **By series** (jen když má aspoň jeden
+  film `franchise`). Přepínač ukazuje jen dostupné pohledy; volba se pamatuje (`prefs` – klíč `order`), kolekce
+  bez zvoleného pohledu ukáže Release.
+- **By series:** skupiny v pořadí svého prvního filmu, uvnitř podle roku; filmy bez série ve skupině
+  **Standalone** na konci.
+- **Nové sloupce** `universe_items.franchise` a `universe_items.label` (migrace
+  `20261106100000_collection_views.sql`), v seedu pole `franchise` a `label`, import je ukládá, admin panel má
+  u filmu pole **Series** a **Label** (dosavadní „Group“ se jmenuje **Section**).
+- **Popisek** se ukazuje nad názvem filmu v seznamu i v kartě Up next (Episode IV – A New Hope…).
+- **Hledání najde i série** – sekce *Series in collections* („Cars“ → *Pixar › Cars*); odkaz
+  `#/collection/<slug>?view=groups&group=<série>` otevře kolekci v pohledu By series a posune ji na sérii.
+- **Cesty na přehledu až na konci** (`KIND_ORDER = series, studio, genre, path`).
+- **Ukázková data:** MCU po hrdinech (Iron Man, Hulk, Thor, Captain America, The Avengers, Guardians…;
+  Black Widow, Eternals, Shang-Chi… jako Standalone), Star Wars s čísly epizod a série *Skywalker Saga*
+  (oddíly Skywalker Saga / Standalone se v pořadí vydání střídaly – přesunuté do By series).
+
+#### Rozhodnutí ve fázi 26
+- **Dva samostatné údaje místo jednoho:** `group_label` = oddíly v čase (Release), `franchise` = série (By series).
+  U MCU dávají smysl obojí (Phase 1–6 i Iron Man / Thor…), u Disneyho éry i série.
+- **Pořadí skupin podle prvního filmu**, ne abecedně – odpovídá tomu, jak série vznikaly (Iron Man před Thorem).
+- **Odkaz z hledání neukládá zvolený pohled** – po otevření z hledání se ukáže By series, ale zapamatovaná
+  volba uživatele zůstane, dokud sám neklikne.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

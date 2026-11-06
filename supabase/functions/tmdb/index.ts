@@ -30,6 +30,8 @@ interface SeedFilm {
   optional?: boolean;
   story?: number;      // pořadí v příběhu (fáze 4)
   note?: string;       // poznámka ke kroku cesty (fáze 16 – V1.8)
+  franchise?: string;  // série uvnitř kolekce pro pohled Groups (V3.0.1)
+  label?: string;      // krátký popisek filmu v kolekci – Episode IV, Part 2… (V3.0.1)
 }
 
 /** Univerzum v seed souboru */
@@ -342,6 +344,8 @@ async function importUniverse(db: SupabaseClient, universe: SeedUniverse, sortOr
     group_label: r.seed.group ?? null,
     is_optional: r.seed.optional ?? false,
     note: r.seed.note ?? null,
+    franchise: r.seed.franchise ?? null,
+    label: r.seed.label ?? null,
   }));
   const uniqueItems = [...new Map(items.map((i) => [i.tmdb_id, i])).values()];
 

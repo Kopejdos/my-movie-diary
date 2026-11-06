@@ -6,7 +6,7 @@ import {
     addWatch, removeLatestWatch, addToWatchlist, removeFromWatchlist, todayLocal,
 } from "../data.js";
 import {
-    buildSearchIndex, parseQuery, searchFilms, searchCollections, filterByWatched,
+    buildSearchIndex, parseQuery, searchFilms, searchCollections, searchGroups, filterByWatched,
     MAX_FILM_RESULTS, MAX_COLLECTION_RESULTS,
 } from "../search.js";
 import { isSignedIn } from "../auth.js";
@@ -165,11 +165,12 @@ class SearchPage {
         }
 
         const foundCollections = searchCollections(this.index, query);
+        const foundGroups = searchGroups(this.index, query);
         const allFilms = searchFilms(this.index, query);
         const films = filterByWatched(allFilms, this.filter, this.counts);
 
         const users = this.users ?? [];
-        if (foundCollections.length === 0 && allFilms.length === 0 && users.length === 0) {
+        if (foundCollections.length === 0 && foundGroups.length === 0 && allFilms.length === 0 && users.length === 0) {
             mount(this.container,
                 h("div", { class: "empty-filter" },
                     h("p", { style: "margin: 0 0 6px" }, format("searchNoResults", this.text)),
@@ -188,9 +189,31 @@ class SearchPage {
                             .map((r) => universeCard(r.universe, this.signedIn))),
                 ]
                 : null,
+            foundGroups.length > 0 ? this.renderGroups(foundGroups.slice(0, MAX_COLLECTION_RESULTS)) : null,
             users.length > 0 ? this.renderUsers(users) : null,
             allFilms.length > 0 ? this.renderFilms(films) : null,
         );
+    }
+
+    /** Série uvnitř kolekcí (V3.0.1) – odkaz otevře kolekci v pohledu „By series“ na dané sérii. */
+    renderGroups(groups) {
+        return [
+            h("div", { class: "section-title" },
+                h("h2", {}, TEXTS.searchGroups),
+                h("span", { class: "muted" }, String(groups.length))),
+            h("div", { class: "group-results" },
+                groups.map((g) => {
+                    const href = `#/collection/${g.universe.slug}?view=groups&group=${encodeURIComponent(g.franchise)}`;
+                    const link = h("a", { class: "group-result", href },
+                        h("span", { class: "group-result__dot", "aria-hidden": "true" }),
+                        h("span", { class: "group-result__info" },
+                            h("strong", {}, g.franchise),
+                            h("span", { class: "muted" }, `${g.universe.name} · ${movies(g.count)}`)),
+                        h("span", { class: "group-result__arrow", "aria-hidden": "true" }, "›"));
+                    if (g.universe.color) link.style.setProperty("--c", g.universe.color);
+                    return link;
+                })),
+        ];
     }
 
     /** Veřejné profily – odkaz na #/u/<nick>. */

@@ -79,11 +79,19 @@ export function parseQuery(raw) {
 export function buildSearchIndex(universes, items) {
     const universeById = new Map(universes.map((u) => [u.id, u]));
     const films = new Map();
+    const groups = new Map();       // "universe_id|série" → skupina uvnitř kolekce (V3.0.1)
 
     for (const item of items) {
         const film = item.film;
         const universe = universeById.get(item.universe_id);
         if (!film || !universe) continue;
+
+        if (item.franchise) {
+            const key = `${universe.id}|${item.franchise}`;
+            const group = groups.get(key) ?? { universe, franchise: item.franchise, name: prepare(item.franchise), count: 0 };
+            group.count += 1;
+            groups.set(key, group);
+        }
 
         let entry = films.get(film.tmdb_id);
         if (!entry) {
@@ -106,6 +114,7 @@ export function buildSearchIndex(universes, items) {
 
     return {
         films: [...films.values()],
+        groups: [...groups.values()],
         collections: universes.map((universe) => ({
             universe,
             name: prepare(universe.name),
@@ -146,6 +155,21 @@ export function searchCollections(index, query) {
         const byDescription = scoreText(item.description, query, null) >= 60 ? 20 : 0;
         const score = Math.max(byName, byDescription);
         if (score > 0) results.push({ universe: item.universe, score });
+    }
+    return results.sort((a, b) => b.score - a.score || a.universe.sort_order - b.universe.sort_order);
+}
+
+/**
+ * Najde série uvnitř kolekcí („Cars“ → Pixar › Cars): [{ universe, franchise, count, score }].
+ * Série se stejným názvem jako celá kolekce se vynechá – tu už najde searchCollections.
+ */
+export function searchGroups(index, query) {
+    if (!query) return [];
+    const results = [];
+    for (const group of index.groups ?? []) {
+        if (group.name.normalized === normalize(group.universe.name)) continue;
+        const score = scoreText(group.name, query, null);
+        if (score > 0) results.push({ ...group, score });
     }
     return results.sort((a, b) => b.score - a.score || a.universe.sort_order - b.universe.sort_order);
 }
