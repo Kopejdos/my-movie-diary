@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.0.2 – November 2026
+- Pixar, DreamWorks, Disney, X-Men, Spider-Man, Alien, Asterix and The Conjuring can be browsed by series
+- Labels like "Spin-off", "Prequel" or "Live-action remake" next to movie titles
+- The Shrek collection is now part of DreamWorks (your viewings stay)
+- Paths rewritten in a truly recommended order – story order, hero by hero, or from easy to intense
+
 ## V3.0.1 – November 2026
 - Collections can be viewed three ways: by release, in story order, or by series (Iron Man, Thor, Captain America…)
 - Movie labels like "Episode IV – A New Hope" next to the title

@@ -275,13 +275,14 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | # | Verze | Fáze | Co přibude |
 |---|---|---|---|
 | 26 | V3.0.1 | Organizace kolekcí 1 – zobrazení ✅ | **tři pohledy na kolekci** (Release / Story / Groups), nové údaje u filmu v kolekci (**skupina** a **popisek**), import + admin panel, hledání najde i skupinu (*Pixar › Cars*), cesty na přehledu níž; ukázková data (MCU podle hrdinů, Star Wars s čísly epizod) |
-| 27 | V3.0.2 | Organizace kolekcí 2 – obsah | Pixar, DreamWorks, Disney, MCU a další série přeskupené podle sérií, popisky (Episode IV, Part 2…), **zrušení kolekce Shrek**, **cesty přepsané na skutečně doporučené pořadí** |
-| 28 | V3.1 | Nové kolekce | nové série, studia (Illumination, Laika, Aardman, A24…), **režiséři** (nový druh kolekce), Christmas Movies, české pohádky a klasika – už podle standardu z V3.0 |
-| 29 | V3.2 | Hodnocení | **0,5–5 ★** (po půlhvězdách) u každého filmu, vlastní hodnocení + průměr uživatelů MMD, nejlépe hodnocené ve statistikách |
-| 30 | V3.3 | Co dneska? + Coming soon | náhodný výběr z watchlistu / rozkoukaných kolekcí; filmy z kolekcí, které teprve vyjdou |
-| 31 | V3.4 | Porovnání s kamarádem | společně viděné filmy, co viděl jen jeden z vás, shoda v % (přes veřejné profily) |
-| 32 | V3.5 | Hledání všech filmů | search sahá do TMDB (jako admin panel) – zapsat jde **jakýkoli film**, nejen ten z kolekce |
-| 33 | V3.6 | Wrapped | rok v kostce – podoba se domyslí, až na něj přijde řada |
+| 27 | V3.0.2 | Organizace kolekcí 2 – obsah ✅ | Pixar, DreamWorks, Disney, MCU a další série přeskupené podle sérií, popisky (Episode IV, Part 2…), **zrušení kolekce Shrek**, **cesty přepsané na skutečně doporučené pořadí** |
+| 28 | V3.1.1 | Kontrola kolekcí | projít **všechny existující kolekce** a doplnit chybějící filmy (jen filmy, ne seriály), sjednotit série a popisky podle standardu V3.0 |
+| 29 | V3.1.2 | Nové kolekce | nové série, studia (Illumination, Laika, Aardman, A24…), **režiséři** (nový druh kolekce), Christmas Movies, české pohádky a klasika – už podle standardu z V3.0 |
+| 30 | V3.2 | Hodnocení | **0,5–5 ★** (po půlhvězdách) u každého filmu, vlastní hodnocení + průměr uživatelů MMD, nejlépe hodnocené ve statistikách |
+| 31 | V3.3 | Co dneska? + Coming soon | náhodný výběr z watchlistu / rozkoukaných kolekcí; filmy z kolekcí, které teprve vyjdou |
+| 32 | V3.4 | Porovnání s kamarádem | společně viděné filmy, co viděl jen jeden z vás, shoda v % (přes veřejné profily) |
+| 33 | V3.5 | Hledání všech filmů | search sahá do TMDB (jako admin panel) – zapsat jde **jakýkoli film**, nejen ten z kolekce |
+| 34 | V3.6 | Wrapped | rok v kostce – podoba se domyslí, až na něj přijde řada |
 
 **Později / nápady:** neoficiální kolekce uživatelů (vlastní seznamy, oddělené od oficiálních, dohledatelné jako
 podkategorie) nebo návrhy kolekcí, které schvaluje správce; export / import; české názvy filmů.
@@ -304,6 +305,12 @@ podkategorie) nebo návrhy kolekcí, které schvaluje správce; export / import;
   (patří k filmu, ne ke kolekci); počet dokončených kolekcí se může o jednu snížit.
 - **Disney** zůstává v pohledu Release po érách a navíc dostane Groups podle sérií (Frozen, Zootopia, Moana, Wreck-It Ralph…).
 - **Studio Marvel se nedělá** – MCU je Marvel Studios, byla by to kopie.
+- **Kolekce Spider-Man zůstává** (návrh 6. 11. přesunout Spider-Verse pod MCU zamítnut) – Raimiho, Amazing,
+  Spider-Verse ani Venom nejsou MCU (jsou od Sony), MCU je neobsahuje. Shrek se ruší jen proto, že DreamWorks
+  obsahuje všechny jeho filmy. Spider-Man má místo toho pohled By series (Raimi / Amazing / MCU / Spider-Verse / Sony).
+- **Jen filmy, ne seriály** – She-Hulk, Loki, WandaVision… jsou seriály Disney+, do MMD nepatří. Hulk má v MCU
+  opravdu jen jeden vlastní film (The Incredible Hulk); jinak se objevuje v Avengers a dalších.
+- **V3.1 rozdělena na dvě vlny** (stejně jako V3.0): nejdřív kontrola a doplnění existujících kolekcí, pak nové.
 - **Kolekce od uživatelů zatím ne** – hrozí nesmyslné kolekce (Spider-Man + Shrek + Indiana Jones); případně později
   jako oddělené *neoficiální* kolekce.
 - **Hodnocení jen od uživatelů MMD**, žádné přebírání z ČSFD / IMDb.
@@ -963,6 +970,28 @@ přihlášení a databáze, bez realtime a storage), případně minifikace.
 - **Pořadí skupin podle prvního filmu**, ne abecedně – odpovídá tomu, jak série vznikaly (Iron Man před Thorem).
 - **Odkaz z hledání neukládá zvolený pohled** – po otevření z hledání se ukáže By series, ale zapamatovaná
   volba uživatele zůstane, dokud sám neklikne.
+
+### Fáze 27 – organizace kolekcí 2: obsah ✅ (6. 11. 2026) – **V3.0.2**
+- **Série (By series)** v seedu: Pixar (Toy Story, Monsters Inc., Finding Nemo, The Incredibles, Cars, Inside Out),
+  DreamWorks (Shrek, Spirit, Madagascar, Kung Fu Panda, How to Train Your Dragon, The Croods, Trolls, The Boss Baby,
+  The Bad Guys), Disney (Fantasia, Winnie the Pooh, The Rescuers, Wreck-It Ralph, Frozen, Zootopia, Moana,
+  Live-action remakes), X-Men (X-Men, Wolverine, Deadpool), Spider-Man (Raimi trilogy, The Amazing Spider-Man,
+  MCU, Spider-Verse, Sony's Spider-Man Universe), Alien (Alien, Alien vs. Predator, Prequels), Asterix (Animated,
+  Live-action), Conjuring (The Conjuring, Annabelle, The Nun). Filmy bez série → *Standalone*.
+- **Oddíly v Release zůstaly tam, kde jdou po sobě** (MCU Phase 1–6, Disney éry, Pixar a DreamWorks po
+  desetiletích, Halloween, Batman, Harry Potter / Fantastic Beasts…). Kde se v pořadí vydání střídaly (X-Men,
+  Spider-Man, Alien, Asterix), přesunuly se do By series.
+- **Popisky:** Star Wars epizody (V3.0.1), Spin-off / Prequel / MCU crossover / Live-action remake (stejný název
+  jako animák) / Director's cut / Pre-Ghibli / Co-production – místo dřívějších jednofilmových „oddílů“.
+- **Kolekce Shrek zrušena** (migrace `20261106110000_remove_shrek_collection.sql`) – filmy jsou v DreamWorks › Shrek;
+  zhlédnutí a watchlist zůstávají.
+- **Cesty přepsané** – pořadí už neodpovídá roku vydání:
+  - *MCU Essentials* – v pořadí příběhu podle Kamenů nekonečna (Captain America: The First Avenger první),
+  - *Star Wars: First Watch* – IV, V, pak prequely jako flashback (I–III) a Rogue One, VI, sequely,
+  - *Superhero Hall of Fame* – po hrdinech (Spider-Man → MCU → Batman → X-Men → DC),
+  - *Animation Essentials* – od rodinných hitů přes klasiku Disney a Ghibli po Spider-Verse,
+  - *Horror 101* – od zábavných vstupních hororů (Scream) po nejtěžší (The Exorcist, Hereditary), klasika cestou,
+  - *Fantasy Starter* – pořadí už bylo vlastní (rampa k Pánovi prstenů), beze změny.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).
