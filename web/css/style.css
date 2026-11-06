@@ -834,6 +834,15 @@ button {
     display: none;
 }
 
+/* Na širší obrazovce se pilulky zalomí na další řádek – od V3.1.2 je žánrů víc a poslední
+   by se jinak schovala za okraj (posouvání do strany myší skoro nikdo nečeká) */
+@media (min-width: 720px) {
+    .chips {
+        flex-wrap: wrap;
+        overflow-x: visible;
+    }
+}
+
 .chip {
     --c: var(--accent);
     flex-shrink: 0;
