@@ -280,7 +280,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 29 | V3.1.2 | Dvouvrstvý filtr ✅ | přehled: 1. **druh** (All / Series / Studios / Genre picks / Paths), 2. **žánr**; Sci-fi & Fantasy rozdělené, nové kategorie Comedy a Crime & Thriller |
 | 30 | V3.1.3 | Velká studia ✅ | **Marvel** (všechny filmy podle Marvelu: MCU, X-Men, Sony, před MCU), **DC** (DCEU, DCU, Batman, staří Supermani, Joker…), **Lucasfilm** (Star Wars, Indiana Jones, Willow), **Illumination**, **Laika**, **Aardman** a další – série jako skupiny v By series |
 | 31 | V3.1.4 | Žánrové výběry mimo horory ✅ | 8 tematických výběrů po 12–15 filmech (sci-fi, akce, vánoční…), ne obecné „Action“ |
-| 32 | V3.1.5 | Nové série | James Bond, Mission: Impossible, John Wick, Indiana Jones… – podle standardu V3.0 |
+| 32 | V3.1.5 | Nové série ✅ | James Bond, Mission: Impossible, John Wick, Indiana Jones… – podle standardu V3.0 |
 | 33 | V3.2 | Hodnocení | **0,5–5 ★** (po půlhvězdách) u každého filmu, vlastní hodnocení + průměr uživatelů MMD, nejlépe hodnocené ve statistikách |
 | 34 | V3.3 | Co dneska? + Coming soon | náhodný výběr z watchlistu / rozkoukaných kolekcí; filmy z kolekcí, které teprve vyjdou |
 | 35 | V3.4 | Porovnání s kamarádem | společně viděné filmy, co viděl jen jeden z vás, shoda v % (přes veřejné profily) |
@@ -1103,6 +1103,28 @@ desetiletích a v By series série studia:
 - **Témata místo obecných žánrů** (Time Travel, ne „Sci-fi“) – výběr pak něco říká a dá se dokončit.
 - **AI & Robots vynecháno ve prospěch War Movies** – tři sci-fi výběry stačí, válečné filmy rozšiřují nabídku.
 - Christmas Movies jsou žánrový výběr, ne série – dávají smysl celoročně ve filtru Family.
+
+### Fáze 32 – nové série ✅ (6. 11. 2026) – **V3.1.5**
+25 nových sérií (167 položek) podle standardu V3.0 – série uvnitř kolekce, popisky, pořadí příběhu, okrajové
+filmy volitelně:
+- **James Bond** (25 oficiálních + volitelně Casino Royale 1967 a Never Say Never Again; By series podle herců),
+  **Mission: Impossible** (8), **John Wick** (4 + Ballerina), **Indiana Jones** (Story: Temple of Doom jako prequel),
+  **The Matrix** (+ The Animatrix volitelně), **Terminator**, **Rocky & Creed**, **Back to the Future**, **Die Hard**,
+  **The Hunger Games** (Katniss + prequely, Story order; Sunrise on the Reaping 2026), **The Twilight Saga**,
+  **Planet of the Apes** (původní série, reboot; Burtonův remake volitelně), **Transformers** (Bay, nová éra,
+  animované), **Star Trek** (TOS, TNG, Kelvin; Section 31 volitelně), **Bourne**, **Men in Black**, **Ghostbusters**
+  (reboot 2016 volitelně), **Predator** (Story order od Killer of Killers po Badlands; AvP volitelně), **Rambo**,
+  **The Godfather**, **Knives Out**, **Paddington**, **Kingsman** (Story: The King's Man jako prequel), **Jumanji**
+  (Zathura volitelně), **The Karate Kid** (původní série + Dre Parker a Legends).
+- Nová kategorie **Drama** (migrace `20261106140000_category_drama.sql`) – Rocky & Creed, The Godfather.
+- Stejné názvy v jedné kolekci mají připnuté TMDB ID (Casino Royale 1967/2006, Ghostbusters 1984/2016,
+  Planet of the Apes 1968/2001, The Karate Kid 1984/2010) + Ballerina (v TMDB „From the World of John Wick: Ballerina“).
+
+#### Rozhodnutí ve fázi 32
+- **Série ze studií zůstávají i samostatně** (Indiana Jones je v Lucasfilmu, Matrix ve Warner Bros.) – kdo sleduje
+  jen jednu sérii, nechce procházet celé studio.
+- **Jumanji 3 (prosinec 2026) zatím ne** – název ani datum nejsou potvrzené; doplní se při další kontrole.
+- **Kapitola rozšiřování V3.1 je tímto hotová** – pokračuje V3.2 (hodnocení).
 
 ## Drobnosti k dořešení
 - Service worker: JS a CSS brát nejdřív ze sítě (mezipaměť jen offline), ať se nová verze ukáže hned po nasazení.

@@ -412,6 +412,423 @@
       ]
     },
     {
+      "slug": "james-bond",
+      "name": "James Bond",
+      "kind": "series",
+      "categories": ["action-adventure"],
+      "color": "#c0a062",
+      "description": "All 25 official 007 movies from Dr. No to No Time to Die – plus the two unofficial ones as extras.",
+      "films": [
+        { "title": "Dr. No", "year": 1962, "franchise": "Sean Connery" },
+        { "title": "From Russia with Love", "year": 1963, "franchise": "Sean Connery" },
+        { "title": "Goldfinger", "year": 1964, "franchise": "Sean Connery", "cover": true },
+        { "title": "Thunderball", "year": 1965, "franchise": "Sean Connery" },
+        { "title": "Casino Royale", "year": 1967, "tmdb": 12208, "optional": true, "label": "Non-Eon parody" },
+        { "title": "You Only Live Twice", "year": 1967, "franchise": "Sean Connery" },
+        { "title": "On Her Majesty's Secret Service", "year": 1969, "franchise": "George Lazenby" },
+        { "title": "Diamonds Are Forever", "year": 1971, "franchise": "Sean Connery" },
+        { "title": "Live and Let Die", "year": 1973, "franchise": "Roger Moore" },
+        { "title": "The Man with the Golden Gun", "year": 1974, "franchise": "Roger Moore" },
+        { "title": "The Spy Who Loved Me", "year": 1977, "franchise": "Roger Moore" },
+        { "title": "Moonraker", "year": 1979, "franchise": "Roger Moore" },
+        { "title": "For Your Eyes Only", "year": 1981, "franchise": "Roger Moore" },
+        { "title": "Octopussy", "year": 1983, "franchise": "Roger Moore" },
+        { "title": "Never Say Never Again", "year": 1983, "optional": true, "franchise": "Sean Connery", "label": "Non-Eon" },
+        { "title": "A View to a Kill", "year": 1985, "franchise": "Roger Moore" },
+        { "title": "The Living Daylights", "year": 1987, "franchise": "Timothy Dalton" },
+        { "title": "Licence to Kill", "year": 1989, "franchise": "Timothy Dalton" },
+        { "title": "GoldenEye", "year": 1995, "franchise": "Pierce Brosnan" },
+        { "title": "Tomorrow Never Dies", "year": 1997, "franchise": "Pierce Brosnan" },
+        { "title": "The World Is Not Enough", "year": 1999, "franchise": "Pierce Brosnan" },
+        { "title": "Die Another Day", "year": 2002, "franchise": "Pierce Brosnan" },
+        { "title": "Casino Royale", "year": 2006, "tmdb": 36557, "franchise": "Daniel Craig" },
+        { "title": "Quantum of Solace", "year": 2008, "franchise": "Daniel Craig" },
+        { "title": "Skyfall", "year": 2012, "franchise": "Daniel Craig" },
+        { "title": "Spectre", "year": 2015, "franchise": "Daniel Craig" },
+        { "title": "No Time to Die", "year": 2021, "franchise": "Daniel Craig" }
+      ]
+    },
+    {
+      "slug": "mission-impossible",
+      "name": "Mission: Impossible",
+      "kind": "series",
+      "categories": ["action-adventure"],
+      "color": "#e11d48",
+      "description": "Ethan Hunt and the IMF – eight impossible missions.",
+      "films": [
+        { "title": "Mission: Impossible", "year": 1996, "cover": true },
+        { "title": "Mission: Impossible II", "year": 2000 },
+        { "title": "Mission: Impossible III", "year": 2006 },
+        { "title": "Mission: Impossible - Ghost Protocol", "year": 2011 },
+        { "title": "Mission: Impossible - Rogue Nation", "year": 2015 },
+        { "title": "Mission: Impossible - Fallout", "year": 2018 },
+        { "title": "Mission: Impossible - Dead Reckoning Part One", "year": 2023 },
+        { "title": "Mission: Impossible - The Final Reckoning", "year": 2025 }
+      ]
+    },
+    {
+      "slug": "john-wick",
+      "name": "John Wick",
+      "kind": "series",
+      "categories": ["action-adventure", "crime-thriller"],
+      "color": "#64748b",
+      "description": "Baba Yaga's war on the High Table – plus the Ballerina spin-off.",
+      "films": [
+        { "title": "John Wick", "year": 2014, "cover": true },
+        { "title": "John Wick: Chapter 2", "year": 2017 },
+        { "title": "John Wick: Chapter 3 - Parabellum", "year": 2019 },
+        { "title": "John Wick: Chapter 4", "year": 2023 },
+        { "title": "Ballerina", "year": 2025, "tmdb": 541671, "label": "Spin-off" }
+      ]
+    },
+    {
+      "slug": "indiana-jones",
+      "name": "Indiana Jones",
+      "kind": "series",
+      "categories": ["action-adventure"],
+      "color": "#a16207",
+      "description": "Whip, fedora and ancient relics – all five adventures.",
+      "films": [
+        { "title": "Raiders of the Lost Ark", "year": 1981, "story": 2, "cover": true },
+        { "title": "Indiana Jones and the Temple of Doom", "year": 1984, "story": 1, "label": "Prequel" },
+        { "title": "Indiana Jones and the Last Crusade", "year": 1989, "story": 3 },
+        { "title": "Indiana Jones and the Kingdom of the Crystal Skull", "year": 2008, "story": 4 },
+        { "title": "Indiana Jones and the Dial of Destiny", "year": 2023, "story": 5 }
+      ]
+    },
+    {
+      "slug": "the-matrix",
+      "name": "The Matrix",
+      "kind": "series",
+      "categories": ["scifi", "action-adventure"],
+      "color": "#22c55e",
+      "description": "Red pill or blue pill – the Matrix saga.",
+      "films": [
+        { "title": "The Matrix", "year": 1999, "cover": true },
+        { "title": "The Matrix Reloaded", "year": 2003 },
+        { "title": "The Animatrix", "year": 2003, "optional": true, "label": "Animated anthology" },
+        { "title": "The Matrix Revolutions", "year": 2003 },
+        { "title": "The Matrix Resurrections", "year": 2021 }
+      ]
+    },
+    {
+      "slug": "terminator",
+      "name": "Terminator",
+      "kind": "series",
+      "categories": ["scifi", "action-adventure"],
+      "color": "#94a3b8",
+      "description": "\"I'll be back.\" – every Terminator movie.",
+      "films": [
+        { "title": "The Terminator", "year": 1984 },
+        { "title": "Terminator 2: Judgment Day", "year": 1991, "cover": true },
+        { "title": "Terminator 3: Rise of the Machines", "year": 2003 },
+        { "title": "Terminator Salvation", "year": 2009 },
+        { "title": "Terminator Genisys", "year": 2015, "label": "Reboot" },
+        { "title": "Terminator: Dark Fate", "year": 2019, "label": "Sequel to T2" }
+      ]
+    },
+    {
+      "slug": "rocky-creed",
+      "name": "Rocky & Creed",
+      "kind": "series",
+      "categories": ["drama"],
+      "color": "#dc2626",
+      "description": "From the steps of Philadelphia to Adonis Creed – the whole fight.",
+      "films": [
+        { "title": "Rocky", "year": 1976, "franchise": "Rocky", "cover": true },
+        { "title": "Rocky II", "year": 1979, "franchise": "Rocky" },
+        { "title": "Rocky III", "year": 1982, "franchise": "Rocky" },
+        { "title": "Rocky IV", "year": 1985, "franchise": "Rocky" },
+        { "title": "Rocky V", "year": 1990, "franchise": "Rocky" },
+        { "title": "Rocky Balboa", "year": 2006, "franchise": "Rocky" },
+        { "title": "Creed", "year": 2015, "franchise": "Creed" },
+        { "title": "Creed II", "year": 2018, "franchise": "Creed" },
+        { "title": "Creed III", "year": 2023, "franchise": "Creed" }
+      ]
+    },
+    {
+      "slug": "back-to-the-future",
+      "name": "Back to the Future",
+      "kind": "series",
+      "categories": ["scifi", "comedy"],
+      "color": "#f97316",
+      "description": "Great Scott! Marty and Doc's trips through time.",
+      "films": [
+        { "title": "Back to the Future", "year": 1985, "cover": true },
+        { "title": "Back to the Future Part II", "year": 1989 },
+        { "title": "Back to the Future Part III", "year": 1990 }
+      ]
+    },
+    {
+      "slug": "die-hard",
+      "name": "Die Hard",
+      "kind": "series",
+      "categories": ["action-adventure"],
+      "color": "#b91c1c",
+      "description": "Yippee-ki-yay – John McClane in the wrong place at the wrong time.",
+      "films": [
+        { "title": "Die Hard", "year": 1988, "cover": true },
+        { "title": "Die Hard 2", "year": 1990 },
+        { "title": "Die Hard with a Vengeance", "year": 1995 },
+        { "title": "Live Free or Die Hard", "year": 2007 },
+        { "title": "A Good Day to Die Hard", "year": 2013 }
+      ]
+    },
+    {
+      "slug": "hunger-games",
+      "name": "The Hunger Games",
+      "kind": "series",
+      "categories": ["scifi", "action-adventure"],
+      "color": "#f59e0b",
+      "description": "May the odds be ever in your favor – Katniss' story and the Panem prequels.",
+      "films": [
+        { "title": "The Hunger Games", "year": 2012, "story": 3, "franchise": "Katniss Everdeen", "cover": true },
+        { "title": "The Hunger Games: Catching Fire", "year": 2013, "story": 4, "franchise": "Katniss Everdeen" },
+        { "title": "The Hunger Games: Mockingjay - Part 1", "year": 2014, "story": 5, "franchise": "Katniss Everdeen" },
+        { "title": "The Hunger Games: Mockingjay - Part 2", "year": 2015, "story": 6, "franchise": "Katniss Everdeen" },
+        { "title": "The Hunger Games: The Ballad of Songbirds & Snakes", "year": 2023, "story": 1, "franchise": "Prequels", "label": "Prequel" },
+        { "title": "The Hunger Games: Sunrise on the Reaping", "year": 2026, "story": 2, "franchise": "Prequels", "label": "Prequel" }
+      ]
+    },
+    {
+      "slug": "twilight",
+      "name": "The Twilight Saga",
+      "kind": "series",
+      "categories": ["fantasy"],
+      "color": "#7c3aed",
+      "description": "Bella, Edward and Jacob – all five Twilight movies.",
+      "films": [
+        { "title": "Twilight", "year": 2008, "cover": true },
+        { "title": "The Twilight Saga: New Moon", "year": 2009 },
+        { "title": "The Twilight Saga: Eclipse", "year": 2010 },
+        { "title": "The Twilight Saga: Breaking Dawn - Part 1", "year": 2011 },
+        { "title": "The Twilight Saga: Breaking Dawn - Part 2", "year": 2012 }
+      ]
+    },
+    {
+      "slug": "planet-of-the-apes",
+      "name": "Planet of the Apes",
+      "kind": "series",
+      "categories": ["scifi"],
+      "color": "#a8763e",
+      "description": "The original series, Tim Burton's remake and the Caesar saga.",
+      "films": [
+        { "title": "Planet of the Apes", "year": 1968, "tmdb": 871, "franchise": "Original series", "cover": true },
+        { "title": "Beneath the Planet of the Apes", "year": 1970, "franchise": "Original series" },
+        { "title": "Escape from the Planet of the Apes", "year": 1971, "franchise": "Original series" },
+        { "title": "Conquest of the Planet of the Apes", "year": 1972, "franchise": "Original series" },
+        { "title": "Battle for the Planet of the Apes", "year": 1973, "franchise": "Original series" },
+        { "title": "Planet of the Apes", "year": 2001, "tmdb": 869, "optional": true, "label": "Tim Burton remake" },
+        { "title": "Rise of the Planet of the Apes", "year": 2011, "franchise": "Reboot saga" },
+        { "title": "Dawn of the Planet of the Apes", "year": 2014, "franchise": "Reboot saga" },
+        { "title": "War for the Planet of the Apes", "year": 2017, "franchise": "Reboot saga" },
+        { "title": "Kingdom of the Planet of the Apes", "year": 2024, "franchise": "Reboot saga" }
+      ]
+    },
+    {
+      "slug": "transformers",
+      "name": "Transformers",
+      "kind": "series",
+      "categories": ["scifi", "action-adventure"],
+      "color": "#2563eb",
+      "description": "Autobots, roll out – Michael Bay's movies, Bumblebee, Rise of the Beasts and the animated films.",
+      "films": [
+        { "title": "The Transformers: The Movie", "year": 1986, "optional": true, "franchise": "Animated", "label": "Animated" },
+        { "title": "Transformers", "year": 2007, "franchise": "Michael Bay films", "cover": true },
+        { "title": "Transformers: Revenge of the Fallen", "year": 2009, "franchise": "Michael Bay films" },
+        { "title": "Transformers: Dark of the Moon", "year": 2011, "franchise": "Michael Bay films" },
+        { "title": "Transformers: Age of Extinction", "year": 2014, "franchise": "Michael Bay films" },
+        { "title": "Transformers: The Last Knight", "year": 2017, "franchise": "Michael Bay films" },
+        { "title": "Bumblebee", "year": 2018, "franchise": "New era", "label": "Prequel" },
+        { "title": "Transformers: Rise of the Beasts", "year": 2023, "franchise": "New era" },
+        { "title": "Transformers One", "year": 2024, "franchise": "Animated", "label": "Animated prequel" }
+      ]
+    },
+    {
+      "slug": "star-trek",
+      "name": "Star Trek",
+      "kind": "series",
+      "categories": ["scifi"],
+      "color": "#0ea5e9",
+      "description": "To boldly go – the Original Series and Next Generation crews and the Kelvin timeline.",
+      "films": [
+        { "title": "Star Trek: The Motion Picture", "year": 1979, "franchise": "The Original Series" },
+        { "title": "Star Trek II: The Wrath of Khan", "year": 1982, "franchise": "The Original Series", "cover": true },
+        { "title": "Star Trek III: The Search for Spock", "year": 1984, "franchise": "The Original Series" },
+        { "title": "Star Trek IV: The Voyage Home", "year": 1986, "franchise": "The Original Series" },
+        { "title": "Star Trek V: The Final Frontier", "year": 1989, "franchise": "The Original Series" },
+        { "title": "Star Trek VI: The Undiscovered Country", "year": 1991, "franchise": "The Original Series" },
+        { "title": "Star Trek: Generations", "year": 1994, "franchise": "The Next Generation" },
+        { "title": "Star Trek: First Contact", "year": 1996, "franchise": "The Next Generation" },
+        { "title": "Star Trek: Insurrection", "year": 1998, "franchise": "The Next Generation" },
+        { "title": "Star Trek: Nemesis", "year": 2002, "franchise": "The Next Generation" },
+        { "title": "Star Trek", "year": 2009, "franchise": "Kelvin timeline" },
+        { "title": "Star Trek Into Darkness", "year": 2013, "franchise": "Kelvin timeline" },
+        { "title": "Star Trek Beyond", "year": 2016, "franchise": "Kelvin timeline" },
+        { "title": "Star Trek: Section 31", "year": 2025, "optional": true, "label": "Streaming film" }
+      ]
+    },
+    {
+      "slug": "bourne",
+      "name": "Bourne",
+      "kind": "series",
+      "categories": ["action-adventure", "crime-thriller"],
+      "color": "#475569",
+      "description": "Jason Bourne remembers – the spy trilogy, its sequel and the Legacy spin-off.",
+      "films": [
+        { "title": "The Bourne Identity", "year": 2002, "cover": true },
+        { "title": "The Bourne Supremacy", "year": 2004 },
+        { "title": "The Bourne Ultimatum", "year": 2007 },
+        { "title": "The Bourne Legacy", "year": 2012, "label": "Spin-off" },
+        { "title": "Jason Bourne", "year": 2016 }
+      ]
+    },
+    {
+      "slug": "men-in-black",
+      "name": "Men in Black",
+      "kind": "series",
+      "categories": ["scifi", "comedy"],
+      "color": "#18181b",
+      "description": "Protecting the Earth from the scum of the universe.",
+      "films": [
+        { "title": "Men in Black", "year": 1997, "cover": true },
+        { "title": "Men in Black II", "year": 2002 },
+        { "title": "Men in Black 3", "year": 2012 },
+        { "title": "Men in Black: International", "year": 2019 }
+      ]
+    },
+    {
+      "slug": "ghostbusters",
+      "name": "Ghostbusters",
+      "kind": "series",
+      "categories": ["comedy", "fantasy"],
+      "color": "#16a34a",
+      "description": "Who you gonna call? – the originals, the reboot and the new generation.",
+      "films": [
+        { "title": "Ghostbusters", "year": 1984, "tmdb": 620, "cover": true },
+        { "title": "Ghostbusters II", "year": 1989 },
+        { "title": "Ghostbusters", "year": 2016, "tmdb": 43074, "optional": true, "label": "Reboot" },
+        { "title": "Ghostbusters: Afterlife", "year": 2021 },
+        { "title": "Ghostbusters: Frozen Empire", "year": 2024 }
+      ]
+    },
+    {
+      "slug": "predator",
+      "name": "Predator",
+      "kind": "series",
+      "categories": ["scifi", "action-adventure"],
+      "color": "#65a30d",
+      "description": "The ultimate hunter – every Predator movie, with the Alien vs. Predator crossovers as extras.",
+      "films": [
+        { "title": "Predator", "year": 1987, "story": 3, "franchise": "Predator", "cover": true },
+        { "title": "Predator 2", "year": 1990, "story": 4, "franchise": "Predator" },
+        { "title": "AVP: Alien vs. Predator", "year": 2004, "optional": true, "franchise": "Alien vs. Predator", "label": "Crossover" },
+        { "title": "Aliens vs Predator: Requiem", "year": 2007, "optional": true, "franchise": "Alien vs. Predator", "label": "Crossover" },
+        { "title": "Predators", "year": 2010, "story": 5, "franchise": "Predator" },
+        { "title": "The Predator", "year": 2018, "story": 6, "franchise": "Predator" },
+        { "title": "Prey", "year": 2022, "story": 2, "franchise": "Predator", "label": "Prequel" },
+        { "title": "Predator: Killer of Killers", "year": 2025, "story": 1, "franchise": "Predator", "label": "Animated" },
+        { "title": "Predator: Badlands", "year": 2025, "story": 7, "franchise": "Predator" }
+      ]
+    },
+    {
+      "slug": "rambo",
+      "name": "Rambo",
+      "kind": "series",
+      "categories": ["action-adventure", "war"],
+      "color": "#78350f",
+      "description": "John Rambo's five wars, from First Blood to Last Blood.",
+      "films": [
+        { "title": "First Blood", "year": 1982, "cover": true },
+        { "title": "Rambo: First Blood Part II", "year": 1985 },
+        { "title": "Rambo III", "year": 1988 },
+        { "title": "Rambo", "year": 2008 },
+        { "title": "Rambo: Last Blood", "year": 2019 }
+      ]
+    },
+    {
+      "slug": "the-godfather",
+      "name": "The Godfather",
+      "kind": "series",
+      "categories": ["crime-thriller", "drama"],
+      "color": "#57534e",
+      "description": "An offer you can't refuse – the Corleone trilogy.",
+      "films": [
+        { "title": "The Godfather", "year": 1972, "cover": true },
+        { "title": "The Godfather Part II", "year": 1974 },
+        { "title": "The Godfather Part III", "year": 1990 }
+      ]
+    },
+    {
+      "slug": "knives-out",
+      "name": "Knives Out",
+      "kind": "series",
+      "categories": ["crime-thriller", "comedy"],
+      "color": "#b45309",
+      "description": "Benoit Blanc's mysteries.",
+      "films": [
+        { "title": "Knives Out", "year": 2019, "cover": true },
+        { "title": "Glass Onion: A Knives Out Mystery", "year": 2022 },
+        { "title": "Wake Up Dead Man: A Knives Out Mystery", "year": 2025 }
+      ]
+    },
+    {
+      "slug": "paddington",
+      "name": "Paddington",
+      "kind": "series",
+      "categories": ["family", "comedy"],
+      "color": "#2563eb",
+      "description": "Marmalade, good manners and the kindest bear in London.",
+      "films": [
+        { "title": "Paddington", "year": 2014, "cover": true },
+        { "title": "Paddington 2", "year": 2017 },
+        { "title": "Paddington in Peru", "year": 2024 }
+      ]
+    },
+    {
+      "slug": "kingsman",
+      "name": "Kingsman",
+      "kind": "series",
+      "categories": ["action-adventure", "comedy"],
+      "color": "#1e3a8a",
+      "description": "Manners maketh man – the secret service, its sequel and the WWI prequel.",
+      "films": [
+        { "title": "Kingsman: The Secret Service", "year": 2014, "story": 2, "cover": true },
+        { "title": "Kingsman: The Golden Circle", "year": 2017, "story": 3 },
+        { "title": "The King's Man", "year": 2021, "story": 1, "label": "Prequel" }
+      ]
+    },
+    {
+      "slug": "jumanji",
+      "name": "Jumanji",
+      "kind": "series",
+      "categories": ["family", "action-adventure"],
+      "color": "#15803d",
+      "description": "The game that pulls you in – from Robin Williams to the video-game sequels.",
+      "films": [
+        { "title": "Jumanji", "year": 1995, "cover": true },
+        { "title": "Zathura: A Space Adventure", "year": 2005, "optional": true, "label": "Spin-off" },
+        { "title": "Jumanji: Welcome to the Jungle", "year": 2017 },
+        { "title": "Jumanji: The Next Level", "year": 2019 }
+      ]
+    },
+    {
+      "slug": "karate-kid",
+      "name": "The Karate Kid",
+      "kind": "series",
+      "categories": ["action-adventure", "family"],
+      "color": "#facc15",
+      "description": "Wax on, wax off – Daniel LaRusso, Dre Parker and Karate Kid: Legends.",
+      "films": [
+        { "title": "The Karate Kid", "year": 1984, "tmdb": 1885, "franchise": "Original series", "cover": true },
+        { "title": "The Karate Kid Part II", "year": 1986, "franchise": "Original series" },
+        { "title": "The Karate Kid Part III", "year": 1989, "franchise": "Original series" },
+        { "title": "The Next Karate Kid", "year": 1994, "franchise": "Original series" },
+        { "title": "The Karate Kid", "year": 2010, "tmdb": 38575, "franchise": "Dre Parker", "label": "Remake" },
+        { "title": "Karate Kid: Legends", "year": 2025, "franchise": "Dre Parker" }
+      ]
+    },
+    {
       "slug": "disney",
       "name": "Disney Animation",
       "kind": "studio",
