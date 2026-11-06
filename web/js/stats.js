@@ -214,3 +214,42 @@ function facts(films) {
         first: pick(films, (a, b) => a.first < b.first),
     };
 }
+
+// ---------------------------------------------------------------------
+// Hodnocení (V3.2)
+// ---------------------------------------------------------------------
+
+/** Kolik nejlépe hodnocených filmů ukázat. */
+export const TOP_RATED = 8;
+
+/**
+ * Statistiky vlastních hodnocení.
+ * ratings = Map tmdb_id → score (1–10), watches = zhlédnutí s údaji o filmu (kvůli názvu a plakátu).
+ * Vrací null, když uživatel nic nehodnotil.
+ */
+export function computeRatingStats(ratings, watches) {
+    if (!ratings || ratings.size === 0) return null;
+    const films = new Map();
+    const lastWatched = new Map();
+    for (const w of watches) {
+        if (!films.has(w.tmdb_id)) films.set(w.tmdb_id, { tmdb_id: w.tmdb_id, ...w.film });
+        if (w.watched_on > (lastWatched.get(w.tmdb_id) ?? "")) lastWatched.set(w.tmdb_id, w.watched_on);
+    }
+
+    const scores = [...ratings.values()];
+    const distribution = Array.from({ length: 10 }, (_, i) => ({ score: i + 1, count: 0 }));
+    for (const score of scores) distribution[score - 1].count++;
+
+    const top = [...ratings.entries()]
+        .filter(([tmdbId]) => films.has(tmdbId))
+        .map(([tmdbId, score]) => ({ film: films.get(tmdbId), score, last: lastWatched.get(tmdbId) }))
+        .sort((a, b) => b.score - a.score || (b.last ?? "").localeCompare(a.last ?? "") || (a.film.title ?? "").localeCompare(b.film.title ?? ""))
+        .slice(0, TOP_RATED);
+
+    return {
+        count: scores.length,
+        average: scores.reduce((sum, s) => sum + s, 0) / scores.length / 2,   // v hvězdičkách
+        distribution,
+        top,
+    };
+}

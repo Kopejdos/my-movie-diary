@@ -7,6 +7,9 @@
 //   groups  – po sériích z franchise (Iron Man, Hulk… / Toy Story, Cars…), uvnitř podle roku.
 // Odkaz #/collection/<slug>?view=groups&group=Cars otevře rovnou daný pohled a skupinu
 // (používá ho hledání).
+//
+// Hodnocení (V3.2): u každého filmu průměr uživatelů MMD (★ 4.2 · 12) a u viděného filmu
+// tlačítko pro vlastní hodnocení 0,5–5 ★ (editor se otevře pod názvem).
 
 import {
     fetchUniverse, fetchMyFilmCounts, addWatch, removeLatestWatch,
@@ -14,6 +17,8 @@ import {
     fetchWatchlistIds, addToWatchlist, removeFromWatchlist,
 } from "../data.js";
 import { isSignedIn } from "../auth.js";
+import { fetchMyRatings, saveRating, clearRating, fetchRatingStats, starsText } from "../ratings.js";
+import { ratingEditor, focusRatingEditor } from "./rating.js";
 import { setAccent } from "../theme.js";
 import { loadPref, savePref } from "../prefs.js";
 import { TEXTS, format, movies, steps } from "../texts.js";
@@ -26,12 +31,13 @@ export async function universeView(container, context) {
     mount(container, loadingView());
     const signedIn = isSignedIn();
 
-    let universe, counts, watchlist;
+    let universe, counts, watchlist, ratings;
     try {
-        [universe, counts, watchlist] = await Promise.all([
+        [universe, counts, watchlist, ratings] = await Promise.all([
             fetchUniverse(params.slug),
             fetchMyFilmCounts(signedIn),
             fetchWatchlistIds(signedIn),
+            fetchMyRatings(signedIn).catch(() => new Map()),   // hodnocení nesmí shodit stránku
         ]);
     } catch (error) {
         if (!isCurrent()) return;
@@ -52,7 +58,12 @@ export async function universeView(container, context) {
 
     document.title = `${universe.name} · ${TEXTS.appName}`;
     setAccent(universe.color);
-    new UniversePage(container, universe, counts, watchlist, signedIn, context.query ?? new URLSearchParams()).render();
+    const page = new UniversePage(container, universe, counts, watchlist, signedIn, context.query ?? new URLSearchParams(), ratings);
+    page.render();
+    // Průměry ostatních se doplní, až dorazí (nezdržují vykreslení stránky)
+    fetchRatingStats(universe.items.map((item) => item.film.tmdb_id))
+        .then((stats) => { if (isCurrent()) page.setRatingStats(stats); })
+        .catch(() => {});
 }
 
 /**
@@ -60,13 +71,16 @@ export async function universeView(container, context) {
  * jen dotčený film, Up next a ukazatel postupu, ne celou stránku.
  */
 class UniversePage {
-    constructor(container, universe, counts, watchlist, signedIn, query = new URLSearchParams()) {
+    constructor(container, universe, counts, watchlist, signedIn, query = new URLSearchParams(), ratings = new Map()) {
         this.container = container;
         this.universe = universe;
         this.counts = counts;
         this.watchlist = watchlist;     // Set tmdb_id filmů ve watchlistu
         this.signedIn = signedIn;
         this.rows = new Map();          // tmdb_id → prvek řádku
+        this.ratings = ratings;         // tmdb_id → vlastní hodnocení (1–10)
+        this.ratingStats = new Map();   // tmdb_id → { average, votes } všech uživatelů
+        this.ratingOpen = null;         // tmdb_id filmu s otevřeným editorem hodnocení
         this.progressBar = null;
         this.progressText = null;
         this.upNext = h("section", { class: "up-next-slot" });
@@ -299,6 +313,59 @@ class UniversePage {
         return nodes;
     }
 
+    /** Průměry hodnocení dorazily – překreslit řádky, které je mají. */
+    setRatingStats(stats) {
+        this.ratingStats = stats;
+        for (const item of this.universe.items) {
+            const row = this.rows.get(item.film.tmdb_id);
+            if (row && stats.has(item.film.tmdb_id)) this.fillRow(row, item);
+        }
+    }
+
+    /** Průměr uživatelů MMD (pilulka) + tlačítko vlastního hodnocení u viděného filmu. */
+    renderRating(row, item, count) {
+        const tmdbId = item.film.tmdb_id;
+        const stats = this.ratingStats.get(tmdbId);
+        const mine = this.ratings.get(tmdbId) ?? null;
+        const average = stats
+            ? h("span", { class: "pill pill--rating", title: format("ratingAverageTitle", stats.average, stats.votes) },
+                `★ ${stats.average}`, h("span", { class: "pill__sub" }, `· ${stats.votes}`))
+            : null;
+        const canRate = this.signedIn && (count > 0 || mine);
+        const button = canRate
+            ? h("button", {
+                class: `rate-btn${mine ? " rate-btn--set" : ""}`, type: "button",
+                "aria-expanded": String(this.ratingOpen === tmdbId),
+                title: mine ? format("rateYours", starsText(mine)) : TEXTS.rateAction,
+                onClick: () => {
+                    this.ratingOpen = this.ratingOpen === tmdbId ? null : tmdbId;
+                    this.fillRow(row, item);
+                    if (this.ratingOpen === tmdbId) focusRatingEditor(row.querySelector(".rate-editor"));
+                },
+            }, mine ? `★ ${starsText(mine)}` : `☆ ${TEXTS.rateAction}`)
+            : null;
+        return [average, button];
+    }
+
+    /** Uloží hodnocení (optimisticky) a obnoví průměr filmu. */
+    async rate(row, item, score) {
+        const tmdbId = item.film.tmdb_id;
+        const before = this.ratings.get(tmdbId) ?? null;
+        if (score) this.ratings.set(tmdbId, score); else this.ratings.delete(tmdbId);
+        this.ratingOpen = null;
+        this.fillRow(row, item);
+        try {
+            if (score) await saveRating(tmdbId, score); else await clearRating(tmdbId);
+            toast(score ? format("ratingSaved", starsText(score)) : TEXTS.ratingCleared);
+            const fresh = await fetchRatingStats([tmdbId]);
+            if (fresh.has(tmdbId)) this.ratingStats.set(tmdbId, fresh.get(tmdbId)); else this.ratingStats.delete(tmdbId);
+        } catch (error) {
+            if (before) this.ratings.set(tmdbId, before); else this.ratings.delete(tmdbId);
+            toast(format("errorGeneric", error.message), "error");
+        }
+        this.fillRow(row, item);
+    }
+
     /** Obsah řádku filmu – volá se znovu po každé změně počtu. */
     fillRow(row, item, busy = false) {
         const { film } = item;
@@ -322,6 +389,7 @@ class UniversePage {
                     pill(yearOf(film.release_date)),
                     film.runtime ? pill(format("minutes", film.runtime)) : null,
                     item.is_optional ? pill(TEXTS.optionalBadge) : null,
+                    this.renderRating(row, item, count),
                 ),
                 this.isPath && item.note ? h("p", { class: "film__note" }, item.note) : null,
                 this.signedIn
@@ -336,6 +404,15 @@ class UniversePage {
                     this.renderWatchlistButton(row, item),
                     this.renderCounter(row, item, count, busy))
                 : h("a", { class: "btn btn--small", href: "#/login" }, TEXTS.signInToTrack),
+            // Editor hodnocení přes celou šířku řádku (na telefonu by se nevešel vedle tlačítek)
+            this.ratingOpen === film.tmdb_id
+                ? ratingEditor({
+                    title: film.title,
+                    score: this.ratings.get(film.tmdb_id) ?? null,
+                    onChange: (score) => this.rate(row, item, score),
+                    onClose: () => { this.ratingOpen = null; this.fillRow(row, item); row.querySelector(".rate-btn")?.focus(); },
+                })
+                : null,
         );
     }
 

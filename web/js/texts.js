@@ -35,6 +35,25 @@ export const TEXTS = {
 
     // Řazení a filtr v detailu univerza
     orderRelease: "Release order",
+    // Hodnocení (V3.2)
+    rateAction: "Rate",
+    rateYours: "Your rating: {0} ★ – click to change",
+    rateTitle: "Rate {0}",
+    rateStars: "{0} stars",
+    rateValue: "{0} / 5",
+    rateNone: "Not rated yet",
+    rateClear: "Remove rating",
+    rateDone: "Done",
+    ratingSaved: "Rated {0} ★",
+    ratingCleared: "Rating removed.",
+    ratingAverageTitle: "My Movie Diary users: {0} ★ on average from {1} ratings",
+    ratingStarsAria: "{0} out of 5 stars",
+    statsTopRated: "Top rated",
+    statsRatings: "Your ratings",
+    statsAverageRating: "Average rating",
+    statsRatedCount: "{0} rated",
+    statsRatingRow: "{0} ★: {1}",
+
     orderStory: "Story order",
     orderGroups: "By series",
     orderLabel: "Order",

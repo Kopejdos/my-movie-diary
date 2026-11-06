@@ -114,6 +114,18 @@ ale může být ve více univerzech.
 | `tmdb_id` | `integer` FK → `films` | |
 | `added_at` | `timestamptz` | |
 
+### `ratings` – hodnocení filmů (V3.2)
+| Sloupec | Typ | Poznámka |
+|---|---|---|
+| `user_id` | `uuid` FK → `profiles` | PK spolu s `tmdb_id`; výchozí `auth.uid()` |
+| `tmdb_id` | `integer` FK → `films` | |
+| `score` | `smallint` | 1–10 = **hvězdičky × 2** (0,5–5 ★ po půlkách) |
+| `created_at`, `updated_at` | `timestamptz` | `updated_at` hlídá trigger `ratings_touch` |
+
+- RLS: každý vidí a mění **jen svoje** hodnocení. Smazání účtu smaže i hodnocení (cascade).
+- **`film_rating_stats(p_ids integer[])`** (security definer, i pro nepřihlášené) vrací pro seznam filmů jen
+  `average` (0,5–5, zaokrouhleno na desetiny) a `votes` – nikdy, kdo jak hodnotil. Nejvýš 1000 filmů na volání.
+
 ### `blocked_words` – zakázaná slova v nickách (V2.3)
 
 | Sloupec | Typ | Popis |

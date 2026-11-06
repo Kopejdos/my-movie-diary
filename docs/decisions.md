@@ -281,7 +281,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 30 | V3.1.3 | Velká studia ✅ | **Marvel** (všechny filmy podle Marvelu: MCU, X-Men, Sony, před MCU), **DC** (DCEU, DCU, Batman, staří Supermani, Joker…), **Lucasfilm** (Star Wars, Indiana Jones, Willow), **Illumination**, **Laika**, **Aardman** a další – série jako skupiny v By series |
 | 31 | V3.1.4 | Žánrové výběry mimo horory ✅ | 8 tematických výběrů po 12–15 filmech (sci-fi, akce, vánoční…), ne obecné „Action“ |
 | 32 | V3.1.5 | Nové série ✅ | James Bond, Mission: Impossible, John Wick, Indiana Jones… – podle standardu V3.0 |
-| 33 | V3.2 | Hodnocení | **0,5–5 ★** (po půlhvězdách) u každého filmu, vlastní hodnocení + průměr uživatelů MMD, nejlépe hodnocené ve statistikách |
+| 33 | V3.2 | Hodnocení ✅ | **0,5–5 ★** (po půlhvězdách) u každého filmu, vlastní hodnocení + průměr uživatelů MMD, nejlépe hodnocené ve statistikách |
 | 34 | V3.3 | Co dneska? + Coming soon | náhodný výběr z watchlistu / rozkoukaných kolekcí; filmy z kolekcí, které teprve vyjdou |
 | 35 | V3.4 | Porovnání s kamarádem | společně viděné filmy, co viděl jen jeden z vás, shoda v % (přes veřejné profily) |
 | 36 | V3.5 | Hledání všech filmů | search sahá do TMDB (jako admin panel) – zapsat jde **jakýkoli film**, nejen ten z kolekce |
@@ -1131,6 +1131,26 @@ a ikony **ze sítě jako první** (limit 2,5 s, offline / pomalá síť → ulo�
 a nová verze (třeba číslo verze v patičce) se ukázala až po druhém obnovení. Neměnné soubory s verzí v názvu
 (vendor/, fonts/) zůstávají jen z mezipaměti; offline režim funguje stejně. Hláška „update-available“
 s tlačítkem Reload se už nepoužívá. Jednorázově: po nasazení téhle opravy je potřeba obnovit ještě naposledy dvakrát.
+
+### Fáze 33 – hodnocení ✅ (6. 11. 2026) – **V3.2**
+- **0,5–5 ★ po půlkách** (tabulka `ratings`, score 1–10). Migrace `20261106150000_ratings.sql` – RLS ověřené na
+  lokálním Postgresu (cizí hodnocení nejde číst, měnit ani vložit; score mimo 1–10 neprojde; anon nevidí tabulku,
+  jen průměry).
+- **Detail kolekce:** u filmu pilulka **průměru uživatelů MMD** („★ 4.2 · 12“, vidí i nepřihlášení) a u viděného filmu
+  tlačítko **☆ Rate** / **★ 4.5**. Editor se otevře pod řádkem přes celou šířku: 5 hvězd, každá se dvěma půlkami
+  (myš, dotyk i klávesnice – Tab + Enter, Escape zavře), náhled při najetí, **Remove rating**. Uložení je
+  optimistické, průměr se po uložení obnoví. Průměry se načítají až po vykreslení stránky.
+- **Statistiky:** dlaždice **Average rating**, panel **Top rated** (8 nejlépe hodnocených s hvězdičkami) a
+  **Your ratings** (rozložení 0,5–5 ★).
+- Nové soubory `web/js/ratings.js` (data) a `web/js/views/rating.js` (hvězdičky).
+
+#### Rozhodnutí ve fázi 33
+- **Hodnotit jde jen viděný film** (pravidlo webu, ne databáze) – kdo smaže poslední zhlédnutí, hodnocení mu zůstane
+  a může ho dál měnit.
+- **Ukládá se 1–10, ne 0,5–5** – celé číslo, žádné zaokrouhlovací chyby.
+- **Průměr veřejný, jednotlivá hodnocení soukromá** – na veřejném profilu zatím nejsou; přijdou s porovnáním
+  s kamarádem (V3.4).
+- **Průměr se ukazuje už od 1 hlasu** (s počtem hlasů vedle) – u malé komunity by vyšší práh skryl skoro vše.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

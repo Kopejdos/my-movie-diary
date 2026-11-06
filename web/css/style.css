@@ -87,6 +87,7 @@
     --u: var(--accent);
     --u-ink: var(--accent-ink);
 
+    --star: #fbbf24;                /* hvězdičky hodnocení (V3.2) */
     --radius: 16px;
     --radius-small: 10px;
     --content-width: 1140px;
@@ -112,6 +113,7 @@
 
 /* ---------- Světlý režim ---------- */
 :root[data-theme="light"] {
+    --star: #d97706;
     --bg: #f1ebe0;
     --bg-deep: #e7dfd1;
     --panel: #fffaf2;
@@ -1193,6 +1195,152 @@ button {
     flex-wrap: wrap;
     align-items: center;
     gap: 5px;
+}
+
+/* ---------- Hodnocení (V3.2) ---------- */
+.pill--rating {
+    color: var(--text);
+}
+
+.pill__sub {
+    color: var(--muted);
+    font-weight: 500;
+}
+
+/* Tlačítko „☆ Rate“ / „★ 4.5“ v řádku filmu */
+.rate-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px dashed var(--border);
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.rate-btn:hover,
+.rate-btn[aria-expanded="true"] {
+    color: var(--star);
+    border-color: var(--star);
+}
+
+.rate-btn--set {
+    border-style: solid;
+    border-color: color-mix(in srgb, var(--star) 55%, var(--border));
+    color: var(--star);
+}
+
+/* Editor pod řádkem filmu – přes všechny sloupce mřížky */
+.film > .rate-editor {
+    grid-column: 1 / -1;
+    margin-top: 0;
+}
+
+.rate-editor {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    margin-top: 8px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--panel) 85%, transparent);
+}
+
+.rate-editor__value {
+    min-width: 5.5em;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.rate-editor__actions {
+    display: flex;
+    gap: 6px;
+    margin-left: auto;
+}
+
+/* Hvězdy: šedý obrys + zlatá výplň oříznutá na procento (půlky) */
+.rate-stars {
+    display: inline-flex;
+    gap: 2px;
+}
+
+.rate-star {
+    position: relative;
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    font-size: 30px;
+    line-height: 32px;
+    text-align: center;
+}
+
+.rate-star::before,
+.rate-star__fill::before {
+    content: "★";
+    position: absolute;
+    inset: 0;
+}
+
+.rate-star::before {
+    color: color-mix(in srgb, var(--muted) 35%, transparent);
+}
+
+.rate-star__fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0;
+    overflow: hidden;
+    color: var(--star);
+    pointer-events: none;
+}
+
+.rate-star__fill::before {
+    width: 32px;
+}
+
+.rate-star__half {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.rate-star__half--left {
+    left: 0;
+}
+
+.rate-star__half--right {
+    right: 0;
+}
+
+.rate-star__half:focus-visible {
+    outline: 2px solid var(--star);
+    outline-offset: -2px;
+    border-radius: 4px;
+}
+
+/* Jen zobrazení (statistiky) */
+.rate-stars--small .rate-star {
+    width: 16px;
+    height: 16px;
+    font-size: 15px;
+    line-height: 16px;
+}
+
+.rate-stars--small .rate-star__fill::before {
+    width: 16px;
 }
 
 .film__status {

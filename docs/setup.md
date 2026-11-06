@@ -191,6 +191,10 @@ Workflow `Deploy to GitHub Pages` před nahráním zmenší JS a CSS (esbuild). 
 selhal (např. chyba syntaxe v JS), nasazení se zastaví a stará verze webu zůstane online – chyba je vidět
 v záložce Actions. Lokálně se web dál spouští přímo ze zdrojáků.
 
+**Nasadit znovu bez změny ve `web/`** (např. když GitHub Pages hlásí „Deployment failed, try again later“):
+**Actions → Deploy to GitHub Pages → Run workflow → main**. Prázdný commit nestačí – workflow se při pushi spouští
+jen tehdy, když se změní složka `web/`. *Re-run* starého běhu používá stejný zabalený web.
+
 ## 10. Keep-alive
 
 GitHub Action `keep-alive.yml` volá každé 3 dny databázovou funkci `ping()`.

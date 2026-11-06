@@ -3,7 +3,9 @@
 
 import { fetchAchievementData } from "../achievements.js";
 import { fetchWatchlistIds, todayLocal } from "../data.js";
-import { computeStats } from "../stats.js";
+import { computeStats, computeRatingStats } from "../stats.js";
+import { fetchMyRatings, starsText } from "../ratings.js";
+import { starsView } from "./rating.js";
 import { isSignedIn } from "../auth.js";
 import { navigate } from "../router.js";
 import { setAccent, inkFor } from "../theme.js";
@@ -19,10 +21,13 @@ export async function statsView(container, context) {
     document.title = `${TEXTS.statsTitle} · ${TEXTS.appName}`;
     mount(container, profileTabs("stats"), loadingView());
 
-    let stats, watchlistCount;
+    let stats, watchlistCount, ratingStats;
     try {
-        const [data, watchlist] = await Promise.all([fetchAchievementData(), fetchWatchlistIds(true)]);
+        const [data, watchlist, ratings] = await Promise.all([
+            fetchAchievementData(), fetchWatchlistIds(true), fetchMyRatings(true).catch(() => new Map()),
+        ]);
         stats = computeStats(data, todayLocal());
+        ratingStats = computeRatingStats(ratings, data.watches);
         watchlistCount = watchlist.size;
     } catch (error) {
         if (!context.isCurrent()) return;
@@ -40,19 +45,21 @@ export async function statsView(container, context) {
         return;
     }
 
-    mount(container, profileTabs("stats"), statsContent(stats, watchlistCount));
+    mount(container, profileTabs("stats"), statsContent(stats, watchlistCount, ratingStats));
 }
 
 /**
  * Dlaždice a panely z hotových statistik (vlastní i veřejný profil).
  * watchlistCount = null → dlaždice watchlistu se nezobrazí (watchlist je soukromý).
  */
-export function statsContent(stats, watchlistCount = null) {
+export function statsContent(stats, watchlistCount = null, ratingStats = null) {
     return [
-        tiles(stats, watchlistCount),
+        tiles(stats, watchlistCount, ratingStats),
         h("div", { class: "stats-grid" },
             panel(TEXTS.statsActivity, monthChart(stats.months), yearList(stats.years)),
             panel(TEXTS.statsTopFilms, topFilms(stats.topFilms)),
+            ratingStats ? panel(TEXTS.statsTopRated, topRated(ratingStats.top)) : null,
+            ratingStats ? panel(TEXTS.statsRatings, ratingChart(ratingStats.distribution)) : null,
             panel(TEXTS.statsDecades, decadeChart(stats.decades)),
             panel(TEXTS.statsCategories, categoryChart(stats.categories)),
             panel(TEXTS.statsAlmostThere, almostThere(stats.almostThere)),
@@ -83,7 +90,7 @@ function panel(title, ...content) {
 // Dlaždice nahoře
 // ---------------------------------------------------------------------
 
-function tiles({ totals, streaks }, watchlistCount) {
+function tiles({ totals, streaks }, watchlistCount, ratingStats) {
     const hours = Math.floor(totals.minutes / 60);
     const tile = (value, label, sub = null) => h("div", { class: "stat-tile" },
         h("span", { class: "stat-tile__value" }, value),
@@ -99,7 +106,31 @@ function tiles({ totals, streaks }, watchlistCount) {
         tile(format("statsStreakDays", streaks.longest), TEXTS.statsLongestStreak,
             streaks.current > 0 ? format("statsCurrentStreak", streaks.current) : null),
         watchlistCount === null ? null : tile(String(watchlistCount), TEXTS.navWatchlist),
+        ratingStats
+            ? tile(`★ ${ratingStats.average.toFixed(1)}`, TEXTS.statsAverageRating, format("statsRatedCount", ratingStats.count))
+            : null,
     );
+}
+
+/** Rozložení hodnocení 0,5–5 ★ (od nejvyššího). */
+function ratingChart(distribution) {
+    return barRows([...distribution].reverse().map((d) => ({
+        label: `★ ${starsText(d.score)}`,
+        value: d.count,
+        title: format("statsRatingRow", starsText(d.score), movies(d.count)),
+    })));
+}
+
+/** Nejlépe hodnocené filmy s hvězdičkami. */
+function topRated(list) {
+    return h("ol", { class: "top-films" },
+        list.map((r, index) => h("li", { class: "top-films__item" },
+            h("span", { class: "top-films__rank" }, String(index + 1)),
+            poster(r.film.poster_path, r.film.title, "top-films__poster", false, "tiny"),
+            h("div", { class: "top-films__info" },
+                h("strong", {}, r.film.title),
+                starsView(r.score, "rate-stars--small")),
+            h("span", { class: "top-films__count" }, starsText(r.score)))));
 }
 
 // ---------------------------------------------------------------------

@@ -3,6 +3,11 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.2 – November 2026
+- Rate movies from ½ to 5 stars – on every movie you've seen
+- See the average rating of My Movie Diary users next to each movie
+- Stats: your average rating, top rated movies and how you rate
+
 ## V3.1.5 – November 2026
 - 25 new series: James Bond, Mission: Impossible, John Wick, Indiana Jones, The Matrix, Terminator, Rocky & Creed, Back to the Future, Die Hard, The Hunger Games, Twilight, Planet of the Apes, Transformers, Star Trek, Bourne, Men in Black, Ghostbusters, Predator, Rambo, The Godfather, Knives Out, Paddington, Kingsman, Jumanji and The Karate Kid
 - New genre: Drama
