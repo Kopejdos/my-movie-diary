@@ -194,6 +194,8 @@ Formát **V<hlavní>.<vedlejší>.<oprava>** (např. V1.2.1):
 | vedlejší | dokončená fáze (nové funkce) | V1.0 → **V1.1** (fáze 9) |
 | oprava | oprava chyby nebo drobnost bez nové funkce | V1.1 → **V1.1.1** |
 
+- **Výjimka V3.0:** velká fáze organizace kolekcí je rozdělená na **V3.0.1** a **V3.0.2** (třetí číslo tu
+  znamená část fáze, ne opravu). Případné opravy pak dostanou další číslo (V3.0.3…).
 - Verze a **měsíc poslední aktualizace** jsou v patičce webu (např. „V1.1 · November 2026“). Obojí je v `web/js/config.js` (`APP_VERSION`, `APP_UPDATED`) – při vydání nové verze se změní tam.
 - Při vydání: úprava `config.js`, záznam do `CHANGELOG.md`, commit a **tag verze** (`git tag v1.1`, `git push --tags`). Tagy `faze-N` z verzí V0.x zůstávají, od V1.1 se používají jen tagy `vX.Y`.
 
@@ -264,6 +266,51 @@ Hororové vlny se střídají s funkcemi, aby každá verze přinesla něco nov�
 | 23 | V2.5 | Hesla ✅ | **Forgot password** (stránka pro nové heslo), **změna hesla v profilu**, přísnější pravidla hesla (délka, povinné znaky) i v Supabase |
 | 24 | V2.6 | CAPTCHA ✅ | Cloudflare Turnstile – registrace, přihlášení (i nickem přes funkci `login`), obnova hesla, Resend confirmation, změna hesla; zmínka v zásadách (zpracovává Cloudflare); předvyplnění e-mailu u Forgot password a rámeček s účtem u nového hesla |
 | 25 | V2.7 | Optimalizace 2 ✅ | odlehčená knihovna Supabase (−40 %), minifikace JS a CSS při nasazení, písmo Inter bez přednačtení – poslední verze kapitoly |
+
+### Kapitola V3.x – kolekce a nové funkce (plán 6. 11. 2026)
+
+Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle nového standardu přibydou nové kolekce
+(V3.1). Pak funkce jedna po druhé.
+
+| # | Verze | Fáze | Co přibude |
+|---|---|---|---|
+| 26 | V3.0.1 | Organizace kolekcí 1 – zobrazení | **tři pohledy na kolekci** (Release / Story / Groups), nové údaje u filmu v kolekci (**skupina** a **popisek**), import + admin panel, hledání najde i skupinu (*Pixar › Cars*), cesty na přehledu níž; ukázková data (MCU podle hrdinů, Star Wars s čísly epizod) |
+| 27 | V3.0.2 | Organizace kolekcí 2 – obsah | Pixar, DreamWorks, Disney, MCU a další série přeskupené podle sérií, popisky (Episode IV, Part 2…), **zrušení kolekce Shrek**, **cesty přepsané na skutečně doporučené pořadí** |
+| 28 | V3.1 | Nové kolekce | nové série, studia (Illumination, Laika, Aardman, A24…), **režiséři** (nový druh kolekce), Christmas Movies, české pohádky a klasika – už podle standardu z V3.0 |
+| 29 | V3.2 | Hodnocení | **0,5–5 ★** (po půlhvězdách) u každého filmu, vlastní hodnocení + průměr uživatelů MMD, nejlépe hodnocené ve statistikách |
+| 30 | V3.3 | Co dneska? + Coming soon | náhodný výběr z watchlistu / rozkoukaných kolekcí; filmy z kolekcí, které teprve vyjdou |
+| 31 | V3.4 | Porovnání s kamarádem | společně viděné filmy, co viděl jen jeden z vás, shoda v % (přes veřejné profily) |
+| 32 | V3.5 | Hledání všech filmů | search sahá do TMDB (jako admin panel) – zapsat jde **jakýkoli film**, nejen ten z kolekce |
+| 33 | V3.6 | Wrapped | rok v kostce – podoba se domyslí, až na něj přijde řada |
+
+**Později / nápady:** neoficiální kolekce uživatelů (vlastní seznamy, oddělené od oficiálních, dohledatelné jako
+podkategorie) nebo návrhy kolekcí, které schvaluje správce; export / import; české názvy filmů.
+
+#### Pravidla řazení kolekcí (od V3.0)
+- **Release** (rok vydání) má **každá** kolekce a je **výchozí všude** – série, studia, žánry. Pokud má kolekce
+  oddíly v čase (MCU Phase 1–6, Disney Golden Age / Renaissance…), ukazují se v tomto pohledu jako nadpisy.
+- **Story** (pořadí v příběhu) jen tam, kde ho filmy mají vyplněné (Star Wars, MCU, X-Men…).
+- **Groups** (po sériích) jen tam, kde mají filmy skupinu – např. MCU: Iron Man → Hulk → Captain America → Thor…;
+  Pixar: Toy Story → Cars → The Incredibles…; uvnitř skupiny podle roku. Skupiny jdou v pořadí prvního filmu,
+  filmy bez skupiny na konec (*Standalone / Originals*).
+- Přepínač ukazuje jen pohledy, které daná kolekce má (Avatar = jen Release). Zvolený pohled si web pamatuje;
+  když ho další kolekce nemá, ukáže Release.
+- **Cesty (paths)** mají dál jen svoje pevné pořadí kroků – to je jejich smysl.
+
+#### Rozhodnutí pro V3.x
+- **Film může být ve více kolekcích** a zhlédnutí se počítá všude → studio se skupinami nevylučuje samostatnou
+  sérii. Samostatná kolekce má smysl tam, kde série přesahuje jedno studio nebo je opravdu velká (MCU, Star Wars).
+- **Shrek jako samostatná kolekce se ruší** – nahradí ho skupina *Shrek* v DreamWorks. Zhlédnutí zůstanou
+  (patří k filmu, ne ke kolekci); počet dokončených kolekcí se může o jednu snížit.
+- **Disney** zůstává v pohledu Release po érách a navíc dostane Groups podle sérií (Frozen, Zootopia, Moana, Wreck-It Ralph…).
+- **Studio Marvel se nedělá** – MCU je Marvel Studios, byla by to kopie.
+- **Kolekce od uživatelů zatím ne** – hrozí nesmyslné kolekce (Spider-Man + Shrek + Indiana Jones); případně později
+  jako oddělené *neoficiální* kolekce.
+- **Hodnocení jen od uživatelů MMD**, žádné přebírání z ČSFD / IMDb.
+- Podnět žáka (6. 11.): samotné názvy z TMDB nestačí (u Star Wars je první film jen „Star Wars“) → **popisek**
+  u filmu v kolekci (Episode IV, Part 2…).
+- Cesty z V1.8 jsou ze 4 ze 6 seřazené jen podle roku vydání (MCU Essentials, Superhero Hall of Fame, Animation
+  Essentials, Horror 101) – kód pořadí drží, chyba je v obsahu → přepsat ve V3.0.2.
 
 **Test 5. 11. 2026:** po zapnutí *Confirm email* s výchozí službou Supabase přišel potvrzovací mail i na soukromou adresu
 kamaráda (mimo tým projektu) – v rozporu s dokumentací. Nedá se na to spoléhat a limit 2 maily / hod platí dál, proto
@@ -890,9 +937,8 @@ přihlášení a databáze, bez realtime a storage), případně minifikace.
 - **Prázdné náhrady místo vlastního klienta** – vlastní obal nad auth-js a postgrest-js by ušetřil o pár kB
   víc, ale chování přihlášení (obnova tokenu, hlavičky) by se muselo psát znovu. Takhle běží původní kód
   supabase-js.
-- **Kapitola V2.x je tímto uzavřená.**
+- **Kapitola V2.x je tímto uzavřená.** Správcovský klíč `MMD_ADMIN_KEY` vyměněn (6. 11.). Pokračuje kapitola V3.x.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).
-- Správcovský klíč `MMD_ADMIN_KEY` byl vidět na screenshotu – po dokončení importů vygenerovat nový.
 - GitHub vypne plánované workflow (keep-alive) ve veřejném repozitáři po 60 dnech bez aktivity v repozitáři – přijde e-mail, zapne se jedním kliknutím.

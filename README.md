@@ -27,6 +27,10 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Admin panel: collections, movies (search TMDB right from the app) and users
 - Installable on a phone or computer (PWA), opens even offline
 
+**Coming next** – collections & new features
+- V3.0 – better organized collections: view by release, story or series (Toy Story, Cars… inside Pixar)
+- V3.1 – new collections, then ratings, "What tonight?", Coming soon and comparing with friends
+
 ## Tech stack
 
 | Part | Technology |
