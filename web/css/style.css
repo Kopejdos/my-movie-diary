@@ -97,6 +97,19 @@
     color-scheme: dark;
 }
 
+/* Na velkých monitorech širší obsah (V3.1.2) – víc karet na řádek, méně prázdných okrajů */
+@media (min-width: 1440px) {
+    :root {
+        --content-width: 1320px;
+    }
+}
+
+@media (min-width: 1700px) {
+    :root {
+        --content-width: 1480px;
+    }
+}
+
 /* ---------- Světlý režim ---------- */
 :root[data-theme="light"] {
     --bg: #f1ebe0;
