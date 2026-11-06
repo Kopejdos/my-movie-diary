@@ -142,8 +142,8 @@ my-movie-diary/
         ├── captcha.js        CAPTCHA Cloudflare Turnstile (V2.6)
         ├── ratings.js        hodnocení filmů – data (V3.2)
         ├── today.js          „Co dneska?“ – výběr tří tipů (V3.3, bez vykreslování)
-        └── views/            obrazovky: universes, universe, search, stats, public-profile, login, register, profile,
-                              watchlist, achievements, admin (univerza, uživatelé), admin-universe, not-found;
+        └── views/            obrazovky: universes, universe, search, upcoming (Coming soon), stats, public-profile, login,
+                              register, profile, watchlist, achievements, admin (univerza, uživatelé), admin-universe, not-found;
                               části: rating (hvězdičky), today (panel Co dneska?), coming-soon (oddíl Coming soon)
 ```
 
@@ -287,6 +287,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 32 | V3.1.5 | Nové série ✅ | James Bond, Mission: Impossible, John Wick, Indiana Jones… – podle standardu V3.0 |
 | 33 | V3.2 | Hodnocení ✅ | **0,5–5 ★** (po půlhvězdách) u každého filmu, vlastní hodnocení + průměr uživatelů MMD, nejlépe hodnocené ve statistikách |
 | 34 | V3.3 | Co dneska? + Coming soon ✅ | panel **What to watch today?** se třemi tipy (watchlist / další v rozkoukané kolekci / něco nového podle oblíbených žánrů) + Shuffle; **Coming soon** – oznámené filmy dole v kolekci (do 5 let dopředu), nepočítají se do postupu |
+| 34b | V3.3.1 | Stránka Coming soon ✅ | záložka **Coming soon** v menu – všechny chystané filmy po čtvrtletích; hranice 5 let a přepnutí v den premiéry automaticky |
 | 35 | V3.4 | Porovnání s kamarádem | společně viděné filmy, co viděl jen jeden z vás, shoda v % (přes veřejné profily) |
 | 36 | V3.5 | Hledání všech filmů | search sahá do TMDB (jako admin panel) – zapsat jde **jakýkoli film**, nejen ten z kolekce |
 | 37 | V3.6 | Wrapped | rok v kostce – podoba se domyslí, až na něj přijde řada |
@@ -1175,6 +1176,7 @@ s tlačítkem Reload se už nepoužívá. Jednorázově: po nasazení téhle opr
   `universe_progress` chystané filmy nepočítá. **Import** (`tmdb`) dřív nevydané filmy přeskočil; teď je uloží
   s `is_upcoming = true`, pokud je premiéra **nejpozději do konce roku letos + 5** (2031 → Avatar 5 se vejde).
   Vzdálenější nebo zrušené filmy jen vypíše v reportu (`skipped`), uložené chystané v `comingSoon`.
+  *(Od V3.3.1 hranici počítá web a import ukládá všechny oznámené filmy – viz fáze 34b.)*
 - **Detail kolekce:** oddíl **Coming soon** úplně dole – kartičky s plakátem (nebo velkým rokem premiéry, když plakát
   ještě není), datem, odpočtem do 60 dnů („in 35 days“) a sérií; přihlášený si film může dát do watchlistu.
   Číslo kolekce na přehledu ani postup se nemění.
@@ -1200,8 +1202,31 @@ s tlačítkem Reload se už nepoužívá. Jednorázově: po nasazení téhle opr
 - **Chystaný film = položka kolekce s příznakem**, ne zvláštní tabulka – po premiéře ho další import jen přepne na
   běžný film (zhlédnutí, watchlist i hodnocení zůstanou na stejném `tmdb_id`).
 - **Horizont 5 let** podle zadání; datum z TMDB, a když ještě není, rozhodne rok ze seedu.
-- **Po premiéře je potřeba import** – web chystaný film ukazuje v Coming soon, dokud ho import nepřepne (odpočet ukáže
-  „out today“). Stačí pustit import dotčených kolekcí, report ukáže, které filmy jsou ještě chystané.
+- ~~Po premiéře je potřeba import~~ – od V3.3.1 se film v den premiéry přepne sám (fáze 34b).
+
+### Fáze 34b – stránka Coming soon + automatika ✅ (6. 11. 2026) – **V3.3.1**
+- **Nová záložka Coming soon** v hlavičce (pro všechny, i nepřihlášené; na telefonu ikona kalendáře) →
+  `#/coming-soon` (`web/js/views/upcoming.js`). Jeden seznam všech chystaných filmů ze všech kolekcí, **nejbližší
+  premiéra nahoře**, rozdělený **po čtvrtletích** (*October – December 2026 · Q4*, *January – March 2027 · Q1*…),
+  filmy bez data na konci (*Date to be announced*). Řádek: plakát (nebo velký rok), název, datum s odpočtem,
+  barevné odkazy na kolekce (série první), ☆ watchlist pro přihlášené. Bez filtrů.
+- **Hranice 5 let počítá web** podle dnešního data, po celých rocích: v roce 2026 se ukazuje vše do konce roku 2031,
+  1. 1. 2027 přibude celý rok 2032 – samo, bez importu (`comingSoonLastYear()` v `data.js`). Import (`tmdb`) proto
+  ukládá **všechny** oznámené filmy, přeskočí jen zrušené. Filmy za hranicí vidí jen admin.
+- **V den premiéry se film přepne sám:** chystaný = `is_upcoming` **a** premiéra je až po dnešku (nebo bez data).
+  Stejné pravidlo má pohled `universe_progress` (migrace `20261106170000_coming_soon_auto.sql`) i web
+  (`isUpcoming()` v `data.js`) – film se v den premiéry začne počítat do postupu a jde označit jako viděný.
+  Import pak jen obnoví údaje z TMDB (délka, plakát) a srovná příznak.
+- **Seed:** *How to Rob a Bank* (David Leitch, 13. 11. 2026) do **Heist Movies**.
+- Hlavička na nejužších telefonech (≤ 360 px) má menší mezery, ať se nepřihlášenému vejde i Register.
+- Service worker `mmd-v6`.
+
+#### Rozhodnutí ve fázi 34b
+- **Stránka bez filtrů** – kdo chce jen Marvel nebo jednu sérii, otevře kolekci (oddíl Coming soon dole); tady jde
+  o přehled „co vychází“.
+- **Čtvrtletí místo měsíců** – měsíců by bylo moc a většinou s jedním filmem.
+- **Hranice po celých rocích**, ne den po dni – jednodušší a stejně se posouvá sama.
+- **Data jsou z TMDB = hlavní (většinou americká) premiéra**, ne česká – rozdíl bývá den až pár týdnů.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

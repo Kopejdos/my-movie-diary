@@ -1,6 +1,6 @@
 // Obrazovka admin panelu: úprava jednoho univerza (#/admin/collection/<slug>).
 
-import { fetchUniverse, fetchCategories } from "../data.js";
+import { fetchUniverse, fetchCategories, isUpcoming } from "../data.js";
 import { clearDataCache } from "../cache.js";
 import {
     updateUniverse, addUniverseItem, updateUniverseItem, removeUniverseItem, swapItemOrder,
@@ -35,7 +35,8 @@ export async function adminUniverseView(container, context) {
     // Admin vidí i chystané filmy (Coming soon, V3.3) – v pořadí ze seedu jako ostatní
     universe = {
         ...universe,
-        items: [...universe.items, ...(universe.upcoming ?? [])].sort((a, b) => a.release_order - b.release_order),
+        items: [...universe.items, ...(universe.upcoming ?? []), ...(universe.later ?? [])]
+            .sort((a, b) => a.release_order - b.release_order),
     };
 
     document.title = `${universe.name} · ${TEXTS.adminTitle}`;
@@ -194,7 +195,7 @@ function itemRow(universe, item, previous, next, reload) {
             h("div", { class: "pills" },
                 pill(yearOf(film.release_date)),
                 isCover ? pill(TEXTS.adminIsCover, true) : null,
-                item.is_upcoming ? pill(TEXTS.comingSoonBadge) : null,
+                isUpcoming(item) ? pill(TEXTS.comingSoonBadge) : null,
             ),
             h("div", { class: "admin-row__fields" },
                 h("label", { class: "mini-field" }, h("span", {}, TEXTS.adminGroup), group),

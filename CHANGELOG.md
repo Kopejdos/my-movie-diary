@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.3.1 – November 2026
+- New **Coming soon** page in the menu – every announced movie from all collections, soonest first, split by quarter
+- Upcoming movies switch to regular ones automatically on their release day – no waiting for an update
+- The five-year window moves on its own every New Year
+- New in Heist Movies: How to Rob a Bank
+
 ## V3.3 – November 2026
 - **What to watch today?** – three picks at the top of the overview: one from your watchlist, what's next in a collection you've started, and something new based on the genres you watch most. Shuffle for different picks
 - **Coming soon** – announced movies (Avatar 4 & 5, Incredibles 3, Shrek 5, Avengers: Secret Wars…) at the bottom of their collections with release dates; they don't count towards progress until they're out

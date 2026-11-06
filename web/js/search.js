@@ -1,4 +1,6 @@
 // Vyhledávání filmů a kolekcí – čistá logika, nic nevykresluje.
+
+import { isUpcoming, inComingSoonWindow } from "./data.js";
 // Hledá se v prohlížeči nad načteným seznamem (stovky filmů = okamžitě),
 // databáze se při psaní neptá.
 
@@ -86,8 +88,10 @@ export function buildSearchIndex(universes, items) {
         const film = item.film;
         const universe = universeById.get(item.universe_id);
         if (!film || !universe) continue;
+        const upcoming = isUpcoming(item);
+        if (upcoming && !inComingSoonWindow(film)) continue;     // za hranicí Coming soon se neukazuje
 
-        if (item.franchise && !item.is_upcoming) {
+        if (item.franchise && !upcoming) {
             const key = `${universe.id}|${item.franchise}`;
             const group = groups.get(key) ?? { universe, franchise: item.franchise, name: prepare(item.franchise), count: 0 };
             group.count += 1;
@@ -104,12 +108,12 @@ export function buildSearchIndex(universes, items) {
                     ? prepare(film.original_title)
                     : null,
                 universes: [],
-                upcoming: Boolean(item.is_upcoming),
+                upcoming,
             };
             films.set(film.tmdb_id, entry);
         }
         // Vydaný aspoň v jedné kolekci = vydaný (jiná kolekce mohla být importovaná dřív)
-        if (!item.is_upcoming) entry.upcoming = false;
+        if (!upcoming) entry.upcoming = false;
         if (!entry.universes.includes(universe)) entry.universes.push(universe);
     }
     for (const entry of films.values()) {

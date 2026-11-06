@@ -1,5 +1,6 @@
 // Coming soon (V3.3) – oznámené filmy, které ještě nevyšly.
-// Oddíl dole v detailu kolekce a pilulka s datem premiéry (kolekce, hledání, watchlist).
+// Oddíl dole v detailu kolekce, pilulka s datem premiéry (hledání, watchlist) a plakát
+// bez obrázku (i pro stránku #/coming-soon, V3.3.1).
 // Chystané filmy se nepočítají do postupu a nejdou označit jako viděné – jde je jen
 // přidat do watchlistu.
 
@@ -57,17 +58,23 @@ export function comingSoonSection(items, watchlistButton = null) {
     );
 }
 
+/**
+ * Plakát chystaného filmu. Když ještě není (u filmů za pár let běžné),
+ * místo prázdného bloku velký rok premiéry na pruhovaném pozadí.
+ */
+export function soonPoster(film, className) {
+    if (film.poster_path) return poster(film.poster_path, film.title, className, false, "small");
+    return h("div", { class: `${className} soon-card__poster--none`, "aria-hidden": "true" },
+        h("span", { class: "soon-card__year" }, yearOf(film.release_date) || "TBA"));
+}
+
 /** Kartička chystaného filmu: plakát, název, datum, popisek / série. */
 function soonCard(item, watchlistButton) {
     const { film } = item;
     const countdown = countdownText(film);
     return h("li", { class: "soon-card" },
         h("div", { class: "soon-card__media" },
-            film.poster_path
-                ? poster(film.poster_path, film.title, "soon-card__poster", false, "small")
-                // Plakát ještě není (u filmů za pár let běžné) – místo prázdného bloku velký rok premiéry
-                : h("div", { class: "soon-card__poster soon-card__poster--none", "aria-hidden": "true" },
-                    h("span", { class: "soon-card__year" }, yearOf(film.release_date) || "TBA")),
+            soonPoster(film, "soon-card__poster"),
             watchlistButton ? watchlistButton(item) : null,
         ),
         h("div", { class: "soon-card__body" },

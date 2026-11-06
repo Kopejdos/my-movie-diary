@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v5";        // V3.3: nové soubory (Co dneska?, Coming soon); od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v6";        // V3.3.1: stránka Coming soon; od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline
@@ -56,6 +56,7 @@ const SHELL = [
     "js/views/rating.js",
     "js/views/today.js",
     "js/views/coming-soon.js",
+    "js/views/upcoming.js",
     "js/views/achievements.js",
     "js/views/login.js",
     "js/views/register.js",

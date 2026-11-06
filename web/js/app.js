@@ -32,6 +32,7 @@ const registerView = lazy(() => import("./views/register.js"), "registerView");
 const profileView = lazy(() => import("./views/profile.js"), "profileView");
 const watchlistView = lazy(() => import("./views/watchlist.js"), "watchlistView");
 const searchView = lazy(() => import("./views/search.js"), "searchView");
+const comingSoonView = lazy(() => import("./views/upcoming.js"), "comingSoonView");
 const statsView = lazy(() => import("./views/stats.js"), "statsView");
 const publicProfileView = lazy(() => import("./views/public-profile.js"), "publicProfileView");
 const adminUniversesView = lazy(() => import("./views/admin.js"), "adminUniversesView");
@@ -57,6 +58,7 @@ addRoute("/register", registerView);
 addRoute("/profile", profileView);
 addRoute("/watchlist", watchlistView);
 addRoute("/search", searchView);
+addRoute("/coming-soon", comingSoonView);
 addRoute("/stats", statsView);
 addRoute("/u/:username", publicProfileView);
 addRoute("/about", aboutView);
@@ -105,6 +107,13 @@ function renderHeader() {
                     title: TEXTS.searchShortcut,
                     "aria-label": TEXTS.navSearch,
                 }, h("span", { class: "search-icon", "aria-hidden": "true" }), h("span", { class: "nav__label" }, TEXTS.navSearch)),
+                // Coming soon (V3.3.1) – pro všechny, i nepřihlášené
+                h("a", {
+                    class: `nav__link nav__soon${path === "/coming-soon" ? " nav__link--active" : ""}`,
+                    href: "#/coming-soon",
+                    title: TEXTS.navComingSoon,
+                    "aria-label": TEXTS.navComingSoon,
+                }, h("span", { class: "calendar-icon", "aria-hidden": "true" }), h("span", { class: "nav__label" }, TEXTS.navComingSoon)),
                 user
                     ? h("a", {
                         class: `nav__link${path === "/watchlist" ? " nav__link--active" : ""}`,

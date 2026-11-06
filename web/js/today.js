@@ -54,8 +54,9 @@ export function buildCatalog(universes, items, today) {
     for (const item of items) {
         const universe = universeById.get(item.universe_id);
         const film = item.film;
-        if (!universe || !film || item.is_upcoming) continue;
-        if (!film.release_date || film.release_date > today) continue;     // pojistka: ještě nevyšlo
+        if (!universe || !film) continue;
+        // Jen vydané filmy – chystaný film se v den premiéry přepne sám (V3.3.1)
+        if (!film.release_date || film.release_date > today) continue;
 
         const list = itemsByUniverse.get(universe.id) ?? [];
         list.push(item);

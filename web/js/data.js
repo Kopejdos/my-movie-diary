@@ -89,7 +89,8 @@ export const KIND_ORDER = ["series", "studio", "genre", "path"];
  *
  * Vrací { ...kolekce, items, upcoming }: items = vydané filmy (s nimi pracuje celá
  * stránka – postup, Up next, pohledy), upcoming = chystané filmy pro oddíl
- * Coming soon (V3.3), seřazené podle data premiéry.
+ * Coming soon (V3.3), seřazené podle data premiéry. Film v den premiéry už patří
+ * do items (V3.3.1); chystané za hranicí let (viz inComingSoonWindow) se neukazují.
  */
 export function fetchUniverse(slug) {
     return cached(`universe:${slug}`, async () => {
@@ -110,11 +111,13 @@ export function fetchUniverse(slug) {
             .then(check);
         if (!universe) return null;
         const { universe_items: all, ...rest } = universe;
-        const items = (all ?? []).filter((item) => !item.is_upcoming);
+        const items = (all ?? []).filter((item) => !isUpcoming(item));
         const upcoming = (all ?? [])
-            .filter((item) => item.is_upcoming)
+            .filter((item) => isUpcoming(item) && inComingSoonWindow(item.film))
             .sort(byPremiere);
-        return { ...rest, items, upcoming };
+        // Oznámené na později (za hranicí let) – web je neukazuje, vidí je jen admin
+        const later = (all ?? []).filter((item) => isUpcoming(item) && !inComingSoonWindow(item.film));
+        return { ...rest, items, upcoming, later };
     });
 }
 
@@ -125,12 +128,86 @@ export function byPremiere(a, b) {
     return da.localeCompare(db) || (a.release_order ?? 0) - (b.release_order ?? 0);
 }
 
-/**
- * Je film ještě před premiérou? Podle data z TMDB a dnešního data uživatele.
- * (Slouží jako pojistka tam, kde příznak is_upcoming z kolekce není po ruce.)
- */
+// ---------------------------------------------------------------------
+// Coming soon (V3.3 / V3.3.1)
+// ---------------------------------------------------------------------
+
+/** Kolik let dopředu Coming soon ukazuje – celé roky, posouvá se samo s dnešním datem. */
+export const COMING_SOON_YEARS = 5;
+
+/** Je film ještě před premiérou? Podle data z TMDB a dnešního data uživatele (den premiéry = vydaný). */
 export function isUnreleased(film) {
     return !film?.release_date || film.release_date > todayLocal();
+}
+
+/**
+ * Je položka kolekce chystaný film? Příznak z importu a premiéra ještě nebyla.
+ * V den premiéry se film přepne sám, bez nového importu (stejné pravidlo má pohled universe_progress).
+ */
+export function isUpcoming(item) {
+    return Boolean(item?.is_upcoming) && isUnreleased(item.film);
+}
+
+/** Poslední rok, který Coming soon ukazuje: letos + 5 (v roce 2026 → celý rok 2031). */
+export function comingSoonLastYear() {
+    return new Date().getFullYear() + COMING_SOON_YEARS;
+}
+
+/** Patří chystaný film do Coming soon? Rozhoduje jen rok premiéry; film bez data ano („Date TBA“). */
+export function inComingSoonWindow(film) {
+    if (!film?.release_date) return true;
+    return Number(film.release_date.slice(0, 4)) <= comingSoonLastYear();
+}
+
+/**
+ * Všechny chystané filmy ze všech kolekcí pro stránku Coming soon (V3.3.1):
+ * [{ film, universes }] seřazené podle premiéry (bez data na konci).
+ * Film ve více kolekcích je jednou a nese seznam kolekcí (série první).
+ */
+export function fetchComingSoon() {
+    return cached("coming-soon", async () => {
+        const rows = await fetchAllRows(() => supabase
+            .from("universe_items")
+            .select("id, is_upcoming, film:films(tmdb_id, title, release_date, poster_path), universe:universes(slug, name, color, kind, sort_order)")
+            .eq("is_upcoming", true)
+            .order("id"));
+
+        const byFilm = new Map();
+        for (const row of rows) {
+            if (!row.film || !isUpcoming(row) || !inComingSoonWindow(row.film)) continue;
+            const entry = byFilm.get(row.film.tmdb_id) ?? { film: row.film, universes: [] };
+            if (row.universe && !entry.universes.some((u) => u.slug === row.universe.slug)) entry.universes.push(row.universe);
+            byFilm.set(row.film.tmdb_id, entry);
+        }
+        const kindRank = (u) => Math.max(0, KIND_ORDER.indexOf(u.kind ?? "series"));
+        for (const entry of byFilm.values()) {
+            entry.universes.sort((a, b) => kindRank(a) - kindRank(b) || a.sort_order - b.sort_order);
+        }
+        return [...byFilm.values()].sort((a, b) =>
+            (a.film.release_date ?? "9999").localeCompare(b.film.release_date ?? "9999")
+            || a.film.title.localeCompare(b.film.title));
+    });
+}
+
+/**
+ * Rozdělí chystané filmy po čtvrtletích: [{ key, year, quarter, items }] v pořadí;
+ * filmy bez data na konci ve skupině s quarter = null.
+ */
+export function groupByQuarter(entries) {
+    const groups = [];
+    for (const entry of entries) {
+        const date = entry.film.release_date;
+        const year = date ? Number(date.slice(0, 4)) : null;
+        const quarter = date ? Math.floor((Number(date.slice(5, 7)) - 1) / 3) + 1 : null;
+        const key = date ? `${year}-Q${quarter}` : "tba";
+        let group = groups[groups.length - 1];
+        if (!group || group.key !== key) {
+            group = { key, year, quarter, items: [] };
+            groups.push(group);
+        }
+        group.items.push(entry);
+    }
+    return groups;
 }
 
 /**
@@ -245,7 +322,7 @@ export async function fetchWatchlist() {
     }
     return rows.map((r) => ({
         ...r,
-        upcoming: upcomingIds.has(r.tmdb_id),
+        upcoming: upcomingIds.has(r.tmdb_id) && isUnreleased(r.film),
         universes: (universesByFilm.get(r.tmdb_id) ?? []).sort((a, b) => a.sort_order - b.sort_order),
     }));
 }

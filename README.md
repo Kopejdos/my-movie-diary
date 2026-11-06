@@ -6,7 +6,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V3.3** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V3.3.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
@@ -15,7 +15,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - +1 / −1 viewing counter – every viewing is logged with a date
 - Progress per collection and **Up next** in every collection
 - **What to watch today?** – three daily picks (watchlist, what's next, something new based on your favourite genres) with Shuffle
-- **Coming soon** – announced movies up to five years ahead at the bottom of each collection, with release dates
+- **Coming soon** – announced movies up to five years ahead: a release calendar of all collections (by quarter) and a section at the bottom of each collection; movies switch to regular ones on their release day
 - Ratings from ½ to 5 stars, with the average of all My Movie Diary users
 - Release order or story (chronological) order, "unwatched only" filter
 - Instant search across all movies, collections and series inside them (by title, original title or year), plus people search

@@ -416,6 +416,22 @@ button {
     }
 }
 
+/* Nejužší telefony (320–360 px): od V3.3.1 je v hlavičce i Coming soon – menší mezery,
+   ať se nepřihlášenému vejde i tlačítko Register */
+@media (max-width: 360px) {
+    .nav {
+        gap: 2px;
+    }
+
+    .nav__link {
+        padding: 6px 7px;
+    }
+
+    .nav .btn--small {
+        padding: 6px 10px;
+    }
+}
+
 /* ---------- Obsah ---------- */
 .main {
     flex: 1;
@@ -1496,6 +1512,92 @@ button {
     margin: 0;
     font-size: 0.78rem;
     color: var(--muted);
+}
+
+/* malý plakát bez obrázku v řádku (stránka Coming soon) – menší rok */
+.film__poster.soon-card__poster--none .soon-card__year {
+    font-size: 0.85rem;
+}
+
+/* ---------- Stránka Coming soon (V3.3.1) – všechny chystané filmy po čtvrtletích ---------- */
+.soon-quarter + .soon-quarter {
+    margin-top: 28px;
+}
+
+.soon-quarter__title {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 12px;
+    font-size: 1.2rem;
+}
+
+.soon-quarter__tag {
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 50%, var(--border));
+}
+
+.soon-quarter__count {
+    margin-left: auto;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--muted);
+}
+
+.film--soon {
+    border-style: dashed;
+}
+
+.film--soon:not(:has(.film__actions)) {
+    grid-template-columns: 56px 1fr;
+}
+
+/* Ikona kalendáře v hlavičce (Coming soon) – nakreslená v CSS jako lupa hledání */
+.calendar-icon {
+    position: relative;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    border: 2px solid currentColor;
+    border-top-width: 4px;
+    border-radius: 3px;
+}
+
+/* dva kroužky nahoře (kroužková vazba kalendáře) */
+.calendar-icon::before {
+    content: "";
+    position: absolute;
+    left: 1px;
+    right: 1px;
+    top: -7px;
+    height: 5px;
+    border-left: 2px solid currentColor;
+    border-right: 2px solid currentColor;
+}
+
+.calendar-icon::after {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 3px;
+    height: 3px;
+    border-radius: 1px;
+    background: currentColor;
+}
+
+.nav__soon {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
 }
 
 /* pilulka s datem premiéry (hledání, watchlist) */

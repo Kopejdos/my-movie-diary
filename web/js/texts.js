@@ -59,6 +59,13 @@ export const TEXTS = {
     comingSoonTomorrow: "tomorrow",
     comingSoonToday: "out today",
     dateTba: "Date TBA",
+    navComingSoon: "Coming soon",
+    comingSoonEyebrow: "Release calendar",
+    comingSoonPageIntro: "Every announced movie from all collections, up to the end of {0} – the soonest at the top.",
+    comingSoonPageEmpty: "Nothing announced right now. Check back later!",
+    comingSoonQuarter: "{0} – {1} {2}",
+    comingSoonQuarterTag: "Q{0}",
+    comingSoonTbaGroup: "Date to be announced",
 
     // Hodnocení (V3.2)
     rateAction: "Rate",

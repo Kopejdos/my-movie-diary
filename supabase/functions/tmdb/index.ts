@@ -7,8 +7,9 @@
 //             univerza + jejich položky. Jen pro správce (hlavička x-admin-key).
 //             Volitelně ?only=mcu – importuje jen jedno univerzum.
 //             Filmy, které ještě nevyšly, se uloží s is_upcoming = true
-//             (oddíl Coming soon, V3.3) – ale jen s premiérou do konce roku
-//             letos + 5; vzdálenější a zrušené se jen vypíšou v reportu.
+//             (oddíl Coming soon, V3.3). Zrušené se jen vypíšou v reportu.
+//             Hranici „do konce roku letos + 5“ počítá až web podle dnešního
+//             data (V3.3.1) – posouvá se sama, import ji neřeší.
 //
 // Tajemství (Supabase → Edge Functions → Secrets):
 //   TMDB_READ_TOKEN – TMDB API Read Access Token
@@ -75,7 +76,6 @@ type Resolved =
 const TMDB_BASE = "https://api.themoviedb.org/3";
 const TMDB_LANGUAGE = "en-US";
 const CONCURRENCY = 6; // kolik dotazů na TMDB běží najednou
-const UPCOMING_YEARS = 5; // Coming soon: premiéra nejpozději do konce roku letos + 5 (V3.3)
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -234,18 +234,6 @@ async function searchMovie(title: string, year?: number): Promise<TmdbSearchResu
   return null;
 }
 
-/**
- * Proč se chystaný film NEimportuje (null = importuje se do Coming soon).
- * Rok premiéry z TMDB; když datum ještě není, rozhodne rok ze seedu.
- */
-function upcomingSkipReason(details: TmdbMovieDetails, seed: SeedFilm): string | null {
-  if (details.status === "Canceled") return "canceled";
-  const year = details.release_date ? Number(details.release_date.slice(0, 4)) : seed.year;
-  if (!year) return "no release date";
-  const lastYear = new Date().getUTCFullYear() + UPCOMING_YEARS;
-  return year > lastYear ? `after ${lastYear}` : null;
-}
-
 /** Dohledá jeden film ze seedu a připraví řádek pro tabulku films. */
 async function resolveFilm(seed: SeedFilm): Promise<Resolved> {
   try {
@@ -270,14 +258,13 @@ async function resolveFilm(seed: SeedFilm): Promise<Resolved> {
       language: TMDB_LANGUAGE,
     });
 
-    // Ještě nevyšlo → Coming soon, pokud je premiéra v dohledu (jinak jen do reportu)
-    const upcoming = details.status !== "Released";
-    if (upcoming) {
-      const skip = upcomingSkipReason(details, seed);
-      if (skip) {
-        return { status: "skipped", seed, title: details.title, releaseDate: details.release_date || null, reason: skip };
-      }
+    // Zrušený film se neukládá (jen do reportu)
+    if (details.status === "Canceled") {
+      return { status: "skipped", seed, title: details.title, releaseDate: details.release_date || null, reason: "canceled" };
     }
+    // Ještě nevyšlo → Coming soon (V3.3). V den premiéry ho web i postup berou jako vydaný
+    // samy podle release_date (V3.3.1); další import jen obnoví údaje a srovná příznak.
+    const upcoming = details.status !== "Released";
 
     const film: FilmRow = {
       tmdb_id: details.id,
