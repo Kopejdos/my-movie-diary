@@ -278,7 +278,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 27 | V3.0.2 | Organizace kolekcí 2 – obsah ✅ | Pixar, DreamWorks, Disney, MCU a další série přeskupené podle sérií, popisky (Episode IV, Part 2…), **zrušení kolekce Shrek**, **cesty přepsané na skutečně doporučené pořadí** |
 | 28 | V3.1.1 | Kontrola kolekcí ✅ | projít **všechny existující kolekce** a doplnit chybějící filmy (jen filmy, ne seriály), sjednotit série a popisky podle standardu V3.0 |
 | 29 | V3.1.2 | Dvouvrstvý filtr ✅ | přehled: 1. **druh** (All / Series / Studios / Genre picks / Paths), 2. **žánr**; Sci-fi & Fantasy rozdělené, nové kategorie Comedy a Crime & Thriller |
-| 30 | V3.1.3 | Velká studia | **Marvel** (všechny filmy podle Marvelu: MCU, X-Men, Sony, před MCU), **DC** (DCEU, DCU, Batman, staří Supermani, Joker…), **Lucasfilm** (Star Wars, Indiana Jones, Willow), **Illumination**, **Laika**, **Aardman** a další – série jako skupiny v By series |
+| 30 | V3.1.3 | Velká studia ✅ | **Marvel** (všechny filmy podle Marvelu: MCU, X-Men, Sony, před MCU), **DC** (DCEU, DCU, Batman, staří Supermani, Joker…), **Lucasfilm** (Star Wars, Indiana Jones, Willow), **Illumination**, **Laika**, **Aardman** a další – série jako skupiny v By series |
 | 31 | V3.1.4 | Žánrové výběry mimo horory | 8 tematických výběrů po 12–15 filmech (sci-fi, akce, vánoční…), ne obecné „Action“ |
 | 32 | V3.1.5 | Nové série | James Bond, Mission: Impossible, John Wick, Indiana Jones… – podle standardu V3.0 |
 | 33 | V3.2 | Hodnocení | **0,5–5 ★** (po půlhvězdách) u každého filmu, vlastní hodnocení + průměr uživatelů MMD, nejlépe hodnocené ve statistikách |
@@ -1040,6 +1040,55 @@ Pravidlo: do kolekce patří každý **film**, který s ní aspoň trochu souvis
 - **Žánrové výběry mimo horory jen tematické** (Time Travel, Heist…) – obecná kolekce „Action“ by byla nekonečná.
 - **Verze V3.1.2–V3.1.5 místo čtyřmístných** (3.1.1.1) – přehlednější.
 
+**Oprava po vydání V3.1.2 – širší stránka a zalamování žánrů (6. 11.):**
+- Na počítači se poslední pilulka žánru (Crime & Thriller) schovávala za okraj → od šířky 720 px se pilulky
+  **zalamují** na další řádek; na telefonu zůstává posouvání do strany (dotyk).
+- **Širší obsah na velkých monitorech** (`--content-width`): do 1440 px 1140 px, od 1440 px **1320 px**, od 1700 px
+  **1480 px** – zhruba polovina prázdného okraje na každé straně; víc karet na řádek. Telefon a tablet beze změny.
+- Poznámka: po nasazení ukáže první načtení ještě starou verzi z offline mezipaměti (service worker) – nová se
+  stáhne na pozadí, stačí obnovit stránku dvakrát (Ctrl+Shift+R). Úprava service workeru (síť jako první u JS/CSS)
+  zapsána do Drobností.
+
+### Fáze 30 – velká studia ✅ (6. 11. 2026) – **V3.1.3**
+Deset nových studií (416 položek, filmy se sdílí s ostatními kolekcemi). Všechna mají v Release oddíly po
+desetiletích a v By series série studia:
+- **Marvel** (85) – *všechny filmy podle Marvelu*: MCU, X-Men (Fox), Spider-Man (Sony: Raimi + Amazing),
+  Spider-Verse, Sony's Spider-Man Universe a filmy před MCU (Blade, Daredevil + Elektra, Hulk 2003, The Punisher,
+  Fantastic Four 2005/2007/2015, Ghost Rider); volitelně Howard the Duck, Captain America (1990), Man-Thing,
+  Big Hero 6.
+- **DC** (50) – klasický Superman (1978–2006, Supergirl jako volitelný spin-off), všichni Batmani (Burton & Schumacher,
+  Dark Knight Trilogy, The Batman), DCEU, DCU, Joker a samostatné (Catwoman, Constantine, Watchmen, Jonah Hex,
+  Green Lantern…); okrajové (Swamp Thing, Steel, V for Vendetta, animované) volitelně.
+- **Lucasfilm** (30) – Star Wars, Indiana Jones (5), American Graffiti, Howard the Duck, Labyrinth, Willow, Tucker,
+  Red Tails, Strange Magic.
+- **Illumination** (17) – Despicable Me + Minions, The Secret Life of Pets, Sing, Super Mario, The Lorax, The Grinch…
+- **Sony Pictures Animation** (21) – Hotel Transylvania, Cloudy with a Chance of Meatballs, Angry Birds, Spider-Verse,
+  KPop Demon Hunters, GOAT…
+- **Blue Sky Studios** (13) – Ice Age, Rio, Robots, Epic, Ferdinand… (studio zavřené 2021).
+- **Laika** (6) – Coraline, ParaNorman, The Boxtrolls, Kubo, Missing Link, Wildwood (2026).
+- **Aardman** (10) – Wallace & Gromit, Chicken Run, Shaun the Sheep, Arthur Christmas, Early Man…
+- **Warner Bros.** (148) – *velké série + zásadní filmy* (celý katalog by měl tisíce titulů): Wizarding World,
+  Middle-earth, DC (bez filmů jiných distributorů – Batman 1966, Supergirl, Swamp Thing), The Matrix, MonsterVerse,
+  Dune, Mad Max (od Mad Max 2), Lethal Weapon, Ocean's, Sherlock Holmes, The Hangover, Gremlins, Beetlejuice,
+  Space Jam, The Lego Movie, It, Conjuring, Final Destination, Mortal Kombat + klasika a hity (Casablanca, The Exorcist,
+  Blade Runner, Goodfellas, Inception, Barbie, Sinners…).
+- **Jerry Bruckheimer Films** (42) – na přání kvůli **Armageddonu** (1998: produkce Bruckheimer, distribuce
+  Touchstone = Disney): Top Gun, Bad Boys, Beverly Hills Cop, Piráti z Karibiku, National Treasure, The Rock,
+  Con Air, Pearl Harbor, Black Hawk Down, F1…
+- Ohlášené filmy (Avengers: Secret Wars, Beyond the Spider-Verse, Man of Tomorrow, The Batman Part II,
+  Starfighter, Minions 3) import zatím přeskočí jako *upcoming*.
+
+#### Rozhodnutí ve fázi 30
+- **Studio = celý katalog, série = skupiny** – Marvel není kopie MCU, DC není kopie DCEU; samostatné série
+  (MCU, X-Men, Batman…) zůstávají pro ty, kdo sledují jen jednu.
+- **Spoluprodukce ve více studiích** – Chicken Run, Were-Rabbit a Flushed Away jsou v DreamWorks i v Aardmanu,
+  Arthur Christmas v Sony i v Aardmanu, Spider-Verse v Marvelu, Spider-Manovi i Sony (zhlédnutí se počítá všude).
+- **Armageddon → Jerry Bruckheimer Films, ne Touchstone** – Touchstone je jen značka Disneyho pro filmy pro dospělé;
+  Bruckheimer je produkční studio s jasným rukopisem a slavnými sériemi.
+- **Warner Bros. jako výběr, ne úplný katalog** – série + filmy, které definovaly studio; další se dají přidat.
+- Doplňování dalších studií (Universal, Paramount, Blumhouse, A24…) později spolu s novými filmy.
+
 ## Drobnosti k dořešení
+- Service worker: JS a CSS brát nejdřív ze sítě (mezipaměť jen offline), ať se nová verze ukáže hned po nasazení.
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).
 - GitHub vypne plánované workflow (keep-alive) ve veřejném repozitáři po 60 dnech bez aktivity v repozitáři – přijde e-mail, zapne se jedním kliknutím.

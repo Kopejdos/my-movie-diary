@@ -3,6 +3,10 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.1.3 – November 2026
+- Ten new studios: Marvel (every Marvel movie, not just the MCU), DC, Warner Bros., Lucasfilm, Jerry Bruckheimer Films (Armageddon, Top Gun, Bad Boys…), Illumination, Sony Pictures Animation, Blue Sky, Laika and Aardman – each browsable by series
+- Wider layout on large screens; genre filters wrap instead of hiding off-screen
+
 ## V3.1.2 – November 2026
 - Two-level filter on the overview: first the collection type (series, studios, genre picks, paths), then the genre
 - New genres: Sci-fi and Fantasy are now separate, plus Comedy and Crime & Thriller
