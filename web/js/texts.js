@@ -241,7 +241,12 @@ export const TEXTS = {
 
     // Přehled univerz
     universesTitle: "Collections",
-    categoryAll: "All",
+    categoryAll: "All genres",
+    kindAll: "All",
+    filterKindLabel: "Collection type",
+    filterGenreLabel: "Genre",
+    filterEmpty: "No collections match this combination.",
+    filterReset: "Show all collections",
     kindSeries: "Series",
     kindStudio: "Studios",
     kindGenre: "Genre picks",

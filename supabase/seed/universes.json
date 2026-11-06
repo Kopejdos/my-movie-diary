@@ -171,7 +171,7 @@
       "slug": "star-wars",
       "name": "Star Wars",
       "kind": "series",
-      "categories": ["scifi-fantasy"],
+      "categories": ["scifi"],
       "color": "#ffe81f",
       "description": "The Skywalker Saga and the standalone Star Wars movies – with the TV films as extras.",
       "films": [
@@ -198,7 +198,7 @@
       "slug": "wizarding-world",
       "name": "Wizarding World",
       "kind": "series",
-      "categories": ["scifi-fantasy"],
+      "categories": ["fantasy"],
       "color": "#8b5cf6",
       "description": "Harry Potter and Fantastic Beasts.",
       "films": [
@@ -220,7 +220,7 @@
       "slug": "middle-earth",
       "name": "Middle-earth",
       "kind": "series",
-      "categories": ["scifi-fantasy"],
+      "categories": ["fantasy"],
       "color": "#c9a227",
       "description": "The Lord of the Rings and The Hobbit – plus the classic animated films as extras.",
       "films": [
@@ -241,7 +241,7 @@
       "slug": "jurassic-park",
       "name": "Jurassic Park",
       "kind": "series",
-      "categories": ["scifi-fantasy", "action-adventure"],
+      "categories": ["scifi", "action-adventure"],
       "color": "#e8562a",
       "description": "Jurassic Park and Jurassic World.",
       "films": [
@@ -258,7 +258,7 @@
       "slug": "fast-and-furious",
       "name": "Fast & Furious",
       "kind": "series",
-      "categories": ["action-adventure"],
+      "categories": ["action-adventure", "crime-thriller"],
       "color": "#ff2e88",
       "description": "Family. The whole Fast & Furious saga.",
       "films": [
@@ -279,7 +279,7 @@
       "slug": "pirates-of-the-caribbean",
       "name": "Pirates of the Caribbean",
       "kind": "series",
-      "categories": ["action-adventure"],
+      "categories": ["action-adventure", "fantasy"],
       "color": "#14b8a6",
       "description": "Captain Jack Sparrow's adventures.",
       "films": [
@@ -294,7 +294,7 @@
       "slug": "alien",
       "name": "Alien",
       "kind": "series",
-      "categories": ["scifi-fantasy", "horror"],
+      "categories": ["scifi", "horror"],
       "color": "#a3e635",
       "description": "In space no one can hear you scream – the Alien saga, prequels and crossovers.",
       "films": [
@@ -313,7 +313,7 @@
       "slug": "studio-ghibli",
       "name": "Studio Ghibli",
       "kind": "studio",
-      "categories": ["animation"],
+      "categories": ["animation", "fantasy"],
       "color": "#34d399",
       "description": "The feature films of Studio Ghibli.",
       "films": [
@@ -349,7 +349,7 @@
       "slug": "asterix-and-obelix",
       "name": "Asterix & Obelix",
       "kind": "series",
-      "categories": ["animation"],
+      "categories": ["animation", "comedy"],
       "color": "#fb923c",
       "description": "The indomitable Gauls – animated and live-action movies.",
       "films": [
@@ -374,7 +374,7 @@
       "slug": "maze-runner",
       "name": "The Maze Runner",
       "kind": "series",
-      "categories": ["scifi-fantasy", "action-adventure"],
+      "categories": ["scifi", "action-adventure"],
       "color": "#a8a29e",
       "description": "Run. Survive. Escape. The Maze Runner trilogy.",
       "films": [
@@ -402,7 +402,7 @@
       "slug": "avatar",
       "name": "Avatar",
       "kind": "series",
-      "categories": ["scifi-fantasy"],
+      "categories": ["scifi"],
       "color": "#22d3ee",
       "description": "James Cameron's journey to Pandora.",
       "films": [
@@ -870,7 +870,7 @@
       "slug": "horror-psychological",
       "name": "Psychological Horror",
       "kind": "genre",
-      "categories": ["horror"],
+      "categories": ["horror", "crime-thriller"],
       "color": "#db2777",
       "description": "When the scariest place is your own mind.",
       "films": [
@@ -1041,7 +1041,7 @@
       "slug": "horror-scifi",
       "name": "Sci-fi Horror",
       "kind": "genre",
-      "categories": ["horror", "scifi-fantasy"],
+      "categories": ["horror", "scifi"],
       "color": "#06b6d4",
       "description": "In space – and in the lab – no one can hear you scream.",
       "films": [
@@ -1089,7 +1089,7 @@
       "slug": "horror-comedy",
       "name": "Horror Comedy",
       "kind": "genre",
-      "categories": ["horror"],
+      "categories": ["horror", "comedy"],
       "color": "#f59e0b",
       "description": "Scares and laughs in equal measure.",
       "films": [
@@ -1210,7 +1210,7 @@
       "slug": "horror-giallo",
       "name": "Giallo",
       "kind": "genre",
-      "categories": ["horror"],
+      "categories": ["horror", "crime-thriller"],
       "color": "#facc15",
       "description": "Italian thrillers – black gloves, razors and lurid colors.",
       "films": [
@@ -1329,7 +1329,7 @@
       "slug": "path-star-wars-first-watch",
       "name": "Star Wars: First Watch",
       "kind": "path",
-      "categories": ["scifi-fantasy"],
+      "categories": ["scifi"],
       "color": "#ffe81f",
       "description": "The best order for a first-time viewer: the prequels as a flashback after the big reveal, then the sequels.",
       "films": [
@@ -1373,7 +1373,7 @@
       "slug": "path-fantasy-starter",
       "name": "Fantasy Starter",
       "kind": "path",
-      "categories": ["scifi-fantasy"],
+      "categories": ["fantasy"],
       "color": "#a78bfa",
       "description": "From first steps into magic to epic battles – a gentle ramp into fantasy.",
       "films": [

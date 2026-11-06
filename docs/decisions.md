@@ -277,12 +277,15 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 26 | V3.0.1 | Organizace kolekcí 1 – zobrazení ✅ | **tři pohledy na kolekci** (Release / Story / Groups), nové údaje u filmu v kolekci (**skupina** a **popisek**), import + admin panel, hledání najde i skupinu (*Pixar › Cars*), cesty na přehledu níž; ukázková data (MCU podle hrdinů, Star Wars s čísly epizod) |
 | 27 | V3.0.2 | Organizace kolekcí 2 – obsah ✅ | Pixar, DreamWorks, Disney, MCU a další série přeskupené podle sérií, popisky (Episode IV, Part 2…), **zrušení kolekce Shrek**, **cesty přepsané na skutečně doporučené pořadí** |
 | 28 | V3.1.1 | Kontrola kolekcí ✅ | projít **všechny existující kolekce** a doplnit chybějící filmy (jen filmy, ne seriály), sjednotit série a popisky podle standardu V3.0 |
-| 29 | V3.1.2 | Nové kolekce | nové série, studia (Illumination, Laika, Aardman, A24…), **režiséři** (nový druh kolekce), Christmas Movies, české pohádky a klasika – už podle standardu z V3.0 |
-| 30 | V3.2 | Hodnocení | **0,5–5 ★** (po půlhvězdách) u každého filmu, vlastní hodnocení + průměr uživatelů MMD, nejlépe hodnocené ve statistikách |
-| 31 | V3.3 | Co dneska? + Coming soon | náhodný výběr z watchlistu / rozkoukaných kolekcí; filmy z kolekcí, které teprve vyjdou |
-| 32 | V3.4 | Porovnání s kamarádem | společně viděné filmy, co viděl jen jeden z vás, shoda v % (přes veřejné profily) |
-| 33 | V3.5 | Hledání všech filmů | search sahá do TMDB (jako admin panel) – zapsat jde **jakýkoli film**, nejen ten z kolekce |
-| 34 | V3.6 | Wrapped | rok v kostce – podoba se domyslí, až na něj přijde řada |
+| 29 | V3.1.2 | Dvouvrstvý filtr ✅ | přehled: 1. **druh** (All / Series / Studios / Genre picks / Paths), 2. **žánr**; Sci-fi & Fantasy rozdělené, nové kategorie Comedy a Crime & Thriller |
+| 30 | V3.1.3 | Velká studia | **Marvel** (všechny filmy podle Marvelu: MCU, X-Men, Sony, před MCU), **DC** (DCEU, DCU, Batman, staří Supermani, Joker…), **Lucasfilm** (Star Wars, Indiana Jones, Willow), **Illumination**, **Laika**, **Aardman** a další – série jako skupiny v By series |
+| 31 | V3.1.4 | Žánrové výběry mimo horory | 8 tematických výběrů po 12–15 filmech (sci-fi, akce, vánoční…), ne obecné „Action“ |
+| 32 | V3.1.5 | Nové série | James Bond, Mission: Impossible, John Wick, Indiana Jones… – podle standardu V3.0 |
+| 33 | V3.2 | Hodnocení | **0,5–5 ★** (po půlhvězdách) u každého filmu, vlastní hodnocení + průměr uživatelů MMD, nejlépe hodnocené ve statistikách |
+| 34 | V3.3 | Co dneska? + Coming soon | náhodný výběr z watchlistu / rozkoukaných kolekcí; filmy z kolekcí, které teprve vyjdou |
+| 35 | V3.4 | Porovnání s kamarádem | společně viděné filmy, co viděl jen jeden z vás, shoda v % (přes veřejné profily) |
+| 36 | V3.5 | Hledání všech filmů | search sahá do TMDB (jako admin panel) – zapsat jde **jakýkoli film**, nejen ten z kolekce |
+| 37 | V3.6 | Wrapped | rok v kostce – podoba se domyslí, až na něj přijde řada |
 
 **Později / nápady:** **kapitola V4.x – seriály** (TMDB má seriály, řady i epizody se stejným klíčem; sledování
 po epizodách, řady jako skupiny, běžící seriály „čeká na novou řadu“ – po dokončení filmové části V3.6);
@@ -306,7 +309,9 @@ podkategorie) nebo návrhy kolekcí, které schvaluje správce; export / import;
 - **Shrek jako samostatná kolekce se ruší** – nahradí ho skupina *Shrek* v DreamWorks. Zhlédnutí zůstanou
   (patří k filmu, ne ke kolekci); počet dokončených kolekcí se může o jednu snížit.
 - **Disney** zůstává v pohledu Release po érách a navíc dostane Groups podle sérií (Frozen, Zootopia, Moana, Wreck-It Ralph…).
-- **Studio Marvel se nedělá** – MCU je Marvel Studios, byla by to kopie.
+- ~~Studio Marvel se nedělá~~ → **změna 6. 11.:** studio **Marvel** ano, ale jako *všechny filmy podle Marvelu*
+  (MCU, X-Men, Spider-Man od Sony, filmy před MCU) – tím není kopií MCU a dostane domov i Marvel mimo MCU.
+  Stejně tak DC, Lucasfilm a další (V3.1.3).
 - **Kolekce Spider-Man zůstává** (návrh 6. 11. přesunout Spider-Verse pod MCU zamítnut) – Raimiho, Amazing,
   Spider-Verse ani Venom nejsou MCU (jsou od Sony), MCU je neobsahuje. Shrek se ruší jen proto, že DreamWorks
   obsahuje všechny jeho filmy. Spider-Man má místo toho pohled By series (Raimi / Amazing / MCU / Spider-Verse / Sony).
@@ -1019,6 +1024,21 @@ Pravidlo: do kolekce patří každý **film**, který s ní aspoň trochu souvis
   novou kolekci ve V3.1.2. Stejně tak **Predator** (souvisí s Alien vs. Predator).
 - Seriály (She-Hulk, Andor, The Mandalorian…) se nepřidávají – viz kapitola V4.x.
 - **Postup se může změnit:** kdo měl dokončený Batman (4 filmy), teď uvidí 6 povinných – nové filmy se počítají.
+
+### Fáze 29 – dvouvrstvý filtr ✅ (6. 11. 2026) – **V3.1.2**
+- **Přehled kolekcí má dvě vrstvy filtru** (`views/universes.js`): nahoře záložky **druhu** (All / Series / Studios /
+  Genre picks / Paths), pod nimi pilulky **žánru**. Počty v jedné vrstvě se počítají podle volby ve druhé, prázdné
+  volby se skryjí (zvolená zůstává vidět). Obě volby se pamatují (`prefs`: `kind`, `category`); kombinace bez
+  výsledku nabídne „Show all collections“.
+- **Kategorie** (migrace `20261106120000_categories_v2.sql`, stejně v seedu): Superhero · **Sci-fi** · **Fantasy** ·
+  Animation · Action & Adventure · **Comedy** · **Crime & Thriller** · Horror. Fantasy: Wizarding World,
+  Middle-earth, Fantasy Starter, Piráti z Karibiku, Ghibli; Comedy: Asterix, Horror Comedy; Crime & Thriller:
+  Fast & Furious, Psychological, Giallo.
+
+#### Rozhodnutí ve fázi 29
+- **Druh jako záložky, žánr jako pilulky** – dvě vrstvy musí být na první pohled odlišné.
+- **Žánrové výběry mimo horory jen tematické** (Time Travel, Heist…) – obecná kolekce „Action“ by byla nekonečná.
+- **Verze V3.1.2–V3.1.5 místo čtyřmístných** (3.1.1.1) – přehlednější.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).
