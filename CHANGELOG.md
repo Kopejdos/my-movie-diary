@@ -3,6 +3,11 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.1.4 – November 2026
+- Eight themed genre picks: Time Travel, Space Adventures, Cyberpunk & Dystopia, Heist Movies, Martial Arts, 80s Action, War Movies and Christmas Movies
+- New genres: Family and War
+- Better collection covers – Marvel shows Endgame, Lucasfilm Star Wars, Bruckheimer Armageddon and so on
+
 ## V3.1.3 – November 2026
 - Ten new studios: Marvel (every Marvel movie, not just the MCU), DC, Warner Bros., Lucasfilm, Jerry Bruckheimer Films (Armageddon, Top Gun, Bad Boys…), Illumination, Sony Pictures Animation, Blue Sky, Laika and Aardman – each browsable by series
 - Wider layout on large screens; genre filters wrap instead of hiding off-screen

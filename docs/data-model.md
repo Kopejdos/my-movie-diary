@@ -66,7 +66,7 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 |---|---|---|
 | `id` | `bigint` PK | |
 | `slug` | `text` unique | `superhero`, `horror`… |
-| `name` | `text` | „Sci-fi“, „Crime & Thriller“ (od V3.1.2: Superhero, Sci-fi, Fantasy, Animation, Action & Adventure, Comedy, Crime & Thriller, Horror) |
+| `name` | `text` | „Sci-fi“, „Crime & Thriller“ (od V3.1.4: Superhero, Sci-fi, Fantasy, Animation, Family, Action & Adventure, Comedy, Crime & Thriller, War, Horror) |
 | `color` | `text` | barva filtru `#rrggbb` |
 | `sort_order` | `integer` | pořadí ve filtru |
 

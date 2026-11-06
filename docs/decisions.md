@@ -279,7 +279,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 28 | V3.1.1 | Kontrola kolekcí ✅ | projít **všechny existující kolekce** a doplnit chybějící filmy (jen filmy, ne seriály), sjednotit série a popisky podle standardu V3.0 |
 | 29 | V3.1.2 | Dvouvrstvý filtr ✅ | přehled: 1. **druh** (All / Series / Studios / Genre picks / Paths), 2. **žánr**; Sci-fi & Fantasy rozdělené, nové kategorie Comedy a Crime & Thriller |
 | 30 | V3.1.3 | Velká studia ✅ | **Marvel** (všechny filmy podle Marvelu: MCU, X-Men, Sony, před MCU), **DC** (DCEU, DCU, Batman, staří Supermani, Joker…), **Lucasfilm** (Star Wars, Indiana Jones, Willow), **Illumination**, **Laika**, **Aardman** a další – série jako skupiny v By series |
-| 31 | V3.1.4 | Žánrové výběry mimo horory | 8 tematických výběrů po 12–15 filmech (sci-fi, akce, vánoční…), ne obecné „Action“ |
+| 31 | V3.1.4 | Žánrové výběry mimo horory ✅ | 8 tematických výběrů po 12–15 filmech (sci-fi, akce, vánoční…), ne obecné „Action“ |
 | 32 | V3.1.5 | Nové série | James Bond, Mission: Impossible, John Wick, Indiana Jones… – podle standardu V3.0 |
 | 33 | V3.2 | Hodnocení | **0,5–5 ★** (po půlhvězdách) u každého filmu, vlastní hodnocení + průměr uživatelů MMD, nejlépe hodnocené ve statistikách |
 | 34 | V3.3 | Co dneska? + Coming soon | náhodný výběr z watchlistu / rozkoukaných kolekcí; filmy z kolekcí, které teprve vyjdou |
@@ -1087,6 +1087,22 @@ desetiletích a v By series série studia:
   Bruckheimer je produkční studio s jasným rukopisem a slavnými sériemi.
 - **Warner Bros. jako výběr, ne úplný katalog** – série + filmy, které definovaly studio; další se dají přidat.
 - Doplňování dalších studií (Universal, Paramount, Blumhouse, A24…) později spolu s novými filmy.
+
+### Fáze 31 – tematické žánrové výběry ✅ (6. 11. 2026) – **V3.1.4**
+- **8 nových výběrů** (13–17 filmů): **Time Travel**, **Space Adventures**, **Cyberpunk & Dystopia** (Sci-fi),
+  **Heist Movies** (Crime & Thriller + Action), **Martial Arts**, **80s Action** (Action & Adventure),
+  **War Movies** (nová kategorie **War**) a **Christmas Movies** (nová kategorie **Family** + Comedy; s Třemi oříšky
+  pro Popelku a Smrtonosnou pastí jako volitelnou – „Is it a Christmas movie?“).
+- **Ruční obal karty:** film v seedu může mít `"cover": true` (import to bere před „prvním povinným filmem“).
+  Nastaveno u studií, kde by obalem byl nevýrazný první film: Marvel → Avengers: Endgame, DC → The Dark Knight,
+  Warner Bros. → The Matrix, Lucasfilm → Star Wars, Jerry Bruckheimer → Armageddon, Ghibli → Spirited Away,
+  DreamWorks → Shrek, Sony → Into the Spider-Verse, Illumination → Minions; a u všech nových výběrů.
+- Migrace `20261106130000_categories_war_family.sql` (kategorie Family a War) – spustit **před** importem.
+
+#### Rozhodnutí ve fázi 31
+- **Témata místo obecných žánrů** (Time Travel, ne „Sci-fi“) – výběr pak něco říká a dá se dokončit.
+- **AI & Robots vynecháno ve prospěch War Movies** – tři sci-fi výběry stačí, válečné filmy rozšiřují nabídku.
+- Christmas Movies jsou žánrový výběr, ne série – dávají smysl celoročně ve filtru Family.
 
 ## Drobnosti k dořešení
 - Service worker: JS a CSS brát nejdřív ze sítě (mezipaměť jen offline), ať se nová verze ukáže hned po nasazení.

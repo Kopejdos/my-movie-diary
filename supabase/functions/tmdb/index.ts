@@ -32,6 +32,7 @@ interface SeedFilm {
   note?: string;       // poznámka ke kroku cesty (fáze 16 – V1.8)
   franchise?: string;  // série uvnitř kolekce pro pohled Groups (V3.0.1)
   label?: string;      // krátký popisek filmu v kolekci – Episode IV, Part 2… (V3.0.1)
+  cover?: boolean;     // tenhle film je obal karty kolekce (V3.1.4; jinak první povinný film)
 }
 
 /** Univerzum v seed souboru */
@@ -295,8 +296,8 @@ async function importUniverse(db: SupabaseClient, universe: SeedUniverse, sortOr
     if (error) throw new Error(`films upsert (${universe.slug}): ${error.message}`);
   }
 
-  // 2. Univerzum (obal = první povinný film)
-  const cover = ok.find((r) => !r.seed.optional) ?? ok[0];
+  // 2. Univerzum (obal = film označený "cover": true, jinak první povinný film)
+  const cover = ok.find((r) => r.seed.cover) ?? ok.find((r) => !r.seed.optional) ?? ok[0];
   const { data: universeRow, error: universeError } = await db
     .from("universes")
     .upsert(
