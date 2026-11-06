@@ -1,0 +1,3252 @@
+/* =====================================================================
+   My Movie Diary – vzhled (fáze 4 – redesign)
+   Základ z RimWorld prezentace (teplé tmavé barvy, mosazný akcent,
+   nadpisy Chakra Petch, fotka přecházející do pozadí) + prvky
+   z rozvrhu (tečkovaná mřížka, barevné záře, lesklé karty, pilulky).
+
+   --u      barva aktuálního univerza (výchozí = mosazný akcent)
+   --u-ink  barva textu na pozadí --u (černá / bílá podle jasu)
+   --c      barva univerza na jednotlivé kartě v přehledu
+   ===================================================================== */
+
+/* ---------- Písma (uložená v projektu – bez Google Fonts, rychlejší první vykreslení) ---------- */
+
+@font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("../fonts/inter-latin-wght-normal.woff2") format("woff2");
+    unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+    font-family: "Chakra Petch";
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url("../fonts/chakra-petch-latin-600-normal.woff2") format("woff2");
+    unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+    font-family: "Chakra Petch";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("../fonts/chakra-petch-latin-700-normal.woff2") format("woff2");
+    unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("../fonts/inter-latin-ext-wght-normal.woff2") format("woff2");
+    unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+@font-face {
+    font-family: "Chakra Petch";
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url("../fonts/chakra-petch-latin-ext-600-normal.woff2") format("woff2");
+    unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+@font-face {
+    font-family: "Chakra Petch";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("../fonts/chakra-petch-latin-ext-700-normal.woff2") format("woff2");
+    unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+/* ---------- Barvy: tmavý režim (výchozí) ---------- */
+:root {
+    --bg: #12161c;
+    --bg-deep: #0d1015;
+    --panel: #1a1f26;
+    --panel-hover: #222832;
+    --border: #2c333d;
+    --text: #e9e4d8;
+    --heading: #f4e8d2;
+    --muted: #9aa0a9;
+    --accent: #d4a75a;           /* mosaz – jako v RimWorld prezentaci */
+    --accent-strong: #e8bd6d;
+    --accent-ink: #17130b;
+    --success: #4cc38a;
+    --danger: #ef6b6b;
+    --dot: rgba(233, 228, 216, 0.07);
+    --shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+    --gloss: rgba(255, 255, 255, 0.07);
+
+    --u: var(--accent);
+    --u-ink: var(--accent-ink);
+
+    --radius: 16px;
+    --radius-small: 10px;
+    --content-width: 1140px;
+    --gutter: 16px;
+    --font-display: "Chakra Petch", "Inter", system-ui, sans-serif;
+    --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+    color-scheme: dark;
+}
+
+/* ---------- Světlý režim ---------- */
+:root[data-theme="light"] {
+    --bg: #f1ebe0;
+    --bg-deep: #e7dfd1;
+    --panel: #fffaf2;
+    --panel-hover: #f6efe3;
+    --border: #ddd2c0;
+    --text: #22262c;
+    --heading: #1a1d22;
+    --muted: #646a73;
+    --accent: #a8792b;
+    --accent-strong: #8f6522;
+    --accent-ink: #ffffff;
+    --success: #1f8a5a;
+    --danger: #c53a3a;
+    --dot: rgba(34, 38, 44, 0.09);
+    --shadow: 0 14px 34px rgba(60, 45, 20, 0.14);
+    --gloss: rgba(255, 255, 255, 0.6);
+    color-scheme: light;
+}
+
+/* Bez ručně zvoleného režimu se řídí nastavením systému */
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme]) {
+        --bg: #f1ebe0;
+        --bg-deep: #e7dfd1;
+        --panel: #fffaf2;
+        --panel-hover: #f6efe3;
+        --border: #ddd2c0;
+        --text: #22262c;
+        --heading: #1a1d22;
+        --muted: #646a73;
+        --accent: #a8792b;
+        --accent-strong: #8f6522;
+        --accent-ink: #ffffff;
+        --success: #1f8a5a;
+        --danger: #c53a3a;
+        --dot: rgba(34, 38, 44, 0.09);
+        --shadow: 0 14px 34px rgba(60, 45, 20, 0.14);
+        --gloss: rgba(255, 255, 255, 0.6);
+        color-scheme: light;
+    }
+}
+
+/* ---------- Základ ---------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.55;
+    /* tečkovaná mřížka (z rozvrhu) */
+    background:
+        radial-gradient(var(--dot) 1px, transparent 1.4px) 0 0 / 22px 22px,
+        var(--bg);
+}
+
+/* barevné záře v rozích – v barvě aktuálního univerza */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        radial-gradient(45% 38% at 8% 0%, color-mix(in srgb, var(--u) 20%, transparent), transparent 70%),
+        radial-gradient(38% 34% at 96% 30%, color-mix(in srgb, var(--u) 11%, transparent), transparent 72%),
+        radial-gradient(45% 40% at 70% 100%, color-mix(in srgb, var(--u) 9%, transparent), transparent 70%);
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--accent-strong);
+}
+
+h1, h2, h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--heading);
+}
+
+h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: -0.01em;
+}
+
+button {
+    font: inherit;
+}
+
+:focus-visible {
+    outline: 2px solid var(--u);
+    outline-offset: 2px;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+.hint {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* Malý popisek nad nadpisem („UP NEXT“, „CONTINUE“) */
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--u);
+}
+
+/* Pilulka s údajem (rok, délka, počet) */
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--panel) 70%, transparent);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+.pill--accent {
+    border-color: color-mix(in srgb, var(--u) 60%, transparent);
+    color: var(--heading);
+    background: color-mix(in srgb, var(--u) 16%, var(--panel));
+}
+
+.pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+/* ---------- Hlavička ---------- */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--bg-deep) 82%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--u) 45%, transparent);
+    padding-top: env(safe-area-inset-top);
+    /* Výška i před vykreslením obsahu JavaScriptem – stránka pak neposkočí (CLS, V2.1.1) */
+    min-height: calc(61px + env(safe-area-inset-top, 0px));
+}
+
+.header__inner {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 10px var(--gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 60px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+.brand__icon {
+    font-size: 1.4rem;
+}
+
+/* Logo s přechodem jako „Rozvrh“ u kamaráda, ale v našich barvách */
+.brand__name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: 0.01em;
+    background: linear-gradient(100deg, var(--heading) 30%, var(--u));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.nav__link {
+    color: var(--muted);
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    white-space: nowrap;
+    border: 1px solid transparent;
+}
+
+.nav__link:hover,
+.nav__link--active {
+    color: var(--heading);
+    border-color: var(--border);
+    background: var(--panel);
+}
+
+.nav__button {
+    background: none;
+    cursor: pointer;
+}
+
+.nav__user {
+    color: var(--accent);
+    font-weight: 700;
+    padding: 7px 10px;
+    border-radius: 999px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
+}
+
+.nav__user:hover,
+.nav__user--active {
+    color: var(--accent-strong);
+    background: var(--panel);
+}
+
+/* Přepínač světlý / tmavý režim */
+.theme-toggle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--heading);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+    border-color: var(--u);
+}
+
+@media (max-width: 560px) {
+    .brand__name {
+        display: none;
+    }
+
+    .nav__link {
+        padding: 6px 9px;
+    }
+
+    .nav__user {
+        max-width: 110px;
+    }
+}
+
+/* Na úzkém telefonu vede na přehled logo – odkaz „Universes“ se schová;
+   odhlášení je na stránce profilu (klik na @nick) */
+@media (max-width: 430px) {
+    .nav__link--home,
+    .nav__signout {
+        display: none;
+    }
+}
+
+/* ---------- Obsah ---------- */
+.main {
+    flex: 1;
+    width: 100%;
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 24px var(--gutter) 56px;
+    /* Patička začíná pod okrajem obrazovky – při načítání obsahu tak neposkočí (CLS, V2.1.1) */
+    min-height: 100vh;
+}
+
+.page-header {
+    margin-bottom: 20px;
+    display: grid;
+    gap: 6px;
+}
+
+.section-title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 32px 0 14px;
+}
+
+.section-title h2 {
+    font-size: 1.5rem;
+}
+
+/* ---------- Tlačítka (pilulky) ---------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--heading);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s, box-shadow 0.15s;
+}
+
+.btn:hover {
+    background: var(--panel-hover);
+    border-color: color-mix(in srgb, var(--u) 60%, var(--border));
+    color: var(--heading);
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn:disabled {
+    opacity: 0.55;
+    cursor: default;
+}
+
+.btn--primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+}
+
+.btn--primary:hover {
+    background: var(--accent-strong);
+    border-color: var(--accent-strong);
+    color: var(--accent-ink);
+}
+
+/* Tlačítko v barvě univerza */
+.btn--universe {
+    background: var(--u);
+    border-color: var(--u);
+    color: var(--u-ink);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--u) 35%, transparent);
+}
+
+.btn--universe:hover {
+    background: color-mix(in srgb, var(--u) 88%, #fff);
+    border-color: color-mix(in srgb, var(--u) 88%, #fff);
+    color: var(--u-ink);
+}
+
+.btn--ghost {
+    background: transparent;
+}
+
+.btn--small {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+}
+
+.btn--block {
+    width: 100%;
+}
+
+/* ---------- Ukazatel postupu ---------- */
+.progress {
+    height: 6px;
+    background: color-mix(in srgb, var(--border) 85%, transparent);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress--large {
+    height: 10px;
+}
+
+.progress__bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--u) 75%, #000), var(--u));
+    border-radius: inherit;
+    box-shadow: 0 0 12px color-mix(in srgb, var(--u) 60%, transparent);
+    transition: width 0.4s ease;
+}
+
+.progress-text {
+    margin: 0;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--heading);
+}
+
+/* ---------- Hero karta na přehledu (Continue watching / vítání) ---------- */
+.hero-card {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 24px;
+    padding: clamp(20px, 4vw, 36px);
+    margin-bottom: 8px;
+    border-radius: 24px;
+    border: 1px solid color-mix(in srgb, var(--hc, var(--u)) 35%, var(--border));
+    background:
+        radial-gradient(60% 120% at 88% 10%, color-mix(in srgb, var(--hc, var(--u)) 38%, transparent), transparent 65%),
+        radial-gradient(50% 100% at 0% 100%, color-mix(in srgb, var(--hc, var(--u)) 22%, transparent), transparent 60%),
+        linear-gradient(160deg, var(--panel), var(--bg-deep));
+    box-shadow: var(--shadow);
+}
+
+/* jemný kruh v pozadí – připomínka kotouče filmu */
+.hero-card::after {
+    content: "";
+    position: absolute;
+    right: -120px;
+    top: -120px;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    border: 40px solid color-mix(in srgb, var(--heading) 4%, transparent);
+    pointer-events: none;
+}
+
+/* Místo pro hero kartu, dokud se nenačte „Continue watching“ (stejná výška, nic neposkakuje) */
+.hero-card--loading {
+    animation: hero-pulse 1.4s ease-in-out infinite;
+}
+
+/* Zástupná i hotová hero karta mají stejnou minimální výšku (nejčastější výška karty
+   „Continue watching“ podle šířky) – po načtení se obsah pod ní neposune (CLS, V2.1.1) */
+.hero-slot {
+    --hero-min: 300px;
+}
+
+.hero-slot > .hero-card {
+    min-height: var(--hero-min);
+}
+
+@media (max-width: 900px) {
+    .hero-slot {
+        --hero-min: 250px;
+    }
+}
+
+@media (max-width: 560px) {
+    .hero-slot {
+        --hero-min: 315px;
+    }
+}
+
+@media (max-width: 400px) {
+    .hero-slot {
+        --hero-min: 380px;
+    }
+}
+
+/* Sekce kolekcí mimo obrazovku se vykreslí, až k nim uživatel doroluje (méně práce při startu) */
+.collection-section + .collection-section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
+}
+
+@keyframes hero-pulse {
+    50% {
+        opacity: 0.6;
+    }
+}
+
+.hero-card__body {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 12px;
+    min-width: 0;
+}
+
+.hero-card__title {
+    font-size: clamp(1.8rem, 5vw, 3.2rem);
+    overflow-wrap: anywhere;
+}
+
+.hero-card__text {
+    margin: 0;
+    color: var(--muted);
+    max-width: 520px;
+}
+
+.hero-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.hero-card__poster {
+    position: relative;
+    z-index: 1;
+    width: clamp(90px, 16vw, 150px);
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    transform: rotate(3deg);
+}
+
+@media (max-width: 560px) {
+    .hero-card {
+        grid-template-columns: 1fr 84px;
+        gap: 14px;
+    }
+}
+
+/* ---------- Přehled univerz ---------- */
+.universe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px;
+}
+
+@media (min-width: 720px) {
+    .universe-grid {
+        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+        gap: 18px;
+    }
+}
+
+.universe-card {
+    --c: var(--accent);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius);
+    overflow: hidden;
+    color: var(--text);
+    border: 1px solid var(--border);
+    background:
+        radial-gradient(120% 90% at 0% 0%, var(--gloss), transparent 55%),
+        var(--panel);
+    transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
+}
+
+.universe-card:hover {
+    color: var(--text);
+    transform: translateY(-4px);
+    border-color: var(--c);
+    box-shadow:
+        0 0 0 1px var(--c),
+        0 16px 34px color-mix(in srgb, var(--c) 28%, transparent);
+}
+
+.universe-card__media {
+    position: relative;
+}
+
+.universe-card__cover {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    display: block;
+    background: var(--panel-hover);
+}
+
+/* plakát plynule přechází do karty */
+.universe-card__media::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 45%;
+    background: linear-gradient(transparent, var(--panel));
+}
+
+/* barevný proužek univerza nahoře */
+.universe-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    z-index: 2;
+    background: var(--c);
+}
+
+.universe-card__badge {
+    position: absolute;
+    top: 12px;
+    right: 10px;
+    z-index: 2;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--c);
+    color: var(--c-ink, #111);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.universe-card__body {
+    position: relative;
+    z-index: 1;
+    margin-top: -36px;
+    padding: 0 12px 14px;
+    display: grid;
+    gap: 8px;
+}
+
+.universe-card__title {
+    font-size: 1.05rem;
+    line-height: 1.15;
+}
+
+.universe-card .progress__bar {
+    background: var(--c);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--c) 60%, transparent);
+}
+
+.universe-card__meta {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+/* Zástupný blok, když film nemá plakát */
+.poster--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    text-align: center;
+    font-size: 0.65rem;
+    color: var(--muted);
+    background: var(--panel-hover);
+}
+
+/* ---------- Kategorie a typy kolekcí na přehledu ---------- */
+.chips {
+    display: flex;
+    gap: 8px;
+    margin: 0 0 18px;
+    padding-bottom: 4px;
+    overflow-x: auto;              /* na telefonu se dají posouvat do strany */
+    scrollbar-width: none;
+}
+
+.chips::-webkit-scrollbar {
+    display: none;
+}
+
+.chip {
+    --c: var(--accent);
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.chip:hover {
+    color: var(--heading);
+    border-color: color-mix(in srgb, var(--c) 60%, var(--border));
+}
+
+.chip--active {
+    background: var(--c);
+    border-color: var(--c);
+    color: var(--c-ink, var(--accent-ink));
+}
+
+.chip--active:hover {
+    color: var(--c-ink, var(--accent-ink));
+}
+
+.chip__count {
+    min-width: 22px;
+    padding: 1px 7px;
+    border-radius: 999px;
+    background: color-mix(in srgb, currentColor 16%, transparent);
+    font-size: 0.75rem;
+    text-align: center;
+}
+
+.collection-sections {
+    display: grid;
+    gap: 28px;
+}
+
+.kind-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 12px;
+    margin-bottom: 12px;
+}
+
+.kind-heading h3 {
+    font-size: 1.15rem;
+    letter-spacing: 0.04em;
+}
+
+.kind-heading .muted {
+    font-size: 0.85rem;
+}
+
+/* ---------- Admin: kategorie ---------- */
+.admin-select {
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 16px;
+}
+
+.category-checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+}
+
+.category-check input {
+    accent-color: var(--c, var(--u));
+}
+
+/* ---------- Detail univerza: banner ---------- */
+/* Fotka z filmu přes celou šířku, která přechodem zmizí do pozadí
+   (stejný princip jako úvod RimWorld prezentace) */
+.banner {
+    position: relative;
+    isolation: isolate;
+    margin: -24px calc(50% - 50vw) 0;
+    padding: 18px max(var(--gutter), calc(50vw - var(--content-width) / 2 + var(--gutter))) 28px;
+    min-height: clamp(300px, 52vh, 500px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Obrázek je ve vlastní vrstvě, která dole zprůhlední – banner tak
+   splyne s tečkovaným pozadím bez viditelného předělu */
+.banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--u) 26%, transparent), transparent 55%),
+        linear-gradient(180deg,
+            color-mix(in srgb, var(--bg) 35%, transparent) 0%,
+            color-mix(in srgb, var(--bg) 55%, transparent) 45%,
+            color-mix(in srgb, var(--bg) 85%, transparent) 85%),
+        var(--banner-image, none) center 25% / cover no-repeat,
+        var(--bg-deep);
+    -webkit-mask-image: linear-gradient(180deg, #000 65%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 65%, transparent 100%);
+}
+
+.banner__content {
+    display: grid;
+    gap: 12px;
+    max-width: 760px;
+}
+
+.banner__title {
+    font-size: clamp(2.2rem, 7vw, 4.4rem);
+    text-shadow: 0 4px 24px color-mix(in srgb, var(--bg) 70%, transparent);
+}
+
+.banner__description {
+    margin: 0;
+    font-size: 1.05rem;
+    max-width: 600px;
+    color: var(--text);
+}
+
+.banner__progress {
+    display: grid;
+    gap: 8px;
+    max-width: 520px;
+    margin-top: 6px;
+}
+
+.back-link {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg-deep) 65%, transparent);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: var(--heading);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.back-link:hover {
+    color: var(--heading);
+    border-color: var(--u);
+}
+
+/* ---------- Up next ---------- */
+.up-next {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 16px;
+    margin: 20px 0 8px;
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    border: 1px solid color-mix(in srgb, var(--u) 45%, var(--border));
+    background:
+        radial-gradient(80% 140% at 100% 0%, color-mix(in srgb, var(--u) 20%, transparent), transparent 65%),
+        var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.up-next__poster {
+    width: 64px;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+}
+
+.up-next__info {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+}
+
+.up-next__title {
+    font-size: 1.35rem;
+    overflow-wrap: anywhere;
+}
+
+.up-next--done {
+    grid-template-columns: auto 1fr;
+}
+
+.up-next__trophy {
+    font-size: 2.4rem;
+    line-height: 1;
+}
+
+@media (max-width: 560px) {
+    .up-next {
+        grid-template-columns: auto 1fr;
+    }
+
+    .up-next > .btn {
+        grid-column: 1 / -1;
+    }
+}
+
+/* ---------- Seznam filmů ---------- */
+.film-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+}
+
+.film-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 26px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--u);
+}
+
+.film-group::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--u) 55%, transparent), transparent);
+}
+
+.film-group:first-child {
+    margin-top: 8px;
+}
+
+.film {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 12px 10px 10px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background:
+        radial-gradient(120% 90% at 0% 0%, var(--gloss), transparent 55%),
+        var(--panel);
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.film--watched {
+    border-color: color-mix(in srgb, var(--u) 55%, var(--border));
+    background:
+        radial-gradient(120% 90% at 0% 0%, var(--gloss), transparent 55%),
+        linear-gradient(90deg, color-mix(in srgb, var(--u) 16%, transparent), transparent 70%),
+        var(--panel);
+    box-shadow: inset 3px 0 0 var(--u);
+}
+
+/* volitelný film – šrafování jako „hodina odpadá“ v rozvrhu */
+.film--optional {
+    border-style: dashed;
+    background:
+        repeating-linear-gradient(135deg,
+            transparent 0 10px,
+            color-mix(in srgb, var(--text) 4%, transparent) 10px 20px),
+        var(--panel);
+}
+
+.film--optional.film--watched {
+    background:
+        repeating-linear-gradient(135deg,
+            transparent 0 10px,
+            color-mix(in srgb, var(--u) 10%, transparent) 10px 20px),
+        var(--panel);
+}
+
+.film__poster {
+    width: 56px;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+    background: var(--panel-hover);
+}
+
+.film__info {
+    min-width: 0;
+    display: grid;
+    gap: 5px;
+}
+
+.film__title {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--heading);
+    overflow-wrap: anywhere;
+}
+
+.film__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+}
+
+.film__status {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.film--watched .film__status {
+    color: color-mix(in srgb, var(--u) 70%, var(--heading));
+    font-weight: 600;
+}
+
+/* ---------- Watchlist ---------- */
+.film__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.star-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.star-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+.star-btn:active {
+    transform: scale(0.9);
+}
+
+.star-btn--active {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 60%, var(--border));
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.watchlist-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+/* odkaz na univerzum v jeho barvě */
+.pill--universe {
+    border-color: color-mix(in srgb, var(--c, var(--accent)) 55%, transparent);
+    background: color-mix(in srgb, var(--c, var(--accent)) 14%, var(--panel));
+    color: var(--heading);
+}
+
+.pill--universe:hover {
+    background: var(--c, var(--accent));
+    color: var(--c-ink, var(--accent-ink));
+}
+
+@media (max-width: 560px) {
+    .film--watchlist {
+        grid-template-columns: 48px 1fr;
+    }
+
+    .film--watchlist .watchlist-actions {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+    }
+
+    .nav__label {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .star-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 1.05rem;
+    }
+
+    .film__actions {
+        gap: 4px;
+    }
+}
+
+/* ---------- Counter +1 / −1 ---------- */
+.counter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.counter__btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--heading);
+    font-size: 1.3rem;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.counter__btn:hover:not(:disabled) {
+    border-color: var(--u);
+}
+
+.counter__btn:active:not(:disabled) {
+    transform: scale(0.9);
+}
+
+.counter__btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.counter__btn--add {
+    background: var(--u);
+    border-color: var(--u);
+    color: var(--u-ink);
+}
+
+.counter__btn--add:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--u) 85%, #fff);
+}
+
+.counter__value {
+    min-width: 24px;
+    text-align: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--heading);
+    font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 480px) {
+    .film {
+        grid-template-columns: 48px 1fr auto;
+        gap: 10px;
+        padding: 8px;
+    }
+
+    .film__poster {
+        width: 48px;
+    }
+
+    .film__title {
+        font-size: 0.95rem;
+    }
+
+    .counter {
+        gap: 4px;
+    }
+
+    .counter__btn {
+        width: 34px;
+        height: 34px;
+        font-size: 1.15rem;
+    }
+
+    .counter__value {
+        min-width: 18px;
+    }
+}
+
+/* ---------- Admin panel ---------- */
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.tab {
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.tab:hover {
+    color: var(--heading);
+}
+
+.tab--active {
+    background: var(--u);
+    border-color: var(--u);
+    color: var(--u-ink);
+}
+
+.tab--active:hover {
+    color: var(--u-ink);
+}
+
+.admin-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.admin-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.admin-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background:
+        radial-gradient(120% 90% at 0% 0%, var(--gloss), transparent 55%),
+        var(--panel);
+}
+
+.admin-row--film {
+    grid-template-columns: 28px 48px 1fr auto;
+}
+
+.admin-row--film .film__poster {
+    width: 48px;
+}
+
+.admin-row__order {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--u);
+    text-align: center;
+}
+
+.admin-row__info {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+}
+
+.admin-row__info strong {
+    color: var(--heading);
+    overflow-wrap: anywhere;
+}
+
+.admin-row__email {
+    font-size: 0.85rem;
+    overflow-wrap: anywhere;
+}
+
+.admin-row__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 6px;
+}
+
+.admin-row__fields {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    margin-top: 2px;
+}
+
+@media (max-width: 640px) {
+    .admin-row,
+    .admin-row--film {
+        grid-template-columns: auto 1fr;
+    }
+
+    .admin-row--film {
+        grid-template-columns: 24px 44px 1fr;
+    }
+
+    .admin-row__actions {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+    }
+}
+
+.icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--heading);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.icon-btn:hover:not(:disabled) {
+    border-color: var(--u);
+}
+
+.icon-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.btn--danger {
+    color: var(--danger);
+}
+
+.btn--danger:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.color-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--text) 10%, transparent);
+}
+
+.avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    border: 1px solid var(--border);
+}
+
+.panel-details {
+    margin: 8px 0 4px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--panel);
+}
+
+.panel-details > summary {
+    cursor: pointer;
+    padding: 14px 18px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--heading);
+    list-style: none;
+}
+
+.panel-details > summary::-webkit-details-marker {
+    display: none;
+}
+
+.panel-details[open] > summary {
+    border-bottom: 1px solid var(--border);
+}
+
+.panel-details > .admin-form {
+    border: none;
+    margin: 0;
+    background: none;
+}
+
+.admin-form {
+    display: grid;
+    gap: 14px;
+    padding: 18px;
+    margin: 8px 0 4px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--panel);
+}
+
+.admin-form > .btn {
+    justify-self: start;
+}
+
+.admin-form__title {
+    font-size: 1.2rem;
+}
+
+.admin-form__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+}
+
+.admin-form input:disabled {
+    opacity: 0.6;
+}
+
+.color-input {
+    height: 44px;
+    padding: 4px !important;
+    cursor: pointer;
+}
+
+.admin-input {
+    padding: 7px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.9rem;
+    min-width: 0;
+}
+
+.admin-input:focus {
+    outline: none;
+    border-color: var(--u);
+}
+
+.admin-input--number {
+    width: 70px;
+}
+
+.admin-input--grow {
+    flex: 1;
+    font-size: 16px;
+    padding: 10px 14px;
+}
+
+.mini-field {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.mini-field .admin-input:not(.admin-input--number) {
+    width: 150px;
+}
+
+.mini-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    cursor: pointer;
+}
+
+.mini-check input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--u);
+}
+
+.admin-search {
+    display: flex;
+    gap: 8px;
+}
+
+.search-results {
+    display: grid;
+    gap: 8px;
+}
+
+.search-result {
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+}
+
+.search-result .film__poster {
+    width: 48px;
+}
+
+/* ---------- Řazení a filtr v detailu univerza ---------- */
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 22px 0 6px;
+}
+
+.segmented {
+    display: inline-flex;
+    padding: 3px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+}
+
+.segmented__option {
+    padding: 7px 14px;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+}
+
+.segmented__option--active {
+    background: var(--u);
+    color: var(--u-ink);
+}
+
+/* přepínač jako v rozvrhu („Přednášky“) */
+.switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px 6px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--heading);
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+}
+
+.switch__track {
+    position: relative;
+    width: 38px;
+    height: 22px;
+    border-radius: 999px;
+    background: var(--border);
+    transition: background 0.2s;
+}
+
+.switch__track::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 0.2s;
+}
+
+.switch[aria-checked="true"] .switch__track {
+    background: var(--u);
+}
+
+.switch[aria-checked="true"] .switch__track::after {
+    transform: translateX(16px);
+}
+
+.empty-filter {
+    padding: 28px 16px;
+    text-align: center;
+    color: var(--muted);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+}
+
+/* ---------- Formuláře ---------- */
+.auth-page {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+.auth-form {
+    width: 100%;
+    max-width: 420px;
+    display: grid;
+    gap: 16px;
+    padding: 28px 24px;
+    border-radius: 22px;
+    border: 1px solid var(--border);
+    background:
+        radial-gradient(90% 60% at 100% 0%, color-mix(in srgb, var(--u) 16%, transparent), transparent 65%),
+        var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.auth-page--stack {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.install-card h2 {
+    font-size: 1.3rem;
+}
+
+.nav__install {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+}
+
+/* V nainstalované aplikaci (na celou obrazovku) hlavička respektuje výřez displeje */
+@media (display-mode: standalone) {
+    .header__inner {
+        padding-left: max(var(--gutter), env(safe-area-inset-left));
+        padding-right: max(var(--gutter), env(safe-area-inset-right));
+    }
+}
+
+@media (max-width: 430px) {
+    .nav__install {
+        padding: 6px 8px;
+    }
+}
+
+.auth-form p {
+    margin: 0;
+}
+
+.auth-form h1 {
+    font-size: 2.1rem;
+}
+
+.auth-form__switch {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.field {
+    display: grid;
+    gap: 6px;
+}
+
+.field__label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--heading);
+}
+
+.field__hint {
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.field input {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    font-size: 16px;   /* menší písmo by na iPhonu přiblížilo stránku */
+}
+
+.field input:focus {
+    outline: none;
+    border-color: var(--u);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--u) 25%, transparent);
+}
+
+.form-error {
+    color: var(--danger);
+    font-size: 0.9rem;
+}
+
+.form-error:empty {
+    display: none;
+}
+
+.btn--google {
+    background: #ffffff;
+    border-color: #dadce0;
+    color: #1f1f1f;
+    gap: 10px;
+}
+
+.btn--google:hover {
+    background: #f1f3f4;
+    border-color: #dadce0;
+    color: #1f1f1f;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+.notice {
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    font-size: 0.9rem;
+}
+
+.badge--accent {
+    justify-self: start;
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* ---------- Stavy: načítání, chyba ---------- */
+.state {
+    display: grid;
+    justify-items: center;
+    gap: 12px;
+    padding: 64px 16px;
+    text-align: center;
+}
+
+.state--error p {
+    color: var(--danger);
+}
+
+.spinner {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+    border-top-color: var(--u);
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ---------- Oznámení ---------- */
+.toasts {
+    position: fixed;
+    left: 50%;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    display: grid;
+    gap: 8px;
+    z-index: 100;
+    width: min(420px, calc(100% - 32px));
+    pointer-events: none;
+}
+
+.toast {
+    padding: 12px 16px;
+    border-radius: 999px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--heading);
+    animation: toast-in 0.2s ease-out;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.toast--action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    text-align: left;
+    pointer-events: auto;
+    border-color: var(--accent);
+}
+
+.toast__button {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.toast--error {
+    border-color: var(--danger);
+}
+
+.toast--hide {
+    opacity: 0;
+    transform: translateY(8px);
+}
+
+@keyframes toast-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+}
+
+/* ---------- Úroveň (XP) ---------- */
+.nav__user {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav__nick {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nav__level {
+    flex-shrink: 0;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.level-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 22px;
+    padding: clamp(18px, 4vw, 28px);
+    margin-bottom: 8px;
+    border-radius: 24px;
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+    background:
+        radial-gradient(70% 140% at 0% 0%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 65%),
+        linear-gradient(160deg, var(--panel), var(--bg-deep));
+    box-shadow: var(--shadow);
+}
+
+.level-card__badge {
+    width: clamp(78px, 18vw, 110px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(circle at 30% 25%, color-mix(in srgb, #fff 45%, var(--accent)), var(--accent) 55%, color-mix(in srgb, var(--accent) 60%, #000));
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 20%, transparent), 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+.level-card__number {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2rem, 6vw, 3rem);
+    color: var(--accent-ink);
+}
+
+.level-card__body {
+    display: grid;
+    gap: 8px;
+    min-width: 0;
+}
+
+.level-card__title {
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+}
+
+.level-card__next {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.level-card__next strong {
+    color: var(--heading);
+}
+
+.xp-parts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.xp-part {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--panel) 70%, transparent);
+    font-size: 0.82rem;
+}
+
+.xp-part__value {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.xp-part__label {
+    color: var(--muted);
+}
+
+@media (max-width: 480px) {
+    .level-card {
+        grid-template-columns: 1fr;
+        justify-items: start;
+    }
+}
+
+/* ---------- Achievementy ---------- */
+.achievements {
+    margin-bottom: 28px;
+}
+
+.achievement-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+}
+
+.achievement {
+    --u: var(--accent);
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 14px;
+    padding: 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--panel);
+    opacity: 0.72;
+}
+
+.achievement--unlocked {
+    opacity: 1;
+    border-color: color-mix(in srgb, var(--u) 55%, var(--border));
+    background:
+        radial-gradient(90% 120% at 0% 0%, color-mix(in srgb, var(--u) 18%, transparent), transparent 65%),
+        var(--panel);
+}
+
+.achievement--complete {
+    box-shadow: 0 0 0 1px var(--u), 0 10px 26px color-mix(in srgb, var(--u) 22%, transparent);
+}
+
+.achievement__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.7rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    filter: grayscale(1);
+}
+
+.achievement--unlocked .achievement__icon {
+    filter: none;
+    border-color: color-mix(in srgb, var(--u) 60%, var(--border));
+    background: color-mix(in srgb, var(--u) 14%, var(--bg));
+}
+
+.achievement__body {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+}
+
+.achievement__name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.05rem;
+}
+
+.achievement__desc,
+.achievement__date {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.achievement__date {
+    font-size: 0.78rem;
+}
+
+.achievement__progress {
+    display: grid;
+    gap: 4px;
+}
+
+.achievement__unit {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+/* úroveň: bronz, stříbro, zlato, platina… */
+.tier {
+    padding: 1px 8px;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #1b1408;
+    background: #c8a36a;
+}
+
+.tier--bronze { background: #cd8a4f; }
+.tier--silver { background: #c9ced6; }
+.tier--gold { background: #f2c14e; }
+.tier--platinum { background: #9fe3e0; }
+.tier--diamond { background: #a5b4fc; }
+.tier--legend { background: #f0abfc; }
+
+.tier-dots {
+    display: flex;
+    gap: 5px;
+}
+
+.tier-dot {
+    width: 22px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--border);
+}
+
+.tier-dot--on {
+    background: var(--u);
+}
+
+.completed-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.completed-badge {
+    --c: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px 7px 8px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--c) 60%, var(--border));
+    background: color-mix(in srgb, var(--c) 14%, var(--panel));
+    color: var(--heading);
+    font-weight: 600;
+    font-size: 0.88rem;
+}
+
+.completed-badge:hover {
+    color: var(--heading);
+    background: color-mix(in srgb, var(--c) 26%, var(--panel));
+}
+
+.completed-badge__date {
+    color: var(--muted);
+    font-weight: 500;
+    font-size: 0.78rem;
+}
+
+.toast--achievement {
+    border-color: var(--accent);
+    background:
+        radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--accent) 28%, transparent), transparent 70%),
+        var(--panel);
+}
+
+/* ---------- Právní stránky (Privacy Policy) ---------- */
+.legal {
+    max-width: 760px;
+}
+
+.legal h1 {
+    margin-bottom: 4px;
+}
+
+.legal h2 {
+    margin: 28px 0 8px;
+    font-size: 1.3rem;
+}
+
+.legal p,
+.legal li {
+    line-height: 1.65;
+}
+
+.legal ul {
+    padding-left: 20px;
+}
+
+/* ---------- Patička ---------- */
+.footer {
+    border-top: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg-deep) 70%, transparent);
+    padding: 24px var(--gutter) calc(24px + env(safe-area-inset-bottom));
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    display: grid;
+    gap: 6px;
+    justify-items: center;
+}
+
+.footer p {
+    margin: 0;
+}
+
+.footer__version {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+}
+
+.footer__tmdb {
+    height: 14px;
+    display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* =====================================================================
+   Vyhledávání (V1.6)
+   ===================================================================== */
+
+/* Lupa nakreslená v CSS – kroužek + rukojeť, barva podle textu */
+.search-icon {
+    position: relative;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}
+
+.search-icon::before {
+    content: "";
+    position: absolute;
+    inset: 0 3px 3px 0;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+}
+
+.search-icon::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 1px;
+    width: 6px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transform: rotate(45deg);
+    transform-origin: right center;
+}
+
+/* Odkaz v hlavičce: lupa + „Search“ (na telefonu jen lupa) */
+.nav__search {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+/* Lišta na přehledu – vypadá jako pole, vede na stránku hledání */
+.search-entry {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 14px;
+    padding: 12px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background:
+        radial-gradient(120% 90% at 0% 0%, var(--gloss), transparent 55%),
+        var(--panel);
+    color: var(--muted);
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.search-entry:hover {
+    border-color: color-mix(in srgb, var(--accent) 60%, var(--border));
+    color: var(--heading);
+}
+
+.search-entry__text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* klávesová zkratka „/“ */
+.kbd {
+    padding: 1px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    border-bottom-width: 2px;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+@media (hover: none) {
+    .kbd {
+        display: none;          /* telefon klávesnici nemá */
+    }
+}
+
+/* Pole na stránce hledání */
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 8px 0 18px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--muted);
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.search-box:focus-within {
+    border-color: var(--u);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--u) 25%, transparent);
+    color: var(--heading);
+}
+
+.search-box__input {
+    flex: 1;
+    min-width: 0;
+    padding: 14px 0;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 16px;            /* menší písmo by na iPhonu přiblížilo stránku */
+    outline: none;
+}
+
+/* vlastní křížek místo prohlížečového */
+.search-box__input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.search-box__clear {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 0;
+    background: var(--panel-hover);
+    color: var(--muted);
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.search-box__clear:hover {
+    color: var(--heading);
+}
+
+.search-box__clear[hidden] {
+    display: none;
+}
+
+.search-page .section-title:first-child {
+    margin-top: 8px;
+}
+
+.chips--wrap {
+    flex-wrap: wrap;
+    overflow: visible;
+    margin: 0;
+}
+
+.search-more {
+    margin: 14px 0 0;
+    text-align: center;
+}
+
+@media (max-width: 560px) {
+    /* na telefonu řádek: plakát + info, ovládání pod nimi (kolekcí může být víc) */
+    .film--search {
+        grid-template-columns: 48px 1fr;
+    }
+
+    .film--search .film__actions {
+        grid-column: 1 / -1;
+        justify-content: flex-end;
+    }
+}
+
+/* =====================================================================
+   Cesty / paths (V1.8)
+   ===================================================================== */
+
+/* Štítek „Path“ na kartě (vlevo nahoře, „Complete“ je vpravo) */
+.universe-card__kind {
+    position: absolute;
+    top: 12px;
+    left: 10px;
+    z-index: 2;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg-deep) 78%, transparent);
+    border: 1px solid color-mix(in srgb, var(--c) 60%, transparent);
+    color: var(--heading);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    backdrop-filter: blur(6px);
+}
+
+/* Seznam kroků: svislá čára spojuje čísla kroků (vidět je v mezerách mezi řádky) */
+.film-list--path {
+    position: relative;
+}
+
+.film-list--path::before {
+    content: "";
+    position: absolute;
+    top: 24px;
+    bottom: 24px;
+    left: 27px;                      /* střed sloupce s číslem (padding 10 + 34 / 2) */
+    width: 2px;
+    background: linear-gradient(var(--u), color-mix(in srgb, var(--u) 25%, transparent));
+    border-radius: 2px;
+}
+
+.film-list--path > li {
+    position: relative;              /* řádky leží nad čárou */
+}
+
+.film--step {
+    grid-template-columns: 34px 56px 1fr auto;
+}
+
+.film__step {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid color-mix(in srgb, var(--u) 70%, var(--border));
+    background: var(--bg);
+    color: var(--heading);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.film--watched .film__step {
+    background: var(--u);
+    border-color: var(--u);
+    color: var(--u-ink);
+}
+
+/* Poznámka „proč to vidět“ */
+.film__note,
+.up-next__note {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    color: var(--text);
+    opacity: 0.85;
+}
+
+.up-next__note {
+    margin-top: 4px;
+    font-style: italic;
+}
+
+/* Admin: poznámka ke kroku přes celou šířku */
+.mini-field--wide {
+    display: flex;
+    width: 100%;
+    margin-top: 6px;
+}
+
+.mini-field--wide .admin-input:not(.admin-input--number) {
+    width: auto;
+    flex: 1;
+}
+
+@media (max-width: 560px) {
+    /* na telefonu: číslo + plakát + text, ovládání pod nimi */
+    .film--step {
+        grid-template-columns: 28px 48px 1fr;
+        gap: 10px;
+    }
+
+    .film--step .film__actions {
+        grid-column: 2 / -1;
+        justify-content: flex-end;
+    }
+
+    .film__step {
+        width: 28px;
+        height: 28px;
+        font-size: 0.85rem;
+    }
+
+    .film-list--path::before {
+        left: 22px;                  /* padding 8 + 28 / 2 */
+    }
+}
+
+@media (min-width: 481px) and (max-width: 560px) {
+    .film-list--path::before {
+        left: 24px;                  /* padding 10 + 28 / 2 */
+    }
+}
+
+/* =====================================================================
+   Statistiky profilu (V1.9)
+   ===================================================================== */
+
+.profile-tabs {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 20px;
+}
+
+.profile-tabs .segmented__option {
+    text-decoration: none;
+}
+
+/* odkazy mají vlastní barvu – aktivní záložka musí mít kontrastní text */
+.profile-tabs .segmented__option--active,
+.profile-tabs .segmented__option--active:hover {
+    color: var(--u-ink);
+}
+
+/* Dlaždice s hlavními čísly */
+.stat-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.stat-tile {
+    display: grid;
+    gap: 2px;
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background:
+        radial-gradient(120% 90% at 0% 0%, var(--gloss), transparent 55%),
+        var(--panel);
+}
+
+.stat-tile__value {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.9rem;
+    line-height: 1.1;
+    color: var(--heading);
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-tile__label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text);
+}
+
+.stat-tile__sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+}
+
+/* Panely ve dvou sloupcích (na telefonu pod sebou) */
+.stats-grid {
+    display: grid;
+    align-items: start;          /* krátký panel se nenatahuje podle souseda */
+    gap: 14px;
+}
+
+@media (min-width: 820px) {
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.stats-panel {
+    display: grid;
+    align-content: start;
+    gap: 14px;
+    padding: 18px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--panel);
+    min-width: 0;
+}
+
+.stats-panel__title {
+    font-size: 1.15rem;
+    margin: 0;
+}
+
+/* Měsíce: svislé sloupce, jedna barva (akcent); hodnota nad sloupcem při najetí,
+   nejvyšší měsíc má hodnotu vidět vždy */
+.chart {
+    margin: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.month-chart {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    align-items: end;
+    gap: 6px;
+    height: 150px;
+    padding-top: 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.month-chart__col {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.month-chart__bar {
+    width: 100%;
+    max-width: 26px;
+    min-height: 2px;
+    border-radius: 4px 4px 0 0;
+    background: color-mix(in srgb, var(--accent) 70%, transparent);
+    transition: background 0.15s;
+}
+
+.month-chart__col:hover .month-chart__bar,
+.month-chart__col--max .month-chart__bar {
+    background: var(--accent);
+}
+
+.month-chart__value {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--heading);
+    opacity: 0;
+    transition: opacity 0.15s;
+    margin-bottom: 3px;
+}
+
+.month-chart__col:hover .month-chart__value,
+.month-chart__col--max .month-chart__value {
+    opacity: 1;
+}
+
+.month-chart__label {
+    position: absolute;
+    bottom: -20px;
+    font-size: 0.68rem;
+    color: var(--muted);
+}
+
+.chart figcaption {
+    margin-top: 18px;
+}
+
+/* Vodorovné sloupce: popisek · stopa · hodnota */
+.bar-rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.bar-rows__row {
+    display: grid;
+    grid-template-columns: minmax(70px, 120px) 1fr auto;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+}
+
+.bar-rows__label {
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bar-rows__track {
+    height: 10px;
+    border-radius: 999px;
+    background: var(--panel-hover);
+}
+
+.bar-rows__bar {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--bar, var(--accent));
+}
+
+.bar-rows__row:hover .bar-rows__bar {
+    filter: brightness(1.12);
+}
+
+.bar-rows__value {
+    font-weight: 700;
+    color: var(--heading);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Textové seznamy (roky, zajímavosti) */
+.stats-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.stats-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--border);
+}
+
+.stats-list li:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.stats-list--facts li > .muted {
+    flex-basis: 100%;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.stats-list--facts strong {
+    color: var(--heading);
+}
+
+/* Nejčastěji viděné */
+.top-films {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.top-films__item {
+    display: grid;
+    grid-template-columns: 22px 38px 1fr auto;
+    align-items: center;
+    gap: 10px;
+}
+
+.top-films__rank {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--muted);
+    text-align: center;
+}
+
+.top-films__poster {
+    width: 38px;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 6px;
+    display: block;
+    background: var(--panel-hover);
+    font-size: 0.5rem;
+    overflow: hidden;
+}
+
+.top-films__info {
+    display: grid;
+    min-width: 0;
+    font-size: 0.9rem;
+}
+
+.top-films__info strong {
+    color: var(--heading);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.top-films__info .muted {
+    font-size: 0.78rem;
+}
+
+.top-films__count {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--accent);
+}
+
+/* Skoro hotovo – kolekce v jejich barvě */
+.almost-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+}
+
+.almost-list__item {
+    display: grid;
+    gap: 6px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    transition: border-color 0.15s;
+}
+
+.almost-list__item:hover {
+    border-color: var(--u);
+}
+
+.almost-list__top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+
+.almost-list__top strong {
+    color: var(--heading);
+}
+
+/* =====================================================================
+   Veřejné profily (V2.0)
+   ===================================================================== */
+
+/* Karta „Public profile“ na vlastním profilu */
+.public-card {
+    display: grid;
+    gap: 14px;
+    margin: 0 0 20px;
+    padding: 18px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background:
+        radial-gradient(120% 90% at 0% 0%, var(--gloss), transparent 55%),
+        var(--panel);
+}
+
+.public-card__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.public-card__title {
+    font-size: 1.15rem;
+    margin: 0 0 4px;
+}
+
+.public-card__text {
+    margin: 0;
+    font-size: 0.88rem;
+    max-width: 62ch;
+}
+
+.public-card__head .switch {
+    flex-shrink: 0;
+}
+
+.public-card__link {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.public-card__link .admin-input {
+    min-width: 0;
+    flex: 1 1 240px;
+    font-size: 0.85rem;
+}
+
+/* Hlavička veřejného profilu */
+.profile-hero {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 20px;
+    margin: 0 0 20px;
+    padding: 22px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background:
+        radial-gradient(80% 120% at 100% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 60%),
+        radial-gradient(120% 90% at 0% 0%, var(--gloss), transparent 55%),
+        var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.profile-hero__avatar,
+.user-result__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: var(--font-display);
+    font-weight: 700;
+}
+
+.profile-hero__avatar {
+    width: 84px;
+    height: 84px;
+    font-size: 2.4rem;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.profile-hero__body {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+}
+
+.profile-hero__name {
+    margin: 0;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    overflow-wrap: anywhere;
+}
+
+.profile-hero__meta {
+    margin: 0;
+}
+
+.profile-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+@media (max-width: 480px) {
+    .profile-hero {
+        grid-template-columns: 1fr;
+        justify-items: start;
+        padding: 18px;
+    }
+
+    .profile-hero__avatar {
+        width: 64px;
+        height: 64px;
+        font-size: 1.8rem;
+    }
+}
+
+/* Lidé ve výsledcích hledání */
+.user-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+}
+
+.user-result {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+    transition: border-color 0.15s;
+}
+
+.user-result:hover {
+    border-color: var(--accent);
+}
+
+.user-result__avatar {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    font-size: 1.1rem;
+}
+
+.user-result__info {
+    display: grid;
+    min-width: 0;
+}
+
+.user-result__info strong {
+    color: var(--heading);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-result__info .muted {
+    font-size: 0.78rem;
+}
+
+@media (max-width: 480px) {
+    /* na telefonu text karty přes celou šířku, přepínač pod ním */
+    .public-card__head {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* =====================================================================
+   O aplikaci, patička, souhlas s podmínkami (V2.2)
+   ===================================================================== */
+
+.footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 18px;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.footer__links a {
+    color: var(--text);
+}
+
+.footer__links a:hover {
+    color: var(--accent);
+}
+
+.about-grid {
+    display: grid;
+    gap: 14px;
+}
+
+@media (min-width: 820px) {
+    .about-grid {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+    }
+}
+
+.about-card {
+    display: grid;
+    gap: 10px;
+    padding: 20px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background:
+        radial-gradient(120% 90% at 0% 0%, var(--gloss), transparent 55%),
+        var(--panel);
+}
+
+.about-card h2 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.about-card p {
+    margin: 0;
+}
+
+.about-list {
+    margin: 0;
+    padding-left: 20px;
+    display: grid;
+    gap: 4px;
+}
+
+/* Zaškrtávátko „souhlasím s podmínkami“ při registraci */
+.consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: var(--text);
+    cursor: pointer;
+}
+
+.consent input {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    accent-color: var(--accent);
+}
+
+/* Věta pod tlačítkem Google */
+.consent-note {
+    margin: -4px 0 0;
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-align: center;
+}
+
+/* =====================================================================
+   Moderace (V2.3)
+   ===================================================================== */
+
+/* Smazání účtu – červený okraj, aby se nedalo přehlédnout */
+.danger-card {
+    border-color: color-mix(in srgb, var(--danger) 55%, var(--border));
+}
+
+.danger-card h2 {
+    color: var(--danger);
+}
+
+.pill--danger {
+    border-color: color-mix(in srgb, var(--danger) 60%, transparent);
+    background: color-mix(in srgb, var(--danger) 16%, var(--panel));
+    color: var(--heading);
+}
+
+.admin-list--words {
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+
+.admin-row--word {
+    grid-template-columns: 1fr auto;
+}
+
+/* Formuláře admina na telefonu: pole přes celou šířku, výběr a tlačítko pod ním */
+.admin-search {
+    flex-wrap: wrap;
+}
+
+.admin-search .admin-input--grow {
+    flex: 1 1 220px;
+    min-width: 0;
+}
+
+/* Atribut hidden má vždy přednost (tlačítka mají jinak display: inline-flex) – V2.4 */
+[hidden] {
+    display: none !important;
+}
+
+/* Odkaz „Forgot password?“ pod polem hesla (V2.5) */
+.auth-form__forgot {
+    margin: -6px 0 0;
+    text-align: right;
+    font-size: 0.85rem;
+}
+
+/* Ochrana proti robotům (V2.6) – Turnstile je většinou neviditelný (prázdný prvek by
+   v mřížce formuláře přidal mezeru navíc, záporné okraje ji vyrovnají); když chce
+   kliknutí, ukáže se políčko na střed. */
+.captcha {
+    display: flex;
+    justify-content: center;
+    margin: -8px 0;
+}
+
+/* Na koho se nové heslo vztahuje (V2.6) */
+.account-box {
+    display: grid;
+    gap: 2px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--accent) 7%, transparent);
+}
+
+.account-box__label {
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.account-box__name {
+    font-size: 1.1rem;
+    overflow-wrap: anywhere;
+}
+
+.account-box__email {
+    font-size: 0.85rem;
+    color: var(--muted);
+    overflow-wrap: anywhere;
+}

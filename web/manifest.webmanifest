@@ -1,0 +1,18 @@
+{
+  "name": "My Movie Diary",
+  "short_name": "MMD",
+  "description": "Track every movie collection you love – MCU, Star Wars, Disney, Pixar, Studio Ghibli and more.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#12161c",
+  "theme_color": "#12161c",
+  "categories": ["entertainment", "lifestyle"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
