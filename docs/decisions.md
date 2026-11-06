@@ -1126,7 +1126,12 @@ filmy volitelně:
 - **Jumanji 3 (prosinec 2026) zatím ne** – název ani datum nejsou potvrzené; doplní se při další kontrole.
 - **Kapitola rozšiřování V3.1 je tímto hotová** – pokračuje V3.2 (hodnocení).
 
+**Oprava k V3.1.5 – nová verze hned po nasazení:** service worker (`web/sw.js`, mezipaměť `mmd-v4`) bere JS, CSS
+a ikony **ze sítě jako první** (limit 2,5 s, offline / pomalá síť → uložená verze). Dřív je vracel hned z mezipaměti
+a nová verze (třeba číslo verze v patičce) se ukázala až po druhém obnovení. Neměnné soubory s verzí v názvu
+(vendor/, fonts/) zůstávají jen z mezipaměti; offline režim funguje stejně. Hláška „update-available“
+s tlačítkem Reload se už nepoužívá. Jednorázově: po nasazení téhle opravy je potřeba obnovit ještě naposledy dvakrát.
+
 ## Drobnosti k dořešení
-- Service worker: JS a CSS brát nejdřív ze sítě (mezipaměť jen offline), ať se nová verze ukáže hned po nasazení.
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).
 - GitHub vypne plánované workflow (keep-alive) ve veřejném repozitáři po 60 dnech bez aktivity v repozitáři – přijde e-mail, zapne se jedním kliknutím.

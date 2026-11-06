@@ -6,6 +6,7 @@ see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 ## V3.1.5 – November 2026
 - 25 new series: James Bond, Mission: Impossible, John Wick, Indiana Jones, The Matrix, Terminator, Rocky & Creed, Back to the Future, Die Hard, The Hunger Games, Twilight, Planet of the Apes, Transformers, Star Trek, Bourne, Men in Black, Ghostbusters, Predator, Rambo, The Godfather, Knives Out, Paddington, Kingsman, Jumanji and The Karate Kid
 - New genre: Drama
+- New versions now show up right after an update – no more reloading twice
 
 ## V3.1.4 – November 2026
 - Eight themed genre picks: Time Travel, Space Adventures, Cyberpunk & Dystopia, Heist Movies, Martial Arts, 80s Action, War Movies and Christmas Movies
