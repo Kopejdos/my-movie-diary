@@ -1,16 +1,18 @@
-// Obrazovka: přehled – hero karta (Continue watching / vítání) a mřížka univerz.
+// Obrazovka: přehled – nahoře „Co dneska?“ (V3.3; tři tipy pro přihlášeného) nebo
+// uvítací karta, pod tím mřížka univerz.
 // Filtr má dvě vrstvy (V3.1.2): 1. druh kolekce (Series / Studios / Genre picks / Paths),
 // 2. žánr (kategorie). Počty v každé vrstvě se počítají podle volby v té druhé.
 
 import {
-    fetchUniverses, fetchCategories, fetchMyFilmCounts, fetchContinueWatching, addWatch, percent, KIND_ORDER,
+    fetchUniverses, fetchCategories, fetchMyFilmCounts, fetchWatchlistIds, fetchSearchData, percent, KIND_ORDER,
     prefetchUniverse,
 } from "../data.js";
 import { loadPref, savePref } from "../prefs.js";
-import { isSignedIn } from "../auth.js";
+import { isSignedIn, getUser } from "../auth.js";
 import { setAccent, inkFor } from "../theme.js";
 import { TEXTS, format, movies, collections, steps } from "../texts.js";
-import { h, mount, poster, posterUrl, pill, yearOf, toast, loadingView, errorView } from "../dom.js";
+import { h, mount, poster, loadingView, errorView } from "../dom.js";
+import { todayPanel, todayPlaceholder } from "./today.js";
 
 export async function universesView(container, context) {
     const { isCurrent } = context;
@@ -19,12 +21,12 @@ export async function universesView(container, context) {
     mount(container, loadingView());
 
     const signedIn = isSignedIn();
-    // Kolekce a kategorie se načtou souběžně; „Continue watching“ (potřebuje zhlédnutí
-    // a další dotazy) se doplní do hero karty později – nezdržuje vykreslení mřížky
-    const continuePromise = signedIn
-        ? fetchMyFilmCounts(true).then(fetchContinueWatching)
+    // Kolekce a kategorie se načtou souběžně; „Co dneska?“ (potřebuje zhlédnutí, watchlist
+    // a seznam filmů) se doplní nahoru později – nezdržuje vykreslení mřížky
+    const todayPromise = signedIn
+        ? Promise.all([fetchSearchData(), fetchCategories(), fetchMyFilmCounts(true), fetchWatchlistIds(true)])
         : Promise.resolve(null);
-    continuePromise.catch(() => null);
+    todayPromise.catch(() => null);
 
     let universes, categories;
     try {
@@ -84,7 +86,7 @@ export async function universesView(container, context) {
         if (visible.length === 0) {
             // Kombinace bez výsledku (např. Paths + Comedy) – nabídnout zrušení filtru
             mount(grid, h("div", { class: "empty-filter" },
-                h("p", { style: "margin: 0 0 12px" }, TEXTS.filterEmpty),
+                h("p", { style: "margin: 0 0 12px" }, TEXTS.filterEmptyCollections),
                 h("button", {
                     class: "btn", type: "button",
                     onClick: () => { selectKind("all"); selectCategory("all"); },
@@ -139,14 +141,22 @@ export async function universesView(container, context) {
         return button;
     }
 
-    const heroSlot = h("div", { class: "hero-slot" },
-        signedIn ? h("div", { class: "hero-card hero-card--loading", "aria-hidden": "true" }) : heroCard(false, null));
+    const heroSlot = h("div", { class: "hero-slot" }, signedIn ? todayPlaceholder() : heroCard(false));
     if (signedIn) {
-        continuePromise
-            .then((continueWatching) => {
-                if (isCurrent()) mount(heroSlot, heroCard(true, continueWatching, () => universesView(container, context)));
+        todayPromise
+            .then(([search, allCategories, counts, watchlist]) => {
+                if (!isCurrent()) return;
+                // Úplný nováček (nic neviděl, nic si neuložil) dostane uvítání místo tipů
+                if (counts.size === 0 && watchlist.size === 0) {
+                    mount(heroSlot, heroCard(true));
+                    return;
+                }
+                mount(heroSlot, todayPanel({
+                    universes: search.universes, items: search.items, categories: allCategories,
+                    counts, watchlist, userId: getUser()?.id,
+                }, () => universesView(container, context)));
             })
-            .catch(() => { if (isCurrent()) mount(heroSlot, heroCard(true, null)); });
+            .catch(() => { if (isCurrent()) mount(heroSlot, heroCard(true)); });
     }
 
     mount(container,
@@ -189,9 +199,8 @@ function kindHeading(kind) {
     );
 }
 
-/** Velká karta nahoře: pokračování v univerzu, nebo přivítání. */
-function heroCard(signedIn, continueWatching, refresh) {
-    // Nepřihlášený – představení aplikace
+/** Uvítací karta nahoře: představení aplikace (host), nebo první krok (nováček). */
+function heroCard(signedIn) {
     if (!signedIn) {
         return h("section", { class: "hero-card" },
             h("div", { class: "hero-card__body" },
@@ -205,62 +214,13 @@ function heroCard(signedIn, continueWatching, refresh) {
             ),
         );
     }
-
-    // Přihlášený, ale ještě nic neviděl (nebo má vše hotové)
-    if (!continueWatching) {
-        return h("section", { class: "hero-card" },
-            h("div", { class: "hero-card__body" },
-                h("span", { class: "eyebrow" }, TEXTS.heroWelcomeEyebrow),
-                h("h1", { class: "hero-card__title" }, TEXTS.heroWelcomeTitle),
-                h("p", { class: "hero-card__text" }, TEXTS.heroWelcomeText),
-            ),
-        );
-    }
-
-    // Continue watching – další neviděný film z naposledy sledovaného univerza
-    const { universe, next } = continueWatching;
-    const film = next.film;
-    const color = universe.color;
-    const markButton = h("button", {
-        class: "btn btn--universe",
-        type: "button",
-        onClick: async () => {
-            markButton.disabled = true;
-            try {
-                await addWatch(film.tmdb_id);
-                refresh();
-            } catch (error) {
-                toast(format("errorGeneric", error.message), "error");
-                markButton.disabled = false;
-            }
-        },
-    }, `+ ${TEXTS.markWatched}`);
-
-    const card = h("section", { class: "hero-card" },
+    return h("section", { class: "hero-card" },
         h("div", { class: "hero-card__body" },
-            h("span", { class: "eyebrow" }, format("continueEyebrow", universe.name)),
-            h("h1", { class: "hero-card__title" }, film.title),
-            h("div", { class: "pills" },
-                pill(yearOf(film.release_date)),
-                film.runtime ? pill(format("minutes", film.runtime)) : null,
-                next.group_label ? pill(next.group_label, true) : null,
-            ),
-            h("div", { class: "hero-card__actions" },
-                markButton,
-                h("a", { class: "btn", href: `#/collection/${universe.slug}` }, TEXTS.openUniverse),
-            ),
+            h("span", { class: "eyebrow" }, TEXTS.heroWelcomeEyebrow),
+            h("h1", { class: "hero-card__title" }, TEXTS.heroWelcomeTitle),
+            h("p", { class: "hero-card__text" }, TEXTS.heroWelcomeText),
         ),
-        posterUrl(film.poster_path)
-            ? poster(film.poster_path, film.title, "hero-card__poster")
-            : null,
     );
-    if (color) {
-        // barva univerza pro záři karty a tlačítko
-        card.style.setProperty("--hc", color);
-        card.style.setProperty("--u", color);
-        card.style.setProperty("--u-ink", inkFor(color));
-    }
-    return card;
 }
 
 /** Kartička univerza – odkaz na detail (používá ji i vyhledávání). */

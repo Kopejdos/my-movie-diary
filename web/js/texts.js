@@ -22,19 +22,44 @@ export const TEXTS = {
     themeToLight: "Switch to light mode",
     themeToDark: "Switch to dark mode",
 
-    // Hero karta na přehledu
+    // Uvítací karta na přehledu (host / nováček)
     heroGuestEyebrow: "Your movie diary",
     heroGuestTitle: "Every collection. Every movie.",
     heroGuestText: "Log what you watch across the MCU, Star Wars, Studio Ghibli and more – and always know what to watch next.",
     heroWelcomeEyebrow: "Welcome back",
     heroWelcomeTitle: "Where do we start?",
     heroWelcomeText: "Pick a collection below and log your first movie.",
-    continueEyebrow: "Continue · {0}",
-    openUniverse: "Open collection",
     markWatched: "Mark as watched",
 
-    // Řazení a filtr v detailu univerza
-    orderRelease: "Release order",
+    // Co dneska? (V3.3) – tři tipy nahoře na přehledu
+    todayEyebrow: "Tonight's pick",
+    todayTitle: "What to watch today?",
+    todayShuffle: "Shuffle",
+    todayShuffleTitle: "Show different picks",
+    todayWatchlist: "From your watchlist",
+    todayNext: "Up next",
+    todayNextIn: "Next in {0}",
+    todayExplore: "Explore something new",
+    todayExploreBecause: "Because you watch {0}",
+    todayExploreFresh: "Something different · {0}",
+    todayEmptyWatchlist: "Add movies with ☆ and they'll show up here.",
+    todayEmptyNext: "Start any collection and we'll keep track of what's next.",
+    todayEmptyExplore: "You've seen it all. Seriously. 🏆",
+    todayMarked: "{0} marked as watched.",
+    todayToWatchlist: "Watchlist",
+    todayInWatchlist: "In watchlist",
+    todayOpen: "Open →",
+
+    // Coming soon (V3.3) – oznámené filmy dole v kolekci
+    comingSoonTitle: "Coming soon",
+    comingSoonHint: "Announced movies – they'll count towards progress once they're out.",
+    comingSoonBadge: "Coming soon",
+    comingSoonOn: "Coming {0}",
+    comingSoonDays: "in {0} days",
+    comingSoonTomorrow: "tomorrow",
+    comingSoonToday: "out today",
+    dateTba: "Date TBA",
+
     // Hodnocení (V3.2)
     rateAction: "Rate",
     rateYours: "Your rating: {0} ★ – click to change",
@@ -54,6 +79,8 @@ export const TEXTS = {
     statsRatedCount: "{0} rated",
     statsRatingRow: "{0} ★: {1}",
 
+    // Řazení a filtr v detailu univerza
+    orderRelease: "Release order",
     orderStory: "Story order",
     orderGroups: "By series",
     orderLabel: "Order",
@@ -264,7 +291,7 @@ export const TEXTS = {
     kindAll: "All",
     filterKindLabel: "Collection type",
     filterGenreLabel: "Genre",
-    filterEmpty: "No collections match this combination.",
+    filterEmptyCollections: "No collections match this combination.",
     filterReset: "Show all collections",
     kindSeries: "Series",
     kindStudio: "Studios",

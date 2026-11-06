@@ -6,6 +6,7 @@ import { navigate } from "../router.js";
 import { setAccent, inkFor } from "../theme.js";
 import { TEXTS, format, movies } from "../texts.js";
 import { h, mount, poster, pill, yearOf, formatDate, toast, loadingView, errorView } from "../dom.js";
+import { soonPill } from "./coming-soon.js";
 
 export async function watchlistView(container, context) {
     setAccent(null);
@@ -50,12 +51,15 @@ export async function watchlistView(container, context) {
         const { film } = item;
         const busy = (on) => buttons.forEach((b) => { b.disabled = on; });
 
-        const watched = h("button", { class: "btn btn--small btn--primary", type: "button" }, `+ ${TEXTS.markWatched}`);
+        // Chystaný film (Coming soon, V3.3) ještě nejde označit jako viděný
+        const watched = item.upcoming
+            ? null
+            : h("button", { class: "btn btn--small btn--primary", type: "button" }, `+ ${TEXTS.markWatched}`);
         const remove = h("button", { class: "btn btn--small", type: "button" }, TEXTS.watchlistRemove);
-        const buttons = [watched, remove];
+        const buttons = [watched, remove].filter(Boolean);
 
         // Zhlédnutí: databáze film z watchlistu odebere sama (trigger)
-        watched.addEventListener("click", async () => {
+        watched?.addEventListener("click", async () => {
             busy(true);
             try {
                 await addWatch(film.tmdb_id);
@@ -78,12 +82,12 @@ export async function watchlistView(container, context) {
             }
         });
 
-        return h("li", { class: "film film--watchlist" },
+        return h("li", { class: `film film--watchlist${item.upcoming ? " film--upcoming" : ""}` },
             poster(film.poster_path, film.title, "film__poster", false, "small"),
             h("div", { class: "film__info" },
                 h("h3", { class: "film__title" }, film.title),
                 h("div", { class: "film__meta" },
-                    pill(yearOf(film.release_date)),
+                    item.upcoming ? soonPill(film) : pill(yearOf(film.release_date)),
                     film.runtime ? pill(format("minutes", film.runtime)) : null,
                     item.universes.map(universeLink),
                 ),

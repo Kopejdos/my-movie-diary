@@ -164,7 +164,7 @@
         { "title": "Joker", "year": 2019, "optional": true, "franchise": "Joker" },
         { "title": "The Batman", "year": 2022, "franchise": "The Batman" },
         { "title": "Joker: Folie à Deux", "year": 2024, "optional": true, "franchise": "Joker" },
-        { "title": "The Batman Part II", "year": 2028, "franchise": "The Batman" }
+        { "title": "The Batman Part II", "year": 2027, "franchise": "The Batman" }
       ]
     },
     {
@@ -272,7 +272,8 @@
         { "title": "The Fate of the Furious", "year": 2017 },
         { "title": "Fast & Furious Presents: Hobbs & Shaw", "year": 2019, "optional": true, "label": "Spin-off" },
         { "title": "F9", "year": 2021 },
-        { "title": "Fast X", "year": 2023 }
+        { "title": "Fast X", "year": 2023 },
+        { "title": "Fast X: Part 2", "year": 2027 }
       ]
     },
     {
@@ -408,7 +409,9 @@
       "films": [
         { "title": "Avatar", "year": 2009 },
         { "title": "Avatar: The Way of Water", "year": 2022 },
-        { "title": "Avatar: Fire and Ash", "year": 2025 }
+        { "title": "Avatar: Fire and Ash", "year": 2025 },
+        { "title": "Avatar 4", "year": 2029 },
+        { "title": "Avatar 5", "year": 2031 }
       ]
     },
     {
@@ -809,7 +812,8 @@
         { "title": "Jumanji", "year": 1995, "cover": true },
         { "title": "Zathura: A Space Adventure", "year": 2005, "optional": true, "label": "Spin-off" },
         { "title": "Jumanji: Welcome to the Jungle", "year": 2017 },
-        { "title": "Jumanji: The Next Level", "year": 2019 }
+        { "title": "Jumanji: The Next Level", "year": 2019 },
+        { "title": "Jumanji: Open World", "year": 2026 }
       ]
     },
     {
@@ -925,7 +929,8 @@
         { "title": "Mufasa: The Lion King", "year": 2024, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes" },
         { "title": "Snow White", "year": 2025, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes" },
         { "title": "Lilo & Stitch", "year": 2025, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes" },
-        { "title": "Moana", "year": 2026, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes" }
+        { "title": "Moana", "year": 2026, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes" },
+        { "title": "Lilo & Stitch 2", "year": 2028, "group": "Live-action remakes", "optional": true, "franchise": "Live-action remakes" }
       ]
     },
     {
@@ -954,7 +959,7 @@
         { "title": "The Good Dinosaur", "year": 2015, "group": "2010s" },
         { "title": "Finding Dory", "year": 2016, "group": "2010s", "franchise": "Finding Nemo" },
         { "title": "Cars 3", "year": 2017, "group": "2010s", "franchise": "Cars" },
-        { "title": "Coco", "year": 2017, "group": "2010s" },
+        { "title": "Coco", "year": 2017, "group": "2010s", "franchise": "Coco" },
         { "title": "Incredibles 2", "year": 2018, "group": "2010s", "franchise": "The Incredibles" },
         { "title": "Toy Story 4", "year": 2019, "group": "2010s", "franchise": "Toy Story" },
         { "title": "Onward", "year": 2020, "group": "2020s" },
@@ -966,7 +971,10 @@
         { "title": "Inside Out 2", "year": 2024, "group": "2020s", "franchise": "Inside Out" },
         { "title": "Elio", "year": 2025, "group": "2020s" },
         { "title": "Hoppers", "year": 2026, "group": "2020s" },
-        { "title": "Toy Story 5", "year": 2026, "group": "2020s", "franchise": "Toy Story" }
+        { "title": "Toy Story 5", "year": 2026, "group": "2020s", "franchise": "Toy Story" },
+        { "title": "Gatto", "year": 2027, "group": "2020s" },
+        { "title": "Incredibles 3", "year": 2028, "group": "2020s", "franchise": "The Incredibles" },
+        { "title": "Coco 2", "year": 2029, "group": "2020s", "franchise": "Coco" }
       ]
     },
     {
@@ -1028,6 +1036,7 @@
         { "title": "Forgotten Island", "year": 2026, "group": "2020s" },
         { "title": "Shrek 5", "year": 2027, "group": "2020s", "franchise": "Shrek" },
         { "title": "How to Train Your Dragon", "year": 2025, "group": "Live-action & hybrid", "optional": true, "franchise": "How to Train Your Dragon", "label": "Live-action remake" },
+        { "title": "How to Train Your Dragon 2", "year": 2027, "tmdb": 1458319, "group": "Live-action & hybrid", "optional": true, "franchise": "How to Train Your Dragon", "label": "Live-action remake" },
         { "title": "Gabby's Dollhouse: The Movie", "year": 2025, "group": "Live-action & hybrid", "optional": true }
       ]
     },
@@ -1183,7 +1192,7 @@
         { "title": "Supergirl", "year": 2026, "group": "2020s", "franchise": "DCU" },
         { "title": "Clayface", "year": 2026, "group": "2020s", "franchise": "DCU" },
         { "title": "Man of Tomorrow", "year": 2027, "group": "2020s", "franchise": "DCU" },
-        { "title": "The Batman Part II", "year": 2028, "group": "2020s", "franchise": "The Batman" }
+        { "title": "The Batman Part II", "year": 2027, "group": "2020s", "franchise": "The Batman" }
       ]
     },
     {
@@ -1341,7 +1350,7 @@
         { "title": "The Lord of the Rings: The Hunt for Gollum", "year": 2027, "group": "2020s", "franchise": "Middle-earth" },
         { "title": "Man of Tomorrow", "year": 2027, "group": "2020s", "franchise": "DC" },
         { "title": "Godzilla x Kong: Supernova", "year": 2027, "group": "2020s", "franchise": "MonsterVerse" },
-        { "title": "The Batman Part II", "year": 2028, "group": "2020s", "franchise": "DC" }
+        { "title": "The Batman Part II", "year": 2027, "group": "2020s", "franchise": "DC" }
       ]
     },
     {
@@ -1460,7 +1469,7 @@
         { "title": "Migration", "year": 2023, "group": "2020s" },
         { "title": "Despicable Me 4", "year": 2024, "group": "2020s", "franchise": "Despicable Me" },
         { "title": "The Super Mario Galaxy Movie", "year": 2026, "group": "2020s", "franchise": "Super Mario" },
-        { "title": "Minions 3", "year": 2027, "group": "2020s", "franchise": "Despicable Me", "label": "Spin-off" }
+        { "title": "Minions & Monsters", "year": 2026, "group": "2020s", "franchise": "Despicable Me", "label": "Spin-off" }
       ]
     },
     {

@@ -66,7 +66,7 @@ export function fetchCategories() {
 }
 
 /**
- * Podklady pro vyhledávání: kolekce (s postupem) a všechny filmy s tím,
+ * Podklady pro vyhledávání a „Co dneska?“: kolekce (s postupem) a všechny filmy s tím,
  * do kterých kolekcí patří. Seznam filmů se mění zřídka – drží se v mezipaměti.
  */
 export async function fetchSearchData() {
@@ -74,7 +74,7 @@ export async function fetchSearchData() {
         fetchUniverses(),
         cached("search-items", () => fetchAllRows(() => supabase
             .from("universe_items")
-            .select("id, universe_id, franchise, film:films(tmdb_id, title, original_title, release_date, runtime, poster_path)")
+            .select("id, universe_id, release_order, is_optional, franchise, is_upcoming, film:films(tmdb_id, title, original_title, release_date, runtime, poster_path)")
             .order("id"))),
     ]);
     return { universes, items };
@@ -86,6 +86,10 @@ export const KIND_ORDER = ["series", "studio", "genre", "path"];
 /**
  * Jedno univerzum podle adresy (slug) včetně filmů v pořadí vydání, nebo null.
  * Jeden dotaz (filmy vnořené v kolekci) místo dvou po sobě; výsledek je v mezipaměti.
+ *
+ * Vrací { ...kolekce, items, upcoming }: items = vydané filmy (s nimi pracuje celá
+ * stránka – postup, Up next, pohledy), upcoming = chystané filmy pro oddíl
+ * Coming soon (V3.3), seřazené podle data premiéry.
  */
 export function fetchUniverse(slug) {
     return cached(`universe:${slug}`, async () => {
@@ -96,7 +100,7 @@ export function fetchUniverse(slug) {
                 cover:films(title, poster_path, backdrop_path),
                 categories(id, slug, name, color, sort_order),
                 universe_items(
-                    id, release_order, story_order, group_label, franchise, label, is_optional, note,
+                    id, release_order, story_order, group_label, franchise, label, is_optional, is_upcoming, note,
                     film:films(tmdb_id, title, original_title, release_date, runtime, poster_path, backdrop_path)
                 )
             `)
@@ -105,9 +109,28 @@ export function fetchUniverse(slug) {
             .maybeSingle()
             .then(check);
         if (!universe) return null;
-        const { universe_items: items, ...rest } = universe;
-        return { ...rest, items: items ?? [] };
+        const { universe_items: all, ...rest } = universe;
+        const items = (all ?? []).filter((item) => !item.is_upcoming);
+        const upcoming = (all ?? [])
+            .filter((item) => item.is_upcoming)
+            .sort(byPremiere);
+        return { ...rest, items, upcoming };
     });
+}
+
+/** Řazení chystaných filmů: podle data premiéry, film bez data až na konec (pak podle seedu). */
+export function byPremiere(a, b) {
+    const da = a.film?.release_date ?? "9999";
+    const db = b.film?.release_date ?? "9999";
+    return da.localeCompare(db) || (a.release_order ?? 0) - (b.release_order ?? 0);
+}
+
+/**
+ * Je film ještě před premiérou? Podle data z TMDB a dnešního data uživatele.
+ * (Slouží jako pojistka tam, kde příznak is_upcoming z kolekce není po ruce.)
+ */
+export function isUnreleased(film) {
+    return !film?.release_date || film.release_date > todayLocal();
 }
 
 /**
@@ -207,12 +230,14 @@ export async function fetchWatchlist() {
 
     const memberships = await supabase
         .from("universe_items")
-        .select("tmdb_id, universe:universes(slug, name, color, sort_order)")
+        .select("tmdb_id, is_upcoming, universe:universes(slug, name, color, sort_order)")
         .in("tmdb_id", rows.map((r) => r.tmdb_id))
         .then(check);
 
     const universesByFilm = new Map();
+    const upcomingIds = new Set();      // filmy, které ještě nevyšly (Coming soon, V3.3)
     for (const m of memberships) {
+        if (m.is_upcoming) upcomingIds.add(m.tmdb_id);
         if (!m.universe) continue;
         const list = universesByFilm.get(m.tmdb_id) ?? [];
         list.push(m.universe);
@@ -220,6 +245,7 @@ export async function fetchWatchlist() {
     }
     return rows.map((r) => ({
         ...r,
+        upcoming: upcomingIds.has(r.tmdb_id),
         universes: (universesByFilm.get(r.tmdb_id) ?? []).sort((a, b) => a.sort_order - b.sort_order),
     }));
 }
@@ -237,39 +263,7 @@ export function nextUnwatched(items, counts) {
     return items.find((item) => !item.is_optional && !counts.has(item.film.tmdb_id)) ?? null;
 }
 
-/**
- * „Continue watching“: univerzum filmu, který uživatel viděl naposledy,
- * a další neviděný film v něm. Vrací { universe, next }, nebo null.
- */
-export async function fetchContinueWatching(counts) {
-    if (counts.size === 0) return null;
-
-    let latestId = null;
-    let latestDate = "";
-    for (const [tmdbId, info] of counts) {
-        if ((info.lastWatchedOn ?? "") > latestDate) {
-            latestDate = info.lastWatchedOn;
-            latestId = tmdbId;
-        }
-    }
-    if (latestId === null) return null;
-
-    const rows = await supabase
-        .from("universe_items")
-        .select("universe:universes(slug)")
-        .eq("tmdb_id", latestId)
-        .limit(1)
-        .then(check);
-    const slug = rows[0]?.universe?.slug;
-    if (!slug) return null;
-
-    const universe = await fetchUniverse(slug);
-    if (!universe) return null;
-    const next = nextUnwatched(universe.items, counts);
-    return next ? { universe, next } : null;
-}
-
-/** Postup v univerzu podle aktuálních počtů (volitelné filmy se nepočítají). */
+/** Postup v univerzu podle aktuálních počtů (volitelné filmy se nepočítají; chystané už v items nejsou). */
 export function computeProgress(items, counts) {
     const required = items.filter((item) => !item.is_optional);
     const watched = required.filter((item) => (counts.get(item.film.tmdb_id)?.count ?? 0) > 0);

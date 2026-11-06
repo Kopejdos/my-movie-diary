@@ -88,6 +88,7 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 | `franchise` | `text`, null | série uvnitř kolekce pro pohled **By series**, např. „Iron Man“, „Toy Story“; `null` = film bez série (skupina *Standalone* na konci); max. 60 znaků (od V3.0.1) |
 | `label` | `text`, null | krátký popisek u názvu, např. „Episode IV – A New Hope“, „Part 2“; max. 60 znaků (od V3.0.1) |
 | `is_optional` | `boolean` | vedlejší film (crossover, spin-off) – nepočítá se do postupu |
+| `is_upcoming` | `boolean` | film ještě nevyšel (V3.3) – oddíl **Coming soon** dole v kolekci, nepočítá se do počtu filmů ani postupu; nastavuje import (premiéra nejpozději do konce roku letos + 5) |
 | `note` | `text`, null | poznámka ke kroku cesty – proč film vidět (max. 300 znaků, od V1.8) |
 
 Unikátní dvojice (`universe_id`, `tmdb_id`) – jeden film je v univerzu nejvýš jednou,
@@ -145,7 +146,7 @@ Zapisuje do ní jen GitHub Action přes databázovou funkci `ping()`; drží se 
 
 ## Pohledy a funkce
 
-- **`universe_progress`** (pohled) – pro přihlášeného uživatele u každého univerza: počet filmů (bez volitelných), počet viděných, procento.
+- **`universe_progress`** (pohled) – pro přihlášeného uživatele u každého univerza: počet filmů (bez volitelných a chystaných – V3.3), počet viděných, procento.
 - **`my_film_counts`** (pohled) – počet zhlédnutí a datum posledního zhlédnutí pro každý film uživatele.
 - **`ping()`** (funkce) – zapíše řádek do `heartbeat` a smaže staré.
 - **`remove_latest_watch(tmdb_id)`** – −1: smaže nejnovější zhlédnutí a vrátí nový počet.

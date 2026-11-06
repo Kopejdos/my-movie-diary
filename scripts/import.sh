@@ -51,12 +51,13 @@ for slug in "${targets[@]}"; do
         --data-binary @"$SEED" \
         -o "$REPORTS/$name.json"
 
-    # Krátké shrnutí z reportu: kolik filmů, varování, nevydané, nenalezené
+    # Krátké shrnutí z reportu: kolik filmů, z toho Coming soon (V3.3), varování
     summary=$(sed -n 's/.*"imported": *\([0-9]*\).*/\1/p' "$REPORTS/$name.json" | head -1)
     if grep -q '"error"' "$REPORTS/$name.json"; then
         echo "✗ $name – CHYBA: $(cat "$REPORTS/$name.json")"
     else
         warnings=$(grep -c '→' "$REPORTS/$name.json" || true)
-        echo "✓ $name – ${summary:-?} filmů, varování: $warnings  ($REPORTS/$name.json)"
+        soon=$(awk '/"comingSoon": \[$/{f=1; next} f && /\]/{f=0} f{c++} END{print c+0}' "$REPORTS/$name.json")
+        echo "✓ $name – ${summary:-?} filmů (z toho Coming soon: $soon), varování: $warnings  ($REPORTS/$name.json)"
     fi
 done

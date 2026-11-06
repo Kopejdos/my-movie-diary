@@ -75,6 +75,7 @@ export function parseQuery(raw) {
  * Index pro hledání z načtených dat.
  * universes: kolekce (fetchUniverses), items: řádky universe_items s filmem.
  * Film ve více kolekcích je v indexu jednou a nese seznam kolekcí.
+ * Chystaný film (Coming soon, V3.3) má upcoming = true – najde se, ale nejde označit jako viděný.
  */
 export function buildSearchIndex(universes, items) {
     const universeById = new Map(universes.map((u) => [u.id, u]));
@@ -86,7 +87,7 @@ export function buildSearchIndex(universes, items) {
         const universe = universeById.get(item.universe_id);
         if (!film || !universe) continue;
 
-        if (item.franchise) {
+        if (item.franchise && !item.is_upcoming) {
             const key = `${universe.id}|${item.franchise}`;
             const group = groups.get(key) ?? { universe, franchise: item.franchise, name: prepare(item.franchise), count: 0 };
             group.count += 1;
@@ -103,9 +104,12 @@ export function buildSearchIndex(universes, items) {
                     ? prepare(film.original_title)
                     : null,
                 universes: [],
+                upcoming: Boolean(item.is_upcoming),
             };
             films.set(film.tmdb_id, entry);
         }
+        // Vydaný aspoň v jedné kolekci = vydaný (jiná kolekce mohla být importovaná dřív)
+        if (!item.is_upcoming) entry.upcoming = false;
         if (!entry.universes.includes(universe)) entry.universes.push(universe);
     }
     for (const entry of films.values()) {
@@ -179,6 +183,7 @@ export function searchGroups(index, query) {
  * counts = Map tmdb_id → { count } (fetchMyFilmCounts).
  */
 export function filterByWatched(results, filter, counts) {
+    if (filter !== "all") results = results.filter((r) => !r.entry.upcoming);   // chystaný film nejde vidět
     if (filter === "watched") return results.filter((r) => counts.has(r.entry.film.tmdb_id));
     if (filter === "unwatched") return results.filter((r) => !counts.has(r.entry.film.tmdb_id));
     return results;

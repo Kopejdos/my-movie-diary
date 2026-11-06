@@ -6,6 +6,9 @@
 //             Dohledá filmy v TMDB, uloží je do tabulky films a vytvoří
 //             univerza + jejich položky. Jen pro správce (hlavička x-admin-key).
 //             Volitelně ?only=mcu – importuje jen jedno univerzum.
+//             Filmy, které ještě nevyšly, se uloží s is_upcoming = true
+//             (oddíl Coming soon, V3.3) – ale jen s premiérou do konce roku
+//             letos + 5; vzdálenější a zrušené se jen vypíšou v reportu.
 //
 // Tajemství (Supabase → Edge Functions → Secrets):
 //   TMDB_READ_TOKEN – TMDB API Read Access Token
@@ -61,8 +64,8 @@ interface FilmRow {
 
 /** Výsledek dohledání jednoho filmu */
 type Resolved =
-  | { status: "ok"; seed: SeedFilm; film: FilmRow; warning?: string }
-  | { status: "upcoming"; seed: SeedFilm; title: string; releaseDate: string | null }
+  | { status: "ok"; seed: SeedFilm; film: FilmRow; upcoming: boolean; warning?: string }
+  | { status: "skipped"; seed: SeedFilm; title: string; releaseDate: string | null; reason: string }
   | { status: "not_found"; seed: SeedFilm; error: string };
 
 // ---------------------------------------------------------------------
@@ -72,6 +75,7 @@ type Resolved =
 const TMDB_BASE = "https://api.themoviedb.org/3";
 const TMDB_LANGUAGE = "en-US";
 const CONCURRENCY = 6; // kolik dotazů na TMDB běží najednou
+const UPCOMING_YEARS = 5; // Coming soon: premiéra nejpozději do konce roku letos + 5 (V3.3)
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -230,6 +234,18 @@ async function searchMovie(title: string, year?: number): Promise<TmdbSearchResu
   return null;
 }
 
+/**
+ * Proč se chystaný film NEimportuje (null = importuje se do Coming soon).
+ * Rok premiéry z TMDB; když datum ještě není, rozhodne rok ze seedu.
+ */
+function upcomingSkipReason(details: TmdbMovieDetails, seed: SeedFilm): string | null {
+  if (details.status === "Canceled") return "canceled";
+  const year = details.release_date ? Number(details.release_date.slice(0, 4)) : seed.year;
+  if (!year) return "no release date";
+  const lastYear = new Date().getUTCFullYear() + UPCOMING_YEARS;
+  return year > lastYear ? `after ${lastYear}` : null;
+}
+
 /** Dohledá jeden film ze seedu a připraví řádek pro tabulku films. */
 async function resolveFilm(seed: SeedFilm): Promise<Resolved> {
   try {
@@ -254,13 +270,13 @@ async function resolveFilm(seed: SeedFilm): Promise<Resolved> {
       language: TMDB_LANGUAGE,
     });
 
-    if (details.status !== "Released") {
-      return {
-        status: "upcoming",
-        seed,
-        title: details.title,
-        releaseDate: details.release_date || null,
-      };
+    // Ještě nevyšlo → Coming soon, pokud je premiéra v dohledu (jinak jen do reportu)
+    const upcoming = details.status !== "Released";
+    if (upcoming) {
+      const skip = upcomingSkipReason(details, seed);
+      if (skip) {
+        return { status: "skipped", seed, title: details.title, releaseDate: details.release_date || null, reason: skip };
+      }
     }
 
     const film: FilmRow = {
@@ -274,7 +290,7 @@ async function resolveFilm(seed: SeedFilm): Promise<Resolved> {
       overview: details.overview || null,
       updated_at: new Date().toISOString(),
     };
-    return { status: "ok", seed, film, warning };
+    return { status: "ok", seed, film, upcoming, warning };
   } catch (error) {
     return { status: "not_found", seed, error: String(error) };
   }
@@ -296,8 +312,10 @@ async function importUniverse(db: SupabaseClient, universe: SeedUniverse, sortOr
     if (error) throw new Error(`films upsert (${universe.slug}): ${error.message}`);
   }
 
-  // 2. Univerzum (obal = film označený "cover": true, jinak první povinný film)
-  const cover = ok.find((r) => r.seed.cover) ?? ok.find((r) => !r.seed.optional) ?? ok[0];
+  // 2. Univerzum (obal = film označený "cover": true, jinak první povinný film;
+  //    chystaný film obalem není – často nemá ani plakát)
+  const released = ok.filter((r) => !r.upcoming);
+  const cover = released.find((r) => r.seed.cover) ?? released.find((r) => !r.seed.optional) ?? released[0];
   const { data: universeRow, error: universeError } = await db
     .from("universes")
     .upsert(
@@ -347,6 +365,7 @@ async function importUniverse(db: SupabaseClient, universe: SeedUniverse, sortOr
     note: r.seed.note ?? null,
     franchise: r.seed.franchise ?? null,
     label: r.seed.label ?? null,
+    is_upcoming: r.upcoming,
   }));
   const uniqueItems = [...new Map(items.map((i) => [i.tmdb_id, i])).values()];
 
@@ -368,12 +387,15 @@ async function importUniverse(db: SupabaseClient, universe: SeedUniverse, sortOr
   return {
     slug: universe.slug,
     imported: uniqueItems.length,
+    comingSoon: ok
+      .filter((r) => r.upcoming)
+      .map((r) => `${r.film.title} (${r.film.release_date ?? `${r.seed.year ?? "?"}, date TBA`})`),
     warnings: ok
       .filter((r) => r.warning)
       .map((r) => `${r.seed.title} (${r.seed.year}) → ${r.warning} [tmdb ${r.film.tmdb_id}]`),
-    upcoming: resolved
-      .filter((r): r is Extract<Resolved, { status: "upcoming" }> => r.status === "upcoming")
-      .map((r) => `${r.title} (${r.releaseDate ?? "date TBA"})`),
+    skipped: resolved
+      .filter((r): r is Extract<Resolved, { status: "skipped" }> => r.status === "skipped")
+      .map((r) => `${r.title} (${r.releaseDate ?? "date TBA"}): ${r.reason}`),
     notFound: resolved
       .filter((r): r is Extract<Resolved, { status: "not_found" }> => r.status === "not_found")
       .map((r) => `${r.seed.title} (${r.seed.year}): ${r.error}`),

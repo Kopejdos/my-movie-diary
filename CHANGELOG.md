@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.3 – November 2026
+- **What to watch today?** – three picks at the top of the overview: one from your watchlist, what's next in a collection you've started, and something new based on the genres you watch most. Shuffle for different picks
+- **Coming soon** – announced movies (Avatar 4 & 5, Incredibles 3, Shrek 5, Avengers: Secret Wars…) at the bottom of their collections with release dates; they don't count towards progress until they're out
+- Add upcoming movies to your watchlist
+- Fixed: the overview could scroll sideways on phones
+
 ## V3.2 – November 2026
 - Rate movies from ½ to 5 stars – on every movie you've seen
 - See the average rating of My Movie Diary users next to each movie

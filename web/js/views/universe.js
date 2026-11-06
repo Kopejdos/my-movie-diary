@@ -10,6 +10,9 @@
 //
 // Hodnocení (V3.2): u každého filmu průměr uživatelů MMD (★ 4.2 · 12) a u viděného filmu
 // tlačítko pro vlastní hodnocení 0,5–5 ★ (editor se otevře pod názvem).
+//
+// Coming soon (V3.3): oznámené filmy (universe.upcoming) jsou v oddílu úplně dole –
+// nepočítají se do počtu filmů, postupu ani Up next; jde je jen přidat do watchlistu.
 
 import {
     fetchUniverse, fetchMyFilmCounts, addWatch, removeLatestWatch,
@@ -19,6 +22,7 @@ import {
 import { isSignedIn } from "../auth.js";
 import { fetchMyRatings, saveRating, clearRating, fetchRatingStats, starsText } from "../ratings.js";
 import { ratingEditor, focusRatingEditor } from "./rating.js";
+import { comingSoonSection } from "./coming-soon.js";
 import { setAccent } from "../theme.js";
 import { loadPref, savePref } from "../prefs.js";
 import { TEXTS, format, movies, steps } from "../texts.js";
@@ -142,6 +146,7 @@ class UniversePage {
             this.toolbar,
             hasOptional ? h("p", { class: "hint", style: "margin: 0 0 8px" }, TEXTS.optionalHint) : null,
             this.list,
+            comingSoonSection(universe.upcoming, this.signedIn ? (item) => this.renderSoonStar(item) : null),
         );
         this.renderToolbar();
         this.renderList();
@@ -442,6 +447,36 @@ class UniversePage {
                 }
             },
         }, inList ? "★" : "☆");
+    }
+
+    /** Hvězdička watchlistu na kartičce v Coming soon (překreslí jen sebe). */
+    renderSoonStar(item) {
+        const tmdbId = item.film.tmdb_id;
+        const button = h("button", { class: "star-btn soon-card__star", type: "button" });
+        const paint = () => {
+            const inList = this.watchlist.has(tmdbId);
+            const label = inList ? TEXTS.watchlistRemove : TEXTS.watchlistAdd;
+            button.className = `star-btn soon-card__star${inList ? " star-btn--active" : ""}`;
+            button.textContent = inList ? "★" : "☆";
+            button.title = label;
+            button.setAttribute("aria-label", `${label}: ${item.film.title}`);
+            button.setAttribute("aria-pressed", String(inList));
+        };
+        button.addEventListener("click", async () => {
+            const inList = this.watchlist.has(tmdbId);
+            if (inList) this.watchlist.delete(tmdbId); else this.watchlist.add(tmdbId);
+            paint();
+            try {
+                if (inList) await removeFromWatchlist(tmdbId); else await addToWatchlist(tmdbId);
+                toast(inList ? TEXTS.watchlistRemoved : TEXTS.watchlistAdded);
+            } catch (error) {
+                if (inList) this.watchlist.add(tmdbId); else this.watchlist.delete(tmdbId);
+                paint();
+                toast(format("errorGeneric", error.message), "error");
+            }
+        });
+        paint();
+        return button;
     }
 
     renderCounter(row, item, count, busy) {

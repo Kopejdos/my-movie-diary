@@ -32,6 +32,11 @@ export async function adminUniverseView(container, context) {
             h("a", { class: "btn", href: "#/admin" }, TEXTS.adminBackToPanel)));
         return;
     }
+    // Admin vidí i chystané filmy (Coming soon, V3.3) – v pořadí ze seedu jako ostatní
+    universe = {
+        ...universe,
+        items: [...universe.items, ...(universe.upcoming ?? [])].sort((a, b) => a.release_order - b.release_order),
+    };
 
     document.title = `${universe.name} · ${TEXTS.adminTitle}`;
     setAccent(universe.color);
@@ -189,6 +194,7 @@ function itemRow(universe, item, previous, next, reload) {
             h("div", { class: "pills" },
                 pill(yearOf(film.release_date)),
                 isCover ? pill(TEXTS.adminIsCover, true) : null,
+                item.is_upcoming ? pill(TEXTS.comingSoonBadge) : null,
             ),
             h("div", { class: "admin-row__fields" },
                 h("label", { class: "mini-field" }, h("span", {}, TEXTS.adminGroup), group),

@@ -139,8 +139,12 @@ my-movie-diary/
         ├── stats.js          statistiky profilu ze zhlédnutí (bez vykreslování)
         ├── social.js         veřejné profily, hledání lidí, sdílení odkazu (bez vykreslování)
         ├── cache.js          mezipaměť katalogu v paměti (V2.1)
+        ├── captcha.js        CAPTCHA Cloudflare Turnstile (V2.6)
+        ├── ratings.js        hodnocení filmů – data (V3.2)
+        ├── today.js          „Co dneska?“ – výběr tří tipů (V3.3, bez vykreslování)
         └── views/            obrazovky: universes, universe, search, stats, public-profile, login, register, profile,
-                              watchlist, achievements, admin (univerza, uživatelé), admin-universe, not-found
+                              watchlist, achievements, admin (univerza, uživatelé), admin-universe, not-found;
+                              části: rating (hvězdičky), today (panel Co dneska?), coming-soon (oddíl Coming soon)
 ```
 
 Pravidla:
@@ -282,7 +286,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 31 | V3.1.4 | Žánrové výběry mimo horory ✅ | 8 tematických výběrů po 12–15 filmech (sci-fi, akce, vánoční…), ne obecné „Action“ |
 | 32 | V3.1.5 | Nové série ✅ | James Bond, Mission: Impossible, John Wick, Indiana Jones… – podle standardu V3.0 |
 | 33 | V3.2 | Hodnocení ✅ | **0,5–5 ★** (po půlhvězdách) u každého filmu, vlastní hodnocení + průměr uživatelů MMD, nejlépe hodnocené ve statistikách |
-| 34 | V3.3 | Co dneska? + Coming soon | náhodný výběr z watchlistu / rozkoukaných kolekcí; filmy z kolekcí, které teprve vyjdou |
+| 34 | V3.3 | Co dneska? + Coming soon ✅ | panel **What to watch today?** se třemi tipy (watchlist / další v rozkoukané kolekci / něco nového podle oblíbených žánrů) + Shuffle; **Coming soon** – oznámené filmy dole v kolekci (do 5 let dopředu), nepočítají se do postupu |
 | 35 | V3.4 | Porovnání s kamarádem | společně viděné filmy, co viděl jen jeden z vás, shoda v % (přes veřejné profily) |
 | 36 | V3.5 | Hledání všech filmů | search sahá do TMDB (jako admin panel) – zapsat jde **jakýkoli film**, nejen ten z kolekce |
 | 37 | V3.6 | Wrapped | rok v kostce – podoba se domyslí, až na něj přijde řada |
@@ -1124,6 +1128,7 @@ filmy volitelně:
 - **Série ze studií zůstávají i samostatně** (Indiana Jones je v Lucasfilmu, Matrix ve Warner Bros.) – kdo sleduje
   jen jednu sérii, nechce procházet celé studio.
 - **Jumanji 3 (prosinec 2026) zatím ne** – název ani datum nejsou potvrzené; doplní se při další kontrole.
+  *(Doplněno ve V3.3 jako Jumanji: Open World.)*
 - **Kapitola rozšiřování V3.1 je tímto hotová** – pokračuje V3.2 (hodnocení).
 
 **Oprava k V3.1.5 – nová verze hned po nasazení:** service worker (`web/sw.js`, mezipaměť `mmd-v4`) bere JS, CSS
@@ -1151,6 +1156,52 @@ s tlačítkem Reload se už nepoužívá. Jednorázově: po nasazení téhle opr
 - **Průměr veřejný, jednotlivá hodnocení soukromá** – na veřejném profilu zatím nejsou; přijdou s porovnáním
   s kamarádem (V3.4).
 - **Průměr se ukazuje už od 1 hlasu** (s počtem hlasů vedle) – u malé komunity by vyšší práh skryl skoro vše.
+
+### Fáze 34 – Co dneska? + Coming soon ✅ (6. 11. 2026) – **V3.3**
+- **What to watch today?** nahoře na přehledu přihlášeného uživatele (nahradil kartu *Continue watching*) – tři karty:
+  1. **From your watchlist** – náhodný vydaný a neviděný film z watchlistu,
+  2. **Up next** – další neviděný film v rozkoukané kolekci; napoprvé v té, kde uživatel viděl film naposledy
+     (= dřívější Continue watching), po Shuffle v jiné rozkoukané kolekci,
+  3. **Explore something new** – kolekce, kterou ještě nezačal, vybraná podle **oblíbených žánrů**: každá kategorie
+     má váhu podle počtu viděných filmů v jejích kolekcích; série a cesta začíná prvním filmem, studio a žánrový výběr
+     nabídne náhodný film. Popisek „Because you watch Horror“ (nebo „Something different“, když žádný žánr nesedí).
+- **Shuffle** nabídne jiné tři filmy (už ukázané přeskočí, dokud jsou jiné). Výběr je **náhodný na den** – generátor
+  se semínkem z data a ID uživatele, takže po obnovení stránky zůstanou stejné tipy.
+- Karta Up next / watchlist má **+ Mark as watched**, Explore **☆ Watchlist** a **Open →**. Úplný nováček (nic neviděl,
+  prázdný watchlist) dostane dál uvítací kartu.
+- Logika v `web/js/today.js` (čistá, bez vykreslování), vykreslení `web/js/views/today.js`. Data se berou ze stejného
+  seznamu filmů jako hledání (`fetchSearchData`, v mezipaměti) – žádná nová tabulka ani funkce v databázi.
+- **Coming soon:** nový sloupec `universe_items.is_upcoming` (migrace `20261106160000_coming_soon.sql`), pohled
+  `universe_progress` chystané filmy nepočítá. **Import** (`tmdb`) dřív nevydané filmy přeskočil; teď je uloží
+  s `is_upcoming = true`, pokud je premiéra **nejpozději do konce roku letos + 5** (2031 → Avatar 5 se vejde).
+  Vzdálenější nebo zrušené filmy jen vypíše v reportu (`skipped`), uložené chystané v `comingSoon`.
+- **Detail kolekce:** oddíl **Coming soon** úplně dole – kartičky s plakátem (nebo velkým rokem premiéry, když plakát
+  ještě není), datem, odpočtem do 60 dnů („in 35 days“) a sérií; přihlášený si film může dát do watchlistu.
+  Číslo kolekce na přehledu ani postup se nemění.
+- **Hledání** chystané filmy najde (pilulka „Coming 21 Dec 2029“, bez počítadla); **watchlist** u nich nemá
+  *Mark as watched*; **statistiky a achievementy** je nepočítají; **admin** je vidí s pilulkou *Coming soon*.
+- **Seed:** Avatar 4 (2029) a 5 (2031), Gatto (2027), Incredibles 3 (2028), Coco 2 (2029), Lilo & Stitch 2 (hraný, 2028),
+  How to Train Your Dragon 2 (hraný, 2027), Jumanji: Open World (prosinec 2026), Fast X: Part 2 (2027).
+  Opravy: *Minions 3* → **Minions & Monsters** (vyšlo 1. 7. 2026 – proto Illumination ukazovala 16 filmů místo 15),
+  *The Batman Part II* → **2027** (přesunuto na říjen 2027).
+- **Opravy mimo plán:** na telefonu šel přehled posouvat do strany (nevykreslené sekce kolekcí měly odhad šířky
+  900 px – `contain-intrinsic-size` teď jen na výšku); text „Nothing left to watch here“ ve filtru neviděných
+  přebíjel stejně pojmenovaný text přehledu (`filterEmpty` byl v `texts.js` dvakrát).
+- Service worker `mmd-v5` (nové soubory v offline mezipaměti).
+
+#### Rozhodnutí ve fázi 34
+- **Co dneska? nahrazuje Continue watching**, místo aby byl další blok nad ním – „co vás čeká dál“ je přesně to, co
+  Continue watching dělalo, dvakrát by se to opakovalo.
+- **Tipy se počítají v prohlížeči**, ne v databázi – seznam filmů už web má kvůli hledání a výpočet je okamžitý;
+  Shuffle tak nepotřebuje žádný dotaz na server.
+- **Náhoda na den, ne při každém načtení** – tip se neztratí, když se uživatel vrátí na přehled.
+- **Explore bere jen nezačaté kolekce** a žánry váží druhou mocninou – oblíbený žánr výrazně převáží, ale malá
+  základní váha nechá občas prostor i pro něco úplně jiného.
+- **Chystaný film = položka kolekce s příznakem**, ne zvláštní tabulka – po premiéře ho další import jen přepne na
+  běžný film (zhlédnutí, watchlist i hodnocení zůstanou na stejném `tmdb_id`).
+- **Horizont 5 let** podle zadání; datum z TMDB, a když ještě není, rozhodne rok ze seedu.
+- **Po premiéře je potřeba import** – web chystaný film ukazuje v Coming soon, dokud ho import nepřepne (odpočet ukáže
+  „out today“). Stačí pustit import dotčených kolekcí, report ukáže, které filmy jsou ještě chystané.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

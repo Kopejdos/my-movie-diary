@@ -17,6 +17,7 @@ import { TEXTS, format, movies, collections } from "../texts.js";
 import { h, mount, poster, pill, yearOf, formatDate, toast, loadingView, errorView } from "../dom.js";
 import { universeCard } from "./universes.js";
 import { searchUsers } from "../social.js";
+import { soonPill } from "./coming-soon.js";
 
 const FILTERS = ["all", "unwatched", "watched"];
 
@@ -240,7 +241,7 @@ class SearchPage {
 
         return h("div", { class: "search-intro" },
             h("p", { class: "muted", style: "margin: 0 0 12px" },
-                format("searchIntro", movies(this.index.films.length), collections(this.index.collections.length))),
+                format("searchIntro", movies(this.index.films.filter((e) => !e.upcoming).length), collections(this.index.collections.length))),
             h("div", { class: "chips chips--wrap" }, TEXTS.searchExamples.map(example)),
             h("p", { class: "hint", style: "margin: 14px 0 0" }, TEXTS.searchShortcutHint),
         );
@@ -292,18 +293,19 @@ class SearchPage {
         const { film } = entry;
         const info = this.counts.get(film.tmdb_id);
         const count = info?.count ?? 0;
-        row.className = `film film--search${count > 0 ? " film--watched" : ""}`;
+        const upcoming = entry.upcoming;      // Coming soon (V3.3) – jen watchlist, bez počítadla
+        row.className = `film film--search${count > 0 ? " film--watched" : ""}${upcoming ? " film--upcoming" : ""}`;
 
         mount(row,
             poster(film.poster_path, film.title, "film__poster", false, "small"),
             h("div", { class: "film__info" },
                 h("h3", { class: "film__title" }, film.title),
                 h("div", { class: "film__meta" },
-                    pill(yearOf(film.release_date)),
+                    upcoming ? soonPill(film) : pill(yearOf(film.release_date)),
                     film.runtime ? pill(format("minutes", film.runtime)) : null,
                     entry.universes.map(collectionLink),
                 ),
-                this.signedIn
+                this.signedIn && !upcoming
                     ? h("p", { class: "film__status" },
                         count > 0
                             ? `${format("watchedTimes", count)} · ${format("lastWatched", formatDate(info.lastWatchedOn))}`
@@ -313,7 +315,7 @@ class SearchPage {
             this.signedIn
                 ? h("div", { class: "film__actions" },
                     this.renderStar(row, entry),
-                    this.renderCounter(row, entry, count, busy))
+                    upcoming ? null : this.renderCounter(row, entry, count, busy))
                 : null,
         );
     }

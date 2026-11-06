@@ -6,14 +6,16 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V3.2** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V3.3** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
 - 94 collections, 6 curated paths and 1,100+ movies from TMDB – MCU, Star Wars, James Bond, Mission: Impossible, Marvel, DC, Warner Bros., Lucasfilm, Disney, Pixar, DreamWorks, Illumination, Studio Ghibli, horror series, hand-picked horror genres and themed picks (Time Travel, Heist, Christmas…), each with its own color and banner
 - Two-level filter: collection type (series, studios, genre picks, paths), then genre (Superhero, Sci-fi, Fantasy, Animation, Horror…); view a collection by release, in story order or by series
 - +1 / −1 viewing counter – every viewing is logged with a date
-- Progress per collection, **Up next** and **Continue watching** suggestions
+- Progress per collection and **Up next** in every collection
+- **What to watch today?** – three daily picks (watchlist, what's next, something new based on your favourite genres) with Shuffle
+- **Coming soon** – announced movies up to five years ahead at the bottom of each collection, with release dates
 - Ratings from ½ to 5 stars, with the average of all My Movie Diary users
 - Release order or story (chronological) order, "unwatched only" filter
 - Instant search across all movies, collections and series inside them (by title, original title or year), plus people search
@@ -29,7 +31,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Installable on a phone or computer (PWA), opens even offline
 
 **Coming next** – collections & new features
-- V3.3 – "What tonight?" and Coming soon, then comparing with friends
+- V3.4 – compare with a friend, then search across all TMDB movies and a yearly Wrapped
 
 ## Tech stack
 

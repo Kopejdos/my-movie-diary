@@ -75,7 +75,10 @@ s GitHubem (automatické migrace) se nezapíná.
    ./scripts/import.sh --all                # všechny – přepíše úpravy z admin panelu, chce potvrzení
    ```
    Reporty se uloží do `import-reports/<slug>.json`.
-5. V reportu zkontrolovat `warnings` (jiný název / rok) a `notFound`. Chybnou shodu opravit
+5. V reportu zkontrolovat `warnings` (jiný název / rok) a `notFound`. Chystané filmy (V3.3) jsou v `comingSoon`
+   (uložené do oddílu Coming soon), vzdálenější než konec roku letos + 5 nebo zrušené v `skipped`.
+   **Po premiéře chystaného filmu** stačí pustit import jeho kolekcí znovu – přepne ho na běžný film.
+   Chybnou shodu opravit
    doplněním `"tmdb": <id>` k filmu v seedu a import pustit znovu, nebo ji opravit v admin panelu.
 
 **Nová verze funkce `tmdb` musí být nasazená před importem**, jinak import poběží se starou verzí.

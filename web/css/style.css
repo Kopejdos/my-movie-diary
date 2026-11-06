@@ -543,7 +543,7 @@ button {
     color: var(--heading);
 }
 
-/* ---------- Hero karta na přehledu (Continue watching / vítání) ---------- */
+/* ---------- Uvítací karta na přehledu (host / nováček; Continue watching nahradilo ve V3.3 „Co dneska?“) ---------- */
 .hero-card {
     position: relative;
     overflow: hidden;
@@ -575,43 +575,20 @@ button {
     pointer-events: none;
 }
 
-/* Místo pro hero kartu, dokud se nenačte „Continue watching“ (stejná výška, nic neposkakuje) */
-.hero-card--loading {
-    animation: hero-pulse 1.4s ease-in-out infinite;
-}
+/* Hero karta se dřív vykreslovala až po načtení „Continue watching“ a měla pevnou minimální
+   výšku (CLS). Od V3.3 je uvítací karta jen pro hosta a nováčka (vykreslí se hned) a zástupný
+   panel „Co dneska?“ drží výšku sám (.today-card--skeleton). */
 
-/* Zástupná i hotová hero karta mají stejnou minimální výšku (nejčastější výška karty
-   „Continue watching“ podle šířky) – po načtení se obsah pod ní neposune (CLS, V2.1.1) */
-.hero-slot {
-    --hero-min: 300px;
-}
-
-.hero-slot > .hero-card {
-    min-height: var(--hero-min);
-}
-
-@media (max-width: 900px) {
-    .hero-slot {
-        --hero-min: 250px;
-    }
-}
-
-@media (max-width: 560px) {
-    .hero-slot {
-        --hero-min: 315px;
-    }
-}
-
-@media (max-width: 400px) {
-    .hero-slot {
-        --hero-min: 380px;
-    }
-}
-
-/* Sekce kolekcí mimo obrazovku se vykreslí, až k nim uživatel doroluje (méně práce při startu) */
+/* Sekce kolekcí mimo obrazovku se vykreslí, až k nim uživatel doroluje (méně práce při startu).
+   Odhad velikosti jen na výšku – dřív „auto 900px“ platilo i pro šířku a nevykreslená sekce
+   byla na telefonu 900 px široká (stránka šla posouvat do strany; opraveno ve V3.3). */
 .collection-section + .collection-section {
     content-visibility: auto;
-    contain-intrinsic-size: auto 900px;
+    contain-intrinsic-block-size: auto 900px;
+}
+
+.collection-section {
+    min-width: 0;
 }
 
 @keyframes hero-pulse {
@@ -646,21 +623,191 @@ button {
     margin-top: 4px;
 }
 
-.hero-card__poster {
+/* ---------- Co dneska? (V3.3) – tři tipy nahoře na přehledu ---------- */
+.today {
     position: relative;
-    z-index: 1;
-    width: clamp(90px, 16vw, 150px);
-    aspect-ratio: 2 / 3;
-    object-fit: cover;
-    border-radius: 12px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
-    transform: rotate(3deg);
+    overflow: hidden;
+    padding: clamp(16px, 3vw, 28px);
+    margin-bottom: 8px;
+    border-radius: 24px;
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+    background:
+        radial-gradient(55% 120% at 92% 0%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 65%),
+        linear-gradient(160deg, var(--panel), var(--bg-deep));
+    box-shadow: var(--shadow);
 }
 
-@media (max-width: 560px) {
-    .hero-card {
-        grid-template-columns: 1fr 84px;
-        gap: 14px;
+.today__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.today__title {
+    margin-top: 4px;
+    font-size: clamp(1.45rem, 3.6vw, 2.2rem);
+}
+
+.today__shuffle {
+    flex-shrink: 0;
+}
+
+.today__shuffle-icon {
+    display: inline-block;
+    font-size: 1.05rem;
+    line-height: 1;
+    transition: transform 0.35s;
+}
+
+.today__shuffle:hover .today__shuffle-icon {
+    transform: rotate(180deg);
+}
+
+.today__grid {
+    display: grid;
+    gap: 12px;
+}
+
+@media (min-width: 960px) {
+    .today__grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.today-card {
+    --c: var(--accent);
+    --c-ink: var(--accent-ink);
+    display: grid;
+    grid-template-columns: clamp(72px, 7vw, 92px) minmax(0, 1fr);
+    gap: 14px;
+    min-height: 220px;          /* stejná výška jako zástupná karta – po načtení nic neposkočí */
+    padding: 14px;
+    border-radius: var(--radius);
+    border: 1px solid color-mix(in srgb, var(--c) 35%, var(--border));
+    background:
+        radial-gradient(120% 120% at 0% 0%, color-mix(in srgb, var(--c) 16%, transparent), transparent 60%),
+        var(--panel);
+    transition: border-color 0.18s, transform 0.18s;
+}
+
+.today-card:hover {
+    border-color: color-mix(in srgb, var(--c) 70%, var(--border));
+}
+
+.today-card__poster-link {
+    align-self: start;
+}
+
+.today-card__poster {
+    display: block;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-small);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+}
+
+.today-card__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    min-width: 0;
+}
+
+/* druh tipu (From your watchlist / Up next / Explore) */
+.today-card__label {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--c) 70%, var(--heading));
+}
+
+.today-card__title {
+    margin: 0;
+    font-size: 1.12rem;
+    line-height: 1.25;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.today-card__title a {
+    color: var(--heading);
+}
+
+.today-card__title a:hover {
+    color: color-mix(in srgb, var(--c) 60%, var(--heading));
+}
+
+.today-card__reason {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.today-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: auto;
+    padding-top: 4px;
+}
+
+/* „+ Mark as watched“ v barvě kolekce tipu */
+.btn--today {
+    background: var(--c);
+    border-color: var(--c);
+    color: var(--c-ink);
+}
+
+.btn--today:hover {
+    background: color-mix(in srgb, var(--c) 88%, #fff);
+    border-color: color-mix(in srgb, var(--c) 88%, #fff);
+    color: var(--c-ink);
+}
+
+.today-card--empty {
+    grid-template-columns: minmax(0, 1fr);
+    border-style: dashed;
+    background: color-mix(in srgb, var(--panel) 60%, transparent);
+}
+
+.today-card__empty {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+/* zástupné karty, než se tipy spočítají */
+.today-card--skeleton {
+    border-color: var(--border);
+    background: var(--panel);
+    animation: hero-pulse 1.4s ease-in-out infinite;
+}
+
+@media (max-width: 959px) {
+    .today-card {
+        min-height: 0;
+    }
+
+    .today-card--skeleton {
+        min-height: 196px;      /* průměrná výška karty na telefonu */
+    }
+}
+
+@media (max-width: 420px) {
+    .today__head {
+        align-items: center;
+    }
+
+    .today__shuffle {
+        padding: 6px 10px;
     }
 }
 
@@ -1195,6 +1342,168 @@ button {
     flex-wrap: wrap;
     align-items: center;
     gap: 5px;
+}
+
+/* ---------- Coming soon (V3.3) – oznámené filmy dole v kolekci ---------- */
+.coming-soon {
+    margin-top: 32px;
+    padding-top: 22px;
+    border-top: 1px dashed var(--border);
+}
+
+.coming-soon__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.coming-soon__head h2 {
+    margin: 0;
+    font-size: 1.35rem;
+}
+
+.coming-soon__count {
+    min-width: 26px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--u-ink);
+    background: var(--u);
+}
+
+.coming-soon__hint {
+    margin: 6px 0 16px;
+}
+
+.coming-soon__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 14px;
+}
+
+@media (min-width: 720px) {
+    .coming-soon__grid {
+        grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+        gap: 18px;
+    }
+}
+
+.soon-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--panel);
+}
+
+.soon-card__media {
+    position: relative;
+}
+
+.soon-card__poster {
+    display: block;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+}
+
+/* plakát ještě není – velký rok premiéry na pruhovaném pozadí v barvě kolekce */
+.soon-card__poster--none {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        repeating-linear-gradient(135deg, color-mix(in srgb, var(--u) 10%, transparent) 0 12px, transparent 12px 24px),
+        radial-gradient(90% 70% at 50% 40%, color-mix(in srgb, var(--u) 22%, transparent), transparent 70%),
+        var(--panel-hover);
+}
+
+.soon-card__year {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2rem, 6vw, 2.6rem);
+    letter-spacing: 0.04em;
+    color: color-mix(in srgb, var(--u) 55%, var(--heading));
+    opacity: 0.85;
+}
+
+/* páska „Coming soon“ přes spodek plakátu */
+.soon-card__media::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 40%;
+    background: linear-gradient(to top, color-mix(in srgb, var(--panel) 85%, transparent), transparent);
+    pointer-events: none;
+}
+
+.soon-card__star {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 1;
+    width: 34px;
+    height: 34px;
+    font-size: 1.05rem;
+    color: var(--heading);
+    border-color: color-mix(in srgb, var(--heading) 25%, transparent);
+    background: color-mix(in srgb, var(--bg-deep) 72%, transparent);
+    backdrop-filter: blur(6px);
+}
+
+.soon-card__star.star-btn--active {
+    color: var(--accent);
+    background: color-mix(in srgb, var(--bg-deep) 80%, transparent);
+}
+
+.soon-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 12px 12px;
+}
+
+.soon-card__title {
+    margin: 0;
+    font-size: 0.98rem;
+    line-height: 1.25;
+}
+
+.soon-card__date {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px;
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: color-mix(in srgb, var(--u) 75%, var(--heading));
+}
+
+.soon-card__countdown {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.soon-card__series {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--muted);
+}
+
+/* pilulka s datem premiéry (hledání, watchlist) */
+.pill--soon {
+    border-style: dashed;
+    border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+    color: var(--heading);
+    background: color-mix(in srgb, var(--accent) 12%, var(--panel));
 }
 
 /* ---------- Hodnocení (V3.2) ---------- */
