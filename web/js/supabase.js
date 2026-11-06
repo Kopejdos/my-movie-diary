@@ -2,7 +2,9 @@
 
 // Knihovna je uložená v projektu jako jeden soubor (vendor/) – dřív se z CDN
 // skládala z desítek malých souborů za sebou, což zdržovalo start aplikace.
-import { createClient } from "../vendor/supabase-js-2.119.0.min.js";
+// Od V2.7 jde o odlehčené sestavení (scripts/vendor/build.mjs): jen přihlášení
+// a dotazy do databáze, bez Realtime / Storage / Functions – o 40 % menší.
+import { createClient } from "../vendor/supabase-lite-2.119.0.min.js";
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./config.js";
 
 // Adresa, se kterou se web otevřel – návrat z Googlu nebo z odkazu v e-mailu nese ?code=…

@@ -176,14 +176,20 @@ Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny
 
 ## 9. Aktualizace knihovny Supabase (web/vendor)
 
-Web používá `supabase-js` jako jeden předpřipravený soubor. Nová verze (jednou za čas, není nutné):
+Web používá odlehčené `supabase-js` jako jeden předpřipravený soubor – jen přihlášení a dotazy do
+databáze, bez Realtime / Storage / Functions (V2.7). Nová verze (jednou za čas, není nutné):
 ```bash
 mkdir /tmp/sb && cd /tmp/sb && npm init -y && npm install @supabase/supabase-js esbuild
-echo 'export { createClient } from "@supabase/supabase-js";' > entry.js
-npx esbuild entry.js --bundle --format=esm --minify --target=es2020 --outfile=supabase-js-<verze>.min.js
+node <cesta k repozitáři>/scripts/vendor/build.mjs
 ```
-Soubor dát do `web/vendor/`, starý smazat a název upravit v `web/js/supabase.js`, `web/index.html`
-(modulepreload) a `web/sw.js` (seznam SHELL).
+Skript vytvoří `web/vendor/supabase-lite-<verze>.min.js`. Starý soubor smazat a název upravit
+v `web/js/supabase.js`, `web/index.html` (modulepreload) a `web/sw.js` (seznam SHELL + zvýšit `VERSION`).
+
+## 9b. Minifikace při nasazení (V2.7)
+
+Workflow `Deploy to GitHub Pages` před nahráním zmenší JS a CSS (esbuild). Nic se nenastavuje; když by krok
+selhal (např. chyba syntaxe v JS), nasazení se zastaví a stará verze webu zůstane online – chyba je vidět
+v záložce Actions. Lokálně se web dál spouští přímo ze zdrojáků.
 
 ## 10. Keep-alive
 

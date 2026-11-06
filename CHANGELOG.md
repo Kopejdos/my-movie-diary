@@ -3,6 +3,10 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V2.7 – November 2026
+- Faster start: a lighter sign-in library, smaller JavaScript and CSS, and text that shows right away
+- First content appears about 30 % sooner on a slow phone connection
+
 ## V2.6 – November 2026
 - Bot protection (Cloudflare Turnstile) on sign-up, sign-in and password forms – usually invisible
 - Forgot password fills in the email you typed on the sign-in page

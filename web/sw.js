@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v2";
+const VERSION = "mmd-v3";        // V2.7: nová knihovna Supabase → stará mezipaměť pryč
 let updateNotified = false;           // o nové verzi se dá vědět jen jednou
 const CACHE = `${VERSION}-app`;
 
@@ -22,7 +22,7 @@ const SHELL = [
     "terms.html",
     "manifest.webmanifest",
     "css/style.css",
-    "vendor/supabase-js-2.119.0.min.js",
+    "vendor/supabase-lite-2.119.0.min.js",
     "fonts/inter-latin-wght-normal.woff2",
     "fonts/chakra-petch-latin-600-normal.woff2",
     "fonts/chakra-petch-latin-700-normal.woff2",

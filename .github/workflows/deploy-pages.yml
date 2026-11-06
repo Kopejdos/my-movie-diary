@@ -2,6 +2,8 @@
 # Spustí se po každém pushi do větve main, který změní složku web/
 # (nebo ručně v záložce Actions → Deploy to GitHub Pages → Run workflow).
 # Nasazuje se jen obsah složky web/, dokumentace v docs/ na web nejde.
+# Od V2.7 se JS a CSS před nasazením zmenší (minifikace) – v repozitáři zůstává
+# čitelný kód s komentáři, zmenšená kopie vzniká jen uvnitř tohoto běhu.
 
 name: Deploy to GitHub Pages
 
@@ -33,6 +35,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+
+      # Zmenšení JavaScriptu a CSS (bez komentářů, mezer a s kratšími názvy proměnných).
+      # Každý soubor zvlášť (bez spojování) – názvy a cesty souborů zůstanou stejné,
+      # takže service worker, dynamické importy i modulepreload fungují beze změny.
+      - name: Minify JavaScript and CSS
+        run: |
+          npx --yes esbuild@0.24.0 $(find web/js -name "*.js") web/sw.js \
+            --minify --outdir=web --outbase=web --allow-overwrite --log-level=warning
+          npx --yes esbuild@0.24.0 web/css/style.css \
+            --minify --outfile=web/css/style.css --allow-overwrite --log-level=warning
 
       - name: Configure Pages
         uses: actions/configure-pages@v6

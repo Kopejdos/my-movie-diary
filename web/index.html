@@ -16,8 +16,9 @@
 
     <link rel="icon" type="image/png" href="icons/favicon.png">
 
-    <!-- Písma z projektu: latinka se přednačte hned, ať text neproblikne -->
-    <link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- Písma z projektu: přednačte se jen malé písmo nadpisů. Inter (48 kB) se načte běžně –
+         text se do té doby ukáže systémovým písmem (font-display: swap) a nezdržuje start
+         aplikace; při další návštěvě je písmo už v mezipaměti (V2.7). -->
     <link rel="preload" href="fonts/chakra-petch-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preconnect" href="https://image.tmdb.org">
     <link rel="preconnect" href="https://vvnexfdnfvwbwluazwoo.supabase.co">
@@ -33,7 +34,7 @@
     <!-- Moduly potřebné hned při startu se stahují najednou (jinak by je prohlížeč objevoval
          postupně). Ostatní obrazovky (admin, hledání, statistiky, profil…) se načtou až při
          prvním otevření – app.js je importuje dynamicky (V2.1.1). -->
-    <link rel="modulepreload" href="vendor/supabase-js-2.119.0.min.js">
+    <link rel="modulepreload" href="vendor/supabase-lite-2.119.0.min.js">
     <link rel="modulepreload" href="js/app.js">
     <link rel="modulepreload" href="js/achievements.js">
     <link rel="modulepreload" href="js/auth.js">

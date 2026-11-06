@@ -6,7 +6,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V2.6** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V2.7** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
@@ -27,14 +27,11 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Admin panel: collections, movies (search TMDB right from the app) and users
 - Installable on a phone or computer (PWA), opens even offline
 
-**Coming next** – optimization & security
-- V2.7 – optimization, round two
-
 ## Tech stack
 
 | Part | Technology |
 |---|---|
-| Frontend | HTML, CSS, vanilla JavaScript (ES modules, no build step), self-hosted fonts and supabase-js bundle |
+| Frontend | HTML, CSS, vanilla JavaScript (ES modules, no build step), self-hosted fonts and a slimmed-down supabase-js bundle; JS and CSS are minified on deploy |
 | Hosting | GitHub Pages (deployed by GitHub Actions) |
 | Database & auth | [Supabase](https://supabase.com) (PostgreSQL, Row Level Security) |
 | Movie data | [TMDB API](https://www.themoviedb.org) via a Supabase Edge Function |

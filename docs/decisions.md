@@ -263,7 +263,7 @@ Hororové vlny se střídají s funkcemi, aby každá verze přinesla něco nov�
 | 22 | V2.4 | E-mail ✅ | **vlastní SMTP** (samostatný Gmail + heslo aplikace), **vlastní vzhled mailů** v designu MMD (potvrzení, obnova hesla, změna e-mailu), po potvrzení hláška a přesměrování na přihlášení, „Please confirm your email“ i u přihlášení nickem, **Resend confirmation** |
 | 23 | V2.5 | Hesla ✅ | **Forgot password** (stránka pro nové heslo), **změna hesla v profilu**, přísnější pravidla hesla (délka, povinné znaky) i v Supabase |
 | 24 | V2.6 | CAPTCHA ✅ | Cloudflare Turnstile – registrace, přihlášení (i nickem přes funkci `login`), obnova hesla, Resend confirmation, změna hesla; zmínka v zásadách (zpracovává Cloudflare); předvyplnění e-mailu u Forgot password a rámeček s účtem u nového hesla |
-| 25 | V2.7 | Optimalizace 2 | druhé kolo měření a zrychlení (Lighthouse, případně minifikace) – poslední verze kapitoly |
+| 25 | V2.7 | Optimalizace 2 ✅ | odlehčená knihovna Supabase (−40 %), minifikace JS a CSS při nasazení, písmo Inter bez přednačtení – poslední verze kapitoly |
 
 **Test 5. 11. 2026:** po zapnutí *Confirm email* s výchozí službou Supabase přišel potvrzovací mail i na soukromou adresu
 kamaráda (mimo tým projektu) – v rozporu s dokumentací. Nedá se na to spoléhat a limit 2 maily / hod platí dál, proto
@@ -860,6 +860,37 @@ přihlášení a databáze, bez realtime a storage), případně minifikace.
 - **Žádná kontrola „nick a e-mail k sobě nepatří“ u obnovy hesla** – odkaz přijde jen do schránky zadaného
   e-mailu, cizí heslo tak změnit nejde. Hláška o nesouladu by naopak komukoli umožnila zjistit, jaký e-mail má
   který veřejný nick. Srozumitelnost řeší předvyplnění e-mailu a rámeček s účtem.
+
+### Fáze 25 – optimalizace, 2. kolo ✅ (6. 11. 2026) – **V2.7**
+- **Odlehčená knihovna Supabase** `web/vendor/supabase-lite-2.119.0.min.js`: sestavená ze stejné verze
+  supabase-js, ale Realtime, Storage a Functions klient jsou nahrazené prázdnými třídami
+  (`scripts/vendor/build.mjs` + `stubs.js`). 225 → 134 kB, po kompresi 59 → 34 kB. Přihlášení a dotazy do
+  databáze jsou beze změny (stejný kód knihovny).
+- **Minifikace při nasazení** – krok *Minify JavaScript and CSS* v `.github/workflows/deploy-pages.yml`
+  (esbuild, každý soubor zvlášť). JS při startu po kompresi ~43 → ~22 kB, CSS 13 → 9 kB.
+- **Inter bez `preload`** – 48 kB písma už nesoupeří o linku s moduly aplikace; text se na první návštěvě
+  na okamžik ukáže systémovým písmem. Přednačítá se jen malé písmo nadpisů (Chakra Petch 700).
+- Service worker `mmd-v3` – stará mezipaměť (s původní knihovnou) se smaže.
+
+**Měření** (telefon 412 px, CPU 4×, 1,6 Mb/s + 150 ms, gzip jako GitHub Pages, přihlášený uživatel, 5 běhů):
+
+| | FCP | LCP | CLS |
+|---|---|---|---|
+| V2.6 | 848 ms | 1643 ms | 0 |
+| + odlehčená knihovna | ~830 ms | ~1560 ms | 0 |
+| + minifikace | 749 ms | 1445 ms | 0 |
+| + Inter bez preload (**V2.7**) | **610 ms** | **1348 ms** | 0 |
+
+#### Rozhodnutí ve fázi 25
+- **Minifikace až v GitHub Actions, ne v repozitáři** – v repozitáři zůstává čitelný kód s českými komentáři
+  (pravidlo „bez build kroku“ platí pro vývoj: soubory z `web/` jdou dál otevřít přímo v prohlížeči). Nevýhoda:
+  chyby v konzoli na živém webu ukazují zmenšený kód – při ladění pustit web lokálně ze zdrojáků.
+- **Bez spojování modulů do jednoho souboru (bundling)** – změnilo by názvy souborů, seznam pro service
+  worker a líné načítání obrazovek; zisk by byl malý (HTTP/2 stahuje moduly souběžně).
+- **Prázdné náhrady místo vlastního klienta** – vlastní obal nad auth-js a postgrest-js by ušetřil o pár kB
+  víc, ale chování přihlášení (obnova tokenu, hlavičky) by se muselo psát znovu. Takhle běží původní kód
+  supabase-js.
+- **Kapitola V2.x je tímto uzavřená.**
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).
