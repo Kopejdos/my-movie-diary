@@ -64,6 +64,7 @@ export function statsContent(stats, watchlistCount = null, ratingStats = null) {
             panel(TEXTS.statsDecades, decadeChart(stats.decades)),
             panel(TEXTS.statsCategories, categoryChart(stats.categories)),
             panel(TEXTS.statsAlmostThere, almostThere(stats.almostThere)),
+            stats.otherCount > 0 ? panel(format("statsOtherMovies", stats.otherCount), otherFilms(stats.otherFilms)) : null,
             panel(TEXTS.statsFacts, factList(stats)),
         ),
     ];
@@ -213,6 +214,17 @@ function topFilms(films) {
     return h("ol", { class: "top-films" },
         films.map((f, index) => h("li", { class: "top-films__item" },
             h("span", { class: "top-films__rank" }, String(index + 1)),
+            poster(f.film.poster_path, f.film.title, "top-films__poster", false, "tiny"),
+            h("div", { class: "top-films__info" },
+                h("strong", {}, f.film.title),
+                h("span", { class: "muted" }, format("lastWatched", formatDate(f.last)))),
+            h("span", { class: "top-films__count" }, `${f.count}×`))));
+}
+
+/** Filmy mimo kolekce (V3.5.1) – naposledy viděné. */
+function otherFilms(films) {
+    return h("ol", { class: "top-films" },
+        films.map((f) => h("li", { class: "top-films__item top-films__item--plain" },
             poster(f.film.poster_path, f.film.title, "top-films__poster", false, "tiny"),
             h("div", { class: "top-films__info" },
                 h("strong", {}, f.film.title),

@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.5.1 – November 2026
+- **Movie requests** – missing a movie? Search TMDB and ask for up to 20 movies at once; follow your requests (pending, added, rejected)
+- See what others want and give +1 instead of asking twice
+- Movies outside collections can be found in Search and logged like any other ("Other movie")
+- New series: The Texas Chainsaw Massacre and Wrong Turn
+
 ## V3.4.2 – November 2026
 - **Compare with a friend** – movies you've both seen, what only one of you has watched and how much your lists overlap
 - Taste match: how similar your ratings are, movies you both loved and your biggest disagreements (friends only)

@@ -41,6 +41,8 @@ const publicProfileView = lazy(() => import("./views/public-profile.js"), "publi
 const adminUniversesView = lazy(() => import("./views/admin.js"), "adminUniversesView");
 const adminUsersView = lazy(() => import("./views/admin.js"), "adminUsersView");
 const adminWordsView = lazy(() => import("./views/admin.js"), "adminWordsView");
+const adminRequestsView = lazy(() => import("./views/admin-requests.js"), "adminRequestsView");
+const requestsView = lazy(() => import("./views/requests.js"), "requestsView");
 const adminUniverseView = lazy(() => import("./views/admin-universe.js"), "adminUniverseView");
 const aboutView = lazy(() => import("./views/about.js"), "aboutView");
 const forgotPasswordView = lazy(() => import("./views/password.js"), "forgotPasswordView");
@@ -72,6 +74,8 @@ addRoute("/reset-password", resetPasswordView);
 addRoute("/admin", adminUniversesView);
 addRoute("/admin/users", adminUsersView);
 addRoute("/admin/words", adminWordsView);
+addRoute("/admin/requests", adminRequestsView);
+addRoute("/requests", requestsView);
 addRoute("/admin/collection/:slug", adminUniverseView);
 addRoute("/admin/universe/:slug", (container, { params }) => redirect(`/admin/collection/${params.slug}`)());
 setNotFound(notFoundView);
@@ -96,7 +100,7 @@ function renderHeader() {
                 h("span", { class: "brand__icon", "aria-hidden": "true" }, "🎬"),
                 h("span", { class: "brand__name" }, TEXTS.appName),
             ),
-            h("nav", { class: "nav" },
+            h("nav", { class: `nav${user && profile?.is_admin ? " nav--admin" : ""}` },
                 canInstall()
                     ? h("button", {
                         class: "nav__link nav__button nav__install", type: "button",
@@ -126,6 +130,15 @@ function renderHeader() {
                         href: "#/watchlist",
                         title: TEXTS.navWatchlist,
                     }, h("span", { "aria-hidden": "true" }, "★ "), h("span", { class: "nav__label" }, TEXTS.navWatchlist))
+                    : null,
+                // Požadavky na filmy (V3.5.1) – jen pro přihlášené
+                user
+                    ? h("a", {
+                        class: `nav__link nav__requests${path === "/requests" ? " nav__link--active" : ""}`,
+                        href: "#/requests",
+                        title: TEXTS.navRequests,
+                        "aria-label": TEXTS.navRequests,
+                    }, h("span", { class: "request-icon", "aria-hidden": "true" }), h("span", { class: "nav__label" }, TEXTS.navRequests))
                     : null,
                 user && profile?.is_admin
                     ? navLink("#/admin", TEXTS.navAdmin, path.startsWith("/admin"))

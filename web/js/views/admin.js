@@ -35,6 +35,7 @@ export function adminHeader(active) {
             tab("#/admin", TEXTS.adminTabUniverses, "universes"),
             tab("#/admin/users", TEXTS.adminTabUsers, "users"),
             tab("#/admin/words", TEXTS.adminTabWords, "words"),
+            tab("#/admin/requests", TEXTS.adminTabRequests, "requests"),
         ),
     );
 }

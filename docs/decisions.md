@@ -143,7 +143,8 @@ my-movie-diary/
         ├── ratings.js        hodnocení filmů – data (V3.2)
         ├── today.js          „Co dneska?“ – výběr tří tipů (V3.3, bez vykreslování)
         ├── compare.js        porovnání s kamarádem (V3.4.2, bez vykreslování)
-        └── views/            obrazovky: universes, universe, search, upcoming (Coming soon), friends, compare, stats, public-profile, login,
+        ├── requests.js       požadavky na filmy – data (V3.5.1)
+        └── views/            obrazovky: universes, universe, search, upcoming (Coming soon), friends, compare, requests, admin-requests, stats, public-profile, login,
                               register, profile, watchlist, achievements, admin (univerza, uživatelé), admin-universe, not-found;
                               části: rating (hvězdičky), today (panel Co dneska?), coming-soon (oddíl Coming soon)
 ```
@@ -291,11 +292,11 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 34b | V3.3.1–2 | Stránka Coming soon ✅ | záložka **Coming soon** v menu – všechny chystané filmy po čtvrtletích; hranice 5 let a přepnutí v den premiéry automaticky; chystaný podle data, ne stavu v TMDB (V3.3.2) |
 | 35 | V3.4.1 | Přátelé ✅ | vzájemné přátelství (žádost → přijetí), přidání podle nicku, odznak žádostí v hlavičce, záložka **Friends** u profilu; přítel vidí i soukromý profil |
 | 36 | V3.4.2 | Porovnání s kamarádem ✅ | společně viděné filmy, co viděl jen jeden z vás, shoda v % a v hodnocení (hodnocení jen u přátel), kolekce vedle sebe, doporučení |
-| 37 | V3.5.1 | Požadavky na filmy | záložka **Requests**: požadavek s více filmy z TMDB, +1 u existujícího požadavku, **My requests** se stavem; admin inbox (přijmout celý / výběr, návrh kolekce podle TMDB); schválené filmy bez kolekce v hledání a na profilu jako *Other movies*; série **Wrong Turn** a **Texas Chainsaw Massacre** |
+| 37 | V3.5.1 | Požadavky na filmy ✅ | záložka **Requests**: požadavek s více filmy z TMDB, +1 u existujícího požadavku, **My requests** se stavem; admin inbox (přijmout celý / výběr, návrh kolekce podle TMDB); schválené filmy bez kolekce v hledání a na profilu jako *Other movies*; série **Wrong Turn** a **Texas Chainsaw Massacre** |
 | 38 | V3.5.2 | Vlastní seznamy | neoficiální kolekce uživatelů **jen z filmů v databázi**: název, popis, 1–3 kategorie, vlastní pořadí, viditelnost soukromá / přátelé / veřejná, na profilu, počítadlo zobrazení |
 | 39 | V3.5.3 | Komunita | veřejné seznamy v hledání; sekce **Community** dole na přehledu (top 7 podle zobrazení, řídí se filtry, záložka *Community*); nahlášení a skrytí adminem |
-| 40 | V3.6.1 | Optimalizace a úklid | sdílené kousky kódu místo kopií (hvězdička watchlistu, pilulka kolekce, `check()`), úklid `style.css`, testy do repozitáře (`tests/`), Lighthouse, indexy v databázi, přístupnost |
-| 41 | V3.6.2 | Přepracování postupu | strmější křivka úrovní (100 filmů ≈ úroveň 5, 500 ≈ 10, *Legend* ≈ 3 000+), XP za kolekci podle velikosti (10 XP za film místo pevných 100), vyšší úrovně achievementů (Collector 500/1 000, Screen Time 500/1 000 h, Completionist 50), zápis **„Seen before“ bez data** (počítá se do kolekcí a filmů, ne do Marathonu, sérií dní ani Wrapped) |
+| 40 | V3.6.1 | Přepracování postupu | strmější křivka úrovní (100 filmů ≈ úroveň 5, 500 ≈ 10, *Legend* ≈ 3 000+), XP za kolekci podle velikosti (10 XP za film místo pevných 100), vyšší úrovně achievementů (Collector 500/1 000, Screen Time 500/1 000 h, Completionist 50), zápis **„Seen before“ bez data** (počítá se do kolekcí a filmů, ne do Marathonu, sérií dní ani Wrapped) |
+| 41 | V3.6.2 | Optimalizace a úklid | sdílené kousky kódu místo kopií (hvězdička watchlistu, pilulka kolekce, `check()`), úklid `style.css`, testy do repozitáře (`tests/`), Lighthouse, indexy v databázi, přístupnost – **jako poslední krok před V4.0** |
 
 #### Kapitola V3.5 – podrobnosti (plán 8. 11. 2026)
 
@@ -348,8 +349,11 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 - **Katalog kurátorský** (film jen přes schválený požadavek) a **seznamy jen z filmů v databázi** – kvalita
   zůstává pod kontrolou, admin schvaluje jedním klikem.
 - **Levelování bylo moc snadné** (100 filmů ≈ úroveň 7: mírná křivka, malé kolekce za plných 100 XP, doplňování
-  starých filmů nafukuje Marathon a Screen Time) – přepracování ve V3.6.2. XP se počítají ze zhlédnutí, takže
+  starých filmů nafukuje Marathon a Screen Time) – přepracování ve V3.6.1. XP se počítají ze zhlédnutí, takže
   nová pravidla platí zpětně pro všechny (úrovně po změně klesnou).
+- **Optimalizace až jako poslední verze kapitoly 3 (V3.6.2)** – uklidí i kód z přepracování postupu a před V4.0
+  bude kód v nejlepším stavu (prohozeno 8. 11.).
+- **Plán a dokumentace se dál nevydávají zvlášť** – změny plánu jdou s nejbližší verzí.
 
 #### Pravidla řazení kolekcí (od V3.0)
 - **Release** (rok vydání) má **každá** kolekce a je **výchozí všude** – série, studia, žánry. Pokud má kolekce
@@ -1339,6 +1343,40 @@ Opraví se hned po migraci a nasazení webu, bez importu.
   mezi přáteli (u veřejného profilu výzva „add as a friend to compare tastes too“).
 - **Shoda = Jaccard**, ne „kolik z mých filmů viděl on“ – je souměrná, oběma vyjde stejné číslo.
 - **Taste match až od 3 společně hodnocených filmů** – z jednoho nebo dvou by procento nic neznamenalo.
+
+### Fáze 37 – požadavky na filmy ✅ (8. 11. 2026) – **V3.5.1**
+- **Záložka Requests** v hlavičce (přihlášení; na užších noteboocích a telefonu jen ikona ⊕) → `#/requests`:
+  - **New request:** hledání v TMDB přímo na stránce (Edge Function `requests`), u každého filmu stav –
+    *In MMD* (už ho máme, odkaz do hledání), *Requested* (už ho chci), *+1 Wanted* (čeká cizí požadavek –
+    výběr se počítá jako +1), *+ Add*. Až **20 filmů** v jednom požadavku (štítky s ×), nepovinná poznámka pro
+    admina. Nejvýš **5 nevyřízených požadavků** (+1 jde dávat dál).
+  - **My requests:** požadavky se stavem *Pending / Added / Rejected / Partly added*, u každého filmu zvlášť
+    (u přidaného i kolekce, kam ho admin zařadil); nerozhodnutý požadavek jde zrušit.
+  - **Wanted movies:** všechny požadované filmy bez jmen žadatelů – záložky Pending / Added / Rejected,
+    filtr podle názvu, počet zájemců a **+1** (zpět jde vzít).
+- **Hledání:** pod výsledky „Can't find a movie? **Request it**“ (předvyplní dotaz); filmy mimo kolekce se
+  najdou s pilulkou *Other movie* a jdou zapsat jako viděné / do watchlistu.
+- **Admin → Requests:** karta požadavku (nick, datum, poznámka), u každého filmu zaškrtnutí, počet zájemců a výběr
+  kolekce – předvybraný **návrh podle TMDB** (stejná série = kolekce, kde už je jiný díl; produkční společnost =
+  studio stejného jména), nebo *No collection*. **Approve / Reject** pro zaškrtnuté filmy (celý požadavek nebo
+  výběr). Rozhodnutí platí pro film ve všech čekajících požadavcích. Po přijetí do kolekce ukáže **řádky do seedu**
+  (s tlačítkem Copy) – jinak by film z kolekce smazal příští import.
+- **Statistiky / profil:** panel **Other movies** (viděné filmy mimo kolekce).
+- **Seed:** série **The Texas Chainsaw Massacre** (9 filmů; remake 2003/2006 volitelný) a **Wrong Turn**
+  (7 filmů; reboot 2021 volitelný) – požadavek od kamaráda.
+- Migrace `20261108100000_film_requests.sql` (tabulky `film_requests`, `film_request_items`, `film_request_votes`,
+  funkce `wanted_films`, `film_request_pending`, pohled `other_films`), nová Edge Function `requests`,
+  funkce `admin` rozšířená o `requests` a `request-decide`. Ověřeno na lokálním Postgresu (cizí požadavky
+  nejsou vidět, přímý zápis požadavku neprojde, +1 jen u čekajícího filmu, zrušit jde jen nerozhodnutý požadavek).
+- Hlavička: správce má v hlavičce o odkaz víc – do 1 439 px jsou Coming soon a Requests jen ikony
+  (ostatním do 1 180 px), na 320 px menší okraje.
+
+#### Rozhodnutí ve fázi 37
+- **Údaje o filmu bere z TMDB server**, ne web – v seznamu požadavků (vidí ho všichni) tak nemůže být podvržený název.
+- **+1 místo duplicitního požadavku** – správce vidí, kolik lidí film chce, a nemá ve schránce desetkrát totéž.
+- **Jedno rozhodnutí na film**, ne na požadavek – stejný film od tří lidí se přijme (nebo zamítne) jednou.
+- **Návrh kolekce jen jako návrh** – produkční společnosti v TMDB jsou nepřesné (Disney je u spousty filmů),
+  zařazení potvrzuje správce.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

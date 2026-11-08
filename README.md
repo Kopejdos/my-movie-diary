@@ -6,11 +6,11 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V3.4.2** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V3.5.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
-- 94 collections, 6 curated paths and 1,100+ movies from TMDB – MCU, Star Wars, James Bond, Mission: Impossible, Marvel, DC, Warner Bros., Lucasfilm, Disney, Pixar, DreamWorks, Illumination, Studio Ghibli, horror series, hand-picked horror genres and themed picks (Time Travel, Heist, Christmas…), each with its own color and banner
+- 96 collections, 6 curated paths and 1,100+ movies from TMDB – MCU, Star Wars, James Bond, Mission: Impossible, Marvel, DC, Warner Bros., Lucasfilm, Disney, Pixar, DreamWorks, Illumination, Studio Ghibli, horror series, hand-picked horror genres and themed picks (Time Travel, Heist, Christmas…), each with its own color and banner
 - Two-level filter: collection type (series, studios, genre picks, paths), then genre (Superhero, Sci-fi, Fantasy, Animation, Horror…); view a collection by release, in story order or by series
 - +1 / −1 viewing counter – every viewing is logged with a date
 - Progress per collection and **Up next** in every collection
@@ -22,6 +22,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Public profiles you can share with a link – opt-in, private by default
 - Friends – mutual friend requests by nickname; friends can see each other's profile even when it's private
 - Compare with a friend – movies in common, taste match from your ratings, recommendations and collections side by side
+- Movie requests – ask for missing movies (several at once), +1 what others want, follow the status of your requests
 - Curated paths – step-by-step routes like MCU Essentials or Horror 101, with a note for every step
 - Watchlist across all collections
 - Achievements with levels (Bronze → Platinum) and completed-collection badges
@@ -33,7 +34,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Installable on a phone or computer (PWA), opens even offline
 
 **Coming next** – collections & new features
-- V3.5 – movie requests, your own lists and community lists; V3.6 – clean-up and a tougher levelling curve
+- V3.5 – your own lists and community lists; V3.6 – a tougher levelling curve, then a clean-up release
 - V4 – settings & themes, a better phone layout, more languages and a yearly Wrapped; V5 – TV shows
 
 ## Tech stack

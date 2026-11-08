@@ -5,6 +5,7 @@
 /** Kolik položek ukázat v žebříčcích. */
 export const TOP_FILMS = 5;
 export const ALMOST_THERE = 6;
+export const OTHER_FILMS = 8;          // kolik filmů mimo kolekce ukázat (V3.5.1)
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -63,6 +64,7 @@ export function computeStats({ watches, universes, items, categories, links }, t
             return { universe, watched, total: required.length, remaining: required.length - watched };
         });
     const completed = progress.filter((p) => p.remaining === 0);
+    const inCollections = new Set(items.map((item) => item.tmdb_id));
     // „Skoro hotovo“: rozkoukané kolekce, nejmíň zbývajících filmů první
     const almostThere = progress
         .filter((p) => p.watched > 0 && p.remaining > 0)
@@ -87,6 +89,12 @@ export function computeStats({ watches, universes, items, categories, links }, t
         decades: byDecade(films),
         categories: byCategory(categories, links, items, byFilm),
         almostThere,
+        // Viděné filmy mimo kolekce (schválené požadavky, V3.5.1) – nejnověji viděné první
+        otherFilms: films
+            .filter((f) => !inCollections.has(f.film.tmdb_id))
+            .sort((a, b) => b.last.localeCompare(a.last))
+            .slice(0, OTHER_FILMS),
+        otherCount: films.filter((f) => !inCollections.has(f.film.tmdb_id)).length,
         streaks: streaks([...perDay.keys()].sort(), today),
         bestDay: bestDay(perDay),
         weekday: favoriteWeekday(perDay),

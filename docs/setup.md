@@ -174,8 +174,16 @@ Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny
 4. **Smazání vlastního účtu (V2.3):** Edge Function `account` (Deploy a new function → Via Editor, obsah
    `supabase/functions/account/index.ts`) a u ní **vypnout Verify JWT** – ověřuje si přihlášení sama.
 
+5. **Požadavky na filmy (V3.5.1):** Edge Function `requests` (Deploy a new function → Via Editor, obsah
+   `supabase/functions/requests/index.ts`) a u ní **vypnout Verify JWT** – ověřuje si přihlášení sama.
+   Používá stejné tajemství `TMDB_READ_TOKEN` jako `tmdb` a `admin`. Požadavky se vyřizují v admin panelu,
+   záložka **Requests** (funkce `admin` musí být nasazená v nové verzi).
+
 **Pozor:** plný import ze seedu přepíše změny z admin panelu u univerz, která jsou v `universes.json`
 (a smaže z nich filmy, které v seedu nejsou). Nová univerza a filmy přidávat přes admin panel.
+To platí i pro filmy přijaté z požadavků do kolekce – admin panel po přijetí ukáže řádky do seedu,
+které je potřeba do `universes.json` doplnit (jinak je příští import té kolekce smaže). Filmy přijaté
+**bez kolekce** import nemaže.
 
 ## 9. Aktualizace knihovny Supabase (web/vendor)
 

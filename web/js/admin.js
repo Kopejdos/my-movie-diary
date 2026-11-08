@@ -44,6 +44,19 @@ export const setUserAdmin = (userId, isAdmin) => callAdmin("set-admin", { user_i
 export const deleteUser = (userId) => callAdmin("delete-user", { user_id: userId });
 export const resetUsername = (userId) => callAdmin("reset-username", { user_id: userId });
 
+// Požadavky na filmy (V3.5.1)
+/** Nevyřízené požadavky s návrhem kolekcí: { requests: [...], universes: [...] }. */
+export const listFilmRequests = () => callAdmin("requests");
+/**
+ * Rozhodnutí: items = [{ id, approve, universe_id? }]. Přijatý film se uloží do films (a do kolekce).
+ * Mění katalog → vyčistí mezipaměť webu.
+ */
+export async function decideFilmRequests(items) {
+    const result = await callAdmin("request-decide", { items });
+    clearDataCache();
+    return result;
+}
+
 // ---------------------------------------------------------------------
 // Zakázaná slova v nickách (V2.3)
 // ---------------------------------------------------------------------

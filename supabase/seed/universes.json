@@ -1716,6 +1716,42 @@
       ]
     },
     {
+      "slug": "texas-chainsaw-massacre",
+      "name": "The Texas Chainsaw Massacre",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#c2410c",
+      "description": "Leatherface and the Sawyer family – the original Texas nightmare and everything after.",
+      "films": [
+        { "title": "The Texas Chain Saw Massacre", "year": 1974, "cover": true },
+        { "title": "The Texas Chainsaw Massacre 2", "year": 1986 },
+        { "title": "Leatherface: The Texas Chainsaw Massacre III", "year": 1990 },
+        { "title": "Texas Chainsaw Massacre: The Next Generation", "year": 1995 },
+        { "title": "The Texas Chainsaw Massacre", "year": 2003, "group": "Remake", "optional": true, "label": "Remake" },
+        { "title": "The Texas Chainsaw Massacre: The Beginning", "year": 2006, "group": "Remake", "optional": true, "label": "Remake prequel" },
+        { "title": "Texas Chainsaw 3D", "year": 2013, "group": "Legacy sequels" },
+        { "title": "Leatherface", "year": 2017, "group": "Legacy sequels", "label": "Prequel" },
+        { "title": "Texas Chainsaw Massacre", "year": 2022, "group": "Legacy sequels" }
+      ]
+    },
+    {
+      "slug": "wrong-turn",
+      "name": "Wrong Turn",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#65a30d",
+      "description": "Never leave the main road – backwoods horror in the hills of West Virginia.",
+      "films": [
+        { "title": "Wrong Turn", "year": 2003 },
+        { "title": "Wrong Turn 2: Dead End", "year": 2007 },
+        { "title": "Wrong Turn 3: Left for Dead", "year": 2009 },
+        { "title": "Wrong Turn 4: Bloody Beginnings", "year": 2011, "label": "Prequel" },
+        { "title": "Wrong Turn 5: Bloodlines", "year": 2012, "label": "Prequel" },
+        { "title": "Wrong Turn 6: Last Resort", "year": 2014 },
+        { "title": "Wrong Turn", "year": 2021, "group": "Reboot", "optional": true, "label": "Reboot" }
+      ]
+    },
+    {
       "slug": "horror-slasher",
       "name": "Slasher",
       "kind": "genre",

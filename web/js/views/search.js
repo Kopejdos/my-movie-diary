@@ -73,7 +73,7 @@ export async function searchView(container, context) {
     }
     if (!isCurrent()) return;
 
-    const page = new SearchPage(results, buildSearchIndex(data.universes, data.items), counts, watchlist, signedIn);
+    const page = new SearchPage(results, buildSearchIndex(data.universes, data.items, data.otherFilms), counts, watchlist, signedIn);
     // Klik na příklad v nápovědě = jako by ho uživatel napsal
     page.onExample = (text) => {
         input.value = text;
@@ -175,7 +175,8 @@ class SearchPage {
             mount(this.container,
                 h("div", { class: "empty-filter" },
                     h("p", { style: "margin: 0 0 6px" }, format("searchNoResults", this.text)),
-                    h("p", { class: "hint", style: "margin: 0" }, TEXTS.searchNoResultsHint)));
+                    h("p", { class: "hint", style: "margin: 0" }, TEXTS.searchNoResultsHint)),
+                this.requestLink());
             return;
         }
 
@@ -193,7 +194,18 @@ class SearchPage {
             foundGroups.length > 0 ? this.renderGroups(foundGroups.slice(0, MAX_COLLECTION_RESULTS)) : null,
             users.length > 0 ? this.renderUsers(users) : null,
             allFilms.length > 0 ? this.renderFilms(films) : null,
+            this.requestLink(),
         );
+    }
+
+    /** „Can't find a movie? Request it“ (V3.5.1) – odkaz na požadavky s předvyplněným dotazem. */
+    requestLink() {
+        const href = this.signedIn
+            ? `#/requests?q=${encodeURIComponent(this.text.trim())}`
+            : "#/login";
+        return h("p", { class: "search-request" },
+            TEXTS.searchRequestQuestion, " ",
+            h("a", { href }, this.signedIn ? TEXTS.searchRequestLink : TEXTS.searchRequestSignIn));
     }
 
     /** Série uvnitř kolekcí (V3.0.1) – odkaz otevře kolekci v pohledu „By series“ na dané sérii. */
@@ -313,6 +325,7 @@ class SearchPage {
                     upcoming ? soonPill(film) : pill(yearOf(film.release_date)),
                     film.runtime ? pill(format("minutes", film.runtime)) : null,
                     entry.universes.map(collectionLink),
+                    entry.other ? h("span", { class: "pill pill--other" }, TEXTS.otherMovieBadge) : null,
                 ),
                 this.signedIn && !upcoming
                     ? h("p", { class: "film__status" },

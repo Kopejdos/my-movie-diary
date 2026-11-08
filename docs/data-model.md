@@ -141,6 +141,28 @@ ale může být ve více univerzech.
   ID účtů web nedostane). Smazání účtu smaže i přátelství (cascade).
 - Ochrana proti spamu: nejvýš 50 nevyřízených odeslaných žádostí a 500 přátel.
 
+### Požadavky na filmy (V3.5.1)
+**`film_requests`** – jeden požadavek: `id`, `user_id` (FK → `profiles`, cascade), `note` (≤ 300 znaků, vidí jen
+autor a správce), `created_at`.
+
+**`film_request_items`** – filmy v požadavku: `id`, `request_id` (FK, cascade), `tmdb_id`, `title`,
+`release_date`, `poster_path` (údaje z TMDB v okamžiku požadavku – film ještě není v `films`), `status`
+(`pending` / `added` / `rejected`), `universe_id` (kam správce film zařadil, null = bez kolekce), `decided_at`.
+Unikátní `(request_id, tmdb_id)`.
+
+**`film_request_votes`** – +1: `(tmdb_id, user_id)` PK, `created_at`.
+
+- RLS: požadavky a jejich filmy vidí **jen autor a správce**; autor smí **zrušit** požadavek, o kterém se ještě
+  nerozhodlo. **Zakládat požadavky jde jen přes Edge Function `requests`** (údaje o filmech bere z TMDB sama,
+  limity: ≤ 20 filmů v požadavku, ≤ 5 nevyřízených požadavků). Hlasy: vlastní, jen u filmu, který čeká
+  (`film_request_pending()`), zrušit vlastní.
+- Rozhodnutí (Edge Function `admin`, akce `request-decide`) platí pro film ve **všech** čekajících požadavcích.
+- **`wanted_films(query, status)`** – jeden řádek na požadovaný film pro všechny přihlášené: `title`,
+  `release_date`, `poster_path`, `status` (čeká-li aspoň jeden → `pending`), `wants` (žadatelé + hlasy),
+  `i_want`, `requested_by_me`, `first_requested`. Jména žadatelů neprozrazuje.
+- **`other_films`** (pohled) – filmy v `films`, které nejsou v žádné kolekci (schválené požadavky, filmy přidané
+  adminem). Čte se v hledání; na profilu a ve statistikách jsou jako *Other movies*.
+
 ### `blocked_words` – zakázaná slova v nickách (V2.3)
 
 | Sloupec | Typ | Popis |
@@ -210,6 +232,8 @@ Výpočty běží v databázi, ne v prohlížeči – web dostane hotová čísl
 | `profiles` | jen vlastní řádek; profily ostatních jen přes funkce `public_profile` / `search_people` (veřejné a přátelé) | jen vlastní řádek, jen sloupce `username` a `is_public` |
 | `watches` | jen vlastní řádky; zhlédnutí veřejných profilů a přátel (film + datum) jen přes `public_profile` | jen vlastní řádky |
 | `friendships` | jen vlastní řádky (kde jsem jedna ze stran) | nikdo přímo – jen funkce přátel (V3.4.1) |
+| `film_requests`, `film_request_items` | autor a správce; souhrn pro všechny přihlášené přes `wanted_films` | založit jen Edge Function `requests`; autor smí zrušit nerozhodnutý požadavek; rozhodnutí jen funkce `admin` (V3.5.1) |
+| `film_request_votes` | jen vlastní | vlastní +1 u čekajícího filmu (V3.5.1) |
 | `watchlist` | jen vlastní řádky (vždy soukromý) | jen vlastní řádky |
 | `blocked_words` | jen správce | jen správce |
 | `heartbeat` | nikdo | jen funkce `ping()` |

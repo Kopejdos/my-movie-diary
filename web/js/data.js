@@ -70,14 +70,19 @@ export function fetchCategories() {
  * do kterých kolekcí patří. Seznam filmů se mění zřídka – drží se v mezipaměti.
  */
 export async function fetchSearchData() {
-    const [universes, items] = await Promise.all([
+    const [universes, items, otherFilms] = await Promise.all([
         fetchUniverses(),
         cached("search-items", () => fetchAllRows(() => supabase
             .from("universe_items")
             .select("id, universe_id, release_order, is_optional, franchise, is_upcoming, film:films(tmdb_id, title, original_title, release_date, runtime, poster_path)")
             .order("id"))),
+        // Filmy mimo kolekce – schválené požadavky (V3.5.1); chyba (stará databáze) nevadí
+        cached("other-films", () => fetchAllRows(() => supabase
+            .from("other_films")
+            .select("tmdb_id, title, original_title, release_date, runtime, poster_path")
+            .order("tmdb_id"))).catch(() => []),
     ]);
-    return { universes, items };
+    return { universes, items, otherFilms };
 }
 
 /** Pořadí typů kolekcí na přehledu – cesty až na konci (V3.0.1; dřív byly první). */

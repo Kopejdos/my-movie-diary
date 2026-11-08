@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v8";        // V3.4.2: porovnání; od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v9";        // V3.5.1: požadavky na filmy; od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline
@@ -46,6 +46,7 @@ const SHELL = [
     "js/social.js",
     "js/today.js",
     "js/compare.js",
+    "js/requests.js",
     "js/views/universes.js",
     "js/views/universe.js",
     "js/views/watchlist.js",
@@ -60,6 +61,8 @@ const SHELL = [
     "js/views/upcoming.js",
     "js/views/friends.js",
     "js/views/compare.js",
+    "js/views/requests.js",
+    "js/views/admin-requests.js",
     "js/views/achievements.js",
     "js/views/login.js",
     "js/views/register.js",

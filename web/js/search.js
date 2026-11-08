@@ -78,8 +78,9 @@ export function parseQuery(raw) {
  * universes: kolekce (fetchUniverses), items: řádky universe_items s filmem.
  * Film ve více kolekcích je v indexu jednou a nese seznam kolekcí.
  * Chystaný film (Coming soon, V3.3) má upcoming = true – najde se, ale nejde označit jako viděný.
+ * otherFilms: filmy mimo kolekce (V3.5.1) – v indexu s prázdným seznamem kolekcí a other = true.
  */
-export function buildSearchIndex(universes, items) {
+export function buildSearchIndex(universes, items, otherFilms = []) {
     const universeById = new Map(universes.map((u) => [u.id, u]));
     const films = new Map();
     const groups = new Map();       // "universe_id|série" → skupina uvnitř kolekce (V3.0.1)
@@ -118,6 +119,20 @@ export function buildSearchIndex(universes, items) {
     }
     for (const entry of films.values()) {
         entry.universes.sort((a, b) => a.sort_order - b.sort_order);
+    }
+    // Filmy mimo kolekce (V3.5.1) – najdou se a jdou zapsat, jen nemají kolekci (other = true)
+    for (const film of otherFilms) {
+        if (films.has(film.tmdb_id)) continue;
+        const upcoming = isUpcoming({ film, is_upcoming: false });
+        films.set(film.tmdb_id, {
+            film,
+            year: film.release_date ? film.release_date.slice(0, 4) : "",
+            title: prepare(film.title),
+            original: film.original_title && film.original_title !== film.title ? prepare(film.original_title) : null,
+            universes: [],
+            upcoming,
+            other: true,
+        });
     }
 
     return {
