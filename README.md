@@ -6,14 +6,14 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V3.5.3** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V3.5.4** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
 - 100+ collections, curated paths and 1,100+ movies from TMDB – MCU, Star Wars, James Bond, Mission: Impossible, Marvel, DC, Warner Bros., Lucasfilm, Disney, Pixar, DreamWorks, Illumination, Studio Ghibli, horror series, hand-picked horror genres and themed picks (Time Travel, Heist, Christmas…), each with its own color and banner
 - Two-level filter: collection type (series, studios, genre picks, paths), then genre (Superhero, Sci-fi, Fantasy, Animation, Horror…); collections sorted A–Z, by recently added or by your progress; view a collection by release, in story order or by series
 - +1 / −1 viewing counter – every viewing is logged with a date
-- Your own lists – any movies from My Movie Diary, in your order; private, for friends or public
+- Your own lists – any movies from My Movie Diary, in your order; private, for friends or public – the most viewed public ones show up in **Community** and in search
 - Progress per collection and **Up next** in every collection
 - **What to watch today?** – three daily picks (watchlist, what's next, something new based on your favourite genres) with Shuffle
 - **Coming soon** – announced movies up to five years ahead: a release calendar of all collections (by quarter) and a section at the bottom of each collection; movies switch to regular ones on their release day
@@ -35,7 +35,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Installable on a phone or computer (PWA), opens even offline
 
 **Coming next** – collections & new features
-- V3.5 – your own lists (V3.5.3) and community lists (V3.5.4); V3.6 – a tougher levelling curve, then a clean-up release
+- V3.6 – a tougher levelling curve, then a clean-up release
 - V4 – settings & themes, a better phone layout, more languages and a yearly Wrapped; V5 – TV shows
 
 ## Tech stack

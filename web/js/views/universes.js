@@ -4,6 +4,8 @@
 // 2. žánr (kategorie). Počty v každé vrstvě se počítají podle volby v té druhé.
 // V3.5.2.2: kolekce se řadí podle abecedy (volitelně nejnovější / můj postup) a v přehledu
 // všech druhů ukazuje každá skupina jen první dvě řady – zbytek po „Show all“.
+// V3.5.4: úplně dole sekce Community – jedna řada 7 nejzobrazovanějších veřejných seznamů
+// uživatelů (řídí se žánrem); záložka Community ukáže všechny.
 
 import {
     fetchUniverses, fetchCategories, fetchMyFilmCounts, fetchWatchlistIds, fetchSearchData, percent, KIND_ORDER,
@@ -15,6 +17,11 @@ import { setAccent, inkFor } from "../theme.js";
 import { TEXTS, format, movies, collections, steps } from "../texts.js";
 import { h, mount, poster, loadingView, errorView } from "../dom.js";
 import { todayPanel, todayPlaceholder } from "./today.js";
+import { fetchCommunityLists } from "../lists.js";
+import { listCard, listGrid } from "./list-card.js";
+
+/** Kolik seznamů ukáže řada Community v přehledu. */
+const COMMUNITY_ROW = 7;
 
 /** Kolik řad kolekcí ukáže sbalená skupina (na úzkém displeji se 2 sloupci 3 řady). */
 const COLLAPSED_ROWS = 2;
@@ -72,6 +79,11 @@ export async function universesView(container, context) {
         : Promise.resolve(null);
     todayPromise.catch(() => null);
 
+    // Seznamy komunity se doplní, až dorazí (nezdržují mřížku kolekcí)
+    let community = [];
+    let communityLoaded = false;
+    const communityPromise = fetchCommunityLists();
+
     let universes, categories;
     try {
         [universes, categories] = await Promise.all([fetchUniverses(), fetchCategories()]);
@@ -85,7 +97,7 @@ export async function universesView(container, context) {
 
     // Zvolený druh a žánr se pamatují; neexistující (smazaná kategorie) = vše
     let selectedKind = loadPref("kind", "all");
-    if (selectedKind !== "all" && !KIND_ORDER.includes(selectedKind)) selectedKind = "all";
+    if (selectedKind !== "all" && selectedKind !== "community" && !KIND_ORDER.includes(selectedKind)) selectedKind = "all";
     let selected = loadPref("category", "all");
     if (selected !== "all" && !categories.some((c) => c.slug === selected)) selected = "all";
     let sort = loadPref("sort", "alpha");
@@ -114,9 +126,18 @@ export async function universesView(container, context) {
         return Boolean(category) && u.categoryIds.includes(category.id);
     };
 
+    /** Seznam komunity v žánru (kategorie podle id). */
+    const listInCategory = (list, slug) => {
+        if (slug === "all") return true;
+        const category = categories.find((c) => c.slug === slug);
+        return Boolean(category) && (list.category_ids ?? []).includes(category.id);
+    };
+
     /** Překreslí oba filtry a mřížku podle zvoleného druhu a žánru (bez nového načítání). */
     function renderCollections() {
-        const visible = sortUniverses(universes.filter((u) => inKind(u, selectedKind) && inCategory(u, selected)), sort);
+        const communityMode = selectedKind === "community";
+        const visible = communityMode ? [] : sortUniverses(universes.filter((u) => inKind(u, selectedKind) && inCategory(u, selected)), sort);
+        const communityVisible = community.filter((l) => listInCategory(l, selected));
 
         // 1. vrstva – druh; počet podle zvoleného žánru. Prázdné druhy se skryjí (kromě zvoleného).
         const forCategory = universes.filter((u) => inCategory(u, selected));
@@ -126,20 +147,44 @@ export async function universesView(container, context) {
                 .map((kind) => ({ kind, n: forCategory.filter((u) => kindOf(u) === kind).length }))
                 .filter(({ kind, n }) => n > 0 || kind === selectedKind)
                 .map(({ kind, n }) => kindTab(kind, kindLabel(kind), n)),
+            communityVisible.length > 0 || communityMode ? kindTab("community", TEXTS.kindCommunity, communityVisible.length) : null,
         );
 
-        // 2. vrstva – žánr; počet podle zvoleného druhu
+        // 2. vrstva – žánr; počet podle zvoleného druhu (u Community podle seznamů)
         const forKind = universes.filter((u) => inKind(u, selectedKind));
         mount(chips,
-            chip("all", TEXTS.categoryAll, null, forKind.length),
+            chip("all", TEXTS.categoryAll, null, communityMode ? community.length : forKind.length),
             categories
-                .map((c) => ({ c, n: forKind.filter((u) => u.categoryIds.includes(c.id)).length }))
+                .map((c) => ({
+                    c,
+                    n: communityMode
+                        ? community.filter((l) => (l.category_ids ?? []).includes(c.id)).length
+                        : forKind.filter((u) => u.categoryIds.includes(c.id)).length,
+                }))
                 .filter(({ c, n }) => n > 0 || c.slug === selected)
                 .map(({ c, n }) => chip(c.slug, c.name, c.color, n)),
         );
-        count.textContent = collections(visible.length);
+        count.textContent = communityMode ? format("communityCount", communityVisible.length) : collections(visible.length);
+        sortSelect.hidden = communityMode;          // komunita je vždy podle zobrazení
 
-        if (visible.length === 0) {
+        // Záložka Community – všechny veřejné seznamy (podle zobrazení)
+        if (communityMode) {
+            sections = [];
+            if (!communityLoaded) {
+                mount(grid, loadingView());
+                return;
+            }
+            mount(grid, communityVisible.length === 0
+                ? h("div", { class: "empty-filter" },
+                    h("p", { style: "margin: 0 0 12px" }, TEXTS.communityEmpty),
+                    h("button", { class: "btn", type: "button", onClick: () => selectCategory("all") }, TEXTS.filterReset))
+                : h("section", { class: "collection-section" },
+                    h("p", { class: "hint community-hint" }, TEXTS.kindCommunityHint),
+                    listGrid(communityVisible, { showAuthor: true })));
+            return;
+        }
+
+        if (visible.length === 0 && (selectedKind !== "all" || communityVisible.length === 0)) {
             // Kombinace bez výsledku (např. Paths + Comedy) – nabídnout zrušení filtru
             mount(grid, h("div", { class: "empty-filter" },
                 h("p", { style: "margin: 0 0 12px" }, TEXTS.filterEmptyCollections),
@@ -177,7 +222,18 @@ export async function universesView(container, context) {
             });
             return section;
         });
-        mount(grid, sections.map((section) => section.element));
+        // Řada Community pod všemi skupinami (jen v přehledu všech druhů)
+        const communityRow = selectedKind === "all" && communityVisible.length > 0
+            ? h("section", { class: "collection-section community-section" },
+                kindHeading("community"),
+                h("div", { class: "list-row" }, communityVisible.slice(0, COMMUNITY_ROW).map((l) => listCard(l, { showAuthor: true }))),
+                communityVisible.length > COMMUNITY_ROW
+                    ? h("div", { class: "section-toggle__row" },
+                        h("button", { class: "btn btn--small", type: "button", onClick: () => { selectKind("community"); grid.scrollIntoView({ block: "start" }); } },
+                            `${format("communityShowAll", communityVisible.length)} →`))
+                    : null)
+            : null;
+        mount(grid, sections.map((section) => section.element), communityRow);
         layoutSections();
     }
 
@@ -281,6 +337,12 @@ export async function universesView(container, context) {
         grid,
     );
     renderCollections();
+    communityPromise.then((lists) => {
+        if (!isCurrent()) return;
+        communityLoaded = true;
+        community = lists;
+        if (lists.length > 0 || selectedKind === "community") renderCollections();
+    });
 }
 
 /** Lišta „Search movies and collections…“ – vede na stránku hledání. */
@@ -297,12 +359,13 @@ function searchEntry() {
 function kindLabel(kind) {
     return {
         path: TEXTS.kindPath, series: TEXTS.kindSeries, studio: TEXTS.kindStudio, genre: TEXTS.kindGenre,
+        community: TEXTS.kindCommunity,
     }[kind] ?? kind;
 }
 
 function kindHeading(kind) {
     const label = kindLabel(kind);
-    const hint = { genre: TEXTS.kindGenreHint, path: TEXTS.kindPathHint }[kind];
+    const hint = { genre: TEXTS.kindGenreHint, path: TEXTS.kindPathHint, community: TEXTS.kindCommunityHint }[kind];
     return h("div", { class: "kind-heading" },
         h("h3", {}, label),
         hint ? h("span", { class: "muted" }, hint) : null,

@@ -4,14 +4,16 @@
 //   • v banneru autor, viditelnost a počet zobrazení,
 //   • autor seznam upraví (název, popis, viditelnost, 1–3 kategorie), smaže,
 //     přesouvá filmy šipkami a odebírá je (i z Coming soon),
-//   • otevření cizího seznamu se započítá do zobrazení (jednou na uživatele).
+//   • otevření cizího seznamu se započítá do zobrazení (jednou na uživatele),
+//   • cizí seznam jde nahlásit (V3.5.4); skrytý seznam (správce) vidí jen autor – s upozorněním.
 
 import { fetchMyFilmCounts, fetchWatchlistIds, fetchCategories } from "../data.js";
 import { isSignedIn } from "../auth.js";
 import { fetchMyRatings, fetchRatingStats } from "../ratings.js";
 import {
     fetchList, updateList, deleteList, setListCategories, removeFromList, swapListItems, registerListView,
-    listErrorText, visibilityLabel, VISIBILITIES, MAX_TITLE, MAX_DESCRIPTION, MAX_LIST_CATEGORIES,
+    reportList, listErrorText, visibilityLabel, VISIBILITIES, MAX_TITLE, MAX_DESCRIPTION, MAX_LIST_CATEGORIES,
+    REPORT_REASONS,
 } from "../lists.js";
 import { setAccent } from "../theme.js";
 import { TEXTS, format, movies } from "../texts.js";
@@ -102,10 +104,78 @@ class ListPage extends UniversePage {
     }
 
     bannerExtras() {
-        if (!this.mine) return null;
+        if (!this.mine) {
+            // Nahlášení cizího seznamu (jen přihlášený)
+            if (!this.signedIn) return null;
+            this.reportButton = h("button", {
+                class: "btn btn--small list-report", type: "button", disabled: Boolean(this.listInfo.reported),
+                onClick: () => this.openReport(),
+            }, this.listInfo.reported ? `⚑ ${TEXTS.listReported}` : `⚑ ${TEXTS.listReport}`);
+            return h("div", { class: "list-owner" }, this.reportButton);
+        }
         return h("div", { class: "list-owner" },
+            this.listInfo.hidden ? h("p", { class: "notice list-hidden-note" }, `⚑ ${TEXTS.listHiddenNote}`) : null,
             h("button", { class: "btn btn--small", type: "button", onClick: () => this.openEditor() }, `✎ ${TEXTS.listEdit}`),
             h("span", { class: "hint" }, TEXTS.listOwnerHint));
+    }
+
+    /** Okno nahlášení: důvod + nepovinná poznámka. */
+    openReport() {
+        const opener = document.activeElement;
+        let reason = REPORT_REASONS[0];
+        const options = h("div", { class: "report-reasons", role: "radiogroup", "aria-label": TEXTS.listReportReason });
+        const paint = () => mount(options, REPORT_REASONS.map((r) => h("label", { class: "report-reason" },
+            h("input", { type: "radio", name: "report-reason", value: r, checked: r === reason, onChange: () => { reason = r; } }),
+            ` ${TEXTS[`listReportReason_${r}`]}`)));
+        paint();
+        const note = h("textarea", { class: "admin-input list-editor__description", rows: 2, maxlength: 300, name: "report-note", placeholder: TEXTS.listReportNote });
+        const send = h("button", { class: "btn btn--primary", type: "submit" }, TEXTS.listReportSend);
+        const form = h("form", {
+            class: "modal list-report-form", role: "dialog", "aria-modal": "true", "aria-labelledby": "list-report-title",
+            onSubmit: async (event) => {
+                event.preventDefault();
+                send.disabled = true;
+                try {
+                    await reportList(this.listInfo.id, reason, note.value);
+                    toast(TEXTS.listReportThanks);
+                } catch (error) {
+                    toast(error.code === "duplicate" ? TEXTS.listReportThanks : listErrorText(error), error.code === "duplicate" ? undefined : "error");
+                    if (error.code !== "duplicate") {
+                        send.disabled = false;
+                        return;
+                    }
+                }
+                this.listInfo.reported = true;
+                if (this.reportButton) {
+                    this.reportButton.disabled = true;
+                    this.reportButton.textContent = `⚑ ${TEXTS.listReported}`;
+                }
+                close();
+            },
+        },
+            h("div", { class: "modal__head" },
+                h("div", {},
+                    h("span", { class: "eyebrow" }, TEXTS.listReport),
+                    h("h2", { id: "list-report-title", class: "modal__title" }, this.listInfo.title)),
+                h("button", { class: "modal__close", type: "button", "aria-label": TEXTS.close, onClick: () => close() }, "×")),
+            h("p", { class: "hint", style: "margin: 0" }, TEXTS.listReportHint),
+            options,
+            note,
+            h("div", { class: "modal__foot" },
+                h("button", { class: "btn", type: "button", onClick: () => close() }, TEXTS.cancel),
+                send));
+        const backdrop = h("div", { class: "modal-backdrop", onClick: (event) => { if (event.target === backdrop) close(); } }, form);
+        const onKey = (event) => { if (event.key === "Escape") close(); };
+        function close() {
+            document.removeEventListener("keydown", onKey);
+            window.removeEventListener("hashchange", close);
+            backdrop.remove();
+            if (opener instanceof HTMLElement && document.body.contains(opener)) opener.focus();
+        }
+        document.body.append(backdrop);
+        document.addEventListener("keydown", onKey);
+        window.addEventListener("hashchange", close);
+        options.querySelector("input")?.focus();
     }
 
     /** Prázdný seznam: místo „nic neodpovídá filtru“ nápověda, jak filmy přidat. */

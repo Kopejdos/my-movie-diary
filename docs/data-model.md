@@ -91,6 +91,15 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 - Triggery: zakázaná slova v názvu / popisu / poznámce (`is_text_allowed`), limity 50 seznamů / 300 filmů /
   3 kategorie, čas úpravy.
 
+### Komunita (V3.5.4)
+- **`lists.hidden`** – skrytý správcem; vidí ho jen autor a správce (`can_view_list_row(owner, visibility,
+  hidden)` – používají ho pravidla RLS i funkce pro web). Autor ho změnit nemůže (nemá právo na sloupec).
+- **`list_reports`** – `list_id` (cascade), `reporter_id` (výchozí `auth.uid()`), `reason` (`offensive` / `spam` /
+  `spoilers` / `other`), `note` (≤ 300), `status` (`open` / `dismissed` / `hidden`), `created_at`; unikátní
+  `(list_id, reporter_id)`. Nahlásit jde jen cizí seznam, který uživatel vidí.
+- `community_lists(limit)` – veřejné, neskryté seznamy s aspoň 3 filmy od nejvíc zobrazených (autor,
+  4 plakáty, id kategorií); `admin_reported_lists()` a `admin_moderate_list(id, hide)` jen pro správce.
+
 ### Hlídání nových dílů sérií (V3.5.2.3)
 - **`films.tmdb_collection_id`** – série TMDB, do které film patří (`belongs_to_collection`); `0` = žádná,
   `null` = ještě nezjištěno. Plní ho import (`tmdb`), přidání filmu v adminu a postupně i kontrola sérií.

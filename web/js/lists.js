@@ -5,6 +5,7 @@
 
 import { supabase } from "./supabase.js";
 import { isUpcoming } from "./data.js";
+import { cached, invalidate } from "./cache.js";
 import { TEXTS, format } from "./texts.js";
 
 export const MAX_LISTS = 50;
@@ -113,6 +114,40 @@ export async function removeFromList(listId, tmdbId) {
 export async function swapListItems(listId, a, b) {
     check(await supabase.from("list_items").update({ position: b.position }).eq("list_id", listId).eq("tmdb_id", a.film.tmdb_id));
     check(await supabase.from("list_items").update({ position: a.position }).eq("list_id", listId).eq("tmdb_id", b.film.tmdb_id));
+}
+
+// ---------------------------------------------------------------------
+// Komunita (V3.5.4)
+// ---------------------------------------------------------------------
+
+export const REPORT_REASONS = ["offensive", "spam", "spoilers", "other"];
+
+/**
+ * Veřejné seznamy komunity (aspoň 3 filmy, neskryté) od nejvíc zobrazených – přehled a hledání.
+ * Mezipaměť na minutu; chyba (stará databáze bez funkce) = žádné seznamy.
+ */
+export function fetchCommunityLists() {
+    return cached("community-lists", async () => {
+        const { data, error } = await supabase.rpc("community_lists", { p_limit: 200 });
+        if (error) return [];
+        return data ?? [];
+    }, 60_000).catch(() => []);
+}
+
+/** Nahlásit seznam (důvod + nepovinná poznámka). Opakované nahlášení = kód "duplicate". */
+export async function reportList(listId, reason, note = null) {
+    check(await supabase.from("list_reports").insert({ list_id: listId, reason, note: note?.trim() || null }));
+}
+
+/** Správce: nahlášené a skryté seznamy. */
+export async function fetchReportedLists() {
+    return check(await supabase.rpc("admin_reported_lists")) ?? [];
+}
+
+/** Správce: skrýt (hide = true) / zobrazit seznam; otevřená nahlášení se uzavřou. */
+export async function moderateList(listId, hide) {
+    check(await supabase.rpc("admin_moderate_list", { p_list_id: listId, p_hide: hide }));
+    invalidate("community-lists");
 }
 
 /** Náhodné ID prohlížeče pro počítadlo zobrazení nepřihlášených (jednou za den). */

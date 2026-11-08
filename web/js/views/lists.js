@@ -6,29 +6,11 @@ import { isSignedIn, getProfile } from "../auth.js";
 import { fetchUserLists, createList, VISIBILITIES, MAX_TITLE, MAX_LISTS, listErrorText, visibilityLabel } from "../lists.js";
 import { setAccent } from "../theme.js";
 import { TEXTS, format, movies } from "../texts.js";
-import { h, mount, posterUrl, toast, loadingView, errorView } from "../dom.js";
+import { h, mount, toast, loadingView, errorView } from "../dom.js";
+import { listGrid } from "./list-card.js";
+
+export { listCard, listGrid } from "./list-card.js";
 import { profileTabs } from "./stats.js";
-
-/** Karta seznamu: obálka ze 4 plakátů, název, počet filmů, viditelnost (u vlastních), zobrazení. */
-export function listCard(list, { showVisibility = false } = {}) {
-    const posters = (list.posters ?? []).slice(0, 4);
-    return h("a", { class: "list-card", href: `#/list/${list.id}` },
-        h("div", { class: `list-card__cover list-card__cover--${Math.max(1, posters.length)}` },
-            posters.length === 0
-                ? h("span", { class: "list-card__empty", "aria-hidden": "true" }, "☰")
-                : posters.map((path) => h("img", { src: posterUrl(path, "small"), alt: "", loading: "lazy", decoding: "async" }))),
-        h("div", { class: "list-card__body" },
-            h("h3", { class: "list-card__title" }, list.title),
-            h("p", { class: "list-card__meta" },
-                [movies(list.item_count),
-                    showVisibility ? visibilityLabel(list.visibility) : null,
-                    list.view_count > 0 ? `👁 ${list.view_count}` : null].filter(Boolean).join(" · "))));
-}
-
-/** Mřížka karet seznamů. */
-export function listGrid(lists, options) {
-    return h("div", { class: "list-grid" }, lists.map((list) => listCard(list, options)));
-}
 
 export async function listsView(container, context) {
     setAccent(null);

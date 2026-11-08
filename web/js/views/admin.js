@@ -41,6 +41,7 @@ export function adminHeader(active) {
             tab("#/admin/users", TEXTS.adminTabUsers, "users"),
             tab("#/admin/words", TEXTS.adminTabWords, "words"),
             tab("#/admin/requests", TEXTS.adminTabRequests, "requests"),
+            tab("#/admin/reports", TEXTS.adminTabReports, "reports"),
         ),
     );
 }

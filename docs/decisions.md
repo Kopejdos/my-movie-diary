@@ -301,7 +301,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 38b | V3.5.2.2 | Quality of life ✅ | **hledání ve všech záložkách admin panelu** (kolekce i podle filmu, uživatelé, zakázaná slova, požadavky); přehled kolekcí **podle abecedy** (nebo nejnovější / můj postup) a **sbalené skupiny** – dvě řady + *Show all* |
 | 38c | V3.5.2.3 | Hlídání nových dílů ✅ | kolekce typu série se jednou denně porovnají se sériemi TMDB: chybějící díly v admin panelu (*Add* / *Dismiss*, i do studia), posunuté premiéry se srovnají samy; popisy z TMDB zkrácené na celé věty |
 | 39 | V3.5.3 | Vlastní seznamy ✅ | neoficiální kolekce uživatelů **jen z filmů v databázi** (bez požadavku): tlačítko ☰ u filmu, název, popis, 1–3 kategorie, vlastní pořadí, viditelnost soukromá / přátelé / veřejná, záložka *Lists* na profilu, počítadlo zobrazení |
-| 40 | V3.5.4 | Komunita | veřejné seznamy v hledání; sekce **Community** dole na přehledu (top 7 podle zobrazení, řídí se filtry, záložka *Community*); nahlášení a skrytí adminem |
+| 40 | V3.5.4 | Komunita ✅ | veřejné seznamy v hledání; sekce **Community** dole na přehledu (top 7 podle zobrazení, řídí se filtry, záložka *Community*); nahlášení a skrytí adminem (záložka *Reports*) |
 | 41 | V3.6.1 | Přepracování postupu | strmější křivka úrovní (100 filmů ≈ úroveň 5, 500 ≈ 10, *Legend* ≈ 3 000+), XP za kolekci podle velikosti (10 XP za film místo pevných 100), vyšší úrovně achievementů (Collector 500/1 000, Screen Time 500/1 000 h, Completionist 50), zápis **„Seen before“ bez data** (počítá se do kolekcí a filmů, ne do Marathonu, sérií dní ani Wrapped) |
 | 42 | V3.6.2 | Optimalizace a úklid | sdílené kousky kódu místo kopií (hvězdička watchlistu, pilulka kolekce, `check()`), úklid `style.css`, testy do repozitáře (`tests/`), Lighthouse, indexy v databázi, přístupnost – **jako poslední krok před V4.0** |
 
@@ -1574,6 +1574,30 @@ Podnět: kolekcí je přes sto, přehled je dlouhý a v adminu se špatně hled�
 - **Odkaz na seznam podle čísla** (`#/list/12`), ne podle názvu – název jde měnit a dva lidé můžou mít
   stejný.
 - **Veřejný seznam = kdokoli s odkazem**; v hledání a v Community se objeví až ve V3.5.4.
+
+### Fáze 40 – komunita ✅ (9. 11. 2026) – **V3.5.4**
+- **Komunitní seznam** = veřejný, neskrytý, **aspoň 3 filmy** (prázdné a rozpracované seznamy se nevystavují).
+- **Přehled:** úplně dole pod Paths sekce **Community** – **jedna řada 7** nejzobrazovanějších (na šířku
+  obsahu, na telefonu se posouvá do strany), autor a 👁 u karty, tlačítko *All N community lists →*.
+  Řídí se žánrem; nová záložka **Community** mezi druhy kolekcí ukáže všechny (podle zobrazení – řazení
+  A–Z se u ní schová, počty u žánrů počítají seznamy). Záložka se pamatuje jako ostatní.
+- **Hledání:** oddíl **Lists** – veřejné seznamy podle názvu, popisu nebo autora (všechna slova dotazu).
+- **Nahlášení:** u cizího seznamu (přihlášený) **⚑ Report** → důvod (urážlivé, spam, spoilery, jiné)
+  + poznámka; jedno nahlášení na uživatele a seznam, autor neví, kdo nahlásil.
+- **Admin → záložka Reports:** nahlášené seznamy (důvody s počtem, poznámky) → *Hide list* / *Dismiss
+  reports*; skryté seznamy níž → *Show again*. Skrytý seznam vidí jen autor (s upozorněním na stránce
+  seznamu a štítkem na kartě) a správce; zmizí z komunity, hledání i profilu. Autor ho sám odkrýt nemůže.
+- Migrace `20261109110000_community.sql` (`lists.hidden`, `list_reports`, `can_view_list_row`,
+  `community_lists`, `admin_reported_lists`, `admin_moderate_list`; `list_info` a `user_lists` znají skrytí
+  a nahlášení). Jen web + migrace. Ověřeno: lokální Postgres (komunita, vlastní seznam nahlásit nejde,
+  skrytí zmizí z komunity i pro nepřihlášeného, autor vidí a neodkryje, správcovské funkce jen pro správce),
+  testy webu (řada a záložka Community, filtr žánru, hledání, nahlášení, skrytý seznam, admin Reports,
+  320 px).
+
+#### Rozhodnutí ve fázi 40
+- **Na přehledu jen jedna řada** – hlavní obsah jsou kurátorské kolekce, komunita je doplněk.
+- **Pořadí podle zobrazení** (ne podle hodnocení) – zobrazení se počítají poctivě (jednou na uživatele).
+- **Skrytí místo smazání** – správce nemaže cizí práci; autor seznam po úpravě může požádat o odkrytí.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

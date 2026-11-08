@@ -7,7 +7,7 @@ import {
 } from "../data.js";
 import {
     buildSearchIndex, parseQuery, searchFilms, searchCollections, searchGroups, filterByWatched,
-    MAX_FILM_RESULTS, MAX_COLLECTION_RESULTS,
+    MAX_FILM_RESULTS, MAX_COLLECTION_RESULTS, normalize,
 } from "../search.js";
 import { isSignedIn } from "../auth.js";
 import { replaceQuery } from "../router.js";
@@ -18,6 +18,8 @@ import { h, mount, poster, pill, yearOf, formatDate, toast, loadingView, errorVi
 import { universeCard } from "./universes.js";
 import { searchUsers } from "../social.js";
 import { soonPill } from "./coming-soon.js";
+import { fetchCommunityLists } from "../lists.js";
+import { listGrid } from "./list-card.js";
 
 const FILTERS = ["all", "unwatched", "watched"];
 
@@ -58,6 +60,9 @@ export async function searchView(container, context) {
     );
     input.focus();
 
+    // Veřejné seznamy komunity (V3.5.4) – načtou se vedle, hledání na ně nečeká
+    const communityPromise = fetchCommunityLists();
+
     let data, counts, watchlist;
     const load = () => Promise.all([
         fetchSearchData(),
@@ -74,6 +79,11 @@ export async function searchView(container, context) {
     if (!isCurrent()) return;
 
     const page = new SearchPage(results, buildSearchIndex(data.universes, data.items, data.otherFilms), counts, watchlist, signedIn);
+    communityPromise.then((lists) => {
+        if (!isCurrent() || lists.length === 0) return;
+        page.lists = lists;
+        if (page.text) page.render();
+    });
     // Klik na příklad v nápovědě = jako by ho uživatel napsal
     page.onExample = (text) => {
         input.value = text;
@@ -129,6 +139,7 @@ class SearchPage {
         this.text = "";
         this.onExample = () => {};
         this.users = [];
+        this.lists = [];            // veřejné seznamy komunity (V3.5.4)
         this.filter = signedIn && FILTERS.includes(loadPref("searchFilter", "all"))
             ? loadPref("searchFilter", "all")
             : "all";
@@ -171,7 +182,8 @@ class SearchPage {
         const films = filterByWatched(allFilms, this.filter, this.counts);
 
         const users = this.users ?? [];
-        if (foundCollections.length === 0 && foundGroups.length === 0 && allFilms.length === 0 && users.length === 0) {
+        const lists = this.findLists(this.text);
+        if (foundCollections.length === 0 && foundGroups.length === 0 && allFilms.length === 0 && users.length === 0 && lists.length === 0) {
             mount(this.container,
                 h("div", { class: "empty-filter" },
                     h("p", { style: "margin: 0 0 6px" }, format("searchNoResults", this.text)),
@@ -192,10 +204,31 @@ class SearchPage {
                 ]
                 : null,
             foundGroups.length > 0 ? this.renderGroups(foundGroups.slice(0, MAX_COLLECTION_RESULTS)) : null,
+            lists.length > 0
+                ? [
+                    h("div", { class: "section-title" },
+                        h("h2", {}, TEXTS.searchLists),
+                        h("span", { class: "muted" }, String(lists.length))),
+                    listGrid(lists.slice(0, MAX_COLLECTION_RESULTS), { showAuthor: true }),
+                ]
+                : null,
             users.length > 0 ? this.renderUsers(users) : null,
             allFilms.length > 0 ? this.renderFilms(films) : null,
             this.requestLink(),
         );
+    }
+
+    /**
+     * Veřejné seznamy podle názvu, popisu nebo autora (V3.5.4) – všechna slova dotazu musí
+     * sedět; nejzobrazovanější první (tak je vrací databáze).
+     */
+    findLists(text) {
+        const words = normalize(text).split(" ").filter((w) => w.length > 0);
+        if (words.length === 0 || this.lists.length === 0) return [];
+        return this.lists.filter((list) => {
+            const haystack = normalize(`${list.title} ${list.description ?? ""} ${list.username}`);
+            return words.every((w) => haystack.includes(w));
+        });
     }
 
     /** „Can't find a movie? Request it“ (V3.5.1) – odkaz na požadavky s předvyplněným dotazem. */

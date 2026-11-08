@@ -3,6 +3,11 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.5.4 – November 2026
+- **Community** – the most viewed public lists at the bottom of the overview (one row, follows the genre filter) and a new Community tab with all of them
+- Public lists can be found in search
+- Report a list that isn't OK – the admin can hide it (Admin → Reports)
+
 ## V3.5.3 – November 2026
 - **Your own lists** – tap ☰ next to any movie (in a collection or in search) to put it on a list, or start a new one right there
 - Profile → **Lists**: all your lists with a poster cover; name, description, up to 3 categories and your own order

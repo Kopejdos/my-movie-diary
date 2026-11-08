@@ -42,6 +42,7 @@ const adminUniversesView = lazy(() => import("./views/admin.js"), "adminUniverse
 const adminUsersView = lazy(() => import("./views/admin.js"), "adminUsersView");
 const adminWordsView = lazy(() => import("./views/admin.js"), "adminWordsView");
 const adminRequestsView = lazy(() => import("./views/admin-requests.js"), "adminRequestsView");
+const adminReportsView = lazy(() => import("./views/admin-reports.js"), "adminReportsView");
 const requestsView = lazy(() => import("./views/requests.js"), "requestsView");
 const listsView = lazy(() => import("./views/lists.js"), "listsView");
 const listView = lazy(() => import("./views/list.js"), "listView");
@@ -77,6 +78,7 @@ addRoute("/admin", adminUniversesView);
 addRoute("/admin/users", adminUsersView);
 addRoute("/admin/words", adminWordsView);
 addRoute("/admin/requests", adminRequestsView);
+addRoute("/admin/reports", adminReportsView);
 addRoute("/requests", requestsView);
 addRoute("/lists", listsView);
 addRoute("/list/:id", listView);
