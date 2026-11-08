@@ -3,6 +3,7 @@
 // jen ze zhlédnutí, která vrátí funkce public_profile.
 // Přátelé (V3.4.1): tlačítko Add friend / Accept / ✓ Friends; přítel vidí i soukromý profil,
 // cizí soukromý profil ukáže jen nick a tlačítko přátelství.
+// Seznamy (V3.5.3): záložka Lists – seznamy, které smím vidět (veřejné, u přítele i „friends“).
 
 import { fetchPublicProfile, shareProfile } from "../social.js";
 import { computeAchievements } from "../achievements.js";
@@ -15,6 +16,8 @@ import { h, mount, toast, loadingView, errorView } from "../dom.js";
 import { achievementsContent } from "./achievements.js";
 import { statsContent } from "./stats.js";
 import { friendButton } from "./friends.js";
+import { fetchUserLists } from "../lists.js";
+import { listGrid } from "./lists.js";
 
 export async function publicProfileView(container, context) {
     const { params, isCurrent } = context;
@@ -60,7 +63,9 @@ export async function publicProfileView(container, context) {
                         // Po přijetí přátelství se profil načte znovu – přítel už data uvidí
                         friendButton(found.profile.username, found.friendship, (state) => { if (state === "friend") reload(); })),
                 ),
-            ));
+            ),
+            // Veřejné seznamy jsou vidět i u soukromého profilu (V3.5.3)
+            userListsSection(found.profile.username, false, true));
         return;
     }
 
@@ -85,9 +90,12 @@ export async function publicProfileView(container, context) {
         }, label);
         mount(tabs, h("div", { class: "segmented" },
             option("achievements", TEXTS.profileTabAchievements),
-            option("stats", TEXTS.profileTabStats)));
+            option("stats", TEXTS.profileTabStats),
+            option("lists", TEXTS.profileTabLists)));
 
-        if (tab === "stats") {
+        if (tab === "lists") {
+            mount(body, userListsSection(profile.username, isOwn));
+        } else if (tab === "stats") {
             mount(body, stats.totals.watches > 0
                 ? statsContent(stats)
                 : h("div", { class: "empty-filter" }, TEXTS.publicNoActivity));
@@ -137,4 +145,26 @@ function profileHero(profile, level, totals, isOwn, friendship, reload) {
                 isOwn ? null : friendButton(profile.username, friendship, (state) => { if (state === "none") reload(); })),
         ),
     );
+}
+
+/**
+ * Seznamy uživatele, které smím vidět (V3.5.3) – načtou se samy.
+ * quiet = když žádný není, nic neukazovat (soukromý profil).
+ */
+function userListsSection(username, isOwn, quiet = false) {
+    const section = h("section", { class: "public-lists" }, quiet ? null : loadingView());
+    fetchUserLists(username)
+        .then((lists) => {
+            if (lists.length === 0) {
+                mount(section, quiet ? null : h("div", { class: "empty-filter" },
+                    isOwn ? TEXTS.listsEmpty : TEXTS.publicNoLists));
+                return;
+            }
+            mount(section,
+                quiet ? h("div", { class: "section-title" }, h("h2", {}, TEXTS.profileTabLists)) : null,
+                listGrid(lists, { showVisibility: isOwn }),
+                isOwn ? h("p", { class: "hint" }, h("a", { href: "#/lists" }, TEXTS.listManage)) : null);
+        })
+        .catch((error) => mount(section, quiet ? null : h("p", { class: "muted" }, format("errorGeneric", error.message))));
+    return section;
 }

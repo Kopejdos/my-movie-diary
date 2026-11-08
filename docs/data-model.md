@@ -76,6 +76,21 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 | `universe_id` | `bigint` FK → `universes` | PK spolu s `category_id` |
 | `category_id` | `bigint` FK → `categories` | |
 
+### Vlastní seznamy (V3.5.3)
+- **`lists`** – `id`, `user_id` (FK → `profiles`, cascade, výchozí `auth.uid()`), `title` (1–80 znaků), `description`
+  (≤ 500), `visibility` (`private` / `friends` / `public`), `view_count`, `created_at`, `updated_at`.
+  Zapisovat jde jen `title`, `description`, `visibility` (počítadlo mění jen `register_list_view`).
+- **`list_items`** – `list_id` (cascade), `tmdb_id` (FK → `films`), `position` (bez pozice = na konec),
+  `note` (≤ 300), `added_at`; PK `(list_id, tmdb_id)`.
+- **`list_categories`** – `list_id`, `category_id`; nejvýš 3 na seznam (trigger).
+- **`list_views`** – `list_id`, `viewer_key` (`u:<uuid>` / `a:<id prohlížeče>`), `viewed_on` (přihlášený pevné
+  datum = jednou navždy, nepřihlášený dnešek = jednou za den); RLS bez pravidel.
+- Viditelnost hlídá `can_view_list(owner, visibility)` (veřejný, vlastní, přítel u `friends`, správce).
+- Funkce pro web: `list_info(id)` (údaje + přezdívka autora + kategorie), `user_lists(username)` (seznamy,
+  které smím vidět, s počtem filmů a 4 plakáty), `my_lists_for_film(tmdb_id)`, `register_list_view(id, anon_id)`.
+- Triggery: zakázaná slova v názvu / popisu / poznámce (`is_text_allowed`), limity 50 seznamů / 300 filmů /
+  3 kategorie, čas úpravy.
+
 ### Hlídání nových dílů sérií (V3.5.2.3)
 - **`films.tmdb_collection_id`** – série TMDB, do které film patří (`belongs_to_collection`); `0` = žádná,
   `null` = ještě nezjištěno. Plní ho import (`tmdb`), přidání filmu v adminu a postupně i kontrola sérií.

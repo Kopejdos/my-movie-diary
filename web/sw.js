@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v13";       // V3.5.2.3: hlídání nových dílů sérií; od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v14";       // V3.5.3: vlastní seznamy; od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline
@@ -47,6 +47,7 @@ const SHELL = [
     "js/today.js",
     "js/compare.js",
     "js/requests.js",
+    "js/lists.js",
     "js/views/universes.js",
     "js/views/universe.js",
     "js/views/watchlist.js",
@@ -65,6 +66,9 @@ const SHELL = [
     "js/views/admin-requests.js",
     "js/views/admin-search.js",
     "js/views/admin-series.js",
+    "js/views/lists.js",
+    "js/views/list.js",
+    "js/views/list-picker.js",
     "js/views/achievements.js",
     "js/views/login.js",
     "js/views/register.js",

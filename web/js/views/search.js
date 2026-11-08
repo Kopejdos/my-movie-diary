@@ -336,10 +336,23 @@ class SearchPage {
             ),
             this.signedIn
                 ? h("div", { class: "film__actions" },
+                    this.renderListButton(entry.film),
                     this.renderStar(row, entry),
                     upcoming ? null : this.renderCounter(row, entry, count, busy))
                 : null,
         );
+    }
+
+    /** Tlačítko ☰ – přidat film do vlastního seznamu (V3.5.3). */
+    renderListButton(film) {
+        return h("button", {
+            class: "star-btn list-btn", type: "button",
+            title: TEXTS.listAddTo, "aria-label": `${TEXTS.listAddTo}: ${film.title}`,
+            onClick: async () => {
+                const { openListPicker } = await import("./list-picker.js");
+                openListPicker(film);
+            },
+        }, "☰");
     }
 
     /** Hvězdička ☆ / ★ – watchlist. */

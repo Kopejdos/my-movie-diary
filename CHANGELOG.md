@@ -3,6 +3,13 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.5.3 – November 2026
+- **Your own lists** – tap ☰ next to any movie (in a collection or in search) to put it on a list, or start a new one right there
+- Profile → **Lists**: all your lists with a poster cover; name, description, up to 3 categories and your own order
+- Private, friends-only or public – whoever opens a list sees their own progress in it, and public lists count views
+- Lists show up on profiles too (only the ones the visitor is allowed to see)
+- On small phones the movie buttons moved below the title, so long titles don't break letter by letter
+
 ## V3.5.2.3 – November 2026
 - Admin: MMD keeps an eye on TMDB series – new parts missing from a collection show up in the admin panel (Add / Dismiss, optionally into the studio collection too)
 - Pushed release dates of upcoming movies are picked up automatically

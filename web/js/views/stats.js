@@ -83,7 +83,8 @@ export function profileTabs(active) {
             tab("profile", "#/profile", TEXTS.profileTabAchievements),
             tab("stats", "#/stats", TEXTS.profileTabStats),
             tab("friends", "#/friends", [TEXTS.profileTabFriends,
-                pending > 0 ? h("span", { class: "tab-badge", "aria-label": format("friendsPendingAria", pending) }, String(pending)) : null])));
+                pending > 0 ? h("span", { class: "tab-badge", "aria-label": format("friendsPendingAria", pending) }, String(pending)) : null]),
+            tab("lists", "#/lists", TEXTS.profileTabLists)));
 }
 
 /** Sekce s nadpisem. */

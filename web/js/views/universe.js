@@ -13,6 +13,10 @@
 //
 // Coming soon (V3.3): oznámené filmy (universe.upcoming) jsou v oddílu úplně dole –
 // nepočítají se do počtu filmů, postupu ani Up next; jde je jen přidat do watchlistu.
+//
+// Vlastní seznamy (V3.5.3): u filmu tlačítko ☰ „Add to list“; stránka seznamu (views/list.js)
+// používá tuhle třídu taky – přepíše jen banner a přidá ovládání autora (háčky bannerPills,
+// bannerExtras, rowExtras).
 
 import {
     fetchUniverse, fetchMyFilmCounts, addWatch, removeLatestWatch,
@@ -74,7 +78,7 @@ export async function universeView(container, context) {
  * Stránka univerza drží počty zhlédnutí a po kliknutí na +/− překreslí
  * jen dotčený film, Up next a ukazatel postupu, ne celou stránku.
  */
-class UniversePage {
+export class UniversePage {
     constructor(container, universe, counts, watchlist, signedIn, query = new URLSearchParams(), ratings = new Map()) {
         this.container = container;
         this.universe = universe;
@@ -90,6 +94,7 @@ class UniversePage {
         this.upNext = h("section", { class: "up-next-slot" });
         this.list = h("ol", { class: "film-list" });
         this.toolbar = h("div", { class: "toolbar" });
+        this.backHref = "#/";             // kam vede „← Back“ (seznam ho mění)
 
         // Cesta = pevné pořadí kroků s poznámkami (bez přepínače pořadí)
         this.isPath = universe.kind === "path";
@@ -214,7 +219,7 @@ class UniversePage {
         const required = universe.items.filter((item) => !item.is_optional).length;
 
         const banner = h("section", { class: "banner" },
-            h("a", { class: "back-link", href: "#/" }, TEXTS.back),
+            h("a", { class: "back-link", href: this.backHref }, this.backText ?? TEXTS.back),
             h("div", { class: "banner__content" },
                 h("h1", { class: "banner__title" }, universe.name),
                 universe.description ? h("p", { class: "banner__description" }, universe.description) : null,
@@ -222,14 +227,43 @@ class UniversePage {
                     pill(this.isPath ? steps(required) : movies(required), true),
                     universe.kind === "genre" ? pill(TEXTS.kindGenre) : null,
                     this.isPath ? pill(`🧭 ${TEXTS.kindPathBadge}`) : null,
+                    this.bannerPills(),
                     (universe.categories ?? [])
                         .sort((a, b) => a.sort_order - b.sort_order)
                         .map((c) => pill(c.name))),
-                this.signedIn ? this.renderProgress() : null,
+                this.signedIn && universe.items.length > 0 ? this.renderProgress() : null,
+                this.bannerExtras(),
             ),
         );
         if (image) banner.style.setProperty("--banner-image", `url("${image}")`);
         return banner;
+    }
+
+    /** Pilulky navíc v banneru (seznam: autor, viditelnost…). */
+    bannerPills() {
+        return null;
+    }
+
+    /** Obsah navíc pod bannerem (seznam: tlačítka autora). */
+    bannerExtras() {
+        return null;
+    }
+
+    /** Ovládání navíc u řádku filmu (seznam: přesun a odebrání). */
+    rowExtras() {
+        return null;
+    }
+
+    /** Tlačítko ☰ – přidat film do vlastního seznamu (V3.5.3; výběr seznamu v okně). */
+    renderListButton(film) {
+        return h("button", {
+            class: "star-btn list-btn", type: "button",
+            title: TEXTS.listAddTo, "aria-label": `${TEXTS.listAddTo}: ${film.title}`,
+            onClick: async () => {
+                const { openListPicker } = await import("./list-picker.js");
+                openListPicker(film);
+            },
+        }, "☰");
     }
 
     /** Záložní banner, když obalový film nemá záběr. */
@@ -396,7 +430,7 @@ class UniversePage {
                     item.is_optional ? pill(TEXTS.optionalBadge) : null,
                     this.renderRating(row, item, count),
                 ),
-                this.isPath && item.note ? h("p", { class: "film__note" }, item.note) : null,
+                (this.isPath || this.showNotes) && item.note ? h("p", { class: "film__note" }, item.note) : null,
                 this.signedIn
                     ? h("p", { class: "film__status" },
                         count > 0
@@ -406,9 +440,11 @@ class UniversePage {
             ),
             this.signedIn
                 ? h("div", { class: "film__actions" },
+                    this.renderListButton(film),
                     this.renderWatchlistButton(row, item),
                     this.renderCounter(row, item, count, busy))
                 : h("a", { class: "btn btn--small", href: "#/login" }, TEXTS.signInToTrack),
+            this.rowExtras(row, item),
             // Editor hodnocení přes celou šířku řádku (na telefonu by se nevešel vedle tlačítek)
             this.ratingOpen === film.tmdb_id
                 ? ratingEditor({

@@ -300,7 +300,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 38a | V3.5.2.1 | Seed bez ruční práce ✅ | do seedu se samy propisují **všechny úpravy z aplikace** (admin panel: přidání, úprava, přesun, odebrání filmu, úprava / nová / smazaná kolekce); nové filmy se řadí **podle data premiéry**; kolekce ze série nabídne přidat díly i do **kolekce studia** (Lethal Weapon → Warner Bros.) |
 | 38b | V3.5.2.2 | Quality of life ✅ | **hledání ve všech záložkách admin panelu** (kolekce i podle filmu, uživatelé, zakázaná slova, požadavky); přehled kolekcí **podle abecedy** (nebo nejnovější / můj postup) a **sbalené skupiny** – dvě řady + *Show all* |
 | 38c | V3.5.2.3 | Hlídání nových dílů ✅ | kolekce typu série se jednou denně porovnají se sériemi TMDB: chybějící díly v admin panelu (*Add* / *Dismiss*, i do studia), posunuté premiéry se srovnají samy; popisy z TMDB zkrácené na celé věty |
-| 39 | V3.5.3 | Vlastní seznamy | neoficiální kolekce uživatelů **jen z filmů v databázi** (bez požadavku): název, popis, 1–3 kategorie, vlastní pořadí, viditelnost soukromá / přátelé / veřejná, na profilu, počítadlo zobrazení |
+| 39 | V3.5.3 | Vlastní seznamy ✅ | neoficiální kolekce uživatelů **jen z filmů v databázi** (bez požadavku): tlačítko ☰ u filmu, název, popis, 1–3 kategorie, vlastní pořadí, viditelnost soukromá / přátelé / veřejná, záložka *Lists* na profilu, počítadlo zobrazení |
 | 40 | V3.5.4 | Komunita | veřejné seznamy v hledání; sekce **Community** dole na přehledu (top 7 podle zobrazení, řídí se filtry, záložka *Community*); nahlášení a skrytí adminem |
 | 41 | V3.6.1 | Přepracování postupu | strmější křivka úrovní (100 filmů ≈ úroveň 5, 500 ≈ 10, *Legend* ≈ 3 000+), XP za kolekci podle velikosti (10 XP za film místo pevných 100), vyšší úrovně achievementů (Collector 500/1 000, Screen Time 500/1 000 h, Completionist 50), zápis **„Seen before“ bez data** (počítá se do kolekcí a filmů, ne do Marathonu, sérií dní ani Wrapped) |
 | 42 | V3.6.2 | Optimalizace a úklid | sdílené kousky kódu místo kopií (hvězdička watchlistu, pilulka kolekce, `check()`), úklid `style.css`, testy do repozitáře (`tests/`), Lighthouse, indexy v databázi, přístupnost – **jako poslední krok před V4.0** |
@@ -1541,6 +1541,39 @@ Podnět: kolekcí je přes sto, přehled je dlouhý a v adminu se špatně hled�
 - **Jen kolekce typu série** – studia a žánrové výběry jsou kurátorské; díly do studia se nabízejí jen
   u filmu, který se přidává do série.
 - **Data premiér se srovnávají bez ptaní** – TMDB je pro data zdroj pravdy; seed obsahuje jen rok.
+
+### Fáze 39 – vlastní seznamy ✅ (9. 11. 2026) – **V3.5.3**
+- **Tlačítko ☰ „Add to list“** u každého filmu v kolekci, v hledání a v seznamu → okno se seznamy
+  (zaškrtnutí film hned přidá / odebere), dole rovnou **nový seznam** s tímhle filmem; odkaz *Manage my lists*.
+- **Profil → záložka Lists** (`#/lists`, vedle Achievements / Stats / Friends): založení seznamu (název,
+  viditelnost) a karty mých seznamů – obálka ze 4 plakátů, počet filmů, viditelnost, zobrazení.
+- **Stránka seznamu** (`#/list/<id>`) používá stránku kolekce: počítadlo, watchlist, hodnocení, Up next
+  a **postup toho, kdo seznam otevřel**; chystané filmy v Coming soon. V banneru autor (odkaz na profil),
+  viditelnost 🔒 / 👥 / 🌍 a 👁 zobrazení.
+  - **Autor:** *Edit list* (název, popis, viditelnost, 1–3 kategorie, smazání), šipky ↑ ↓ a *Remove*
+    u filmu, × u chystaného filmu; poznámka k filmu se ukazuje (zatím bez úprav v aplikaci).
+- **Veřejný profil → záložka Lists**: seznamy, které smí návštěvník vidět (veřejné; u přítele i „friends“);
+  u soukromého profilu jen veřejné seznamy, a jen když nějaké jsou.
+- **Počítadlo zobrazení:** přihlášený jednou navždy, nepřihlášený jednou za den (náhodné ID prohlížeče);
+  autor se nepočítá; počítadlo mění jen databázová funkce (`register_list_view`), autor ho nastavit nemůže.
+- **Zakázaná slova** v názvu a popisu (seznam z admin panelu, po slovech: *exact* = celé slovo, *contains* =
+  slovo obsahuje zakázané; zakázaná slova kratší než 4 znaky jen jako celé slovo – „ass“ nezablokuje
+  „Assassin“). **Limity:** 50 seznamů, 300 filmů, 3 kategorie.
+- **Úzký telefon (≤ 480 px):** tlačítka filmu (☰ ☆ − 0 +) se přesunula pod název – přibylo ☰ a název
+  by se jinak lámal po písmenech.
+- Migrace `20261109100000_lists.sql` (tabulky `lists`, `list_items`, `list_categories`, `list_views`, funkce
+  `can_view_list`, `list_info`, `user_lists`, `my_lists_for_film`, `register_list_view`, `is_text_allowed`,
+  kontroly v triggerech). Jen web + migrace, žádná Edge Function. Ověřeno: lokální Postgres (viditelnost
+  soukromá / veřejná / nepřihlášený, cizí zápis zakázán, zakázané slovo, limit kategorií, počítadlo nejde
+  nastavit, zobrazení autora / opakované / nepřihlášený za den), testy webu (☰ v kolekci a hledání, nový
+  seznam, Moje seznamy, detail, přesun, odebrání, úpravy, cizí seznam, veřejný profil, smazání, 320 px).
+
+#### Rozhodnutí ve fázi 39
+- **Stránka seznamu = stránka kolekce** (stejná třída) – seznam umí všechno, co kolekce (počítadlo,
+  hodnocení, Up next), a každá další úprava kolekcí se projeví i v seznamech.
+- **Odkaz na seznam podle čísla** (`#/list/12`), ne podle názvu – název jde měnit a dva lidé můžou mít
+  stejný.
+- **Veřejný seznam = kdokoli s odkazem**; v hledání a v Community se objeví až ve V3.5.4.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

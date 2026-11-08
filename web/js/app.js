@@ -43,6 +43,8 @@ const adminUsersView = lazy(() => import("./views/admin.js"), "adminUsersView");
 const adminWordsView = lazy(() => import("./views/admin.js"), "adminWordsView");
 const adminRequestsView = lazy(() => import("./views/admin-requests.js"), "adminRequestsView");
 const requestsView = lazy(() => import("./views/requests.js"), "requestsView");
+const listsView = lazy(() => import("./views/lists.js"), "listsView");
+const listView = lazy(() => import("./views/list.js"), "listView");
 const adminUniverseView = lazy(() => import("./views/admin-universe.js"), "adminUniverseView");
 const aboutView = lazy(() => import("./views/about.js"), "aboutView");
 const forgotPasswordView = lazy(() => import("./views/password.js"), "forgotPasswordView");
@@ -76,6 +78,8 @@ addRoute("/admin/users", adminUsersView);
 addRoute("/admin/words", adminWordsView);
 addRoute("/admin/requests", adminRequestsView);
 addRoute("/requests", requestsView);
+addRoute("/lists", listsView);
+addRoute("/list/:id", listView);
 addRoute("/admin/collection/:slug", adminUniverseView);
 addRoute("/admin/universe/:slug", (container, { params }) => redirect(`/admin/collection/${params.slug}`)());
 setNotFound(notFoundView);
@@ -147,7 +151,7 @@ function renderHeader() {
                     ? [
                         // S nevyřízenou žádostí o přátelství vede nick rovnou na Friends (V3.4.1)
                         h("a", {
-                            class: `nav__user${(["/profile", "/stats", "/friends"].includes(path) || path.startsWith("/compare/")) ? " nav__user--active" : ""}`,
+                            class: `nav__user${(["/profile", "/stats", "/friends", "/lists"].includes(path) || path.startsWith("/compare/")) ? " nav__user--active" : ""}`,
                             href: pending > 0 ? "#/friends" : "#/profile",
                             title: pending > 0 ? format("friendsPendingAria", pending) : TEXTS.navProfile,
                         },
