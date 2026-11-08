@@ -2712,6 +2712,69 @@
         { "title": "Lethal Weapon 4", "year": 1998, "tmdb": 944 },
         { "title": "Lethal Weapon 5", "tmdb": 1528550 }
       ]
+    },
+    {
+      "slug": "winnetou",
+      "name": "Winnetou",
+      "kind": "series",
+      "categories": ["action-adventure"],
+      "color": "#8b5cf6",
+      "description": "Winnetou is a fictional Native American hero of several novels written by Karl May (1842–1912, with about 200 million copies worldwide one of the best selling German writers of all time) in German, in",
+      "films": [
+        { "title": "Treasure of Silver Lake", "year": 1962, "tmdb": 5636 },
+        { "title": "Apache Gold", "year": 1963, "tmdb": 3685 },
+        { "title": "Old Shatterhand", "year": 1964, "tmdb": 9547 },
+        { "title": "Last of the Renegades", "year": 1964, "tmdb": 3686 },
+        { "title": "Frontier Hellcat", "year": 1964, "tmdb": 9347 },
+        { "title": "Rampage at Apache Wells", "year": 1965, "tmdb": 19199 },
+        { "title": "The Desperado Trail", "year": 1965, "tmdb": 7085 },
+        { "title": "Flaming Frontier", "year": 1965, "tmdb": 9627 },
+        { "title": "Winnetou and the Crossbreed", "year": 1966, "tmdb": 9628 },
+        { "title": "Thunder at the Border", "year": 1966, "tmdb": 9629 },
+        { "title": "The Valley of Death", "year": 1968, "tmdb": 10638 }
+      ]
+    },
+    {
+      "slug": "the-hills-have-eyes-original",
+      "name": "The Hills Have Eyes",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#f97316",
+      "description": "Two tales of cannibalistic carnage, both written and directed by Wes Craven, about a mutant clan lurking in a desert.",
+      "films": [
+        { "title": "The Hills Have Eyes", "year": 1977, "tmdb": 12262, "group": "original" },
+        { "title": "The Hills Have Eyes Part 2", "year": 1985, "tmdb": 18477, "group": "original" },
+        { "title": "The Hills Have Eyes", "year": 2006, "tmdb": 9792, "group": "reboot" },
+        { "title": "The Hills Have Eyes 2", "year": 2007, "tmdb": 9793, "group": "reboot" }
+      ]
+    },
+    {
+      "slug": "i-spit-on-your-grave",
+      "name": "I Spit on Your Grave",
+      "kind": "series",
+      "categories": ["crime-thriller", "horror"],
+      "color": "#ef4444",
+      "description": "CineTel Films acquired rights to remake I Spit on Your Grave, which had a Halloween 2010 worldwide theatrical release. The remake was produced by CineTel president and CEO Paul Hertzberg and Lisa Hans",
+      "films": [
+        { "title": "I Spit on Your Grave", "year": 2010, "tmdb": 43947 },
+        { "title": "I Spit on Your Grave 2", "year": 2013, "tmdb": 207768 },
+        { "title": "I Spit on Your Grave III: Vengeance Is Mine", "year": 2015, "tmdb": 357096 }
+      ]
+    },
+    {
+      "slug": "the-purge",
+      "name": "The Purge",
+      "kind": "series",
+      "categories": ["crime-thriller", "horror"],
+      "color": "#3b82f6",
+      "description": "The Purge Collection unfolds in a dystopian America where all crime is legal for one night each year. Blending horror, action, and social commentary, it explores themes of survival, morality, and syst",
+      "films": [
+        { "title": "The Purge", "year": 2013, "tmdb": 158015 },
+        { "title": "The Purge: Anarchy", "year": 2014, "tmdb": 238636 },
+        { "title": "The Purge: Election Year", "year": 2016, "tmdb": 316727 },
+        { "title": "The First Purge", "year": 2018, "tmdb": 442249 },
+        { "title": "The Forever Purge", "year": 2021, "tmdb": 602223 }
+      ]
     }
   ]
 }
