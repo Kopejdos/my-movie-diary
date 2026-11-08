@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v11";       // V3.5.2.1: úpravy z aplikace do seedu; od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v12";       // V3.5.2.2: hledání v adminu, řazení a sbalení přehledu; od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline
@@ -63,6 +63,7 @@ const SHELL = [
     "js/views/compare.js",
     "js/views/requests.js",
     "js/views/admin-requests.js",
+    "js/views/admin-search.js",
     "js/views/achievements.js",
     "js/views/login.js",
     "js/views/register.js",

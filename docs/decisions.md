@@ -203,7 +203,8 @@ Formát **V<hlavní>.<vedlejší>.<oprava>** (např. V1.2.1):
 - **Výjimka V3.0:** velká fáze organizace kolekcí je rozdělená na **V3.0.1** a **V3.0.2** (třetí číslo tu
   znamená část fáze, ne opravu). Případné opravy pak dostanou další číslo (V3.0.3…).
 - **Výjimka V3.5.2.x:** doplňky k hotové části fáze, které nechceme zařadit až za další část plánu, dostanou
-  **čtvrté číslo** (V3.5.2.1 – úpravy z aplikace do seedu, V3.5.2.2 – hlídání nových dílů).
+  **čtvrté číslo** (V3.5.2.1 – úpravy z aplikace do seedu, V3.5.2.2 – quality of life, V3.5.2.3 – hlídání
+  nových dílů).
 - Verze a **měsíc poslední aktualizace** jsou v patičce webu (např. „V1.1 · November 2026“). Obojí je v `web/js/config.js` (`APP_VERSION`, `APP_UPDATED`) – při vydání nové verze se změní tam.
 - Při vydání: úprava `config.js`, záznam do `CHANGELOG.md`, commit a **tag verze** (`git tag v1.1`, `git push --tags`). Tagy `faze-N` z verzí V0.x zůstávají, od V1.1 se používají jen tagy `vX.Y`.
 
@@ -297,7 +298,8 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 37 | V3.5.1 | Požadavky na filmy ✅ | záložka **Requests**: požadavek s více filmy z TMDB, +1 u existujícího požadavku, **My requests** se stavem; admin inbox (přijmout celý / výběr, návrh kolekce podle TMDB); schválené filmy bez kolekce v hledání a na profilu jako *Other movies*; série **Wrong Turn** a **Texas Chainsaw Massacre** |
 | 38 | V3.5.2 | Požadavky na kolekce ✅ | požadavek má dva druhy: **Movies** (libovolné filmy) a **Collection** (celá série TMDB – jen její díly, cizí film → „Nuh uh“); admin z něj jedním klikem vytvoří **oficiální kolekci**; návrhy nových kolekcí z běžných požadavků (víc filmů z jedné série); **seed se doplňuje sám** (`sync-seed.sh`) |
 | 38a | V3.5.2.1 | Seed bez ruční práce ✅ | do seedu se samy propisují **všechny úpravy z aplikace** (admin panel: přidání, úprava, přesun, odebrání filmu, úprava / nová / smazaná kolekce); nové filmy se řadí **podle data premiéry**; kolekce ze série nabídne přidat díly i do **kolekce studia** (Lethal Weapon → Warner Bros.) |
-| 38b | V3.5.2.2 | Hlídání nových dílů | u kolekcí ze série TMDB jednou denně kontrola nových dílů a dat premiér; admin panel ukáže *New parts → Add*, chystané filmy rovnou do Coming soon |
+| 38b | V3.5.2.2 | Quality of life ✅ | **hledání ve všech záložkách admin panelu** (kolekce i podle filmu, uživatelé, zakázaná slova, požadavky); přehled kolekcí **podle abecedy** (nebo nejnovější / můj postup) a **sbalené skupiny** – dvě řady + *Show all* |
+| 38c | V3.5.2.3 | Hlídání nových dílů | u kolekcí ze série TMDB jednou denně kontrola nových dílů a dat premiér; admin panel ukáže *New parts → Add*, chystané filmy rovnou do Coming soon |
 | 39 | V3.5.3 | Vlastní seznamy | neoficiální kolekce uživatelů **jen z filmů v databázi** (bez požadavku): název, popis, 1–3 kategorie, vlastní pořadí, viditelnost soukromá / přátelé / veřejná, na profilu, počítadlo zobrazení |
 | 40 | V3.5.4 | Komunita | veřejné seznamy v hledání; sekce **Community** dole na přehledu (top 7 podle zobrazení, řídí se filtry, záložka *Community*); nahlášení a skrytí adminem |
 | 41 | V3.6.1 | Přepracování postupu | strmější křivka úrovní (100 filmů ≈ úroveň 5, 500 ≈ 10, *Legend* ≈ 3 000+), XP za kolekci podle velikosti (10 XP za film místo pevných 100), vyšší úrovně achievementů (Collector 500/1 000, Screen Time 500/1 000 h, Completionist 50), zápis **„Seen before“ bez data** (počítá se do kolekcí a filmů, ne do Marathonu, sérií dní ani Wrapped) |
@@ -371,7 +373,9 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
   bude kód v nejlepším stavu (prohozeno 8. 11.).
 - **Plán a dokumentace se dál nevydávají zvlášť** – změny plánu jdou s nejbližší verzí.
 - **Seed bez ruční práce (8. 11.)** – i úpravy z admin panelu se mají do seedu dostat samy (V3.5.2.1); hlídání
-  nových dílů sérií jako bonus (V3.5.2.2).
+  nových dílů sérií jako bonus (V3.5.2.3).
+- **Quality of life (8. 11.)** – kolekcí přibývá: hledání v admin panelu, řazení podle abecedy a kratší přehled
+  (V3.5.2.2); hlídání nových dílů se posouvá na V3.5.2.3.
 - **Požadavky rozdělené na filmy a kolekce (8. 11.)** – nová V3.5.2 *Požadavky na kolekce*; vlastní seznamy se
   posouvají na V3.5.3 a komunita na V3.5.4 (čísla fází od 39 o jednu výš).
 
@@ -1479,6 +1483,32 @@ Podnět: po přidání Lethal Weapon 5 do Warner Bros. bylo potřeba ručně upr
 - **Při konfliktu vyhrává admin panel** u filmů, které v něm byly upravené; ručně přidané řádky zůstanou.
 - **Pořadí kolekcí na přehledu** se nepropisuje (přesouvání bloků v souboru by dělalo velké diffy) – kdo chce
   jiné pořadí natrvalo, přesune blok v seedu.
+
+### Fáze 38b – quality of life ✅ (8. 11. 2026) – **V3.5.2.2**
+Podnět: kolekcí je přes sto, přehled je dlouhý a v adminu se špatně hledá.
+- **Hledání v admin panelu** – ve všech záložkách stejné pole (`views/admin-search.js`): filtruje okamžitě
+  v prohlížeči, bez ohledu na velikost písmen a diakritiku, zvýrazní shodu, ukáže „12 of 107“, **/** skočí
+  do pole, **Esc** ho vymaže; hledaný text a filtr se pamatují po dobu návštěvy (po návratu z detailu kolekce).
+  - *Collections*: název, adresa, kategorie **i film v kolekci** (🎬 název filmu u řádku); přepínače
+    Series / Studios / Genre picks / Paths; při hledání se schovají šipky pořadí.
+  - *Users*: přezdívka a e-mail; Admins / Google / Email (/ ⚠ Flagged, když nějaký je).
+  - *Nicknames*: slovo; Contains / Exact.
+  - *Requests*: žadatel, poznámka, série, filmy; Movies / Collections (i návrhy nových kolekcí).
+- **Přehled kolekcí:**
+  - Řazení **A–Z** (výchozí; úvodní člen „The / A / An“ se přeskakuje – *The Purge* je u P), *Recently added*,
+    *My progress* (přihlášený). Volba se pamatuje.
+  - V přehledu všech druhů ukáže každá skupina (Series, Studios…) jen **dvě řady** (na úzkém displeji
+    3 řady) a tlačítko **Show all N** / *Show fewer*. Počet karet podle skutečného počtu sloupců –
+    přepočítá se při změně šířky okna. Vybraný jeden druh (záložka Series…) = vše bez sbalení.
+- Jen web – žádná migrace ani Edge Function. Ověřeno testy webu (pořadí, sbalení na 1280 / 900 / 390 /
+  320 px, rozbalení, řazení, hledání ve všech záložkách, zapamatování filtru, diakritika, /).
+
+#### Rozhodnutí ve fázi 38b
+- **Hledání v prohlížeči, ne v databázi** – admin seznamy jsou celé načtené (stovky řádků), filtr je okamžitý.
+- **Pořadí kolekcí z admin panelu (šipky)** dál určuje pořadí v seedu a v adminu; přehled pro uživatele se
+  řadí podle abecedy.
+- **Sbalení podle řad, ne pevný počet** – „dvě řady“ vypadají stejně na každé šířce (pevných 14 by na mobilu
+  znamenalo 7 řad, na širokém monitoru půl řady).
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

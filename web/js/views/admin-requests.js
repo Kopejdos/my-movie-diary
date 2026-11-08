@@ -13,6 +13,7 @@ import { listFilmRequests, decideFilmRequests, createCollectionFromSeries } from
 import { TEXTS, format, movies } from "../texts.js";
 import { h, mount, poster, yearOf, formatDate, toast, loadingView, errorView } from "../dom.js";
 import { requireAdminView, adminHeader } from "./admin.js";
+import { adminSearch, matchesQuery, noResults } from "./admin-search.js";
 
 export async function adminRequestsView(container, context) {
     if (!requireAdminView(container)) return;
@@ -41,30 +42,53 @@ export async function adminRequestsView(container, context) {
         }
     };
     const list = h("div");
-    const render = () => mount(list,
-        (data.new_collections ?? []).length > 0
-            ? h("section", { class: "admin-new-collections" },
-                h("div", { class: "section-title" },
-                    h("h2", {}, TEXTS.adminNewCollections),
-                    h("span", { class: "muted" }, String(data.new_collections.length))),
-                h("p", { class: "hint" }, TEXTS.adminNewCollectionsHint),
-                h("ul", { class: "admin-requests" }, data.new_collections.map((series) => {
-                    const ids = new Set(series.items.map((i) => i.id));
-                    const suggestions = data.requests.flatMap((r) => r.items).filter((i) => ids.has(i.id)).flatMap((i) => i.suggestions);
-                    return newCollectionCard(series, studioPicker(suggestions), reload);
-                })))
-            : null,
-        h("div", { class: "section-title" },
-            h("h2", {}, TEXTS.adminTabRequests),
-            h("span", { class: "muted" }, format("adminRequestsCount", data.requests.length))),
-        data.requests.length === 0
-            ? h("p", { class: "empty-filter" }, TEXTS.adminRequestsEmpty)
-            : h("ol", { class: "admin-requests" }, data.requests.map((request) => request.kind === "collection"
-                ? collectionRequestCard(request, studioPicker(request.items.flatMap((i) => i.suggestions)), reload)
-                : requestCard(request, data.universes, reload))));
+    // Hledání (V3.5.2.2): žadatel, poznámka, název série, názvy filmů; filtr druhu požadavku
+    const search = adminSearch({
+        key: "requests",
+        placeholder: TEXTS.adminSearchRequests,
+        filters: [
+            { value: "all", label: TEXTS.kindAll },
+            { value: "films", label: TEXTS.requestsMode_films },
+            { value: "collection", label: TEXTS.adminFilterCollections },
+        ],
+        onChange: () => render(),
+    });
+    const render = () => {
+        const query = search.query();
+        const kind = search.filter();
+        const requests = data.requests.filter((r) => (kind === "all" || (r.kind ?? "films") === kind) &&
+            matchesQuery(query, r.username, r.note, r.collection_name, ...r.items.map((i) => i.title)));
+        const series = kind === "films" ? [] : (data.new_collections ?? []).filter((c) =>
+            matchesQuery(query, c.tmdb_name, c.name, ...c.items.map((i) => i.title)));
+        search.setCount(requests.length, data.requests.length);
+        const nothing = search.active() && requests.length === 0 && series.length === 0;
+        mount(list,
+            series.length > 0
+                ? h("section", { class: "admin-new-collections" },
+                    h("div", { class: "section-title" },
+                        h("h2", {}, TEXTS.adminNewCollections),
+                        h("span", { class: "muted" }, String(series.length))),
+                    h("p", { class: "hint" }, TEXTS.adminNewCollectionsHint),
+                    h("ul", { class: "admin-requests" }, series.map((item) => {
+                        const ids = new Set(item.items.map((i) => i.id));
+                        const suggestions = data.requests.flatMap((r) => r.items).filter((i) => ids.has(i.id)).flatMap((i) => i.suggestions);
+                        return newCollectionCard(item, studioPicker(suggestions), reload);
+                    })))
+                : null,
+            h("div", { class: "section-title" },
+                h("h2", {}, TEXTS.adminTabRequests),
+                h("span", { class: "muted" }, format("adminRequestsCount", data.requests.length))),
+            nothing
+                ? noResults(() => search.reset())
+                : requests.length === 0
+                    ? h("p", { class: "empty-filter" }, TEXTS.adminRequestsEmpty)
+                    : h("ol", { class: "admin-requests" }, requests.map((request) => request.kind === "collection"
+                        ? collectionRequestCard(request, studioPicker(request.items.flatMap((i) => i.suggestions)), reload)
+                        : requestCard(request, data.universes, reload))));
+    };
 
     render();
-    mount(container, adminHeader("requests"), seedBox, list);
+    mount(container, adminHeader("requests"), seedBox, data.requests.length + (data.new_collections ?? []).length > 0 ? search.element : null, list);
 }
 
 /**

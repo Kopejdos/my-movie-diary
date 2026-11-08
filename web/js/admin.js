@@ -98,7 +98,7 @@ export async function removeBlockedWord(id) {
 export async function listUniversesForAdmin() {
     return await supabase
         .from("universes")
-        .select("id, slug, name, description, color, kind, sort_order, items:universe_items(count)")
+        .select("id, slug, name, description, color, kind, sort_order, items:universe_items(count), categories(name)")
         .order("sort_order")
         .then(check);
 }

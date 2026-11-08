@@ -1,5 +1,7 @@
 // Obrazovky admin panelu: přehled univerz (#/admin), uživatelé (#/admin/users)
 // a zakázaná slova v nickách (#/admin/words).
+// V3.5.2.2: v každé záložce pole pro hledání (admin-search.js) – filtruje se okamžitě
+// v prohlížeči; kolekce jdou najít i podle filmu, který obsahují.
 
 import { getProfile, getUser, isSignedIn } from "../auth.js";
 import {
@@ -11,6 +13,8 @@ import { setAccent } from "../theme.js";
 import { TEXTS, format, movies, collections } from "../texts.js";
 import { h, mount, pill, formatDate, toast, loadingView, errorView } from "../dom.js";
 import { field } from "./login.js";
+import { fetchSearchData } from "../data.js";
+import { adminSearch, matchesQuery, highlight, noResults } from "./admin-search.js";
 
 /** Je přihlášený správce? Jinak ukáže hlášku a vrátí false. */
 export function requireAdminView(container) {
@@ -62,6 +66,70 @@ export async function adminUniversesView(container, context) {
 
     const reload = () => adminUniversesView(container, context);
 
+    // Filmy v kolekcích pro hledání podle filmu – načtou se, až když se začne hledat
+    let filmsByUniverse = null;
+    let filmsLoading = false;
+    const loadFilms = () => {
+        if (filmsByUniverse || filmsLoading) return;
+        filmsLoading = true;
+        fetchSearchData()
+            .then(({ items }) => {
+                filmsByUniverse = new Map();
+                for (const item of items) {
+                    if (!item.film) continue;
+                    const list = filmsByUniverse.get(item.universe_id) ?? [];
+                    list.push(item.film);
+                    filmsByUniverse.set(item.universe_id, list);
+                }
+                if (context.isCurrent()) render();
+            })
+            .catch(() => { filmsLoading = false; });
+    };
+
+    const list = h("div");
+    const search = adminSearch({
+        key: "universes",
+        placeholder: TEXTS.adminSearchUniverses,
+        filters: [
+            { value: "all", label: TEXTS.kindAll },
+            { value: "series", label: TEXTS.kindSeries },
+            { value: "studio", label: TEXTS.kindStudio },
+            { value: "genre", label: TEXTS.kindGenre },
+            { value: "path", label: TEXTS.kindPath },
+        ],
+        onChange: () => render(),
+    });
+
+    function render() {
+        const query = search.query();
+        if (query.length >= 2) loadFilms();
+        const kind = search.filter();
+        const shown = [];
+        for (const universe of universes) {
+            if (kind !== "all" && (universe.kind ?? "series") !== kind) continue;
+            const categoryNames = (universe.categories ?? []).map((c) => c.name);
+            if (matchesQuery(query, universe.name, universe.slug, ...categoryNames)) {
+                shown.push({ universe, film: null });
+                continue;
+            }
+            // Shoda podle filmu v kolekci (až po načtení filmů)
+            const film = query.length >= 2
+                ? (filmsByUniverse?.get(universe.id) ?? []).find((f) => matchesQuery(query, f.title, f.original_title))
+                : null;
+            if (film) shown.push({ universe, film });
+        }
+        search.setCount(shown.length, universes.length);
+        const filtering = search.active();
+        mount(list, shown.length === 0
+            ? noResults(() => search.reset())
+            : h("ol", { class: "admin-list" }, shown.map(({ universe, film }) => {
+                const index = universes.indexOf(universe);
+                // Při hledání se šipky schovají – přesun mezi vyfiltrovanými kolekcemi by mátl
+                return universeRow(universe, universes[index - 1], universes[index + 1], reload, { query, film, filtering });
+            })));
+    }
+    render();
+
     mount(container,
         adminHeader("universes"),
         newUniverseForm(),
@@ -69,14 +137,13 @@ export async function adminUniversesView(container, context) {
             h("h2", {}, TEXTS.adminTabUniverses),
             h("span", { class: "muted" }, collections(universes.length)),
         ),
-        h("ol", { class: "admin-list" },
-            universes.map((universe, index) => universeRow(universe, universes[index - 1], universes[index + 1], reload)),
-        ),
+        search.element,
+        list,
     );
 }
 
 /** Řádek univerza: barva, název, počet filmů, posun, úprava, smazání. */
-function universeRow(universe, previous, next, reload) {
+function universeRow(universe, previous, next, reload, { query = "", film = null, filtering = false } = {}) {
     const count = universe.items?.[0]?.count ?? 0;
 
     async function run(action, message) {
@@ -92,21 +159,22 @@ function universeRow(universe, previous, next, reload) {
     return h("li", { class: "admin-row" },
         h("span", { class: "color-dot", style: `background: ${universe.color ?? "var(--accent)"}` }),
         h("div", { class: "admin-row__info" },
-            h("strong", {}, universe.name),
+            h("strong", {}, highlight(universe.name, query)),
             h("div", { class: "pills" },
                 pill(universe.slug),
                 pill(movies(count)),
                 universe.kind && universe.kind !== "series"
-                    ? pill(universe.kind === "studio" ? TEXTS.kindStudio : TEXTS.kindGenre, true)
-                    : null),
+                    ? pill(kindPillLabel(universe.kind), true)
+                    : null,
+                film ? h("span", { class: "pill pill--match" }, "🎬 ", highlight(film.title, query)) : null),
         ),
         h("div", { class: "admin-row__actions" },
-            h("button", {
+            filtering ? null : h("button", {
                 class: "icon-btn", type: "button", title: TEXTS.adminMoveUp, "aria-label": TEXTS.adminMoveUp,
                 disabled: !previous,
                 onClick: () => run(() => swapUniverseOrder(universe, previous)),
             }, "↑"),
-            h("button", {
+            filtering ? null : h("button", {
                 class: "icon-btn", type: "button", title: TEXTS.adminMoveDown, "aria-label": TEXTS.adminMoveDown,
                 disabled: !next,
                 onClick: () => run(() => swapUniverseOrder(universe, next)),
@@ -121,6 +189,11 @@ function universeRow(universe, previous, next, reload) {
             }, TEXTS.adminDelete),
         ),
     );
+}
+
+/** Popisek druhu kolekce v řádku (série se neoznačuje). */
+function kindPillLabel(kind) {
+    return { studio: TEXTS.kindStudio, genre: TEXTS.kindGenre, path: TEXTS.kindPath }[kind] ?? kind;
 }
 
 /** Formulář pro nové univerzum (rozbalovací). */
@@ -200,17 +273,48 @@ export async function adminUsersView(container, context) {
     const reload = () => adminUsersView(container, context);
     const selfId = getUser()?.id;
 
+    const list = h("div");
+    const filters = [
+        { value: "all", label: TEXTS.kindAll },
+        { value: "admins", label: TEXTS.adminFilterAdmins },
+        { value: "google", label: "Google" },
+        { value: "email", label: "Email" },
+    ];
+    if (users.some((u) => u.flagged)) filters.push({ value: "flagged", label: `⚠ ${TEXTS.adminFlagged}` });
+    const search = adminSearch({
+        key: "users", placeholder: TEXTS.adminSearchUsers, filters, onChange: () => render(),
+    });
+    const byFilter = {
+        all: () => true,
+        admins: (u) => u.is_admin,
+        google: (u) => u.provider === "google",
+        email: (u) => u.provider !== "google",
+        flagged: (u) => u.flagged,
+    };
+
+    function render() {
+        const query = search.query();
+        const test = byFilter[search.filter()] ?? byFilter.all;
+        const shown = users.filter((u) => test(u) && matchesQuery(query, u.username, u.email));
+        search.setCount(shown.length, users.length);
+        mount(list, shown.length === 0
+            ? noResults(() => search.reset())
+            : h("ol", { class: "admin-list" }, shown.map((user) => userRow(user, user.id === selfId, reload, query))));
+    }
+    render();
+
     mount(container,
         adminHeader("users"),
         h("div", { class: "section-title" },
             h("h2", {}, TEXTS.adminTabUsers),
             h("span", { class: "muted" }, format("adminUsersCount", users.length)),
         ),
-        h("ol", { class: "admin-list" }, users.map((user) => userRow(user, user.id === selfId, reload))),
+        search.element,
+        list,
     );
 }
 
-function userRow(user, isSelf, reload) {
+function userRow(user, isSelf, reload, query = "") {
     async function run(action, message) {
         try {
             await action();
@@ -231,8 +335,8 @@ function userRow(user, isSelf, reload) {
             "aria-hidden": "true",
         }, (user.username ?? "?").slice(0, 1).toUpperCase()),
         h("div", { class: "admin-row__info" },
-            h("strong", {}, `@${user.username ?? "—"}`),
-            h("span", { class: "muted admin-row__email" }, user.email ?? ""),
+            h("strong", {}, "@", highlight(user.username ?? "—", query)),
+            h("span", { class: "muted admin-row__email" }, highlight(user.email ?? "", query)),
             h("div", { class: "pills" },
                 user.flagged ? h("span", { class: "pill pill--danger", title: TEXTS.adminFlaggedHint }, `⚠ ${TEXTS.adminFlagged}`) : null,
                 user.is_admin ? pill(TEXTS.profileAdmin, true) : null,
@@ -315,9 +419,9 @@ export async function adminWordsView(container, context) {
         }
     }
 
-    const row = (w) => h("li", { class: "admin-row admin-row--word" },
+    const row = (w, query) => h("li", { class: "admin-row admin-row--word" },
         h("div", { class: "admin-row__info" },
-            h("strong", {}, w.word),
+            h("strong", {}, highlight(w.word, query)),
             h("div", { class: "pills" },
                 pill(w.match_mode === "exact" ? TEXTS.adminWordExact : TEXTS.adminWordContains))),
         h("div", { class: "admin-row__actions" },
@@ -335,6 +439,26 @@ export async function adminWordsView(container, context) {
                 },
             }, TEXTS.adminRemove)));
 
+    // Hledání v seznamu (V3.5.2.2)
+    const list = h("div");
+    const search = adminSearch({
+        key: "words", placeholder: TEXTS.adminSearchWords,
+        filters: [
+            { value: "all", label: TEXTS.kindAll },
+            { value: "contains", label: TEXTS.adminWordContains },
+            { value: "exact", label: TEXTS.adminWordExact },
+        ],
+        onChange: () => render(),
+    });
+    function render() {
+        const query = search.query();
+        const shown = words.filter((w) => (search.filter() === "all" || w.match_mode === search.filter()) && matchesQuery(query, w.word));
+        search.setCount(shown.length, words.length);
+        mount(list, shown.length === 0
+            ? noResults(() => search.reset())
+            : h("ul", { class: "admin-list admin-list--words" }, shown.map((w) => row(w, query))));
+    }
+
     mount(container,
         adminHeader("words"),
         h("form", { class: "admin-form", onSubmit: add },
@@ -345,6 +469,8 @@ export async function adminWordsView(container, context) {
         h("div", { class: "section-title" },
             h("h2", {}, TEXTS.adminTabWords),
             h("span", { class: "muted" }, String(words.length))),
-        h("ul", { class: "admin-list admin-list--words" }, words.map(row)),
+        search.element,
+        list,
     );
+    render();
 }

@@ -2,6 +2,8 @@
 // uvítací karta, pod tím mřížka univerz.
 // Filtr má dvě vrstvy (V3.1.2): 1. druh kolekce (Series / Studios / Genre picks / Paths),
 // 2. žánr (kategorie). Počty v každé vrstvě se počítají podle volby v té druhé.
+// V3.5.2.2: kolekce se řadí podle abecedy (volitelně nejnovější / můj postup) a v přehledu
+// všech druhů ukazuje každá skupina jen první dvě řady – zbytek po „Show all“.
 
 import {
     fetchUniverses, fetchCategories, fetchMyFilmCounts, fetchWatchlistIds, fetchSearchData, percent, KIND_ORDER,
@@ -13,6 +15,45 @@ import { setAccent, inkFor } from "../theme.js";
 import { TEXTS, format, movies, collections, steps } from "../texts.js";
 import { h, mount, poster, loadingView, errorView } from "../dom.js";
 import { todayPanel, todayPlaceholder } from "./today.js";
+
+/** Kolik řad kolekcí ukáže sbalená skupina (na úzkém displeji se 2 sloupci 3 řady). */
+const COLLAPSED_ROWS = 2;
+const COLLAPSED_ROWS_NARROW = 3;
+
+/** Rozbalené skupiny (druhy kolekcí) – pamatují se do obnovení stránky. */
+const expandedKinds = new Set();
+
+/** Způsoby řazení kolekcí; „progress“ jen pro přihlášené. */
+const SORTS = ["alpha", "newest", "progress"];
+
+/** Název pro řazení podle abecedy: bez úvodního členu („The Purge“ → „Purge“). */
+function sortName(name) {
+    return (name ?? "").replace(/^(the|a|an)\s+/i, "");
+}
+
+const collator = new Intl.Collator("en", { sensitivity: "base", numeric: true });
+
+/** Seřadí kolekce podle zvoleného způsobu (vrací novou kopii). */
+export function sortUniverses(list, sort) {
+    const byName = (a, b) => collator.compare(sortName(a.name), sortName(b.name));
+    const sorted = [...list];
+    if (sort === "newest") {
+        sorted.sort((a, b) => b.id - a.id);                 // novější kolekce mají vyšší ID
+    } else if (sort === "progress") {
+        const pct = (u) => (u.totalCount > 0 ? u.watchedCount / u.totalCount : 0);
+        sorted.sort((a, b) => pct(b) - pct(a) || byName(a, b));
+    } else {
+        sorted.sort(byName);
+    }
+    return sorted;
+}
+
+/** Kolik sloupců má mřížka kolekcí při dané šířce (stejně jako CSS .universe-grid). */
+function gridColumns(width) {
+    const wide = window.matchMedia("(min-width: 720px)").matches;
+    const [min, gap] = wide ? [190, 18] : [150, 14];
+    return Math.max(1, Math.floor((width + gap) / (min + gap)));
+}
 
 export async function universesView(container, context) {
     const { isCurrent } = context;
@@ -44,6 +85,18 @@ export async function universesView(container, context) {
     if (selectedKind !== "all" && !KIND_ORDER.includes(selectedKind)) selectedKind = "all";
     let selected = loadPref("category", "all");
     if (selected !== "all" && !categories.some((c) => c.slug === selected)) selected = "all";
+    let sort = loadPref("sort", "alpha");
+    if (!SORTS.includes(sort) || (sort === "progress" && !signedIn)) sort = "alpha";
+
+    const sortSelect = h("select", {
+        class: "sort-select", "aria-label": TEXTS.sortLabel,
+        onChange: () => {
+            sort = sortSelect.value;
+            savePref("sort", sort);
+            renderCollections();
+        },
+    }, SORTS.filter((s) => s !== "progress" || signedIn)
+        .map((s) => h("option", { value: s, selected: s === sort }, TEXTS[`sort_${s}`])));
 
     const kindTabs = h("div", { class: "kind-tabs", role: "tablist", "aria-label": TEXTS.filterKindLabel });
     const chips = h("div", { class: "chips", role: "tablist", "aria-label": TEXTS.filterGenreLabel });
@@ -60,7 +113,7 @@ export async function universesView(container, context) {
 
     /** Překreslí oba filtry a mřížku podle zvoleného druhu a žánru (bez nového načítání). */
     function renderCollections() {
-        const visible = universes.filter((u) => inKind(u, selectedKind) && inCategory(u, selected));
+        const visible = sortUniverses(universes.filter((u) => inKind(u, selectedKind) && inCategory(u, selected)), sort);
 
         // 1. vrstva – druh; počet podle zvoleného žánru. Prázdné druhy se skryjí (kromě zvoleného).
         const forCategory = universes.filter((u) => inCategory(u, selected));
@@ -98,11 +151,65 @@ export async function universesView(container, context) {
         const groups = KIND_ORDER
             .map((kind) => ({ kind, items: visible.filter((u) => kindOf(u) === kind) }))
             .filter((g) => g.items.length > 0);
-        mount(grid, groups.map((g) => h("section", { class: "collection-section" },
-            groups.length > 1 ? kindHeading(g.kind) : null,
-            h("div", { class: "universe-grid" }, g.items.map((u, i) => universeCard(u, signedIn, groups.indexOf(g) === 0 && i < 5))),
-        )));
+        // Víc skupin = přehled → každá skupina sbalená na pár řad (V3.5.2.2)
+        const collapsible = groups.length > 1;
+        sections = groups.map((g) => {
+            const cards = g.items.map((u, i) => universeCard(u, signedIn, groups.indexOf(g) === 0 && i < 5));
+            const toggle = h("button", { class: "btn btn--small section-toggle", type: "button", hidden: true });
+            const element = h("section", { class: "collection-section" },
+                collapsible ? kindHeading(g.kind) : null,
+                h("div", { class: "universe-grid" }, cards),
+                h("div", { class: "section-toggle__row" }, toggle));
+            const section = { kind: g.kind, cards, toggle, element, collapsible };
+            toggle.addEventListener("click", () => {
+                if (expandedKinds.has(g.kind)) {
+                    expandedKinds.delete(g.kind);
+                    layoutSection(section);
+                    // po sbalení ať skupina nezůstane mimo obrazovku
+                    if (element.getBoundingClientRect().top < 0) element.scrollIntoView({ block: "start" });
+                } else {
+                    expandedKinds.add(g.kind);
+                    layoutSection(section);
+                }
+            });
+            return section;
+        });
+        mount(grid, sections.map((section) => section.element));
+        layoutSections();
     }
+
+    /** Sbalení / rozbalení skupiny podle počtu sloupců mřížky. */
+    let sections = [];
+    let columns = 0;
+    function layoutSection(section) {
+        const rows = columns <= 2 ? COLLAPSED_ROWS_NARROW : COLLAPSED_ROWS;
+        const limit = columns * rows;
+        const tooMany = section.collapsible && section.cards.length > limit;
+        const open = !tooMany || expandedKinds.has(section.kind);
+        section.cards.forEach((card, i) => card.classList.toggle("is-collapsed", !open && i >= limit));
+        section.toggle.hidden = !tooMany;
+        section.toggle.textContent = open
+            ? `${TEXTS.collectionsShowFewer} ▴`
+            : `${format("collectionsShowAll", section.cards.length)} ▾`;
+        section.toggle.setAttribute("aria-expanded", String(open));
+    }
+    function layoutSections() {
+        columns = gridColumns(grid.clientWidth || container.clientWidth);
+        sections.forEach(layoutSection);
+    }
+    // Změna šířky okna → jiný počet sloupců → přepočítat sbalení
+    let resizeFrame = 0;
+    const observer = new ResizeObserver(() => {
+        if (!document.body.contains(grid)) {
+            observer.disconnect();
+            return;
+        }
+        cancelAnimationFrame(resizeFrame);
+        resizeFrame = requestAnimationFrame(() => {
+            if (gridColumns(grid.clientWidth) !== columns) layoutSections();
+        });
+    });
+    observer.observe(grid);
 
     function selectKind(kind) {
         selectedKind = kind;
@@ -163,7 +270,7 @@ export async function universesView(container, context) {
         heroSlot,
         h("div", { class: "section-title" },
             h("h2", {}, TEXTS.universesTitle),
-            count,
+            h("span", { class: "section-title__side" }, count, sortSelect),
         ),
         searchEntry(),
         kindTabs,
