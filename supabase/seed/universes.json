@@ -2696,6 +2696,21 @@
         { "title": "The Exorcist", "year": 1973, "note": "Often called the scariest film ever made." },
         { "title": "Hereditary", "year": 2018, "note": "The final boss: modern grief horror that gets under your skin." }
       ]
+    },
+    {
+      "slug": "lethal-weapon",
+      "name": "Lethal Weapon",
+      "kind": "series",
+      "categories": ["action-adventure", "crime-thriller"],
+      "color": "#f59e0b",
+      "description": "Lethal Weapon is a buddy cop movie series starring Mel Gibson and Danny Glover. A total of four films have been made since the first one in 1987, and all have been a success at the box-office.",
+      "films": [
+        { "title": "Lethal Weapon", "year": 1987, "tmdb": 941 },
+        { "title": "Lethal Weapon 2", "year": 1989, "tmdb": 942 },
+        { "title": "Lethal Weapon 3", "year": 1992, "tmdb": 943 },
+        { "title": "Lethal Weapon 4", "year": 1998, "tmdb": 944 },
+        { "title": "Lethal Weapon 5", "tmdb": 1528550 }
+      ]
     }
   ]
 }
