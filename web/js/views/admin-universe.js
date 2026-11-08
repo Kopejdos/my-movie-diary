@@ -4,7 +4,7 @@ import { fetchUniverse, fetchCategories, isUpcoming } from "../data.js";
 import { clearDataCache } from "../cache.js";
 import {
     updateUniverse, addUniverseItem, updateUniverseItem, removeUniverseItem, swapItemOrder,
-    setUniverseCover, searchTmdb, addFilmFromTmdb, setUniverseCategories,
+    setUniverseCover, searchTmdb, setUniverseCategories,
 } from "../admin.js";
 import { setAccent } from "../theme.js";
 import { TEXTS, format, movies } from "../texts.js";
@@ -266,8 +266,8 @@ function addMoviePanel(universe, reload) {
         add.addEventListener("click", async () => {
             add.disabled = true;
             try {
-                const film = await addFilmFromTmdb(movie.tmdb_id);
-                await addUniverseItem(universe.id, film.tmdb_id, {
+                // uloží film a zařadí ho podle data premiéry (V3.5.2.1)
+                const film = await addUniverseItem(universe.id, movie.tmdb_id, {
                     group: group.value.trim(), optional: optional.checked,
                 });
                 if (film.status && film.status !== "Released") {

@@ -76,6 +76,16 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 | `universe_id` | `bigint` FK → `universes` | PK spolu s `category_id` |
 | `category_id` | `bigint` FK → `categories` | |
 
+### Synchronizace se seedem (V3.5.2.1)
+- **`universes.source`** – `seed` (podle seedu) / `app` (kolekce vytvořená nebo upravená v aplikaci – název,
+  popis, barva, typ, kategorie, obal). Import ji vrátí na `seed`.
+- **`seed_removals`** – filmy odebrané z kolekcí a smazané kolekce v admin panelu: `universe_slug`, `tmdb_id`
+  (null = celá kolekce), `removed_at`. RLS bez pravidel (jen Edge Functions). `seed-sync` podle nich vyškrtne
+  řádky ze seedu, import záznamy dané kolekce smaže.
+- Triggery `mark_app_change`, `mark_universe_categories_change` a `log_seed_removal` reagují jen na zápis
+  přihlášeného uživatele (admin panel; zapisovat do kolekcí smí jen správce) – Edge Functions (service role)
+  si značku nastavují samy.
+
 ### `universe_items` – filmy v univerzu
 | Sloupec | Typ | Poznámka |
 |---|---|---|
@@ -90,7 +100,7 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 | `is_optional` | `boolean` | vedlejší film (crossover, spin-off) – nepočítá se do postupu |
 | `is_upcoming` | `boolean` | film ještě nevyšel (V3.3) – oddíl **Coming soon**, nepočítá se do počtu filmů ani postupu; nastavuje import. Od V3.3.2 rozhoduje hlavně datum: se známým `films.release_date` je film chystaný, dokud premiéra nebyla (v den premiéry se počítá jako vydaný, i když import neproběhl, a naopak budoucí premiéra je chystaná, i když TMDB hlásí „Released“); bez data rozhodne tento příznak. Hranici „do konce roku letos + 5“ počítá web |
 | `note` | `text`, null | poznámka ke kroku cesty – proč film vidět (max. 300 znaků, od V1.8) |
-| `source` | `text` | `seed` (výchozí – položka ze seedu; import ji smaže, když v seedu chybí) / `request` (přidal ji správce z požadavku nebo jako kolekci ze série – import ji **nesmaže**, `scripts/sync-seed.sh` ji dopíše do seedu; dalším importem se z ní stane `seed`). Od V3.5.2 |
+| `source` | `text` | `seed` (výchozí – položka ze seedu; import ji smaže, když v seedu chybí) / `request` (z požadavku nebo kolekce ze série, V3.5.2) / `admin` (přidaná nebo upravená v admin panelu – nastaví trigger, V3.5.2.1). Ne-`seed` položky import **nesmaže** a `scripts/sync-seed.sh` je propíše do seedu; dalším importem se z nich stane `seed` |
 
 Unikátní dvojice (`universe_id`, `tmdb_id`) – jeden film je v univerzu nejvýš jednou,
 ale může být ve více univerzech.

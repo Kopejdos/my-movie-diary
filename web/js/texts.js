@@ -241,7 +241,7 @@ export const TEXTS = {
     adminRequestsPickSome: "Tick at least one movie.",
     adminRequestsAdded: "Added {0}.",
     adminRequestsRejected: "Rejected {0}.",
-    adminRequestsSeedHint: "Saved. Nothing to copy – the import keeps these movies, and ./scripts/import.sh (or ./scripts/sync-seed.sh) writes them into supabase/seed/universes.json for you:",
+    adminRequestsSeedHint: "Saved. Nothing to copy – ./scripts/import.sh (or ./scripts/sync-seed.sh) writes every change made in the app into supabase/seed/universes.json for you:",
     adminNewCollections: "Suggested new collections",
     adminNewCollectionsHint: "People asked for several movies from the same TMDB series, and MMD has no collection for it yet. Create it in one click – the requested movies are marked as added.",
     adminNewCollectionName: "Collection name",
@@ -251,6 +251,10 @@ export const TEXTS = {
     adminNewCollectionRequested: "Requested: {0}",
     adminCollectionRequest: "Collection request",
     adminCollectionRequestTooFew: "Tick at least 2 movies for a collection.",
+    adminAlsoAddTo: "Also add to:",
+    adminAlsoSameSeries: "has other movies of this series",
+    adminAlsoStudio: "studio from TMDB",
+    adminAlsoAdded: "+ {1} in {0}.",
 
     // Řazení a filtr v detailu univerza
     orderRelease: "Release order",

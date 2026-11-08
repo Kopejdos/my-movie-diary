@@ -48,7 +48,11 @@ export async function adminRequestsView(container, context) {
                     h("h2", {}, TEXTS.adminNewCollections),
                     h("span", { class: "muted" }, String(data.new_collections.length))),
                 h("p", { class: "hint" }, TEXTS.adminNewCollectionsHint),
-                h("ul", { class: "admin-requests" }, data.new_collections.map((series) => newCollectionCard(series, reload))))
+                h("ul", { class: "admin-requests" }, data.new_collections.map((series) => {
+                    const ids = new Set(series.items.map((i) => i.id));
+                    const suggestions = data.requests.flatMap((r) => r.items).filter((i) => ids.has(i.id)).flatMap((i) => i.suggestions);
+                    return newCollectionCard(series, studioPicker(suggestions), reload);
+                })))
             : null,
         h("div", { class: "section-title" },
             h("h2", {}, TEXTS.adminTabRequests),
@@ -56,7 +60,7 @@ export async function adminRequestsView(container, context) {
         data.requests.length === 0
             ? h("p", { class: "empty-filter" }, TEXTS.adminRequestsEmpty)
             : h("ol", { class: "admin-requests" }, data.requests.map((request) => request.kind === "collection"
-                ? collectionRequestCard(request, reload)
+                ? collectionRequestCard(request, studioPicker(request.items.flatMap((i) => i.suggestions)), reload)
                 : requestCard(request, data.universes, reload))));
 
     render();
@@ -89,14 +93,42 @@ function nameInput(value) {
     });
 }
 
+/**
+ * Zaškrtávátka „Also add to“ – kolekce studií z návrhů u filmů série (V3.5.2.1).
+ * Studio, ve kterém už jsou jiné díly série (např. Warner Bros. u Lethal Weapon), je zaškrtnuté
+ * předem; studio jen podle produkční společnosti z TMDB ne.
+ */
+function studioPicker(suggestions) {
+    const studios = new Map();
+    for (const s of suggestions) {
+        if (s.kind !== "studio") continue;
+        const sameSeries = s.reason.startsWith("Same series");
+        const known = studios.get(s.universe_id);
+        if (!known || (sameSeries && !known.sameSeries)) studios.set(s.universe_id, { ...s, sameSeries });
+    }
+    const boxes = [...studios.values()].map((s) => ({
+        id: s.universe_id,
+        input: h("input", { type: "checkbox", checked: s.sameSeries, "aria-label": s.name }),
+        studio: s,
+    }));
+    return {
+        element: boxes.length === 0 ? null : h("div", { class: "admin-request__also" },
+            h("span", { class: "hint" }, TEXTS.adminAlsoAddTo),
+            boxes.map((b) => h("label", { class: "admin-request__also-option", title: b.studio.reason },
+                b.input, ` ${b.studio.name}`, h("span", { class: "muted" }, ` · ${b.studio.sameSeries ? TEXTS.adminAlsoSameSeries : TEXTS.adminAlsoStudio}`)))),
+        picked: () => boxes.filter((b) => b.input.checked).map((b) => b.id),
+    };
+}
+
 /** Vytvoří kolekci ze série TMDB a obnoví seznam (společné pro obě karty). */
-async function createFromSeries(buttons, tmdbCollectionId, name, tmdbIds, reload, rejectIds = []) {
+async function createFromSeries(buttons, tmdbCollectionId, name, tmdbIds, reload, rejectIds = [], also = []) {
     buttons.forEach((b) => { b.disabled = true; });
     try {
-        const result = await createCollectionFromSeries(tmdbCollectionId, name, tmdbIds);
+        const result = await createCollectionFromSeries(tmdbCollectionId, name, tmdbIds, also);
         // nezaškrtnuté díly požadavku na kolekci → zamítnuté (jinak by dál čekaly)
         if (rejectIds.length > 0) await decideFilmRequests(rejectIds.map((id) => ({ id, approve: false })));
-        toast(format("adminNewCollectionCreated", result.name, movies(result.films)));
+        const extra = (result.also ?? []).filter((a) => a.films > 0).map((a) => format("adminAlsoAdded", a.universe, movies(a.films)));
+        toast([format("adminNewCollectionCreated", result.name, movies(result.films)), ...extra].join(" "));
         await reload(result.seed);
     } catch (error) {
         toast(format("errorGeneric", error.message), "error");
@@ -105,11 +137,11 @@ async function createFromSeries(buttons, tmdbCollectionId, name, tmdbIds, reload
 }
 
 /** Návrh nové kolekce: víc požadovaných filmů z jedné série TMDB (z běžných požadavků). */
-function newCollectionCard(series, reload) {
+function newCollectionCard(series, studios, reload) {
     const name = nameInput(series.name);
     const create = h("button", {
         class: "btn btn--small btn--primary", type: "button",
-        onClick: () => createFromSeries([create], series.tmdb_collection_id, name.value, [], reload),
+        onClick: () => createFromSeries([create], series.tmdb_collection_id, name.value, [], reload, [], studios.picked()),
     }, TEXTS.adminNewCollectionCreate);
     const titles = [...new Map(series.items.map((i) => [i.tmdb_id, i.title])).values()];
     return h("li", { class: "admin-request admin-request--series" },
@@ -117,11 +149,12 @@ function newCollectionCard(series, reload) {
             h("strong", {}, series.tmdb_name),
             h("span", { class: "muted" }, format("adminNewCollectionParts", movies(series.parts))),
             h("span", { class: "muted" }, format("adminNewCollectionRequested", titles.join(", ")))),
-        h("div", { class: "admin-request__create" }, name, create));
+        h("div", { class: "admin-request__create" }, name, create),
+        studios.element);
 }
 
 /** Požadavek na kolekci: díly jedné série → nová kolekce z vybraných dílů, nebo zamítnutí. */
-function collectionRequestCard(request, reload) {
+function collectionRequestCard(request, studios, reload) {
     const rows = request.items.map((item) => {
         const checkbox = h("input", { type: "checkbox", checked: true, "aria-label": item.title });
         const element = h("li", { class: "admin-request__film admin-request__film--plain" },
@@ -144,7 +177,7 @@ function collectionRequestCard(request, reload) {
                 return;
             }
             const rest = rows.filter((r) => !r.checkbox.checked).map((r) => r.item.id);
-            createFromSeries(buttons, request.tmdb_collection_id, name.value, picked().map((r) => r.item.tmdb_id), reload, rest);
+            createFromSeries(buttons, request.tmdb_collection_id, name.value, picked().map((r) => r.item.tmdb_id), reload, rest, studios.picked());
         },
     }, TEXTS.adminNewCollectionCreate);
     const rejectButton = h("button", {
@@ -176,6 +209,7 @@ function collectionRequestCard(request, reload) {
         request.note ? h("p", { class: "req-card__note" }, `“${request.note}”`) : null,
         h("ul", { class: "admin-request__films" }, rows.map((r) => r.element)),
         h("div", { class: "admin-request__create" }, name),
+        studios.element,
         h("div", { class: "admin-request__actions" },
             h("span", { class: "hint" }, TEXTS.adminRequestsSelectedHint), ...buttons),
     );

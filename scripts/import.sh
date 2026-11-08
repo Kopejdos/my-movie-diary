@@ -5,11 +5,11 @@
 # Použití (Git Bash, ve složce repozitáře):
 #   ./scripts/import.sh mad-max                 jedna kolekce
 #   ./scripts/import.sh saw scream halloween    víc kolekcí
-#   ./scripts/import.sh --all                   VŠECHNY kolekce (přepíše úpravy z admin panelu!)
+#   ./scripts/import.sh --all                   VŠECHNY kolekce (trvá dlouho, chce potvrzení)
 #
 # Klíč MMD_ADMIN_KEY se zadává skrytě (nic se nezobrazí, ani hvězdičky).
-# Před importem se sám spustí scripts/sync-seed.sh – doplní do seedu filmy
-# přijaté z požadavků (V3.5.2). Změněný seed pak commitni.
+# Před importem se sám spustí scripts/sync-seed.sh – propíše do seedu všechno, co se
+# změnilo v aplikaci (požadavky, admin panel – V3.5.2, V3.5.2.1). Změněný seed pak commitni.
 # Reporty se ukládají do složky import-reports/ (Git ji ignoruje).
 # =====================================================================
 
@@ -29,7 +29,7 @@ if [ $# -eq 0 ]; then
 fi
 
 if [ "$1" = "--all" ]; then
-    echo "POZOR: plný import přepíše úpravy z admin panelu u všech kolekcí ze seedu."
+    echo "Plný import všech kolekcí ze seedu (úpravy z admin panelu se nejdřív propíšou do seedu)."
     read -r -p "Opravdu pokračovat? (ano/ne) " answer
     [ "$answer" = "ano" ] || { echo "Zrušeno."; exit 0; }
     targets=("")            # prázdný = bez &only= → všechno
@@ -41,8 +41,8 @@ read -r -s -p "Admin key: " KEY
 echo
 mkdir -p "$REPORTS"
 
-# V3.5.2: nejdřív dopsat do seedu filmy přijaté z požadavků (ať je seed úplný
-# a import je převezme jako obyčejné položky)
+# Nejdřív propsat do seedu změny z aplikace (požadavky, admin panel), ať je seed úplný
+# a import je převezme jako obyčejné položky – nic z aplikace se tak nepřepíše
 MMD_KEY="$KEY" bash scripts/sync-seed.sh
 
 for slug in "${targets[@]}"; do

@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 # =====================================================================
-# My Movie Diary – doplnění seedu o filmy přidané z požadavků (V3.5.2)
+# My Movie Diary – propsání změn z aplikace do seedu (V3.5.2, V3.5.2.1)
 #
 # Použití (Git Bash, ve složce repozitáře):
 #   ./scripts/sync-seed.sh
 #
 # Pošle supabase/seed/universes.json funkci tmdb (action=seed-sync) a uloží,
-# co vrátí: soubor doplněný o filmy, které správce přijal z požadavků do kolekcí,
-# a o celé kolekce vytvořené ze série TMDB. Zbytek souboru se nemění.
+# co vrátí: soubor se všemi změnami z aplikace – filmy přijaté z požadavků, kolekce
+# vytvořené ze série TMDB a úpravy v admin panelu (přidání, úprava, přesun a odebrání
+# filmu, úprava / nová / smazaná kolekce). Mění se jen dotčené kolekce.
 # Pak stačí změnu zkontrolovat (git diff) a commitnout.
 #
 # Spouští se i sám na začátku ./scripts/import.sh – ručně ho stačí pustit,
@@ -45,17 +46,19 @@ if [ "$status" != "200" ] || [ ! -s "$body" ]; then
     exit 1
 fi
 
-# Počty z hlaviček odpovědi (X-Seed-Films / X-Seed-Collections)
-films=$(grep -i '^x-seed-films:' "$headers" | tr -d '\r' | awk '{print $2}')
-collections=$(grep -i '^x-seed-collections:' "$headers" | tr -d '\r' | awk '{print $2}')
-films="${films:-0}"
-collections="${collections:-0}"
+# Počty z hlaviček odpovědi (X-Seed-Changed / X-Seed-Added / X-Seed-Removed / X-Seed-Slugs)
+header() { grep -i "^$1:" "$headers" | tr -d '\r' | cut -d' ' -f2- ; }
+changed=$(header x-seed-changed); changed="${changed:-0}"
+added=$(header x-seed-added); added="${added:-0}"
+removed=$(header x-seed-removed); removed="${removed:-0}"
+slugs=$(header x-seed-slugs)
 
-if [ "$films" = "0" ] && [ "$collections" = "0" ]; then
-    echo "✓ Seed je aktuální – žádné nové filmy z požadavků."
+if [ "$changed" = "0" ] && [ "$added" = "0" ] && [ "$removed" = "0" ]; then
+    echo "✓ Seed je aktuální – v aplikaci se nic nezměnilo."
     exit 0
 fi
 
 cat "$body" > "$SEED"
-echo "✓ Seed doplněn: filmy do kolekcí: $films, nové kolekce: $collections"
+echo "✓ Seed doplněn: upravené kolekce: $changed, nové: $added, smazané: $removed"
+echo "  ($slugs)"
 echo "  Zkontroluj změny (git diff $SEED) a commitni je."

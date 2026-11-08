@@ -59,10 +59,11 @@ export async function decideFilmRequests(items) {
 
 /**
  * Nová oficiální kolekce ze série TMDB (V3.5.2). tmdbIds = jen tyto díly (požadavek na kolekci),
- * prázdné = celá série. Vrací { slug, name, films, requests_added, seed } – seed = blok do universes.json.
+ * prázdné = celá série; also = ID kolekcí studií, kam díly přidat taky (V3.5.2.1).
+ * Vrací { slug, name, films, requests_added, also, seed } – seed jen pro kontrolu (do souboru ho dopíše sync-seed).
  */
-export async function createCollectionFromSeries(tmdbCollectionId, name, tmdbIds = []) {
-    const result = await callAdmin("request-create-collection", { tmdb_collection_id: tmdbCollectionId, name, tmdb_ids: tmdbIds });
+export async function createCollectionFromSeries(tmdbCollectionId, name, tmdbIds = [], also = []) {
+    const result = await callAdmin("request-create-collection", { tmdb_collection_id: tmdbCollectionId, name, tmdb_ids: tmdbIds, also });
     clearDataCache();
     return result;
 }
@@ -146,19 +147,13 @@ export async function swapUniverseOrder(a, b) {
 // Filmy v univerzu
 // ---------------------------------------------------------------------
 
-/** Přidá film (už uložený v films) na konec univerza. */
+/**
+ * Přidá film do univerza (V3.5.2.1): funkce admin uloží detail z TMDB a zařadí film podle data
+ * premiéry (u cesty na konec). Vrací film (title, release_date, status…).
+ * Do seedu ho pak dopíše scripts/sync-seed.sh – import ho nesmaže.
+ */
 export async function addUniverseItem(universeId, tmdbId, { group = null, optional = false } = {}) {
-    const last = await supabase
-        .from("universe_items").select("release_order")
-        .eq("universe_id", universeId).order("release_order", { ascending: false }).limit(1)
-        .then(check);
-    await supabase.from("universe_items").insert({
-        universe_id: universeId,
-        tmdb_id: tmdbId,
-        release_order: (last[0]?.release_order ?? 0) + 1,
-        group_label: group || null,
-        is_optional: optional,
-    }).then(check);
+    return await callAdmin("add-item", { universe_id: universeId, tmdb_id: tmdbId, group: group || null, optional });
 }
 
 export async function updateUniverseItem(id, fields) {

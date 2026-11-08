@@ -5079,3 +5079,18 @@ a.friend-row__name:hover {
         justify-self: start;
     }
 }
+
+/* admin – „Also add to“ (kolekce studií, V3.5.2.1) */
+.admin-request__also {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 14px;
+}
+
+.admin-request__also-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}

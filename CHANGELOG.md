@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.5.2.1 – November 2026
+- Admin: every change made in the admin panel (adding, editing, moving or removing movies, editing, adding or deleting collections) is written into the seed automatically
+- New movies are placed by release date instead of at the end of a collection
+- Creating a collection from a series can add its movies to the studio collection too (e.g. Lethal Weapon → Warner Bros.)
+- Fixed: unreleased movies added in the admin panel now show up in Coming soon
+
 ## V3.5.2 – November 2026
 - **Collection requests** – Requests now has two modes: *Movies* (any movies, as before) and *Collection*: pick a movie, its whole series loads from TMDB and you choose which parts to ask for
 - A collection request can only contain movies from one series – try to sneak in anything else and you get a friendly "Nuh uh"

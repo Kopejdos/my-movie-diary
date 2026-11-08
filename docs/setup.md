@@ -72,7 +72,7 @@ s GitHubem (automatické migrace) se nezapíná.
    ```bash
    ./scripts/import.sh mad-max              # jedna kolekce
    ./scripts/import.sh saw scream halloween # víc kolekcí
-   ./scripts/import.sh --all                # všechny – přepíše úpravy z admin panelu, chce potvrzení
+   ./scripts/import.sh --all                # všechny – chce potvrzení
    ```
    Reporty se uloží do `import-reports/<slug>.json`.
    Před importem skript sám spustí **`./scripts/sync-seed.sh`** (V3.5.2) – doplní do `supabase/seed/universes.json`
@@ -185,11 +185,18 @@ Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny
 6. **Požadavky na kolekce (V3.5.2):** po migraci `20261108110000_collection_requests.sql` znovu nasadit funkce
    `requests`, `admin` **a `tmdb`** (akce `seed-sync` a import, který nemaže filmy z požadavků).
 
-**Pozor:** plný import ze seedu přepíše změny z admin panelu u univerz, která jsou v `universes.json`
-(a smaže z nich filmy, které v seedu nejsou). Nová univerza a filmy přidávat přes admin panel.
-**Výjimka (od V3.5.2):** filmy přijaté z požadavků do kolekce a kolekce vytvořené ze série mají
-`universe_items.source = 'request'` – import je nesmaže a `import.sh` / `sync-seed.sh` je do `universes.json`
-dopíše sám, nic se nekopíruje ručně. Filmy přijaté **bez kolekce** import nemaže (v seedu nejsou).
+7. **Úpravy z aplikace do seedu (V3.5.2.1):** migrace `20261108130000_seed_sync_app_edits.sql`, znovu nasadit
+   `admin` a `tmdb`.
+
+**Seed a admin panel (od V3.5.2.1):** seed je zdroj pravdy pro import, ale **úpravy z aplikace se neztratí** –
+databáze si je pamatuje (`universe_items.source`, `universes.source`, tabulka `seed_removals`) a `import.sh`
+je před importem propíše do `universes.json` (`sync-seed.sh`): filmy z požadavků, kolekce ze série, přidání /
+úprava / přesun / odebrání filmu, úprava / nová / smazaná kolekce. Nic se nekopíruje ručně.
+- Upravíš-li **tutéž kolekci** v admin panelu i ručně v seedu (před syncem), u filmů upravených v admin panelu
+  vyhraje admin panel (databáze); ručně přidané řádky zůstanou.
+- **Pořadí kolekcí na přehledu** (šipky v admin panelu) se do seedu nepropisuje – určuje ho pořadí bloků
+  v souboru.
+- Filmy přijaté **bez kolekce** v seedu nejsou a import je nemaže.
 
 ## 9. Aktualizace knihovny Supabase (web/vendor)
 

@@ -202,6 +202,8 @@ Formát **V<hlavní>.<vedlejší>.<oprava>** (např. V1.2.1):
 
 - **Výjimka V3.0:** velká fáze organizace kolekcí je rozdělená na **V3.0.1** a **V3.0.2** (třetí číslo tu
   znamená část fáze, ne opravu). Případné opravy pak dostanou další číslo (V3.0.3…).
+- **Výjimka V3.5.2.x:** doplňky k hotové části fáze, které nechceme zařadit až za další část plánu, dostanou
+  **čtvrté číslo** (V3.5.2.1 – úpravy z aplikace do seedu, V3.5.2.2 – hlídání nových dílů).
 - Verze a **měsíc poslední aktualizace** jsou v patičce webu (např. „V1.1 · November 2026“). Obojí je v `web/js/config.js` (`APP_VERSION`, `APP_UPDATED`) – při vydání nové verze se změní tam.
 - Při vydání: úprava `config.js`, záznam do `CHANGELOG.md`, commit a **tag verze** (`git tag v1.1`, `git push --tags`). Tagy `faze-N` z verzí V0.x zůstávají, od V1.1 se používají jen tagy `vX.Y`.
 
@@ -294,6 +296,8 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 36 | V3.4.2 | Porovnání s kamarádem ✅ | společně viděné filmy, co viděl jen jeden z vás, shoda v % a v hodnocení (hodnocení jen u přátel), kolekce vedle sebe, doporučení |
 | 37 | V3.5.1 | Požadavky na filmy ✅ | záložka **Requests**: požadavek s více filmy z TMDB, +1 u existujícího požadavku, **My requests** se stavem; admin inbox (přijmout celý / výběr, návrh kolekce podle TMDB); schválené filmy bez kolekce v hledání a na profilu jako *Other movies*; série **Wrong Turn** a **Texas Chainsaw Massacre** |
 | 38 | V3.5.2 | Požadavky na kolekce ✅ | požadavek má dva druhy: **Movies** (libovolné filmy) a **Collection** (celá série TMDB – jen její díly, cizí film → „Nuh uh“); admin z něj jedním klikem vytvoří **oficiální kolekci**; návrhy nových kolekcí z běžných požadavků (víc filmů z jedné série); **seed se doplňuje sám** (`sync-seed.sh`) |
+| 38a | V3.5.2.1 | Seed bez ruční práce ✅ | do seedu se samy propisují **všechny úpravy z aplikace** (admin panel: přidání, úprava, přesun, odebrání filmu, úprava / nová / smazaná kolekce); nové filmy se řadí **podle data premiéry**; kolekce ze série nabídne přidat díly i do **kolekce studia** (Lethal Weapon → Warner Bros.) |
+| 38b | V3.5.2.2 | Hlídání nových dílů | u kolekcí ze série TMDB jednou denně kontrola nových dílů a dat premiér; admin panel ukáže *New parts → Add*, chystané filmy rovnou do Coming soon |
 | 39 | V3.5.3 | Vlastní seznamy | neoficiální kolekce uživatelů **jen z filmů v databázi** (bez požadavku): název, popis, 1–3 kategorie, vlastní pořadí, viditelnost soukromá / přátelé / veřejná, na profilu, počítadlo zobrazení |
 | 40 | V3.5.4 | Komunita | veřejné seznamy v hledání; sekce **Community** dole na přehledu (top 7 podle zobrazení, řídí se filtry, záložka *Community*); nahlášení a skrytí adminem |
 | 41 | V3.6.1 | Přepracování postupu | strmější křivka úrovní (100 filmů ≈ úroveň 5, 500 ≈ 10, *Legend* ≈ 3 000+), XP za kolekci podle velikosti (10 XP za film místo pevných 100), vyšší úrovně achievementů (Collector 500/1 000, Screen Time 500/1 000 h, Completionist 50), zápis **„Seen before“ bez data** (počítá se do kolekcí a filmů, ne do Marathonu, sérií dní ani Wrapped) |
@@ -366,6 +370,8 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 - **Optimalizace až jako poslední verze kapitoly 3 (V3.6.2)** – uklidí i kód z přepracování postupu a před V4.0
   bude kód v nejlepším stavu (prohozeno 8. 11.).
 - **Plán a dokumentace se dál nevydávají zvlášť** – změny plánu jdou s nejbližší verzí.
+- **Seed bez ruční práce (8. 11.)** – i úpravy z admin panelu se mají do seedu dostat samy (V3.5.2.1); hlídání
+  nových dílů sérií jako bonus (V3.5.2.2).
 - **Požadavky rozdělené na filmy a kolekce (8. 11.)** – nová V3.5.2 *Požadavky na kolekce*; vlastní seznamy se
   posouvají na V3.5.3 a komunita na V3.5.4 (čísla fází od 39 o jednu výš).
 
@@ -1440,6 +1446,39 @@ seedu v 80s Action nejsou a příští import 80s Action je odtamtud odebere.
 - **Seed zůstává zdrojem pravdy**, ale ruční kopírování odpadá: databáze si pamatuje, co přišlo z požadavků,
   a skript to do souboru dopíše sám. Úprava souboru jde přes funkci (ne Node na počítači), aby stačil Git Bash.
 - **Úprava seedu je textová** (vložení řádků), ne přeformátování celého souboru – diff v gitu ukáže jen nové řádky.
+
+### Fáze 38a – seed bez ruční práce ✅ (8. 11. 2026) – **V3.5.2.1**
+Podnět: po přidání Lethal Weapon 5 do Warner Bros. bylo potřeba ručně upravit seed (řádek, pořadí, čárky).
+- **Všechny úpravy z aplikace se propisují do seedu** (`sync-seed.sh`, spouští ho i `import.sh`):
+  - film přidaný v admin panelu, upravený (skupina, série, popisek, volitelný, poznámka, pořadí v příběhu),
+    přesunutý šipkami nebo odebraný,
+  - úprava kolekce (název, popis, barva, typ, kategorie, obal), nová kolekce a smazaná kolekce,
+  - filmy z požadavků a kolekce ze série (jako ve V3.5.2).
+- Jak to funguje: změnu od přihlášeného správce pozná databáze sama (triggery) – položka dostane
+  `source = 'admin'`, kolekce `source = 'app'`, odebrání se zapíše do `seed_removals`. Sync přepíše **jen bloky
+  dotčených kolekcí**: pořadí filmů podle databáze, nezměněné řádky do písmene stejné (u upraveného se zachová
+  pořadí klíčů), filmy ze seedu bez položky v databázi (neimportované, nenalezené) zůstanou na svém místě.
+  Import pak vše převezme jako `seed` a záznamy o odebrání smaže.
+- **Řazení podle data premiéry:** film přidaný z požadavku i v admin panelu se zařadí před první film, který
+  vyšel později (bez data na konec, u cesty vždy na konec). Přidání v admin panelu jde nově přes funkci `admin`
+  (akce `add-item`) – nastaví i příznak Coming soon u nevydaného filmu.
+- **Kolekce ze série → i do studia:** u požadavku na kolekci a u návrhu nové kolekce *Also add to:* se studii
+  z návrhů – předem zaškrtnuté je studio, kde už jiné díly série jsou (Lethal Weapon → Warner Bros.). Díly se
+  přidají se sérií (franchise) podle už zařazených dílů a s oddílem podle desetiletí (1980s…), pokud ho studio
+  používá.
+- Migrace `20261108130000_seed_sync_app_edits.sql` (`universes.source`, `universe_items.source` + `admin`,
+  tabulka `seed_removals`, triggery), funkce `admin` (`add-item`, řazení podle data, `also`), `tmdb` (nový
+  `seed-sync`, import nastaví `source = 'seed'` a smaže záznamy o odebrání). Ověřeno: lokální Postgres
+  (triggery jen pro přihlášeného, ne pro Edge Functions), unit testy syncu (beze změny = beze změny souboru,
+  přidání doprostřed, úprava popisku, odebrání, hlavička a obal, smazaná kolekce uprostřed i na konci, nová
+  kolekce, CRLF, opakované spuštění, film s jiným názvem v TMDB), řazení podle data a pole pro studio.
+
+#### Rozhodnutí ve fázi 38a
+- **Seed zůstává zdrojem pravdy, databáze si pamatuje jen rozdíly** – žádné přepisování celého souboru
+  z databáze (ztratily by se ručně psané filmy, které se zatím nenašly, a diff by byl nečitelný).
+- **Při konfliktu vyhrává admin panel** u filmů, které v něm byly upravené; ručně přidané řádky zůstanou.
+- **Pořadí kolekcí na přehledu** se nepropisuje (přesouvání bloků v souboru by dělalo velké diffy) – kdo chce
+  jiné pořadí natrvalo, přesune blok v seedu.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).
