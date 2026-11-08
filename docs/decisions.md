@@ -291,25 +291,65 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 34b | V3.3.1–2 | Stránka Coming soon ✅ | záložka **Coming soon** v menu – všechny chystané filmy po čtvrtletích; hranice 5 let a přepnutí v den premiéry automaticky; chystaný podle data, ne stavu v TMDB (V3.3.2) |
 | 35 | V3.4.1 | Přátelé ✅ | vzájemné přátelství (žádost → přijetí), přidání podle nicku, odznak žádostí v hlavičce, záložka **Friends** u profilu; přítel vidí i soukromý profil |
 | 36 | V3.4.2 | Porovnání s kamarádem ✅ | společně viděné filmy, co viděl jen jeden z vás, shoda v % a v hodnocení (hodnocení jen u přátel), kolekce vedle sebe, doporučení |
-| 37 | V3.5.1 | Hledání všech filmů | search sahá do TMDB (jako admin panel) – zapsat jde **jakýkoli film**, nejen ten z kolekce |
-| 38 | V3.5.2 | Návrhy do kolekcí | filmy, které uživatelé zapíšou a podle TMDB patří do existující série nebo studia, se adminovi ukážou jako návrh – přidání jedním klikem |
-| 39 | V3.6 | Optimalizace a úklid | sdílené kousky kódu místo kopií (hvězdička watchlistu, pilulka kolekce, `check()`), úklid `style.css`, testy do repozitáře (`tests/`), Lighthouse, indexy v databázi, přístupnost |
+| 37 | V3.5.1 | Požadavky na filmy | záložka **Requests**: požadavek s více filmy z TMDB, +1 u existujícího požadavku, **My requests** se stavem; admin inbox (přijmout celý / výběr, návrh kolekce podle TMDB); schválené filmy bez kolekce v hledání a na profilu jako *Other movies*; série **Wrong Turn** a **Texas Chainsaw Massacre** |
+| 38 | V3.5.2 | Vlastní seznamy | neoficiální kolekce uživatelů **jen z filmů v databázi**: název, popis, 1–3 kategorie, vlastní pořadí, viditelnost soukromá / přátelé / veřejná, na profilu, počítadlo zobrazení |
+| 39 | V3.5.3 | Komunita | veřejné seznamy v hledání; sekce **Community** dole na přehledu (top 7 podle zobrazení, řídí se filtry, záložka *Community*); nahlášení a skrytí adminem |
+| 40 | V3.6.1 | Optimalizace a úklid | sdílené kousky kódu místo kopií (hvězdička watchlistu, pilulka kolekce, `check()`), úklid `style.css`, testy do repozitáře (`tests/`), Lighthouse, indexy v databázi, přístupnost |
+| 41 | V3.6.2 | Přepracování postupu | strmější křivka úrovní (100 filmů ≈ úroveň 5, 500 ≈ 10, *Legend* ≈ 3 000+), XP za kolekci podle velikosti (10 XP za film místo pevných 100), vyšší úrovně achievementů (Collector 500/1 000, Screen Time 500/1 000 h, Completionist 50), zápis **„Seen before“ bez data** (počítá se do kolekcí a filmů, ne do Marathonu, sérií dní ani Wrapped) |
 
-#### Kapitola V4.x – přizpůsobení (plán 7. 11. 2026)
+#### Kapitola V3.5 – podrobnosti (plán 8. 11. 2026)
+
+**Požadavky (V3.5.1)**
+- Katalog zůstává **kurátorský**: film se do databáze dostane jen přes **schválený požadavek** (nebo import / admin),
+  ne tím, že ho někdo zapíše jako viděný.
+- Požadavek = **jeden nebo víc filmů** (vybrané hledáním v TMDB přímo ve formuláři) + nepovinná poznámka. Jen na
+  **filmy**, ne na celé kolekce (kolekce si uživatel udělá sám jako vlastní seznam).
+- Stránka **Requests** v menu (pro přihlášené): hledání v požadavcích; když už film někdo chce, místo nového
+  požadavku **+1**; **My requests** se stavem *Pending* / *Added* / *Rejected* – u částečně přijatého po filmech.
+- **Admin** přijme celý požadavek nebo jen vybrané filmy; u každého filmu vidí **návrh kolekce** podle série
+  a studia v TMDB a zařadí ho jedním klikem (původní nápad „návrhy do kolekcí“ je tak součástí přijímání).
+- Schválený film bez kolekce: najde se v hledání, jde zapsat jako viděný / do watchlistu / ohodnotit,
+  na profilu a ve statistikách jako **Other movies**; do postupu kolekcí se nepočítá.
+- Proti spamu: nejvýš ~5 nevyřízených požadavků na uživatele a 20 filmů v jednom.
+- V hledání odkaz „Can't find a movie? Request it“.
+
+**Vlastní seznamy (V3.5.2)**
+- Jen z filmů, které už jsou v databázi (tlačítko *+ Add to list* u filmu v kolekci, hledání, watchlistu).
+- Název, popis, **1–3 kategorie** z našich (kvůli filtru v komunitě), vlastní pořadí.
+- Viditelnost **soukromá / přátelé / veřejná**; kdo seznam otevře, vidí v něm **svůj** postup.
+- **Počítadlo zobrazení**: jedno na uživatele (nepřihlášený jednou za den), aby si ho autor nenahnal obnovováním.
+- Název a popis projdou filtrem zakázaných slov (jako nicky).
+
+**Komunita (V3.5.3)**
+- Na hlavní stránce **ne** – veřejné seznamy se najdou přes **hledání**.
+- Výjimka: sekce **Community** úplně dole pod Paths – **jedna řada 7 nejoblíbenějších** podle zobrazení.
+  Řídí se filtry nahoře: nová záložka **Community** mezi Series / Studios / Genre picks / Paths a žánrové
+  kategorie; při *All + All* top 7 celkově.
+- Nahlášení nevhodného seznamu, admin ho může skrýt.
+
+#### Kapitola V4.x – přizpůsobení (plán 7. 11. 2026, upraveno 8. 11.)
 | Fáze | Verze | Název | Obsah |
 |---|---|---|---|
-| 40 | V4.0 | Nastavení ⚙ | tlačítko ⚙ místo ☾ v hlavičce s panelem: **režim** Light / Dark / System, **styl** Modern / Paper classic, **barva** Collection colors (dnešní) nebo pevná (mosazná, růžová, modrá, zelená, fialová), drobnosti (výchozí pořadí, hustota seznamu, méně animací); rozdělení **Profil** (achievementy, statistiky, přátelé) × **Nastavení** (účet + vzhled) |
-| 41 | V4.1 | Wrapped | rok v kostce – podoba se domyslí, až na něj přijde řada (první celý rok dat = 2027) |
+| 42 | V4.0 | Nastavení ⚙ | tlačítko ⚙ místo ☾ v hlavičce s panelem: **režim** Light / Dark / System, **styl** Modern / Paper classic, **barva** Collection colors (dnešní) nebo pevná (mosazná, růžová, modrá, zelená, fialová), drobnosti (výchozí pořadí, hustota seznamu, méně animací); rozdělení **Profil** (achievementy, statistiky, přátelé) × **Nastavení** (účet, heslo, veřejný profil, instalace, smazání účtu, **Sign out** + vzhled) |
+| 43 | V4.1 | Mobil a drobná vylepšení | sbalitelné achievementy a statistiky (zapamatuje si stav), **spodní lišta** na telefonu (Collections · Search · Coming soon · Watchlist · Profil), větší plochy pro klepnutí, kontrola všech obrazovek na 320–390 px |
+| 44 | V4.2 | Jazyky | **angličtina, čeština, němčina, španělština, ukrajinština** (ruština ne); texty webu, názvy filmů z TMDB v daném jazyce (ukládá import), popisy kolekcí; češtinu kontroluje Adam, ostatní ideálně rodilý mluvčí |
+| 45 | V4.3 | Wrapped | rok v kostce – **poprvé za rok 2027** (prosinec 2027): nováček si na začátku doplní stovky filmů, první celý rok dat bude 2027; filmy „Seen before“ se nepočítají |
 
-**Později / nápady:** **kapitola V5.x – seriály** (TMDB má seriály, řady i epizody se stejným klíčem; sledování
-po epizodách, řady jako skupiny, běžící seriály „čeká na novou řadu“); neoficiální kolekce uživatelů (vlastní
-seznamy, oddělené od oficiálních, dohledatelné jako podkategorie) nebo návrhy kolekcí, které schvaluje správce;
-export / import; české názvy filmů; nastavení uložené k účtu (stejný vzhled na všech zařízeních).
+**Kapitola V5.x – seriály** (jen seriály): TMDB má seriály, řady i epizody se stejným klíčem; sledování po epizodách,
+řady jako skupiny, běžící seriály „čeká na novou řadu“.
 
-#### Rozhodnutí k plánu (7. 11. 2026)
+**Později / nápady:** export / import; nastavení uložené k účtu (stejný vzhled na všech zařízeních).
+
+#### Rozhodnutí k plánu (7. a 8. 11. 2026)
 - **Wrapped z V3.6 do kapitoly 4** – teď by nic důležitého neřešil; V3.6 místo něj úklid kódu.
-- **Nová kapitola V4 = přizpůsobení** (nastavení, vzhled, Wrapped), **seriály posunuté na V5** – kapitola 4 má
-  jedno téma.
+- **Nová kapitola V4 = přizpůsobení** (nastavení, mobil, jazyky, Wrapped), **kapitola V5 = jen seriály**.
+- **V3.5 = obsah od uživatelů** ve třech krocích, které na sebe navazují: bez požadavků nepřibudou filmy, bez
+  seznamů není co ukazovat v komunitě.
+- **Katalog kurátorský** (film jen přes schválený požadavek) a **seznamy jen z filmů v databázi** – kvalita
+  zůstává pod kontrolou, admin schvaluje jedním klikem.
+- **Levelování bylo moc snadné** (100 filmů ≈ úroveň 7: mírná křivka, malé kolekce za plných 100 XP, doplňování
+  starých filmů nafukuje Marathon a Screen Time) – přepracování ve V3.6.2. XP se počítají ze zhlédnutí, takže
+  nová pravidla platí zpětně pro všechny (úrovně po změně klesnou).
 
 #### Pravidla řazení kolekcí (od V3.0)
 - **Release** (rok vydání) má **každá** kolekce a je **výchozí všude** – série, studia, žánry. Pokud má kolekce

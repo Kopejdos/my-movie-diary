@@ -33,7 +33,8 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Installable on a phone or computer (PWA), opens even offline
 
 **Coming next** – collections & new features
-- V3.5 – log any movie from TMDB (with collection suggestions for the admin), then a clean-up release; later settings & themes and a yearly Wrapped
+- V3.5 – movie requests, your own lists and community lists; V3.6 – clean-up and a tougher levelling curve
+- V4 – settings & themes, a better phone layout, more languages and a yearly Wrapped; V5 – TV shows
 
 ## Tech stack
 
