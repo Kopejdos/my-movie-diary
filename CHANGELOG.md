@@ -3,6 +3,13 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.5.2 – November 2026
+- **Collection requests** – Requests now has two modes: *Movies* (any movies, as before) and *Collection*: pick a movie, its whole series loads from TMDB and you choose which parts to ask for
+- A collection request can only contain movies from one series – try to sneak in anything else and you get a friendly "Nuh uh"
+- My requests show which collection you asked for
+- Admin: create an official collection from a series in one click – from a collection request, or from suggestions when people request several movies of the same series
+- Movies approved from requests are kept in their collections and written into the seed automatically – no more copying lines
+
 ## V3.5.1 – November 2026
 - New series: RoboCop, Black Christmas, Terrifier, Happy Death Day and Ti West's X Trilogy (seed update)
 - **Movie requests** – missing a movie? Search TMDB and ask for up to 20 movies at once; follow your requests (pending, added, rejected)

@@ -1,5 +1,5 @@
 // =====================================================================
-// My Movie Diary – Edge Function "requests" (V3.5.1)
+// My Movie Diary – Edge Function "requests" (V3.5.1, kolekce V3.5.2)
 //
 // Požadavky na filmy od přihlášených uživatelů. Funkce si sama ověří
 // přístupový token z hlavičky Authorization (jakýkoli přihlášený uživatel).
@@ -12,6 +12,11 @@
 //                                     (název, rok, plakát) si funkce stáhne z TMDB sama.
 //                                     Film, který už je v MMD, přeskočí; na film, na který
 //                                     už čeká cizí požadavek, dá místo toho +1.
+//   series  { tmdb_id }              → série TMDB, do které film patří (V3.5.2): díly se stavem,
+//                                     jestli už má v MMD kolekci a jestli na ni čeká požadavek
+//   create  { kind: "collection", tmdb_collection_id, tmdb_ids[], note? }
+//                                   → požadavek na kolekci (V3.5.2): VŠECHNY filmy musí být díly
+//                                     té série (jinak chyba not_same_series), aspoň 2 filmy
 //
 // Tajemství: TMDB_READ_TOKEN (stejné jako funkce tmdb a admin).
 // V nastavení funkce musí být vypnuté "Verify JWT" (ověřuje si přístup sama).
@@ -83,6 +88,13 @@ interface TmdbMovie {
   release_date: string;
   poster_path: string | null;
   adult?: boolean;
+  belongs_to_collection?: { id: number; name: string } | null;
+}
+
+interface TmdbCollection {
+  id: number;
+  name: string;
+  parts: TmdbMovie[];
 }
 
 async function tmdbGet<T>(path: string, params: Record<string, string> = {}): Promise<T> {
@@ -138,7 +150,109 @@ async function search(db: SupabaseClient, userId: string, query: string) {
   }));
 }
 
-/** Založí požadavek. Vrací, co se s kterým filmem stalo. */
+// ---------------------------------------------------------------------
+// Požadavky na kolekce (V3.5.2)
+// ---------------------------------------------------------------------
+
+/** Má série TMDB v MMD vlastní kolekci (kolekce typu série s aspoň jedním jejím dílem)? */
+async function seriesInMmd(db: SupabaseClient, partIds: number[]) {
+  if (partIds.length === 0) return null;
+  const { data, error } = await db.from("universe_items")
+    .select("universe:universes(slug, name, kind)")
+    .in("tmdb_id", partIds);
+  if (error) throw new Error(error.message);
+  // deno-lint-ignore no-explicit-any
+  const series = (data ?? []).map((r: any) => r.universe).find((u) => u?.kind === "series");
+  return series ? { slug: series.slug, name: series.name } : null;
+}
+
+/** Čeká už na tuto sérii požadavek na kolekci? */
+async function collectionPending(db: SupabaseClient, collectionId: number) {
+  const { data, error } = await db.from("film_requests")
+    .select("id, items:film_request_items!inner(status)")
+    .eq("tmdb_collection_id", collectionId)
+    .eq("items.status", "pending")
+    .limit(1);
+  if (error) throw new Error(error.message);
+  return (data ?? []).length > 0;
+}
+
+/** Série, do které film patří: díly v pořadí vydání se stavem v MMD. */
+async function seriesOf(db: SupabaseClient, userId: string, tmdbId: number) {
+  if (!Number.isInteger(tmdbId) || tmdbId <= 0) throw new HttpError(400, "Invalid movie", "invalid");
+  const movie = await tmdbGet<TmdbMovie>(`/movie/${tmdbId}`, { language: "en-US" });
+  if (!movie.belongs_to_collection) {
+    return { movie: { tmdb_id: movie.id, title: movie.title }, collection: null };
+  }
+  const collection = await tmdbGet<TmdbCollection>(`/collection/${movie.belongs_to_collection.id}`, { language: "en-US" });
+  const parts = collection.parts
+    .filter((p) => !p.adult)
+    .sort((a, b) => (a.release_date || "9999").localeCompare(b.release_date || "9999"));
+  const ids = parts.map((p) => p.id);
+  const [{ inCatalog }, inMmd, pending] = await Promise.all([
+    statusOf(db, userId, ids),
+    seriesInMmd(db, ids),
+    collectionPending(db, collection.id),
+  ]);
+  return {
+    movie: { tmdb_id: movie.id, title: movie.title },
+    collection: {
+      id: collection.id,
+      name: collection.name,
+      parts: parts.map((p) => ({
+        tmdb_id: p.id,
+        title: p.title,
+        year: p.release_date ? p.release_date.slice(0, 4) : null,
+        poster_path: p.poster_path,
+        in_catalog: inCatalog.has(p.id),
+      })),
+    },
+    in_mmd: inMmd,
+    pending,
+  };
+}
+
+/** Požadavek na kolekci: jen díly jedné série, aspoň 2, série ještě nemá kolekci ani čekající požadavek. */
+async function createCollectionRequest(db: SupabaseClient, userId: string, collectionId: number, tmdbIds: unknown, note: string) {
+  if (!Number.isInteger(collectionId) || collectionId <= 0) throw new HttpError(400, "Invalid series", "invalid");
+  const ids = [...new Set(Array.isArray(tmdbIds) ? tmdbIds.map(Number) : [])].filter((id) => Number.isInteger(id) && id > 0);
+  if (ids.length < 2) throw new HttpError(400, "A collection needs at least 2 movies", "too_few");
+  if (ids.length > MAX_FILMS) throw new HttpError(400, `At most ${MAX_FILMS} movies`, "too_many");
+
+  const collection = await tmdbGet<TmdbCollection>(`/collection/${collectionId}`, { language: "en-US" });
+  const partById = new Map(collection.parts.filter((p) => !p.adult).map((p) => [p.id, p]));
+  const foreign = ids.filter((id) => !partById.has(id));
+  if (foreign.length > 0) {
+    throw new HttpError(400, `Only movies from ${collection.name} can be in this request`, "not_same_series");
+  }
+  if (await seriesInMmd(db, [...partById.keys()])) throw new HttpError(409, "This series already has a collection", "collection_exists");
+  if (await collectionPending(db, collectionId)) throw new HttpError(409, "This collection is already requested", "collection_pending");
+
+  const { data: open, error: openError } = await db
+    .from("film_requests")
+    .select("id, items:film_request_items!inner(status)")
+    .eq("user_id", userId)
+    .eq("items.status", "pending");
+  if (openError) throw new Error(openError.message);
+  if ((open ?? []).length >= MAX_PENDING) throw new HttpError(429, `At most ${MAX_PENDING} open requests`, "limit");
+
+  const { data: request, error } = await db.from("film_requests").insert({
+    user_id: userId, note: note || null, kind: "collection",
+    tmdb_collection_id: collectionId, collection_name: collection.name.slice(0, 120),
+  }).select("id").single();
+  if (error) throw new Error(error.message);
+
+  // Údaje o dílech ze série TMDB (i filmy, které už v MMD jsou – patří do nové kolekce)
+  const { error: itemsError } = await db.from("film_request_items").insert(ids.map((id) => {
+    const part = partById.get(id)!;
+    return { request_id: request.id, tmdb_id: id, title: part.title, release_date: part.release_date || null, poster_path: part.poster_path };
+  }));
+  if (itemsError) throw new Error(itemsError.message);
+
+  return { request_id: request.id, kind: "collection", collection: collection.name, requested: ids, voted: [], in_catalog: [], already_mine: [], not_found: [] };
+}
+
+/** Založí požadavek na filmy. Vrací, co se s kterým filmem stalo. */
 async function create(db: SupabaseClient, userId: string, tmdbIds: unknown, note: unknown) {
   const ids = [...new Set(Array.isArray(tmdbIds) ? tmdbIds.map(Number) : [])]
     .filter((id) => Number.isInteger(id) && id > 0);
@@ -221,7 +335,13 @@ Deno.serve(async (request) => {
       case "search":
         return json(await search(db, userId, String(body.query ?? "")));
       case "create":
+        if (body.kind === "collection") {
+          const note = typeof body.note === "string" ? body.note.trim().slice(0, MAX_NOTE) : "";
+          return json(await createCollectionRequest(db, userId, Number(body.tmdb_collection_id), body.tmdb_ids, note));
+        }
         return json(await create(db, userId, body.tmdb_ids, body.note));
+      case "series":
+        return json(await seriesOf(db, userId, Number(body.tmdb_id)));
       default:
         return json({ error: `Unknown action: ${body.action}` }, 400);
     }

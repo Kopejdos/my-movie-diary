@@ -293,18 +293,19 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 35 | V3.4.1 | Přátelé ✅ | vzájemné přátelství (žádost → přijetí), přidání podle nicku, odznak žádostí v hlavičce, záložka **Friends** u profilu; přítel vidí i soukromý profil |
 | 36 | V3.4.2 | Porovnání s kamarádem ✅ | společně viděné filmy, co viděl jen jeden z vás, shoda v % a v hodnocení (hodnocení jen u přátel), kolekce vedle sebe, doporučení |
 | 37 | V3.5.1 | Požadavky na filmy ✅ | záložka **Requests**: požadavek s více filmy z TMDB, +1 u existujícího požadavku, **My requests** se stavem; admin inbox (přijmout celý / výběr, návrh kolekce podle TMDB); schválené filmy bez kolekce v hledání a na profilu jako *Other movies*; série **Wrong Turn** a **Texas Chainsaw Massacre** |
-| 38 | V3.5.2 | Vlastní seznamy | neoficiální kolekce uživatelů **jen z filmů v databázi**: název, popis, 1–3 kategorie, vlastní pořadí, viditelnost soukromá / přátelé / veřejná, na profilu, počítadlo zobrazení |
-| 39 | V3.5.3 | Komunita | veřejné seznamy v hledání; sekce **Community** dole na přehledu (top 7 podle zobrazení, řídí se filtry, záložka *Community*); nahlášení a skrytí adminem |
-| 40 | V3.6.1 | Přepracování postupu | strmější křivka úrovní (100 filmů ≈ úroveň 5, 500 ≈ 10, *Legend* ≈ 3 000+), XP za kolekci podle velikosti (10 XP za film místo pevných 100), vyšší úrovně achievementů (Collector 500/1 000, Screen Time 500/1 000 h, Completionist 50), zápis **„Seen before“ bez data** (počítá se do kolekcí a filmů, ne do Marathonu, sérií dní ani Wrapped) |
-| 41 | V3.6.2 | Optimalizace a úklid | sdílené kousky kódu místo kopií (hvězdička watchlistu, pilulka kolekce, `check()`), úklid `style.css`, testy do repozitáře (`tests/`), Lighthouse, indexy v databázi, přístupnost – **jako poslední krok před V4.0** |
+| 38 | V3.5.2 | Požadavky na kolekce ✅ | požadavek má dva druhy: **Movies** (libovolné filmy) a **Collection** (celá série TMDB – jen její díly, cizí film → „Nuh uh“); admin z něj jedním klikem vytvoří **oficiální kolekci**; návrhy nových kolekcí z běžných požadavků (víc filmů z jedné série); **seed se doplňuje sám** (`sync-seed.sh`) |
+| 39 | V3.5.3 | Vlastní seznamy | neoficiální kolekce uživatelů **jen z filmů v databázi** (bez požadavku): název, popis, 1–3 kategorie, vlastní pořadí, viditelnost soukromá / přátelé / veřejná, na profilu, počítadlo zobrazení |
+| 40 | V3.5.4 | Komunita | veřejné seznamy v hledání; sekce **Community** dole na přehledu (top 7 podle zobrazení, řídí se filtry, záložka *Community*); nahlášení a skrytí adminem |
+| 41 | V3.6.1 | Přepracování postupu | strmější křivka úrovní (100 filmů ≈ úroveň 5, 500 ≈ 10, *Legend* ≈ 3 000+), XP za kolekci podle velikosti (10 XP za film místo pevných 100), vyšší úrovně achievementů (Collector 500/1 000, Screen Time 500/1 000 h, Completionist 50), zápis **„Seen before“ bez data** (počítá se do kolekcí a filmů, ne do Marathonu, sérií dní ani Wrapped) |
+| 42 | V3.6.2 | Optimalizace a úklid | sdílené kousky kódu místo kopií (hvězdička watchlistu, pilulka kolekce, `check()`), úklid `style.css`, testy do repozitáře (`tests/`), Lighthouse, indexy v databázi, přístupnost – **jako poslední krok před V4.0** |
 
 #### Kapitola V3.5 – podrobnosti (plán 8. 11. 2026)
 
 **Požadavky (V3.5.1)**
 - Katalog zůstává **kurátorský**: film se do databáze dostane jen přes **schválený požadavek** (nebo import / admin),
   ne tím, že ho někdo zapíše jako viděný.
-- Požadavek = **jeden nebo víc filmů** (vybrané hledáním v TMDB přímo ve formuláři) + nepovinná poznámka. Jen na
-  **filmy**, ne na celé kolekce (kolekce si uživatel udělá sám jako vlastní seznam).
+- Požadavek = **jeden nebo víc filmů** (vybrané hledáním v TMDB přímo ve formuláři) + nepovinná poznámka.
+  (Od V3.5.2 i požadavek na celou kolekci – viz níž.)
 - Stránka **Requests** v menu (pro přihlášené): hledání v požadavcích; když už film někdo chce, místo nového
   požadavku **+1**; **My requests** se stavem *Pending* / *Added* / *Rejected* – u částečně přijatého po filmech.
 - **Admin** přijme celý požadavek nebo jen vybrané filmy; u každého filmu vidí **návrh kolekce** podle série
@@ -314,14 +315,25 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 - Proti spamu: nejvýš ~5 nevyřízených požadavků na uživatele a 20 filmů v jednom.
 - V hledání odkaz „Can't find a movie? Request it“.
 
-**Vlastní seznamy (V3.5.2)**
+**Požadavky na kolekce (V3.5.2)** – změna plánu 8. 11.
+- Požadavek má **dva druhy**: **Movies** (jako ve V3.5.1 – různé filmy najednou) a **Collection**.
+- **Collection** = filmy **jen z jedné série TMDB** (*belongs_to_collection*). Uživatel vybere jeden film, načte se
+  jeho série a do požadavku jdou jen její díly. Zkusí-li přidat film odjinud: **„Nuh uh, buddy!“** – kontroluje to
+  web i Edge Function `requests` (obejít to nejde). Aspoň 2 filmy; série, která už v MMD kolekci má, nebo na kterou
+  už požadavek čeká, nejde.
+- Admin z požadavku na kolekci jedním klikem vytvoří **oficiální kolekci** (název jde upravit, kategorie podle žánrů
+  TMDB, barva, pořadí vydání). Když běžné požadavky obsahují **aspoň 2 filmy ze stejné série** bez kolekce, nabídne
+  admin panel **Suggested new collections**.
+- **Vlastní kolekce uživatelů požadavek nepotřebují** – to jsou vlastní seznamy (V3.5.3).
+
+**Vlastní seznamy (V3.5.3)**
 - Jen z filmů, které už jsou v databázi (tlačítko *+ Add to list* u filmu v kolekci, hledání, watchlistu).
 - Název, popis, **1–3 kategorie** z našich (kvůli filtru v komunitě), vlastní pořadí.
 - Viditelnost **soukromá / přátelé / veřejná**; kdo seznam otevře, vidí v něm **svůj** postup.
 - **Počítadlo zobrazení**: jedno na uživatele (nepřihlášený jednou za den), aby si ho autor nenahnal obnovováním.
 - Název a popis projdou filtrem zakázaných slov (jako nicky).
 
-**Komunita (V3.5.3)**
+**Komunita (V3.5.4)**
 - Na hlavní stránce **ne** – veřejné seznamy se najdou přes **hledání**.
 - Výjimka: sekce **Community** úplně dole pod Paths – **jedna řada 7 nejoblíbenějších** podle zobrazení.
   Řídí se filtry nahoře: nová záložka **Community** mezi Series / Studios / Genre picks / Paths a žánrové
@@ -354,6 +366,8 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 - **Optimalizace až jako poslední verze kapitoly 3 (V3.6.2)** – uklidí i kód z přepracování postupu a před V4.0
   bude kód v nejlepším stavu (prohozeno 8. 11.).
 - **Plán a dokumentace se dál nevydávají zvlášť** – změny plánu jdou s nejbližší verzí.
+- **Požadavky rozdělené na filmy a kolekce (8. 11.)** – nová V3.5.2 *Požadavky na kolekce*; vlastní seznamy se
+  posouvají na V3.5.3 a komunita na V3.5.4 (čísla fází od 39 o jednu výš).
 
 #### Pravidla řazení kolekcí (od V3.0)
 - **Release** (rok vydání) má **každá** kolekce a je **výchozí všude** – série, studia, žánry. Pokud má kolekce
@@ -1383,6 +1397,49 @@ seedu v 80s Action nejsou a příští import 80s Action je odtamtud odebere.
 - **Jedno rozhodnutí na film**, ne na požadavek – stejný film od tří lidí se přijme (nebo zamítne) jednou.
 - **Návrh kolekce jen jako návrh** – produkční společnosti v TMDB jsou nepřesné (Disney je u spousty filmů),
   zařazení potvrzuje správce.
+
+### Fáze 38 – požadavky na kolekce ✅ (8. 11. 2026) – **V3.5.2**
+- **Requests → New request** má přepínač **Movies | Collection**:
+  - *Movies* – beze změny (až 20 libovolných filmů).
+  - *Collection* – u výsledku hledání **Choose series** načte sérii TMDB: karta s díly (všechny předem zaškrtnuté,
+    filmy už v MMD označené *In MMD*), *Change series*. Film bez série → „request it as a movie“ (s přepnutím),
+    série s kolekcí v MMD → odkaz na ni, série s čekajícím požadavkem → hláška. Film z jiné série →
+    **„Nuh uh, buddy! 🙅 … A collection request can only contain movies from one series.“** Odeslat jde
+    až od 2 dílů.
+  - *My requests* u požadavku na kolekci ukáže **Collection: název série**.
+- **Admin → Requests:**
+  - **Suggested new collections** – aspoň 2 požadované filmy ze stejné série TMDB, která v MMD nemá kolekci
+    (napříč všemi čekajícími požadavky): název k úpravě + **Create collection** (celá série).
+  - **Collection request** – karta s díly (zaškrtnutí), název k úpravě, **Create collection** ze zaškrtnutých dílů
+    (nezaškrtnuté se zamítnou) nebo **Reject**.
+  - Nová kolekce: filmy z TMDB, pořadí vydání, kategorie podle nejčastějších žánrů (nejvýš 2), barva podle názvu,
+    na konci přehledu; čekající požadavky na její filmy → *Added*.
+- **Seed se doplňuje sám** (přání 8. 11. – „zautomatizovat, aby se to dostávalo do souborů“):
+  - `universe_items.source` = `seed` / `request`. Film přidaný z požadavku (i celá nová kolekce) má `request` –
+    **import ho nesmaže**, i když v seedu ještě není (řadí se za filmy ze seedu).
+  - **`./scripts/sync-seed.sh`** pošle `universes.json` funkci `tmdb` (`action=seed-sync`), ta do něj **textově**
+    dopíše chybějící filmy (řádek na konec `films` dané kolekce, s `tmdb` ID, skupinou, popiskem…) a celé nové
+    kolekce (na konec seznamu). Zbytek souboru zůstane, jak je (i konce řádků CRLF z Windows); výsledek se
+    ověří jako platný JSON. Stačí Git Bash a curl. Opakované spuštění nic nezdvojí.
+  - **`./scripts/import.sh` spustí synchronizaci sám** před importem – importovaný film se pak stane obyčejnou
+    položkou `seed`. Změněný seed se jen commitne.
+  - Admin panel po přijetí ukáže uložené řádky už jen pro kontrolu (kopírovat není potřeba).
+  - Migrace označí i filmy přijaté ve V3.5.1 – kromě **RoboCop 2 a 3 v 80s Action** (mají vlastní kolekci,
+    příští import 80s Action je odebere, jak bylo v plánu).
+- **Seed:** MaXXXine a oba remaky Black Christmas s pevným TMDB ID.
+- Migrace `20261108110000_collection_requests.sql` (`film_requests.kind`, `tmdb_collection_id`,
+  `collection_name`; `universe_items.source`), funkce `requests` (akce `series`, `create` s `kind: collection`),
+  `admin` (`request-create-collection`, `new_collections` v `requests`), `tmdb` (`seed-sync`, import nemaže
+  položky z požadavků). Ověřeno: lokální Postgres (omezení druhů, označení starých položek), unit test doplnění
+  seedu (LF i CRLF, opakované spuštění, nová kolekce), testy webu (oba režimy, nuh uh, admin, 320 px).
+
+#### Rozhodnutí ve fázi 38
+- **Kolekce jen z jedné série TMDB** – oficiální kolekce má jasnou hranici (díly série), nemíchá se; libovolný
+  výběr filmů je vlastní seznam (V3.5.3).
+- **Kontrolu série dělá server** podle TMDB – web ji ukazuje jen pro pohodlí, podvrhnout ji nejde.
+- **Seed zůstává zdrojem pravdy**, ale ruční kopírování odpadá: databáze si pamatuje, co přišlo z požadavků,
+  a skript to do souboru dopíše sám. Úprava souboru jde přes funkci (ne Node na počítači), aby stačil Git Bash.
+- **Úprava seedu je textová** (vložení řádků), ne přeformátování celého souboru – diff v gitu ukáže jen nové řádky.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

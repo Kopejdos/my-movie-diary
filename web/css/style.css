@@ -4815,6 +4815,97 @@ a.friend-row__name:hover {
     padding: 9px 0;
 }
 
+/* Požadavek na kolekci (V3.5.2) */
+.req-form__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.req-mode-hint {
+    margin: -4px 0 0;
+}
+
+.req-series-message {
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--danger) 50%, var(--border));
+    background: color-mix(in srgb, var(--danger) 8%, var(--panel));
+    overflow-wrap: anywhere;
+}
+
+.req-series-message[hidden] {
+    display: none;
+}
+
+.link-button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--accent);
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.req-series {
+    display: grid;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+    background: color-mix(in srgb, var(--accent) 5%, var(--panel));
+}
+
+.req-series__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.req-series__title {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+}
+
+.req-series .eyebrow,
+.req-card__kind .eyebrow,
+.admin-request .eyebrow {
+    color: var(--accent);
+}
+
+.req-series__parts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+    max-height: 380px;
+    overflow-y: auto;
+}
+
+.req-series__part {
+    display: grid;
+    grid-template-columns: auto 32px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.req-series .req-selected__count {
+    margin: 0;
+}
+
+.req-card__kind {
+    margin: 0;
+}
+
 @media (max-width: 520px) {
     .req-film {
         grid-template-columns: 32px minmax(0, 1fr) auto;
@@ -4938,5 +5029,53 @@ a.friend-row__name:hover {
 @media (max-width: 620px) {
     .admin-request__film {
         grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* admin – požadavky na kolekce a návrhy nových kolekcí (V3.5.2) */
+.admin-new-collections {
+    margin-bottom: 26px;
+}
+
+.admin-new-collections .hint {
+    max-width: 900px;
+}
+
+.admin-request--collection,
+.admin-request--series {
+    border-left: 4px solid var(--accent);
+}
+
+.admin-request__film--plain {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.admin-request__create {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-request__name {
+    flex: 1 1 220px;
+    min-width: 0;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-deep);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 420px) {
+    .req-series__part {
+        grid-template-columns: auto 32px minmax(0, 1fr);
+    }
+
+    .req-series__part .pill {
+        grid-column: 3;
+        justify-self: start;
     }
 }

@@ -51,9 +51,26 @@ export function searchTmdbForRequest(query) {
     return callRequests("search", { query });
 }
 
-/** Založí požadavek. Vrací { request_id, requested, voted, in_catalog, already_mine, not_found }. */
+/** Založí požadavek na filmy. Vrací { request_id, requested, voted, in_catalog, already_mine, not_found }. */
 export function createFilmRequest(tmdbIds, note) {
     return callRequests("create", { tmdb_ids: tmdbIds, note });
+}
+
+/**
+ * Série TMDB, do které film patří (V3.5.2):
+ * { movie, collection: { id, name, parts: [{ tmdb_id, title, year, poster_path, in_catalog }] } | null,
+ *   in_mmd: { slug, name } | null (série už má kolekci), pending (na kolekci už čeká požadavek) }.
+ */
+export function fetchSeriesForRequest(tmdbId) {
+    return callRequests("series", { tmdb_id: tmdbId });
+}
+
+/**
+ * Požadavek na kolekci: jen díly jedné série (kontroluje funkce requests – jinak chyba
+ * not_same_series), aspoň 2 filmy.
+ */
+export function createCollectionRequest(collectionId, tmdbIds, note) {
+    return callRequests("create", { kind: "collection", tmdb_collection_id: collectionId, tmdb_ids: tmdbIds, note });
 }
 
 /**
@@ -70,7 +87,7 @@ export async function fetchWantedFilms(query = "", status = null) {
 export async function fetchMyRequests() {
     const rows = await supabase
         .from("film_requests")
-        .select("id, note, created_at, items:film_request_items(id, tmdb_id, title, release_date, poster_path, status, decided_at, universe:universes(slug, name, color))")
+        .select("id, note, created_at, kind, collection_name, items:film_request_items(id, tmdb_id, title, release_date, poster_path, status, decided_at, universe:universes(slug, name, color))")
         .order("created_at", { ascending: false })
         .then(check);
     return rows.map((r) => ({ ...r, status: requestStatus(r.items) }));

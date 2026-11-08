@@ -10,6 +10,10 @@
 //             (oddíl Coming soon, V3.3). Zrušené se jen vypíšou v reportu.
 //             Hranici „do konce roku letos + 5“ počítá až web podle dnešního
 //             data (V3.3.1) – posouvá se sama, import ji neřeší.
+//             Filmy přidané z požadavků (universe_items.source = 'request')
+//             import nemaže (V3.5.2).
+//   seed-sync – POST, tělo = text universes.json; vrátí ho doplněný o filmy
+//             z požadavků (scripts/sync-seed.sh). Jen pro správce.
 //
 // Tajemství (Supabase → Edge Functions → Secrets):
 //   TMDB_READ_TOKEN – TMDB API Read Access Token
@@ -355,6 +359,7 @@ async function importUniverse(db: SupabaseClient, universe: SeedUniverse, sortOr
     franchise: r.seed.franchise ?? null,
     label: r.seed.label ?? null,
     is_upcoming: r.upcoming,
+    source: "seed",             // film už je v seedu → obyčejná položka (V3.5.2)
   }));
   const uniqueItems = [...new Map(items.map((i) => [i.tmdb_id, i])).values()];
 
@@ -365,17 +370,33 @@ async function importUniverse(db: SupabaseClient, universe: SeedUniverse, sortOr
     if (error) throw new Error(`items upsert (${universe.slug}): ${error.message}`);
   }
 
-  // 4. Smazat položky, které už v seedu nejsou (seed je zdroj pravdy)
+  // 4. Smazat položky, které už v seedu nejsou (seed je zdroj pravdy).
+  //    Výjimka (V3.5.2): filmy přidané z požadavků (source = 'request') zůstávají –
+  //    do seedu je dopíše scripts/sync-seed.sh; řadí se za filmy ze seedu.
   const keepIds = uniqueItems.map((i) => i.tmdb_id);
-  let deleteQuery = db.from("universe_items").delete().eq("universe_id", universeRow.id);
+  let deleteQuery = db.from("universe_items").delete().eq("universe_id", universeRow.id).eq("source", "seed");
   if (keepIds.length > 0) deleteQuery = deleteQuery.not("tmdb_id", "in", `(${keepIds.join(",")})`);
   const { error: deleteError } = await deleteQuery;
   if (deleteError) throw new Error(`items cleanup (${universe.slug}): ${deleteError.message}`);
+
+  const { data: fromRequests, error: keptError } = await db
+    .from("universe_items")
+    .select("id, release_order")
+    .eq("universe_id", universeRow.id)
+    .eq("source", "request")
+    .order("release_order");
+  if (keptError) throw new Error(`request items (${universe.slug}): ${keptError.message}`);
+  for (const [index, item] of (fromRequests ?? []).entries()) {
+    const { error } = await db.from("universe_items")
+      .update({ release_order: uniqueItems.length + index + 1 }).eq("id", item.id);
+    if (error) throw new Error(`request items order (${universe.slug}): ${error.message}`);
+  }
 
   // Report – jen to, co stojí za kontrolu
   return {
     slug: universe.slug,
     imported: uniqueItems.length,
+    fromRequests: fromRequests?.length ?? 0,
     comingSoon: ok
       .filter((r) => r.upcoming)
       .map((r) => `${r.film.title} (${r.film.release_date ?? `${r.seed.year ?? "?"}, date TBA`})`),
@@ -418,6 +439,226 @@ async function handleImport(request: Request, url: URL): Promise<Response> {
 }
 
 // ---------------------------------------------------------------------
+// Synchronizace seedu (V3.5.2): filmy přidané z požadavků → universes.json
+//
+// POST ?action=seed-sync, tělo = text supabase/seed/universes.json (jak je na disku).
+// Vrací upravený text souboru (text/plain) a v hlavičkách počty:
+//   X-Seed-Films        – kolik filmů přibylo do existujících kolekcí,
+//   X-Seed-Collections  – kolik celých kolekcí přibylo (vytvořené ze série TMDB).
+// Soubor se mění jen textově (vloží se řádky na konec "films" dané kolekce),
+// formátování zbytku zůstane přesně, jak je. Volá ho scripts/sync-seed.sh.
+// ---------------------------------------------------------------------
+
+/** Položka kolekce z databáze, kterou je potřeba dopsat do seedu. */
+interface SyncItem {
+  tmdb_id: number;
+  title: string;
+  release_date: string | null;
+  release_order: number;
+  story_order: number | null;
+  group_label: string | null;
+  is_optional: boolean;
+  franchise: string | null;
+  label: string | null;
+  note: string | null;
+}
+
+/** Kolekce z databáze (pro celé nové kolekce, které v seedu ještě nejsou). */
+interface SyncUniverse {
+  slug: string;
+  name: string;
+  kind: string;
+  color: string | null;
+  description: string | null;
+  categories: string[];
+  items: SyncItem[];
+}
+
+/** Řádek filmu ve stylu seedu: { "title": "X", "year": 2024, "tmdb": 1 } */
+export function seedFilmLine(item: SyncItem, indent: string): string {
+  const film: Record<string, unknown> = { title: item.title };
+  if (item.release_date) film.year = Number(item.release_date.slice(0, 4));
+  film.tmdb = item.tmdb_id;
+  if (item.group_label) film.group = item.group_label;
+  if (item.story_order) film.story = item.story_order;
+  if (item.is_optional) film.optional = true;
+  if (item.franchise) film.franchise = item.franchise;
+  if (item.label) film.label = item.label;
+  if (item.note) film.note = item.note;
+  const body = Object.entries(film).map(([key, value]) => `${JSON.stringify(key)}: ${JSON.stringify(value)}`).join(", ");
+  return `${indent}{ ${body} }`;
+}
+
+/** Je film už v seedu kolekce? (přesné TMDB ID, nebo stejný název a rok) */
+function inSeed(films: SeedFilm[], item: SyncItem): boolean {
+  const year = item.release_date ? Number(item.release_date.slice(0, 4)) : undefined;
+  return films.some((f) =>
+    f.tmdb === item.tmdb_id ||
+    (!f.tmdb && normalizeTitle(f.title) === normalizeTitle(item.title) && (f.year ?? year) === year)
+  );
+}
+
+/**
+ * Doplní seed (text souboru) o filmy z požadavků. Čistá funkce – testuje se bez databáze.
+ * byUniverse: slug → položky (kolekce, které v seedu jsou); newUniverses: celé nové kolekce.
+ */
+export function patchSeed(
+  text: string,
+  byUniverse: Map<string, SyncItem[]>,
+  newUniverses: SyncUniverse[],
+): { text: string; films: string[]; collections: string[] } {
+  const eol = text.includes("\r\n") ? "\r\n" : "\n";
+  const lines = text.replace(/\r\n/g, "\n").split("\n");
+  const seed = JSON.parse(text) as { universes: SeedUniverse[] };
+  const added: string[] = [];
+  const addedCollections: string[] = [];
+
+  /** Přidá čárku na konec řádku s hodnotou (ne za "[" / "{" a ne podruhé). */
+  const withComma = (line: string) => (/[,[{]\s*$/.test(line) ? line : line.replace(/\s*$/, ","));
+
+  for (const [slug, items] of byUniverse) {
+    const universe = seed.universes.find((u) => u.slug === slug);
+    if (!universe) continue;
+    const missing = items.filter((item) => !inSeed(universe.films ?? [], item));
+    if (missing.length === 0) continue;
+
+    const slugLine = lines.findIndex((line) => new RegExp(`^\\s*"slug":\\s*${JSON.stringify(slug).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*,?\\s*$`).test(line));
+    if (slugLine < 0) continue;
+    let filmsLine = -1;
+    for (let i = slugLine + 1; i < lines.length; i++) {
+      if (/^\s*"films":\s*\[/.test(lines[i])) { filmsLine = i; break; }
+      if (/^\s*"slug":/.test(lines[i])) break;      // další kolekce – tahle "films" nemá
+    }
+    if (filmsLine < 0) continue;
+
+    // Prázdné pole na jednom řádku: "films": [] → rozepsat na víc řádků
+    const indent = lines[filmsLine].match(/^\s*/)![0];
+    if (/\[\s*\]/.test(lines[filmsLine])) {
+      const tail = lines[filmsLine].replace(/^.*\[\s*\]/, "");
+      lines.splice(filmsLine, 1, lines[filmsLine].replace(/\[\s*\].*$/, "["), `${indent}]${tail}`);
+    }
+    let closeLine = -1;
+    for (let i = filmsLine + 1; i < lines.length; i++) {
+      if (/^\s*\]\s*,?\s*$/.test(lines[i])) { closeLine = i; break; }
+    }
+    if (closeLine < 0) continue;
+
+    const previous = closeLine - 1;
+    const filmIndent = previous > filmsLine ? lines[previous].match(/^\s*/)![0] : `${indent}  `;
+    if (previous > filmsLine) lines[previous] = withComma(lines[previous]);
+    const newLines = missing
+      .sort((a, b) => a.release_order - b.release_order)
+      .map((item, i, all) => seedFilmLine(item, filmIndent) + (i < all.length - 1 ? "," : ""));
+    lines.splice(closeLine, 0, ...newLines);
+    added.push(...missing.map((item) => `${slug}: ${item.title}${item.release_date ? ` (${item.release_date.slice(0, 4)})` : ""}`));
+  }
+
+  // Celé nové kolekce → na konec pole "universes" (před "  ]" a závěrečnou "}")
+  const fresh = newUniverses.filter((u) => !seed.universes.some((s) => s.slug === u.slug) && u.items.length > 0);
+  if (fresh.length > 0) {
+    let end = lines.length - 1;
+    while (end >= 0 && lines[end].trim() === "") end--;              // závěrečná "}"
+    let close = end - 1;
+    while (close >= 0 && lines[close].trim() === "") close--;        // "  ]" pole universes
+    if (end >= 0 && lines[end].trim() === "}" && close >= 0 && /^\s*\]\s*$/.test(lines[close])) {
+      let last = close - 1;
+      while (last >= 0 && lines[last].trim() === "") last--;
+      if (last >= 0 && lines[last].trim() !== "[" && !/"universes":\s*\[\s*$/.test(lines[last])) lines[last] = withComma(lines[last]);
+      const blocks: string[] = [];
+      fresh.forEach((u, index) => {
+        blocks.push(
+          "    {",
+          `      "slug": ${JSON.stringify(u.slug)},`,
+          `      "name": ${JSON.stringify(u.name)},`,
+          `      "kind": ${JSON.stringify(u.kind || "series")},`,
+          ...(u.categories.length > 0 ? [`      "categories": [${u.categories.map((c) => JSON.stringify(c)).join(", ")}],`] : []),
+          ...(u.color ? [`      "color": ${JSON.stringify(u.color)},`] : []),
+          ...(u.description ? [`      "description": ${JSON.stringify(u.description)},`] : []),
+          `      "films": [`,
+          ...[...u.items].sort((a, b) => a.release_order - b.release_order)
+            .map((item, i, all) => seedFilmLine(item, "        ") + (i < all.length - 1 ? "," : "")),
+          "      ]",
+          index < fresh.length - 1 ? "    }," : "    }",
+        );
+        addedCollections.push(`${u.slug} (${u.items.length} movies)`);
+      });
+      lines.splice(close, 0, ...blocks);
+    }
+  }
+
+  const result = lines.join("\n");
+  JSON.parse(result);              // pojistka: upravený seed musí být platný JSON
+  return { text: result.replace(/\n/g, eol), films: added, collections: addedCollections };
+}
+
+async function handleSeedSync(request: Request): Promise<Response> {
+  if (request.headers.get("x-admin-key") !== requireEnv("MMD_ADMIN_KEY")) {
+    return json({ error: "Unauthorized" }, 401);
+  }
+  if (request.method !== "POST") return json({ error: "Use POST" }, 405);
+  const text = await request.text();
+  try {
+    if (!Array.isArray(JSON.parse(text).universes)) throw new Error();
+  } catch {
+    return json({ error: "Body must be supabase/seed/universes.json" }, 400);
+  }
+
+  const db = createAdminClient();
+  // Kolekce, ve kterých je aspoň jeden film z požadavku
+  const { data: requestItems, error } = await db
+    .from("universe_items")
+    .select("universe_id")
+    .eq("source", "request");
+  if (error) throw new Error(`request items: ${error.message}`);
+  const universeIds = [...new Set((requestItems ?? []).map((i) => i.universe_id))];
+
+  const byUniverse = new Map<string, SyncItem[]>();
+  const newUniverses: SyncUniverse[] = [];
+  if (universeIds.length > 0) {
+    const seed = JSON.parse(text) as { universes: SeedUniverse[] };
+    const { data: universes, error: universeError } = await db
+      .from("universes")
+      .select("id, slug, name, kind, color, description, " +
+        "categories:universe_categories(category:categories(slug)), " +
+        "items:universe_items(tmdb_id, release_order, story_order, group_label, is_optional, franchise, label, note, source, film:films(title, release_date))")
+      .in("id", universeIds);
+    if (universeError) throw new Error(`universes: ${universeError.message}`);
+
+    // deno-lint-ignore no-explicit-any
+    for (const u of (universes ?? []) as any[]) {
+      // deno-lint-ignore no-explicit-any
+      const toItem = (i: any): SyncItem => ({
+        tmdb_id: i.tmdb_id, title: i.film?.title ?? `TMDB ${i.tmdb_id}`, release_date: i.film?.release_date ?? null,
+        release_order: i.release_order, story_order: i.story_order, group_label: i.group_label,
+        is_optional: i.is_optional, franchise: i.franchise, label: i.label, note: i.note,
+      });
+      if (seed.universes.some((s) => s.slug === u.slug)) {
+        // deno-lint-ignore no-explicit-any
+        byUniverse.set(u.slug, u.items.filter((i: any) => i.source === "request").map(toItem));
+      } else {
+        newUniverses.push({
+          slug: u.slug, name: u.name, kind: u.kind, color: u.color, description: u.description,
+          // deno-lint-ignore no-explicit-any
+          categories: (u.categories ?? []).map((c: any) => c.category?.slug).filter(Boolean),
+          items: u.items.map(toItem),
+        });
+      }
+    }
+  }
+
+  const result = patchSeed(text, byUniverse, newUniverses);
+  return new Response(result.text, {
+    status: 200,
+    headers: {
+      ...CORS_HEADERS,
+      "Content-Type": "text/plain; charset=utf-8",
+      "X-Seed-Films": String(result.films.length),
+      "X-Seed-Collections": String(result.collections.length),
+    },
+  });
+}
+
+// ---------------------------------------------------------------------
 // Vstupní bod
 // ---------------------------------------------------------------------
 
@@ -431,6 +672,8 @@ Deno.serve(async (request) => {
     switch (action) {
       case "import":
         return await handleImport(request, url);
+      case "seed-sync":
+        return await handleSeedSync(request);
       default:
         return json({ error: `Unknown action: ${action}` }, 400);
     }

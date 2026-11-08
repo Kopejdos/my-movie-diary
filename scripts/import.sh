@@ -8,6 +8,8 @@
 #   ./scripts/import.sh --all                   VŠECHNY kolekce (přepíše úpravy z admin panelu!)
 #
 # Klíč MMD_ADMIN_KEY se zadává skrytě (nic se nezobrazí, ani hvězdičky).
+# Před importem se sám spustí scripts/sync-seed.sh – doplní do seedu filmy
+# přijaté z požadavků (V3.5.2). Změněný seed pak commitni.
 # Reporty se ukládají do složky import-reports/ (Git ji ignoruje).
 # =====================================================================
 
@@ -38,6 +40,10 @@ fi
 read -r -s -p "Admin key: " KEY
 echo
 mkdir -p "$REPORTS"
+
+# V3.5.2: nejdřív dopsat do seedu filmy přijaté z požadavků (ať je seed úplný
+# a import je převezme jako obyčejné položky)
+MMD_KEY="$KEY" bash scripts/sync-seed.sh
 
 for slug in "${targets[@]}"; do
     name="${slug:-all}"

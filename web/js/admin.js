@@ -57,6 +57,16 @@ export async function decideFilmRequests(items) {
     return result;
 }
 
+/**
+ * Nová oficiální kolekce ze série TMDB (V3.5.2). tmdbIds = jen tyto díly (požadavek na kolekci),
+ * prázdné = celá série. Vrací { slug, name, films, requests_added, seed } – seed = blok do universes.json.
+ */
+export async function createCollectionFromSeries(tmdbCollectionId, name, tmdbIds = []) {
+    const result = await callAdmin("request-create-collection", { tmdb_collection_id: tmdbCollectionId, name, tmdb_ids: tmdbIds });
+    clearDataCache();
+    return result;
+}
+
 // ---------------------------------------------------------------------
 // Zakázaná slova v nickách (V2.3)
 // ---------------------------------------------------------------------

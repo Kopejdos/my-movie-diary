@@ -90,6 +90,7 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 | `is_optional` | `boolean` | vedlejší film (crossover, spin-off) – nepočítá se do postupu |
 | `is_upcoming` | `boolean` | film ještě nevyšel (V3.3) – oddíl **Coming soon**, nepočítá se do počtu filmů ani postupu; nastavuje import. Od V3.3.2 rozhoduje hlavně datum: se známým `films.release_date` je film chystaný, dokud premiéra nebyla (v den premiéry se počítá jako vydaný, i když import neproběhl, a naopak budoucí premiéra je chystaná, i když TMDB hlásí „Released“); bez data rozhodne tento příznak. Hranici „do konce roku letos + 5“ počítá web |
 | `note` | `text`, null | poznámka ke kroku cesty – proč film vidět (max. 300 znaků, od V1.8) |
+| `source` | `text` | `seed` (výchozí – položka ze seedu; import ji smaže, když v seedu chybí) / `request` (přidal ji správce z požadavku nebo jako kolekci ze série – import ji **nesmaže**, `scripts/sync-seed.sh` ji dopíše do seedu; dalším importem se z ní stane `seed`). Od V3.5.2 |
 
 Unikátní dvojice (`universe_id`, `tmdb_id`) – jeden film je v univerzu nejvýš jednou,
 ale může být ve více univerzech.
@@ -143,7 +144,9 @@ ale může být ve více univerzech.
 
 ### Požadavky na filmy (V3.5.1)
 **`film_requests`** – jeden požadavek: `id`, `user_id` (FK → `profiles`, cascade), `note` (≤ 300 znaků, vidí jen
-autor a správce), `created_at`.
+autor a správce), `created_at`. Od V3.5.2 i **`kind`** (`films` = libovolné filmy / `collection` = díly jedné série
+TMDB), **`tmdb_collection_id`** (série u požadavku na kolekci – vyplněná právě tehdy, když `kind = 'collection'`,
+omezení `film_requests_series_check`) a **`collection_name`** (název série z TMDB, ≤ 120 znaků).
 
 **`film_request_items`** – filmy v požadavku: `id`, `request_id` (FK, cascade), `tmdb_id`, `title`,
 `release_date`, `poster_path` (údaje z TMDB v okamžiku požadavku – film ještě není v `films`), `status`
@@ -157,6 +160,9 @@ Unikátní `(request_id, tmdb_id)`.
   limity: ≤ 20 filmů v požadavku, ≤ 5 nevyřízených požadavků). Hlasy: vlastní, jen u filmu, který čeká
   (`film_request_pending()`), zrušit vlastní.
 - Rozhodnutí (Edge Function `admin`, akce `request-decide`) platí pro film ve **všech** čekajících požadavcích.
+- Požadavek na kolekci (V3.5.2): funkce `requests` ověří podle TMDB, že všechny filmy patří do jedné série
+  (jinak chyba `not_same_series`), aspoň 2 filmy, série ještě nemá kolekci v MMD ani čekající požadavek.
+  Správce z něj vytvoří kolekci akcí `request-create-collection` funkce `admin`.
 - **`wanted_films(query, status)`** – jeden řádek na požadovaný film pro všechny přihlášené: `title`,
   `release_date`, `poster_path`, `status` (čeká-li aspoň jeden → `pending`), `wants` (žadatelé + hlasy),
   `i_want`, `requested_by_me`, `first_requested`. Jména žadatelů neprozrazuje.

@@ -1,11 +1,15 @@
 // Obrazovka: požadavky na filmy (#/requests, V3.5.1) – jen pro přihlášené.
-//   • Nový požadavek: hledání v TMDB, výběr až 20 filmů, nepovinná poznámka.
+//   • Nový požadavek – dva druhy (V3.5.2):
+//       Movies     – libovolné filmy z TMDB (až 20), nepovinná poznámka;
+//       Collection – celá série TMDB: vybere se jeden film, načte se jeho série
+//                    a do požadavku jdou jen její díly (cizí film → „nuh uh“).
 //   • My requests: vlastní požadavky se stavem (Pending / Added / Rejected / Partly added).
 //   • Wanted movies: všechny požadované filmy (bez jmen žadatelů), hledání a +1.
 
 import {
     searchTmdbForRequest, createFilmRequest, fetchWantedFilms, fetchMyRequests, voteForFilm,
-    cancelFilmRequest, openRequestCount, MAX_REQUEST_FILMS, MAX_OPEN_REQUESTS, MAX_NOTE,
+    cancelFilmRequest, openRequestCount, fetchSeriesForRequest, createCollectionRequest,
+    MAX_REQUEST_FILMS, MAX_OPEN_REQUESTS, MAX_NOTE,
 } from "../requests.js";
 import { isSignedIn } from "../auth.js";
 import { navigate } from "../router.js";
@@ -15,6 +19,7 @@ import { h, mount, poster, yearOf, toast, loadingView, errorView, formatDate } f
 
 const SEARCH_DELAY = 350;          // ms po posledním znaku, než se zeptáme TMDB
 const WANTED_TABS = ["pending", "added", "rejected"];
+const MODES = ["films", "collection"];   // druh nového požadavku (V3.5.2)
 
 export async function requestsView(container, context) {
     setAccent(null);
@@ -53,8 +58,12 @@ class RequestsPage {
     constructor(mine, wanted, initialQuery) {
         this.mine = mine;
         this.wanted = wanted;
-        this.selected = new Map();          // tmdb_id → výsledek hledání
+        this.selected = new Map();          // tmdb_id → výsledek hledání (režim Movies)
         this.results = [];
+        this.mode = "films";                // films | collection
+        this.series = null;                 // vybraná série TMDB (režim Collection)
+        this.seriesPicked = new Set();      // zaškrtnuté díly série
+        this.seriesLoading = null;          // tmdb_id filmu, jehož série se právě načítá
         this.wantedTab = "pending";
         this.wantedQuery = "";
         this.initialQuery = initialQuery;
@@ -94,23 +103,65 @@ class RequestsPage {
         });
         this.submit = h("button", { class: "btn btn--primary", type: "submit" }, TEXTS.requestsSend);
         this.limitNote = h("p", { class: "notice req-limit" });
+        this.modeTabs = h("div", { class: "segmented req-modes", role: "group", "aria-label": TEXTS.requestsKind });
+        this.modeHint = h("p", { class: "hint req-mode-hint" });
+        this.seriesMessage = h("p", { class: "req-series-message", role: "alert", hidden: true });
 
         mount(this.composer,
             h("form", {
                 class: "req-form", novalidate: true,
                 onSubmit: (event) => { event.preventDefault(); this.send(); },
             },
-                h("h2", { class: "req-form__title" }, TEXTS.requestsNew),
+                h("div", { class: "req-form__top" },
+                    h("h2", { class: "req-form__title" }, TEXTS.requestsNew),
+                    this.modeTabs),
+                this.modeHint,
                 this.limitNote,
                 h("div", { class: "search-box req-search" },
                     h("span", { class: "search-icon", "aria-hidden": "true" }), this.searchInput),
+                this.seriesMessage,
                 this.resultsBox,
                 this.selectedBox,
                 this.note,
                 h("div", { class: "req-form__actions" }, this.submit),
             ));
+        this.renderModes();
         this.renderSelected();
         this.renderLimit();
+    }
+
+    /** Přepínač Movies | Collection a nápověda k vybranému druhu. */
+    renderModes() {
+        mount(this.modeTabs, MODES.map((mode) => h("button", {
+            class: `segmented__option${this.mode === mode ? " segmented__option--active" : ""}`,
+            type: "button", "aria-pressed": String(this.mode === mode),
+            onClick: () => this.setMode(mode),
+        }, TEXTS[`requestsMode_${mode}`])));
+        this.modeHint.textContent = this.mode === "films"
+            ? format("requestsModeHint_films", MAX_REQUEST_FILMS)
+            : TEXTS.requestsModeHint_collection;
+        this.searchInput.placeholder = this.mode === "films" ? TEXTS.requestsSearchPlaceholder : TEXTS.requestsSeriesSearchPlaceholder;
+        this.searchInput.setAttribute("aria-label", this.searchInput.placeholder);
+    }
+
+    setMode(mode) {
+        if (mode === this.mode) return;
+        this.mode = mode;
+        this.hideSeriesMessage();
+        this.renderModes();
+        this.renderResults();
+        this.renderSelected();
+    }
+
+    /** Hláška nad výsledky (cizí série, film bez série…); null = schovat. */
+    showSeriesMessage(...content) {
+        mount(this.seriesMessage, ...content);
+        this.seriesMessage.hidden = false;
+    }
+
+    hideSeriesMessage() {
+        this.seriesMessage.hidden = true;
+        mount(this.seriesMessage);
     }
 
     renderLimit() {
@@ -146,6 +197,7 @@ class RequestsPage {
             return;
         }
         mount(this.resultsBox, this.results.map((film) => {
+            if (this.mode === "collection") return this.seriesResult(film);
             const picked = this.selected.has(film.tmdb_id);
             let action;
             if (film.state === "in_catalog") {
@@ -169,6 +221,116 @@ class RequestsPage {
         }));
     }
 
+    /** Výsledek hledání v režimu Collection: vybrat sérii / přidat díl / „nuh uh“. */
+    seriesResult(film) {
+        let action;
+        if (!this.series) {
+            const loading = this.seriesLoading === film.tmdb_id;
+            action = h("button", {
+                class: "btn btn--small btn--primary", type: "button", disabled: loading,
+                onClick: () => this.chooseSeries(film),
+            }, loading ? TEXTS.requestsSeriesLoading : TEXTS.requestsChooseSeries);
+        } else {
+            const part = this.series.collection.parts.find((p) => p.tmdb_id === film.tmdb_id);
+            const picked = part && this.seriesPicked.has(film.tmdb_id);
+            action = h("button", {
+                class: `btn btn--small${picked ? " btn--picked" : part ? " btn--primary" : ""}`,
+                type: "button", "aria-pressed": String(Boolean(picked)),
+                onClick: () => part ? this.togglePart(film.tmdb_id) : this.nuhUh(film),
+            }, picked ? `✓ ${TEXTS.requestsPicked}` : `+ ${TEXTS.requestsAdd}`);
+        }
+        return h("li", { class: "req-result" },
+            poster(film.poster_path, film.title, "req-result__poster", false, "tiny"),
+            h("span", { class: "req-result__info" },
+                h("strong", {}, film.title),
+                h("span", { class: "muted" }, [film.year, film.state === "in_catalog" ? TEXTS.requestsInCatalog : null].filter(Boolean).join(" · "))),
+            action);
+    }
+
+    /** Načte sérii TMDB, do které film patří, a nabídne její díly. */
+    async chooseSeries(film) {
+        this.hideSeriesMessage();
+        this.seriesLoading = film.tmdb_id;
+        this.renderResults();
+        try {
+            const data = await fetchSeriesForRequest(film.tmdb_id);
+            if (!data.collection) {
+                this.showSeriesMessage(format("requestsNoSeries", film.title), " ",
+                    h("button", { class: "link-button", type: "button", onClick: () => this.setMode("films") }, TEXTS.requestsSwitchToMovies));
+            } else if (data.in_mmd) {
+                this.showSeriesMessage(`${format("requestsSeriesInMmd", data.collection.name)}:`, " ",
+                    h("a", { href: `#/collection/${data.in_mmd.slug}` }, data.in_mmd.name));
+            } else if (data.pending) {
+                this.showSeriesMessage(format("requestsSeriesPending", data.collection.name));
+            } else {
+                this.series = data;
+                this.seriesPicked = new Set(data.collection.parts.map((p) => p.tmdb_id));
+            }
+        } catch (error) {
+            this.showSeriesMessage(format("errorGeneric", error.message));
+        }
+        this.seriesLoading = null;
+        this.renderResults();
+        this.renderSelected();
+    }
+
+    /** Film z jiné série do požadavku na kolekci nepatří. */
+    nuhUh(film) {
+        const message = format("requestsNotSameSeries", film.title, this.series.collection.name);
+        this.showSeriesMessage(h("strong", {}, TEXTS.requestsNuhUh), " ", message);
+        this.seriesMessage.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+
+    togglePart(tmdbId) {
+        if (this.seriesPicked.has(tmdbId)) this.seriesPicked.delete(tmdbId);
+        else this.seriesPicked.add(tmdbId);
+        this.hideSeriesMessage();
+        this.renderResults();
+        this.renderSelected();
+    }
+
+    clearSeries() {
+        this.series = null;
+        this.seriesPicked = new Set();
+        this.hideSeriesMessage();
+        this.renderResults();
+        this.renderSelected();
+    }
+
+    /** Karta vybrané série: díly se zaškrtávátky (předem všechny), filmy v MMD označené. */
+    renderSeries() {
+        if (!this.series) {
+            this.submit.disabled = true;
+            mount(this.selectedBox, h("p", { class: "hint req-selected__empty" }, TEXTS.requestsSeriesHint));
+            return;
+        }
+        const { collection } = this.series;
+        this.submit.disabled = this.seriesPicked.size < 2;
+        mount(this.selectedBox,
+            h("div", { class: "req-series" },
+                h("div", { class: "req-series__head" },
+                    h("span", { class: "req-series__title" },
+                        h("span", { class: "eyebrow" }, TEXTS.requestsSeriesLabel),
+                        h("strong", {}, collection.name)),
+                    h("button", { class: "btn btn--small", type: "button", onClick: () => this.clearSeries() }, TEXTS.requestsChangeSeries)),
+                h("p", { class: "req-selected__count" },
+                    format("requestsSeriesSelected", this.seriesPicked.size, collection.parts.length),
+                    this.seriesPicked.size < 2 ? h("span", { class: "muted" }, ` · ${TEXTS.requestsSeriesTooFew}`) : null),
+                h("ul", { class: "req-series__parts" }, collection.parts.map((part) => {
+                    const checkbox = h("input", {
+                        type: "checkbox", checked: this.seriesPicked.has(part.tmdb_id),
+                        onChange: () => this.togglePart(part.tmdb_id),
+                    });
+                    return h("li", {},
+                        h("label", { class: "req-series__part" }, checkbox,
+                            poster(part.poster_path, part.title, "req-film__poster", false, "tiny"),
+                            h("span", { class: "req-wanted__info" },
+                                h("strong", {}, part.title),
+                                h("span", { class: "muted" }, part.year ?? TEXTS.requestsSeriesNoDate)),
+                            part.in_catalog ? h("span", { class: "pill pill--added" }, `✓ ${TEXTS.requestsInCatalog}`) : null));
+                }))));
+    }
+
     toggle(film) {
         if (this.selected.has(film.tmdb_id)) {
             this.selected.delete(film.tmdb_id);
@@ -184,6 +346,10 @@ class RequestsPage {
     }
 
     renderSelected() {
+        if (this.mode === "collection") {
+            this.renderSeries();
+            return;
+        }
         const films = [...this.selected.values()];
         this.submit.disabled = films.length === 0;
         mount(this.selectedBox,
@@ -199,7 +365,44 @@ class RequestsPage {
                 ]);
     }
 
+    /** Odeslání požadavku na kolekci (jen díly vybrané série, aspoň 2). */
+    async sendCollection() {
+        if (!this.series || this.seriesPicked.size < 2) return;
+        this.submit.disabled = true;
+        try {
+            const result = await createCollectionRequest(this.series.collection.id,
+                this.series.collection.parts.map((p) => p.tmdb_id).filter((id) => this.seriesPicked.has(id)),     // v pořadí série
+                this.note.value);
+            toast(format("requestsSentCollection", result.collection, movies(result.requested.length)));
+            this.series = null;
+            this.seriesPicked = new Set();
+            this.note.value = "";
+            this.searchInput.value = "";
+            this.results = [];
+            this.renderResults();
+            this.renderSelected();
+            await this.reload();
+        } catch (error) {
+            const name = this.series?.collection.name ?? "";
+            const text = {
+                not_same_series: `${TEXTS.requestsNuhUh} ${format("requestsNotSameSeriesAny", name)}`,
+                too_few: TEXTS.requestsSeriesTooFew,
+                too_many: format("requestsTooMany", MAX_REQUEST_FILMS),
+                collection_exists: format("requestsSeriesInMmd", name),
+                collection_pending: format("requestsSeriesPending", name),
+                limit: format("requestsLimitNote", MAX_OPEN_REQUESTS),
+            }[error.code] ?? format("errorGeneric", error.message);
+            toast(text, "error");
+            this.showSeriesMessage(text);
+            this.submit.disabled = false;
+        }
+    }
+
     async send() {
+        if (this.mode === "collection") {
+            await this.sendCollection();
+            return;
+        }
         const ids = [...this.selected.keys()];
         if (ids.length === 0) return;
         this.submit.disabled = true;
@@ -271,6 +474,9 @@ class RequestsPage {
                 h("span", { class: "muted" }, formatDate(request.created_at.slice(0, 10))),
                 h("span", { class: "muted" }, movies(request.items.length)),
                 cancel),
+            request.kind === "collection"
+                ? h("p", { class: "req-card__kind" }, h("span", { class: "eyebrow" }, TEXTS.requestsSeriesLabel), " ", h("strong", {}, request.collection_name))
+                : null,
             request.note ? h("p", { class: "req-card__note" }, `“${request.note}”`) : null,
             h("ul", { class: "req-card__films" }, request.items.map((item) => h("li", { class: "req-film" },
                 poster(item.poster_path, item.title, "req-film__poster", false, "tiny"),

@@ -75,6 +75,9 @@ s GitHubem (automatické migrace) se nezapíná.
    ./scripts/import.sh --all                # všechny – přepíše úpravy z admin panelu, chce potvrzení
    ```
    Reporty se uloží do `import-reports/<slug>.json`.
+   Před importem skript sám spustí **`./scripts/sync-seed.sh`** (V3.5.2) – doplní do `supabase/seed/universes.json`
+   filmy, které admin přijal z požadavků (i celé kolekce vytvořené ze série). Změněný seed zkontrolovat
+   (`git diff`) a commitnout. Samotnou synchronizaci bez importu: `./scripts/sync-seed.sh`.
 5. V reportu zkontrolovat `warnings` (jiný název / rok) a `notFound`. Chystané filmy (V3.3) jsou v `comingSoon`,
    zrušené v `skipped`. V den premiéry se chystaný film přepne na běžný sám (V3.3.1); import po premiéře jen
    doplní délku a plakát z TMDB.
@@ -179,11 +182,14 @@ Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny
    Používá stejné tajemství `TMDB_READ_TOKEN` jako `tmdb` a `admin`. Požadavky se vyřizují v admin panelu,
    záložka **Requests** (funkce `admin` musí být nasazená v nové verzi).
 
+6. **Požadavky na kolekce (V3.5.2):** po migraci `20261108110000_collection_requests.sql` znovu nasadit funkce
+   `requests`, `admin` **a `tmdb`** (akce `seed-sync` a import, který nemaže filmy z požadavků).
+
 **Pozor:** plný import ze seedu přepíše změny z admin panelu u univerz, která jsou v `universes.json`
 (a smaže z nich filmy, které v seedu nejsou). Nová univerza a filmy přidávat přes admin panel.
-To platí i pro filmy přijaté z požadavků do kolekce – admin panel po přijetí ukáže řádky do seedu,
-které je potřeba do `universes.json` doplnit (jinak je příští import té kolekce smaže). Filmy přijaté
-**bez kolekce** import nemaže.
+**Výjimka (od V3.5.2):** filmy přijaté z požadavků do kolekce a kolekce vytvořené ze série mají
+`universe_items.source = 'request'` – import je nesmaže a `import.sh` / `sync-seed.sh` je do `universes.json`
+dopíše sám, nic se nekopíruje ručně. Filmy přijaté **bez kolekce** import nemaže (v seedu nejsou).
 
 ## 9. Aktualizace knihovny Supabase (web/vendor)
 

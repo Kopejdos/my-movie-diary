@@ -16,6 +16,10 @@
 //   request-decide { items: [{ id, approve, universe_id? }] }
 //                                       → přijme (film do films, případně do kolekce) / zamítne;
 //                                         rozhodnutí platí pro film ve všech požadavcích
+//   request-create-collection { tmdb_collection_id, name }
+//                                       → nová kolekce ze série TMDB (V3.5.2): všechny díly série
+//                                         do films a do kolekce, čekající požadavky na ně → added;
+//                                         vrací blok do seedu
 //
 // V nastavení funkce musí být vypnuté "Verify JWT" (ověřuje si přístup sama).
 // =====================================================================
@@ -278,10 +282,12 @@ async function suggestCollections(db: SupabaseClient, tmdbId: number, universes:
   const details = await tmdbGet<TmdbMovieDetails>(`/movie/${tmdbId}`, { language: "en-US" });
   const byId = new Map(universes.map((u) => [u.id, u]));
   const suggestions = new Map<number, { universe_id: number; slug: string; name: string; kind: string; reason: string }>();
+  let series: { id: number; name: string; parts: number } | null = null;     // série v TMDB (V3.5.2)
 
   if (details.belongs_to_collection) {
     const collection = await tmdbGet<{ name: string; parts: { id: number }[] }>(
       `/collection/${details.belongs_to_collection.id}`, { language: "en-US" });
+    series = { id: details.belongs_to_collection.id, name: collection.name, parts: collection.parts.length };
     const partIds = collection.parts.map((p) => p.id).filter((id) => id !== tmdbId);
     if (partIds.length > 0) {
       const { data, error } = await db.from("universe_items").select("universe_id").in("tmdb_id", partIds);
@@ -307,14 +313,18 @@ async function suggestCollections(db: SupabaseClient, tmdbId: number, universes:
   }
 
   const rank = (kind: string) => ["series", "genre", "studio", "path"].indexOf(kind);
-  return [...suggestions.values()].sort((a, b) => rank(a.kind) - rank(b.kind) || a.name.localeCompare(b.name));
+  return {
+    suggestions: [...suggestions.values()].sort((a, b) => rank(a.kind) - rank(b.kind) || a.name.localeCompare(b.name)),
+    // série má vlastní kolekci v MMD, když aspoň jeden návrh přišel ze „stejné série“ a je to série
+    series: series ? { ...series, inMmd: [...suggestions.values()].some((s) => s.kind === "series" && s.reason.startsWith("Same series")) } : null,
+  };
 }
 
 /** Nevyřízené požadavky: žadatel, poznámka, filmy (s počtem zájemců a návrhem kolekcí). */
 async function listRequests(db: SupabaseClient) {
   const [{ data: items, error }, { data: universes, error: uError }, { data: votes, error: vError }] = await Promise.all([
     db.from("film_request_items")
-      .select("id, tmdb_id, title, release_date, poster_path, status, request:film_requests(id, note, created_at, user_id)")
+      .select("id, tmdb_id, title, release_date, poster_path, status, request:film_requests(id, note, created_at, user_id, kind, tmdb_collection_id, collection_name)")
       .eq("status", "pending"),
     db.from("universes").select("id, slug, name, kind").order("sort_order"),
     db.from("film_request_votes").select("tmdb_id"),
@@ -338,14 +348,35 @@ async function listRequests(db: SupabaseClient) {
   // Návrhy kolekcí – každý film jen jednou, nejvýš 6 dotazů na TMDB najednou
   const filmIds = [...new Set(rows.map((r) => r.tmdb_id as number))];
   const suggestionList = await mapLimited(filmIds, 6, (id) =>
-    suggestCollections(db, id, (universes ?? []) as UniverseLite[]).catch(() => []));
-  const suggestionsOf = new Map(filmIds.map((id, i) => [id, suggestionList[i]]));
+    suggestCollections(db, id, (universes ?? []) as UniverseLite[]).catch(() => ({ suggestions: [], series: null })));
+  const suggestionsOf = new Map(filmIds.map((id, i) => [id, suggestionList[i].suggestions]));
+  const seriesOf = new Map(filmIds.map((id, i) => [id, suggestionList[i].series]));
 
-  const requests = new Map<number, { id: number; note: string | null; created_at: string; username: string | null; items: unknown[] }>();
+  // Návrhy NOVÝCH kolekcí (V3.5.2): aspoň 2 požadované filmy ze stejné série TMDB,
+  // která v MMD ještě nemá vlastní kolekci (napříč všemi čekajícími požadavky)
+  const bySeries = new Map<number, { tmdb_collection_id: number; tmdb_name: string; name: string; parts: number; items: { id: number; tmdb_id: number; title: string }[] }>();
+  for (const r of rows) {
+    const series = seriesOf.get(r.tmdb_id);
+    if (!series || series.inMmd || r.request?.kind === "collection") continue;
+    const entry = bySeries.get(series.id) ?? {
+      tmdb_collection_id: series.id, tmdb_name: series.name, name: series.name.replace(/\s+Collection$/i, ""),
+      parts: series.parts, items: [],
+    };
+    entry.items.push({ id: r.id, tmdb_id: r.tmdb_id, title: r.title });
+    bySeries.set(series.id, entry);
+  }
+  const newCollections = [...bySeries.values()].filter((c) => new Set(c.items.map((i) => i.tmdb_id)).size >= 2);
+
+  // deno-lint-ignore no-explicit-any
+  const requests = new Map<number, any>();
   for (const r of rows) {
     const request = requests.get(r.request.id) ?? {
       id: r.request.id, note: r.request.note, created_at: r.request.created_at,
       username: nickOf.get(r.request.user_id) ?? null, items: [],
+      // požadavek na kolekci (V3.5.2)
+      kind: r.request.kind ?? "films",
+      tmdb_collection_id: r.request.tmdb_collection_id ?? null,
+      collection_name: r.request.collection_name ?? null,
     };
     request.items.push({
       id: r.id, tmdb_id: r.tmdb_id, title: r.title, release_date: r.release_date, poster_path: r.poster_path,
@@ -356,13 +387,124 @@ async function listRequests(db: SupabaseClient) {
   return {
     requests: [...requests.values()].sort((a, b) => a.created_at.localeCompare(b.created_at)),
     universes: universes ?? [],
+    new_collections: newCollections,
   };
+}
+
+/** Žánry TMDB → naše kategorie (slug). */
+const GENRE_TO_CATEGORY: Record<string, string> = {
+  "Horror": "horror", "Science Fiction": "scifi", "Fantasy": "fantasy", "Animation": "animation",
+  "Family": "family", "Action": "action-adventure", "Adventure": "action-adventure", "Comedy": "comedy",
+  "Drama": "drama", "Crime": "crime-thriller", "Thriller": "crime-thriller", "Mystery": "crime-thriller", "War": "war",
+};
+
+/** Barvy nových kolekcí – vybírá se podle názvu, ať je barva pokaždé stejná. */
+const COLLECTION_COLORS = ["#ef4444", "#f97316", "#f59e0b", "#84cc16", "#10b981", "#06b6d4", "#3b82f6", "#8b5cf6", "#d946ef", "#f43f5e"];
+
+function slugFrom(name: string): string {
+  return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+    .replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40) || "collection";
+}
+
+/**
+ * Nová kolekce (série) ze série TMDB: všechny díly do films, kolekce na konec přehledu,
+ * díly v pořadí vydání, kategorie podle žánrů, čekající požadavky na tyto filmy → added.
+ * Vrací i blok do seedu – jen pro kontrolu: do souboru ho dopíše skript scripts/sync-seed.sh.
+ */
+async function createCollectionFromSeries(db: SupabaseClient, tmdbCollectionId: number, rawName: unknown, onlyIds: unknown) {
+  if (!Number.isInteger(tmdbCollectionId) || tmdbCollectionId <= 0) throw new HttpError(400, "Invalid collection");
+  const collection = await tmdbGet<{ name: string; overview: string; parts: { id: number; release_date: string; genre_ids: number[] }[] }>(
+    `/collection/${tmdbCollectionId}`, { language: "en-US" });
+  const name = (typeof rawName === "string" && rawName.trim() ? rawName.trim() : collection.name.replace(/\s+Collection$/i, "")).slice(0, 80);
+
+  // Díly v pořadí vydání (bez data na konci); u požadavku na kolekci jen ty, které uživatel vybral
+  const only = new Set(Array.isArray(onlyIds) ? onlyIds.map(Number).filter(Number.isInteger) : []);
+  const parts = [...collection.parts]
+    .filter((p) => only.size === 0 || only.has(p.id))
+    .sort((a, b) => (a.release_date || "9999").localeCompare(b.release_date || "9999"));
+  if (parts.length === 0) throw new HttpError(400, "No movies of this series selected");
+  const films = [];
+  for (const part of parts) films.push(await addFilm(db, part.id));
+
+  // Kategorie: nejčastější žánry dílů (nejvýš 2)
+  const genreList = await tmdbGet<{ genres: { id: number; name: string }[] }>("/genre/movie/list", { language: "en-US" });
+  const genreName = new Map(genreList.genres.map((g) => [g.id, g.name]));
+  const counts = new Map<string, number>();
+  for (const part of parts) {
+    for (const slug of new Set(part.genre_ids.map((id) => GENRE_TO_CATEGORY[genreName.get(id) ?? ""]).filter(Boolean))) {
+      counts.set(slug, (counts.get(slug) ?? 0) + 1);
+    }
+  }
+  const categorySlugs = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 2).map(([slug]) => slug);
+
+  // Volná adresa a pořadí na konci sérií
+  let slug = slugFrom(name);
+  for (let n = 2; ; n++) {
+    const { data: taken } = await db.from("universes").select("id").eq("slug", slug).maybeSingle();
+    if (!taken) break;
+    slug = `${slugFrom(name).slice(0, 36)}-${n}`;
+  }
+  const { data: last } = await db.from("universes").select("sort_order").order("sort_order", { ascending: false }).limit(1);
+  const color = COLLECTION_COLORS[[...name].reduce((sum, ch) => sum + ch.charCodeAt(0), 0) % COLLECTION_COLORS.length];
+  const description = (collection.overview || `Every ${name} movie.`).slice(0, 200);
+
+  const { data: universe, error } = await db.from("universes").insert({
+    slug, name, description, color, kind: "series",
+    sort_order: (last?.[0]?.sort_order ?? 0) + 10,
+    cover_tmdb_id: films[0]?.tmdb_id ?? null,
+  }).select("id, slug").single();
+  if (error) throw new Error(error.message);
+
+  const { error: itemsError } = await db.from("universe_items").insert(films.map((film, index) => ({
+    universe_id: universe.id,
+    tmdb_id: film.tmdb_id,
+    release_order: index + 1,
+    is_upcoming: film.status !== "Released",
+    source: "request",          // import ji nesmaže, sync-seed ji dopíše do seedu (V3.5.2)
+  })));
+  if (itemsError) throw new Error(itemsError.message);
+
+  if (categorySlugs.length > 0) {
+    const { data: cats } = await db.from("categories").select("id, slug").in("slug", categorySlugs);
+    if (cats && cats.length > 0) {
+      await db.from("universe_categories").insert(cats.map((c) => ({ universe_id: universe.id, category_id: c.id })));
+    }
+  }
+
+  const ids = films.map((f) => f.tmdb_id);
+  const { data: decided, error: decideError } = await db.from("film_request_items")
+    .update({ status: "added", decided_at: new Date().toISOString(), universe_id: universe.id })
+    .in("tmdb_id", ids).eq("status", "pending")
+    .select("id");
+  if (decideError) throw new Error(decideError.message);
+
+  // Blok do supabase/seed/universes.json (stejné formátování jako seed)
+  const filmLines = films.map((film) => {
+    const year = film.release_date ? Number(film.release_date.slice(0, 4)) : undefined;
+    return `        ${JSON.stringify({ title: film.title, year, tmdb: film.tmdb_id }).replace(/^\{/, "{ ").replace(/\}$/, " }").replace(/,"/g, ", \"").replace(/":/g, "\": ")}`;
+  });
+  const seed = [
+    "    {",
+    `      "slug": ${JSON.stringify(slug)},`,
+    `      "name": ${JSON.stringify(name)},`,
+    `      "kind": "series",`,
+    `      "categories": ${JSON.stringify(categorySlugs).replace(/,/g, ", ")},`,
+    `      "color": ${JSON.stringify(color)},`,
+    `      "description": ${JSON.stringify(description)},`,
+    `      "films": [`,
+    filmLines.join(",\n"),
+    "      ]",
+    "    },",
+  ].join("\n");
+
+  return { slug, name, films: films.length, requests_added: decided?.length ?? 0, seed };
 }
 
 /**
  * Rozhodnutí o filmech z požadavků. Přijetí: film do films (detail z TMDB), případně na konec
  * kolekce; všechny čekající položky s tímto filmem → added. Zamítnutí: → rejected.
- * Vrací i řádky do seedu – bez nich by film z kolekce smazal příští import.
+ * Vrací i řádky do seedu – jen pro kontrolu: položky mají source = 'request', import je nesmaže
+ * a skript scripts/sync-seed.sh je do seedu dopíše sám (V3.5.2).
  */
 async function decideRequests(db: SupabaseClient, decisions: unknown) {
   if (!Array.isArray(decisions) || decisions.length === 0) throw new HttpError(400, "Nothing to decide");
@@ -403,6 +545,7 @@ async function decideRequests(db: SupabaseClient, decisions: unknown) {
           tmdb_id: item.tmdb_id,
           release_order: (last?.[0]?.release_order ?? 0) + 1,
           is_upcoming: film.status !== "Released",
+          source: "request",        // import ji nesmaže, sync-seed ji dopíše do seedu (V3.5.2)
         });
         if (insertError) throw new Error(insertError.message);
       }
@@ -457,6 +600,8 @@ Deno.serve(async (request) => {
         return json(await listRequests(db));
       case "request-decide":
         return json(await decideRequests(db, body.items));
+      case "request-create-collection":
+        return json(await createCollectionFromSeries(db, Number(body.tmdb_collection_id), body.name, body.tmdb_ids));
       default:
         return json({ error: `Unknown action: ${body.action}` }, 400);
     }

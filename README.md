@@ -22,7 +22,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Public profiles you can share with a link – opt-in, private by default
 - Friends – mutual friend requests by nickname; friends can see each other's profile even when it's private
 - Compare with a friend – movies in common, taste match from your ratings, recommendations and collections side by side
-- Movie requests – ask for missing movies (several at once), +1 what others want, follow the status of your requests
+- Movie requests – ask for missing movies (several at once) or a whole series as a new collection, +1 what others want, follow the status of your requests
 - Curated paths – step-by-step routes like MCU Essentials or Horror 101, with a note for every step
 - Watchlist across all collections
 - Achievements with levels (Bronze → Platinum) and completed-collection badges
@@ -30,11 +30,11 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Personal stats – activity, most watched movies, decades, categories, streaks and collections you're closest to finishing
 - Sign in with email or nickname & password, or with Google; password reset and bot protection (Cloudflare Turnstile)
 - Light and dark mode
-- Admin panel: collections, movies (search TMDB right from the app) and users
+- Admin panel: collections, movies (search TMDB right from the app), users and requests – a new collection from a TMDB series in one click
 - Installable on a phone or computer (PWA), opens even offline
 
 **Coming next** – collections & new features
-- V3.5 – your own lists and community lists; V3.6 – a tougher levelling curve, then a clean-up release
+- V3.5 – your own lists (V3.5.3) and community lists (V3.5.4); V3.6 – a tougher levelling curve, then a clean-up release
 - V4 – settings & themes, a better phone layout, more languages and a yearly Wrapped; V5 – TV shows
 
 ## Tech stack

@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v9";        // V3.5.1: požadavky na filmy; od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v10";       // V3.5.2: požadavky na kolekce; od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline

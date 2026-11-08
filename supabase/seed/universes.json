@@ -1774,8 +1774,8 @@
       "description": "The sorority house, the phone calls and the original slasher – plus both remakes.",
       "films": [
         { "title": "Black Christmas", "year": 1974, "cover": true },
-        { "title": "Black Christmas", "year": 2006, "group": "Remakes", "optional": true, "label": "Remake" },
-        { "title": "Black Christmas", "year": 2019, "group": "Remakes", "optional": true, "label": "Remake" }
+        { "title": "Black Christmas", "year": 2006, "tmdb": 9656, "group": "Remakes", "optional": true, "label": "Remake" },
+        { "title": "Black Christmas", "year": 2019, "tmdb": 551808, "group": "Remakes", "optional": true, "label": "Remake" }
       ]
     },
     {
@@ -1814,7 +1814,7 @@
       "films": [
         { "title": "X", "year": 2022, "tmdb": 760104, "story": 2, "cover": true },
         { "title": "Pearl", "year": 2022, "tmdb": 949423, "story": 1, "label": "Prequel" },
-        { "title": "MaXXXine", "year": 2024, "story": 3, "label": "Sequel" }
+        { "title": "MaXXXine", "year": 2024, "tmdb": 1023922, "story": 3, "label": "Sequel" }
       ]
     },
     {
@@ -1865,7 +1865,9 @@
         { "title": "Smile", "year": 2022 },
         { "title": "Talk to Me", "year": 2023, "tmdb": 1008042 },
         { "title": "Longlegs", "year": 2024 },
-        { "title": "Weapons", "year": 2025 }
+        { "title": "Weapons", "year": 2025 },
+        { "title": "Smile 2", "year": 2024, "tmdb": 1100782 },
+        { "title": "Sinister 2", "year": 2015, "tmdb": 283445 }
       ]
     },
     {
@@ -1913,7 +1915,8 @@
         { "title": "Incantation", "year": 2022 },
         { "title": "The Pope's Exorcist", "year": 2023 },
         { "title": "Evil Dead Rise", "year": 2023 },
-        { "title": "Late Night with the Devil", "year": 2024 }
+        { "title": "Late Night with the Devil", "year": 2024 },
+        { "title": "The First Omen", "year": 2024, "tmdb": 437342 }
       ]
     },
     {
@@ -2034,7 +2037,8 @@
         { "title": "The Mist", "year": 2007 },
         { "title": "A Quiet Place", "year": 2018 },
         { "title": "Crawl", "year": 2019 },
-        { "title": "Nope", "year": 2022 }
+        { "title": "Nope", "year": 2022 },
+        { "title": "The Descent: Part 2", "year": 2009, "tmdb": 34480 }
       ]
     },
     {
@@ -2108,7 +2112,8 @@
         { "title": "Annihilation", "year": 2018 },
         { "title": "M3GAN", "year": 2022 },
         { "title": "Alien: Romulus", "year": 2024 },
-        { "title": "Companion", "year": 2025 }
+        { "title": "Companion", "year": 2025 },
+        { "title": "M3GAN 2.0", "year": 2025, "tmdb": 1071585 }
       ]
     },
     {
