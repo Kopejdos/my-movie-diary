@@ -10,7 +10,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 ## Features
 
-- 96 collections, 6 curated paths and 1,100+ movies from TMDB – MCU, Star Wars, James Bond, Mission: Impossible, Marvel, DC, Warner Bros., Lucasfilm, Disney, Pixar, DreamWorks, Illumination, Studio Ghibli, horror series, hand-picked horror genres and themed picks (Time Travel, Heist, Christmas…), each with its own color and banner
+- 101 collections, 6 curated paths and 1,100+ movies from TMDB – MCU, Star Wars, James Bond, Mission: Impossible, Marvel, DC, Warner Bros., Lucasfilm, Disney, Pixar, DreamWorks, Illumination, Studio Ghibli, horror series, hand-picked horror genres and themed picks (Time Travel, Heist, Christmas…), each with its own color and banner
 - Two-level filter: collection type (series, studios, genre picks, paths), then genre (Superhero, Sci-fi, Fantasy, Animation, Horror…); view a collection by release, in story order or by series
 - +1 / −1 viewing counter – every viewing is logged with a date
 - Progress per collection and **Up next** in every collection

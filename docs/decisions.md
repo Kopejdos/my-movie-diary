@@ -1371,6 +1371,12 @@ Opraví se hned po migraci a nasazení webu, bez importu.
 - Hlavička: správce má v hlavičce o odkaz víc – do 1 439 px jsou Coming soon a Requests jen ikony
   (ostatním do 1 180 px), na 320 px menší okraje.
 
+**Doplnění seedu (8. 11.):** série **RoboCop** (1987, 2, 3; remake 2014 volitelný), **Black Christmas** (1974 + dva
+remaky volitelně), **Terrifier** (All Hallows' Eve volitelně), **Happy Death Day** (2 filmy) a **X Trilogy**
+(X, Pearl, MaXXXine – s pořadím v příběhu: Pearl → X → MaXXXine). Návrhy od kamaráda a první požadavky:
+RoboCop 2 a 3 admin přijal do 80s Action (návrh podle TMDB série) – patří ale do vlastní kolekce, takže řádky do
+seedu v 80s Action nejsou a příští import 80s Action je odtamtud odebere.
+
 #### Rozhodnutí ve fázi 37
 - **Údaje o filmu bere z TMDB server**, ne web – v seznamu požadavků (vidí ho všichni) tak nemůže být podvržený název.
 - **+1 místo duplicitního požadavku** – správce vidí, kolik lidí film chce, a nemá ve schránce desetkrát totéž.

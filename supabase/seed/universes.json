@@ -531,6 +531,20 @@
       ]
     },
     {
+      "slug": "robocop",
+      "name": "RoboCop",
+      "kind": "series",
+      "categories": ["scifi", "action-adventure"],
+      "color": "#7dd3fc",
+      "description": "Part man, part machine, all cop – Detroit's finest from 1987 to the 2014 remake.",
+      "films": [
+        { "title": "RoboCop", "year": 1987, "cover": true },
+        { "title": "RoboCop 2", "year": 1990, "tmdb": 5549 },
+        { "title": "RoboCop 3", "year": 1993, "tmdb": 5550 },
+        { "title": "RoboCop", "year": 2014, "tmdb": 97020, "group": "Remake", "optional": true, "label": "Remake" }
+      ]
+    },
+    {
       "slug": "rocky-creed",
       "name": "Rocky & Creed",
       "kind": "series",
@@ -1749,6 +1763,58 @@
         { "title": "Wrong Turn 5: Bloodlines", "year": 2012, "label": "Prequel" },
         { "title": "Wrong Turn 6: Last Resort", "year": 2014 },
         { "title": "Wrong Turn", "year": 2021, "group": "Reboot", "optional": true, "label": "Reboot" }
+      ]
+    },
+    {
+      "slug": "black-christmas",
+      "name": "Black Christmas",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#b91c1c",
+      "description": "The sorority house, the phone calls and the original slasher – plus both remakes.",
+      "films": [
+        { "title": "Black Christmas", "year": 1974, "cover": true },
+        { "title": "Black Christmas", "year": 2006, "group": "Remakes", "optional": true, "label": "Remake" },
+        { "title": "Black Christmas", "year": 2019, "group": "Remakes", "optional": true, "label": "Remake" }
+      ]
+    },
+    {
+      "slug": "terrifier",
+      "name": "Terrifier",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#a1a1aa",
+      "description": "Art the Clown – silent, smiling and extremely gory.",
+      "films": [
+        { "title": "All Hallows' Eve", "year": 2013, "optional": true, "label": "Art's first appearance" },
+        { "title": "Terrifier", "year": 2016, "cover": true },
+        { "title": "Terrifier 2", "year": 2022 },
+        { "title": "Terrifier 3", "year": 2024 }
+      ]
+    },
+    {
+      "slug": "happy-death-day",
+      "name": "Happy Death Day",
+      "kind": "series",
+      "categories": ["horror", "comedy"],
+      "color": "#ec4899",
+      "description": "The same birthday, the same masked killer – again and again.",
+      "films": [
+        { "title": "Happy Death Day", "year": 2017 },
+        { "title": "Happy Death Day 2U", "year": 2019 }
+      ]
+    },
+    {
+      "slug": "x-trilogy",
+      "name": "X Trilogy",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#f59e0b",
+      "description": "Ti West's trilogy – Maxine, Pearl and a farm in Texas.",
+      "films": [
+        { "title": "X", "year": 2022, "tmdb": 760104, "story": 2, "cover": true },
+        { "title": "Pearl", "year": 2022, "tmdb": 949423, "story": 1, "label": "Prequel" },
+        { "title": "MaXXXine", "year": 2024, "story": 3, "label": "Sequel" }
       ]
     },
     {

@@ -4,6 +4,7 @@ All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
 ## V3.5.1 – November 2026
+- New series: RoboCop, Black Christmas, Terrifier, Happy Death Day and Ti West's X Trilogy (seed update)
 - **Movie requests** – missing a movie? Search TMDB and ask for up to 20 movies at once; follow your requests (pending, added, rejected)
 - See what others want and give +1 instead of asking twice
 - Movies outside collections can be found in Search and logged like any other ("Other movie")
