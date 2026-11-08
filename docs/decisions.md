@@ -1496,7 +1496,8 @@ Podnět: kolekcí je přes sto, přehled je dlouhý a v adminu se špatně hled�
   - *Requests*: žadatel, poznámka, série, filmy; Movies / Collections (i návrhy nových kolekcí).
 - **Přehled kolekcí:**
   - Řazení **A–Z** (výchozí; úvodní člen „The / A / An“ se přeskakuje – *The Purge* je u P), *Recently added*,
-    *My progress* (přihlášený). Volba se pamatuje.
+    *My progress* (přihlášený): nahoře **rozkoukané** (od nejvíc zhlédnutých), pak **nenačaté**, **dokoukané**
+    až na konci (obojí podle abecedy) – dokoukané kolekce člověk hledá nejmíň. Volba se pamatuje.
   - V přehledu všech druhů ukáže každá skupina (Series, Studios…) jen **dvě řady** (na úzkém displeji
     3 řady) a tlačítko **Show all N** / *Show fewer*. Počet karet podle skutečného počtu sloupců –
     přepočítá se při změně šířky okna. Vybraný jeden druh (záložka Series…) = vše bez sbalení.

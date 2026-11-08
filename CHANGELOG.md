@@ -4,7 +4,7 @@ All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
 ## V3.5.2.2 – November 2026
-- Collections are sorted A–Z by default ("The" is skipped) – or by recently added or your progress
+- Collections are sorted A–Z by default ("The" is skipped) – or by recently added or your progress (started collections first, finished ones last)
 - The overview is shorter: each group shows two rows, the rest is one click away (Show all)
 - Admin: a search bar in every tab – collections (even by a movie inside them), users, nicknames and requests
 

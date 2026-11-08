@@ -40,8 +40,11 @@ export function sortUniverses(list, sort) {
     if (sort === "newest") {
         sorted.sort((a, b) => b.id - a.id);                 // novější kolekce mají vyšší ID
     } else if (sort === "progress") {
-        const pct = (u) => (u.totalCount > 0 ? u.watchedCount / u.totalCount : 0);
-        sorted.sort((a, b) => pct(b) - pct(a) || byName(a, b));
+        // Rozkoukané nahoře (nejvíc zhlédnuté první), pak nenačaté, dokoukané až na konci –
+        // uvnitř nenačatých a dokoukaných podle abecedy. Opakovaná zhlédnutí pořadí nemění.
+        const pct = (u) => (u.totalCount > 0 ? Math.min(1, u.watchedCount / u.totalCount) : 0);
+        const group = (u) => (pct(u) >= 1 ? 2 : pct(u) > 0 ? 0 : 1);
+        sorted.sort((a, b) => group(a) - group(b) || (group(a) === 0 ? pct(b) - pct(a) : 0) || byName(a, b));
     } else {
         sorted.sort(byName);
     }
