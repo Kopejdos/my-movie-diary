@@ -61,6 +61,7 @@ export function achievementsContent(result) {
             h("span", { class: "muted" }, format("achievementsSummary", result.unlockedCount, result.totalCount)),
         ),
         h("div", { class: "achievement-grid" }, result.cards.map(achievementCard)),
+        h("p", { class: "hint achievements-note" }, TEXTS.achievementsSeenBeforeNote),
         h("div", { class: "section-title" },
             h("h2", {}, TEXTS.achievementsCompleted),
             h("span", { class: "muted" }, String(result.completed.length)),

@@ -17,15 +17,15 @@ function byFilm(watches) {
     for (const w of watches) {
         const entry = films.get(w.tmdb_id) ?? { film: { tmdb_id: w.tmdb_id, ...w.film }, count: 0, last: "" };
         entry.count++;
-        if ((w.watched_on ?? "") > entry.last) entry.last = w.watched_on ?? "";
+        if (!w.seen_before && (w.watched_on ?? "") > entry.last) entry.last = w.watched_on ?? "";
         films.set(w.tmdb_id, entry);
     }
     return films;
 }
 
-/** Celkový čas zhlédnutí v minutách (každé zhlédnutí zvlášť). */
+/** Celkový čas zhlédnutí v minutách (každé datované zhlédnutí zvlášť). */
 function minutesOf(watches) {
-    return watches.reduce((sum, w) => sum + (w.film?.runtime ?? 0), 0);
+    return watches.reduce((sum, w) => sum + (w.seen_before ? 0 : (w.film?.runtime ?? 0)), 0);   // „Seen before“ bez času (V3.6.1)
 }
 
 /**

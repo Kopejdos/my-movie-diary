@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.6.1 – November 2026
+- **Tougher levels** – a steeper curve (about level 5 at 100 movies, level 10 at 500, Legend takes thousands), completed collections give 10 XP per movie instead of a flat 100
+- New achievement tiers: Collector 500 / 1,000, Screen Time 500 / 1,000 h, Completionist 50, Rewatcher 5 / 10
+- **Seen before** – mark a movie you saw long ago without a date, or a whole collection at once; it counts towards your movies and collections, not towards Screen Time, Marathon or streaks
+- Levels are recalculated from your history, so yours may go down a bit
+
 ## V3.5.4 – November 2026
 - **Community** – the most viewed public lists at the bottom of the overview (one row, follows the genre filter) and a new Community tab with all of them
 - Public lists can be found in search

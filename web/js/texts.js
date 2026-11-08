@@ -513,7 +513,17 @@ export const TEXTS = {
     levelBreakdownCollections: "Collections",
     levelBreakdownAchievements: "Achievements",
     levelUp: "⬆️ Level up! Level {0} – {1}",
-    levelHowTo: "+10 XP per new movie · +3 per rewatch · +100 per completed collection · +25 to +200 per achievement level",
+    levelHowTo: "+10 XP per new movie · +3 per rewatch · +10 XP per movie of every completed collection · +25 to +800 per achievement level",
+    // Seen before (V3.6.1)
+    seenBeforeAsk: "Seen it before?",
+    seenBeforeHint: "Mark it as seen without a date – counts towards movies and collections, not towards time stats.",
+    seenBeforeStatus: "Seen before",
+    seenBeforeOne: "{0} marked as seen before.",
+    seenBeforeMany: "{0} marked as seen before.",
+    seenAllQuestion: "Seen these before?",
+    seenAllAction: "Mark the {0} you haven't logged as seen",
+    seenAllConfirm: "Mark {0} as seen before (without a date)? They count towards your movies and this collection, not towards Marathon, Screen Time or streaks.",
+    achievementsSeenBeforeNote: "Movies marked “Seen before” count towards Collector, Completionist and collections – not towards Screen Time or Marathon.",
 
     // Achievementy
     achievementsTitle: "Achievements",

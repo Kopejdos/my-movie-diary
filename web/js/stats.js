@@ -1,6 +1,8 @@
 // Statistiky profilu – výpočet ze zhlédnutí, která už jsou v databázi.
 // Čistá logika (bez vykreslování); data se načítají stejně jako pro achievementy
 // (fetchAchievementData), takže stránka nepotřebuje žádný další dotaz.
+// „Seen before“ (V3.6.1, zhlédnutí bez data) se počítá do filmů, zhlédnutí a kolekcí,
+// ale ne do ničeho časového: čas, grafy po měsících a rocích, série dní, nejlepší den.
 
 /** Kolik položek ukázat v žebříčcích. */
 export const TOP_FILMS = 5;
@@ -37,12 +39,14 @@ export function computeStats({ watches, universes, items, categories, links }, t
     let minutes = 0;
 
     for (const w of watches) {
-        const entry = byFilm.get(w.tmdb_id) ?? { film: { tmdb_id: w.tmdb_id, ...w.film }, count: 0, first: w.watched_on, last: w.watched_on };
+        // first / last = jen datovaná zhlédnutí ("" = film je jen „Seen before“)
+        const entry = byFilm.get(w.tmdb_id) ?? { film: { tmdb_id: w.tmdb_id, ...w.film }, count: 0, first: "", last: "" };
         entry.count++;
-        if (w.watched_on < entry.first) entry.first = w.watched_on;
-        if (w.watched_on > entry.last) entry.last = w.watched_on;
         byFilm.set(w.tmdb_id, entry);
+        if (w.seen_before) continue;
 
+        if (!entry.first || w.watched_on < entry.first) entry.first = w.watched_on;
+        if (w.watched_on > entry.last) entry.last = w.watched_on;
         perDay.set(w.watched_on, (perDay.get(w.watched_on) ?? 0) + 1);
         minutes += w.film?.runtime ?? 0;
     }
@@ -126,8 +130,8 @@ function perYear(watches, byFilm) {
         if (!years.has(year)) years.set(year, { year, watches: 0, newFilms: 0 });
         return years.get(year);
     };
-    for (const w of watches) row(w.watched_on.slice(0, 4)).watches++;
-    for (const f of byFilm.values()) row(f.first.slice(0, 4)).newFilms++;
+    for (const w of watches) if (!w.seen_before) row(w.watched_on.slice(0, 4)).watches++;
+    for (const f of byFilm.values()) if (f.first) row(f.first.slice(0, 4)).newFilms++;
     return [...years.values()].sort((a, b) => b.year.localeCompare(a.year));
 }
 
@@ -219,7 +223,7 @@ function facts(films) {
         shortest: pick(withRuntime, (a, b) => a.film.runtime < b.film.runtime),
         oldest: pick(withDate, (a, b) => a.film.release_date < b.film.release_date),
         newest: pick(withDate, (a, b) => a.film.release_date > b.film.release_date),
-        first: pick(films, (a, b) => a.first < b.first),
+        first: pick(films.filter((f) => f.first), (a, b) => a.first < b.first),   // null = vše jen „Seen before“
     };
 }
 
@@ -241,7 +245,7 @@ export function computeRatingStats(ratings, watches) {
     const lastWatched = new Map();
     for (const w of watches) {
         if (!films.has(w.tmdb_id)) films.set(w.tmdb_id, { tmdb_id: w.tmdb_id, ...w.film });
-        if (w.watched_on > (lastWatched.get(w.tmdb_id) ?? "")) lastWatched.set(w.tmdb_id, w.watched_on);
+        if (!w.seen_before && w.watched_on > (lastWatched.get(w.tmdb_id) ?? "")) lastWatched.set(w.tmdb_id, w.watched_on);
     }
 
     const scores = [...ratings.values()];

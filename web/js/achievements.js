@@ -3,6 +3,10 @@
 // i data odemčení se spočítají ze zhlédnutí, takže fungují i zpětně.
 //
 // Úrovně jdou škálovat – stačí připsat další číslo do `tiers`.
+//
+// V3.6.1 – přepracování postupu: strmější křivka úrovní, XP za kolekci podle její velikosti,
+// vyšší úrovně achievementů. Zhlédnutí „Seen before“ (bez data) se počítají do filmů,
+// opakování a kolekcí, ale ne do času (Screen Time) ani do Marathonu.
 
 import { supabase } from "./supabase.js";
 import { cached } from "./cache.js";
@@ -18,11 +22,11 @@ export const TIER_LABELS = ["Bronze", "Silver", "Gold", "Platinum", "Diamond", "
 /** Achievementy s úrovněmi. `measure` určuje, z čeho se počítá postup. */
 export const ACHIEVEMENTS = [
     { key: "first", icon: "🎬", measure: "distinctFilms", tiers: [1] },
-    { key: "collector", icon: "🎞️", measure: "distinctFilms", tiers: [10, 50, 100, 200] },
-    { key: "screen-time", icon: "⏱️", measure: "hours", tiers: [24, 100, 200] },
+    { key: "collector", icon: "🎞️", measure: "distinctFilms", tiers: [10, 50, 100, 200, 500, 1000] },
+    { key: "screen-time", icon: "⏱️", measure: "hours", tiers: [24, 100, 200, 500, 1000] },
     { key: "marathon", icon: "🏃", measure: "bestDay", tiers: [3, 5, 8] },
-    { key: "rewatcher", icon: "🔁", measure: "mostRewatched", tiers: [3] },
-    { key: "completionist", icon: "🏆", measure: "completedCollections", tiers: [1, 5, 10, 20] },
+    { key: "rewatcher", icon: "🔁", measure: "mostRewatched", tiers: [3, 5, 10] },
+    { key: "completionist", icon: "🏆", measure: "completedCollections", tiers: [1, 5, 10, 20, 50] },
 ];
 
 /** Fanoušek kategorie – úrovně podle počtu dokončených kolekcí v kategorii. */
@@ -76,7 +80,7 @@ export async function fetchAchievementData() {
     const [watches, catalog] = await Promise.all([
         fetchAll(() => supabase
             .from("watches")
-            .select("tmdb_id, watched_on, created_at, film:films(title, poster_path, release_date, runtime)")
+            .select("tmdb_id, watched_on, seen_before, created_at, film:films(title, poster_path, release_date, runtime)")
             .order("watched_on")
             .order("created_at")),
         fetchCatalogData(),
@@ -137,15 +141,19 @@ export function computeAchievements({ watches, universes, items, categories, lin
             reachDates.distinctFilms.push(date);          // n-tý film viděn v den `date`
         }
 
-        const before = Math.floor(minutes / 60);
-        minutes += w.film?.runtime ?? 0;
-        for (let h = before + 1; h <= Math.floor(minutes / 60); h++) reachDates.hours.push(date);
+        // „Seen before“ (bez data) se do času ani do Marathonu nepočítá – jinak by doplnění
+        // stovek starých filmů za jeden večer odemklo Marathon i Screen Time
+        if (!w.seen_before) {
+            const before = Math.floor(minutes / 60);
+            minutes += w.film?.runtime ?? 0;
+            for (let h = before + 1; h <= Math.floor(minutes / 60); h++) reachDates.hours.push(date);
 
-        const dayCount = (perDay.get(date) ?? 0) + 1;
-        perDay.set(date, dayCount);
-        if (dayCount > bestDay) {
-            bestDay = dayCount;
-            reachDates.bestDay.push(date);                // poprvé `bestDay` filmů za den
+            const dayCount = (perDay.get(date) ?? 0) + 1;
+            perDay.set(date, dayCount);
+            if (dayCount > bestDay) {
+                bestDay = dayCount;
+                reachDates.bestDay.push(date);            // poprvé `bestDay` filmů za den
+            }
         }
 
         const count = (watchCount.get(w.tmdb_id) ?? 0) + 1;
@@ -165,12 +173,12 @@ export function computeAchievements({ watches, universes, items, categories, lin
         requiredByUniverse.set(item.universe_id, list);
     }
 
-    const completed = [];                 // { universe, date } seřazené podle data dokončení
+    const completed = [];                 // { universe, date, size } seřazené podle data dokončení
     for (const universe of universes) {
         const required = requiredByUniverse.get(universe.id) ?? [];
         if (required.length === 0 || !required.every((id) => firstWatched.has(id))) continue;
         const date = required.map((id) => firstWatched.get(id)).sort().at(-1);
-        completed.push({ universe, date });
+        completed.push({ universe, date, size: required.length });
     }
     completed.sort((a, b) => a.date.localeCompare(b.date));
     reachDates.completedCollections = completed.map((c) => c.date);
@@ -248,12 +256,12 @@ export function computeAchievements({ watches, universes, items, categories, lin
 // XP a úrovně
 // ---------------------------------------------------------------------
 
-/** Kolik XP dává která aktivita. */
+/** Kolik XP dává která aktivita (V3.6.1). */
 export const XP_RULES = {
     newFilm: 10,                       // poprvé viděný film
     rewatch: 3,                        // každé další zhlédnutí
-    completedCollection: 100,          // dokončená kolekce
-    tier: [25, 50, 100, 200],          // úroveň achievementu: Bronze, Silver, Gold, Platinum (a výš)
+    collectionPerFilm: 10,             // dokončená kolekce: 10 XP za každý povinný film (malá kolekce = málo XP)
+    tier: [25, 50, 100, 200, 400, 800], // úroveň achievementu: Bronze, Silver, Gold, Platinum, Diamond, Legend
 };
 
 /** Filmové tituly podle úrovně: [od úrovně, titul]. */
@@ -269,16 +277,21 @@ export const LEVEL_TITLES = [
     [25, "Legend"],
 ];
 
-/** XP potřebné k dosažení úrovně: 1 → 0, 2 → 100, 3 → 300, 4 → 600, 5 → 1000… */
+/**
+ * XP potřebné k dosažení úrovně (V3.6.1, strmější křivka): 150 · (úroveň − 1)^1,85, zaokrouhleno na 50.
+ * 2 → 150, 3 → 550, 5 → 1 950, 10 → 8 750, 15 → 19 800, 20 → 34 800, 25 → 53 650.
+ * Zhruba: 100 filmů ≈ úroveň 5, 500 filmů ≈ úroveň 10, Legend (25) ≈ 3 000+ filmů.
+ */
 export function xpForLevel(level) {
-    return 50 * level * (level - 1);
+    if (level <= 1) return 0;
+    return Math.round((150 * (level - 1) ** 1.85) / 50) * 50;
 }
 
 /** Rozpad XP podle zdroje + součet. */
 export function computeXp({ values, completed, cards }) {
     const films = values.distinctFilms * XP_RULES.newFilm;
     const rewatches = (values.totalWatches - values.distinctFilms) * XP_RULES.rewatch;
-    const collections = completed.length * XP_RULES.completedCollection;
+    const collections = completed.reduce((sum, c) => sum + (c.size ?? 0) * XP_RULES.collectionPerFilm, 0);
     let achievements = 0;
     for (const card of cards) {
         card.tiers.forEach((tier, index) => {

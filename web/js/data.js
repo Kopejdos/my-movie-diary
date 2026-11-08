@@ -282,6 +282,22 @@ export async function addWatch(tmdbId) {
     watchesChanged();
 }
 
+/**
+ * „Seen before“ (V3.6.1): film(y) jsem viděl dřív, datum nevím. Počítá se do filmů a kolekcí,
+ * ne do časových statistik. Jde i hromadně (celá kolekce najednou).
+ */
+export async function addSeenBefore(tmdbIds) {
+    const ids = [...new Set(tmdbIds)];
+    if (ids.length === 0) return;
+    const today = todayLocal();
+    for (let i = 0; i < ids.length; i += 500) {
+        await supabase.from("watches")
+            .insert(ids.slice(i, i + 500).map((tmdb_id) => ({ tmdb_id, watched_on: today, seen_before: true })))
+            .then(check);
+    }
+    watchesChanged();
+}
+
 /** −1: smaže nejnovější zhlédnutí. Vrací nový počet. */
 export async function removeLatestWatch(tmdbId) {
     const count = await supabase.rpc("remove_latest_watch", { p_tmdb_id: tmdbId }).then(check);

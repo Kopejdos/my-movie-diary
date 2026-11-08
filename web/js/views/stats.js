@@ -218,7 +218,7 @@ function topFilms(films) {
             poster(f.film.poster_path, f.film.title, "top-films__poster", false, "tiny"),
             h("div", { class: "top-films__info" },
                 h("strong", {}, f.film.title),
-                h("span", { class: "muted" }, format("lastWatched", formatDate(f.last)))),
+                h("span", { class: "muted" }, f.last ? format("lastWatched", formatDate(f.last)) : TEXTS.seenBeforeStatus)),
             h("span", { class: "top-films__count" }, `${f.count}×`))));
 }
 
@@ -229,7 +229,7 @@ function otherFilms(films) {
             poster(f.film.poster_path, f.film.title, "top-films__poster", false, "tiny"),
             h("div", { class: "top-films__info" },
                 h("strong", {}, f.film.title),
-                h("span", { class: "muted" }, format("lastWatched", formatDate(f.last)))),
+                h("span", { class: "muted" }, f.last ? format("lastWatched", formatDate(f.last)) : TEXTS.seenBeforeStatus)),
             h("span", { class: "top-films__count" }, `${f.count}×`))));
 }
 
@@ -261,7 +261,7 @@ function factList({ facts, bestDay, weekday }) {
         sub ? h("span", { class: "hint" }, sub) : null);
 
     return h("ul", { class: "stats-list stats-list--facts" },
-        fact(TEXTS.statsFirstLogged, facts.first.film.title, formatDate(facts.first.first)),
+        facts.first ? fact(TEXTS.statsFirstLogged, facts.first.film.title, formatDate(facts.first.first)) : null,
         facts.longest ? fact(TEXTS.statsLongest, facts.longest.film.title, format("minutes", facts.longest.film.runtime)) : null,
         facts.shortest ? fact(TEXTS.statsShortest, facts.shortest.film.title, format("minutes", facts.shortest.film.runtime)) : null,
         facts.oldest ? fact(TEXTS.statsOldest, facts.oldest.film.title, year(facts.oldest)) : null,

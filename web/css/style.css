@@ -5656,3 +5656,26 @@ a.friend-row__name:hover {
     color: var(--muted);
     font-size: 0.9rem;
 }
+
+/* ---------- Seen before (V3.6.1) ---------- */
+.film__seen {
+    font-size: inherit;
+    color: var(--u, var(--accent));
+}
+
+.film__seen:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.seen-all-slot:empty {
+    display: none;
+}
+
+.seen-all {
+    margin: 10px 0 0;
+}
+
+.achievements-note {
+    margin: 10px 0 0;
+}

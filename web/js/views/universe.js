@@ -21,7 +21,7 @@
 import {
     fetchUniverse, fetchMyFilmCounts, addWatch, removeLatestWatch,
     computeProgress, percent, todayLocal, nextUnwatched,
-    fetchWatchlistIds, addToWatchlist, removeFromWatchlist,
+    fetchWatchlistIds, addToWatchlist, removeFromWatchlist, addSeenBefore,
 } from "../data.js";
 import { isSignedIn } from "../auth.js";
 import { fetchMyRatings, saveRating, clearRating, fetchRatingStats, starsText } from "../ratings.js";
@@ -232,6 +232,7 @@ export class UniversePage {
                         .sort((a, b) => a.sort_order - b.sort_order)
                         .map((c) => pill(c.name))),
                 this.signedIn && universe.items.length > 0 ? this.renderProgress() : null,
+                this.signedIn && universe.items.length > 0 ? (this.seenAllSlot = h("div", { class: "seen-all-slot" })) : null,
                 this.bannerExtras(),
             ),
         );
@@ -434,8 +435,13 @@ export class UniversePage {
                 this.signedIn
                     ? h("p", { class: "film__status" },
                         count > 0
-                            ? `${format("watchedTimes", count)} · ${format("lastWatched", formatDate(info.lastWatchedOn))}`
-                            : TEXTS.notWatched)
+                            ? watchStatus(count, info.lastWatchedOn)
+                            : [TEXTS.notWatched, " · ",
+                                h("button", {
+                                    class: "link-button film__seen", type: "button", disabled: busy,
+                                    title: TEXTS.seenBeforeHint,
+                                    onClick: () => this.markSeenBefore([item]),
+                                }, TEXTS.seenBeforeAsk)])
                     : null,
             ),
             this.signedIn
@@ -515,6 +521,52 @@ export class UniversePage {
         return button;
     }
 
+    /**
+     * „Seen before“ (V3.6.1) – film(y) viděné dřív bez data; u kolekce i všechny najednou.
+     * Optimisticky: hned se ukáže, při chybě se vrátí zpět.
+     */
+    async markSeenBefore(items) {
+        const fresh = items.filter((item) => !this.counts.has(item.film.tmdb_id));
+        if (fresh.length === 0) return;
+        for (const item of fresh) this.counts.set(item.film.tmdb_id, { count: 1, lastWatchedOn: null });
+        this.afterSeenBefore(fresh);
+        try {
+            await addSeenBefore(fresh.map((item) => item.film.tmdb_id));
+            fresh.forEach((item) => this.watchlist.delete(item.film.tmdb_id));   // viděný film opustí watchlist
+            toast(fresh.length === 1 ? format("seenBeforeOne", fresh[0].film.title) : format("seenBeforeMany", movies(fresh.length)));
+        } catch (error) {
+            for (const item of fresh) this.counts.delete(item.film.tmdb_id);
+            toast(format("errorGeneric", error.message), "error");
+        }
+        this.afterSeenBefore(fresh);
+    }
+
+    /** Překreslení po „Seen before“ – jednotlivé řádky, nebo celý seznam při hromadném zápisu. */
+    afterSeenBefore(items) {
+        if (this.unwatchedOnly || items.length > 1) {
+            this.renderList();
+        } else {
+            const row = this.rows.get(items[0].film.tmdb_id);
+            if (row) this.fillRow(row, items[0]);
+        }
+        this.updateProgress();
+    }
+
+    /** Odkaz „Seen these before? Mark all as seen“ pod postupem (jen když něco zbývá). */
+    renderSeenAll() {
+        if (!this.seenAllSlot) return;
+        const unwatched = this.universe.items.filter((item) => !this.counts.has(item.film.tmdb_id));
+        mount(this.seenAllSlot, unwatched.length < 2 ? null : h("p", { class: "hint seen-all" },
+            TEXTS.seenAllQuestion, " ",
+            h("button", {
+                class: "link-button", type: "button",
+                onClick: () => {
+                    if (!window.confirm(format("seenAllConfirm", movies(unwatched.length)))) return;
+                    this.markSeenBefore(unwatched);
+                },
+            }, format("seenAllAction", movies(unwatched.length)))));
+    }
+
     renderCounter(row, item, count, busy) {
         return h("div", { class: "counter" },
             h("button", {
@@ -579,6 +631,7 @@ export class UniversePage {
     /** Ukazatel postupu v banneru a karta Up next. */
     updateProgress() {
         this.renderUpNext();
+        this.renderSeenAll();
         if (!this.progressBar) return;
         const progress = computeProgress(this.universe.items, this.counts);
         const value = percent(progress);
@@ -588,4 +641,13 @@ export class UniversePage {
                 ? `🏆 ${TEXTS.progressDone} ${format("progressCount", progress.watched, progress.total)}`
                 : `${format("progressCount", progress.watched, progress.total)} · ${value} %`;
     }
+}
+
+/**
+ * Stav filmu: „Watched 2× · Last: 5 Nov 2026“, u zhlédnutí jen „Seen before“ (bez data, V3.6.1)
+ * „Seen before“, případně „Watched 2× · Seen before“.
+ */
+export function watchStatus(count, lastWatchedOn) {
+    if (lastWatchedOn) return `${format("watchedTimes", count)} · ${format("lastWatched", formatDate(lastWatchedOn))}`;
+    return count > 1 ? `${format("watchedTimes", count)} · ${TEXTS.seenBeforeStatus}` : TEXTS.seenBeforeStatus;
 }

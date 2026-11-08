@@ -3,7 +3,7 @@
 
 import {
     fetchSearchData, fetchMyFilmCounts, fetchWatchlistIds,
-    addWatch, removeLatestWatch, addToWatchlist, removeFromWatchlist, todayLocal,
+    addWatch, removeLatestWatch, addToWatchlist, removeFromWatchlist, todayLocal, addSeenBefore,
 } from "../data.js";
 import {
     buildSearchIndex, parseQuery, searchFilms, searchCollections, searchGroups, filterByWatched,
@@ -16,6 +16,7 @@ import { loadPref, savePref } from "../prefs.js";
 import { TEXTS, format, movies, collections } from "../texts.js";
 import { h, mount, poster, pill, yearOf, formatDate, toast, loadingView, errorView } from "../dom.js";
 import { universeCard } from "./universes.js";
+import { watchStatus } from "./universe.js";
 import { searchUsers } from "../social.js";
 import { soonPill } from "./coming-soon.js";
 import { fetchCommunityLists } from "../lists.js";
@@ -363,8 +364,13 @@ class SearchPage {
                 this.signedIn && !upcoming
                     ? h("p", { class: "film__status" },
                         count > 0
-                            ? `${format("watchedTimes", count)} · ${format("lastWatched", formatDate(info.lastWatchedOn))}`
-                            : TEXTS.notWatched)
+                            ? watchStatus(count, info.lastWatchedOn)
+                            : [TEXTS.notWatched, " · ",
+                                h("button", {
+                                    class: "link-button film__seen", type: "button", disabled: busy,
+                                    title: TEXTS.seenBeforeHint,
+                                    onClick: () => this.seenBefore(row, entry),
+                                }, TEXTS.seenBeforeAsk)])
                     : null,
             ),
             this.signedIn
@@ -430,6 +436,22 @@ class SearchPage {
     }
 
     /** +1 / −1 – okamžitě v řádku, při chybě zpět. Filtr se nepřepočítá, ať řádek nezmizí pod prstem. */
+    /** „Seen before“ (V3.6.1) – viděno dřív, bez data. */
+    async seenBefore(row, entry) {
+        const tmdbId = entry.film.tmdb_id;
+        this.counts.set(tmdbId, { count: 1, lastWatchedOn: null });
+        this.fillRow(row, entry, true);
+        try {
+            await addSeenBefore([tmdbId]);
+            this.watchlist.delete(tmdbId);
+            toast(format("seenBeforeOne", entry.film.title));
+        } catch (error) {
+            this.counts.delete(tmdbId);
+            toast(format("errorGeneric", error.message), "error");
+        }
+        this.fillRow(row, entry, false);
+    }
+
     async change(row, entry, delta) {
         const tmdbId = entry.film.tmdb_id;
         const before = this.counts.get(tmdbId);

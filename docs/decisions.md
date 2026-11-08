@@ -302,7 +302,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 38c | V3.5.2.3 | Hlídání nových dílů ✅ | kolekce typu série se jednou denně porovnají se sériemi TMDB: chybějící díly v admin panelu (*Add* / *Dismiss*, i do studia), posunuté premiéry se srovnají samy; popisy z TMDB zkrácené na celé věty |
 | 39 | V3.5.3 | Vlastní seznamy ✅ | neoficiální kolekce uživatelů **jen z filmů v databázi** (bez požadavku): tlačítko ☰ u filmu, název, popis, 1–3 kategorie, vlastní pořadí, viditelnost soukromá / přátelé / veřejná, záložka *Lists* na profilu, počítadlo zobrazení |
 | 40 | V3.5.4 | Komunita ✅ | veřejné seznamy v hledání; sekce **Community** dole na přehledu (top 7 podle zobrazení, řídí se filtry, záložka *Community*); nahlášení a skrytí adminem (záložka *Reports*) |
-| 41 | V3.6.1 | Přepracování postupu | strmější křivka úrovní (100 filmů ≈ úroveň 5, 500 ≈ 10, *Legend* ≈ 3 000+), XP za kolekci podle velikosti (10 XP za film místo pevných 100), vyšší úrovně achievementů (Collector 500/1 000, Screen Time 500/1 000 h, Completionist 50), zápis **„Seen before“ bez data** (počítá se do kolekcí a filmů, ne do Marathonu, sérií dní ani Wrapped) |
+| 41 | V3.6.1 | Přepracování postupu ✅ | strmější křivka úrovní (100 filmů ≈ úroveň 5, 500 ≈ 10, *Legend* ≈ 3 000+), XP za kolekci podle velikosti (10 XP za film místo pevných 100), vyšší úrovně achievementů (Collector 500/1 000, Screen Time 500/1 000 h, Completionist 50), zápis **„Seen before“ bez data** (počítá se do kolekcí a filmů, ne do Marathonu, sérií dní ani Wrapped) |
 | 42 | V3.6.2 | Optimalizace a úklid | sdílené kousky kódu místo kopií (hvězdička watchlistu, pilulka kolekce, `check()`), úklid `style.css`, testy do repozitáře (`tests/`), Lighthouse, indexy v databázi, přístupnost – **jako poslední krok před V4.0** |
 
 #### Kapitola V3.5 – podrobnosti (plán 8. 11. 2026)
@@ -1598,6 +1598,36 @@ Podnět: kolekcí je přes sto, přehled je dlouhý a v adminu se špatně hled�
 - **Na přehledu jen jedna řada** – hlavní obsah jsou kurátorské kolekce, komunita je doplněk.
 - **Pořadí podle zobrazení** (ne podle hodnocení) – zobrazení se počítají poctivě (jednou na uživatele).
 - **Skrytí místo smazání** – správce nemaže cizí práci; autor seznam po úpravě může požádat o odkrytí.
+
+### Fáze 41 – přepracování postupu ✅ (9. 11. 2026) – **V3.6.1**
+- **Strmější křivka úrovní:** XP na úroveň = 150 · (úroveň − 1)^1,85 (zaokrouhleno na 50) – úroveň 2 = 150,
+  5 = 1 950, 10 = 8 750, 15 = 19 800, 20 = 34 800, 25 (*Legend*) = 53 650. Simulace: 100 filmů ≈ úroveň 5,
+  500 ≈ 10–11, *Legend* ≈ 3 000+ filmů.
+- **XP za kolekci podle velikosti:** 10 XP za každý povinný film dokončené kolekce (dřív pevných 100 – malá
+  dvoudílná kolekce dávala stejně jako MCU).
+- **XP za úrovně achievementů:** 25 / 50 / 100 / 200 / 400 / 800 (Bronze … Legend).
+- **Vyšší úrovně achievementů:** Collector 10 / 50 / 100 / 200 / **500 / 1 000**, Screen Time 24 / 100 / 200 /
+  **500 / 1 000 h**, Completionist 1 / 5 / 10 / 20 / **50**, Rewatcher 3 / **5 / 10**; Marathon beze změny.
+- **„Seen before“** – zhlédnutí bez data (`watches.seen_before`, `watched_on` = den zápisu):
+  - u neviděného filmu odkaz **Seen it before?** (kolekce, seznam, hledání); stav **Seen before**,
+    případně „Watched 2× · Seen before“,
+  - pod postupem kolekce / seznamu **Seen these before? Mark the N you haven't logged as seen** – hromadně
+    (s potvrzením) – rychlé doplnění pro nováčky se stovkami viděných filmů,
+  - počítá se do viděných filmů, opakování, postupu kolekcí, Up next, Collectoru, Completionistu, fanoušků;
+    **ne** do Screen Time, Marathonu, času, grafů po měsících a rocích, sérií dní, nejlepšího dne
+    (a ve V4.3 ani do Wrapped),
+  - `my_film_counts.last_watched_on` jen z datovaných zhlédnutí; veřejný profil a porovnání příznak znají.
+- XP i úrovně se počítají ze zhlédnutí, takže nová pravidla platí **zpětně** – po aktualizaci úrovně klesnou.
+- Migrace `20261109120000_seen_before.sql`. Jen web + migrace. Ověřeno: lokální Postgres, simulace úrovní
+  (10–1 240 filmů, 300 filmů jen „Seen before“), testy webu (Seen it before?, hromadně, stav, profil,
+  statistiky, porovnání, seznamy).
+
+#### Rozhodnutí ve fázi 41
+- **„Seen before“ jako příznak, ne prázdné datum** – všechno, co pracuje s datem (pohledy, řazení), dál
+  funguje; časové statistiky ho prostě přeskočí.
+- **Hromadné doplnění jen pro nezalogované filmy** – nic se nezdvojí a nic se nesmaže.
+- **Doplněné filmy nedávají Marathon ani čas** – jinak by jeden večer doplňování odemkl úrovně, na které
+  se má dlouho koukat.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

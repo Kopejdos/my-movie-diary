@@ -76,6 +76,12 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 | `universe_id` | `bigint` FK → `universes` | PK spolu s `category_id` |
 | `category_id` | `bigint` FK → `categories` | |
 
+### Seen before (V3.6.1)
+- **`watches.seen_before`** (boolean, výchozí false) – film viděný dřív, datum neznámé; `watched_on` = den zápisu.
+  Počítá se do filmů a kolekcí, ne do časových statistik.
+- **`my_film_counts.last_watched_on`** – jen z datovaných zhlédnutí (null = film je jen „Seen before“).
+- `public_profile` posílá u zhlédnutí i `seen_before`.
+
 ### Vlastní seznamy (V3.5.3)
 - **`lists`** – `id`, `user_id` (FK → `profiles`, cascade, výchozí `auth.uid()`), `title` (1–80 znaků), `description`
   (≤ 500), `visibility` (`private` / `friends` / `public`), `view_count`, `created_at`, `updated_at`.

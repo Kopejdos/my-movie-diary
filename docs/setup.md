@@ -198,6 +198,8 @@ Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny
 
 10. **Komunita (V3.5.4):** migrace `20261109110000_community.sql`. Edge Functions beze změny.
 
+11. **Přepracování postupu (V3.6.1):** migrace `20261109120000_seen_before.sql`. Edge Functions beze změny.
+
 **Seed a admin panel (od V3.5.2.1):** seed je zdroj pravdy pro import, ale **úpravy z aplikace se neztratí** –
 databáze si je pamatuje (`universe_items.source`, `universes.source`, tabulka `seed_removals`) a `import.sh`
 je před importem propíše do `universes.json` (`sync-seed.sh`): filmy z požadavků, kolekce ze série, přidání /
