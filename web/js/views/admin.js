@@ -15,6 +15,7 @@ import { h, mount, pill, formatDate, toast, loadingView, errorView } from "../do
 import { field } from "./login.js";
 import { fetchSearchData } from "../data.js";
 import { adminSearch, matchesQuery, highlight, noResults } from "./admin-search.js";
+import { seriesUpdatesPanel } from "./admin-series.js";
 
 /** Je přihlášený správce? Jinak ukáže hlášku a vrátí false. */
 export function requireAdminView(container) {
@@ -132,6 +133,7 @@ export async function adminUniversesView(container, context) {
 
     mount(container,
         adminHeader("universes"),
+        seriesUpdatesPanel(),            // nové díly sérií (V3.5.2.3)
         newUniverseForm(),
         h("div", { class: "section-title" },
             h("h2", {}, TEXTS.adminTabUniverses),

@@ -2775,6 +2775,67 @@
         { "title": "The First Purge", "year": 2018, "tmdb": 442249 },
         { "title": "The Forever Purge", "year": 2021, "tmdb": 602223 }
       ]
+    },
+    {
+      "slug": "ring",
+      "name": "Ring",
+      "kind": "series",
+      "categories": ["crime-thriller", "horror"],
+      "color": "#ef4444",
+      "description": "A series of supernatural horror films, based on the series of novels of the same name by Koji Suzuki, about a cursed videotape that kills anyone who watches it seven days later.",
+      "films": [
+        { "title": "Ring", "year": 1998, "tmdb": 2671 },
+        { "title": "The Spiral", "year": 1998, "tmdb": 9706 },
+        { "title": "Ring 2", "year": 1999, "tmdb": 9669 },
+        { "title": "Ring 0", "year": 2000, "tmdb": 9674 },
+        { "title": "Sadako 3D", "year": 2012, "tmdb": 140441 },
+        { "title": "Sadako 3D 2", "year": 2013, "tmdb": 257527 },
+        { "title": "Sadako vs. Kayako", "year": 2016, "tmdb": 382602 },
+        { "title": "Sadako", "year": 2019, "tmdb": 583132 },
+        { "title": "Sadako DX", "year": 2022, "tmdb": 940417 }
+      ]
+    },
+    {
+      "slug": "the-grudge",
+      "name": "The Grudge",
+      "kind": "series",
+      "categories": ["crime-thriller", "horror"],
+      "color": "#8b5cf6",
+      "description": "American horror film series released by Sony Pictures based on the Japanese Ju-on series created by Takashi Shimizu. The series focuses on those affected by a curse of a deceased woman's violent rage ",
+      "films": [
+        { "title": "The Grudge", "year": 2004, "tmdb": 1970 },
+        { "title": "The Grudge 2", "year": 2006, "tmdb": 1975 },
+        { "title": "The Grudge 3", "year": 2009, "tmdb": 1977 }
+      ]
+    },
+    {
+      "slug": "resident-evil",
+      "name": "Resident Evil",
+      "kind": "series",
+      "categories": ["action-adventure", "horror"],
+      "color": "#f59e0b",
+      "description": "Loosely based upon the Capcom video games of the same name, the Resident Evil film series follows the protagonist Alice, a character created for the films. The Umbrella Corporation acts as the main an",
+      "films": [
+        { "title": "Resident Evil", "year": 2002, "tmdb": 1576 },
+        { "title": "Resident Evil: Apocalypse", "year": 2004, "tmdb": 1577 },
+        { "title": "Resident Evil: Extinction", "year": 2007, "tmdb": 7737 },
+        { "title": "Resident Evil: Afterlife", "year": 2010, "tmdb": 35791 },
+        { "title": "Resident Evil: Retribution", "year": 2012, "tmdb": 71679 },
+        { "title": "Resident Evil: The Final Chapter", "year": 2016, "tmdb": 173897 }
+      ]
+    },
+    {
+      "slug": "silent-hill",
+      "name": "Silent Hill",
+      "kind": "series",
+      "categories": ["crime-thriller", "horror"],
+      "color": "#d946ef",
+      "description": "A horror film series adaption of the survival horror video game Silent Hill.",
+      "films": [
+        { "title": "Silent Hill", "year": 2006, "tmdb": 588 },
+        { "title": "Silent Hill: Revelation 3D", "year": 2012, "tmdb": 61012 },
+        { "title": "Return to Silent Hill", "year": 2026, "tmdb": 680493 }
+      ]
     }
   ]
 }

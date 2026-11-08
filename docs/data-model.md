@@ -76,6 +76,16 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 | `universe_id` | `bigint` FK → `universes` | PK spolu s `category_id` |
 | `category_id` | `bigint` FK → `categories` | |
 
+### Hlídání nových dílů sérií (V3.5.2.3)
+- **`films.tmdb_collection_id`** – série TMDB, do které film patří (`belongs_to_collection`); `0` = žádná,
+  `null` = ještě nezjištěno. Plní ho import (`tmdb`), přidání filmu v adminu a postupně i kontrola sérií.
+- **`universes.tmdb_collection_id`** – série TMDB, ze které kolekce vznikla (kolekce ze série).
+- **`series_updates`** – nalezené chybějící díly: `universe_id` (FK, cascade), `tmdb_collection_id`, `tmdb_id`,
+  `title`, `release_date`, `poster_path`, `status` (`pending` / `added` / `dismissed`), `found_at`,
+  `decided_at`; unikátní `(universe_id, tmdb_id)` – zahozený díl se znovu nenabídne.
+- **`admin_state`** – `key` → `value` (jsonb): `series_check` = čas a výsledek poslední kontroly.
+- Obě tabulky mají RLS bez pravidel – pracuje s nimi jen Edge Function `admin`.
+
 ### Synchronizace se seedem (V3.5.2.1)
 - **`universes.source`** – `seed` (podle seedu) / `app` (kolekce vytvořená nebo upravená v aplikaci – název,
   popis, barva, typ, kategorie, obal). Import ji vrátí na `seed`.

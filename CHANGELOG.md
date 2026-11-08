@@ -3,6 +3,11 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.5.2.3 – November 2026
+- Admin: MMD keeps an eye on TMDB series – new parts missing from a collection show up in the admin panel (Add / Dismiss, optionally into the studio collection too)
+- Pushed release dates of upcoming movies are picked up automatically
+- Descriptions of collections created from a series are shortened to whole sentences
+
 ## V3.5.2.2 – November 2026
 - Collections are sorted A–Z by default ("The" is skipped) – or by recently added or your progress (started collections first, finished ones last)
 - The overview is shorter: each group shows two rows, the rest is one click away (Show all)

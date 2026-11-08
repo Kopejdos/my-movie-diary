@@ -299,7 +299,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 38 | V3.5.2 | Požadavky na kolekce ✅ | požadavek má dva druhy: **Movies** (libovolné filmy) a **Collection** (celá série TMDB – jen její díly, cizí film → „Nuh uh“); admin z něj jedním klikem vytvoří **oficiální kolekci**; návrhy nových kolekcí z běžných požadavků (víc filmů z jedné série); **seed se doplňuje sám** (`sync-seed.sh`) |
 | 38a | V3.5.2.1 | Seed bez ruční práce ✅ | do seedu se samy propisují **všechny úpravy z aplikace** (admin panel: přidání, úprava, přesun, odebrání filmu, úprava / nová / smazaná kolekce); nové filmy se řadí **podle data premiéry**; kolekce ze série nabídne přidat díly i do **kolekce studia** (Lethal Weapon → Warner Bros.) |
 | 38b | V3.5.2.2 | Quality of life ✅ | **hledání ve všech záložkách admin panelu** (kolekce i podle filmu, uživatelé, zakázaná slova, požadavky); přehled kolekcí **podle abecedy** (nebo nejnovější / můj postup) a **sbalené skupiny** – dvě řady + *Show all* |
-| 38c | V3.5.2.3 | Hlídání nových dílů | u kolekcí ze série TMDB jednou denně kontrola nových dílů a dat premiér; admin panel ukáže *New parts → Add*, chystané filmy rovnou do Coming soon |
+| 38c | V3.5.2.3 | Hlídání nových dílů ✅ | kolekce typu série se jednou denně porovnají se sériemi TMDB: chybějící díly v admin panelu (*Add* / *Dismiss*, i do studia), posunuté premiéry se srovnají samy; popisy z TMDB zkrácené na celé věty |
 | 39 | V3.5.3 | Vlastní seznamy | neoficiální kolekce uživatelů **jen z filmů v databázi** (bez požadavku): název, popis, 1–3 kategorie, vlastní pořadí, viditelnost soukromá / přátelé / veřejná, na profilu, počítadlo zobrazení |
 | 40 | V3.5.4 | Komunita | veřejné seznamy v hledání; sekce **Community** dole na přehledu (top 7 podle zobrazení, řídí se filtry, záložka *Community*); nahlášení a skrytí adminem |
 | 41 | V3.6.1 | Přepracování postupu | strmější křivka úrovní (100 filmů ≈ úroveň 5, 500 ≈ 10, *Legend* ≈ 3 000+), XP za kolekci podle velikosti (10 XP za film místo pevných 100), vyšší úrovně achievementů (Collector 500/1 000, Screen Time 500/1 000 h, Completionist 50), zápis **„Seen before“ bez data** (počítá se do kolekcí a filmů, ne do Marathonu, sérií dní ani Wrapped) |
@@ -1510,6 +1510,37 @@ Podnět: kolekcí je přes sto, přehled je dlouhý a v adminu se špatně hled�
   řadí podle abecedy.
 - **Sbalení podle řad, ne pevný počet** – „dvě řady“ vypadají stejně na každé šířce (pevných 14 by na mobilu
   znamenalo 7 řad, na širokém monitoru půl řady).
+
+### Fáze 38c – hlídání nových dílů ✅ (8. 11. 2026) – **V3.5.2.3**
+- **Které série se hlídají:** u každé kolekce typu *series* série TMDB, ze které vznikla
+  (`universes.tmdb_collection_id`, kolekce ze série od V3.5.2.3), a každá série TMDB, ze které má kolekce
+  **aspoň 2 filmy** (Lethal Weapon, Alien, Avengers v MCU…). Studia, žánrové výběry a cesty se nehlídají.
+- **Kdy:** sama, když správce otevře admin panel (záložka Collections) a od poslední kontroly uběhlo
+  20 hodin; tlačítkem **Check now** kdykoli. Žádný plánovač ani další nastavení.
+- **Co udělá:**
+  - díl série, který v kolekci chybí → panel **New movies in your series** nahoře v admin panelu:
+    *Add* (zařadí se podle data premiéry, zaškrtnutá studia s jinými díly série – např. Warner Bros. –
+    dostanou film taky) nebo *Dismiss* (už se nenabídne); *Dismiss all* po první kontrole, která najde
+    i dávno vynechané filmy; zrušené filmy (*Canceled*) se nenabízejí,
+  - u filmů, které v kolekcích jsou, srovná **datum premiéry** podle TMDB (posunutá premiéra → Coming soon
+    sedí samo),
+  - filmům bez zjištěné série je doplní z TMDB (po 150 za kontrolu; import je doplní všem najednou).
+- Přidané filmy se do seedu propíšou samy (sync, V3.5.2.1).
+- **Popisy kolekcí ze série** se zkracují na celé věty (tečka mimo závorky, ne „Mr.“ / iniciály); když se
+  nevejde ani první věta, useknutí na slově s „…“ (oprava „…in German, in“ u Winnetou).
+- Migrace `20261108140000_series_watch.sql` (`films.tmdb_collection_id`, `universes.tmdb_collection_id`,
+  tabulky `series_updates` a `admin_state`), funkce `admin` (akce `series-updates`, `series-check`,
+  `series-decide`, `series-dismiss-all`), `tmdb` (import ukládá sérii filmu). Ověřeno: unit test kontroly
+  (doplnění sérií, hlídané série, nové díly, zrušený film přeskočen, posunuté datum, druhá kontrola beze
+  změn, přidání i do studia, zahození), zkracování popisů, testy webu (panel, Add / Dismiss, Check now,
+  Dismiss all, 360 px).
+
+#### Rozhodnutí ve fázi 38c
+- **Kontrola při otevření admin panelu, ne plánovač** – nic dalšího se nenastavuje (žádný cron, žádné
+  tajemství na GitHubu); denní kontrola stačí, nové díly se oznamují měsíce dopředu.
+- **Jen kolekce typu série** – studia a žánrové výběry jsou kurátorské; díly do studia se nabízejí jen
+  u filmu, který se přidává do série.
+- **Data premiér se srovnávají bez ptaní** – TMDB je pro data zdroj pravdy; seed obsahuje jen rok.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

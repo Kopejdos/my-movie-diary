@@ -65,6 +65,7 @@ interface FilmRow {
   poster_path: string | null;
   backdrop_path: string | null;
   overview: string | null;
+  tmdb_collection_id: number;   // série TMDB, 0 = žádná (V3.5.2.3 – hlídání nových dílů)
   updated_at: string;
 }
 
@@ -206,6 +207,7 @@ interface TmdbMovieDetails {
   backdrop_path: string | null;
   overview: string;
   status: string; // "Released", "Post Production", …
+  belongs_to_collection?: { id: number; name: string } | null;
 }
 
 /**
@@ -282,6 +284,7 @@ async function resolveFilm(seed: SeedFilm): Promise<Resolved> {
       poster_path: details.poster_path,
       backdrop_path: details.backdrop_path,
       overview: details.overview || null,
+      tmdb_collection_id: details.belongs_to_collection?.id ?? 0,
       updated_at: new Date().toISOString(),
     };
     return { status: "ok", seed, film, upcoming, warning };

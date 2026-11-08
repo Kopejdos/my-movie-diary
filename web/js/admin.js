@@ -69,6 +69,33 @@ export async function createCollectionFromSeries(tmdbCollectionId, name, tmdbIds
 }
 
 // ---------------------------------------------------------------------
+// Hlídání nových dílů sérií (V3.5.2.3)
+// ---------------------------------------------------------------------
+
+/**
+ * Čekající nové díly sérií. Když od poslední kontroly uběhl den, funkce admin nejdřív
+ * zkontroluje série v TMDB (trvá pár sekund). force = zkontrolovat hned.
+ * Vrací { checked_at, series, collections, found, dates_updated, backfill_left, ran, updates }.
+ */
+export async function fetchSeriesUpdates(force = false) {
+    const result = await callAdmin(force ? "series-check" : "series-updates", {});
+    if (result.ran && result.dates_updated > 0) clearDataCache();      // posunuté premiéry
+    return result;
+}
+
+/** Přidat nalezený díl do kolekce (also = ID kolekcí studií), nebo zahodit. */
+export async function decideSeriesUpdate(id, add, also = []) {
+    const result = await callAdmin("series-decide", { id, add, also });
+    if (add) clearDataCache();
+    return result;
+}
+
+/** Zahodit všechny čekající díly. */
+export async function dismissAllSeriesUpdates() {
+    return await callAdmin("series-dismiss-all", {});
+}
+
+// ---------------------------------------------------------------------
 // Zakázaná slova v nickách (V2.3)
 // ---------------------------------------------------------------------
 

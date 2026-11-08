@@ -8,6 +8,10 @@
 // POST { "action": "…", … }
 //   search       { query }              → hledání filmů v TMDB
 //   add-film     { tmdb_id }            → uloží film do tabulky films (detail z TMDB)
+//   series-updates                      → nové díly sérií; kontrola TMDB, jen když od poslední uběhl den
+//   series-check                        → kontrola sérií hned (V3.5.2.3)
+//   series-decide { id, add, also? }    → přidat nalezený díl do kolekce (i do studií) / zahodit
+//   series-dismiss-all                  → zahodit všechny čekající díly
 //   add-item     { universe_id, tmdb_id, group?, optional? }
 //                                       → film do films a do kolekce, zařazený podle data premiéry
 //                                         (V3.5.2.1); sync-seed ho dopíše do seedu
@@ -162,6 +166,7 @@ async function addFilm(db: SupabaseClient, tmdbId: number) {
     poster_path: d.poster_path,
     backdrop_path: d.backdrop_path,
     overview: d.overview || null,
+    tmdb_collection_id: d.belongs_to_collection?.id ?? 0,      // série TMDB (V3.5.2.3)
     updated_at: new Date().toISOString(),
   };
   const { error } = await db.from("films").upsert(film, { onConflict: "tmdb_id" });
@@ -468,6 +473,30 @@ async function studioFields(db: SupabaseClient, universeId: number, partIds: num
   return { franchise, group_label: group };
 }
 
+/**
+ * Popis zkrácený na celé věty (V3.5.2.3): nejvýš max znaků, konec na tečce / vykřičníku /
+ * otazníku mimo závorky; když se ani první věta nevejde, useknout na slově a přidat „…“.
+ */
+export function shortDescription(text: string | null | undefined, max = 200): string {
+  const clean = (text ?? "").replace(/\s+/g, " ").trim();
+  if (clean.length <= max) return clean;
+  let depth = 0;
+  let lastEnd = -1;
+  for (let i = 0; i < max; i++) {
+    const ch = clean[i];
+    if (ch === "(" || ch === "[") depth++;
+    else if ((ch === ")" || ch === "]") && depth > 0) depth--;
+    else if (depth === 0 && ".!?".includes(ch) && (clean[i + 1] === " " || i + 1 === clean.length)) {
+      // „Mr.“, „Dr.“, „St.“ a iniciály („J.“) konec věty nejsou
+      const word = clean.slice(0, i).split(" ").pop() ?? "";
+      if (!/^(Mr|Mrs|Ms|Dr|St|Jr|Sr|vs|[A-Z])$/.test(word)) lastEnd = i;
+    }
+  }
+  if (lastEnd >= 40) return clean.slice(0, lastEnd + 1);
+  const cut = clean.slice(0, max - 1);
+  return `${cut.slice(0, Math.max(cut.lastIndexOf(" "), 40)).replace(/[\s,;:–-]+$/, "")}…`;
+}
+
 /** Žánry TMDB → naše kategorie (slug). */
 const GENRE_TO_CATEGORY: Record<string, string> = {
   "Horror": "horror", "Science Fiction": "scifi", "Fantasy": "fantasy", "Animation": "animation",
@@ -523,13 +552,14 @@ async function createCollectionFromSeries(db: SupabaseClient, tmdbCollectionId: 
   }
   const { data: last } = await db.from("universes").select("sort_order").order("sort_order", { ascending: false }).limit(1);
   const color = COLLECTION_COLORS[[...name].reduce((sum, ch) => sum + ch.charCodeAt(0), 0) % COLLECTION_COLORS.length];
-  const description = (collection.overview || `Every ${name} movie.`).slice(0, 200);
+  const description = shortDescription(collection.overview, 200) || `Every ${name} movie.`;
 
   const { data: universe, error } = await db.from("universes").insert({
     slug, name, description, color, kind: "series",
     source: "app",              // nová kolekce z aplikace – sync-seed ji dopíše do seedu (V3.5.2.1)
     sort_order: (last?.[0]?.sort_order ?? 0) + 10,
     cover_tmdb_id: films[0]?.tmdb_id ?? null,
+    tmdb_collection_id: tmdbCollectionId,     // hlídání nových dílů (V3.5.2.3)
   }).select("id, slug").single();
   if (error) throw new Error(error.message);
 
@@ -649,6 +679,237 @@ async function decideRequests(db: SupabaseClient, decisions: unknown) {
 }
 
 // ---------------------------------------------------------------------
+// Hlídání nových dílů sérií (V3.5.2.3)
+//
+// Kolekce typu série se porovnají se sériemi TMDB, ze kterých mají filmy:
+//   • série, ze které kolekce vznikla (universes.tmdb_collection_id),
+//   • každá série TMDB, ze které má kolekce aspoň 2 filmy.
+// Díl série, který v kolekci chybí (a nebyl dřív zahozen), se uloží do series_updates
+// a správce ho v admin panelu přidá nebo zahodí. Zrušené filmy (Canceled) se přeskočí.
+// U filmů, které v kolekci jsou, se zároveň srovná datum premiéry podle TMDB
+// (posunutá premiéra chystaného filmu se tak promítne sama).
+// Kontrola se spustí sama, když správce otevře admin panel a od poslední uběhlo
+// SERIES_CHECK_HOURS hodin; tlačítkem „Check now“ kdykoli.
+// ---------------------------------------------------------------------
+
+const SERIES_CHECK_HOURS = 20;
+const SERIES_BACKFILL_PER_RUN = 150;     // kolik filmů bez zjištěné série doplnit za jednu kontrolu
+
+interface CollectionPart {
+  id: number;
+  title: string;
+  release_date: string;
+  poster_path: string | null;
+}
+
+/** Kontrola sérií. force = i když od poslední neuběhl den. Vrací stav + nalezené díly. */
+async function seriesCheck(db: SupabaseClient, force: boolean) {
+  const { data: stateRow } = await db.from("admin_state").select("value").eq("key", "series_check").maybeSingle();
+  const previous = (stateRow?.value ?? {}) as Record<string, unknown>;
+  const lastAt = typeof previous.checked_at === "string" ? Date.parse(previous.checked_at) : 0;
+  if (!force && Date.now() - lastAt < SERIES_CHECK_HOURS * 3600_000) {
+    return { ...previous, ran: false, updates: await listSeriesUpdates(db) };
+  }
+
+  // 1. Kolekce typu série s filmy a jejich sériemi TMDB
+  const { data: universes, error } = await db
+    .from("universes")
+    .select("id, slug, name, tmdb_collection_id, items:universe_items(tmdb_id, film:films(tmdb_id, release_date, tmdb_collection_id))")
+    .eq("kind", "series");
+  if (error) throw new Error(error.message);
+  // deno-lint-ignore no-explicit-any
+  const list = (universes ?? []) as any[];
+
+  // 2. Filmy bez zjištěné série – doplnit z TMDB (po dávkách, ať kontrola netrvá dlouho)
+  const filmCollection = new Map<number, number | null>();
+  for (const u of list) for (const i of u.items ?? []) if (i.film) filmCollection.set(i.tmdb_id, i.film.tmdb_collection_id);
+  const unknown = [...filmCollection.entries()].filter(([, c]) => c === null).map(([id]) => id);
+  const batch = unknown.slice(0, SERIES_BACKFILL_PER_RUN);
+  await mapLimited(batch, 8, async (tmdbId) => {
+    try {
+      const d = await tmdbGet<TmdbMovieDetails>(`/movie/${tmdbId}`, { language: "en-US" });
+      const collectionId = d.belongs_to_collection?.id ?? 0;
+      await db.from("films").update({ tmdb_collection_id: collectionId }).eq("tmdb_id", tmdbId);
+      filmCollection.set(tmdbId, collectionId);
+    } catch {
+      // film v TMDB nenalezen – zkusí se příště
+    }
+  });
+
+  // 3. Hlídané série každé kolekce
+  const watched: { universeId: number; collectionId: number; have: Set<number> }[] = [];
+  for (const u of list) {
+    const have = new Set<number>((u.items ?? []).map((i: { tmdb_id: number }) => i.tmdb_id));
+    const counts = new Map<number, number>();
+    for (const id of have) {
+      const c = filmCollection.get(id);
+      if (c) counts.set(c, (counts.get(c) ?? 0) + 1);
+    }
+    const ids = new Set([...counts.entries()].filter(([, n]) => n >= 2).map(([c]) => c));
+    if (u.tmdb_collection_id) ids.add(u.tmdb_collection_id);
+    for (const collectionId of ids) watched.push({ universeId: u.id, collectionId, have });
+  }
+
+  // 4. Díly sérií z TMDB (každá série jednou)
+  const collectionIds = [...new Set(watched.map((w) => w.collectionId))];
+  const parts = new Map<number, CollectionPart[]>();
+  await mapLimited(collectionIds, 8, async (collectionId) => {
+    try {
+      const c = await tmdbGet<{ parts: CollectionPart[] }>(`/collection/${collectionId}`, { language: "en-US" });
+      parts.set(collectionId, c.parts ?? []);
+    } catch {
+      // série v TMDB zmizela / chyba sítě – přeskočit
+    }
+  });
+
+  // 5a. Posunutá data premiér u filmů, které v kolekcích jsou
+  const filmDates = new Map<number, string | null>();
+  for (const u of list) for (const i of u.items ?? []) if (i.film) filmDates.set(i.tmdb_id, i.film.release_date);
+  let datesUpdated = 0;
+  const dateFixes = new Map<number, string>();
+  for (const partList of parts.values()) {
+    for (const part of partList) {
+      if (!part.release_date || !filmDates.has(part.id)) continue;
+      if (filmDates.get(part.id) !== part.release_date) dateFixes.set(part.id, part.release_date);
+    }
+  }
+  await mapLimited([...dateFixes.entries()], 8, async ([tmdbId, date]) => {
+    const { error: dateError } = await db.from("films").update({ release_date: date }).eq("tmdb_id", tmdbId);
+    if (!dateError) datesUpdated++;
+  });
+
+  // 5b. Chybějící díly → series_updates (jen nové – už nabídnuté / zahozené znovu ne)
+  const { data: known } = await db.from("series_updates").select("universe_id, tmdb_id");
+  const seen = new Set((known ?? []).map((k) => `${k.universe_id}:${k.tmdb_id}`));
+  const candidates: { universeId: number; collectionId: number; part: CollectionPart }[] = [];
+  for (const w of watched) {
+    for (const part of parts.get(w.collectionId) ?? []) {
+      if (w.have.has(part.id) || seen.has(`${w.universeId}:${part.id}`)) continue;
+      seen.add(`${w.universeId}:${part.id}`);
+      candidates.push({ universeId: w.universeId, collectionId: w.collectionId, part });
+    }
+  }
+  // Zrušené filmy pryč (stav je jen v detailu filmu)
+  const status = new Map<number, string>();
+  await mapLimited([...new Set(candidates.map((c) => c.part.id))], 8, async (tmdbId) => {
+    try {
+      status.set(tmdbId, (await tmdbGet<TmdbMovieDetails>(`/movie/${tmdbId}`, { language: "en-US" })).status ?? "");
+    } catch {
+      status.set(tmdbId, "");
+    }
+  });
+  const rows = candidates
+    .filter((c) => status.get(c.part.id) !== "Canceled")
+    .map((c) => ({
+      universe_id: c.universeId,
+      tmdb_collection_id: c.collectionId,
+      tmdb_id: c.part.id,
+      title: c.part.title,
+      release_date: c.part.release_date || null,
+      poster_path: c.part.poster_path,
+    }));
+  if (rows.length > 0) {
+    const { error: insertError } = await db.from("series_updates").upsert(rows, { onConflict: "universe_id,tmdb_id", ignoreDuplicates: true });
+    if (insertError) throw new Error(insertError.message);
+  }
+
+  const state = {
+    checked_at: new Date().toISOString(),
+    series: collectionIds.length,
+    collections: new Set(watched.map((w) => w.universeId)).size,
+    found: rows.length,
+    dates_updated: datesUpdated,
+    backfill_left: Math.max(0, unknown.length - batch.length),
+  };
+  await db.from("admin_state").upsert({ key: "series_check", value: state, updated_at: state.checked_at });
+  return { ...state, ran: true, updates: await listSeriesUpdates(db) };
+}
+
+/**
+ * Čekající nové díly + kolekce studií, kam díl jde přidat taky (studio, ve kterém už jsou
+ * jiné díly téže série – např. Warner Bros. u Lethal Weapon).
+ */
+async function listSeriesUpdates(db: SupabaseClient) {
+  const { data, error } = await db
+    .from("series_updates")
+    .select("id, universe_id, tmdb_collection_id, tmdb_id, title, release_date, poster_path, found_at, universe:universes(slug, name, color)")
+    .eq("status", "pending")
+    .order("release_date", { ascending: false, nullsFirst: true });
+  if (error) throw new Error(error.message);
+  // deno-lint-ignore no-explicit-any
+  const updates = (data ?? []) as any[];
+  if (updates.length === 0) return [];
+
+  const collectionIds = [...new Set(updates.map((u) => u.tmdb_collection_id))];
+  const { data: films } = await db.from("films").select("tmdb_id, tmdb_collection_id").in("tmdb_collection_id", collectionIds);
+  const filmToCollection = new Map((films ?? []).map((f) => [f.tmdb_id, f.tmdb_collection_id]));
+  const { data: studioItems } = filmToCollection.size > 0
+    ? await db.from("universe_items")
+      .select("tmdb_id, universe:universes!inner(id, name, kind)")
+      .in("tmdb_id", [...filmToCollection.keys()])
+      .eq("universe.kind", "studio")
+    : { data: [] };
+  const studiosByCollection = new Map<number, Map<number, { universe_id: number; name: string; items: Set<number> }>>();
+  // deno-lint-ignore no-explicit-any
+  for (const row of (studioItems ?? []) as any[]) {
+    const collectionId = filmToCollection.get(row.tmdb_id);
+    if (!collectionId || !row.universe) continue;
+    const studios = studiosByCollection.get(collectionId) ?? new Map();
+    const studio = studios.get(row.universe.id) ?? { universe_id: row.universe.id, name: row.universe.name, items: new Set<number>() };
+    studio.items.add(row.tmdb_id);
+    studios.set(row.universe.id, studio);
+    studiosByCollection.set(collectionId, studios);
+  }
+  return updates.map((u) => ({
+    ...u,
+    also: [...(studiosByCollection.get(u.tmdb_collection_id)?.values() ?? [])]
+      .filter((s) => !s.items.has(u.tmdb_id) && s.universe_id !== u.universe_id)
+      .map((s) => ({ universe_id: s.universe_id, name: s.name })),
+  }));
+}
+
+/** Přidat nalezený díl do kolekce (a případně do studií), nebo zahodit. */
+async function decideSeriesUpdate(db: SupabaseClient, id: number, add: boolean, alsoIds: unknown) {
+  const { data: update, error } = await db.from("series_updates")
+    .select("id, universe_id, tmdb_collection_id, tmdb_id, status").eq("id", id).maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!update) throw new HttpError(404, "Update not found");
+  if (update.status !== "pending") return { id, status: update.status, also: [] };
+
+  const alsoAdded: string[] = [];
+  if (add) {
+    const film = await addFilm(db, update.tmdb_id);
+    await insertChronological(db, update.universe_id, film, { source: "admin" });
+    const also = [...new Set(Array.isArray(alsoIds) ? alsoIds.map(Number).filter((n) => Number.isInteger(n) && n > 0) : [])];
+    if (also.length > 0) {
+      const { data: partFilms } = await db.from("films").select("tmdb_id").eq("tmdb_collection_id", update.tmdb_collection_id);
+      const partIds = (partFilms ?? []).map((f) => f.tmdb_id);
+      const { data: universe } = await db.from("universes").select("name").eq("id", update.universe_id).maybeSingle();
+      for (const studioId of also) {
+        const { data: studio } = await db.from("universes").select("id, name, kind").eq("id", studioId).maybeSingle();
+        if (!studio || studio.kind === "path") continue;
+        const fields = await studioFields(db, studio.id, partIds, universe?.name ?? film.title, film.release_date);
+        if (await insertChronological(db, studio.id, film, { ...fields, source: "admin" })) alsoAdded.push(studio.name);
+      }
+    }
+  }
+  const status = add ? "added" : "dismissed";
+  const { error: saveError } = await db.from("series_updates")
+    .update({ status, decided_at: new Date().toISOString() }).eq("id", id);
+  if (saveError) throw new Error(saveError.message);
+  return { id, status, also: alsoAdded };
+}
+
+/** Zahodit všechny čekající díly (např. po první kontrole, která najde staré vynechané filmy). */
+async function dismissAllSeriesUpdates(db: SupabaseClient) {
+  const { data, error } = await db.from("series_updates")
+    .update({ status: "dismissed", decided_at: new Date().toISOString() })
+    .eq("status", "pending").select("id");
+  if (error) throw new Error(error.message);
+  return { dismissed: data?.length ?? 0 };
+}
+
+// ---------------------------------------------------------------------
 // Vstupní bod
 // ---------------------------------------------------------------------
 
@@ -692,6 +953,14 @@ Deno.serve(async (request) => {
         });
         return json({ ...film, added });
       }
+      case "series-updates":       // kontrola sérií, jen když od poslední uběhl den (V3.5.2.3)
+        return json(await seriesCheck(db, false));
+      case "series-check":         // kontrola hned („Check now“)
+        return json(await seriesCheck(db, true));
+      case "series-decide":
+        return json(await decideSeriesUpdate(db, Number(body.id), body.add === true, body.also));
+      case "series-dismiss-all":
+        return json(await dismissAllSeriesUpdates(db));
       case "request-create-collection":
         return json(await createCollectionFromSeries(db, Number(body.tmdb_collection_id), body.name, body.tmdb_ids, body.also));
       default:
