@@ -278,13 +278,13 @@ export const LEVEL_TITLES = [
 ];
 
 /**
- * XP potřebné k dosažení úrovně (V3.6.1, strmější křivka): 150 · (úroveň − 1)^1,85, zaokrouhleno na 50.
- * 2 → 150, 3 → 550, 5 → 1 950, 10 → 8 750, 15 → 19 800, 20 → 34 800, 25 → 53 650.
- * Zhruba: 100 filmů ≈ úroveň 5, 500 filmů ≈ úroveň 10, Legend (25) ≈ 3 000+ filmů.
+ * XP potřebné k dosažení úrovně (V3.6.1, upraveno ve V3.6.1.1): 110 · (úroveň − 1)^2,07, zaokrouhleno na 50.
+ * 2 → 100, 3 → 450, 5 → 1 950, 10 → 10 400, 15 → 25 950, 20 → 48 800, 25 (Legend) → 79 150.
+ * Zhruba: 100 filmů ≈ úroveň 5, 500 filmů ≈ úroveň 9–10, Legend ≈ 4 500–5 000 filmů.
  */
 export function xpForLevel(level) {
     if (level <= 1) return 0;
-    return Math.round((150 * (level - 1) ** 1.85) / 50) * 50;
+    return Math.round((110 * (level - 1) ** 2.07) / 50) * 50;
 }
 
 /** Rozpad XP podle zdroje + součet. */

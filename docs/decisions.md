@@ -204,7 +204,7 @@ Formát **V<hlavní>.<vedlejší>.<oprava>** (např. V1.2.1):
   znamená část fáze, ne opravu). Případné opravy pak dostanou další číslo (V3.0.3…).
 - **Výjimka V3.5.2.x:** doplňky k hotové části fáze, které nechceme zařadit až za další část plánu, dostanou
   **čtvrté číslo** (V3.5.2.1 – úpravy z aplikace do seedu, V3.5.2.2 – quality of life, V3.5.2.3 – hlídání
-  nových dílů).
+  nových dílů; V3.6.1.1 – úprava křivky úrovní).
 - Verze a **měsíc poslední aktualizace** jsou v patičce webu (např. „V1.1 · November 2026“). Obojí je v `web/js/config.js` (`APP_VERSION`, `APP_UPDATED`) – při vydání nové verze se změní tam.
 - Při vydání: úprava `config.js`, záznam do `CHANGELOG.md`, commit a **tag verze** (`git tag v1.1`, `git push --tags`). Tagy `faze-N` z verzí V0.x zůstávají, od V1.1 se používají jen tagy `vX.Y`.
 
@@ -1621,6 +1621,11 @@ Podnět: kolekcí je přes sto, přehled je dlouhý a v adminu se špatně hled�
 - Migrace `20261109120000_seen_before.sql`. Jen web + migrace. Ověřeno: lokální Postgres, simulace úrovní
   (10–1 240 filmů, 300 filmů jen „Seen before“), testy webu (Seen it before?, hromadně, stav, profil,
   statistiky, porovnání, seznamy).
+
+- **V3.6.1.1 (9. 11.) – Legend ještě dál:** 3 000 filmů na Legend bylo málo (přání: zhruba o 30 000 XP víc).
+  Nová křivka **110 · (úroveň − 1)^2,07**: 2 → 100, 3 → 450, 5 → 1 950 (beze změny), 10 → 10 400,
+  15 → 25 950, 20 → 48 800, **25 (Legend) → 79 150 XP**. Simulace: 100 filmů ≈ úroveň 5, 500 ≈ 9–10,
+  1 000 ≈ 13, 3 000 ≈ 20, **Legend ≈ 4 500–5 000 filmů**. Začátek je o chlup snazší, konec o hodně těžší.
 
 #### Rozhodnutí ve fázi 41
 - **„Seen before“ jako příznak, ne prázdné datum** – všechno, co pracuje s datem (pohledy, řazení), dál

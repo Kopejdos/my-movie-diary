@@ -3,6 +3,9 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.6.1.1 – November 2026
+- Legend is now a real legend: it takes about 79,000 XP (roughly 4,500–5,000 movies) – the first levels stay quick, the top ones take much longer
+
 ## V3.6.1 – November 2026
 - **Tougher levels** – a steeper curve (about level 5 at 100 movies, level 10 at 500, Legend takes thousands), completed collections give 10 XP per movie instead of a flat 100
 - New achievement tiers: Collector 500 / 1,000, Screen Time 500 / 1,000 h, Completionist 50, Rewatcher 5 / 10
