@@ -1,47 +1,18 @@
 // Požadavky na filmy (V3.5.1) – logika, nic nevykresluje.
 // Hledání v TMDB a založení požadavku jdou přes Edge Function "requests" (údaje o filmech
 // si bere z TMDB sama), čtení a +1 přímo přes Supabase (pravidla RLS).
+// Chyby z funkce mají kód (FunctionError.code – limit, not_same_series…), podle kterého web ukáže text.
 
 import { supabase } from "./supabase.js";
-import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./config.js";
+import { check, callFunction } from "./db.js";
 
 /** Nejvíc filmů v jednom požadavku a nevyřízených požadavků (stejně jako ve funkci requests). */
 export const MAX_REQUEST_FILMS = 20;
 export const MAX_OPEN_REQUESTS = 5;
 export const MAX_NOTE = 300;
 
-function check({ data, error }) {
-    if (error) throw new Error(error.message);
-    return data;
-}
-
-/** Chyba z funkce requests s kódem (limit, too_many…), podle kterého web ukáže text. */
-export class RequestError extends Error {
-    constructor(message, code) {
-        super(message);
-        this.code = code;
-    }
-}
-
 /** Zavolá akci funkce requests s tokenem přihlášeného uživatele. */
-async function callRequests(action, payload = {}) {
-    const { data } = await supabase.auth.getSession();
-    const token = data.session?.access_token;
-    if (!token) throw new RequestError("Not signed in", "not_signed_in");
-
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/requests`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            apikey: SUPABASE_PUBLISHABLE_KEY,
-            Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ action, ...payload }),
-    });
-    const body = await response.json().catch(() => ({}));
-    if (!response.ok) throw new RequestError(body.error ?? `HTTP ${response.status}`, body.code ?? "error");
-    return body;
-}
+const callRequests = (action, payload = {}) => callFunction("requests", action, payload);
 
 /**
  * Hledání filmů v TMDB pro požadavek: [{ tmdb_id, title, year, poster_path, state }],

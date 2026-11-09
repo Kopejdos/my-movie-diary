@@ -4,13 +4,14 @@
 // Hranice: do konce roku letos + 5 (posouvá se sama, viz comingSoonLastYear v data.js).
 
 import {
-    fetchComingSoon, groupByQuarter, comingSoonLastYear, fetchWatchlistIds, addToWatchlist, removeFromWatchlist,
+    fetchComingSoon, groupByQuarter, comingSoonLastYear, fetchWatchlistIds,
 } from "../data.js";
 import { isSignedIn } from "../auth.js";
-import { setAccent, inkFor } from "../theme.js";
+import { setAccent } from "../theme.js";
 import { TEXTS, format, movies } from "../texts.js";
-import { h, mount, toast, loadingView, errorView } from "../dom.js";
+import { h, mount, loadingView, errorView } from "../dom.js";
 import { soonPill, soonPoster } from "./coming-soon.js";
+import { watchlistStar, collectionPill } from "./film-controls.js";
 
 export async function comingSoonView(container, context) {
     setAccent(null);
@@ -66,49 +67,10 @@ function row(entry, watchlist, signedIn) {
             h("h3", { class: "film__title" }, film.title),
             h("div", { class: "film__meta" },
                 soonPill(film),
-                entry.universes.map(collectionLink),
+                entry.universes.map((u) => collectionPill(u)),
             ),
         ),
         signedIn ? h("div", { class: "film__actions" }, watchlistStar(film, watchlist)) : null,
     );
 }
 
-/** Barevná pilulka s odkazem na kolekci. */
-function collectionLink(universe) {
-    const link = h("a", { class: "pill pill--universe", href: `#/collection/${universe.slug}` }, universe.name);
-    if (universe.color) {
-        link.style.setProperty("--c", universe.color);
-        link.style.setProperty("--c-ink", inkFor(universe.color));
-    }
-    return link;
-}
-
-/** Hvězdička ☆ / ★ – watchlist (překreslí jen sebe). */
-function watchlistStar(film, watchlist) {
-    const id = film.tmdb_id;
-    const button = h("button", { class: "star-btn", type: "button" });
-    const paint = () => {
-        const inList = watchlist.has(id);
-        const label = inList ? TEXTS.watchlistRemove : TEXTS.watchlistAdd;
-        button.className = `star-btn${inList ? " star-btn--active" : ""}`;
-        button.textContent = inList ? "★" : "☆";
-        button.title = label;
-        button.setAttribute("aria-label", `${label}: ${film.title}`);
-        button.setAttribute("aria-pressed", String(inList));
-    };
-    button.addEventListener("click", async () => {
-        const inList = watchlist.has(id);
-        if (inList) watchlist.delete(id); else watchlist.add(id);
-        paint();
-        try {
-            if (inList) await removeFromWatchlist(id); else await addToWatchlist(id);
-            toast(inList ? TEXTS.watchlistRemoved : TEXTS.watchlistAdded);
-        } catch (error) {
-            if (inList) watchlist.add(id); else watchlist.delete(id);
-            paint();
-            toast(format("errorGeneric", error.message), "error");
-        }
-    });
-    paint();
-    return button;
-}

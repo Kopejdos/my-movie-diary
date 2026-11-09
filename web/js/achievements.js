@@ -11,6 +11,7 @@
 import { supabase } from "./supabase.js";
 import { cached } from "./cache.js";
 import { isUpcoming } from "./data.js";
+import { fetchAllRows } from "./db.js";
 
 // ---------------------------------------------------------------------
 // Definice
@@ -63,22 +64,10 @@ function scaledTiers(tiers, available) {
 // Načtení dat
 // ---------------------------------------------------------------------
 
-/** Supabase vrací najednou nejvýš 1000 řádků – načte se po částech. */
-async function fetchAll(buildQuery) {
-    const pageSize = 1000;
-    const rows = [];
-    for (let from = 0; ; from += pageSize) {
-        const { data, error } = await buildQuery().range(from, from + pageSize - 1);
-        if (error) throw new Error(error.message);
-        rows.push(...data);
-        if (data.length < pageSize) return rows;
-    }
-}
-
 /** Vše, co je k výpočtu potřeba: vlastní zhlédnutí + katalog (kolekce, filmy, kategorie). */
 export async function fetchAchievementData() {
     const [watches, catalog] = await Promise.all([
-        fetchAll(() => supabase
+        fetchAllRows(() => supabase
             .from("watches")
             .select("tmdb_id, watched_on, seen_before, created_at, film:films(title, poster_path, release_date, runtime)")
             .order("watched_on")
@@ -98,12 +87,12 @@ export function fetchCatalogData() {
 
 async function loadCatalogData() {
     const [universes, items, categories, links] = await Promise.all([
-        fetchAll(() => supabase.from("universes").select("id, slug, name, color, kind").order("sort_order").order("id")),
+        fetchAllRows(() => supabase.from("universes").select("id, slug, name, color, kind").order("sort_order").order("id")),
         // Chystané filmy (Coming soon, V3.3) se do postupu ani achievementů nepočítají –
         // v den premiéry už ano (V3.3.1), proto se bere i datum premiéry
-        fetchAll(() => supabase.from("universe_items").select("universe_id, tmdb_id, is_optional, is_upcoming, film:films(release_date)").order("id")),
-        fetchAll(() => supabase.from("categories").select("id, slug, name, color, sort_order").order("sort_order").order("id")),
-        fetchAll(() => supabase.from("universe_categories").select("universe_id, category_id").order("universe_id").order("category_id")),
+        fetchAllRows(() => supabase.from("universe_items").select("universe_id, tmdb_id, is_optional, is_upcoming, film:films(release_date)").order("id")),
+        fetchAllRows(() => supabase.from("categories").select("id, slug, name, color, sort_order").order("sort_order").order("id")),
+        fetchAllRows(() => supabase.from("universe_categories").select("universe_id, category_id").order("universe_id").order("category_id")),
     ]);
     return {
         universes,

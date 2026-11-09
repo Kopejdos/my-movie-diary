@@ -6,7 +6,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V3.6.1.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V3.6.2** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
@@ -34,8 +34,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Admin panel: collections, movies (search TMDB right from the app), users and requests – a new collection from a TMDB series in one click; changes are written back into the seed automatically; new parts of TMDB series are spotted for you
 - Installable on a phone or computer (PWA), opens even offline
 
-**Coming next** – collections & new features
-- V3.6.2 – a clean-up and optimisation release
+**Coming next** – new features
 - V4 – settings & themes, a better phone layout, more languages and a yearly Wrapped; V5 – TV shows
 
 ## Tech stack
@@ -55,6 +54,7 @@ my-movie-diary/
 ├── docs/                project documentation
 ├── scripts/             helper scripts (movie import)
 ├── supabase/            database migrations and Edge Functions
+├── tests/               automated tests of the app logic (`node --test`)
 └── web/                 the website itself (deployed to GitHub Pages)
 ```
 

@@ -59,7 +59,6 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 | `kind` | `text` | typ kolekce: `series` / `studio` / `genre` (žánrový výběr) / `path` (cesta, od V1.8) |
 | `cover_tmdb_id` | `integer` FK → `films` | film, jehož plakát je na kartičce |
 | `sort_order` | `integer` | pořadí na hlavní obrazovce |
-| `owner_id` | `uuid` FK → `profiles`, null | `null` = oficiální univerzum; vyplněné = vlastní univerzum uživatele (později) |
 
 ### `categories` – kategorie (sekce přehledu)
 | Sloupec | Typ | Poznámka |
@@ -294,4 +293,11 @@ Výpočty běží v databázi, ne v prohlížeči – web dostane hotová čísl
 | `blocked_words` | jen správce | jen správce |
 | `heartbeat` | nikdo | jen funkce `ping()` |
 
-Vlastní univerza uživatelů (později) se přidají jako další pravidlo: řádky s `owner_id` vidí a mění jen jejich vlastník.
+Vlastní sbírky uživatelů jsou **seznamy** (`lists`, V3.5.3) – sloupec `universes.owner_id` z V1 se nikdy nepoužil
+a ve V3.6.2 byl smazán; kolekce čte kdokoli (pravidlo „Universes are readable“).
+
+**Výkon pravidel (V3.6.2):** pravidla volají `(select auth.uid())` a `(select public.is_admin())` místo přímého
+volání – Postgres hodnotu spočítá jednou za dotaz, ne pro každý řádek. Nová pravidla piš stejně. Cizí klíče,
+podle kterých se hledá nebo maže, mají vlastní index (`universe_items.tmdb_id`, `watches.tmdb_id`,
+`watchlist.tmdb_id`, `universes.cover_tmdb_id`, `film_request_items.universe_id`, `film_request_votes.user_id`,
+`list_categories.category_id`, `list_reports.reporter_id`).

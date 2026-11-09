@@ -2,7 +2,7 @@
 
 import { fetchAchievementData, computeAchievements, markSeen } from "../achievements.js";
 import { getUser } from "../auth.js";
-import { inkFor } from "../theme.js";
+import { inkFor, applyUniverseColor } from "../theme.js";
 import { TEXTS, format } from "../texts.js";
 import { h, mount, formatDate, loadingView, errorView } from "../dom.js";
 
@@ -134,8 +134,7 @@ function achievementCard(card) {
         ),
     );
     if (card.category?.color) {
-        el.style.setProperty("--u", card.category.color);
-        el.style.setProperty("--u-ink", inkFor(card.category.color));
+        applyUniverseColor(el, card.category.color);
     }
     return el;
 }

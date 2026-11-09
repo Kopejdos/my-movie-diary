@@ -5,7 +5,8 @@
    z rozvrhu (tečkovaná mřížka, barevné záře, lesklé karty, pilulky).
 
    --u      barva aktuálního univerza (výchozí = mosazný akcent)
-   --u-ink  barva textu na pozadí --u (černá / bílá podle jasu)
+   --u-fill pozadí tlačítek v barvě univerza (ztmavené, je-li třeba kvůli kontrastu – V3.6.2)
+   --u-ink  barva textu na pozadí --u-fill (černá / bílá podle kontrastu)
    --c      barva univerza na jednotlivé kartě v přehledu
    ===================================================================== */
 
@@ -122,8 +123,8 @@
     --text: #22262c;
     --heading: #1a1d22;
     --muted: #646a73;
-    --accent: #a8792b;
-    --accent-strong: #8f6522;
+    --accent: #8f6522;           /* tmavší mosaz – bílý text má kontrast 5 : 1 (V3.6.2) */
+    --accent-strong: #7a561c;
     --accent-ink: #ffffff;
     --success: #1f8a5a;
     --danger: #c53a3a;
@@ -144,8 +145,8 @@
         --text: #22262c;
         --heading: #1a1d22;
         --muted: #646a73;
-        --accent: #a8792b;
-        --accent-strong: #8f6522;
+        --accent: #8f6522;
+        --accent-strong: #7a561c;
         --accent-ink: #ffffff;
         --success: #1f8a5a;
         --danger: #c53a3a;
@@ -356,6 +357,10 @@ button {
 }
 
 .nav__user {
+    position: relative;    /* odznak žádostí o přátelství v rohu (.nav__badge) */
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     color: var(--accent);
     font-weight: 700;
     padding: 7px 10px;
@@ -510,15 +515,15 @@ button {
 
 /* Tlačítko v barvě univerza */
 .btn--universe {
-    background: var(--u);
+    background: var(--u-fill, var(--u));
     border-color: var(--u);
     color: var(--u-ink);
-    box-shadow: 0 6px 20px color-mix(in srgb, var(--u) 35%, transparent);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--u-fill, var(--u)) 35%, transparent);
 }
 
 .btn--universe:hover {
-    background: color-mix(in srgb, var(--u) 88%, #fff);
-    border-color: color-mix(in srgb, var(--u) 88%, #fff);
+    background: color-mix(in srgb, var(--u-fill, var(--u)) 88%, #fff);
+    border-color: color-mix(in srgb, var(--u-fill, var(--u)) 88%, #fff);
     color: var(--u-ink);
 }
 
@@ -1390,7 +1395,7 @@ button {
     font-size: 0.8rem;
     font-weight: 700;
     color: var(--u-ink);
-    background: var(--u);
+    background: var(--u-fill, var(--u));
 }
 
 .coming-soon__hint {
@@ -1891,7 +1896,7 @@ button {
 }
 
 .counter__btn--add {
-    background: var(--u);
+    background: var(--u-fill, var(--u));
     border-color: var(--u);
     color: var(--u-ink);
 }
@@ -1962,7 +1967,7 @@ button {
 }
 
 .tab--active {
-    background: var(--u);
+    background: var(--u-fill, var(--u));
     border-color: var(--u);
     color: var(--u-ink);
 }
@@ -2231,6 +2236,7 @@ button {
 
 .admin-search {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
 }
 
@@ -2292,7 +2298,7 @@ button {
 }
 
 .segmented__option--active {
-    background: var(--u);
+    background: var(--u-fill, var(--u));
     color: var(--u-ink);
 }
 
@@ -2597,12 +2603,6 @@ button {
 }
 
 /* ---------- Úroveň (XP) ---------- */
-.nav__user {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-
 /* zkracuje se jen nick (ne celé tlačítko) – odznak žádostí v rohu tak nikdy neusekne */
 .nav__nick {
     min-width: 0;
@@ -3175,7 +3175,7 @@ button {
 }
 
 .film--watched .film__step {
-    background: var(--u);
+    background: var(--u-fill, var(--u));
     border-color: var(--u);
     color: var(--u-ink);
 }
@@ -3907,10 +3907,6 @@ button {
 }
 
 /* Formuláře admina na telefonu: pole přes celou šířku, výběr a tlačítko pod ním */
-.admin-search {
-    flex-wrap: wrap;
-}
-
 .admin-search .admin-input--grow {
     flex: 1 1 220px;
     min-width: 0;
@@ -3990,10 +3986,6 @@ button {
 }
 
 /* odznak žádostí v rohu tlačítka s nickem – nebere místo nicku (na telefonu je úzký) */
-.nav__user {
-    position: relative;
-}
-
 .nav__badge {
     position: absolute;
     top: -5px;

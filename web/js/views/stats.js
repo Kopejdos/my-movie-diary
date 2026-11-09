@@ -9,7 +9,7 @@ import { fetchMyRatings, starsText } from "../ratings.js";
 import { starsView } from "./rating.js";
 import { isSignedIn } from "../auth.js";
 import { navigate } from "../router.js";
-import { setAccent, inkFor } from "../theme.js";
+import { setAccent, applyUniverseColor } from "../theme.js";
 import { TEXTS, format, movies } from "../texts.js";
 import { h, mount, poster, formatDate, loadingView, errorView } from "../dom.js";
 
@@ -245,8 +245,7 @@ function almostThere(list) {
                 h("div", { class: "progress" }, h("div", { class: "progress__bar", style: `width: ${value}%` })),
                 h("span", { class: "hint" }, format("progressCount", p.watched, p.total)));
             if (p.universe.color) {
-                link.style.setProperty("--u", p.universe.color);
-                link.style.setProperty("--u-ink", inkFor(p.universe.color));
+                applyUniverseColor(link, p.universe.color);
             }
             return link;
         }));

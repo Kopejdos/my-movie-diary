@@ -3,10 +3,11 @@
 import { fetchWatchlist, addWatch, removeFromWatchlist } from "../data.js";
 import { isSignedIn } from "../auth.js";
 import { navigate } from "../router.js";
-import { setAccent, inkFor } from "../theme.js";
+import { setAccent } from "../theme.js";
 import { TEXTS, format, movies } from "../texts.js";
 import { h, mount, poster, pill, yearOf, formatDate, toast, loadingView, errorView } from "../dom.js";
 import { soonPill } from "./coming-soon.js";
+import { collectionPill } from "./film-controls.js";
 
 export async function watchlistView(container, context) {
     setAccent(null);
@@ -89,7 +90,7 @@ export async function watchlistView(container, context) {
                 h("div", { class: "film__meta" },
                     item.upcoming ? soonPill(film) : pill(yearOf(film.release_date)),
                     film.runtime ? pill(format("minutes", film.runtime)) : null,
-                    item.universes.map(universeLink),
+                    item.universes.map((u) => collectionPill(u)),
                 ),
                 h("p", { class: "film__status" }, format("watchlistAddedOn", formatDate(item.added_at?.slice(0, 10)))),
             ),
@@ -109,12 +110,3 @@ export async function watchlistView(container, context) {
     renderList();
 }
 
-/** Barevná pilulka s odkazem na univerzum. */
-function universeLink(universe) {
-    const link = h("a", { class: "pill pill--universe", href: `#/collection/${universe.slug}` }, universe.name);
-    if (universe.color) {
-        link.style.setProperty("--c", universe.color);
-        link.style.setProperty("--c-ink", inkFor(universe.color));
-    }
-    return link;
-}

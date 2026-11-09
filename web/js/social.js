@@ -7,12 +7,7 @@
 import { supabase } from "./supabase.js";
 import { SITE_URL } from "./config.js";
 import { fetchCatalogData } from "./achievements.js";
-
-/** Převede chybu Supabase na běžnou výjimku. */
-function check({ data, error }) {
-    if (error) throw new Error(error.message);
-    return data;
-}
+import { check } from "./db.js";
 
 /**
  * Profil podle nicku:

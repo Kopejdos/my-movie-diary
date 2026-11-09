@@ -4,6 +4,7 @@
 # Nasazuje se jen obsah složky web/, dokumentace v docs/ na web nejde.
 # Od V2.7 se JS a CSS před nasazením zmenší (minifikace) – v repozitáři zůstává
 # čitelný kód s komentáři, zmenšená kopie vzniká jen uvnitř tohoto běhu.
+# Od V3.6.2 se před nasazením spustí testy (tests/) – při chybě se nenasadí nic.
 
 name: Deploy to GitHub Pages
 
@@ -35,6 +36,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+
+      # Testy logiky webu (V3.6.2, složka tests/) – když některý selže, nasazení se zastaví
+      # a na webu zůstane předchozí funkční verze. Node.js je na runneru předinstalovaný.
+      - name: Run tests
+        run: node --test
 
       # Zmenšení JavaScriptu a CSS (bez komentářů, mezer a s kratšími názvy proměnných).
       # Každý soubor zvlášť (bez spojování) – názvy a cesty souborů zůstanou stejné,

@@ -102,7 +102,7 @@ function renderHeader() {
 
     mount(header,
         h("div", { class: "header__inner" },
-            h("a", { class: "brand", href: "#/" },
+            h("a", { class: "brand", href: "#/", "aria-label": TEXTS.appName },
                 h("span", { class: "brand__icon", "aria-hidden": "true" }, "🎬"),
                 h("span", { class: "brand__name" }, TEXTS.appName),
             ),

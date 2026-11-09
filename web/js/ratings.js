@@ -4,13 +4,9 @@
 // film_rating_stats (jen průměr a počet hlasů).
 
 import { supabase } from "./supabase.js";
+import { check } from "./db.js";
 
 const MAX_IDS_PER_REQUEST = 1000;
-
-function check({ data, error }) {
-    if (error) throw new Error(error.message);
-    return data;
-}
 
 /** Vlastní hodnocení: Map tmdb_id → score (1–10). Nepřihlášený = prázdná mapa. */
 export async function fetchMyRatings(signedIn) {

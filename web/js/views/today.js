@@ -7,6 +7,7 @@ import { buildCatalog, pickToday } from "../today.js";
 import { inkFor } from "../theme.js";
 import { TEXTS, format } from "../texts.js";
 import { h, mount, poster, pill, yearOf, toast } from "../dom.js";
+import { collectionPill } from "./film-controls.js";
 
 /**
  * Panel „What to watch today?“.
@@ -37,7 +38,7 @@ export function todayPanel(data, onWatched) {
 
         mount(grid,
             card("watchlist", picks.watchlist, TEXTS.todayWatchlist,
-                picks.watchlist?.universe ? collectionPill(picks.watchlist.universe) : null,
+                picks.watchlist?.universe ? collectionPill(picks.watchlist.universe, "today-card__collection") : null,
                 TEXTS.todayEmptyWatchlist),
             card("next", picks.next, TEXTS.todayNext,
                 picks.next ? h("p", { class: "today-card__reason" }, format("todayNextIn", picks.next.universe.name)) : null,
@@ -151,15 +152,6 @@ export function todayPanel(data, onWatched) {
     );
 }
 
-/** Barevná pilulka s odkazem na kolekci. */
-function collectionPill(universe) {
-    const link = h("a", { class: "pill pill--universe today-card__collection", href: `#/collection/${universe.slug}` }, universe.name);
-    if (universe.color) {
-        link.style.setProperty("--c", universe.color);
-        link.style.setProperty("--c-ink", inkFor(universe.color));
-    }
-    return link;
-}
 
 /** Zástupný panel, dokud se tipy načítají (stejná výška – nic neposkočí). */
 export function todayPlaceholder() {

@@ -3,7 +3,7 @@
 
 import {
     fetchSearchData, fetchMyFilmCounts, fetchWatchlistIds,
-    addWatch, removeLatestWatch, addToWatchlist, removeFromWatchlist, todayLocal, addSeenBefore,
+    addWatch, removeLatestWatch, todayLocal, addSeenBefore,
 } from "../data.js";
 import {
     buildSearchIndex, parseQuery, searchFilms, searchCollections, searchGroups, filterByWatched,
@@ -11,10 +11,12 @@ import {
 } from "../search.js";
 import { isSignedIn } from "../auth.js";
 import { replaceQuery } from "../router.js";
-import { setAccent, inkFor } from "../theme.js";
+import { setAccent } from "../theme.js";
 import { loadPref, savePref } from "../prefs.js";
 import { TEXTS, format, movies, collections } from "../texts.js";
-import { h, mount, poster, pill, yearOf, formatDate, toast, loadingView, errorView } from "../dom.js";
+import { listButton } from "./list-button.js";
+import { watchlistStar, collectionPill } from "./film-controls.js";
+import { h, mount, poster, pill, yearOf, toast, loadingView, errorView } from "../dom.js";
 import { universeCard } from "./universes.js";
 import { watchStatus } from "./universe.js";
 import { searchUsers } from "../social.js";
@@ -358,7 +360,7 @@ class SearchPage {
                 h("div", { class: "film__meta" },
                     upcoming ? soonPill(film) : pill(yearOf(film.release_date)),
                     film.runtime ? pill(format("minutes", film.runtime)) : null,
-                    entry.universes.map(collectionLink),
+                    entry.universes.map((u) => collectionPill(u)),
                     entry.other ? h("span", { class: "pill pill--other" }, TEXTS.otherMovieBadge) : null,
                 ),
                 this.signedIn && !upcoming
@@ -375,46 +377,11 @@ class SearchPage {
             ),
             this.signedIn
                 ? h("div", { class: "film__actions" },
-                    this.renderListButton(entry.film),
-                    this.renderStar(row, entry),
+                    listButton(entry.film),
+                    watchlistStar(entry.film, this.watchlist),
                     upcoming ? null : this.renderCounter(row, entry, count, busy))
                 : null,
         );
-    }
-
-    /** Tlačítko ☰ – přidat film do vlastního seznamu (V3.5.3). */
-    renderListButton(film) {
-        return h("button", {
-            class: "star-btn list-btn", type: "button",
-            title: TEXTS.listAddTo, "aria-label": `${TEXTS.listAddTo}: ${film.title}`,
-            onClick: async () => {
-                const { openListPicker } = await import("./list-picker.js");
-                openListPicker(film);
-            },
-        }, "☰");
-    }
-
-    /** Hvězdička ☆ / ★ – watchlist. */
-    renderStar(row, entry) {
-        const tmdbId = entry.film.tmdb_id;
-        const inList = this.watchlist.has(tmdbId);
-        const label = inList ? TEXTS.watchlistRemove : TEXTS.watchlistAdd;
-        return h("button", {
-            class: `star-btn${inList ? " star-btn--active" : ""}`,
-            type: "button", title: label, "aria-label": label, "aria-pressed": String(inList),
-            onClick: async () => {
-                if (inList) this.watchlist.delete(tmdbId); else this.watchlist.add(tmdbId);
-                this.fillRow(row, entry);
-                try {
-                    if (inList) await removeFromWatchlist(tmdbId); else await addToWatchlist(tmdbId);
-                    toast(inList ? TEXTS.watchlistRemoved : TEXTS.watchlistAdded);
-                } catch (error) {
-                    if (inList) this.watchlist.add(tmdbId); else this.watchlist.delete(tmdbId);
-                    this.fillRow(row, entry);
-                    toast(format("errorGeneric", error.message), "error");
-                }
-            },
-        }, inList ? "★" : "☆");
     }
 
     renderCounter(row, entry, count, busy) {
@@ -480,12 +447,3 @@ class SearchPage {
     }
 }
 
-/** Barevná pilulka s odkazem na kolekci. */
-function collectionLink(universe) {
-    const link = h("a", { class: "pill pill--universe", href: `#/collection/${universe.slug}` }, universe.name);
-    if (universe.color) {
-        link.style.setProperty("--c", universe.color);
-        link.style.setProperty("--c-ink", inkFor(universe.color));
-    }
-    return link;
-}

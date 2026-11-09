@@ -4,25 +4,7 @@
 import { supabase } from "./supabase.js";
 import { cached, invalidate } from "./cache.js";
 import { backdropUrl } from "./dom.js";
-
-/** Převede chybu Supabase na běžnou výjimku. */
-function check({ data, error }) {
-    if (error) throw new Error(error.message);
-    return data;
-}
-
-/**
- * Načte všechny řádky po stránkách – Supabase vrací nejvýš 1000 řádků na dotaz.
- * buildQuery musí řadit podle jednoznačného sloupce, jinak by se stránky překrývaly.
- */
-async function fetchAllRows(buildQuery, pageSize = 1000) {
-    const rows = [];
-    for (let from = 0; ; from += pageSize) {
-        const page = await buildQuery().range(from, from + pageSize - 1).then(check);
-        rows.push(...page);
-        if (page.length < pageSize) return rows;
-    }
-}
+import { check, fetchAllRows } from "./db.js";
 
 /**
  * Všechna univerza seřazená pro hlavní obrazovku, včetně obalu a postupu.
@@ -139,11 +121,6 @@ export function byPremiere(a, b) {
 
 /** Kolik let dopředu Coming soon ukazuje – celé roky, posouvá se samo s dnešním datem. */
 export const COMING_SOON_YEARS = 5;
-
-/** Je film ještě před premiérou? Podle data z TMDB a dnešního data uživatele (den premiéry = vydaný). */
-export function isUnreleased(film) {
-    return !film?.release_date || film.release_date > todayLocal();
-}
 
 /**
  * Je položka kolekce chystaný film? Rozhoduje datum premiéry (V3.3.2): dokud nebyla, je chystaný –

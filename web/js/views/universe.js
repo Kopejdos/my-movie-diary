@@ -21,7 +21,7 @@
 import {
     fetchUniverse, fetchMyFilmCounts, addWatch, removeLatestWatch,
     computeProgress, percent, todayLocal, nextUnwatched,
-    fetchWatchlistIds, addToWatchlist, removeFromWatchlist, addSeenBefore,
+    fetchWatchlistIds, addSeenBefore,
 } from "../data.js";
 import { isSignedIn } from "../auth.js";
 import { fetchMyRatings, saveRating, clearRating, fetchRatingStats, starsText } from "../ratings.js";
@@ -30,6 +30,8 @@ import { comingSoonSection } from "./coming-soon.js";
 import { setAccent } from "../theme.js";
 import { loadPref, savePref } from "../prefs.js";
 import { TEXTS, format, movies, steps } from "../texts.js";
+import { listButton } from "./list-button.js";
+import { watchlistStar } from "./film-controls.js";
 import {
     h, mount, poster, pill, backdropUrl, yearOf, formatDate, toast, loadingView, errorView,
 } from "../dom.js";
@@ -255,18 +257,6 @@ export class UniversePage {
         return null;
     }
 
-    /** Tlačítko ☰ – přidat film do vlastního seznamu (V3.5.3; výběr seznamu v okně). */
-    renderListButton(film) {
-        return h("button", {
-            class: "star-btn list-btn", type: "button",
-            title: TEXTS.listAddTo, "aria-label": `${TEXTS.listAddTo}: ${film.title}`,
-            onClick: async () => {
-                const { openListPicker } = await import("./list-picker.js");
-                openListPicker(film);
-            },
-        }, "☰");
-    }
-
     /** Záložní banner, když obalový film nemá záběr. */
     firstBackdrop() {
         return this.universe.items.find((item) => item.film.backdrop_path)?.film.backdrop_path ?? null;
@@ -446,8 +436,8 @@ export class UniversePage {
             ),
             this.signedIn
                 ? h("div", { class: "film__actions" },
-                    this.renderListButton(film),
-                    this.renderWatchlistButton(row, item),
+                    listButton(film),
+                    watchlistStar(item.film, this.watchlist),
                     this.renderCounter(row, item, count, busy))
                 : h("a", { class: "btn btn--small", href: "#/login" }, TEXTS.signInToTrack),
             this.rowExtras(row, item),
@@ -463,62 +453,9 @@ export class UniversePage {
         );
     }
 
-    /** Hvězdička ☆ / ★ – přidá film do watchlistu nebo ho odebere. */
-    renderWatchlistButton(row, item) {
-        const tmdbId = item.film.tmdb_id;
-        const inList = this.watchlist.has(tmdbId);
-        const label = inList ? TEXTS.watchlistRemove : TEXTS.watchlistAdd;
-
-        return h("button", {
-            class: `star-btn${inList ? " star-btn--active" : ""}`,
-            type: "button",
-            title: label,
-            "aria-label": label,
-            "aria-pressed": String(inList),
-            onClick: async () => {
-                // Optimisticky – hvězdička se změní hned
-                if (inList) this.watchlist.delete(tmdbId); else this.watchlist.add(tmdbId);
-                this.fillRow(row, item);
-                try {
-                    if (inList) await removeFromWatchlist(tmdbId); else await addToWatchlist(tmdbId);
-                    toast(inList ? TEXTS.watchlistRemoved : TEXTS.watchlistAdded);
-                } catch (error) {
-                    if (inList) this.watchlist.add(tmdbId); else this.watchlist.delete(tmdbId);
-                    this.fillRow(row, item);
-                    toast(format("errorGeneric", error.message), "error");
-                }
-            },
-        }, inList ? "★" : "☆");
-    }
-
-    /** Hvězdička watchlistu na kartičce v Coming soon (překreslí jen sebe). */
-    renderSoonStar(item) {
-        const tmdbId = item.film.tmdb_id;
-        const button = h("button", { class: "star-btn soon-card__star", type: "button" });
-        const paint = () => {
-            const inList = this.watchlist.has(tmdbId);
-            const label = inList ? TEXTS.watchlistRemove : TEXTS.watchlistAdd;
-            button.className = `star-btn soon-card__star${inList ? " star-btn--active" : ""}`;
-            button.textContent = inList ? "★" : "☆";
-            button.title = label;
-            button.setAttribute("aria-label", `${label}: ${item.film.title}`);
-            button.setAttribute("aria-pressed", String(inList));
-        };
-        button.addEventListener("click", async () => {
-            const inList = this.watchlist.has(tmdbId);
-            if (inList) this.watchlist.delete(tmdbId); else this.watchlist.add(tmdbId);
-            paint();
-            try {
-                if (inList) await removeFromWatchlist(tmdbId); else await addToWatchlist(tmdbId);
-                toast(inList ? TEXTS.watchlistRemoved : TEXTS.watchlistAdded);
-            } catch (error) {
-                if (inList) this.watchlist.add(tmdbId); else this.watchlist.delete(tmdbId);
-                paint();
-                toast(format("errorGeneric", error.message), "error");
-            }
-        });
-        paint();
-        return button;
+    /** Hvězdička watchlistu na kartičce v Coming soon (views/film-controls.js). */
+    renderSoonStar(item, extraClass = "soon-card__star") {
+        return watchlistStar(item.film, this.watchlist, extraClass);
     }
 
     /**

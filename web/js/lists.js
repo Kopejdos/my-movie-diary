@@ -176,14 +176,18 @@ export function listErrorText(error) {
     return {
         list_text_not_allowed: TEXTS.listErrorWords,
         list_limit: format("listErrorLimit", MAX_LISTS),
-        list_items_limit: TEXTS.listErrorItems,
+        list_items_limit: format("listErrorItems", MAX_LIST_ITEMS),
         list_categories_limit: TEXTS.listErrorCategories,
         duplicate: TEXTS.listErrorDuplicate,
     }[code] ?? format("errorGeneric", error.message);
 }
 
+/** Ikona viditelnosti seznamu. */
+export function visibilityIcon(visibility) {
+    return { private: "🔒", friends: "👥", public: "🌍" }[visibility] ?? "";
+}
+
 /** Ikona + název viditelnosti („🔒 Private“). */
 export function visibilityLabel(visibility) {
-    const icon = { private: "🔒", friends: "👥", public: "🌍" }[visibility] ?? "";
-    return `${icon} ${TEXTS[`listVisibility_${visibility}`] ?? visibility}`;
+    return `${visibilityIcon(visibility)} ${TEXTS[`listVisibility_${visibility}`] ?? visibility}`;
 }

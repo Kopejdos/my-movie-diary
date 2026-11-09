@@ -3,7 +3,6 @@
 
 export const TEXTS = {
     appName: "My Movie Diary",
-    tagline: "Track every movie collection you love.",
 
     // Navigace
     navUniverses: "Collections",
@@ -126,7 +125,7 @@ export const TEXTS = {
     listEmptyOwn: "No movies yet – tap ☰ next to any movie in a collection or in search to add it here.",
     listErrorWords: "The name or description contains a word that isn't allowed.",
     listErrorLimit: "You can have at most {0} lists.",
-    listErrorItems: "A list can have at most 300 movies.",
+    listErrorItems: "A list can have at most {0} movies.",
     listErrorCategories: "A list can have at most 3 categories.",
     listErrorDuplicate: "That movie is already in the list.",
     publicNoLists: "No lists to show.",
@@ -533,7 +532,6 @@ export const TEXTS = {
     achievementUnlocked: "🏆 Achievement unlocked: {0}",
     achievementCollectionDone: "🏆 Collection complete: {0}",
     achievementUnlockedOn: "Unlocked {0}",
-    achievementNext: "Next: {0}",
     achievementAllDone: "All levels unlocked!",
     achFirstName: "First Steps",
     achFirstDesc: "Log your first movie.",
@@ -605,10 +603,6 @@ export const TEXTS = {
     nextStep: "Next step",
     pathComplete: "Path complete",
     pathCompleteText: "You've walked the whole path. Pick another one?",
-    universesCount: "{0} collections",
-    universesIntro: "Pick a collection and start logging what you have watched.",
-    universesGuestHint: "Sign in to track your progress.",
-    movieCount: "{0} movies",
     progressCount: "{0} / {1} watched",
     progressDone: "Complete!",
 
@@ -755,7 +749,6 @@ export const TEXTS = {
     adminDelete: "Delete",
     adminMoveUp: "Move up",
     adminMoveDown: "Move down",
-    adminMovies: "{0} movies",
     adminConfirmDeleteUniverse: "Delete the collection \"{0}\"? Movies stay in the database, only the collection and its list are removed.",
     adminDeleted: "Deleted.",
     adminBackToPanel: "← Admin panel",
@@ -816,7 +809,7 @@ export function movies(count) {
     return count === 1 ? "1 movie" : `${count} movies`;
 }
 
-/** Vrátí text podle klíče a dosadí parametry: format("movieCount", 12) → "12 movies". */
+/** Vrátí text podle klíče a dosadí parametry: format("listBy", "kopec") → "by @kopec". */
 export function format(key, ...args) {
     const template = TEXTS[key] ?? `???${key}???`;
     return template.replace(/\{(\d+)\}/g, (_, index) => String(args[Number(index)] ?? ""));

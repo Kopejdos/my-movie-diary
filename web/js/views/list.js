@@ -16,9 +16,10 @@ import {
     REPORT_REASONS,
 } from "../lists.js";
 import { setAccent } from "../theme.js";
-import { TEXTS, format, movies } from "../texts.js";
+import { TEXTS, format } from "../texts.js";
 import { h, mount, pill, toast, loadingView, errorView } from "../dom.js";
 import { UniversePage } from "./universe.js";
+import { openModal } from "./modal.js";
 
 export async function listView(container, context) {
     const { params, isCurrent } = context;
@@ -121,61 +122,48 @@ class ListPage extends UniversePage {
 
     /** Okno nahlášení: důvod + nepovinná poznámka. */
     openReport() {
-        const opener = document.activeElement;
         let reason = REPORT_REASONS[0];
-        const options = h("div", { class: "report-reasons", role: "radiogroup", "aria-label": TEXTS.listReportReason });
-        const paint = () => mount(options, REPORT_REASONS.map((r) => h("label", { class: "report-reason" },
-            h("input", { type: "radio", name: "report-reason", value: r, checked: r === reason, onChange: () => { reason = r; } }),
-            ` ${TEXTS[`listReportReason_${r}`]}`)));
-        paint();
+        const options = h("div", { class: "report-reasons", role: "radiogroup", "aria-label": TEXTS.listReportReason },
+            REPORT_REASONS.map((r) => h("label", { class: "report-reason" },
+                h("input", { type: "radio", name: "report-reason", value: r, checked: r === reason, onChange: () => { reason = r; } }),
+                ` ${TEXTS[`listReportReason_${r}`]}`)));
         const note = h("textarea", { class: "admin-input list-editor__description", rows: 2, maxlength: 300, name: "report-note", placeholder: TEXTS.listReportNote });
         const send = h("button", { class: "btn btn--primary", type: "submit" }, TEXTS.listReportSend);
-        const form = h("form", {
-            class: "modal list-report-form", role: "dialog", "aria-modal": "true", "aria-labelledby": "list-report-title",
-            onSubmit: async (event) => {
-                event.preventDefault();
+        const modal = openModal({
+            eyebrow: TEXTS.listReport,
+            title: this.listInfo.title,
+            className: "list-report-form",
+            focus: options.querySelector("input"),
+            onSubmit: async () => {
                 send.disabled = true;
                 try {
                     await reportList(this.listInfo.id, reason, note.value);
                     toast(TEXTS.listReportThanks);
                 } catch (error) {
-                    toast(error.code === "duplicate" ? TEXTS.listReportThanks : listErrorText(error), error.code === "duplicate" ? undefined : "error");
+                    // už nahlášeno = taky díky; jiná chyba = zkusit znovu
                     if (error.code !== "duplicate") {
+                        toast(listErrorText(error), "error");
                         send.disabled = false;
                         return;
                     }
+                    toast(TEXTS.listReportThanks);
                 }
                 this.listInfo.reported = true;
                 if (this.reportButton) {
                     this.reportButton.disabled = true;
                     this.reportButton.textContent = `⚑ ${TEXTS.listReported}`;
                 }
-                close();
+                modal.close();
             },
-        },
-            h("div", { class: "modal__head" },
-                h("div", {},
-                    h("span", { class: "eyebrow" }, TEXTS.listReport),
-                    h("h2", { id: "list-report-title", class: "modal__title" }, this.listInfo.title)),
-                h("button", { class: "modal__close", type: "button", "aria-label": TEXTS.close, onClick: () => close() }, "×")),
-            h("p", { class: "hint", style: "margin: 0" }, TEXTS.listReportHint),
-            options,
-            note,
-            h("div", { class: "modal__foot" },
-                h("button", { class: "btn", type: "button", onClick: () => close() }, TEXTS.cancel),
-                send));
-        const backdrop = h("div", { class: "modal-backdrop", onClick: (event) => { if (event.target === backdrop) close(); } }, form);
-        const onKey = (event) => { if (event.key === "Escape") close(); };
-        function close() {
-            document.removeEventListener("keydown", onKey);
-            window.removeEventListener("hashchange", close);
-            backdrop.remove();
-            if (opener instanceof HTMLElement && document.body.contains(opener)) opener.focus();
-        }
-        document.body.append(backdrop);
-        document.addEventListener("keydown", onKey);
-        window.addEventListener("hashchange", close);
-        options.querySelector("input")?.focus();
+            content: [
+                h("p", { class: "hint", style: "margin: 0" }, TEXTS.listReportHint),
+                options,
+                note,
+                h("div", { class: "modal__foot" },
+                    h("button", { class: "btn", type: "button", onClick: () => modal.close() }, TEXTS.cancel),
+                    send),
+            ],
+        });
     }
 
     /** Prázdný seznam: místo „nic neodpovídá filtru“ nápověda, jak filmy přidat. */
@@ -219,11 +207,9 @@ class ListPage extends UniversePage {
 
     /** Hvězdička na kartičce Coming soon + u autora křížek pro odebrání. */
     renderSoonStar(item) {
-        const star = super.renderSoonStar(item);
-        if (!this.mine) return star;
-        star.classList.remove("soon-card__star");
+        if (!this.mine) return super.renderSoonStar(item);
         return h("span", { class: "soon-card__actions" },
-            star,
+            super.renderSoonStar(item, ""),
             h("button", {
                 class: "star-btn", type: "button", title: TEXTS.adminRemove, "aria-label": `${TEXTS.adminRemove}: ${item.film.title}`,
                 onClick: () => this.remove(item),
@@ -263,7 +249,6 @@ class ListPage extends UniversePage {
 
     /** Okno úprav: název, popis, viditelnost, kategorie (nejvýš 3), smazání seznamu. */
     openEditor() {
-        const opener = document.activeElement;
         const info = this.listInfo;
         const title = h("input", { class: "admin-input", type: "text", maxlength: MAX_TITLE, required: true, value: info.title, name: "list-title" });
         const description = h("textarea", { class: "admin-input list-editor__description", maxlength: MAX_DESCRIPTION, rows: 3, name: "list-description" }, info.description ?? "");
@@ -296,7 +281,7 @@ class ListPage extends UniversePage {
                 if (!window.confirm(format("listConfirmDelete", info.title))) return;
                 try {
                     await deleteList(info.id);
-                    close();
+                    modal.close();
                     toast(format("listDeleted", info.title));
                     window.location.hash = "/lists";
                 } catch (error) {
@@ -305,10 +290,11 @@ class ListPage extends UniversePage {
             },
         }, TEXTS.listDelete);
 
-        const form = h("form", {
-            class: "modal list-editor", role: "dialog", "aria-modal": "true", "aria-labelledby": "list-editor-title",
-            onSubmit: async (event) => {
-                event.preventDefault();
+        const modal = openModal({
+            title: TEXTS.listEdit,
+            className: "list-editor",
+            focus: title,
+            onSubmit: async () => {
                 if (!title.value.trim()) {
                     title.focus();
                     return;
@@ -319,35 +305,22 @@ class ListPage extends UniversePage {
                     const sameCategories = chosen.size === info.categories.length && info.categories.every((c) => chosen.has(c));
                     if (!sameCategories) await setListCategories(info.id, [...chosen]);
                     toast(TEXTS.adminSaved);
-                    close();
+                    modal.close();
                     this.reload();
                 } catch (error) {
                     toast(listErrorText(error), "error");
                     save.disabled = false;
                 }
             },
-        },
-            h("div", { class: "modal__head" },
-                h("h2", { id: "list-editor-title", class: "modal__title" }, TEXTS.listEdit),
-                h("button", { class: "modal__close", type: "button", "aria-label": TEXTS.close, onClick: () => close() }, "×")),
-            h("label", { class: "list-editor__field" }, h("span", {}, TEXTS.listTitleLabel), title),
-            h("label", { class: "list-editor__field" }, h("span", {}, TEXTS.listDescriptionLabel), description),
-            h("div", { class: "list-editor__field" }, h("span", {}, TEXTS.listVisibility), visibility, visibilityHint),
-            h("fieldset", { class: "list-editor__field list-editor__categories" },
-                h("legend", {}, format("listCategoriesLabel", MAX_LIST_CATEGORIES)),
-                boxes.map(({ c, input }) => h("label", { class: "list-editor__category" }, input, ` ${c.name}`))),
-            h("div", { class: "modal__foot" }, remove, save));
-        const backdrop = h("div", { class: "modal-backdrop", onClick: (event) => { if (event.target === backdrop) close(); } }, form);
-        const onKey = (event) => { if (event.key === "Escape") close(); };
-        function close() {
-            document.removeEventListener("keydown", onKey);
-            window.removeEventListener("hashchange", close);
-            backdrop.remove();
-            if (opener instanceof HTMLElement && document.body.contains(opener)) opener.focus();
-        }
-        document.body.append(backdrop);
-        document.addEventListener("keydown", onKey);
-        window.addEventListener("hashchange", close);
-        title.focus();
+            content: [
+                h("label", { class: "list-editor__field" }, h("span", {}, TEXTS.listTitleLabel), title),
+                h("label", { class: "list-editor__field" }, h("span", {}, TEXTS.listDescriptionLabel), description),
+                h("div", { class: "list-editor__field" }, h("span", {}, TEXTS.listVisibility), visibility, visibilityHint),
+                h("fieldset", { class: "list-editor__field list-editor__categories" },
+                    h("legend", {}, format("listCategoriesLabel", MAX_LIST_CATEGORIES)),
+                    boxes.map(({ c, input }) => h("label", { class: "list-editor__category" }, input, ` ${c.name}`))),
+                h("div", { class: "modal__foot" }, remove, save),
+            ],
+        });
     }
 }

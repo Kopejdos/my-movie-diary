@@ -303,7 +303,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 39 | V3.5.3 | Vlastní seznamy ✅ | neoficiální kolekce uživatelů **jen z filmů v databázi** (bez požadavku): tlačítko ☰ u filmu, název, popis, 1–3 kategorie, vlastní pořadí, viditelnost soukromá / přátelé / veřejná, záložka *Lists* na profilu, počítadlo zobrazení |
 | 40 | V3.5.4 | Komunita ✅ | veřejné seznamy v hledání; sekce **Community** dole na přehledu (top 7 podle zobrazení, řídí se filtry, záložka *Community*); nahlášení a skrytí adminem (záložka *Reports*) |
 | 41 | V3.6.1 | Přepracování postupu ✅ | strmější křivka úrovní (100 filmů ≈ úroveň 5, 500 ≈ 10, *Legend* ≈ 3 000+), XP za kolekci podle velikosti (10 XP za film místo pevných 100), vyšší úrovně achievementů (Collector 500/1 000, Screen Time 500/1 000 h, Completionist 50), zápis **„Seen before“ bez data** (počítá se do kolekcí a filmů, ne do Marathonu, sérií dní ani Wrapped) |
-| 42 | V3.6.2 | Optimalizace a úklid | sdílené kousky kódu místo kopií (hvězdička watchlistu, pilulka kolekce, `check()`), úklid `style.css`, testy do repozitáře (`tests/`), Lighthouse, indexy v databázi, přístupnost – **jako poslední krok před V4.0** |
+| 42 | V3.6.2 | Optimalizace a úklid ✅ | sdílené kousky kódu místo kopií (hvězdička watchlistu, pilulka kolekce, okna, `check()`, volání Edge Functions), úklid `style.css` a nepoužívaného kódu, testy do repozitáře (`tests/`), Lighthouse, rychlejší pravidla RLS a indexy v databázi, kontrast a přístupnost – **poslední krok před V4.0** |
 
 #### Kapitola V3.5 – podrobnosti (plán 8. 11. 2026)
 
@@ -1633,6 +1633,49 @@ Podnět: kolekcí je přes sto, přehled je dlouhý a v adminu se špatně hled�
 - **Hromadné doplnění jen pro nezalogované filmy** – nic se nezdvojí a nic se nesmaže.
 - **Doplněné filmy nedávají Marathon ani čas** – jinak by jeden večer doplňování odemkl úrovně, na které
   se má dlouho koukat.
+
+### Fáze 42 – optimalizace a úklid ✅ (9. 11. 2026) – **V3.6.2**
+Uzavírá kapitolu 3 – bez nových funkcí, kód a databáze v nejlepším stavu před V4.0.
+- **Sdílené moduly místo kopií:**
+  - `js/db.js` – `check()`, `fetchAllRows()` (stránkování po 1 000 řádcích) a `callFunction()` pro volání
+    Edge Functions (dřív vlastní kopie v `data.js`, `social.js`, `ratings.js`, `achievements.js`, `admin.js`,
+    `requests.js`),
+  - `views/modal.js` – jedno okno pro *Add to list*, úpravu seznamu a nahlášení (Esc, klik vedle, ×,
+    vrácení fokusu, zavření při změně adresy),
+  - `views/list-button.js` – tlačítko ☰ (okno se načte až po kliknutí),
+  - `views/film-controls.js` – hvězdička watchlistu (dřív 5 kopií) a barevná pilulka kolekce (dřív 5 kopií).
+- **Úklid:** nepoužívané funkce (`isUnreleased`, `addFilmFromTmdb`, `RequestError`) a texty, nepoužité
+  importy (kontrola `tsc --noUnusedLocals`), zdvojená pravidla v `style.css`; service worker a
+  `modulepreload` v `index.html` znají všechny moduly (některé novější chyběly – offline by se nenačetly).
+- **Databáze** (migrace `20261109130000_optimize.sql`):
+  - pravidla RLS volají `auth.uid()` a `is_admin()` přes `(select …)` – Postgres je spočítá jednou za dotaz,
+    ne pro každý řádek (doporučení Supabase *auth_rls_initplan*); přepíše se automaticky každé pravidlo,
+    význam se nemění, migrace jde spustit opakovaně,
+  - indexy pro cizí klíče (`universe_items.tmdb_id`, `watches.tmdb_id`, `watchlist.tmdb_id`,
+    `universes.cover_tmdb_id`, `film_request_items.universe_id`, `film_request_votes.user_id`,
+    `list_categories.category_id`, `list_reports.reporter_id`),
+  - smazaný sloupec `universes.owner_id` (vlastní univerza z V1 nahradily vlastní seznamy) a s ním
+    pravidlo „Official and own universes are readable“ → jednoduché „Universes are readable“.
+- **Přístupnost:** kontrola axe (WCAG 2 A/AA) všech hlavních stránek ve světlém i tmavém režimu – opraveno:
+  - kontrast bílého textu na tlačítkách: světlá mosaz `#a8792b` → `#8f6522` (3,9 → 5,2 : 1),
+  - tlačítka v barvě kolekce: nová proměnná `--u-fill` – barvu, u které by text nebyl čitelný ani bílý, ani
+    černý (např. červená MCU `#e23636`, 4,4 : 1), mírně ztmaví (`fillFor()` v `theme.js`); `inkFor()` volí
+    vždy čitelnější z obou barev textu,
+  - popisek u ukazatelů postupu na kartách kolekcí a u loga v hlavičce (na mobilu jen 🎬).
+- **Lighthouse** (mobil, lokální server s gzip): výkon 92, přístupnost 100, osvědčené postupy 96 (chyby jen
+  z blokované sítě v testu), SEO 100. Zbylé rady (minifikace, cache) řeší nasazení / GitHub Pages.
+- **Testy v repozitáři** (`tests/`, Node.js 20+ bez instalace balíčků, spuštění `node --test`): úrovně a XP,
+  achievementy (včetně *Seen before*), hledání a kontrast barev všech kolekcí ze seedu.
+  Spouští se i při každém nasazení (GitHub Actions) – když test selže, web se nenasadí a zůstane předchozí verze.
+- Ověřeno: lokální Postgres (migrace 2×, chování RLS), testy webu (seznamy, komunita, QoL, série, požadavky,
+  Seen before, hledání, statistiky, porovnání, hodnocení, přátelé…) proti V3.6.1.1 beze změny výsledků.
+
+#### Rozhodnutí ve fázi 42
+- **Testy prohlížeče (Playwright) zůstávají mimo repozitář** – stojí na podvržených odpovědích Supabase,
+  které se s každou verzí mění; do repozitáře jdou rychlé testy čisté logiky, které jdou spustit kdekoli.
+- **Žádný build krok navíc** – minifikace už běží při nasazení (V2.7), sdílené moduly stačí.
+- **Barva kolekce se kvůli kontrastu jen ztmaví a jen na tlačítkách** – záře, okraje a texty zůstávají
+  v původní barvě, vzhled se skoro nezmění.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

@@ -13,9 +13,10 @@ import {
 } from "../requests.js";
 import { isSignedIn } from "../auth.js";
 import { navigate } from "../router.js";
-import { setAccent, inkFor } from "../theme.js";
+import { setAccent } from "../theme.js";
 import { TEXTS, format, movies } from "../texts.js";
 import { h, mount, poster, yearOf, toast, loadingView, errorView, formatDate } from "../dom.js";
+import { collectionPill } from "./film-controls.js";
 
 const SEARCH_DELAY = 350;          // ms po posledním znaku, než se zeptáme TMDB
 const WANTED_TABS = ["pending", "added", "rejected"];
@@ -482,7 +483,7 @@ class RequestsPage {
                 poster(item.poster_path, item.title, "req-film__poster", false, "tiny"),
                 h("span", { class: "req-film__title" }, item.title, item.release_date ? h("span", { class: "muted" }, ` (${yearOf(item.release_date)})`) : null),
                 statusPill(item.status),
-                item.universe ? universePill(item.universe) : null))),
+                item.universe ? collectionPill(item.universe) : null))),
         );
     }
 
@@ -570,12 +571,3 @@ function statusPill(status) {
     return h("span", { class: `pill req-status req-status--${status}` }, TEXTS[`requestsStatus_${status}`]);
 }
 
-/** Barevná pilulka kolekce, do které správce film zařadil. */
-function universePill(universe) {
-    const link = h("a", { class: "pill pill--universe", href: `#/collection/${universe.slug}` }, universe.name);
-    if (universe.color) {
-        link.style.setProperty("--c", universe.color);
-        link.style.setProperty("--c-ink", inkFor(universe.color));
-    }
-    return link;
-}

@@ -413,6 +413,7 @@ export function universeCard(universe, signedIn, eager = false) {
             signedIn
                 ? [
                     h("div", { class: "progress", role: "progressbar",
+                            "aria-label": format("progressCount", progress.watched, progress.total),
                             "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": value },
                         h("div", { class: "progress__bar", style: `width: ${value}%` }),
                     ),

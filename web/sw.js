@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v17";       // V3.6.1.1: Legend až na 79 150 XP; od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v18";       // V3.6.2: úklid a optimalizace; od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline
@@ -36,6 +36,7 @@ const SHELL = [
     "js/pwa.js",
     "js/auth.js",
     "js/data.js",
+    "js/db.js",
     "js/admin.js",
     "js/achievements.js",
     "js/cache.js",
@@ -70,6 +71,9 @@ const SHELL = [
     "js/views/list.js",
     "js/views/list-picker.js",
     "js/views/list-card.js",
+    "js/views/list-button.js",
+    "js/views/film-controls.js",
+    "js/views/modal.js",
     "js/views/admin-reports.js",
     "js/views/achievements.js",
     "js/views/login.js",

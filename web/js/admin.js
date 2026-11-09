@@ -4,7 +4,7 @@
 
 import { supabase } from "./supabase.js";
 import { clearDataCache } from "./cache.js";
-import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "./config.js";
+import { callFunction } from "./db.js";
 
 function check({ data, error }) {
     if (error) throw new Error(error.message);
@@ -18,27 +18,9 @@ function check({ data, error }) {
 // ---------------------------------------------------------------------
 
 /** Zavolá akci funkce admin s přístupovým tokenem přihlášeného uživatele. */
-async function callAdmin(action, payload = {}) {
-    const { data } = await supabase.auth.getSession();
-    const token = data.session?.access_token;
-    if (!token) throw new Error("Not signed in");
-
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/admin`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            apikey: SUPABASE_PUBLISHABLE_KEY,
-            Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ action, ...payload }),
-    });
-    const body = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(body.error ?? `HTTP ${response.status}`);
-    return body;
-}
+const callAdmin = (action, payload = {}) => callFunction("admin", action, payload);
 
 export const searchTmdb = (query) => callAdmin("search", { query });
-export const addFilmFromTmdb = (tmdbId) => callAdmin("add-film", { tmdb_id: tmdbId });
 export const listUsers = () => callAdmin("users");
 export const setUserAdmin = (userId, isAdmin) => callAdmin("set-admin", { user_id: userId, is_admin: isAdmin });
 export const deleteUser = (userId) => callAdmin("delete-user", { user_id: userId });

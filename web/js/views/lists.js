@@ -5,7 +5,7 @@
 import { isSignedIn, getProfile } from "../auth.js";
 import { fetchUserLists, createList, VISIBILITIES, MAX_TITLE, MAX_LISTS, listErrorText, visibilityLabel } from "../lists.js";
 import { setAccent } from "../theme.js";
-import { TEXTS, format, movies } from "../texts.js";
+import { TEXTS, format } from "../texts.js";
 import { h, mount, toast, loadingView, errorView } from "../dom.js";
 import { listGrid } from "./list-card.js";
 

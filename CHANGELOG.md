@@ -3,6 +3,14 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.6.2 – November 2026
+- Clean-up and optimisation release that closes chapter 3 – no new features, just a faster and tidier app
+- Better contrast: buttons in the light theme and in collection colours (e.g. the red MCU) are easier to read
+- Screen readers now announce collection progress and the logo link
+- Faster database rules and new indexes – large lists and profiles load a little quicker
+- All app modules are cached for offline use (a few newer ones were missing)
+- Automated tests for levels, achievements, search and colour contrast (`node --test`)
+
 ## V3.6.1.1 – November 2026
 - Legend is now a real legend: it takes about 79,000 XP (roughly 4,500–5,000 movies) – the first levels stay quick, the top ones take much longer
 
