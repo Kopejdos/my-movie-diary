@@ -3,6 +3,9 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V3.6.3 – November 2026
+- No changes in the app – the roadmap for chapter 4 is planned out: settings, a better phone layout, more languages, then a big wave of new movies in five parts (westerns, directors, classic monsters, many new series, anime, Czech classics and new genre picks – first goal 2,000 movies), the yearly Wrapped and an optimisation release before TV shows
+
 ## V3.6.2 – November 2026
 - Clean-up and optimisation release that closes chapter 3 – no new features, just a faster and tidier app
 - Better contrast: buttons in the light theme and in collection colours (e.g. the red MCU) are easier to read

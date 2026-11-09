@@ -6,7 +6,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V3.6.2** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V3.6.3** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
@@ -35,7 +35,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Installable on a phone or computer (PWA), opens even offline
 
 **Coming next** – new features
-- V4 – settings & themes, a better phone layout, more languages and a yearly Wrapped; V5 – TV shows
+- V4 – settings & themes, a better phone layout, more languages, lots of new movies (first goal: 2,000) and a yearly Wrapped; V5 – TV shows
 
 ## Tech stack
 

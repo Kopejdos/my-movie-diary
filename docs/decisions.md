@@ -205,6 +205,9 @@ Formát **V<hlavní>.<vedlejší>.<oprava>** (např. V1.2.1):
 - **Výjimka V3.5.2.x:** doplňky k hotové části fáze, které nechceme zařadit až za další část plánu, dostanou
   **čtvrté číslo** (V3.5.2.1 – úpravy z aplikace do seedu, V3.5.2.2 – quality of life, V3.5.2.3 – hlídání
   nových dílů; V3.6.1.1 – úprava křivky úrovní).
+- **Výjimka V4.3:** velké doplnění filmů je rozdělené na **V4.3.1–V4.3.5** (třetí číslo = část fáze, jako
+  u V3.0); případné opravy dostanou čtvrté číslo (V4.3.1.1…).
+- **V3.6.3** – jen plán a dokumentace (rozplánování kapitoly 4), aplikace beze změny.
 - Verze a **měsíc poslední aktualizace** jsou v patičce webu (např. „V1.1 · November 2026“). Obojí je v `web/js/config.js` (`APP_VERSION`, `APP_UPDATED`) – při vydání nové verze se změní tam.
 - Při vydání: úprava `config.js`, záznam do `CHANGELOG.md`, commit a **tag verze** (`git tag v1.1`, `git push --tags`). Tagy `faze-N` z verzí V0.x zůstávají, od V1.1 se používají jen tagy `vX.Y`.
 
@@ -346,22 +349,104 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
   kategorie; při *All + All* top 7 celkově.
 - Nahlášení nevhodného seznamu, admin ho může skrýt.
 
-#### Kapitola V4.x – přizpůsobení (plán 7. 11. 2026, upraveno 8. 11.)
+#### Kapitola V4.x – přizpůsobení a obsah (plán 7. 11. 2026, upraveno 8. a 9. 11.)
 | Fáze | Verze | Název | Obsah |
 |---|---|---|---|
-| 42 | V4.0 | Nastavení ⚙ | tlačítko ⚙ místo ☾ v hlavičce s panelem: **režim** Light / Dark / System, **styl** Modern / Paper classic, **barva** Collection colors (dnešní) nebo pevná (mosazná, růžová, modrá, zelená, fialová), drobnosti (výchozí pořadí, hustota seznamu, méně animací); rozdělení **Profil** (achievementy, statistiky, přátelé) × **Nastavení** (účet, heslo, veřejný profil, instalace, smazání účtu, **Sign out** + vzhled) |
-| 43 | V4.1 | Mobil a drobná vylepšení | sbalitelné achievementy a statistiky (zapamatuje si stav), **spodní lišta** na telefonu (Collections · Search · Coming soon · Watchlist · Profil), větší plochy pro klepnutí, kontrola všech obrazovek na 320–390 px |
-| 44 | V4.2 | Jazyky | **angličtina, čeština, němčina, španělština, ukrajinština** (ruština ne); texty webu, názvy filmů z TMDB v daném jazyce (ukládá import), popisy kolekcí; češtinu kontroluje Adam, ostatní ideálně rodilý mluvčí |
-| 45 | V4.3 | Wrapped | rok v kostce – **poprvé za rok 2027** (prosinec 2027): nováček si na začátku doplní stovky filmů, první celý rok dat bude 2027; filmy „Seen before“ se nepočítají |
+| 43 | V4.0 | Nastavení ⚙ | tlačítko ⚙ místo ☾ v hlavičce s panelem: **režim** Light / Dark / System, **styl** Modern / Paper classic, **barva** Collection colors (dnešní) nebo pevná (mosazná, růžová, modrá, zelená, fialová), drobnosti (výchozí pořadí, hustota seznamu, méně animací); rozdělení **Profil** (achievementy, statistiky, přátelé) × **Nastavení** (účet, heslo, veřejný profil, instalace, smazání účtu, **Sign out** + vzhled) |
+| 44 | V4.1 | Mobil a drobná vylepšení | sbalitelné achievementy a statistiky (zapamatuje si stav), **spodní lišta** na telefonu (Collections · Search · Coming soon · Watchlist · Profil), větší plochy pro klepnutí, kontrola všech obrazovek na 320–390 px |
+| 45 | V4.2 | Jazyky | **angličtina, čeština, němčina, španělština, ukrajinština** (ruština ne); texty webu, názvy filmů z TMDB v daném jazyce (ukládá import), popisy kolekcí; češtinu kontroluje Adam, ostatní ideálně rodilý mluvčí |
+| 46a | V4.3.1 | Nástroje + westerny | admin: **kolekce z osoby** (režisér / herec, i **průnik dvou osob**), **kolekce ze studia / klíčového slova TMDB**, **ukazatel cíle** (např. 1 264 / 2 000); kategorie **Western** 🤠, **Bud Spencer & Terence Hill**, Leone, westernové výběry |
+| 46b | V4.3.2 | Režiséři a klasika | nový typ kolekce **Director** (záložka *Directors*), 10 režisérů, **Best Picture Winners**, Universal Monsters, Hammer, Louis de Funès, Belmondo |
+| 46c | V4.3.3 | Série a monstra | ~40 komediálních, akčních, sci-fi / fantasy a hororových sérií, **Godzilla + MonsterVerse**, King Kong; studia A24, Blumhouse, Amblin, Toho |
+| 46d | V4.3.4 | Anime a česká klasika | kategorie **Anime** 🎌 a **Czech & Slovak** 🇨🇿; Shinkai, Hosoda, Kon, Evangelion, Pokémon, Dragon Ball, Detective Conan, Cartoon Saloon; Slunce, seno…, Básníci, Anděl Páně, české pohádky, Svěrák |
+| 46e | V4.3.5 | Žánrové výběry a cesty | ~20 nových žánrových výběrů po 12–15 filmech + 7 nových cest; **cíl 2 000 filmů splněn** |
+| 47 | V4.4 | Wrapped | rok v kostce – **poprvé za rok 2027** (prosinec 2027): nováček si na začátku doplní stovky filmů, první celý rok dat bude 2027; filmy „Seen before“ se nepočítají |
+| 48 | V4.5 | Optimalizace před seriály | úklid a výkon s velkým katalogem (načítání, hledání, import) – připravit půdu pro kapitolu V5 |
+
+#### V4.3 – velké doplnění filmů (plán 9. 11. 2026)
+**Cíl:** z dnešních **1 264 filmů na 2 000**, pak dál po 500 (2 500, 3 000…). Rozděleno na **pět částí** –
+nejdřív nástroje, aby přidávání nebyla ruční dřina, pak obsah po tematických balících. Každá část je sama
+o sobě hotová a vydaná (migrace → Edge Functions → import → push). Odhad počtu filmů je hrubý (filmy se
+mezi kolekcemi opakují – kolekce režiséra sdílí filmy se studii, výběry se sériemi).
+
+| Část | Odhad nových filmů | Katalog po vydání |
+|---|---|---|
+| V4.3.1 Nástroje + westerny | ~120 | ~1 380 |
+| V4.3.2 Režiséři a klasika | ~250 | ~1 630 |
+| V4.3.3 Série a monstra | ~230 | ~1 860 |
+| V4.3.4 Anime a česká klasika | ~180 | ~2 040 |
+| V4.3.5 Žánrové výběry a cesty | ~150 | **~2 190** |
+
+**V4.3.1 – Nástroje + westerny**
+- **Kolekce z osoby** (admin panel): hledání osoby v TMDB → filmografie s filtry (role režie / herec, bez
+  dokumentů a krátkých filmů, minimální počet hlasů, od–do roku) → zaškrtnout → kolekce. **Průnik dvou osob**
+  = filmy, kde hrají oba (Bud Spencer & Terence Hill). Skupiny se dají pojmenovat (*Together* / sólo).
+- **Kolekce ze studia nebo klíčového slova TMDB** (Toho, Hammer, A24…) – stejný výběr se zaškrtáváním,
+  řazení podle popularity / roku.
+- **Ukazatel cíle** v admin panelu: počet filmů v katalogu a postup k dalšímu cíli (2 000 → 2 500 → …).
+- Kategorie **Western** 🤠 (Winnetou se přidá i sem).
+- **Bud Spencer & Terence Hill** – jedna kolekce, skupiny *Together* (~17 filmů), *Bud Spencer*, *Terence Hill*
+  (známé sólovky: Piedone, My Name Is Nobody…).
+- **Sergio Leone** (dolarová trilogie, Once Upon a Time in the West…), Django, Magnificent Seven.
+- Výběry **Western Classics**, **Spaghetti Western**, **Modern Westerns** (Unforgiven, The Hateful Eight…).
+
+**V4.3.2 – Režiséři a klasika**
+- Nový typ kolekce **Director** – záložka *Directors* na přehledu vedle Series / Studios / Genre picks / Paths,
+  filmy po desetiletích; odznak na kartě jako u cest. Návrh: achievement **Auteur** (dokončené kolekce
+  režisérů, úrovně 1 / 3 / 5).
+- **Nolan, Tarantino, Kubrick, Hitchcock, Spielberg, Burton, Wes Anderson, Fincher, Villeneuve, Kurosawa.**
+- **Best Picture Winners** – všichni vítězové Oscara za nejlepší film (skoro 100), skupiny po desetiletích.
+- Studia **Universal Monsters** (Dracula, Frankenstein, The Mummy, The Wolf Man… a pokračování) a **Hammer Films**.
+- **Louis de Funès** (Četníci ze Saint-Tropez, Fantomas) a **Jean-Paul Belmondo**.
+- Cesty **Nolan in Order** a **Oscar Essentials**.
+
+**V4.3.3 – Série a monstra**
+- **Komedie:** Police Academy, The Naked Gun, Hot Shots!, Scary Movie, Austin Powers, American Pie, Home Alone,
+  Night at the Museum, Rush Hour, Bad Boys, Beverly Hills Cop, The Hangover.
+- **Akční:** The Expendables, Taken, The Transporter, The Equalizer, Underworld, Riddick, Ip Man,
+  Olympus Has Fallen, Dirty Harry, Death Wish.
+- **Sci-fi a fantasy:** Dune, Tron, The Chronicles of Narnia, Divergent, Pacific Rim, Mortal Kombat,
+  The Mummy + The Scorpion King, Cloverfield, A Quiet Place, Tremors, Jaws.
+- **Horory:** Child's Play, Hellraiser, Paranormal Activity, The Exorcist, Evil Dead, Candyman, The Omen,
+  Poltergeist, Hostel, Jeepers Creepers, 28 Days / Years Later, Romerova „Dead“ série, [REC], Phantasm,
+  Hannibal Lecter.
+- **Monstra:** **Godzilla** (japonské filmy Toho + MonsterVerse), **King Kong**.
+- Studia **A24** (výběr), **Blumhouse**, **Amblin**, **Toho**.
+- Cesta **Kaiju 101**.
+
+**V4.3.4 – Anime a česká klasika** (až po V4.2 – české názvy filmů už budou v aplikaci)
+- Kategorie **Anime** 🎌 (Studio Ghibli se přidá i sem) a **Czech & Slovak** 🇨🇿.
+- **Anime:** Makoto Shinkai, Mamoru Hosoda, Satoshi Kon, Evangelion, Akira, Ghost in the Shell;
+  na objem **Pokémon**, **Dragon Ball**, **Detective Conan**. Studio **Cartoon Saloon**.
+- **Česká klasika:** Slunce, seno… (3), Básníci (6), Anděl Páně (2), výběr **České pohádky**, filmy Svěráků.
+- Cesty **Anime Starter** a **Czech Classics**.
+
+**V4.3.5 – Žánrové výběry a cesty** (na konec – výběry pak sáhnou i po filmech z předchozích částí)
+- Výběry: 90s Action, Disaster, Sports, Musicals, Biopics, Mafia & Gangster, Prison, Courtroom, Spy (mimo
+  Bonda), Survival, Post-apocalyptic, Alien Invasion, AI & Robots, Sword & Sandal, Rom-com, Coming of Age,
+  Spoof & Parody, Buddy Cop, Dog Movies.
+- Cesty **Western Starter** a **Comedy Classics**.
+- Kontrola cíle: **2 000 filmů** (ukazatel z V4.3.1), další cíl 2 500 už jako průběžné doplňování přes
+  požadavky a nástroje z V4.3.1.
 
 **Kapitola V5.x – seriály** (jen seriály): TMDB má seriály, řady i epizody se stejným klíčem; sledování po epizodách,
 řady jako skupiny, běžící seriály „čeká na novou řadu“.
 
 **Později / nápady:** export / import; nastavení uložené k účtu (stejný vzhled na všech zařízeních).
 
-#### Rozhodnutí k plánu (7. a 8. 11. 2026)
+#### Rozhodnutí k plánu (7.–9. 11. 2026)
 - **Wrapped z V3.6 do kapitoly 4** – teď by nic důležitého neřešil; V3.6 místo něj úklid kódu.
 - **Nová kapitola V4 = přizpůsobení** (nastavení, mobil, jazyky, Wrapped), **kapitola V5 = jen seriály**.
+- **9. 11.: V4.3 = velké doplnění filmů** (cíl 2 000, pak po 500), Wrapped se posouvá na **V4.4** a před seriály
+  přibude **V4.5 – optimalizace** (katalog bude o dost větší).
+- **9. 11.: V4.3 v pěti částech (V4.3.1–V4.3.5)** – obsahu je na čtyři části moc (jen série a režiséři
+  jsou stovky filmů) a nástroje musí být první, jinak by se kolekce z osob a studií skládaly ručně po filmech.
+- **Nástroje před obsahem** – kolekce z osoby / studia / klíčového slova se použijí i po V4.3 (požadavky,
+  další cíle 2 500, 3 000…).
+- **Anime a česká klasika až po jazycích (V4.2)** – české filmy pod anglickými názvy by vypadaly divně.
+- **Žánrové výběry na konec** – čím větší katalog, tím víc filmů výběry využijí a tím míň nových se přidává
+  jen kvůli nim.
+- **Rychlost hlídá V4.5** – po V4.3 bude katalog skoro dvakrát větší (hledání, přehled, import).
 - **V3.5 = obsah od uživatelů** ve třech krocích, které na sebe navazují: bez požadavků nepřibudou filmy, bez
   seznamů není co ukazovat v komunitě.
 - **Katalog kurátorský** (film jen přes schválený požadavek) a **seznamy jen z filmů v databázi** – kvalita
@@ -1615,7 +1700,7 @@ Podnět: kolekcí je přes sto, přehled je dlouhý a v adminu se špatně hled�
     (s potvrzením) – rychlé doplnění pro nováčky se stovkami viděných filmů,
   - počítá se do viděných filmů, opakování, postupu kolekcí, Up next, Collectoru, Completionistu, fanoušků;
     **ne** do Screen Time, Marathonu, času, grafů po měsících a rocích, sérií dní, nejlepšího dne
-    (a ve V4.3 ani do Wrapped),
+    (a ve V4.4 ani do Wrapped),
   - `my_film_counts.last_watched_on` jen z datovaných zhlédnutí; veřejný profil a porovnání příznak znají.
 - XP i úrovně se počítají ze zhlédnutí, takže nová pravidla platí **zpětně** – po aktualizaci úrovně klesnou.
 - Migrace `20261109120000_seen_before.sql`. Jen web + migrace. Ověřeno: lokální Postgres, simulace úrovní
@@ -1669,6 +1754,10 @@ Uzavírá kapitolu 3 – bez nových funkcí, kód a databáze v nejlepším sta
   Spouští se i při každém nasazení (GitHub Actions) – když test selže, web se nenasadí a zůstane předchozí verze.
 - Ověřeno: lokální Postgres (migrace 2×, chování RLS), testy webu (seznamy, komunita, QoL, série, požadavky,
   Seen before, hledání, statistiky, porovnání, hodnocení, přátelé…) proti V3.6.1.1 beze změny výsledků.
+
+- **V3.6.3 (9. 11.) – plán kapitoly 4:** poslední vydání před V4.0, jen dokumentace – nové pořadí
+  V4.3 *Velké doplnění filmů* (pět částí V4.3.1–V4.3.5, cíl 2 000 filmů), V4.4 *Wrapped*, V4.5 *Optimalizace
+  před seriály*; čísla fází kapitoly 4 posunutá o jednu (V4.0 = fáze 43).
 
 #### Rozhodnutí ve fázi 42
 - **Testy prohlížeče (Playwright) zůstávají mimo repozitář** – stojí na podvržených odpovědích Supabase,
