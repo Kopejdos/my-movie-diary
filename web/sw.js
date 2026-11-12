@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v18";       // V3.6.2: úklid a optimalizace; od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v19";       // V3.6.4: rychlejší přehled; od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline

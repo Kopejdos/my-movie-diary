@@ -2,6 +2,7 @@
 
 import {
     initAuth, onAuthChange, getUser, getProfile, signOut, hasGeneratedUsername, authRedirectResult, isRecoverySession,
+    hasStoredSession,
 } from "./auth.js";
 import { addRoute, setNotFound, startRouter, render, navigate, currentPath } from "./router.js";
 import { TEXTS, format } from "./texts.js";
@@ -12,6 +13,7 @@ import { APP_VERSION, APP_UPDATED } from "./config.js";
 import { refreshAchievements, tierLabel } from "./achievements.js";
 import { warmOverview, invalidateProgress } from "./data.js";
 import { getPendingCount, refreshPendingCount, resetFriends } from "./social.js";
+import { fetchCommunityLists } from "./lists.js";
 
 // Přehled a detail kolekce se načítají hned (první, co uživatel uvidí);
 // ostatní obrazovky až při prvním otevření – méně JavaScriptu při startu (V2.1.1)
@@ -52,7 +54,10 @@ const forgotPasswordView = lazy(() => import("./views/password.js"), "forgotPass
 const resetPasswordView = lazy(() => import("./views/password.js"), "resetPasswordView");
 
 // Data přehledu se začnou stahovat hned – souběžně s přihlášením a profilem
-if (currentPath() === "/") warmOverview();
+if (currentPath() === "/") {
+    warmOverview();
+    fetchCommunityLists();          // řada Community dole na přehledu (v mezipaměti, V3.6.4)
+}
 
 // Cesty v aplikaci
 addRoute("/", universesView);
@@ -87,6 +92,7 @@ addRoute("/admin/universe/:slug", (container, { params }) => redirect(`/admin/co
 setNotFound(notFoundView);
 
 const header = document.getElementById("site-header");
+let authPending = true;           // přihlášení se při startu ještě ověřuje (V3.6.4)
 let level = null;                 // úroveň přihlášeného uživatele (odznak v hlavičce), viz refreshProgress()
 const main = document.getElementById("app");
 
@@ -163,10 +169,12 @@ function renderHeader() {
                         h("button", { class: "nav__link nav__button nav__signout", type: "button", onClick: handleSignOut },
                             TEXTS.navSignOut),
                     ]
-                    : [
-                        navLink("#/login", TEXTS.navSignIn, path === "/login"),
-                        h("a", { class: "btn btn--primary btn--small", href: "#/register" }, TEXTS.navRegister),
-                    ],
+                    : authPending && hasStoredSession()
+                        ? null                  // přihlášení se teprve ověřuje – tlačítka by jen problikla
+                        : [
+                            navLink("#/login", TEXTS.navSignIn, path === "/login"),
+                            h("a", { class: "btn btn--primary btn--small", href: "#/register" }, TEXTS.navRegister),
+                        ],
             ),
         ),
     );
@@ -377,6 +385,7 @@ if (versionLabel) versionLabel.textContent = `${APP_VERSION} · ${APP_UPDATED}`;
 // Start
 renderHeader();
 await initAuth();
+authPending = false;
 lastUserId = getUser()?.id ?? null;
 routerStarted = true;
 await handleAuthRedirect();

@@ -13,13 +13,20 @@ export function check({ data, error }) {
 /**
  * Načte všechny řádky po stránkách – Supabase vrací nejvýš 1000 řádků na dotaz.
  * buildQuery musí řadit podle jednoznačného sloupce, jinak by se stránky překrývaly.
+ * parallel: kolik stránek se stáhne najednou (V3.6.4) – u velkých tabulek (katalog) šetří
+ * čekání na odpovědi po sobě; nanejvýš jeden dotaz navíc vrátí prázdnou stránku.
  */
-export async function fetchAllRows(buildQuery, pageSize = 1000) {
+export async function fetchAllRows(buildQuery, { pageSize = 1000, parallel = 1 } = {}) {
     const rows = [];
-    for (let from = 0; ; from += pageSize) {
-        const page = await buildQuery().range(from, from + pageSize - 1).then(check);
-        rows.push(...page);
-        if (page.length < pageSize) return rows;
+    for (let from = 0; ; from += pageSize * parallel) {
+        const pages = await Promise.all(Array.from({ length: parallel }, (_, i) => {
+            const start = from + i * pageSize;
+            return buildQuery().range(start, start + pageSize - 1).then(check);
+        }));
+        for (const page of pages) {
+            rows.push(...page);
+            if (page.length < pageSize) return rows;
+        }
     }
 }
 

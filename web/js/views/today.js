@@ -69,7 +69,7 @@ export function todayPanel(data, onWatched) {
         const href = universe ? `#/collection/${universe.slug}` : "#/watchlist";
         const node = h("article", { class: `today-card today-card--${type}` },
             h("a", { class: "today-card__poster-link", href, tabindex: "-1", "aria-hidden": "true" },
-                poster(film.poster_path, film.title, "today-card__poster", false, "small")),
+                poster(film.poster_path, film.title, "today-card__poster", true, "small")),
             h("div", { class: "today-card__body" },
                 h("span", { class: "today-card__label" }, label),
                 h("h2", { class: "today-card__title" }, h("a", { href }, film.title)),

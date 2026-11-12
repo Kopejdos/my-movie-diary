@@ -133,8 +133,12 @@ export async function universesView(container, context) {
         return Boolean(category) && (list.category_ids ?? []).includes(category.id);
     };
 
-    /** Překreslí oba filtry a mřížku podle zvoleného druhu a žánru (bez nového načítání). */
-    function renderCollections() {
+    /**
+     * Překreslí oba filtry a mřížku podle zvoleného druhu a žánru (bez nového načítání).
+     * onlyCommunity: dorazily seznamy komunity – stačí filtry a řada Community, kolekce
+     * zůstanou (dřív se kvůli tomu stavěla celá mřížka podruhé).
+     */
+    function renderCollections({ onlyCommunity = false } = {}) {
         const communityMode = selectedKind === "community";
         const visible = communityMode ? [] : sortUniverses(universes.filter((u) => inKind(u, selectedKind) && inCategory(u, selected)), sort);
         const communityVisible = community.filter((l) => listInCategory(l, selected));
@@ -166,6 +170,10 @@ export async function universesView(container, context) {
         );
         count.textContent = communityMode ? format("communityCount", communityVisible.length) : collections(visible.length);
         sortSelect.hidden = communityMode;          // komunita je vždy podle zobrazení
+        if (onlyCommunity && !communityMode && sections.length > 0) {
+            renderCommunityRow(communityVisible);
+            return;
+        }
 
         // Záložka Community – všechny veřejné seznamy (podle zobrazení)
         if (communityMode) {
@@ -201,14 +209,21 @@ export async function universesView(container, context) {
             .filter((g) => g.items.length > 0);
         // Víc skupin = přehled → každá skupina sbalená na pár řad (V3.5.2.2)
         const collapsible = groups.length > 1;
-        sections = groups.map((g) => {
-            const cards = g.items.map((u, i) => universeCard(u, signedIn, groups.indexOf(g) === 0 && i < 5));
+        sections = groups.map((g, groupIndex) => {
+            // Kartičky se vytvářejí, až jsou potřeba (V3.6.4) – ve sbaleném přehledu je vidět jen
+            // pár řad, zbytek vznikne po „Show all“ (dřív se hned stavělo všech 116 karet)
             const toggle = h("button", { class: "btn btn--small section-toggle", type: "button", hidden: true });
+            const gridElement = h("div", { class: "universe-grid" });
             const element = h("section", { class: "collection-section" },
                 collapsible ? kindHeading(g.kind) : null,
-                h("div", { class: "universe-grid" }, cards),
+                gridElement,
                 h("div", { class: "section-toggle__row" }, toggle));
-            const section = { kind: g.kind, cards, toggle, element, collapsible };
+            const section = {
+                kind: g.kind, universes: g.items, cards: [], gridElement, toggle, element, collapsible,
+                // Plakáty prvních karet hned (u hosta jsou vidět nahoře); přihlášený má nahoře
+                // „Co dneska?“ – jeho plakáty mají přednost, kolekce se načtou líně (V3.6.4)
+                eager: groupIndex === 0 && !signedIn,
+            };
             toggle.addEventListener("click", () => {
                 if (expandedKinds.has(g.kind)) {
                     expandedKinds.delete(g.kind);
@@ -222,7 +237,14 @@ export async function universesView(container, context) {
             });
             return section;
         });
-        // Řada Community pod všemi skupinami (jen v přehledu všech druhů)
+        mount(grid, sections.map((section) => section.element), communitySlot);
+        layoutSections();
+        renderCommunityRow(communityVisible);
+    }
+
+    /** Řada Community pod všemi skupinami (jen v přehledu všech druhů). */
+    const communitySlot = h("div", { class: "community-slot" });
+    function renderCommunityRow(communityVisible) {
         const communityRow = selectedKind === "all" && communityVisible.length > 0
             ? h("section", { class: "collection-section community-section" },
                 kindHeading("community"),
@@ -233,8 +255,7 @@ export async function universesView(container, context) {
                             `${format("communityShowAll", communityVisible.length)} →`))
                     : null)
             : null;
-        mount(grid, sections.map((section) => section.element), communityRow);
-        layoutSections();
+        mount(communitySlot, communityRow);
     }
 
     /** Sbalení / rozbalení skupiny podle počtu sloupců mřížky. */
@@ -243,13 +264,22 @@ export async function universesView(container, context) {
     function layoutSection(section) {
         const rows = columns <= 2 ? COLLAPSED_ROWS_NARROW : COLLAPSED_ROWS;
         const limit = columns * rows;
-        const tooMany = section.collapsible && section.cards.length > limit;
+        const total = section.universes.length;
+        const tooMany = section.collapsible && total > limit;
         const open = !tooMany || expandedKinds.has(section.kind);
+        // Dovytvořit kartičky, které mají být vidět (všechny najednou jedním vložením)
+        const needed = open ? total : limit;
+        if (section.cards.length < needed) {
+            const created = section.universes.slice(section.cards.length, needed)
+                .map((u, i) => universeCard(u, signedIn, section.eager && section.cards.length + i < 5));
+            section.cards.push(...created);
+            section.gridElement.append(...created);
+        }
         section.cards.forEach((card, i) => card.classList.toggle("is-collapsed", !open && i >= limit));
         section.toggle.hidden = !tooMany;
         section.toggle.textContent = open
             ? `${TEXTS.collectionsShowFewer} ▴`
-            : `${format("collectionsShowAll", section.cards.length)} ▾`;
+            : `${format("collectionsShowAll", total)} ▾`;
         section.toggle.setAttribute("aria-expanded", String(open));
     }
     function layoutSections() {
@@ -341,7 +371,7 @@ export async function universesView(container, context) {
         if (!isCurrent()) return;
         communityLoaded = true;
         community = lists;
-        if (lists.length > 0 || selectedKind === "community") renderCollections();
+        if (lists.length > 0 || selectedKind === "community") renderCollections({ onlyCommunity: true });
     });
 }
 

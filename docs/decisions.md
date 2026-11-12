@@ -208,6 +208,7 @@ Formát **V<hlavní>.<vedlejší>.<oprava>** (např. V1.2.1):
 - **Výjimka V4.3:** velké doplnění filmů je rozdělené na **V4.3.1–V4.3.5** (třetí číslo = část fáze, jako
   u V3.0); případné opravy dostanou čtvrté číslo (V4.3.1.1…).
 - **V3.6.3** – jen plán a dokumentace (rozplánování kapitoly 4), aplikace beze změny.
+- **V3.6.4** – oprava výkonu přehledu pro přihlášené (patch k V3.6.2).
 - Verze a **měsíc poslední aktualizace** jsou v patičce webu (např. „V1.1 · November 2026“). Obojí je v `web/js/config.js` (`APP_VERSION`, `APP_UPDATED`) – při vydání nové verze se změní tam.
 - Při vydání: úprava `config.js`, záznam do `CHANGELOG.md`, commit a **tag verze** (`git tag v1.1`, `git push --tags`). Tagy `faze-N` z verzí V0.x zůstávají, od V1.1 se používají jen tagy `vX.Y`.
 
@@ -361,7 +362,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 46d | V4.3.4 | Anime a česká klasika | kategorie **Anime** 🎌 a **Czech & Slovak** 🇨🇿; Shinkai, Hosoda, Kon, Evangelion, Pokémon, Dragon Ball, Detective Conan, Cartoon Saloon; Slunce, seno…, Básníci, Anděl Páně, české pohádky, Svěrák |
 | 46e | V4.3.5 | Žánrové výběry a cesty | ~20 nových žánrových výběrů po 12–15 filmech + 7 nových cest; **cíl 2 000 filmů splněn** |
 | 47 | V4.4 | Wrapped | rok v kostce – **poprvé za rok 2027** (prosinec 2027): nováček si na začátku doplní stovky filmů, první celý rok dat bude 2027; filmy „Seen before“ se nepočítají |
-| 48 | V4.5 | Optimalizace před seriály | úklid a výkon s velkým katalogem (načítání, hledání, import) – připravit půdu pro kapitolu V5 |
+| 48 | V4.5 | Optimalizace před seriály | úklid a výkon s velkým katalogem (načítání, hledání, import), **katalog v mezipaměti prohlížeče** pro opakované návštěvy – připravit půdu pro kapitolu V5 |
 
 #### V4.3 – velké doplnění filmů (plán 9. 11. 2026)
 **Cíl:** z dnešních **1 264 filmů na 2 000**, pak dál po 500 (2 500, 3 000…). Rozděleno na **pět částí** –
@@ -1758,6 +1759,25 @@ Uzavírá kapitolu 3 – bez nových funkcí, kód a databáze v nejlepším sta
 - **V3.6.3 (9. 11.) – plán kapitoly 4:** poslední vydání před V4.0, jen dokumentace – nové pořadí
   V4.3 *Velké doplnění filmů* (pět částí V4.3.1–V4.3.5, cíl 2 000 filmů), V4.4 *Wrapped*, V4.5 *Optimalizace
   před seriály*; čísla fází kapitoly 4 posunutá o jednu (V4.0 = fáze 43).
+
+- **V3.6.4 (12. 11.) – rychlejší přehled pro přihlášené:** Lighthouse na ostrém webu po přihlášení ukazoval
+  výkon 48–69 (host 92). Měřeno lokálně s realistickými daty (116 kolekcí, ~1 300 filmů, ~1 000 zhlédnutí,
+  zpoždění sítě): **V3.6.2 ani V3.6.3 nic nezhoršily** (stejné skóre jako V3.6.1.1) – pomalý byl přehled
+  přihlášeného od začátku, jen se dřív neměřil. Rozdíly mezi běhy v prohlížeči dělají hlavně rozšíření
+  a zátěž počítače (měřit v anonymním okně). Opraveno:
+  - **karty kolekcí se tvoří, až jsou vidět** – ve sbaleném přehledu jen první řady (na mobilu 24 místo 116),
+    zbytek po *Show all*,
+  - **dorazivší seznamy komunity překreslí jen řadu Community** (dřív se kvůli nim stavěla celá mřížka znovu),
+  - **osobní data a katalog se stahují hned při startu**, souběžně s ověřením přihlášení (dřív až po načtení
+    profilu a vykreslení přehledu) – „Co dneska?“ je o jedno kolo odpovědí dřív,
+  - **achievementy berou kolekce a položky z mezipaměti přehledu** (dřív dva velké dotazy navíc),
+  - **velký katalog se stahuje po třech stránkách najednou** (`fetchAllRows(…, { parallel: 3 })`) –
+    připraveno na V4.3, kdy položek bude přes 2 000,
+  - plakáty „Co dneska?“ se načítají hned, karty kolekcí přihlášeného líně,
+  - hlavička při startu neukáže přihlášenému na okamžik *Sign in / Register*.
+  - Výsledek (Lighthouse mobil, lokálně, 4 běhy): výkon **71–76 → 82–84**, TBT **400–530 → 140–200 ms**.
+    LCP (~4 s v simulaci pomalé sítě) teď určuje hlavně síť – řetěz HTML → JS → data → plakát; další krok
+    (mezipaměť katalogu v prohlížeči pro opakované návštěvy) patří do **V4.5**.
 
 #### Rozhodnutí ve fázi 42
 - **Testy prohlížeče (Playwright) zůstávají mimo repozitář** – stojí na podvržených odpovědích Supabase,

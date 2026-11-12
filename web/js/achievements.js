@@ -10,7 +10,7 @@
 
 import { supabase } from "./supabase.js";
 import { cached } from "./cache.js";
-import { isUpcoming } from "./data.js";
+import { isUpcoming, fetchUniverseRows, fetchCatalogItems, fetchCategories } from "./data.js";
 import { fetchAllRows } from "./db.js";
 
 // ---------------------------------------------------------------------
@@ -71,7 +71,8 @@ export async function fetchAchievementData() {
             .from("watches")
             .select("tmdb_id, watched_on, seen_before, created_at, film:films(title, poster_path, release_date, runtime)")
             .order("watched_on")
-            .order("created_at")),
+            .order("created_at")
+            .order("id")),          // id: jednoznačné pořadí pro stránkování
         fetchCatalogData(),
     ]);
     return { watches, ...catalog };
@@ -86,21 +87,20 @@ export function fetchCatalogData() {
 }
 
 async function loadCatalogData() {
-    const [universes, items, categories, links] = await Promise.all([
-        fetchAllRows(() => supabase.from("universes").select("id, slug, name, color, kind").order("sort_order").order("id")),
-        // Chystané filmy (Coming soon, V3.3) se do postupu ani achievementů nepočítají –
-        // v den premiéry už ano (V3.3.1), proto se bere i datum premiéry
-        fetchAllRows(() => supabase.from("universe_items").select("universe_id, tmdb_id, is_optional, is_upcoming, film:films(release_date)").order("id")),
-        fetchAllRows(() => supabase.from("categories").select("id, slug, name, color, sort_order").order("sort_order").order("id")),
-        fetchAllRows(() => supabase.from("universe_categories").select("universe_id, category_id").order("universe_id").order("category_id")),
+    // Stejná data jako přehled a hledání (V3.6.4) – po otevření přehledu se nic znovu nestahuje
+    const [universeRows, catalogItems, categories] = await Promise.all([
+        fetchUniverseRows(), fetchCatalogItems(), fetchCategories(),
     ]);
     return {
-        universes,
-        items: items
+        universes: universeRows.map(({ id, slug, name, color, kind }) => ({ id, slug, name, color, kind })),
+        // Chystané filmy (Coming soon, V3.3) se do postupu ani achievementů nepočítají –
+        // v den premiéry už ano (V3.3.1)
+        items: catalogItems
             .filter((item) => !isUpcoming(item))
-            .map(({ universe_id, tmdb_id, is_optional }) => ({ universe_id, tmdb_id, is_optional })),
+            .map(({ universe_id, film, is_optional }) => ({ universe_id, tmdb_id: film.tmdb_id, is_optional })),
         categories,
-        links,
+        links: universeRows.flatMap((u) => (u.universe_categories ?? [])
+            .map((uc) => ({ universe_id: u.id, category_id: uc.category_id }))),
     };
 }
 

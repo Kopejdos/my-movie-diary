@@ -607,9 +607,15 @@ button {
 /* Sekce kolekcí mimo obrazovku se vykreslí, až k nim uživatel doroluje (méně práce při startu).
    Odhad velikosti jen na výšku – dřív „auto 900px“ platilo i pro šířku a nevykreslená sekce
    byla na telefonu 900 px široká (stránka šla posouvat do strany; opraveno ve V3.3). */
-.collection-section + .collection-section {
+.collection-section + .collection-section,
+.community-slot > .collection-section {
     content-visibility: auto;
     contain-intrinsic-block-size: auto 900px;
+}
+
+/* Obal řady Community (V3.6.4) – překresluje se sám, v rozložení se chová jako by tu nebyl */
+.community-slot {
+    display: contents;
 }
 
 .collection-section {

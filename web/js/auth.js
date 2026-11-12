@@ -52,6 +52,20 @@ export function getUser() {
     return state.user;
 }
 
+/**
+ * Je v prohlížeči uložené přihlášení? (bez sítě, jen pohled do localStorage – V3.6.4)
+ * Hlavička tak při startu neukáže na okamžik Sign in / Register přihlášenému uživateli.
+ */
+export function hasStoredSession() {
+    try {
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key?.startsWith("sb-") && key.endsWith("-auth-token")) return true;
+        }
+    } catch { /* soukromý režim bez úložiště */ }
+    return false;
+}
+
 export function getProfile() {
     return state.profile;
 }

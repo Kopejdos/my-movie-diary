@@ -13,11 +13,7 @@ import { check, fetchAllRows } from "./db.js";
 export async function fetchUniverses() {
     // Seznam kolekcí z mezipaměti (mění se jen v adminu); postup vždy čerstvý
     const [universes, progress] = await Promise.all([
-        cached("universes", () => supabase
-            .from("universes")
-            .select("id, slug, name, description, color, kind, sort_order, cover:films(title, poster_path, backdrop_path), universe_categories(category_id)")
-            .order("sort_order")
-            .then(check)),
+        fetchUniverseRows(),
         // Postup jen na pár sekund – sdílí ho přednačtení při startu a první vykreslení;
         // po zhlédnutí nebo přihlášení se zahodí (invalidateProgress)
         cached("progress", () => supabase
@@ -38,6 +34,31 @@ export async function fetchUniverses() {
     });
 }
 
+/**
+ * Řádky kolekcí bez postupu (v mezipaměti). Sdílí je přehled, hledání i achievementy
+ * (V3.6.4 – dřív si achievementy stahovaly kolekce ještě jednou).
+ */
+export function fetchUniverseRows() {
+    return cached("universes", () => supabase
+        .from("universes")
+        .select("id, slug, name, description, color, kind, sort_order, cover:films(title, poster_path, backdrop_path), universe_categories(category_id)")
+        .order("sort_order")
+        .order("id")
+        .then(check));
+}
+
+/**
+ * Všechny položky kolekcí s filmy (v mezipaměti). Sdílí je hledání, „Co dneska?“
+ * i achievementy (V3.6.4 – dřív dva samostatné velké dotazy na stejnou tabulku).
+ * Stránky po 1 000 řádcích se stahují po třech najednou (katalog má přes 1 000 položek).
+ */
+export function fetchCatalogItems() {
+    return cached("search-items", () => fetchAllRows(() => supabase
+        .from("universe_items")
+        .select("id, universe_id, release_order, is_optional, franchise, is_upcoming, film:films(tmdb_id, title, original_title, release_date, runtime, poster_path)")
+        .order("id"), { parallel: 3 }));
+}
+
 /** Všechny kategorie (sekce přehledu) v pořadí. */
 export function fetchCategories() {
     return cached("categories", () => supabase
@@ -54,10 +75,7 @@ export function fetchCategories() {
 export async function fetchSearchData() {
     const [universes, items, otherFilms] = await Promise.all([
         fetchUniverses(),
-        cached("search-items", () => fetchAllRows(() => supabase
-            .from("universe_items")
-            .select("id, universe_id, release_order, is_optional, franchise, is_upcoming, film:films(tmdb_id, title, original_title, release_date, runtime, poster_path)")
-            .order("id"))),
+        fetchCatalogItems(),
         // Filmy mimo kolekce – schválené požadavky (V3.5.1); chyba (stará databáze) nevadí
         cached("other-films", () => fetchAllRows(() => supabase
             .from("other_films")
@@ -213,6 +231,10 @@ export function prefetchUniverse(slug, backdropPath = null) {
  */
 export async function fetchMyFilmCounts(signedIn) {
     if (!signedIn) return new Map();
+    return takeWarm("counts") ?? loadMyFilmCounts();
+}
+
+async function loadMyFilmCounts() {
     const rows = await supabase
         .from("my_film_counts")
         .select("tmdb_id, watch_count, last_watched_on")
@@ -236,11 +258,30 @@ export function todayLocal() {
 /** Zahodí uložený postup (po zhlédnutí, přihlášení, odhlášení). */
 export function invalidateProgress() {
     invalidate("progress");
+    warm.clear();
+}
+
+// Přednačtení při startu (V3.6.4): osobní data (zhlédnutí, watchlist) se začnou stahovat
+// hned, souběžně s ověřením přihlášení – přehled je pak použije jen jednou a jen čerstvé
+// (do 10 s). Jinak se vždy načítají znovu, protože se mění.
+const warm = new Map();             // klíč → { at, promise }
+const WARM_MS = 10_000;
+
+function takeWarm(key) {
+    const hit = warm.get(key);
+    warm.delete(key);
+    return hit && Date.now() - hit.at < WARM_MS ? hit.promise : null;
+}
+
+function putWarm(key, promise) {
+    promise.catch(() => warm.delete(key));
+    warm.set(key, { at: Date.now(), promise });
 }
 
 /** Oznámí zbytku aplikace, že se změnila zhlédnutí (např. kvůli achievementům). */
 function watchesChanged() {
     invalidateProgress();
+    warm.clear();
     document.dispatchEvent(new CustomEvent("watches-changed"));
 }
 
@@ -251,6 +292,14 @@ function watchesChanged() {
 export function warmOverview() {
     fetchUniverses().catch(() => {});
     fetchCategories().catch(() => {});
+    // Přihlášený (relace uložená v prohlížeči – zjistí se bez sítě): rovnou i podklady pro
+    // „Co dneska?“ – dřív se na ně čekalo, až se načte profil a vykreslí přehled
+    supabase.auth.getSession().then(({ data }) => {
+        if (!data.session) return;
+        fetchSearchData().catch(() => {});
+        putWarm("counts", loadMyFilmCounts());
+        putWarm("watchlist", loadWatchlistIds());
+    }).catch(() => {});
 }
 
 /** +1: zapíše nové zhlédnutí (dnes podle hodin uživatele). */
@@ -289,6 +338,10 @@ export async function removeLatestWatch(tmdbId) {
 /** ID filmů ve watchlistu přihlášeného uživatele (prázdné pro nepřihlášeného). */
 export async function fetchWatchlistIds(signedIn) {
     if (!signedIn) return new Set();
+    return takeWarm("watchlist") ?? loadWatchlistIds();
+}
+
+async function loadWatchlistIds() {
     const rows = await supabase.from("watchlist").select("tmdb_id").then(check);
     return new Set(rows.map((r) => r.tmdb_id));
 }
