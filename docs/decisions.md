@@ -209,6 +209,7 @@ Formát **V<hlavní>.<vedlejší>.<oprava>** (např. V1.2.1):
   u V3.0); případné opravy dostanou čtvrté číslo (V4.3.1.1…).
 - **V3.6.3** – jen plán a dokumentace (rozplánování kapitoly 4), aplikace beze změny.
 - **V3.6.4** – oprava výkonu přehledu pro přihlášené (patch k V3.6.2).
+- **V4.0.1** – rozložení stránky Settings na širší obrazovce (patch k V4.0).
 - Verze a **měsíc poslední aktualizace** jsou v patičce webu (např. „V1.1 · November 2026“). Obojí je v `web/js/config.js` (`APP_VERSION`, `APP_UPDATED`) – při vydání nové verze se změní tam.
 - Při vydání: úprava `config.js`, záznam do `CHANGELOG.md`, commit a **tag verze** (`git tag v1.1`, `git push --tags`). Tagy `faze-N` z verzí V0.x zůstávají, od V1.1 se používají jen tagy `vX.Y`.
 
@@ -1857,6 +1858,11 @@ v prohlížeči (`localStorage`, klíč `mmd-settings`).
   (ztmavení jako u ostatních tlačítek), počty na žetonech žánrů ve světlém režimu, seznam „Almost there“.
 - Test `tests/settings.test.mjs`; webové testy (seznamy, komunita, požadavky, heslo, CAPTCHA, moderace,
   přátelé, statistiky…) projdou; 320 px bez vodorovného posouvání (pět záložek profilu se vejde).
+
+- **V4.0.1 (14. 11.) – rozložení Settings:** účet na širší obrazovce (od 900 px – počítač, tablet na šířku)
+  ve **dvou sloupcích** – vlevo nick a heslo, vpravo veřejný profil, instalace, odhlášení a smazání účtu;
+  karty se roztáhnou na šířku sloupce místo úzkého pruhu uprostřed. Stránka je zhruba o třetinu kratší,
+  na telefonu zůstává vše pod sebou.
 
 #### Rozhodnutí ve fázi 43
 - **Nastavení jen v prohlížeči** – každé zařízení může vypadat jinak (telefon tmavý, počítač světlý); uložení

@@ -3,6 +3,9 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.0.1 – November 2026
+- On a computer or a tablet in landscape, your account settings now sit in two columns instead of one narrow strip – less scrolling
+
 ## V4.0 – November 2026
 - New **⚙ Settings**: the gear in the header opens appearance options that apply instantly
 - **Mode:** System, Light or Dark – System follows your device

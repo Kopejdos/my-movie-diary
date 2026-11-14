@@ -6029,3 +6029,34 @@ a.friend-row__name:hover {
 .appearance-panel {
     width: min(520px, 100%);
 }
+
+/* Účet ve dvou sloupcích (V4.0.1) – karty se roztáhnou na šířku sloupce místo úzkého středu */
+.settings-columns {
+    display: grid;
+    gap: 16px;
+    align-items: start;
+}
+
+@media (min-width: 900px) {
+    .settings-columns {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.settings-column {
+    display: grid;
+    gap: 16px;
+    align-content: start;
+    min-width: 0;
+}
+
+.settings-columns .auth-form,
+.settings-columns .public-card {
+    max-width: none;
+    margin: 0;
+}
+
+.settings-columns .auth-form {
+    gap: 12px;
+    padding: 22px;
+}

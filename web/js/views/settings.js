@@ -38,17 +38,21 @@ export async function settingsView(container) {
             settingsSection(TEXTS.settingsAppearance, TEXTS.settingsAppearanceHint, appearanceControls()),
             settingsSection(TEXTS.settingsPreferences, null, defaultsControls(signedIn))),
         signedIn
+            // Na širší obrazovce (od 900 px) dva sloupce – vlevo nick a heslo, vpravo veřejný
+            // profil, instalace, odhlášení a smazání (V4.0.1); na telefonu pod sebou
             ? h("section", { class: "settings-account" },
                 h("h2", { class: "settings-account__title" }, TEXTS.settingsAccount),
-                h("div", { class: "auth-page auth-page--stack" },
-                    generated ? null : nicknameCard(),
-                    publicProfileCard(),
-                    changePasswordCard(),
-                    installCard(),
-                    signOutCard(),
-                    deleteAccountCard()))
+                h("div", { class: "settings-columns" },
+                    h("div", { class: "settings-column" },
+                        generated ? null : nicknameCard(),
+                        changePasswordCard()),
+                    h("div", { class: "settings-column" },
+                        publicProfileCard(),
+                        installCard(),
+                        signOutCard(),
+                        deleteAccountCard())))
             : h("section", { class: "settings-account" },
-                h("div", { class: "auth-page auth-page--stack" },
+                h("div", { class: "settings-columns" },
                     installCard(),
                     h("section", { class: "auth-form" },
                         h("h2", {}, TEXTS.settingsAccount),

@@ -48,7 +48,8 @@
         { "title": "The Fantastic Four: First Steps", "year": 2025, "group": "Phase 6", "story": 37 },
         { "title": "Spider-Man: Brand New Day", "year": 2026, "group": "Phase 6", "story": 38, "franchise": "Spider-Man" },
         { "title": "Avengers: Doomsday", "year": 2026, "group": "Phase 6", "story": 39, "franchise": "The Avengers" },
-        { "title": "Avengers: Secret Wars", "year": 2027, "group": "Phase 6", "story": 40, "franchise": "The Avengers" }
+        { "title": "Avengers: Secret Wars", "year": 2027, "group": "Phase 6", "story": 40, "franchise": "The Avengers" },
+        { "title": "Black Panther 3", "year": 2028, "tmdb": 1386618 }
       ]
     },
     {
@@ -251,7 +252,8 @@
         { "title": "Jurassic World", "year": 2015, "group": "Jurassic World" },
         { "title": "Jurassic World: Fallen Kingdom", "year": 2018, "group": "Jurassic World" },
         { "title": "Jurassic World Dominion", "year": 2022, "group": "Jurassic World" },
-        { "title": "Jurassic World Rebirth", "year": 2025, "group": "Jurassic World" }
+        { "title": "Jurassic World Rebirth", "year": 2025, "group": "Jurassic World" },
+        { "title": "Untitled Jurassic World Rebirth Sequel", "tmdb": 1714034 }
       ]
     },
     {
@@ -368,7 +370,9 @@
         { "title": "Asterix & Obelix: God Save Britannia", "year": 2012, "franchise": "Live-action" },
         { "title": "Asterix: The Mansions of the Gods", "year": 2014, "franchise": "Animated" },
         { "title": "Asterix: The Secret of the Magic Potion", "year": 2018, "franchise": "Animated" },
-        { "title": "Asterix & Obelix: The Middle Kingdom", "year": 2023, "franchise": "Live-action" }
+        { "title": "Asterix & Obelix: The Middle Kingdom", "year": 2023, "franchise": "Live-action" },
+        { "title": "Asterix: The Kingdom of Nubia", "year": 2026, "tmdb": 1084728 },
+        { "title": "Astérix et les Douze Travaux", "tmdb": 1282171 }
       ]
     },
     {
@@ -448,7 +452,8 @@
         { "title": "Quantum of Solace", "year": 2008, "franchise": "Daniel Craig" },
         { "title": "Skyfall", "year": 2012, "franchise": "Daniel Craig" },
         { "title": "Spectre", "year": 2015, "franchise": "Daniel Craig" },
-        { "title": "No Time to Die", "year": 2021, "franchise": "Daniel Craig" }
+        { "title": "No Time to Die", "year": 2021, "franchise": "Daniel Craig" },
+        { "title": "Untitled James Bond Film", "tmdb": 1184696 }
       ]
     },
     {
@@ -799,7 +804,8 @@
       "films": [
         { "title": "Paddington", "year": 2014, "cover": true },
         { "title": "Paddington 2", "year": 2017 },
-        { "title": "Paddington in Peru", "year": 2024 }
+        { "title": "Paddington in Peru", "year": 2024 },
+        { "title": "Paddington 4", "tmdb": 1670528 }
       ]
     },
     {
@@ -1146,7 +1152,8 @@
         { "title": "Spider-Man: Brand New Day", "year": 2026, "group": "2020s", "franchise": "MCU" },
         { "title": "Avengers: Doomsday", "year": 2026, "group": "2020s", "franchise": "MCU" },
         { "title": "Avengers: Secret Wars", "year": 2027, "group": "2020s", "franchise": "MCU" },
-        { "title": "Spider-Man: Beyond the Spider-Verse", "year": 2027, "group": "2020s", "franchise": "Spider-Verse" }
+        { "title": "Spider-Man: Beyond the Spider-Verse", "year": 2027, "group": "2020s", "franchise": "Spider-Verse" },
+        { "title": "Black Panther 3", "year": 2028, "tmdb": 1386618, "group": "2020s", "franchise": "MCU" }
       ]
     },
     {
@@ -1224,6 +1231,7 @@
         { "title": "A Clockwork Orange", "year": 1971, "group": "1970s" },
         { "title": "Dirty Harry", "year": 1971, "group": "1970s" },
         { "title": "The Exorcist", "year": 1973, "group": "1970s" },
+        { "title": "Exorcist II: The Heretic", "year": 1977, "tmdb": 11586, "group": "1970s", "franchise": "The Exorcist" },
         { "title": "Superman", "year": 1978, "tmdb": 1924, "group": "1970s", "franchise": "DC" },
         { "title": "Superman II", "year": 1980, "group": "1980s", "franchise": "DC" },
         { "title": "Mad Max 2", "year": 1981, "group": "1980s", "franchise": "Mad Max" },
@@ -1237,6 +1245,7 @@
         { "title": "Batman", "year": 1989, "tmdb": 268, "group": "1980s", "franchise": "DC" },
         { "title": "Lethal Weapon 2", "year": 1989, "group": "1980s", "franchise": "Lethal Weapon" },
         { "title": "Gremlins 2: The New Batch", "year": 1990, "group": "1990s", "franchise": "Gremlins" },
+        { "title": "The Exorcist III", "year": 1990, "tmdb": 11587, "group": "1990s", "franchise": "The Exorcist" },
         { "title": "Goodfellas", "year": 1990, "group": "1990s" },
         { "title": "Batman Returns", "year": 1992, "group": "1990s", "franchise": "DC" },
         { "title": "Lethal Weapon 3", "year": 1992, "group": "1990s", "franchise": "Lethal Weapon" },
@@ -1261,8 +1270,10 @@
         { "title": "The Matrix Revolutions", "year": 2003, "group": "2000s", "franchise": "The Matrix" },
         { "title": "Harry Potter and the Prisoner of Azkaban", "year": 2004, "group": "2000s", "franchise": "Wizarding World" },
         { "title": "Catwoman", "year": 2004, "group": "2000s", "franchise": "DC" },
+        { "title": "Exorcist: The Beginning", "year": 2004, "tmdb": 11026, "group": "2000s", "franchise": "The Exorcist" },
         { "title": "Ocean's Twelve", "year": 2004, "group": "2000s", "franchise": "Ocean's" },
         { "title": "The Polar Express", "year": 2004, "group": "2000s", "label": "Animated" },
+        { "title": "Dominion: Prequel to The Exorcist", "year": 2005, "tmdb": 12700, "group": "2000s", "franchise": "The Exorcist" },
         { "title": "Harry Potter and the Goblet of Fire", "year": 2005, "group": "2000s", "franchise": "Wizarding World" },
         { "title": "Batman Begins", "year": 2005, "group": "2000s", "franchise": "DC" },
         { "title": "Constantine", "year": 2005, "group": "2000s", "franchise": "DC" },
@@ -1341,6 +1352,7 @@
         { "title": "Shazam! Fury of the Gods", "year": 2023, "group": "2020s", "franchise": "DC" },
         { "title": "The Flash", "year": 2023, "group": "2020s", "franchise": "DC" },
         { "title": "Blue Beetle", "year": 2023, "group": "2020s", "franchise": "DC" },
+        { "title": "The Exorcist: Believer", "year": 2023, "tmdb": 807172, "group": "2020s", "franchise": "The Exorcist" },
         { "title": "Aquaman and the Lost Kingdom", "year": 2023, "group": "2020s", "franchise": "DC" },
         { "title": "The Nun II", "year": 2023, "group": "2020s", "franchise": "The Conjuring Universe" },
         { "title": "Barbie", "year": 2023, "group": "2020s" },
@@ -1364,6 +1376,7 @@
         { "title": "The Lord of the Rings: The Hunt for Gollum", "year": 2027, "group": "2020s", "franchise": "Middle-earth" },
         { "title": "Man of Tomorrow", "year": 2027, "group": "2020s", "franchise": "DC" },
         { "title": "Godzilla x Kong: Supernova", "year": 2027, "group": "2020s", "franchise": "MonsterVerse" },
+        { "title": "Final Destination 7", "year": 2028, "tmdb": 1505252, "group": "2020s", "franchise": "Final Destination" },
         { "title": "The Batman Part II", "year": 2027, "group": "2020s", "franchise": "DC" },
         { "title": "Lethal Weapon 5", "tmdb": 1528550, "group": "2020s", "franchise": "Lethal Weapon" }
       ]
@@ -1614,7 +1627,8 @@
         { "title": "Saw 3D", "year": 2010, "story": 8 },
         { "title": "Jigsaw", "year": 2017, "story": 9 },
         { "title": "Spiral: From the Book of Saw", "year": 2021, "story": 10 },
-        { "title": "Saw X", "year": 2023, "story": 2 }
+        { "title": "Saw X", "year": 2023, "story": 2 },
+        { "title": "Untitled Saw Film", "tmdb": 1509671 }
       ]
     },
     {
@@ -1631,7 +1645,8 @@
         { "title": "Scream 4", "year": 2011 },
         { "title": "Scream", "year": 2022 },
         { "title": "Scream VI", "year": 2023 },
-        { "title": "Scream 7", "year": 2026 }
+        { "title": "Scream 7", "year": 2026 },
+        { "title": "Scream 8", "tmdb": 1650066 }
       ]
     },
     {
@@ -1670,7 +1685,8 @@
         { "title": "Final Destination 3", "year": 2006, "story": 4 },
         { "title": "The Final Destination", "year": 2009, "story": 5 },
         { "title": "Final Destination 5", "year": 2011, "story": 1 },
-        { "title": "Final Destination Bloodlines", "year": 2025, "story": 6 }
+        { "title": "Final Destination Bloodlines", "year": 2025, "story": 6 },
+        { "title": "Final Destination 7", "year": 2028, "tmdb": 1505252 }
       ]
     },
     {
@@ -1746,7 +1762,8 @@
         { "title": "The Texas Chainsaw Massacre: The Beginning", "year": 2006, "group": "Remake", "optional": true, "label": "Remake prequel" },
         { "title": "Texas Chainsaw 3D", "year": 2013, "group": "Legacy sequels" },
         { "title": "Leatherface", "year": 2017, "group": "Legacy sequels", "label": "Prequel" },
-        { "title": "Texas Chainsaw Massacre", "year": 2022, "group": "Legacy sequels" }
+        { "title": "Texas Chainsaw Massacre", "year": 2022, "group": "Legacy sequels" },
+        { "title": "The Texas Chainsaw Massacre", "tmdb": 1452181 }
       ]
     },
     {
@@ -1790,7 +1807,8 @@
         { "title": "All Hallows' Eve", "year": 2013, "optional": true, "label": "Art's first appearance" },
         { "title": "Terrifier", "year": 2016, "cover": true },
         { "title": "Terrifier 2", "year": 2022 },
-        { "title": "Terrifier 3", "year": 2024 }
+        { "title": "Terrifier 3", "year": 2024 },
+        { "title": "Terrifier 4", "tmdb": 1320786 }
       ]
     },
     {
@@ -1802,7 +1820,8 @@
       "description": "The same birthday, the same masked killer – again and again.",
       "films": [
         { "title": "Happy Death Day", "year": 2017 },
-        { "title": "Happy Death Day 2U", "year": 2019 }
+        { "title": "Happy Death Day 2U", "year": 2019 },
+        { "title": "Happy Death Day to Us", "tmdb": 774079 }
       ]
     },
     {
@@ -2816,12 +2835,16 @@
       "color": "#f59e0b",
       "description": "Loosely based upon the Capcom video games of the same name, the Resident Evil film series follows the protagonist Alice, a character created for the films. The Umbrella Corporation acts as the main an",
       "films": [
-        { "title": "Resident Evil", "year": 2002, "tmdb": 1576 },
-        { "title": "Resident Evil: Apocalypse", "year": 2004, "tmdb": 1577 },
-        { "title": "Resident Evil: Extinction", "year": 2007, "tmdb": 7737 },
-        { "title": "Resident Evil: Afterlife", "year": 2010, "tmdb": 35791 },
-        { "title": "Resident Evil: Retribution", "year": 2012, "tmdb": 71679 },
-        { "title": "Resident Evil: The Final Chapter", "year": 2016, "tmdb": 173897 }
+        { "title": "Resident Evil", "year": 2002, "tmdb": 1576, "franchise": "Live action" },
+        { "title": "Resident Evil: Apocalypse", "year": 2004, "tmdb": 1577, "franchise": "Live action" },
+        { "title": "Resident Evil: Extinction", "year": 2007, "tmdb": 7737, "franchise": "Live action" },
+        { "title": "Resident Evil: Degeneration", "year": 2008, "tmdb": 13648, "franchise": "animated" },
+        { "title": "Resident Evil: Afterlife", "year": 2010, "tmdb": 35791, "franchise": "Live action" },
+        { "title": "Resident Evil: Retribution", "year": 2012, "tmdb": 71679, "franchise": "Live action" },
+        { "title": "Resident Evil: Damnation", "year": 2012, "tmdb": 133121, "franchise": "animated" },
+        { "title": "Resident Evil: The Final Chapter", "year": 2016, "tmdb": 173897, "franchise": "Live action" },
+        { "title": "Resident Evil: Death Island", "year": 2023, "tmdb": 1083862, "franchise": "animated" },
+        { "title": "Resident Evil: Vendetta", "year": 2017, "tmdb": 400136, "franchise": "animated" }
       ]
     },
     {
@@ -2835,6 +2858,182 @@
         { "title": "Silent Hill", "year": 2006, "tmdb": 588 },
         { "title": "Silent Hill: Revelation 3D", "year": 2012, "tmdb": 61012 },
         { "title": "Return to Silent Hill", "year": 2026, "tmdb": 680493 }
+      ]
+    },
+    {
+      "slug": "fear-street",
+      "name": "Fear Street",
+      "kind": "series",
+      "categories": ["crime-thriller", "horror"],
+      "color": "#06b6d4",
+      "description": "Three film adaptations of the book series by R. L. Stine.",
+      "films": [
+        { "title": "Fear Street: 1994", "year": 2021, "tmdb": 591273 },
+        { "title": "Fear Street: 1978", "year": 2021, "tmdb": 591274 },
+        { "title": "Fear Street: 1666", "year": 2021, "tmdb": 591275 }
+      ]
+    },
+    {
+      "slug": "ju-on",
+      "name": "Ju-on",
+      "kind": "series",
+      "categories": ["crime-thriller", "horror"],
+      "color": "#8b5cf6",
+      "description": "Japanese horror franchise revolving around a curse born when one person dies with a deep and burning rage.",
+      "films": [
+        { "title": "Ju-on: The Curse", "year": 2000, "tmdb": 32250 },
+        { "title": "Ju-on: The Curse 2", "year": 2000, "tmdb": 44203 },
+        { "title": "Ju-on: The Grudge", "year": 2002, "tmdb": 11838 },
+        { "title": "Ju-on: The Grudge 2", "year": 2003, "tmdb": 9666 }
+      ]
+    },
+    {
+      "slug": "silent-night-deadly-night",
+      "name": "Silent Night, Deadly Night",
+      "kind": "series",
+      "categories": ["crime-thriller", "horror"],
+      "color": "#ef4444",
+      "description": "Series about slashers about childhood traumas that lead to Santa Claus killing sprees, and other horror stories occurring on Christmas.",
+      "films": [
+        { "title": "Silent Night, Deadly Night", "year": 1984, "tmdb": 27414 },
+        { "title": "Silent Night, Deadly Night Part 2", "year": 1987, "tmdb": 50719 },
+        { "title": "Silent Night, Deadly Night III: Better Watch Out!", "year": 1989, "tmdb": 42709 },
+        { "title": "Initiation: Silent Night, Deadly Night 4", "year": 1990, "tmdb": 59762 },
+        { "title": "Silent Night, Deadly Night 5: The Toy Maker", "year": 1991, "tmdb": 70984 }
+      ]
+    },
+    {
+      "slug": "the-exorcist",
+      "name": "The Exorcist",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#ef4444",
+      "description": "A horror anthology series focused on fictional accounts of demonic possession, and the efforts of religious authorities to counter it with various acts of faith.",
+      "films": [
+        { "title": "The Exorcist", "year": 1973, "tmdb": 9552 },
+        { "title": "Exorcist II: The Heretic", "year": 1977, "tmdb": 11586 },
+        { "title": "The Exorcist III", "year": 1990, "tmdb": 11587 },
+        { "title": "Exorcist: The Beginning", "year": 2004, "tmdb": 11026 },
+        { "title": "Dominion: Prequel to The Exorcist", "year": 2005, "tmdb": 12700 },
+        { "title": "The Exorcist: Believer", "year": 2023, "tmdb": 807172 }
+      ]
+    },
+    {
+      "slug": "the-omen",
+      "name": "The Omen",
+      "kind": "series",
+      "categories": ["crime-thriller", "horror"],
+      "color": "#ef4444",
+      "description": "Supernatural horror series centered around Damien Thorn, the Antichrist.",
+      "films": [
+        { "title": "The Omen", "year": 1976, "tmdb": 794 },
+        { "title": "Damien - Omen II", "year": 1978, "tmdb": 10766 },
+        { "title": "The Final Conflict", "year": 1981, "tmdb": 10768 },
+        { "title": "Omen IV: The Awakening", "year": 1991, "tmdb": 17792 },
+        { "title": "The First Omen", "year": 2024, "tmdb": 437342 }
+      ]
+    },
+    {
+      "slug": "one-missed-call",
+      "name": "One Missed Call",
+      "kind": "series",
+      "categories": ["crime-thriller", "horror"],
+      "color": "#8b5cf6",
+      "description": "Cult Japanese horror franchise revolving around a deadly curse that travels through cellphones.",
+      "films": [
+        { "title": "One Missed Call", "year": 2003, "tmdb": 9694 },
+        { "title": "One Missed Call 2", "year": 2005, "tmdb": 14021 },
+        { "title": "One Missed Call 3: Final", "year": 2006, "tmdb": 55470 }
+      ]
+    },
+    {
+      "slug": "scary-movie",
+      "name": "Scary Movie",
+      "kind": "series",
+      "categories": ["comedy"],
+      "color": "#d946ef",
+      "description": "Scary Movie is a 2000 horror comedy spoof film directed by Keenen Ivory Wayans. It is an American dark comedy that heavily parodies the horror, slasher, and mystery genres.",
+      "films": [
+        { "title": "Scary Movie", "year": 2000, "tmdb": 4247 },
+        { "title": "Scary Movie 2", "year": 2001, "tmdb": 4248 },
+        { "title": "Scary Movie 3", "year": 2003, "tmdb": 4256 },
+        { "title": "Scary Movie 4", "year": 2006, "tmdb": 4257 },
+        { "title": "Scary Movie 5", "year": 2013, "tmdb": 4258 },
+        { "title": "Scary Movie", "year": 2026, "tmdb": 1273221 }
+      ]
+    },
+    {
+      "slug": "the-chronicles-of-riddick",
+      "name": "The Chronicles of Riddick",
+      "kind": "series",
+      "categories": ["action-adventure", "scifi"],
+      "color": "#ef4444",
+      "description": "The Chronicles of Riddick is a science fiction action film series which follows the exploits of the antihero Richard B. Riddick.",
+      "films": [
+        { "title": "Pitch Black", "year": 2000, "tmdb": 2787 },
+        { "title": "The Chronicles of Riddick", "year": 2004, "tmdb": 2789 },
+        { "title": "Riddick", "year": 2013, "tmdb": 87421 }
+      ]
+    },
+    {
+      "slug": "becky",
+      "name": "Becky",
+      "kind": "series",
+      "categories": ["crime-thriller", "horror"],
+      "color": "#10b981",
+      "description": "A series of thriller films about a teenage girl facing off against violent men.",
+      "films": [
+        { "title": "Becky", "year": 2020, "tmdb": 601844 },
+        { "title": "The Wrath of Becky", "year": 2023, "tmdb": 986070 },
+        { "title": "The Last Temptation of Becky", "year": 2026, "tmdb": 1642568 }
+      ]
+    },
+    {
+      "slug": "firefly",
+      "name": "Firefly",
+      "kind": "series",
+      "categories": ["crime-thriller", "horror"],
+      "color": "#f97316",
+      "description": "A horror film series written and directed by Rob Zombie, following the exploits of a family of psychopathic killers, including Captain Spaulding, Otis Driftwood, and Baby Firefly as recurring…",
+      "films": [
+        { "title": "House of 1000 Corpses", "year": 2003, "tmdb": 2662 },
+        { "title": "The Devil's Rejects", "year": 2005, "tmdb": 1696 },
+        { "title": "3 from Hell", "year": 2019, "tmdb": 489064 }
+      ]
+    },
+    {
+      "slug": "hellraiser",
+      "name": "Hellraiser",
+      "kind": "series",
+      "categories": ["crime-thriller", "horror"],
+      "color": "#06b6d4",
+      "description": "Hellraiser is a British horror film franchise is based on the novella The Hellbound Heart by Clive Barker. The films continually features the Cenobite Pinhead.",
+      "films": [
+        { "title": "Hellraiser", "year": 1987, "tmdb": 9003 },
+        { "title": "Hellbound: Hellraiser II", "year": 1988, "tmdb": 9064 },
+        { "title": "Hellraiser III: Hell on Earth", "year": 1992, "tmdb": 11569 },
+        { "title": "Hellraiser: Bloodline", "year": 1996, "tmdb": 8766 },
+        { "title": "Hellraiser: Inferno", "year": 2000, "tmdb": 12597 },
+        { "title": "Hellraiser: Hellseeker", "year": 2002, "tmdb": 11246 },
+        { "title": "Hellraiser: Deader", "year": 2005, "tmdb": 17455 },
+        { "title": "Hellraiser: Hellworld", "year": 2005, "tmdb": 12699 },
+        { "title": "Hellraiser: Revelations", "year": 2011, "tmdb": 70584 },
+        { "title": "Hellraiser: Judgment", "year": 2018, "tmdb": 444149 }
+      ]
+    },
+    {
+      "slug": "the-strangers",
+      "name": "The Strangers",
+      "kind": "series",
+      "categories": ["crime-thriller", "horror"],
+      "color": "#10b981",
+      "description": "An American horror & slasher film series that follows people who are terrorized by three masked assailants: the Man in the Mask, Dollface & Pin-Up Girl.",
+      "films": [
+        { "title": "The Strangers", "year": 2008, "tmdb": 10665, "franchise": "primal" },
+        { "title": "The Strangers: Prey at Night", "year": 2018, "tmdb": 371608, "franchise": "primal" },
+        { "title": "The Strangers: Chapter 1", "year": 2024, "tmdb": 1010600, "franchise": "Remake" },
+        { "title": "The Strangers: Chapter 2", "year": 2025, "tmdb": 1010756, "franchise": "Remake" },
+        { "title": "The Strangers: Chapter 3", "year": 2026, "tmdb": 1010755, "franchise": "Remake" }
       ]
     }
   ]
