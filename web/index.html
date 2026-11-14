@@ -24,10 +24,19 @@
     <link rel="preconnect" href="https://vvnexfdnfvwbwluazwoo.supabase.co">
 
     <script>
-        // Uložený režim nastavit dřív, než se stránka vykreslí (jinak by problikla)
+        // Uložené nastavení vzhledu (V4.0, js/settings.js) použít dřív, než se stránka
+        // vykreslí – jinak by problikla ve výchozích barvách
         try {
-            const theme = localStorage.getItem("mmd-theme");
-            if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+            const s = JSON.parse(localStorage.getItem("mmd-settings") || "{}");
+            const old = localStorage.getItem("mmd-theme");
+            const mode = s.mode || old || "system";
+            const root = document.documentElement;
+            root.dataset.theme = mode === "light" || mode === "dark" ? mode
+                : (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+            if (s.style) root.dataset.style = s.style;
+            if (s.accent) root.dataset.accent = s.accent;
+            if (s.density) root.dataset.density = s.density;
+            if (s.motion) root.dataset.motion = s.motion;
         } catch { }
     </script>
     <link rel="stylesheet" href="css/style.css">
@@ -48,6 +57,7 @@
     <link rel="modulepreload" href="js/pwa.js">
     <link rel="modulepreload" href="js/ratings.js">
     <link rel="modulepreload" href="js/router.js">
+    <link rel="modulepreload" href="js/settings.js">
     <link rel="modulepreload" href="js/social.js">
     <link rel="modulepreload" href="js/supabase.js">
     <link rel="modulepreload" href="js/texts.js">

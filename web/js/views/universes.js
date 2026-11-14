@@ -12,6 +12,7 @@ import {
     prefetchUniverse,
 } from "../data.js";
 import { loadPref, savePref } from "../prefs.js";
+import { onSettingsChange } from "../settings.js";
 import { isSignedIn, getUser } from "../auth.js";
 import { setAccent, inkFor } from "../theme.js";
 import { TEXTS, format, movies, collections, steps } from "../texts.js";
@@ -61,7 +62,11 @@ export function sortUniverses(list, sort) {
 /** Kolik sloupců má mřížka kolekcí při dané šířce (stejně jako CSS .universe-grid). */
 function gridColumns(width) {
     const wide = window.matchMedia("(min-width: 720px)").matches;
-    const [min, gap] = wide ? [190, 18] : [150, 14];
+    // stejné hodnoty jako .universe-grid v style.css (hustota Compact od V4.0)
+    const compact = document.documentElement.dataset.density === "compact";
+    const [min, gap] = compact
+        ? (wide ? [150, 12] : [120, 10])
+        : (wide ? [190, 18] : [150, 14]);
     return Math.max(1, Math.floor((width + gap) / (min + gap)));
 }
 
@@ -299,6 +304,14 @@ export async function universesView(container, context) {
         });
     });
     observer.observe(grid);
+    // Hustota Compact (V4.0) mění počet sloupců i bez změny šířky
+    const stopSettings = onSettingsChange(() => {
+        if (!document.body.contains(grid)) {
+            stopSettings();
+            return;
+        }
+        if (gridColumns(grid.clientWidth) !== columns) layoutSections();
+    });
 
     function selectKind(kind) {
         selectedKind = kind;

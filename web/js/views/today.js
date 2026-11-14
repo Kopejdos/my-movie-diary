@@ -4,7 +4,7 @@
 
 import { addWatch, addToWatchlist, removeFromWatchlist, todayLocal } from "../data.js";
 import { buildCatalog, pickToday } from "../today.js";
-import { inkFor } from "../theme.js";
+import { inkFor, fillFor } from "../theme.js";
 import { TEXTS, format } from "../texts.js";
 import { h, mount, poster, pill, yearOf, toast } from "../dom.js";
 import { collectionPill } from "./film-controls.js";
@@ -82,8 +82,11 @@ export function todayPanel(data, onWatched) {
             ),
         );
         if (universe?.color) {
+            // tlačítko v barvě kolekce – barvu, na které by text nebyl čitelný, ztmaví (V4.0)
+            const fill = fillFor(universe.color);
             node.style.setProperty("--c", universe.color);
-            node.style.setProperty("--c-ink", inkFor(universe.color));
+            node.style.setProperty("--c-fill", fill);
+            node.style.setProperty("--c-ink", inkFor(fill));
         }
         return node;
     }

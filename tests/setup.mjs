@@ -9,3 +9,10 @@ globalThis.localStorage ??= { getItem: () => null, setItem() {}, removeItem() {}
 
 /** Cesta k modulu webu, např. web("achievements.js"). */
 export const web = (file) => new URL(`../web/js/${file}`, import.meta.url).href;
+
+// Minimum z DOM pro moduly, které při načtení sáhnou na <html> (settings.js – V4.0)
+globalThis.document ??= {
+    documentElement: { dataset: {}, style: { setProperty() {}, removeProperty() {} } },
+    querySelectorAll: () => [],
+};
+globalThis.getComputedStyle ??= () => ({ getPropertyValue: () => "" });

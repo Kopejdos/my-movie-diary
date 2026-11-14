@@ -1,34 +1,11 @@
-// Světlý / tmavý režim a barva aktuálního univerza.
-// Volba režimu se pamatuje v prohlížeči; bez volby se řídí nastavením systému.
+// Barva aktuálního univerza a výpočty kontrastu.
+// Režim, styl a pevná barva akcentu jsou od V4.0 v settings.js.
 
-const STORAGE_KEY = "mmd-theme";
+import { getSettings, onSettingsChange, resolvedMode } from "./settings.js";
 
-/** Uložená volba ("light" / "dark"), nebo null. */
-function storedTheme() {
-    try {
-        return localStorage.getItem(STORAGE_KEY);
-    } catch {
-        return null;   // soukromé okno / zakázané úložiště
-    }
-}
-
-/** Aktuálně zobrazený režim. */
+/** Aktuálně zobrazený režim ("light" / "dark") – pro CAPTCHA a podobně. */
 export function currentTheme() {
-    const stored = storedTheme();
-    if (stored === "light" || stored === "dark") return stored;
-    return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-}
-
-/** Přepne režim a uloží volbu. Vrací nový režim. */
-export function toggleTheme() {
-    const next = currentTheme() === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    try {
-        localStorage.setItem(STORAGE_KEY, next);
-    } catch {
-        // bez úložiště platí volba jen do zavření stránky
-    }
-    return next;
+    return resolvedMode();
 }
 
 /** Relativní jas barvy #rrggbb podle WCAG (0 = černá, 1 = bílá). */
@@ -91,10 +68,16 @@ export function applyUniverseColor(element, color) {
     element.style.setProperty("--u-ink", inkFor(fill));
 }
 
-/** Nastaví barvu univerza pro celou stránku (null = výchozí mosazná). */
+let pageColor = null;        // barva kolekce na aktuální stránce (i když se právě nepoužívá)
+
+/**
+ * Nastaví barvu univerza pro celou stránku (null = výchozí akcent).
+ * S pevnou barvou v nastavení (V4.0) se barva kolekce nepoužije – stránka zůstane v akcentu.
+ */
 export function setAccent(color) {
+    pageColor = color;
     const root = document.documentElement.style;
-    if (color) {
+    if (color && getSettings().accent === "collection") {
         applyUniverseColor(document.documentElement, color);
     } else {
         root.removeProperty("--u");
@@ -102,3 +85,6 @@ export function setAccent(color) {
         root.removeProperty("--u-ink");
     }
 }
+
+// Přepnutí mezi barvou kolekce a pevnou barvou se projeví hned i na otevřené stránce
+onSettingsChange(() => setAccent(pageColor));

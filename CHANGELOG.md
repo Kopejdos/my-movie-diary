@@ -3,6 +3,17 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.0 – November 2026
+- New **⚙ Settings**: the gear in the header opens appearance options that apply instantly
+- **Mode:** System, Light or Dark – System follows your device
+- **Style:** Modern or the new **Paper classic** – a cosy paper diary with ruled lines and serif type
+- **Color:** keep collection colors, or pick one color for the whole app – Brass, Pink, Blue, Green or Purple
+- **Density:** Compact shows more collections per row and slimmer movie rows
+- **Animations:** turn them down even if your device doesn't ask for it
+- New **Settings** page with your defaults (movie order, collection sorting) and your account – nickname, public profile, password, app install, sign out and account deletion
+- Your profile now focuses on achievements, stats, friends and lists; Sign out moved to Settings
+- Better contrast for "What to watch today?" buttons and genre counts
+
 ## V3.6.4 – November 2026
 - The home page loads faster when you're signed in: collection cards are built only when they come into view, your data starts loading right away and nothing is downloaded twice
 - "What to watch today?" appears sooner and its posters load first

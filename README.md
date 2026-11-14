@@ -6,7 +6,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V3.6.4** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V4.0** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
@@ -30,12 +30,12 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - XP and levels with movie-themed titles – from Extra to Legend
 - Personal stats – activity, most watched movies, decades, categories, streaks and collections you're closest to finishing
 - Sign in with email or nickname & password, or with Google; password reset and bot protection (Cloudflare Turnstile)
-- Light and dark mode
+- Settings ⚙ – System / Light / Dark mode, Modern or Paper classic style, collection colors or one fixed color, compact density and reduced animations; your defaults and account in one place
 - Admin panel: collections, movies (search TMDB right from the app), users and requests – a new collection from a TMDB series in one click; changes are written back into the seed automatically; new parts of TMDB series are spotted for you
 - Installable on a phone or computer (PWA), opens even offline
 
 **Coming next** – new features
-- V4 – settings & themes, a better phone layout, more languages, lots of new movies (first goal: 2,000) and a yearly Wrapped; V5 – TV shows
+- V4 – settings & themes, a better phone layout, more languages, better admin & request tools, lots of new movies (first goal: 2,000), perks for higher levels and a yearly Wrapped; V5 – TV shows
 
 ## Tech stack
 
@@ -70,6 +70,8 @@ my-movie-diary/
 ## Credits
 
 This product uses the TMDB API but is not endorsed or certified by TMDB.
+
+The settings gear icon is based on [Feather Icons](https://feathericons.com) (MIT).
 
 <a href="https://www.themoviedb.org"><img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg" alt="TMDB logo" height="16"></a>
 

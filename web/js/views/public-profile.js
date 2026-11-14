@@ -44,7 +44,7 @@ export async function publicProfileView(container, context) {
             h("a", { class: "back-link", href: "#/" }, TEXTS.back),
             h("div", { class: "state" },
                 h("p", {}, isOwn ? TEXTS.publicOwnPrivate : TEXTS.publicNotFound),
-                isOwn ? h("a", { class: "btn btn--primary", href: "#/profile" }, TEXTS.publicOpenSettings) : null));
+                isOwn ? h("a", { class: "btn btn--primary", href: "#/settings" }, TEXTS.publicOpenSettings) : null));
         return;
     }
 
@@ -136,7 +136,7 @@ function profileHero(profile, level, totals, isOwn, friendship, reload) {
             h("div", { class: "profile-hero__actions" },
                 // Soukromý profil přítele: odkaz by ostatním nic neukázal – sdílení se schová
                 profile.isPublic ? share : null,
-                isOwn ? h("a", { class: "btn", href: "#/profile" }, TEXTS.publicEdit) : null,
+                isOwn ? h("a", { class: "btn", href: "#/settings" }, TEXTS.publicEdit) : null,
                 // Porovnání (V3.4.2) – přihlášený u cizího profilu, který vidí
                 !isOwn && isSignedIn()
                     ? h("a", { class: "btn", href: `#/compare/${encodeURIComponent(profile.username)}` }, `⇄ ${TEXTS.compareButton}`)

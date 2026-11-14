@@ -376,7 +376,7 @@ button {
     background: var(--panel);
 }
 
-/* Přepínač světlý / tmavý režim */
+/* Kulaté tlačítko v hlavičce – od V4.0 ⚙ (okno se vzhledem), dřív ☀ / ☾ */
 .theme-toggle {
     width: 38px;
     height: 38px;
@@ -411,11 +411,10 @@ button {
     }
 }
 
-/* Na úzkém telefonu vede na přehled logo – odkaz „Universes“ se schová;
-   odhlášení je na stránce profilu (klik na @nick) */
+/* Na úzkém telefonu vede na přehled logo – odkaz „Universes“ se schová
+   (odhlášení je od V4.0 v Settings) */
 @media (max-width: 430px) {
-    .nav__link--home,
-    .nav__signout {
+    .nav__link--home {
         display: none;
     }
 }
@@ -792,14 +791,14 @@ button {
 
 /* „+ Mark as watched“ v barvě kolekce tipu */
 .btn--today {
-    background: var(--c);
-    border-color: var(--c);
+    background: var(--c-fill, var(--c));
+    border-color: var(--c-fill, var(--c));
     color: var(--c-ink);
 }
 
 .btn--today:hover {
-    background: color-mix(in srgb, var(--c) 88%, #fff);
-    border-color: color-mix(in srgb, var(--c) 88%, #fff);
+    background: color-mix(in srgb, var(--c-fill, var(--c)) 88%, #000);
+    border-color: color-mix(in srgb, var(--c-fill, var(--c)) 88%, #000);
     color: var(--c-ink);
 }
 
@@ -1068,11 +1067,16 @@ button {
     color: var(--c-ink, var(--accent-ink));
 }
 
+/* bílé číslo na aktivním žetonu ve světlém režimu – tmavší podklad kvůli kontrastu (V4.0) */
+:root[data-theme="light"] .chip--active .chip__count {
+    background: rgba(0, 0, 0, 0.22);
+}
+
 .chip__count {
     min-width: 22px;
     padding: 1px 7px;
     border-radius: 999px;
-    background: color-mix(in srgb, currentColor 16%, transparent);
+    background: color-mix(in srgb, currentColor 10%, transparent);
     font-size: 0.75rem;
     text-align: center;
 }
@@ -3254,6 +3258,17 @@ button {
 
 .profile-tabs .segmented__option {
     text-decoration: none;
+}
+
+/* Pět záložek (V4.0 + ⚙) se musí vejít i na 320 px */
+@media (max-width: 360px) {
+    .profile-tabs .segmented__option {
+        padding-inline: 8px;
+    }
+
+    .profile-tabs .segmented__option--icon {
+        padding-inline: 9px;
+    }
 }
 
 /* odkazy mají vlastní barvu – aktivní záložka musí mít kontrastní text */
@@ -5676,4 +5691,341 @@ a.friend-row__name:hover {
 
 .achievements-note {
     margin: 10px 0 0;
+}
+
+
+/* =====================================================================
+   V4.0 – nastavení: barvy akcentu, styl Paper classic, hustota, animace
+   Hodnoty zapisuje js/settings.js na <html> (data-accent, data-style,
+   data-density, data-motion; data-theme = vyřešený režim light / dark).
+   ===================================================================== */
+
+/* Skryté, ale čitelné pro čtečky obrazovky (přepínače v nastavení) */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Ozubené kolečko (podle Feather Icons, MIT) – kreslí se barvou textu */
+.gear-icon {
+    display: inline-block;
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    background: currentColor;
+    -webkit-mask: var(--gear) center / contain no-repeat;
+    mask: var(--gear) center / contain no-repeat;
+    --gear: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z'/%3E%3C/svg%3E");
+}
+
+.segmented__option--icon {
+    display: inline-flex;
+    align-items: center;
+    padding-inline: 11px;
+}
+
+/* ---------- Pevné barvy akcentu (tmavý režim) ---------- */
+/* kontrast: text v akcentu na pozadí ≥ 6,7 : 1, tmavý text na tlačítku ≥ 7,6 : 1 */
+:root[data-accent="pink"] {
+    --accent: #f287b7;
+    --accent-strong: #f7a3c9;
+}
+
+:root[data-accent="blue"] {
+    --accent: #72aef2;
+    --accent-strong: #93c2f6;
+}
+
+:root[data-accent="green"] {
+    --accent: #56c993;
+    --accent-strong: #74d6a8;
+}
+
+:root[data-accent="purple"] {
+    --accent: #b896f2;
+    --accent-strong: #cbb0f6;
+}
+
+/* ---------- Pevné barvy akcentu (světlý režim) – bílý text na tlačítku ≥ 5,8 : 1 ---------- */
+:root[data-theme="light"][data-accent="pink"] {
+    --accent: #b0305f;
+    --accent-strong: #962750;
+}
+
+:root[data-theme="light"][data-accent="blue"] {
+    --accent: #1d5fa6;
+    --accent-strong: #174f8b;
+}
+
+:root[data-theme="light"][data-accent="green"] {
+    --accent: #1c7349;
+    --accent-strong: #165f3c;
+}
+
+:root[data-theme="light"][data-accent="purple"] {
+    --accent: #6a42b3;
+    --accent-strong: #5a379a;
+}
+
+/* ---------- Styl Paper classic – papírový deník ---------- */
+/* Teplý papír, linky jako v sešitě, patkové písmo, bez září a lesku, menší zaoblení */
+:root[data-style="paper"] {
+    --bg: #1c1915;
+    --bg-deep: #15130f;
+    --panel: #25211b;
+    --panel-hover: #2d2820;
+    --border: #3d362b;
+    --text: #e9e0cc;
+    --heading: #f5ead3;
+    --muted: #a89d88;
+    --dot: rgba(233, 224, 204, 0.06);
+    --shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+    --gloss: transparent;
+    --radius: 8px;
+    --radius-small: 6px;
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --font-body: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, "Noto Serif", serif;
+}
+
+:root[data-style="paper"][data-theme="light"] {
+    --bg: #f3ead6;
+    --bg-deep: #e9dec6;
+    --panel: #fbf6e9;
+    --panel-hover: #f4ecdb;
+    --border: #d8c9ab;
+    --text: #2a241c;
+    --heading: #1d1812;
+    --muted: #6a5e4b;
+    --dot: rgba(42, 36, 28, 0.06);
+    --shadow: 0 8px 22px rgba(60, 45, 20, 0.12);
+}
+
+/* linkovaný papír místo tečkované mřížky */
+:root[data-style="paper"] body {
+    background:
+        repeating-linear-gradient(to bottom, transparent 0 31px, var(--dot) 31px 32px),
+        var(--bg);
+}
+
+/* bez barevných září v rozích */
+:root[data-style="paper"] body::before {
+    display: none;
+}
+
+:root[data-style="paper"] .header {
+    box-shadow: none;
+    border-bottom-width: 2px;
+    border-bottom-style: double;
+}
+
+:root[data-style="paper"] h1 {
+    letter-spacing: 0;
+}
+
+:root[data-style="paper"] .film,
+:root[data-style="paper"] .universe-card,
+:root[data-style="paper"] .modal {
+    border-radius: var(--radius-small);
+}
+
+/* ---------- Hustota Compact – menší karty a řádky filmů ---------- */
+:root[data-density="compact"] .universe-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+}
+
+@media (min-width: 720px) {
+    :root[data-density="compact"] .universe-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+    }
+}
+
+:root[data-density="compact"] .universe-card__title {
+    font-size: 0.95rem;
+}
+
+:root[data-density="compact"] .film-list {
+    gap: 6px;
+}
+
+:root[data-density="compact"] .film {
+    grid-template-columns: 42px 1fr auto;
+    gap: 10px;
+    padding: 6px 10px 6px 6px;
+}
+
+:root[data-density="compact"] .film__poster {
+    width: 42px;
+}
+
+/* ---------- Animace: Reduced (i bez nastavení systému) ---------- */
+:root[data-motion="reduce"] *,
+:root[data-motion="reduce"] *::before,
+:root[data-motion="reduce"] *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+}
+
+/* ---------- Stránka Settings a okno ⚙ ---------- */
+.settings-layout {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+@media (min-width: 900px) {
+    .settings-layout {
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+        align-items: start;
+    }
+}
+
+.settings-card {
+    padding: 20px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--panel);
+}
+
+.settings-card__title,
+.settings-account__title {
+    font-size: 1.35rem;
+    margin-bottom: 4px;
+}
+
+.settings-card__hint {
+    margin: 0 0 14px;
+    font-size: 0.9rem;
+}
+
+.settings-account__title {
+    margin-bottom: 14px;
+}
+
+.settings-group {
+    display: grid;
+    gap: 18px;
+}
+
+.setting {
+    margin: 0;
+    padding: 0;
+    border: none;
+    min-width: 0;
+}
+
+.setting__legend {
+    display: block;
+    margin-bottom: 8px;
+    padding: 0;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.setting__hint {
+    margin: 8px 0 0;
+}
+
+/* přepínače jako segmented – <label> s radiem uvnitř */
+.segmented--choice {
+    flex-wrap: wrap;
+    max-width: 100%;
+}
+
+.segmented--choice .segmented__option {
+    display: inline-flex;
+    align-items: center;
+}
+
+.segmented--choice .segmented__option.is-checked {
+    background: var(--u-fill, var(--u));
+    color: var(--u-ink);
+}
+
+.segmented--choice .segmented__option:focus-within,
+.swatch:focus-within {
+    outline: 2px solid var(--u);
+    outline-offset: 2px;
+}
+
+/* barevná kolečka akcentu */
+.swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.swatch {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px 6px 6px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.swatch.is-checked {
+    border-color: var(--heading);
+    box-shadow: inset 0 0 0 1px var(--heading);
+}
+
+.swatch__dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid color-mix(in srgb, var(--heading) 25%, transparent);
+}
+
+/* barvy koleček: stejné jako akcent v daném režimu */
+.swatch__dot--collection {
+    background: conic-gradient(#e23636, #f5c518, #4cc38a, #3b82f6, #a855f7, #e23636);
+}
+
+.swatch__dot--brass { background: #d4a75a; }
+.swatch__dot--pink { background: #f287b7; }
+.swatch__dot--blue { background: #72aef2; }
+.swatch__dot--green { background: #56c993; }
+.swatch__dot--purple { background: #b896f2; }
+
+:root[data-theme="light"] .swatch__dot--brass { background: #8f6522; }
+:root[data-theme="light"] .swatch__dot--pink { background: #b0305f; }
+:root[data-theme="light"] .swatch__dot--blue { background: #1d5fa6; }
+:root[data-theme="light"] .swatch__dot--green { background: #1c7349; }
+:root[data-theme="light"] .swatch__dot--purple { background: #6a42b3; }
+
+.settings-field {
+    display: grid;
+    gap: 0;
+}
+
+.settings-field select {
+    max-width: 320px;
+}
+
+.settings-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.appearance-panel {
+    width: min(520px, 100%);
 }

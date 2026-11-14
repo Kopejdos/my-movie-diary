@@ -1,13 +1,12 @@
 // Vstupní bod webu: přihlášení, hlavička a router.
 
 import {
-    initAuth, onAuthChange, getUser, getProfile, signOut, hasGeneratedUsername, authRedirectResult, isRecoverySession,
+    initAuth, onAuthChange, getUser, getProfile, hasGeneratedUsername, authRedirectResult, isRecoverySession,
     hasStoredSession,
 } from "./auth.js";
 import { addRoute, setNotFound, startRouter, render, navigate, currentPath } from "./router.js";
 import { TEXTS, format } from "./texts.js";
 import { h, mount, toast, loadingView } from "./dom.js";
-import { currentTheme, toggleTheme } from "./theme.js";
 import { initPwa, canInstall, promptInstall, onInstallChange, onUpdateAvailable } from "./pwa.js";
 import { APP_VERSION, APP_UPDATED } from "./config.js";
 import { refreshAchievements, tierLabel } from "./achievements.js";
@@ -33,6 +32,7 @@ function lazy(load, name) {
 const loginView = lazy(() => import("./views/login.js"), "loginView");
 const registerView = lazy(() => import("./views/register.js"), "registerView");
 const profileView = lazy(() => import("./views/profile.js"), "profileView");
+const settingsView = lazy(() => import("./views/settings.js"), "settingsView");
 const watchlistView = lazy(() => import("./views/watchlist.js"), "watchlistView");
 const searchView = lazy(() => import("./views/search.js"), "searchView");
 const comingSoonView = lazy(() => import("./views/upcoming.js"), "comingSoonView");
@@ -69,6 +69,7 @@ addRoute("/universe/:slug", (container, { params }) => redirect(`/collection/${p
 addRoute("/login", loginView);
 addRoute("/register", registerView);
 addRoute("/profile", profileView);
+addRoute("/settings", settingsView);
 addRoute("/watchlist", watchlistView);
 addRoute("/search", searchView);
 addRoute("/coming-soon", comingSoonView);
@@ -121,7 +122,7 @@ function renderHeader() {
                         },
                     }, `⤓ ${TEXTS.install}`)
                     : null,
-                themeToggle(),
+                settingsButton(),
                 navLink("#/", TEXTS.navUniverses, path === "/" || path.startsWith("/collection/"), " nav__link--home"),
                 h("a", {
                     class: `nav__link nav__search${path === "/search" ? " nav__link--active" : ""}`,
@@ -159,15 +160,14 @@ function renderHeader() {
                     ? [
                         // S nevyřízenou žádostí o přátelství vede nick rovnou na Friends (V3.4.1)
                         h("a", {
-                            class: `nav__user${(["/profile", "/stats", "/friends", "/lists"].includes(path) || path.startsWith("/compare/")) ? " nav__user--active" : ""}`,
+                            class: `nav__user${(["/profile", "/stats", "/friends", "/lists", "/settings"].includes(path) || path.startsWith("/compare/")) ? " nav__user--active" : ""}`,
                             href: pending > 0 ? "#/friends" : "#/profile",
                             title: pending > 0 ? format("friendsPendingAria", pending) : TEXTS.navProfile,
                         },
                             level ? h("span", { class: "nav__level", title: `${level.title} · ${level.xp} XP` }, String(level.level)) : null,
                             h("span", { class: "nav__nick" }, profile ? `@${profile.username}` : ""),
                             pending > 0 ? h("span", { class: "nav__badge", "aria-hidden": "true" }, String(pending)) : null),
-                        h("button", { class: "nav__link nav__button nav__signout", type: "button", onClick: handleSignOut },
-                            TEXTS.navSignOut),
+                        // Sign out je od V4.0 v Settings (⚙ → All settings, nebo záložka v profilu)
                     ]
                     : authPending && hasStoredSession()
                         ? null                  // přihlášení se teprve ověřuje – tlačítka by jen problikla
@@ -180,29 +180,19 @@ function renderHeader() {
     );
 }
 
-/** Kulaté tlačítko ☀ / ☾ – přepne světlý a tmavý režim. */
-function themeToggle() {
-    const dark = currentTheme() === "dark";
+/** Kulaté tlačítko ⚙ – okno se vzhledem (V4.0, dřív přepínač ☀ / ☾). Okno se načte až po kliknutí. */
+function settingsButton() {
     return h("button", {
-        class: "theme-toggle",
+        class: "theme-toggle settings-toggle",
         type: "button",
-        title: dark ? TEXTS.themeToLight : TEXTS.themeToDark,
-        "aria-label": dark ? TEXTS.themeToLight : TEXTS.themeToDark,
-        onClick: () => {
-            toggleTheme();
-            renderHeader();
+        title: TEXTS.navSettings,
+        "aria-label": TEXTS.navSettings,
+        "aria-haspopup": "dialog",
+        onClick: async () => {
+            const { openAppearancePanel } = await import("./views/appearance.js");
+            openAppearancePanel();
         },
-    }, dark ? "☀" : "☾");
-}
-
-async function handleSignOut() {
-    try {
-        await signOut();
-        toast(TEXTS.signedOut);
-        navigate("/");
-    } catch (error) {
-        toast(format("errorGeneric", error.message), "error");
-    }
+    }, h("span", { class: "gear-icon", "aria-hidden": "true" }));
 }
 
 /** Reakce na přihlášení / odhlášení: překreslit hlavičku a obrazovku. */
@@ -228,7 +218,7 @@ onAuthChange(({ user, profile }) => {
         refreshPendingCount();
         // Uživatel z Google má zatím automatický nickname → nabídnout volbu vlastního
         if (hasGeneratedUsername()) {
-            navigate("/profile");
+            navigate("/settings");
             return;
         }
         toast(format("welcome", profile?.username ?? ""));
@@ -258,7 +248,7 @@ document.addEventListener("route-rendered", () => {
 initPwa();
 onInstallChange(() => {
     renderHeader();
-    if (currentPath() === "/profile") render();
+    if (currentPath() === "/settings") render();
 });
 onUpdateAvailable(() => toast(TEXTS.updateAvailable, "info", {
     label: TEXTS.updateReload,
@@ -393,6 +383,6 @@ await handleAuthRedirect();
 // prohlížeč volný – nezdržují start ani první interakci (V2.1.1)
 if (getUser()) whenIdle(() => refreshProgress({ announce: false }), 2500);
 if (getUser() && hasGeneratedUsername() && !isRecoverySession()) {
-    window.location.hash = "/profile";
+    window.location.hash = "/settings";
 }
 await startRouter(main);

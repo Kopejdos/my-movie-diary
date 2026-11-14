@@ -204,6 +204,8 @@ Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny
     nepoužívaný sloupec `universes.owner_id`). Jde spustit i opakovaně. Edge Functions beze změny.
     Testy logiky webu: v kořeni repozitáře `node --test` (Node.js 20+, viz `tests/README.md`).
 
+13. **Nastavení (V4.0):** bez migrace a bez změny Edge Functions – stačí nahrát web (push).
+
 **Seed a admin panel (od V3.5.2.1):** seed je zdroj pravdy pro import, ale **úpravy z aplikace se neztratí** –
 databáze si je pamatuje (`universe_items.source`, `universes.source`, tabulka `seed_removals`) a `import.sh`
 je před importem propíše do `universes.json` (`sync-seed.sh`): filmy z požadavků, kolekce ze série, přidání /

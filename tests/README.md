@@ -21,6 +21,7 @@ Jeden soubor: `node --test tests/levels.test.mjs`.
 | `levels.test.mjs` | prahy úrovní (100 / 450 / 1 950 / 10 400 … 79 150 XP), tituly Extra … Legend, postup k další úrovni |
 | `achievements.test.mjs` | XP za nové filmy, opakování a dokončené kolekce; *Seen before* se nepočítá do času ani Marathonu; datum odemčení |
 | `search.test.mjs` | normalizace textu (diakritika, apostrofy, `&`), pořadí výsledků, „spiderman“ = „Spider-Man“, hledání podle roku |
+| `settings.test.mjs` | nastavení vzhledu (V4.0): výchozí hodnoty, neplatné volby se ignorují, zápis na `<html>` |
 | `theme.test.mjs` | každá barva kolekce ze `supabase/seed/universes.json` dá tlačítko s kontrastem aspoň 4,5 : 1 (WCAG AA) |
 
 ## Pomocné soubory

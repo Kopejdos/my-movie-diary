@@ -84,7 +84,13 @@ export function profileTabs(active) {
             tab("stats", "#/stats", TEXTS.profileTabStats),
             tab("friends", "#/friends", [TEXTS.profileTabFriends,
                 pending > 0 ? h("span", { class: "tab-badge", "aria-label": format("friendsPendingAria", pending) }, String(pending)) : null]),
-            tab("lists", "#/lists", TEXTS.profileTabLists)));
+            tab("lists", "#/lists", TEXTS.profileTabLists),
+            // Nastavení (V4.0) – jen ikona, ať se pět záložek vejde i na úzký telefon
+            h("a", {
+                class: `segmented__option segmented__option--icon${active === "settings" ? " segmented__option--active" : ""}`,
+                href: "#/settings", title: TEXTS.profileTabSettings, "aria-label": TEXTS.profileTabSettings,
+                "aria-current": active === "settings" ? "page" : null,
+            }, h("span", { class: "gear-icon", "aria-hidden": "true" }))));
 }
 
 /** Sekce s nadpisem. */
@@ -247,7 +253,7 @@ function almostThere(list) {
             if (p.universe.color) {
                 applyUniverseColor(link, p.universe.color);
             }
-            return link;
+            return h("li", {}, link);
         }));
 }
 
