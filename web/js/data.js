@@ -5,6 +5,14 @@ import { supabase } from "./supabase.js";
 import { cached, invalidate } from "./cache.js";
 import { backdropUrl } from "./dom.js";
 import { check, fetchAllRows } from "./db.js";
+import { TRANSLATED, catalogReady, localizeUniverse, localizeCategory, localizeItem, localizeRows, localizeFilm } from "./catalog-i18n.js";
+
+/** Počká na překlady katalogu (V4.2.2) a přeloží jimi načtená data; v angličtině nic nedělá. */
+async function translated(promise, apply) {
+    const [data] = await Promise.all([promise, catalogReady]);
+    if (TRANSLATED && data) apply(data);
+    return data;
+}
 
 /**
  * Všechna univerza seřazená pro hlavní obrazovku, včetně obalu a postupu.
@@ -39,12 +47,12 @@ export async function fetchUniverses() {
  * (V3.6.4 – dřív si achievementy stahovaly kolekce ještě jednou).
  */
 export function fetchUniverseRows() {
-    return cached("universes", () => supabase
+    return cached("universes", () => translated(supabase
         .from("universes")
-        .select("id, slug, name, description, color, kind, sort_order, cover:films(title, poster_path, backdrop_path), universe_categories(category_id)")
+        .select("id, slug, name, description, color, kind, sort_order, cover_tmdb_id, cover:films(title, poster_path, backdrop_path), universe_categories(category_id)")
         .order("sort_order")
         .order("id")
-        .then(check));
+        .then(check), (rows) => rows.forEach(localizeUniverse)));
 }
 
 /**
@@ -53,19 +61,24 @@ export function fetchUniverseRows() {
  * Stránky po 1 000 řádcích se stahují po třech najednou (katalog má přes 1 000 položek).
  */
 export function fetchCatalogItems() {
-    return cached("search-items", () => fetchAllRows(() => supabase
+    return cached("search-items", () => translated(fetchAllRows(() => supabase
         .from("universe_items")
         .select("id, universe_id, release_order, is_optional, franchise, is_upcoming, film:films(tmdb_id, title, original_title, release_date, runtime, poster_path)")
-        .order("id"), { parallel: 3 }));
+        .order("id"), { parallel: 3 }), (rows) => rows.forEach((item) => localizeItem(item))));
 }
 
-/** Všechny kategorie (sekce přehledu) v pořadí. */
-export function fetchCategories() {
-    return cached("categories", () => supabase
+/**
+ * Všechny kategorie (sekce přehledu) v pořadí.
+ * original = bez překladu (admin panel – V4.2.2; jinak by se přeložený název mohl uložit).
+ */
+export function fetchCategories({ original = false } = {}) {
+    const load = () => supabase
         .from("categories")
         .select("id, slug, name, color, sort_order")
         .order("sort_order")
-        .then(check));
+        .then(check);
+    if (original && TRANSLATED) return cached("categories-original", load);
+    return cached("categories", () => translated(load(), (rows) => rows.forEach(localizeCategory)));
 }
 
 /**
@@ -77,10 +90,10 @@ export async function fetchSearchData() {
         fetchUniverses(),
         fetchCatalogItems(),
         // Filmy mimo kolekce – schválené požadavky (V3.5.1); chyba (stará databáze) nevadí
-        cached("other-films", () => fetchAllRows(() => supabase
+        cached("other-films", () => translated(fetchAllRows(() => supabase
             .from("other_films")
             .select("tmdb_id, title, original_title, release_date, runtime, poster_path")
-            .order("tmdb_id"))).catch(() => []),
+            .order("tmdb_id")), (rows) => rows.forEach((film) => localizeFilm(film)))).catch(() => []),
     ]);
     return { universes, items, otherFilms };
 }
@@ -96,10 +109,12 @@ export const KIND_ORDER = ["series", "studio", "genre", "path"];
  * stránka – postup, Up next, pohledy), upcoming = chystané filmy pro oddíl
  * Coming soon (V3.3), seřazené podle data premiéry. Film v den premiéry už patří
  * do items (V3.3.1); chystané za hranicí let (viz inComingSoonWindow) se neukazují.
+ * original = bez překladu (admin panel – V4.2.2; editor by jinak uložil přeložené texty).
  */
-export function fetchUniverse(slug) {
-    return cached(`universe:${slug}`, async () => {
-        const universe = await supabase
+export function fetchUniverse(slug, { original = false } = {}) {
+    const key = original && TRANSLATED ? `universe-original:${slug}` : `universe:${slug}`;
+    return cached(key, async () => {
+        const universe = await translated(supabase
             .from("universes")
             .select(`
                 id, slug, name, description, color, kind, cover_tmdb_id,
@@ -113,7 +128,12 @@ export function fetchUniverse(slug) {
             .eq("slug", slug)
             .order("release_order", { referencedTable: "universe_items" })
             .maybeSingle()
-            .then(check);
+            .then(check), (row) => {
+            if (original) return;
+            localizeUniverse(row);
+            row.categories?.forEach(localizeCategory);
+            row.universe_items?.forEach((item) => localizeItem(item));
+        });
         if (!universe) return null;
         const { universe_items: all, ...rest } = universe;
         const items = (all ?? []).filter((item) => !isUpcoming(item));
@@ -351,11 +371,11 @@ async function loadWatchlistIds() {
  * Seřazený od naposledy přidaného.
  */
 export async function fetchWatchlist() {
-    const rows = await supabase
+    const rows = await translated(supabase
         .from("watchlist")
         .select("tmdb_id, added_at, film:films(tmdb_id, title, release_date, runtime, poster_path)")
         .order("added_at", { ascending: false })
-        .then(check);
+        .then(check), localizeRows);
     if (rows.length === 0) return [];
 
     const memberships = await supabase
@@ -367,6 +387,7 @@ export async function fetchWatchlist() {
     const universesByFilm = new Map();
     const upcomingIds = new Set();      // filmy, které ještě nevyšly (Coming soon, V3.3)
     for (const m of memberships) {
+        localizeUniverse(m.universe);
         if (m.is_upcoming) upcomingIds.add(m.tmdb_id);
         if (!m.universe) continue;
         const list = universesByFilm.get(m.tmdb_id) ?? [];

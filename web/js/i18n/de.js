@@ -662,6 +662,10 @@ export default {
     notFoundTitle: "Seite nicht gefunden",
     notFoundText: "Hier gibt es nichts.",
 
+    footerAbout: "Über die App",
+    footerTerms: "Nutzungsbedingungen",
+    footerPrivacy: "Datenschutz",
+    footerContact: "Kontakt",
     tmdbAttribution: "Dieses Produkt nutzt die TMDB-API, wird aber nicht von TMDB unterstützt oder zertifiziert.",
     errorCopy: "Kopieren wird in diesem Browser nicht unterstützt.",
     requestsCancelTooLate: "Dieser Wunsch kann nicht mehr zurückgezogen werden.",

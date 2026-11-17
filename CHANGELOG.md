@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.2.2 – November 2026
+- Movie titles now show in your language – Czech, German, Spanish and Ukrainian titles come straight from TMDB
+- Collections, genres and every step of the curated paths are translated too
+- Search finds movies by the translated and the English title (and works with Cyrillic)
+- The footer speaks your language; Terms and Privacy stay in English with a short note in yours
+
 ## V4.2.1 – November 2026
 - My Movie Diary now speaks five languages: English, Čeština, Deutsch, Español and Українська
 - Pick yours in Settings → Language – by default the app follows your browser

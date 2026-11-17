@@ -405,6 +405,14 @@ document.addEventListener("keydown", (event) => {
     if (field) field.focus(); else navigate("/search");
 });
 
+// Statické texty v index.html (patička) v jazyce aplikace (V4.2.2): data-text = klíč textu
+document.querySelectorAll("[data-text]").forEach((element) => {
+    element.textContent = TEXTS[element.dataset.text] ?? element.textContent;
+});
+document.querySelectorAll("[data-text-aria]").forEach((element) => {
+    element.setAttribute("aria-label", TEXTS[element.dataset.textAria] ?? element.getAttribute("aria-label"));
+});
+
 // Verze a měsíc poslední aktualizace v patičce
 const versionLabel = document.getElementById("app-version");
 if (versionLabel) versionLabel.textContent = `${APP_VERSION} · ${monthYear(APP_UPDATED)}`;

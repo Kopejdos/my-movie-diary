@@ -44,9 +44,26 @@ films ◄──── universe_items ────► universes
 | `poster_path` | `text` | cesta k plakátu na CDN TMDB (`/abc.jpg`) |
 | `backdrop_path` | `text` | širokoúhlý záběr z filmu – banner v detailu univerza |
 | `overview` | `text` | krátký popis |
+| `translated_at` | `timestamptz` | kdy se uložily překlady (V4.2.2); `null` = ještě ne → vezme ho akce `translate` |
 | `updated_at` | `timestamptz` | kdy se naposledy obnovilo z TMDB |
 
 Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
+
+### `film_translations` – přeložené názvy filmů (V4.2.2)
+| Sloupec | Typ | Poznámka |
+|---|---|---|
+| `tmdb_id` | `integer` FK → `films` (cascade) | PK spolu s `lang` |
+| `lang` | `text` | `cs` / `de` / `es` / `uk` |
+| `title` | `text` | název v jazyce; `null` = stejný jako anglický (web ukáže anglický) |
+| `overview` | `text` | popis v jazyce (web ho zatím neukazuje) |
+
+- Plní ji Edge Function `tmdb` (import – překlady přijdou ve stejné odpovědi TMDB, `append_to_response=translations`;
+  akce `translate` pro filmy bez překladu, volá ji `scripts/translate.sh`) a `admin` (přidání filmu).
+  Španělština má přednost ze Španělska (jinak Mexiko), němčina z Německa.
+- Číst smí kdokoli. Web si názvy bere funkcí **`film_titles(lang)`** – jeden objekt JSON `{ "603": "Matrix", … }`
+  místo ~1 300 řádků.
+- **Kolekce, kategorie, poznámky cest a obecné popisky** (Phase 1, Remake…) v databázi nejsou – jsou
+  v souborech `web/js/i18n/catalog.<jazyk>.json` a verzují se s webem (`web/js/catalog-i18n.js`).
 
 ### `universes` – univerza
 | Sloupec | Typ | Poznámka |

@@ -22,7 +22,7 @@ export function normalize(text) {
         .toLowerCase()
         .replace(/&/g, " and ")
         .replace(/['’`]/g, "")                 // apostrof slovo nedělí (stoker's → stokers)
-        .replace(/[^a-z0-9]+/g, " ")
+        .replace(/[^\p{L}\p{N}]+/gu, " ")      // písmena všech abeced (i cyrilice – V4.2.2) a číslice
         .trim();
 }
 
@@ -73,6 +73,18 @@ export function parseQuery(raw) {
     return { normalized, tokens: normalized.split(" "), compact: normalized.replace(/ /g, "") };
 }
 
+/** Anglický název přeloženého filmu (V4.2.2) – najde se i podle něj; jinak null. */
+function englishOf(film) {
+    return film.title_en && film.title_en !== film.title ? prepare(film.title_en) : null;
+}
+
+/** Původní název, když se liší od zobrazeného i anglického (ten má vlastní, silnější shodu). */
+function originalOf(film) {
+    return film.original_title && film.original_title !== film.title && film.original_title !== film.title_en
+        ? prepare(film.original_title)
+        : null;
+}
+
 /**
  * Index pro hledání z načtených dat.
  * universes: kolekce (fetchUniverses), items: řádky universe_items s filmem.
@@ -105,9 +117,8 @@ export function buildSearchIndex(universes, items, otherFilms = []) {
                 film,
                 year: film.release_date ? film.release_date.slice(0, 4) : "",
                 title: prepare(film.title),
-                original: film.original_title && film.original_title !== film.title
-                    ? prepare(film.original_title)
-                    : null,
+                original: originalOf(film),
+                english: englishOf(film),
                 universes: [],
                 upcoming,
             };
@@ -128,7 +139,8 @@ export function buildSearchIndex(universes, items, otherFilms = []) {
             film,
             year: film.release_date ? film.release_date.slice(0, 4) : "",
             title: prepare(film.title),
-            original: film.original_title && film.original_title !== film.title ? prepare(film.original_title) : null,
+            original: originalOf(film),
+            english: englishOf(film),
             universes: [],
             upcoming,
             other: true,
@@ -141,6 +153,7 @@ export function buildSearchIndex(universes, items, otherFilms = []) {
         collections: universes.map((universe) => ({
             universe,
             name: prepare(universe.name),
+            english: universe.name_en ? prepare(universe.name_en) : null,     // V4.2.2
             slug: prepare(universe.slug),
             description: prepare(universe.description),
         })),
@@ -159,6 +172,7 @@ export function searchFilms(index, query) {
         const score = Math.max(
             scoreText(entry.title, query, entry.year),
             entry.original ? scoreText(entry.original, query, entry.year) - 5 : 0,
+            entry.english ? scoreText(entry.english, query, entry.year) : 0,      // anglický název přeloženého filmu (V4.2.2)
         );
         if (score > 0) results.push({ entry, score });
     }
@@ -173,7 +187,10 @@ export function searchCollections(index, query) {
     if (!query) return [];
     const results = [];
     for (const item of index.collections) {
-        const byName = Math.max(scoreText(item.name, query, null), scoreText(item.slug, query, null) - 10);
+        const byName = Math.max(
+            scoreText(item.name, query, null),
+            item.english ? scoreText(item.english, query, null) : 0,
+            scoreText(item.slug, query, null) - 10);
         // Popis jen při shodě začátků slov – jinak by „man“ našlo půlku popisů
         const byDescription = scoreText(item.description, query, null) >= 60 ? 20 : 0;
         const score = Math.max(byName, byDescription);

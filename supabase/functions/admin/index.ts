@@ -7,7 +7,8 @@
 //
 // POST { "action": "…", … }
 //   search       { query }              → hledání filmů v TMDB
-//   add-film     { tmdb_id }            → uloží film do tabulky films (detail z TMDB)
+//   add-film     { tmdb_id }            → uloží film do tabulky films (detail z TMDB);
+//                                         od V4.2.2 i s překlady názvu (film_translations)
 //   series-updates                      → nové díly sérií; kontrola TMDB, jen když od poslední uběhl den
 //   series-check                        → kontrola sérií hned (V3.5.2.3)
 //   series-decide { id, add, also? }    → přidat nalezený díl do kolekce (i do studií) / zahodit
@@ -132,6 +133,44 @@ interface TmdbMovieDetails extends TmdbSearchResult {
   status: string;
   belongs_to_collection?: { id: number; name: string } | null;
   production_companies?: { id: number; name: string }[];
+  translations?: TmdbTranslations;    // s append_to_response=translations (V4.2.2)
+}
+
+// ---------------------------------------------------------------------
+// Překlady názvů filmů (V4.2.2) – stejná pravidla jako v Edge Function tmdb
+// ---------------------------------------------------------------------
+
+interface TmdbTranslations {
+  translations: { iso_639_1: string; iso_3166_1: string; data: { title?: string; overview?: string } }[];
+}
+
+/** Jazyky aplikace a země, jejichž překlad má přednost (španělština ze Španělska…). */
+const TRANSLATION_REGIONS: Record<string, string[]> = {
+  cs: ["CZ"],
+  de: ["DE", "AT", "CH"],
+  es: ["ES", "MX"],
+  uk: ["UA"],
+};
+
+const regionRank = (regions: string[], region: string) => {
+  const index = regions.indexOf(region);
+  return index === -1 ? regions.length : index;
+};
+
+/** Řádky film_translations z překladů TMDB (název stejný jako anglický se neukládá). */
+function pickTranslations(tmdbId: number, englishTitle: string, data: TmdbTranslations | undefined) {
+  const all = data?.translations ?? [];
+  const rows: { tmdb_id: number; lang: string; title: string | null; overview: string | null }[] = [];
+  for (const [lang, regions] of Object.entries(TRANSLATION_REGIONS)) {
+    const candidates = all
+      .filter((t) => t.iso_639_1 === lang)
+      .sort((a, b) => regionRank(regions, a.iso_3166_1) - regionRank(regions, b.iso_3166_1));
+    const title = candidates.map((t) => t.data?.title?.trim()).find(Boolean) ?? null;
+    const overview = candidates.map((t) => t.data?.overview?.trim()).find(Boolean) ?? null;
+    const localTitle = title && title !== englishTitle ? title : null;
+    if (localTitle || overview) rows.push({ tmdb_id: tmdbId, lang, title: localTitle, overview });
+  }
+  return rows;
 }
 
 /** Hledání filmů podle názvu (prvních 12 výsledků). */
@@ -155,7 +194,8 @@ async function search(query: string) {
 /** Stáhne detail filmu z TMDB a uloží ho do tabulky films. */
 async function addFilm(db: SupabaseClient, tmdbId: number) {
   if (!Number.isInteger(tmdbId) || tmdbId <= 0) throw new HttpError(400, "Invalid tmdb_id");
-  const d = await tmdbGet<TmdbMovieDetails>(`/movie/${tmdbId}`, { language: "en-US" });
+  // Překlady (V4.2.2) přijdou ve stejné odpovědi
+  const d = await tmdbGet<TmdbMovieDetails>(`/movie/${tmdbId}`, { language: "en-US", append_to_response: "translations" });
 
   const film = {
     tmdb_id: d.id,
@@ -167,10 +207,17 @@ async function addFilm(db: SupabaseClient, tmdbId: number) {
     backdrop_path: d.backdrop_path,
     overview: d.overview || null,
     tmdb_collection_id: d.belongs_to_collection?.id ?? 0,      // série TMDB (V3.5.2.3)
+    translated_at: new Date().toISOString(),                    // V4.2.2
     updated_at: new Date().toISOString(),
   };
   const { error } = await db.from("films").upsert(film, { onConflict: "tmdb_id" });
   if (error) throw new Error(error.message);
+  const translations = pickTranslations(d.id, d.title, d.translations);
+  if (translations.length > 0) {
+    const { error: translationError } = await db.from("film_translations")
+      .upsert(translations, { onConflict: "tmdb_id,lang" });
+    if (translationError) throw new Error(translationError.message);
+  }
   return { ...film, status: d.status };
 }
 

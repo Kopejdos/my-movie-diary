@@ -11,10 +11,19 @@
     <link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="fonts/chakra-petch-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
     <script>
-        // Uložený režim nastavit dřív, než se stránka vykreslí (jinak by problikla)
+        // Uložené nastavení vzhledu (V4.0, js/settings.js) použít dřív, než se stránka
+        // vykreslí – stejně jako v index.html (od V4.2.2 i tady, dřív jen starý přepínač ☾ / ☀)
         try {
-            const theme = localStorage.getItem("mmd-theme");
-            if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+            const s = JSON.parse(localStorage.getItem("mmd-settings") || "{}");
+            const old = localStorage.getItem("mmd-theme");
+            const mode = s.mode || old || "system";
+            const root = document.documentElement;
+            root.dataset.theme = mode === "light" || mode === "dark" ? mode
+                : (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+            if (s.style) root.dataset.style = s.style;
+            if (s.accent) root.dataset.accent = s.accent;
+            if (s.density) root.dataset.density = s.density;
+            if (s.motion) root.dataset.motion = s.motion;
         } catch { }
     </script>
     <link rel="stylesheet" href="css/style.css">
@@ -158,5 +167,6 @@
         </p>
         <p>This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
     </footer>
+    <script src="js/legal.js" defer></script>
 </body>
 </html>

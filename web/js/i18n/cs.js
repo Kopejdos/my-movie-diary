@@ -690,6 +690,10 @@ export default {
     notFoundTitle: "Stránka nenalezena",
     notFoundText: "Tady nic není.",
 
+    footerAbout: "O aplikaci",
+    footerTerms: "Podmínky",
+    footerPrivacy: "Soukromí",
+    footerContact: "Kontakt",
     tmdbAttribution: "Tento produkt používá TMDB API, ale TMDB ho neschvaluje ani necertifikuje.",
     errorCopy: "Kopírování tento prohlížeč nepodporuje.",
     requestsCancelTooLate: "Tento požadavek už zrušit nejde.",

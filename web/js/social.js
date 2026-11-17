@@ -9,6 +9,7 @@ import { supabase } from "./supabase.js";
 import { SITE_URL } from "./config.js";
 import { fetchCatalogData } from "./achievements.js";
 import { check } from "./db.js";
+import { catalogReady, localizeRows } from "./catalog-i18n.js";
 
 /**
  * Profil podle nicku:
@@ -22,6 +23,7 @@ export async function fetchPublicProfile(username) {
     const [profile, catalog] = await Promise.all([
         supabase.rpc("public_profile", { p_username: username }).then(check),
         fetchCatalogData(),
+        catalogReady,
     ]);
     if (!profile) return null;
     const friendship = profile.friendship ?? "none";
@@ -31,7 +33,7 @@ export async function fetchPublicProfile(username) {
     return {
         profile: { username: profile.username, memberSince: profile.member_since, isPublic: profile.is_public !== false },
         friendship,
-        data: { watches: profile.watches ?? [], ...catalog },
+        data: { watches: localizeRows(profile.watches ?? []), ...catalog },
         // Hodnocení vidí jen přítel (V3.4.2); jinak null
         ratings: Array.isArray(profile.ratings) ? new Map(profile.ratings.map((r) => [r.tmdb_id, r.score])) : null,
     };

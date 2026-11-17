@@ -19,7 +19,11 @@ export async function adminUniverseView(container, context) {
 
     let universe, categories;
     try {
-        [universe, categories] = await Promise.all([fetchUniverse(context.params.slug), fetchCategories()]);
+        // Bez překladu (V4.2.2) – editor ukládá anglické texty
+        [universe, categories] = await Promise.all([
+            fetchUniverse(context.params.slug, { original: true }),
+            fetchCategories({ original: true }),
+        ]);
     } catch (error) {
         if (!context.isCurrent()) return;
         mount(container, errorView(format("errorGeneric", error.message),

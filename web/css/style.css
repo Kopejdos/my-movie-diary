@@ -2927,6 +2927,17 @@ button {
     padding-left: 20px;
 }
 
+/* Poznámka „stránka je jen anglicky“ pro jiný jazyk aplikace (V4.2.2, js/legal.js) */
+.legal__note {
+    margin: 12px 0 0;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    background: var(--panel);
+    font-size: 0.92rem;
+}
+
 /* ---------- Patička ---------- */
 .footer {
     border-top: 1px solid var(--border);
@@ -7184,4 +7195,26 @@ a.friend-row__name:hover {
 .settings-language {
     width: 100%;
     max-width: 320px;
+}
+
+/* ---------- Delší překlady (V4.2) ----------
+   Němčina, španělština a ukrajinština mají delší slova než angličtina – přepínače a pravý okraj nadpisů
+   se smí zúžit a popisky zalomit, místo aby přetekly přes okraj obrazovky. */
+.segmented {
+    max-width: 100%;
+}
+
+.segmented__option {
+    min-width: 0;
+    text-align: center;
+}
+
+.section-title__side {
+    min-width: 0;
+}
+
+@media (max-width: 360px) {
+    .profile-tabs .segmented__option {
+        padding-inline: 6px;
+    }
 }

@@ -844,6 +844,10 @@ export default {
     notFoundText: "There is nothing here.",
 
     // Patička (podmínka TMDB)
+    footerAbout: "About",
+    footerTerms: "Terms",
+    footerPrivacy: "Privacy",
+    footerContact: "Contact",
     tmdbAttribution: "This product uses the TMDB API but is not endorsed or certified by TMDB.",
     errorCopy: "Copying is not supported in this browser.",
     requestsCancelTooLate: "This request can no longer be canceled.",

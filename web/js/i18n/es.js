@@ -662,6 +662,10 @@ export default {
     notFoundTitle: "Página no encontrada",
     notFoundText: "Aquí no hay nada.",
 
+    footerAbout: "Acerca de",
+    footerTerms: "Condiciones",
+    footerPrivacy: "Privacidad",
+    footerContact: "Contacto",
     tmdbAttribution: "Este producto usa la API de TMDB, pero no está respaldado ni certificado por TMDB.",
     errorCopy: "Este navegador no permite copiar.",
     requestsCancelTooLate: "Esta petición ya no se puede cancelar.",

@@ -20,9 +20,10 @@ Jeden soubor: `node --test tests/levels.test.mjs`.
 |---|---|
 | `levels.test.mjs` | prahy úrovní (100 / 450 / 1 950 / 10 400 … 79 150 XP), tituly Extra … Legend, postup k další úrovni |
 | `achievements.test.mjs` | XP za nové filmy, opakování a dokončené kolekce; *Seen before* se nepočítá do času ani Marathonu; datum odemčení |
-| `search.test.mjs` | normalizace textu (diakritika, apostrofy, `&`), pořadí výsledků, „spiderman“ = „Spider-Man“, hledání podle roku |
+| `search.test.mjs` | normalizace textu (diakritika, apostrofy, `&`, cyrilice), pořadí výsledků, „spiderman“ = „Spider-Man“, hledání podle roku i podle anglického názvu přeloženého filmu |
 | `settings.test.mjs` | nastavení vzhledu (V4.0): výchozí hodnoty, neplatné volby se ignorují, zápis na `<html>` |
 | `texts.test.mjs` | jazyky (V4.2): každý slovník má všechny texty mimo admin, žádné navíc, stejné `{0}` jako angličtina a tvary podle počtu (1 / 2 / 5 / 21…) |
+| `catalog-i18n.test.mjs` | přeložená data katalogu (V4.2.2): soubory `catalog.<jazyk>.json` mají správný tvar, žádné prázdné texty a stejné kolekce ve všech jazycích |
 | `theme.test.mjs` | každá barva kolekce ze `supabase/seed/universes.json` dá tlačítko s kontrastem aspoň 4,5 : 1 (WCAG AA) |
 
 ## Pomocné soubory

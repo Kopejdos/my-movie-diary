@@ -6,6 +6,7 @@
 import { supabase } from "./supabase.js";
 import { isUpcoming } from "./data.js";
 import { cached, invalidate } from "./cache.js";
+import { catalogReady, localizeRows } from "./catalog-i18n.js";
 import { TEXTS, format } from "./texts.js";
 
 export const MAX_LISTS = 50;
@@ -56,6 +57,8 @@ export async function fetchList(id) {
         .select("tmdb_id, position, note, added_at, film:films(tmdb_id, title, original_title, release_date, runtime, poster_path, backdrop_path)")
         .eq("list_id", id)
         .order("position")) ?? [];
+    await catalogReady;
+    localizeRows(rows);             // přeložené názvy filmů (V4.2.2)
     const entries = rows.filter((row) => row.film).map((row) => ({
         film: row.film,
         position: row.position,

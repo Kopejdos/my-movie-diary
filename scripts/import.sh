@@ -11,6 +11,7 @@
 # Před importem se sám spustí scripts/sync-seed.sh – propíše do seedu všechno, co se
 # změnilo v aplikaci (požadavky, admin panel – V3.5.2, V3.5.2.1). Změněný seed pak commitni.
 # Reporty se ukládají do složky import-reports/ (Git ji ignoruje).
+# Na konci se samy doplní přeložené názvy filmů, které ještě chybí (scripts/translate.sh, V4.2.2).
 # =====================================================================
 
 set -euo pipefail
@@ -67,3 +68,6 @@ for slug in "${targets[@]}"; do
         echo "✓ $name – ${summary:-?} filmů (z toho Coming soon: $soon), varování: $warnings  ($REPORTS/$name.json)"
     fi
 done
+
+# Přeložené názvy (V4.2.2): importované filmy už překlady mají, doplní se jen ostatní
+MMD_KEY="$KEY" bash scripts/translate.sh

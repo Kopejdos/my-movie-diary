@@ -208,7 +208,7 @@ Formát **V<hlavní>.<vedlejší>.<oprava>** (např. V1.2.1):
 - **Výjimka V4.1:** mobil ve dvou částech **V4.1.1–V4.1.2** (třetí číslo = část fáze, jako u V4.3);
   **V4.1.3** = komunita (zařazená před jazyky, aby se nové texty překládaly jen jednou).
 - **Výjimka V4.2:** jazyky ve dvou částech – **V4.2.1** texty rozhraní, **V4.2.2** přeložená data (filmy,
-  kolekce, kategorie).
+  kolekce, kategorie, patička).
 - **Výjimka V4.3:** velké doplnění filmů je rozdělené na **V4.3.1–V4.3.6** (třetí číslo = část fáze, jako
   u V3.0); případné opravy dostanou čtvrté číslo (V4.3.1.1…).
 - **V3.6.3** – jen plán a dokumentace (rozplánování kapitoly 4), aplikace beze změny.
@@ -363,7 +363,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 44b | V4.1.2 | Mobil: profil, ostatní stránky a nové nastavení ✅ | sbalitelné achievementy a statistiky (zapamatuje si stav), kompaktní watchlist, hledání, Coming soon, seznamy, přátelé; **nastavení na telefonu jako menu** s rozbalovacími položkami; admin, požadavky a okna na telefonu; kontrola všech obrazovek na 320–390 px |
 | 44c | V4.1.3 | Komunita: poctivá zobrazení, trend a sledování seznamů ✅ | počty zobrazení od nuly, řazení komunity podle lidí za 30 dní + sledujících, ☆ Follow u cizích seznamů, Lists → Following s „Updated“ |
 | 45a | V4.2.1 | Jazyky: rozhraní ✅ | **angličtina, čeština, němčina, španělština, ukrajinština** (ruština ne) – všechny texty webu, data a čísla podle jazyka, volba v Settings (výchozí podle prohlížeče); admin panel zůstává anglicky |
-| 45b | V4.2.2 | Jazyky: data | **názvy a popisy filmů z TMDB** v daném jazyce (ukládá import / Edge Function), **názvy a popisy kolekcí a kategorií**, hledání i podle přeložených názvů; češtinu kontroluje Adam, ostatní ideálně rodilý mluvčí |
+| 45b | V4.2.2 | Jazyky: data ✅ | **názvy filmů z TMDB** v daném jazyce (import / admin panel, `scripts/translate.sh`), **názvy a popisy kolekcí, kategorie, poznámky cest** a obecné popisky (soubory `catalog.<jazyk>.json`), hledání i podle anglického názvu a v cyrilici, patička v jazyce aplikace |
 | 46a | V4.3.1 | Editor a požadavky | admin: **úpravy kolekce s jedním Save** (změny se sbírají, *Save* / *Discard*, varování při odchodu), **hledání filmu se po přidání nesmaže**; požadavky: uživatel u filmů nastaví **Section / Series / Label a pořadí**, **vlastní kolekce** z libovolných filmů (ne jen jedna série TMDB), **limit 30 filmů** v požadavku (dřív 20) |
 | 46b | V4.3.2 | Nástroje + westerny | admin: **kolekce z osoby** (režisér / herec, i **průnik dvou osob**), **kolekce ze studia / klíčového slova TMDB**, **ukazatel cíle** (např. 1 264 / 2 000); kategorie **Western** 🤠, **Bud Spencer & Terence Hill**, Leone, westernové výběry |
 | 46c | V4.3.3 | Režiséři a klasika | nový typ kolekce **Director** (záložka *Directors*), 10 režisérů, **Best Picture Winners**, Universal Monsters, Hammer, Louis de Funès, Belmondo |
@@ -1990,6 +1990,46 @@ testovacích seznamů byla vymyšlená.
 - **Rozdělení V4.2 na dvě části** – texty rozhraní jsou jen web, přeložená data potřebují migraci,
   Edge Function a nový import; menší kroky se lépe zkoušejí.
 - **Ruština ne** (rozhodnuto už v plánu V4).
+
+### Fáze 45b – jazyky: přeložená data ✅ (17. 11. 2026) – **V4.2.2**
+- **Názvy filmů z TMDB:** tabulka `film_translations` (cs, de, es, uk; migrace
+  `20261118100000_film_translations.sql`). Import i admin panel si překlady berou **ve stejném dotazu** na TMDB
+  (`append_to_response=translations`) – nic navíc. Starší filmy přeloží `scripts/translate.sh` (akce
+  `translate` funkce `tmdb`, po dávkách 150 filmů; `import.sh` ji volá na konci sám).
+  Španělština má přednost ze Španělska (web má es-ES), jinak latinskoamerická; němčina z Německa.
+- **Web** načte při startu jedním dotazem `film_titles(lang)` (objekt JSON místo ~1 300 řádků) a přeloží
+  data hned po načtení (`catalog-i18n.js`) – přehled, kolekce, hledání, Co dneska, Coming soon, watchlist,
+  seznamy, profily, statistiky. Anglicky se nic navíc nestahuje.
+- **Kolekce, kategorie, poznámky cest a obecné popisky** (Phase 1, Remake, Episode IV…) jsou v souborech
+  `web/js/i18n/catalog.<jazyk>.json`: 116 kolekcí (název tam, kde se v daném jazyce říká jinak – Piráti
+  z Karibiku, Smrtonosná past, Planet der Affen…; jinak jen popis), 11 kategorií, 78 poznámek cest a ~120
+  popisků. Poznámky a popisky se hledají podle anglického textu – úprava v adminu tak překlad nerozbije, jen se
+  do doplnění ukáže anglicky.
+- **Hledání:** najde film podle přeloženého i anglického názvu (Kmotr i Godfather), funguje i v cyrilici
+  (Чужий).
+- **Admin panel bere data bez překladu** (`fetchUniverse(slug, { original: true })`) – editor by jinak uložil
+  přeložené texty do databáze.
+- **Patička** v jazyce aplikace (About / Terms / Privacy / Contact, věta o TMDB).
+- **Terms a Privacy zůstávají anglicky** – pod nadpisem je v jiném jazyce krátká poznámka „stránka je jen
+  anglicky, to hlavní najdeš na stránce O aplikaci“ (`js/legal.js`). Stránky nově berou i nastavení vzhledu
+  z V4.0 (dřív jen starý přepínač ☾ / ☀).
+- Ověřeno: migrace na lokálním Postgresu (i opakovaně, `film_titles` jako nepřihlášený), výběr překladů z TMDB
+  (pořadí zemí, název stejný jako anglický se neukládá), `translate.sh` na falešných odpovědích (dávky, konec,
+  výpis chyb), testy (`node --test` – nově hledání v cyrilici a podle anglického názvu, tvar souborů
+  `catalog.*.json`), web v cs / de / es / uk na 320 / 390 / 1280 px bez přetečení.
+
+#### Rozhodnutí ve fázi 45b
+- **Názvy filmů v databázi, texty kolekcí v souborech webu** – filmů přibývá z aplikace (požadavky, admin)
+  a TMDB je přeloží samo; texty kolekcí píšu ručně spolu se seedem a s webem se i verzují.
+- **Překládá se v prohlížeči, ne v SQL** – jedna mapa názvů na celé sezení místo úprav desítky databázových
+  funkcí; angličtina zůstane beze změny a bez zátěže.
+- **Popisy filmů (overview) se ukládají, ale zatím neukazují** – web je nikde nezobrazuje; připraveno pro detail
+  filmu.
+- **Vlastní jména sérií zůstávají** (Iron Man, Deadpool…), překládají se jen obecné popisky a názvy, které se
+  v daném jazyce opravdu říkají jinak.
+- **Požadavky (hledání v TMDB) zůstávají anglicky** – TMDB najde film i podle českého názvu, výsledky jsou
+  pro admina.
+- **Terms a Privacy se nepřekládají** – závazná je jedna verze; shrnutí v jazyce aplikace je na stránce About.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

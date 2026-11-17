@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v25";       // V4.2.1: jazyky rozhraní; od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v26";       // V4.2.2: přeložené názvy filmů a kolekcí; od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline
@@ -31,6 +31,7 @@ const SHELL = [
     "js/router.js",
     "js/texts.js",
     "js/i18n/en.js",            // ostatní jazyky (V4.2) si mezipaměť uloží při prvním použití
+    "js/catalog-i18n.js",
     "js/dom.js",
     "js/theme.js",
     "js/prefs.js",

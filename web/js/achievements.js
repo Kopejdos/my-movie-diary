@@ -13,6 +13,7 @@ import { cached } from "./cache.js";
 import { TEXTS } from "./texts.js";
 import { isUpcoming, fetchUniverseRows, fetchCatalogItems, fetchCategories } from "./data.js";
 import { fetchAllRows } from "./db.js";
+import { catalogReady, localizeRows } from "./catalog-i18n.js";
 
 // ---------------------------------------------------------------------
 // Definice
@@ -75,8 +76,9 @@ export async function fetchAchievementData() {
             .order("created_at")
             .order("id")),          // id: jednoznačné pořadí pro stránkování
         fetchCatalogData(),
+        catalogReady,
     ]);
-    return { watches, ...catalog };
+    return { watches: localizeRows(watches), ...catalog };
 }
 
 /**

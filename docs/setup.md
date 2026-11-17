@@ -211,6 +211,11 @@ Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny
 16. **Jazyky rozhraní (V4.2.1):** bez migrace a bez změny Edge Functions – stačí nahrát web (push).
     Nový jazyk = nový soubor `web/js/i18n/<kód>.js` (kopie `en.js` s přeloženými hodnotami) + kód
     v `LANGUAGES` a `LOCALES` (`texts.js`) a v `SETTING_OPTIONS.language` (`settings.js`).
+17. **Přeložené názvy (V4.2.2):** migrace `20261118100000_film_translations.sql`, pak znovu nasadit Edge
+    Functions **`tmdb`** a **`admin`** (Verify JWT dál vypnuté) a jednou spustit `./scripts/translate.sh`
+    (projde celý katalog, pár minut). Další filmy překládá sám import a admin panel; `import.sh` navíc na konci
+    doplní, co chybí. Názvy kolekcí, kategorie a poznámky cest jsou v `web/js/i18n/catalog.<jazyk>.json` –
+    novou kolekci stačí doplnit tam (jinak se ukáže anglicky).
 
 **Seed a admin panel (od V3.5.2.1):** seed je zdroj pravdy pro import, ale **úpravy z aplikace se neztratí** –
 databáze si je pamatuje (`universe_items.source`, `universes.source`, tabulka `seed_removals`) a `import.sh`

@@ -662,6 +662,10 @@ export default {
     notFoundTitle: "Сторінку не знайдено",
     notFoundText: "Тут нічого немає.",
 
+    footerAbout: "Про застосунок",
+    footerTerms: "Умови",
+    footerPrivacy: "Конфіденційність",
+    footerContact: "Контакти",
     tmdbAttribution: "Цей продукт використовує API TMDB, але не схвалений і не сертифікований TMDB.",
     errorCopy: "Цей браузер не підтримує копіювання.",
     requestsCancelTooLate: "Цей запит уже не можна скасувати.",

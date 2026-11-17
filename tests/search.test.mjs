@@ -37,3 +37,20 @@ test("slepený název a rok", () => {
     assert.deepEqual(titles("1986"), ["Aliens"]);
     assert.deepEqual(titles("alien3"), ["Alien³"]);          // „³“ se normalizuje na „3“
 });
+
+test("přeložené názvy (V4.2.2) – cyrilice a hledání podle anglického názvu", () => {
+    assert.equal(normalize("Чужий"), "чужии");                 // й → и + háček, který se zahodí
+    assert.equal(normalize("Хрещений батько"), "хрещении батько");
+
+    const translated = (tmdbId, title, english, date) => ({ ...film(tmdbId, title, date), original_title: english, title_en: english });
+    const localIndex = buildSearchIndex([universe], [
+        { universe_id: 1, film: translated(10, "Kmotr", "The Godfather", "1972-03-14") },
+        { universe_id: 1, film: film(11, "The Godfather Part II", "1974-12-20") },
+        { universe_id: 1, film: translated(12, "Чужий", "Alien", "1979-05-25") },
+    ]);
+    const found = (query) => searchFilms(localIndex, parseQuery(query)).map((r) => r.entry.film.title);
+    assert.deepEqual(found("kmotr"), ["Kmotr"]);
+    assert.deepEqual(found("godfather"), ["Kmotr", "The Godfather Part II"]);   // anglický název bez penalizace, pak rok
+    assert.deepEqual(found("чужий"), ["Чужий"]);
+    assert.deepEqual(found("alien"), ["Чужий"]);
+});

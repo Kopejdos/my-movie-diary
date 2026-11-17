@@ -15,6 +15,12 @@
 //   seed-sync – POST, tělo = text universes.json; vrátí ho doplněný o změny
 //             z aplikace – požadavky i admin panel (scripts/sync-seed.sh).
 //             Jen pro správce.
+//   translate – POST (V4.2.2): stáhne z TMDB názvy a popisy filmů v češtině,
+//             němčině, španělštině a ukrajinštině pro filmy, které ještě přeložené
+//             nejsou (films.translated_at je null) – po dávkách (?limit=, výchozí 150).
+//             Vrací { translated, remaining }; scripts/translate.sh ji volá, dokud
+//             remaining není 0. Import překládá filmy rovnou (stejný dotaz na TMDB).
+//             Jen pro správce.
 //
 // Tajemství (Supabase → Edge Functions → Secrets):
 //   TMDB_READ_TOKEN – TMDB API Read Access Token
@@ -66,12 +72,21 @@ interface FilmRow {
   backdrop_path: string | null;
   overview: string | null;
   tmdb_collection_id: number;   // série TMDB, 0 = žádná (V3.5.2.3 – hlídání nových dílů)
+  translated_at: string;        // kdy se uložily překlady (V4.2.2)
   updated_at: string;
+}
+
+/** Řádek tabulky film_translations (V4.2.2) */
+interface TranslationRow {
+  tmdb_id: number;
+  lang: string;
+  title: string | null;
+  overview: string | null;
 }
 
 /** Výsledek dohledání jednoho filmu */
 type Resolved =
-  | { status: "ok"; seed: SeedFilm; film: FilmRow; upcoming: boolean; warning?: string }
+  | { status: "ok"; seed: SeedFilm; film: FilmRow; translations: TranslationRow[]; upcoming: boolean; warning?: string }
   | { status: "skipped"; seed: SeedFilm; title: string; releaseDate: string | null; reason: string }
   | { status: "not_found"; seed: SeedFilm; error: string };
 
@@ -82,6 +97,17 @@ type Resolved =
 const TMDB_BASE = "https://api.themoviedb.org/3";
 const TMDB_LANGUAGE = "en-US";
 const CONCURRENCY = 6; // kolik dotazů na TMDB běží najednou
+
+/**
+ * Jazyky aplikace (V4.2.2) a země, jejichž překlad TMDB má přednost (první = nejlepší):
+ * španělština ze Španělska (web má es-ES), jinak latinskoamerická; němčina z Německa.
+ */
+const TRANSLATION_REGIONS: Record<string, string[]> = {
+  cs: ["CZ"],
+  de: ["DE", "AT", "CH"],
+  es: ["ES", "MX"],
+  uk: ["UA"],
+};
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -208,6 +234,48 @@ interface TmdbMovieDetails {
   overview: string;
   status: string; // "Released", "Post Production", …
   belongs_to_collection?: { id: number; name: string } | null;
+  translations?: TmdbTranslations;  // s append_to_response=translations (V4.2.2)
+}
+
+interface TmdbTranslations {
+  translations: {
+    iso_639_1: string;
+    iso_3166_1: string;
+    data: { title?: string; overview?: string };
+  }[];
+}
+
+/**
+ * Z překladů TMDB vybere řádky pro jazyky aplikace. Název stejný jako anglický se neukládá
+ * (title = null → web ukáže anglický); jazyk bez názvu i popisu se vynechá.
+ */
+function pickTranslations(tmdbId: number, englishTitle: string, data: TmdbTranslations | undefined): TranslationRow[] {
+  const all = data?.translations ?? [];
+  const rows: TranslationRow[] = [];
+  for (const [lang, regions] of Object.entries(TRANSLATION_REGIONS)) {
+    const candidates = all
+      .filter((t) => t.iso_639_1 === lang)
+      .sort((a, b) => rank(regions, a.iso_3166_1) - rank(regions, b.iso_3166_1));
+    const title = candidates.map((t) => t.data?.title?.trim()).find(Boolean) ?? null;
+    const overview = candidates.map((t) => t.data?.overview?.trim()).find(Boolean) ?? null;
+    const localTitle = title && title !== englishTitle ? title : null;
+    if (localTitle || overview) rows.push({ tmdb_id: tmdbId, lang, title: localTitle, overview });
+  }
+  return rows;
+}
+
+const rank = (regions: string[], region: string) => {
+  const index = regions.indexOf(region);
+  return index === -1 ? regions.length : index;
+};
+
+/** Uloží překlady filmů (V4.2.2). Starý překlad jazyka, který už TMDB nemá, zůstane. */
+async function saveTranslations(db: SupabaseClient, rows: TranslationRow[]) {
+  for (let i = 0; i < rows.length; i += 500) {
+    const { error } = await db.from("film_translations")
+      .upsert(rows.slice(i, i + 500), { onConflict: "tmdb_id,lang" });
+    if (error) throw new Error(`translations upsert: ${error.message}`);
+  }
 }
 
 /**
@@ -261,8 +329,10 @@ async function resolveFilm(seed: SeedFilm): Promise<Resolved> {
       }
     }
 
+    // Překlady (V4.2.2) přijdou ve stejné odpovědi – žádný dotaz na TMDB navíc
     const details = await tmdbGet<TmdbMovieDetails>(`/movie/${tmdbId}`, {
       language: TMDB_LANGUAGE,
+      append_to_response: "translations",
     });
 
     // Zrušený film se neukládá (jen do reportu)
@@ -285,9 +355,11 @@ async function resolveFilm(seed: SeedFilm): Promise<Resolved> {
       backdrop_path: details.backdrop_path,
       overview: details.overview || null,
       tmdb_collection_id: details.belongs_to_collection?.id ?? 0,
+      translated_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
-    return { status: "ok", seed, film, upcoming, warning };
+    const translations = pickTranslations(details.id, details.title, details.translations);
+    return { status: "ok", seed, film, translations, upcoming, warning };
   } catch (error) {
     return { status: "not_found", seed, error: String(error) };
   }
@@ -307,6 +379,8 @@ async function importUniverse(db: SupabaseClient, universe: SeedUniverse, sortOr
     const films = [...new Map(ok.map((r) => [r.film.tmdb_id, r.film])).values()];
     const { error } = await db.from("films").upsert(films, { onConflict: "tmdb_id" });
     if (error) throw new Error(`films upsert (${universe.slug}): ${error.message}`);
+    const translations = [...new Map(ok.flatMap((r) => r.translations).map((t) => [`${t.tmdb_id}|${t.lang}`, t])).values()];
+    await saveTranslations(db, translations);
   }
 
   // 2. Univerzum (obal = film označený "cover": true, jinak první povinný film;
@@ -453,6 +527,67 @@ async function handleImport(request: Request, url: URL): Promise<Response> {
     ok: true,
     totalImported: report.reduce((sum, r) => sum + r.imported, 0),
     universes: report,
+  });
+}
+
+// ---------------------------------------------------------------------
+// Překlady filmů (V4.2.2) – filmy, které ještě přeložené nejsou
+// (uložené před V4.2.2, přidané z požadavků bez kolekce…). Po dávkách, ať se vejde
+// do časového limitu Edge Function; scripts/translate.sh volá, dokud něco zbývá.
+// ---------------------------------------------------------------------
+
+async function handleTranslate(request: Request, url: URL): Promise<Response> {
+  if (request.headers.get("x-admin-key") !== requireEnv("MMD_ADMIN_KEY")) {
+    return json({ error: "Unauthorized" }, 401);
+  }
+  if (request.method !== "POST") return json({ error: "Use POST" }, 405);
+
+  const limit = Math.min(Math.max(Number(url.searchParams.get("limit")) || 150, 1), 400);
+  const db = createAdminClient();
+  const { data: films, error } = await db
+    .from("films")
+    .select("tmdb_id, title")
+    .is("translated_at", null)
+    .order("tmdb_id")
+    .limit(limit);
+  if (error) throw new Error(`untranslated films: ${error.message}`);
+  const list = (films ?? []) as { tmdb_id: number; title: string }[];
+
+  const failed: string[] = [];
+  const results = await mapLimited(list, CONCURRENCY, async (film) => {
+    try {
+      const data = await tmdbGet<TmdbTranslations>(`/movie/${film.tmdb_id}/translations`);
+      return { film, rows: pickTranslations(film.tmdb_id, film.title, data) };
+    } catch (tmdbError) {
+      failed.push(`${film.title} [tmdb ${film.tmdb_id}]: ${String(tmdbError)}`);
+      return null;
+    }
+  });
+  const done = results.filter((r): r is NonNullable<typeof r> => r !== null);
+  await saveTranslations(db, done.flatMap((r) => r.rows));
+
+  // Film, který TMDB nenajde (404), se označí také – jinak by ho každá dávka zkoušela znovu
+  const notFound = list.filter((f) => failed.some((line) => line.includes(`[tmdb ${f.tmdb_id}]`) && line.includes("TMDB 404")));
+  const markIds = [...done.map((r) => r.film.tmdb_id), ...notFound.map((f) => f.tmdb_id)];
+  if (markIds.length > 0) {
+    const { error: markError } = await db.from("films")
+      .update({ translated_at: new Date().toISOString() })
+      .in("tmdb_id", markIds);
+    if (markError) throw new Error(`translated_at: ${markError.message}`);
+  }
+
+  const { count, error: countError } = await db
+    .from("films")
+    .select("tmdb_id", { count: "exact", head: true })
+    .is("translated_at", null);
+  if (countError) throw new Error(`remaining: ${countError.message}`);
+
+  return json({
+    ok: true,
+    translated: done.length,
+    titles: done.reduce((sum, r) => sum + r.rows.filter((t) => t.title).length, 0),
+    remaining: count ?? 0,
+    failed,
   });
 }
 
@@ -911,6 +1046,8 @@ Deno.serve(async (request) => {
         return await handleImport(request, url);
       case "seed-sync":
         return await handleSeedSync(request);
+      case "translate":
+        return await handleTranslate(request, url);
       default:
         return json({ error: `Unknown action: ${action}` }, 400);
     }
