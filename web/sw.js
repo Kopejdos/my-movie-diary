@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v24";       // V4.1.3: sledování seznamů; od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v25";       // V4.2.1: jazyky rozhraní; od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline
@@ -30,6 +30,7 @@ const SHELL = [
     "js/supabase.js",
     "js/router.js",
     "js/texts.js",
+    "js/i18n/en.js",            // ostatní jazyky (V4.2) si mezipaměť uloží při prvním použití
     "js/dom.js",
     "js/theme.js",
     "js/prefs.js",

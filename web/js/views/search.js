@@ -13,7 +13,7 @@ import { isSignedIn } from "../auth.js";
 import { replaceQuery } from "../router.js";
 import { setAccent } from "../theme.js";
 import { loadPref, savePref } from "../prefs.js";
-import { TEXTS, format, movies, collections } from "../texts.js";
+import { TEXTS, format, movies, collections, LOCALE } from "../texts.js";
 import { listButton } from "./list-button.js";
 import { watchlistStar, collectionPill } from "./film-controls.js";
 import { h, mount, poster, pill, yearOf, toast, loadingView, errorView } from "../dom.js";
@@ -271,7 +271,7 @@ class SearchPage {
      */
     renderUsers(users) {
         const meta = (u) => u.visible && u.memberSince
-            ? format("publicMemberSince", new Date(u.memberSince).toLocaleDateString("en-GB", { month: "long", year: "numeric" }))
+            ? format("publicMemberSince", new Date(u.memberSince).toLocaleDateString(LOCALE, { month: "long", year: "numeric" }))
             : `🔒 ${TEXTS.friendsPrivateEyebrow}`;
         const badge = (u) => ({
             friend: `✓ ${TEXTS.friendsIsFriend}`, incoming: TEXTS.friendsBadgeIncoming, outgoing: TEXTS.friendsRequestSent,

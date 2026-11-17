@@ -8,7 +8,7 @@ import {
 } from "../data.js";
 import { isSignedIn } from "../auth.js";
 import { setAccent } from "../theme.js";
-import { TEXTS, format, movies } from "../texts.js";
+import { TEXTS, format, movies, LOCALE } from "../texts.js";
 import { h, mount, loadingView, errorView } from "../dom.js";
 import { soonPill, soonPoster } from "./coming-soon.js";
 import { watchlistStar, collectionPill } from "./film-controls.js";
@@ -53,7 +53,7 @@ export async function comingSoonView(container, context) {
 /** Nadpis čtvrtletí: „October – December 2026“, filmy bez data „Date to be announced“. */
 export function quarterLabel(group) {
     if (!group.quarter) return TEXTS.comingSoonTbaGroup;
-    const month = (index) => new Date(2000, index, 1).toLocaleDateString("en-GB", { month: "long" });
+    const month = (index) => new Date(2000, index, 1).toLocaleDateString(LOCALE, { month: "long" });
     const first = (group.quarter - 1) * 3;
     return format("comingSoonQuarter", month(first), month(first + 2), group.year);
 }

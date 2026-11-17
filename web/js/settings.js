@@ -4,6 +4,7 @@
 //   accent   collection (barva podle kolekce, dnešní chování) / brass / pink / blue / green / purple
 //   density  comfortable / compact (menší karty a řádky filmů)
 //   motion   system (podle systému) / reduce (bez animací)
+//   language auto (podle prohlížeče) / en / cs / de / es / uk – čte ho texts.js při startu (V4.2)
 // Na <html> se zapisují jako data-theme (vyřešený režim), data-style, data-accent, data-density
 // a data-motion; styly v style.css podle nich přepínají barvy. Stejné čtení dělá i krátký skript
 // v <head> index.html, aby stránka při startu neproblikla.
@@ -17,10 +18,11 @@ export const SETTING_OPTIONS = {
     accent: ["collection", "brass", "pink", "blue", "green", "purple"],
     density: ["comfortable", "compact"],
     motion: ["system", "reduce"],
+    language: ["auto", "en", "cs", "de", "es", "uk"],     // V4.2 – změna znovu načte aplikaci
 };
 
 export const DEFAULT_SETTINGS = {
-    mode: "system", style: "modern", accent: "collection", density: "comfortable", motion: "system",
+    mode: "system", style: "modern", accent: "collection", density: "comfortable", motion: "system", language: "auto",
 };
 
 const listeners = new Set();

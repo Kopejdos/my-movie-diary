@@ -208,6 +208,9 @@ Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny
 14. **Mobil (V4.1.1–V4.1.2):** bez migrace a bez změny Edge Functions – stačí nahrát web (push).
 15. **Sledování seznamů (V4.1.3):** migrace `20261117100000_list_follows.sql` (sledování, trend, počty
     zobrazení od nuly – vynulují se jen při prvním spuštění). Edge Functions beze změny.
+16. **Jazyky rozhraní (V4.2.1):** bez migrace a bez změny Edge Functions – stačí nahrát web (push).
+    Nový jazyk = nový soubor `web/js/i18n/<kód>.js` (kopie `en.js` s přeloženými hodnotami) + kód
+    v `LANGUAGES` a `LOCALES` (`texts.js`) a v `SETTING_OPTIONS.language` (`settings.js`).
 
 **Seed a admin panel (od V3.5.2.1):** seed je zdroj pravdy pro import, ale **úpravy z aplikace se neztratí** –
 databáze si je pamatuje (`universe_items.source`, `universes.source`, tabulka `seed_removals`) a `import.sh`

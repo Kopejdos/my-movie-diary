@@ -5,7 +5,7 @@ import {
     hasStoredSession,
 } from "./auth.js";
 import { addRoute, setNotFound, startRouter, render, navigate, currentPath } from "./router.js";
-import { TEXTS, format } from "./texts.js";
+import { TEXTS, format, monthYear } from "./texts.js";
 import { h, mount, toast, loadingView } from "./dom.js";
 import { initPwa, canInstall, promptInstall, onInstallChange, onUpdateAvailable } from "./pwa.js";
 import { APP_VERSION, APP_UPDATED } from "./config.js";
@@ -407,7 +407,7 @@ document.addEventListener("keydown", (event) => {
 
 // Verze a měsíc poslední aktualizace v patičce
 const versionLabel = document.getElementById("app-version");
-if (versionLabel) versionLabel.textContent = `${APP_VERSION} · ${APP_UPDATED}`;
+if (versionLabel) versionLabel.textContent = `${APP_VERSION} · ${monthYear(APP_UPDATED)}`;
 
 // Start
 renderHeader();

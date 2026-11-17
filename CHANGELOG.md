@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.2.1 – November 2026
+- My Movie Diary now speaks five languages: English, Čeština, Deutsch, Español and Українська
+- Pick yours in Settings → Language – by default the app follows your browser
+- Dates, numbers and A–Z sorting follow the chosen language
+- Movie and collection titles stay in English for now – translated titles come in the next update
+
 ## V4.1.3 – November 2026
 - Follow community lists: tap ☆ Follow on any list and find it later in Profile → Lists → Following
 - Lists you follow show an UPDATED badge when their author changes something

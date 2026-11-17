@@ -45,12 +45,13 @@ jobs:
       # Zmenšení JavaScriptu a CSS (bez komentářů, mezer a s kratšími názvy proměnných).
       # Každý soubor zvlášť (bez spojování) – názvy a cesty souborů zůstanou stejné,
       # takže service worker, dynamické importy i modulepreload fungují beze změny.
+      # --charset=utf8 (V4.2): čeština a ukrajinština zůstanou jako znaky, ne \u0423… (cyrilice by měla 2× víc).
       - name: Minify JavaScript and CSS
         run: |
           npx --yes esbuild@0.24.0 $(find web/js -name "*.js") web/sw.js \
-            --minify --outdir=web --outbase=web --allow-overwrite --log-level=warning
+            --minify --charset=utf8 --outdir=web --outbase=web --allow-overwrite --log-level=warning
           npx --yes esbuild@0.24.0 web/css/style.css \
-            --minify --outfile=web/css/style.css --allow-overwrite --log-level=warning
+            --minify --charset=utf8 --outfile=web/css/style.css --allow-overwrite --log-level=warning
 
       - name: Configure Pages
         uses: actions/configure-pages@v6

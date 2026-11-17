@@ -10,7 +10,7 @@ import { starsView } from "./rating.js";
 import { isSignedIn } from "../auth.js";
 import { navigate } from "../router.js";
 import { setAccent, applyUniverseColor } from "../theme.js";
-import { TEXTS, format, movies } from "../texts.js";
+import { TEXTS, format, movies, number, LOCALE } from "../texts.js";
 import { h, mount, poster, formatDate, loadingView, errorView } from "../dom.js";
 import { collapsible } from "./collapsible.js";
 
@@ -118,14 +118,14 @@ function tiles({ totals, streaks }, watchlistCount, ratingStats) {
     return h("div", { class: "stat-tiles" },
         tile(String(totals.films), TEXTS.statsMovies),
         tile(String(totals.watches), TEXTS.statsViewings, format("statsRewatches", totals.rewatches)),
-        tile(format("statsHours", hours), TEXTS.statsTime,
-            hours >= 24 ? format("statsDays", (totals.minutes / 60 / 24).toFixed(1)) : format("statsMinutes", totals.minutes)),
+        tile(format("statsHours", number(hours)), TEXTS.statsTime,
+            hours >= 24 ? format("statsDays", number(totals.minutes / 60 / 24, 1)) : format("statsMinutes", number(totals.minutes))),
         tile(`${totals.completed} / ${totals.collections}`, TEXTS.statsCompleted, format("statsStarted", totals.started)),
         tile(format("statsStreakDays", streaks.longest), TEXTS.statsLongestStreak,
             streaks.current > 0 ? format("statsCurrentStreak", streaks.current) : null),
         watchlistCount === null ? null : tile(String(watchlistCount), TEXTS.navWatchlist),
         ratingStats
-            ? tile(`★ ${ratingStats.average.toFixed(1)}`, TEXTS.statsAverageRating, format("statsRatedCount", ratingStats.count))
+            ? tile(`★ ${number(ratingStats.average, 1)}`, TEXTS.statsAverageRating, format("statsRatedCount", ratingStats.count))
             : null,
     );
 }
@@ -159,7 +159,7 @@ function topRated(list) {
 function monthChart(months) {
     const max = Math.max(1, ...months.map((m) => m.count));
     const total = months.reduce((sum, m) => sum + m.count, 0);
-    const label = (date) => date.toLocaleDateString("en-GB", { month: "short" });
+    const label = (date) => date.toLocaleDateString(LOCALE, { month: "short" });
 
     return h("figure", { class: "chart" },
         h("div", { class: "month-chart", role: "img", "aria-label": format("statsMonthsAria", total) },
@@ -174,7 +174,7 @@ function monthChart(months) {
     );
 
     function date(d) {
-        return d.toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+        return d.toLocaleDateString(LOCALE, { month: "long", year: "numeric" });
     }
 }
 
@@ -202,9 +202,9 @@ function barRows(rows) {
 
 function decadeChart(decades) {
     return barRows(decades.map((d) => ({
-        label: `${d.decade}s`,
+        label: format("statsDecade", d.decade),
         value: d.count,
-        title: `${d.decade}s: ${movies(d.count)}`,
+        title: `${format("statsDecade", d.decade)}: ${movies(d.count)}`,
     })));
 }
 

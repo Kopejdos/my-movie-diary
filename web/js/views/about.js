@@ -2,7 +2,7 @@
 
 import { APP_VERSION, APP_UPDATED, OPERATOR_NAME, CONTACT_EMAIL, GITHUB_URL, MIN_AGE } from "../config.js";
 import { setAccent } from "../theme.js";
-import { TEXTS, format } from "../texts.js";
+import { TEXTS, format, monthYear } from "../texts.js";
 import { h, mount } from "../dom.js";
 
 export function aboutView(container) {
@@ -41,7 +41,7 @@ export function aboutView(container) {
                 h("p", {}, TEXTS.aboutCreditsText),
                 h("p", { class: "muted" }, TEXTS.tmdbAttribution),
                 h("p", {},
-                    h("strong", {}, `${APP_VERSION} · ${APP_UPDATED}`), " · ",
+                    h("strong", {}, `${APP_VERSION} · ${monthYear(APP_UPDATED)}`), " · ",
                     link(`${GITHUB_URL}/blob/main/CHANGELOG.md`, TEXTS.aboutChangelog, true))),
         ),
     );

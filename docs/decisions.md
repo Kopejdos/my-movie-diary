@@ -207,12 +207,14 @@ Formát **V<hlavní>.<vedlejší>.<oprava>** (např. V1.2.1):
   nových dílů; V3.6.1.1 – úprava křivky úrovní).
 - **Výjimka V4.1:** mobil ve dvou částech **V4.1.1–V4.1.2** (třetí číslo = část fáze, jako u V4.3);
   **V4.1.3** = komunita (zařazená před jazyky, aby se nové texty překládaly jen jednou).
+- **Výjimka V4.2:** jazyky ve dvou částech – **V4.2.1** texty rozhraní, **V4.2.2** přeložená data (filmy,
+  kolekce, kategorie).
 - **Výjimka V4.3:** velké doplnění filmů je rozdělené na **V4.3.1–V4.3.6** (třetí číslo = část fáze, jako
   u V3.0); případné opravy dostanou čtvrté číslo (V4.3.1.1…).
 - **V3.6.3** – jen plán a dokumentace (rozplánování kapitoly 4), aplikace beze změny.
 - **V3.6.4** – oprava výkonu přehledu pro přihlášené (patch k V3.6.2).
 - **V4.0.1** – rozložení stránky Settings na širší obrazovce (patch k V4.0).
-- Verze a **měsíc poslední aktualizace** jsou v patičce webu (např. „V1.1 · November 2026“). Obojí je v `web/js/config.js` (`APP_VERSION`, `APP_UPDATED`) – při vydání nové verze se změní tam.
+- Verze a **měsíc poslední aktualizace** jsou v patičce webu (např. „V1.1 · November 2026“). Obojí je v `web/js/config.js` (`APP_VERSION`, `APP_UPDATED` ve tvaru `2026-11` – od V4.2.1 se název měsíce ukáže v jazyce aplikace) – při vydání nové verze se změní tam.
 - Při vydání: úprava `config.js`, záznam do `CHANGELOG.md`, commit a **tag verze** (`git tag v1.1`, `git push --tags`). Tagy `faze-N` z verzí V0.x zůstávají, od V1.1 se používají jen tagy `vX.Y`.
 
 ### Pořadí kroků při vydání (důležité!)
@@ -360,7 +362,8 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 44a | V4.1.1 | Mobil: základ, přehled a kolekce ✅ | menší vzhled na telefonu (do 599 px), **spodní lišta** (Collections · Search · Soon · Watchlist · Profile), nižší hlavička, „Co dneska?“ jako tři řádky bez plakátu, karty kolekcí 3 na řádek, nižší úvod kolekce, řádek filmu v jednom řádku (~75 px místo 136) |
 | 44b | V4.1.2 | Mobil: profil, ostatní stránky a nové nastavení ✅ | sbalitelné achievementy a statistiky (zapamatuje si stav), kompaktní watchlist, hledání, Coming soon, seznamy, přátelé; **nastavení na telefonu jako menu** s rozbalovacími položkami; admin, požadavky a okna na telefonu; kontrola všech obrazovek na 320–390 px |
 | 44c | V4.1.3 | Komunita: poctivá zobrazení, trend a sledování seznamů ✅ | počty zobrazení od nuly, řazení komunity podle lidí za 30 dní + sledujících, ☆ Follow u cizích seznamů, Lists → Following s „Updated“ |
-| 45 | V4.2 | Jazyky | **angličtina, čeština, němčina, španělština, ukrajinština** (ruština ne); texty webu, názvy filmů z TMDB v daném jazyce (ukládá import), popisy kolekcí; češtinu kontroluje Adam, ostatní ideálně rodilý mluvčí |
+| 45a | V4.2.1 | Jazyky: rozhraní ✅ | **angličtina, čeština, němčina, španělština, ukrajinština** (ruština ne) – všechny texty webu, data a čísla podle jazyka, volba v Settings (výchozí podle prohlížeče); admin panel zůstává anglicky |
+| 45b | V4.2.2 | Jazyky: data | **názvy a popisy filmů z TMDB** v daném jazyce (ukládá import / Edge Function), **názvy a popisy kolekcí a kategorií**, hledání i podle přeložených názvů; češtinu kontroluje Adam, ostatní ideálně rodilý mluvčí |
 | 46a | V4.3.1 | Editor a požadavky | admin: **úpravy kolekce s jedním Save** (změny se sbírají, *Save* / *Discard*, varování při odchodu), **hledání filmu se po přidání nesmaže**; požadavky: uživatel u filmů nastaví **Section / Series / Label a pořadí**, **vlastní kolekce** z libovolných filmů (ne jen jedna série TMDB), **limit 30 filmů** v požadavku (dřív 20) |
 | 46b | V4.3.2 | Nástroje + westerny | admin: **kolekce z osoby** (režisér / herec, i **průnik dvou osob**), **kolekce ze studia / klíčového slova TMDB**, **ukazatel cíle** (např. 1 264 / 2 000); kategorie **Western** 🤠, **Bud Spencer & Terence Hill**, Leone, westernové výběry |
 | 46c | V4.3.3 | Režiséři a klasika | nový typ kolekce **Director** (záložka *Directors*), 10 režisérů, **Best Picture Winners**, Universal Monsters, Hammer, Louis de Funès, Belmondo |
@@ -1957,6 +1960,36 @@ testovacích seznamů byla vymyšlená.
 - **Trend za 30 dní, ne celkový počet** – starý seznam s mnoha zobrazeními by jinak navždy blokoval nové.
 - **Sledující má váhu 3 návštěv** – sledování je silnější signál než jedno otevření.
 - **Před jazyky (V4.2)** – nové texty se pak přeloží rovnou se vším ostatním.
+
+### Fáze 45a – jazyky: rozhraní ✅ (17. 11. 2026) – **V4.2.1**
+- **Pět jazyků:** English, Čeština, Deutsch, Español, Українська. Slovníky v `web/js/i18n/<jazyk>.js`
+  (`en.js` je vzor a záloha – chybějící klíč se ukáže anglicky). `texts.js` vybere jazyk a před startem
+  aplikace načte jeho slovník (jeden soubor navíc, jen pro neanglický jazyk).
+- **Volba jazyka:** Settings → Appearance → Language (i v okně ⚙). Výchozí *Automatic* = podle jazyka
+  prohlížeče (slovenština → čeština), jinak angličtina. Změna znovu načte aplikaci.
+- **Data a čísla podle jazyka** (`LOCALE`: en-GB, cs-CZ, de-DE, es-ES, uk-UA) – kalendář, statistiky, řazení
+  kolekcí A–Z. **Tvary podle počtu** přes `Intl.PluralRules` (1 film / 2 filmy / 5 filmů; ukrajinština
+  one / few / many).
+- **Tituly úrovní přeložené** (Komparzista → Legenda; DE Komparse, ES Extra, UK Масовка…).
+- **Cyrilice:** přidané písmo `inter-cyrillic-wght-normal.woff2` (stáhne se jen u ukrajinštiny); nadpisy
+  (Chakra Petch cyrilici nemá) se v ukrajinštině ukážou písmem Inter.
+- **Nasazení:** minifikace s `--charset=utf8` (`deploy-pages.yml`) – cyrilice zůstane jako znaky, ukrajinský
+  slovník má po zmenšení ~44 kB místo ~99 kB.
+- **Měsíc v patičce v jazyce aplikace** (`APP_UPDATED = "2026-11"` → „listopad 2026“), desetinná čísla
+  ve statistikách a hodnoceních s čárkou tam, kde se píše (57,7 dne; ★ 4,5), desetiletí „léta 1990“ / „1990er“.
+- Ověřeno: kontrola slovníků (žádný chybějící klíč ani rozdílné zástupné znaky `{0}`), testy logiky
+  (`node --test`), všechny obrazovky v každém jazyce na 320 / 390 / 700 / 1280 px bez přetečení.
+
+#### Rozhodnutí ve fázi 45a
+- **Admin panel zůstává anglicky** – používá ho jen správce; ušetří ~140 textů na jazyk.
+- **Právní stránky (Terms, Privacy) zůstávají anglicky** – závazná je jedna verze; překlad by se musel
+  udržovat se vším ostatním.
+- **Změna jazyka = znovu načtení** – texty si moduly berou při startu; přepínání za běhu by znamenalo
+  překreslit úplně všechno, a jazyk se mění jednou za čas.
+- **Názvy filmů a kolekcí zatím anglicky** – přijdou ve V4.2.2 z TMDB (import je uloží do databáze).
+- **Rozdělení V4.2 na dvě části** – texty rozhraní jsou jen web, přeložená data potřebují migraci,
+  Edge Function a nový import; menší kroky se lépe zkoušejí.
+- **Ruština ne** (rozhodnuto už v plánu V4).
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

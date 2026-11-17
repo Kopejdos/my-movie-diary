@@ -5,6 +5,7 @@
 
 import { supabase } from "./supabase.js";
 import { check } from "./db.js";
+import { number } from "./texts.js";
 
 const MAX_IDS_PER_REQUEST = 1000;
 
@@ -41,8 +42,8 @@ export async function fetchRatingStats(tmdbIds) {
     return result;
 }
 
-/** score 1–10 → text hvězdiček („4.5“, „3“). */
+/** score 1–10 → text hvězdiček („4.5“, „3“; desetinná čárka podle jazyka – V4.2). */
 export function starsText(score) {
     const stars = score / 2;
-    return Number.isInteger(stars) ? String(stars) : stars.toFixed(1);
+    return Number.isInteger(stars) ? String(stars) : number(stars, 1);
 }

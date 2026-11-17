@@ -3,7 +3,7 @@
 // ani nicky uživatelů tak nemůžou do stránky podstrčit kód.
 
 import { TMDB_IMAGE_ROOT, POSTER_SIZES, BACKDROP_SIZES } from "./config.js";
-import { TEXTS } from "./texts.js";
+import { TEXTS, LOCALE } from "./texts.js";
 
 /**
  * Vytvoří prvek: h("a", { class: "btn", href: "#/" }, "Text", jinyPrvek).
@@ -80,7 +80,7 @@ export function yearOf(date) {
 /** Datum "2026-11-05" → "5 Nov 2026". */
 export function formatDate(date) {
     if (!date) return "";
-    return new Date(`${date}T00:00:00`).toLocaleDateString("en-GB", {
+    return new Date(`${date}T00:00:00`).toLocaleDateString(LOCALE, {
         day: "numeric", month: "short", year: "numeric",
     });
 }

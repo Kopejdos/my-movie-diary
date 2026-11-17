@@ -4,6 +4,7 @@
 // Přátelství se mění jen přes funkce send_friend_request / respond_friend_request /
 // remove_friend – pracují s nickem, ID účtů web nikdy nedostane.
 
+import { TEXTS } from "./texts.js";
 import { supabase } from "./supabase.js";
 import { SITE_URL } from "./config.js";
 import { fetchCatalogData } from "./achievements.js";
@@ -160,5 +161,5 @@ async function copyText(text) {
     field.select();
     const ok = document.execCommand("copy");
     field.remove();
-    if (!ok) throw new Error("Copying is not supported in this browser.");
+    if (!ok) throw new Error(TEXTS.errorCopy);
 }

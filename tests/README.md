@@ -22,6 +22,7 @@ Jeden soubor: `node --test tests/levels.test.mjs`.
 | `achievements.test.mjs` | XP za nové filmy, opakování a dokončené kolekce; *Seen before* se nepočítá do času ani Marathonu; datum odemčení |
 | `search.test.mjs` | normalizace textu (diakritika, apostrofy, `&`), pořadí výsledků, „spiderman“ = „Spider-Man“, hledání podle roku |
 | `settings.test.mjs` | nastavení vzhledu (V4.0): výchozí hodnoty, neplatné volby se ignorují, zápis na `<html>` |
+| `texts.test.mjs` | jazyky (V4.2): každý slovník má všechny texty mimo admin, žádné navíc, stejné `{0}` jako angličtina a tvary podle počtu (1 / 2 / 5 / 21…) |
 | `theme.test.mjs` | každá barva kolekce ze `supabase/seed/universes.json` dá tlačítko s kontrastem aspoň 4,5 : 1 (WCAG AA) |
 
 ## Pomocné soubory
@@ -32,6 +33,6 @@ Jeden soubor: `node --test tests/levels.test.mjs`.
 
 ## Kdy spustit
 
-Po změně levelování, achievementů, hledání nebo barev kolekcí – a před vydáním verze.
+Po změně levelování, achievementů, hledání, textů (nový klíč v `en.js` = doplnit ho do všech jazyků) nebo barev kolekcí – a před vydáním verze.
 `theme.test.mjs` hlídá, že automatické ztmavení barvy na tlačítkách (`fillFor` ve `web/js/theme.js`)
 stačí pro každou kolekci – i pro ty, které teprve přibudou v seedu.

@@ -10,6 +10,7 @@
 
 import { supabase } from "./supabase.js";
 import { cached } from "./cache.js";
+import { TEXTS } from "./texts.js";
 import { isUpcoming, fetchUniverseRows, fetchCatalogItems, fetchCategories } from "./data.js";
 import { fetchAllRows } from "./db.js";
 
@@ -294,7 +295,9 @@ export function computeXp({ values, completed, cards }) {
 export function levelFromXp(xp) {
     let level = 1;
     while (xp >= xpForLevel(level + 1)) level++;
-    const title = [...LEVEL_TITLES].reverse().find(([from]) => level >= from)[1];
+    const titleEn = [...LEVEL_TITLES].reverse().find(([from]) => level >= from)[1];
+    // titul v jazyce aplikace (V4.2) – klíč levelTitle_LeadActor…, jinak anglicky
+    const title = TEXTS[`levelTitle_${titleEn.replace(/[^A-Za-z]/g, "")}`] ?? titleEn;
     const floor = xpForLevel(level);
     const next = xpForLevel(level + 1);
     return {

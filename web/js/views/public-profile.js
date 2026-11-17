@@ -11,7 +11,7 @@ import { computeStats } from "../stats.js";
 import { todayLocal } from "../data.js";
 import { getProfile, isSignedIn } from "../auth.js";
 import { setAccent } from "../theme.js";
-import { TEXTS, format, movies, collections } from "../texts.js";
+import { TEXTS, format, movies, collections, LOCALE } from "../texts.js";
 import { h, mount, toast, loadingView, errorView } from "../dom.js";
 import { achievementsContent } from "./achievements.js";
 import { statsContent } from "./stats.js";
@@ -130,7 +130,7 @@ function profileHero(profile, level, totals, isOwn, friendship, reload) {
             h("span", { class: "eyebrow" }, format("levelLabel", level.level), " · ", level.title),
             h("h1", { class: "profile-hero__name" }, `@${profile.username}`),
             h("p", { class: "muted profile-hero__meta" },
-                format("publicMemberSince", new Date(profile.memberSince).toLocaleDateString("en-GB", { month: "long", year: "numeric" })),
+                format("publicMemberSince", new Date(profile.memberSince).toLocaleDateString(LOCALE, { month: "long", year: "numeric" })),
                 " · ",
                 format("publicSummary", movies(totals.films), collections(totals.completed))),
             h("div", { class: "profile-hero__actions" },

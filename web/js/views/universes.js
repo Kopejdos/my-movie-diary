@@ -15,7 +15,7 @@ import { loadPref, savePref } from "../prefs.js";
 import { onSettingsChange } from "../settings.js";
 import { isSignedIn, getUser } from "../auth.js";
 import { setAccent, inkFor } from "../theme.js";
-import { TEXTS, format, movies, collections, steps } from "../texts.js";
+import { TEXTS, format, movies, collections, steps, LOCALE } from "../texts.js";
 import { h, mount, poster, loadingView, errorView } from "../dom.js";
 import { todayPanel, todayPlaceholder } from "./today.js";
 import { fetchCommunityLists } from "../lists.js";
@@ -40,7 +40,7 @@ function sortName(name) {
     return (name ?? "").replace(/^(the|a|an)\s+/i, "");
 }
 
-const collator = new Intl.Collator("en", { sensitivity: "base", numeric: true });
+const collator = new Intl.Collator(LOCALE, { sensitivity: "base", numeric: true });
 
 /** Seřadí kolekce podle zvoleného způsobu (vrací novou kopii). */
 export function sortUniverses(list, sort) {

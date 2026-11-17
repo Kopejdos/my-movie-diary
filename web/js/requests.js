@@ -3,6 +3,7 @@
 // si bere z TMDB sama), čtení a +1 přímo přes Supabase (pravidla RLS).
 // Chyby z funkce mají kód (FunctionError.code – limit, not_same_series…), podle kterého web ukáže text.
 
+import { TEXTS } from "./texts.js";
 import { supabase } from "./supabase.js";
 import { check, callFunction } from "./db.js";
 
@@ -84,7 +85,7 @@ export async function voteForFilm(tmdbId, on) {
 /** Zruší vlastní požadavek, o kterém se ještě nerozhodlo. */
 export async function cancelFilmRequest(id) {
     const rows = await supabase.from("film_requests").delete().eq("id", id).select("id").then(check);
-    if (!rows || rows.length === 0) throw new Error("This request can no longer be canceled.");
+    if (!rows || rows.length === 0) throw new Error(TEXTS.requestsCancelTooLate);
 }
 
 /** Počet nevyřízených vlastních požadavků (limit MAX_OPEN_REQUESTS). */

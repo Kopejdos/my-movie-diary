@@ -3,7 +3,7 @@
 
 import { SETTING_OPTIONS, getSettings, setSetting, onSettingsChange } from "../settings.js";
 import { isSignedIn } from "../auth.js";
-import { TEXTS } from "../texts.js";
+import { TEXTS, LANGUAGES } from "../texts.js";
 import { h } from "../dom.js";
 import { openModal } from "./modal.js";
 
@@ -40,9 +40,28 @@ function choiceGroup(key, legend, { swatches = false, hint = null, wideOnly = fa
 
 const capitalize = (text) => text[0].toUpperCase() + text.slice(1);
 
+/** Výběr jazyka (V4.2) – názvy jazyků v daném jazyce; změna uloží volbu a načte aplikaci znovu. */
+function languageSelect() {
+    const current = getSettings().language;
+    const select = h("select", {
+        class: "admin-input settings-language", "aria-label": TEXTS.settingsLanguage,
+        onChange: (event) => {
+            setSetting("language", event.target.value);
+            window.location.reload();
+        },
+    },
+        h("option", { value: "auto", selected: current === "auto" }, TEXTS.settingsLanguage_auto),
+        Object.entries(LANGUAGES).map(([code, name]) => h("option", { value: code, selected: current === code }, name)));
+    return h("div", { class: "setting" },
+        h("span", { class: "setting__legend" }, TEXTS.settingsLanguage),
+        select,
+        h("p", { class: "hint setting__hint" }, TEXTS.settingsLanguageHint));
+}
+
 /** Všechny volby vzhledu. Po změně (i z jiného místa) se označení samo přepne. */
 export function appearanceControls() {
     const root = h("div", { class: "settings-group" },
+        languageSelect(),
         choiceGroup("mode", TEXTS.settingsMode),
         choiceGroup("style", TEXTS.settingsStyle),
         choiceGroup("accent", TEXTS.settingsAccent, { swatches: true, hint: TEXTS.settingsAccentHint }),
