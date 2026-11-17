@@ -364,7 +364,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 44c | V4.1.3 | Komunita: poctivá zobrazení, trend a sledování seznamů ✅ | počty zobrazení od nuly, řazení komunity podle lidí za 30 dní + sledujících, ☆ Follow u cizích seznamů, Lists → Following s „Updated“ |
 | 45a | V4.2.1 | Jazyky: rozhraní ✅ | **angličtina, čeština, němčina, španělština, ukrajinština** (ruština ne) – všechny texty webu, data a čísla podle jazyka, volba v Settings (výchozí podle prohlížeče); admin panel zůstává anglicky |
 | 45b | V4.2.2 | Jazyky: data ✅ | **názvy filmů z TMDB** v daném jazyce (import / admin panel, `scripts/translate.sh`), **názvy a popisy kolekcí, kategorie, poznámky cest** a obecné popisky (soubory `catalog.<jazyk>.json`), hledání i podle anglického názvu a v cyrilici, patička v jazyce aplikace |
-| 46a | V4.3.1 | Editor a požadavky | admin: **úpravy kolekce s jedním Save** (změny se sbírají, *Save* / *Discard*, varování při odchodu), **hledání filmu se po přidání nesmaže**; požadavky: uživatel u filmů nastaví **Section / Series / Label a pořadí**, **vlastní kolekce** z libovolných filmů (ne jen jedna série TMDB), **limit 30 filmů** v požadavku (dřív 20) |
+| 46a | V4.3.1 | Editor a požadavky ✅ | admin: **úpravy kolekce s jedním Save** (změny se sbírají, *Save* / *Discard*, varování při odchodu), **hledání filmu se po přidání nesmaže**; požadavky: uživatel u filmů nastaví **Section / Series / Label a pořadí**, **vlastní kolekce** z libovolných filmů (ne jen jedna série TMDB), **limit 30 filmů** v požadavku (dřív 20) |
 | 46b | V4.3.2 | Nástroje + westerny | admin: **kolekce z osoby** (režisér / herec, i **průnik dvou osob**), **kolekce ze studia / klíčového slova TMDB**, **ukazatel cíle** (např. 1 264 / 2 000); kategorie **Western** 🤠, **Bud Spencer & Terence Hill**, Leone, westernové výběry |
 | 46c | V4.3.3 | Režiséři a klasika | nový typ kolekce **Director** (záložka *Directors*), 10 režisérů, **Best Picture Winners**, Universal Monsters, Hammer, Louis de Funès, Belmondo |
 | 46d | V4.3.4 | Série a monstra | ~40 komediálních, akčních, sci-fi / fantasy a hororových sérií, **Godzilla + MonsterVerse**, King Kong; studia A24, Blumhouse, Amblin, Toho |
@@ -2030,6 +2030,41 @@ testovacích seznamů byla vymyšlená.
 - **Požadavky (hledání v TMDB) zůstávají anglicky** – TMDB najde film i podle českého názvu, výsledky jsou
   pro admina.
 - **Terms a Privacy se nepřekládají** – závazná je jedna verze; shrnutí v jazyce aplikace je na stránce About.
+
+### Fáze 46a – editor a požadavky ✅ (17. 11. 2026) – **V4.3.1**
+- **Jeden editor pro admina i uživatele** (`web/js/views/collection-editor.js`): řádek filmu s oddílem (Section),
+  sérií (Series), popiskem (Label), šipkami pořadí a odebráním; v adminu navíc pořadí v příběhu, volitelný,
+  poznámka u cesty a obal. Editor jen drží stav – ukládá stránka, která ho používá.
+- **Admin – úprava kolekce s jedním Save:** změny údajů kolekce, kategorií i filmů se sbírají, upravený řádek
+  se zvýrazní, odebraný film zůstane přeškrtnutý s **Undo**; dole se drží lišta „Unsaved changes: 3 ·
+  Discard · Save“. Save nejdřív uloží nové filmy do katalogu (Edge Function `admin`, `add-film` – i s překlady)
+  a pak vše ostatní **jednou databázovou funkcí v jedné transakci** (`admin_save_collection`, migrace
+  `20261118110000_editor_requests.sql`). Při odchodu s neuloženými změnami se stránka zeptá (i při zavření karty).
+- **Hledání filmu se po přidání nesmaže** – výsledky zůstanou, u přidaného „✓ Added“, dalším klepnutím se film
+  z editoru zase odebere. Nový film se zařadí podle data premiéry (u cesty na konec), jako dřív.
+- **Požadavky:** třetí druh **Own collection** – vlastní kolekce z libovolných filmů s názvem (i filmy, které už
+  v MMD jsou). U kolekce ze série i vlastní kolekce uživatel v editoru nastaví **pořadí, Section, Series
+  a Label**; vynechaný díl série jde vrátit tlačítkem pod editorem. Názvy a texty se kontrolují zakázanými slovy.
+- **Schválení požadavku na kolekci** v admin panelu ve stejném editoru, předvyplněné od uživatele: správce
+  doladí pořadí a pole, přidá další filmy hledáním, zvolí studia (*Also add to*) a vytvoří kolekci
+  (`create-collection`); filmy, které v editoru nezůstaly, se zamítnou.
+- **Limit filmů v požadavku 20 → 30** (Edge Function `requests` i web).
+- Drobnost: tmavší zelená u vybraných tlačítek ve světlém režimu (kontrast 4,5 : 1).
+- Ověřeno: migrace na lokálním Postgresu (uložení najednou, změna pořadí, nový a odebraný film, záznam pro
+  sync-seed, druhé uložení stejného stavu nic nezmění, ne-admin dostane chybu, vlastní kolekce bez názvu
+  neprojde), webové testy editoru (změny, Undo, hledání zůstává, otázka při odchodu, Save s přidanými filmy,
+  Discard), požadavek na vlastní kolekci a na sérii (pořadí a pole v odeslaných datech), schválení v adminu
+  (předvyplnění, zamítnutí odebraných), telefon 390 px bez přetečení, axe ve světlém i tmavém režimu.
+
+#### Rozhodnutí ve fázi 46a
+- **Uložení databázovou funkcí, ne novou akcí Edge Function** – funkce běží s právy správce, takže dál platí
+  pravidla RLS i triggery, které značí změny pro sync-seed; jedna transakce = buď vše, nebo nic. Edge Function
+  je potřeba jen na stažení nového filmu z TMDB.
+- **Mění se jen opravdu změněné řádky** – sync-seed tak přepíše v seedu jen to, co se změnilo.
+- **Odebraný film zůstane do uložení vidět** (přeškrtnutý s Undo) – omyl jde vrátit bez Discard všeho.
+- **Uživatel v požadavku nemá pořadí v příběhu, volitelný ani obal** – to doladí správce; uživatel řeší jen
+  to, co o kolekci ví (pořadí a pojmenování skupin).
+- **Vlastní kolekce smí obsahovat filmy, které už v MMD jsou** – patří do nové kolekce stejně jako díly série.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

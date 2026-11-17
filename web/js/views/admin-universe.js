@@ -1,19 +1,29 @@
 // Obrazovka admin panelu: úprava jednoho univerza (#/admin/collection/<slug>).
+//
+// V4.3.1 – jeden Save: změny údajů kolekce i filmů (oddíl, série, popisek, pořadí v příběhu,
+// volitelný, poznámka, obal, pořadí šipkami, přidání, odebrání) se jen sbírají. Upravený řádek
+// se zvýrazní a dole je lišta „3 unsaved changes · Discard · Save“. Save uloží vše najednou
+// (nové filmy se nejdřív uloží do katalogu přes Edge Function admin, pak jedna databázová
+// funkce admin_save_collection v jedné transakci). Odchod s neuloženými změnami se zeptá.
+// Hledání filmu se po přidání nesmaže – u přidaného filmu je „✓ Added“.
 
-import { fetchUniverse, fetchCategories, isUpcoming } from "../data.js";
+import { fetchUniverse, fetchCategories } from "../data.js";
 import { clearDataCache } from "../cache.js";
-import {
-    updateUniverse, addUniverseItem, updateUniverseItem, removeUniverseItem, swapItemOrder,
-    setUniverseCover, searchTmdb, setUniverseCategories,
-} from "../admin.js";
+import { searchTmdb, addFilmToCatalog, saveCollection } from "../admin.js";
+import { setLeaveGuard } from "../router.js";
 import { setAccent } from "../theme.js";
 import { TEXTS, format, movies } from "../texts.js";
-import { h, mount, poster, pill, yearOf, toast, loadingView, errorView } from "../dom.js";
+import { h, mount, toast, loadingView, errorView } from "../dom.js";
 import { field } from "./login.js";
 import { requireAdminView } from "./admin.js";
+import { createCollectionEditor, unsavedText } from "./collection-editor.js";
+import { tmdbSearchPanel } from "./tmdb-search-panel.js";
+
+const KINDS = [["series", "kindSeries"], ["studio", "kindStudio"], ["genre", "kindGenre"], ["path", "kindPathOption"]];
 
 export async function adminUniverseView(container, context) {
     if (!requireAdminView(container)) return;
+    setLeaveGuard(null);
     mount(container, loadingView());
     clearDataCache();               // admin vždy pracuje s čerstvými daty
 
@@ -44,8 +54,109 @@ export async function adminUniverseView(container, context) {
     };
 
     document.title = `${universe.name} · ${TEXTS.adminTitle}`;
+    buildPage(container, universe, categories, () => adminUniverseView(container, context));
+}
+
+/** Celá stránka editoru. Discard ji postaví znovu z načtených dat, Save uloží a načte znovu. */
+function buildPage(container, universe, categories, reload) {
     setAccent(universe.color);
-    const reload = () => adminUniverseView(container, context);
+
+    let ready = false;                  // editor volá onChange už při prvním vykreslení
+    const details = detailsForm(universe, categories, () => update());
+    const editor = createCollectionEditor({
+        items: universe.items,
+        mode: "admin",
+        kind: universe.kind ?? "series",
+        coverId: universe.cover_tmdb_id,
+        onChange: () => update(),
+    });
+    details.onKindChange = (kind) => editor.setKind(kind);
+
+    // Nové filmy: oddíl a „volitelný“ z panelu hledání, zařazení podle data premiéry
+    const newFields = {
+        group: h("input", {
+            type: "text", class: "admin-input", value: universe.items.at(-1)?.group_label ?? "",
+            placeholder: TEXTS.adminGroupPlaceholder, "aria-label": TEXTS.adminGroup, maxlength: 60,
+        }),
+        optional: h("input", { type: "checkbox" }),
+    };
+    const search = tmdbSearchPanel({
+        search: searchTmdb,
+        isAdded: (tmdbId) => editor.has(tmdbId),
+        onToggle: (movie, added) => {
+            if (added) {
+                editor.removeFilm(movie.tmdb_id);
+            } else {
+                editor.add(
+                    { tmdb_id: movie.tmdb_id, title: movie.title, poster_path: movie.poster_path, release_date: movie.release_date ?? null },
+                    { group_label: newFields.group.value, is_optional: newFields.optional.checked });
+            }
+        },
+        extra: h("div", { class: "admin-row__fields" },
+            h("label", { class: "mini-field" }, h("span", {}, TEXTS.adminGroup), newFields.group),
+            h("label", { class: "mini-check" }, newFields.optional, h("span", {}, TEXTS.adminOptional))),
+        open: universe.items.length === 0,
+    });
+
+    // Lišta s neuloženými změnami
+    const count = h("span", { class: "save-bar__count" });
+    const discard = h("button", { class: "btn btn--small", type: "button", onClick: () => {
+        setLeaveGuard(null);
+        buildPage(container, universe, categories, reload);
+    } }, TEXTS.adminEditorDiscard);
+    const save = h("button", { class: "btn btn--primary btn--small", type: "button", onClick: () => saveAll() }, TEXTS.adminSave);
+    const bar = h("div", { class: "save-bar", role: "region", "aria-label": TEXTS.adminEditorUnsavedRegion, hidden: true },
+        h("div", { class: "save-bar__inner" }, count, discard, save));
+    const filmCount = h("span", { class: "muted" });
+
+    const total = () => editor.changes() + details.changes();
+    function update() {
+        if (!ready) return;
+        const changes = total();
+        bar.hidden = changes === 0;
+        count.textContent = unsavedText(changes);
+        filmCount.textContent = movies(editor.count());
+        search.refresh();
+    }
+
+    async function saveAll() {
+        if (!details.valid()) {
+            toast(TEXTS.adminNameRequired, "error");
+            return;
+        }
+        save.disabled = true;
+        discard.disabled = true;
+        save.textContent = TEXTS.adminEditorSaving;
+        try {
+            // 1. Nové filmy do katalogu (detail a překlady z TMDB), po třech najednou
+            const fresh = editor.items().filter((item) => item.id === null);
+            for (let i = 0; i < fresh.length; i += 3) {
+                await Promise.all(fresh.slice(i, i + 3).map((item) => addFilmToCatalog(item.tmdb_id)));
+            }
+            // 2. Všechno ostatní najednou
+            const changedDetails = details.changedValues();
+            if (editor.coverChanged()) changedDetails.cover_tmdb_id = editor.cover();
+            await saveCollection(universe.id, {
+                universe: Object.keys(changedDetails).length > 0 ? changedDetails : null,
+                categories: details.categoriesChanged() ? details.categoryIds() : null,
+                items: editor.items().map((item) => ({
+                    id: item.id, tmdb_id: item.tmdb_id, group_label: item.group_label, franchise: item.franchise,
+                    label: item.label, story_order: item.story_order, is_optional: item.is_optional, note: item.note,
+                })),
+                removed: editor.removedIds(),
+            });
+            toast(TEXTS.adminSaved);
+            setLeaveGuard(null);
+            reload();
+        } catch (error) {
+            toast(format("errorGeneric", error.message), "error");
+            save.disabled = false;
+            discard.disabled = false;
+            save.textContent = TEXTS.adminSave;
+        }
+    }
+
+    setLeaveGuard(() => (total() > 0 ? TEXTS.adminEditorLeave : null));
 
     mount(container,
         h("div", { class: "admin-top" },
@@ -56,41 +167,33 @@ export async function adminUniverseView(container, context) {
             h("span", { class: "eyebrow" }, TEXTS.navAdmin),
             h("h1", {}, universe.name),
         ),
-        detailsForm(universe, categories, reload),
-        addMoviePanel(universe, reload),
+        details.element,
+        search.element,
         h("div", { class: "section-title" },
             h("h2", {}, TEXTS.adminMoviesInUniverse),
-            h("span", { class: "muted" }, movies(universe.items.length)),
+            filmCount,
         ),
-        h("p", { class: "hint" }, TEXTS.adminStoryHint),
-        h("ol", { class: "admin-list" },
-            universe.items.map((item, index) =>
-                itemRow(universe, item, universe.items[index - 1], universe.items[index + 1], reload)),
-        ),
+        h("p", { class: "hint" }, TEXTS.adminStoryHint, " ", TEXTS.adminEditorHint),
+        editor.element,
+        bar,
     );
+    ready = true;
+    update();
 }
 
-/** Spustí změnu, ukáže výsledek a stránku znovu načte. */
-async function run(action, reload, message) {
-    try {
-        await action();
-        if (message) toast(message);
-        reload();
-    } catch (error) {
-        toast(format("errorGeneric", error.message), "error");
-    }
-}
-
-/** Název, popis, barva, typ a kategorie kolekce. */
-function detailsForm(universe, categories, reload) {
-    const name = h("input", { type: "text", value: universe.name, maxlength: 80, required: true });
-    const description = h("input", { type: "text", value: universe.description ?? "", maxlength: 200 });
-    const color = h("input", { type: "color", value: universe.color ?? "#d4a75a", class: "color-input" });
-    const submit = h("button", { class: "btn btn--primary", type: "submit" }, TEXTS.adminSave);
-
+/** Název, popis, barva, typ a kategorie kolekce – změny se jen sbírají (uloží je Save). */
+function detailsForm(universe, categories, onChange) {
+    const original = {
+        name: universe.name,
+        description: universe.description ?? "",
+        color: universe.color ?? "#d4a75a",
+        kind: universe.kind ?? "series",
+    };
+    const name = h("input", { type: "text", value: original.name, maxlength: 80, required: true });
+    const description = h("input", { type: "text", value: original.description, maxlength: 200 });
+    const color = h("input", { type: "color", value: original.color, class: "color-input" });
     const kind = h("select", { class: "admin-input admin-select" },
-        [["series", TEXTS.kindSeries], ["studio", TEXTS.kindStudio], ["genre", TEXTS.kindGenre], ["path", TEXTS.kindPathOption]]
-            .map(([value, label]) => h("option", { value, selected: (universe.kind ?? "series") === value }, label)));
+        KINDS.map(([value, key]) => h("option", { value, selected: original.kind === value }, TEXTS[key])));
 
     const assigned = new Set((universe.categories ?? []).map((c) => c.id));
     const categoryBoxes = categories.map((c) => ({
@@ -100,29 +203,46 @@ function detailsForm(universe, categories, reload) {
         color: c.color,
     }));
 
-    // Náhled barvy hned při výběru
-    color.addEventListener("input", () => setAccent(color.value));
+    const current = () => ({
+        name: name.value.trim(),
+        description: description.value.trim(),
+        color: color.value,
+        kind: kind.value,
+    });
+    const categoryIds = () => categoryBoxes.filter((box) => box.input.checked).map((box) => box.id);
+    const categoriesChanged = () => {
+        const now = categoryIds();
+        return now.length !== assigned.size || now.some((id) => !assigned.has(id));
+    };
+    const changedValues = () => {
+        const now = current();
+        return Object.fromEntries(Object.entries(now).filter(([key, value]) => value !== original[key]));
+    };
 
-    return h("form", {
+    const form = {
+        element: null,
+        onKindChange: () => {},
+        changes: () => Object.keys(changedValues()).length + (categoriesChanged() ? 1 : 0),
+        changedValues,
+        categoriesChanged,
+        categoryIds,
+        valid: () => current().name !== "",
+    };
+
+    for (const input of [name, description]) input.addEventListener("input", onChange);
+    color.addEventListener("input", () => {
+        setAccent(color.value);         // náhled barvy hned při výběru
+        onChange();
+    });
+    kind.addEventListener("change", () => {
+        form.onKindChange(kind.value);
+        onChange();
+    });
+    categoryBoxes.forEach((box) => box.input.addEventListener("change", onChange));
+
+    form.element = h("form", {
             class: "admin-form",
-            onSubmit: (event) => {
-                event.preventDefault();
-                if (!name.value.trim()) {
-                    toast(TEXTS.adminNameRequired, "error");
-                    return;
-                }
-                submit.disabled = true;
-                run(async () => {
-                    await updateUniverse(universe.id, {
-                        name: name.value.trim(),
-                        description: description.value.trim() || null,
-                        color: color.value,
-                        kind: kind.value,
-                    });
-                    await setUniverseCategories(universe.id,
-                        categoryBoxes.filter((box) => box.input.checked).map((box) => box.id));
-                }, reload, TEXTS.adminSaved);
-            },
+            onSubmit: (event) => event.preventDefault(),
         },
         h("h2", { class: "admin-form__title" }, TEXTS.adminUniverseDetails),
         h("div", { class: "admin-form__grid" },
@@ -140,171 +260,6 @@ function detailsForm(universe, categories, reload) {
                     box.input, h("span", {}, box.label)))),
             h("span", { class: "field__hint" }, TEXTS.adminCategoriesHint),
         ),
-        submit,
     );
-}
-
-/** Řádek filmu: oddíl, série, popisek, pořadí v příběhu, volitelný, obal, posun, odebrání. */
-function itemRow(universe, item, previous, next, reload) {
-    const { film } = item;
-    const isCover = universe.cover_tmdb_id === film.tmdb_id;
-
-    // Úpravy polí se ukládají hned po opuštění pole (change)
-    const save = (fields) => run(() => updateUniverseItem(item.id, fields), reload, TEXTS.adminSaved);
-
-    const group = h("input", {
-        type: "text", class: "admin-input", value: item.group_label ?? "",
-        placeholder: TEXTS.adminGroupPlaceholder, "aria-label": TEXTS.adminGroup, maxlength: 60,
-    });
-    group.addEventListener("change", () => save({ group_label: group.value.trim() || null }));
-
-    // Série pro pohled „By series“ a popisek u názvu (V3.0.1)
-    const franchise = h("input", {
-        type: "text", class: "admin-input", value: item.franchise ?? "",
-        placeholder: TEXTS.adminFranchisePlaceholder, "aria-label": TEXTS.adminFranchise, maxlength: 60,
-    });
-    franchise.addEventListener("change", () => save({ franchise: franchise.value.trim() || null }));
-
-    const label = h("input", {
-        type: "text", class: "admin-input", value: item.label ?? "",
-        placeholder: TEXTS.adminLabelPlaceholder, "aria-label": TEXTS.adminLabel, maxlength: 60,
-    });
-    label.addEventListener("change", () => save({ label: label.value.trim() || null }));
-
-    const story = h("input", {
-        type: "number", class: "admin-input admin-input--number", min: 1, max: 999,
-        value: item.story_order ?? "", placeholder: "—", "aria-label": TEXTS.adminStoryOrder,
-    });
-    story.addEventListener("change", () =>
-        save({ story_order: story.value === "" ? null : Number(story.value) }));
-
-    const optional = h("input", { type: "checkbox", checked: item.is_optional });
-    optional.addEventListener("change", () => save({ is_optional: optional.checked }));
-
-    // Poznámka ke kroku – jen u cest (jinde se nezobrazuje)
-    const isPath = universe.kind === "path";
-    const note = isPath
-        ? h("input", {
-            type: "text", class: "admin-input admin-input--grow", value: item.note ?? "",
-            placeholder: TEXTS.adminNotePlaceholder, "aria-label": TEXTS.adminNote, maxlength: 300,
-        })
-        : null;
-    note?.addEventListener("change", () => save({ note: note.value.trim() || null }));
-
-    return h("li", { class: `admin-row admin-row--film${item.is_optional ? " film--optional" : ""}` },
-        h("span", { class: "admin-row__order" }, String(item.release_order)),
-        poster(film.poster_path, film.title, "film__poster", false, "small"),
-        h("div", { class: "admin-row__info" },
-            h("strong", {}, film.title),
-            h("div", { class: "pills" },
-                pill(yearOf(film.release_date)),
-                isCover ? pill(TEXTS.adminIsCover, true) : null,
-                isUpcoming(item) ? pill(TEXTS.comingSoonBadge) : null,
-            ),
-            h("div", { class: "admin-row__fields" },
-                h("label", { class: "mini-field" }, h("span", {}, TEXTS.adminGroup), group),
-                isPath ? null : h("label", { class: "mini-field" }, h("span", {}, TEXTS.adminFranchise), franchise),
-                h("label", { class: "mini-field" }, h("span", {}, TEXTS.adminLabel), label),
-                h("label", { class: "mini-field" }, h("span", {}, TEXTS.adminStoryOrder), story),
-                h("label", { class: "mini-check" }, optional, h("span", {}, TEXTS.adminOptional)),
-            ),
-            note ? h("label", { class: "mini-field mini-field--wide" }, h("span", {}, TEXTS.adminNote), note) : null,
-        ),
-        h("div", { class: "admin-row__actions" },
-            h("button", {
-                class: "icon-btn", type: "button", title: TEXTS.adminMoveUp, "aria-label": TEXTS.adminMoveUp,
-                disabled: !previous, onClick: () => run(() => swapItemOrder(item, previous), reload),
-            }, "↑"),
-            h("button", {
-                class: "icon-btn", type: "button", title: TEXTS.adminMoveDown, "aria-label": TEXTS.adminMoveDown,
-                disabled: !next, onClick: () => run(() => swapItemOrder(item, next), reload),
-            }, "↓"),
-            isCover ? null : h("button", {
-                class: "btn btn--small", type: "button",
-                onClick: () => run(() => setUniverseCover(universe.id, film.tmdb_id), reload, TEXTS.adminSaved),
-            }, TEXTS.adminSetCover),
-            h("button", {
-                class: "btn btn--small btn--danger", type: "button",
-                onClick: () => {
-                    if (!window.confirm(format("adminConfirmRemoveMovie", film.title))) return;
-                    run(() => removeUniverseItem(item.id), reload, TEXTS.adminDeleted);
-                },
-            }, TEXTS.adminRemove),
-        ),
-    );
-}
-
-/** Hledání v TMDB a přidání filmu na konec univerza. */
-function addMoviePanel(universe, reload) {
-    const inUniverse = new Set(universe.items.map((item) => item.film.tmdb_id));
-    const lastGroup = universe.items.at(-1)?.group_label ?? "";
-
-    const query = h("input", { type: "search", class: "admin-input admin-input--grow",
-        placeholder: TEXTS.adminSearchPlaceholder, "aria-label": TEXTS.adminSearch });
-    const group = h("input", { type: "text", class: "admin-input", value: lastGroup,
-        placeholder: TEXTS.adminGroupPlaceholder, "aria-label": TEXTS.adminGroup, maxlength: 60 });
-    const optional = h("input", { type: "checkbox" });
-    const results = h("div", { class: "search-results" });
-    const submit = h("button", { class: "btn btn--primary", type: "submit" }, TEXTS.adminSearch);
-
-    async function handleSearch(event) {
-        event.preventDefault();
-        if (!query.value.trim()) return;
-        submit.disabled = true;
-        mount(results, loadingView());
-        try {
-            const found = await searchTmdb(query.value);
-            mount(results, found.length === 0
-                ? h("p", { class: "muted" }, TEXTS.adminNoResults)
-                : found.map(resultCard));
-        } catch (error) {
-            mount(results, h("p", { class: "form-error" }, format("errorGeneric", error.message)));
-        }
-        submit.disabled = false;
-    }
-
-    function resultCard(movie) {
-        const already = inUniverse.has(movie.tmdb_id);
-        const add = h("button", { class: "btn btn--small btn--universe", type: "button", disabled: already },
-            already ? TEXTS.adminAlreadyIn : TEXTS.adminAdd);
-        add.addEventListener("click", async () => {
-            add.disabled = true;
-            try {
-                // uloží film a zařadí ho podle data premiéry (V3.5.2.1)
-                const film = await addUniverseItem(universe.id, movie.tmdb_id, {
-                    group: group.value.trim(), optional: optional.checked,
-                });
-                if (film.status && film.status !== "Released") {
-                    toast(format("adminNotReleased", film.release_date ?? "TBA"));
-                }
-                toast(format("adminMovieAdded", film.title));
-                reload();
-            } catch (error) {
-                toast(format("errorGeneric", error.message), "error");
-                add.disabled = false;
-            }
-        });
-
-        return h("div", { class: "search-result" },
-            poster(movie.poster_path, movie.title, "film__poster", false, "small"),
-            h("div", { class: "admin-row__info" },
-                h("strong", {}, movie.title),
-                h("div", { class: "pills" }, pill(movie.year ?? "—"),
-                    movie.original_title && movie.original_title !== movie.title ? pill(movie.original_title) : null),
-            ),
-            add,
-        );
-    }
-
-    return h("details", { class: "panel-details", open: universe.items.length === 0 },
-        h("summary", {}, `+ ${TEXTS.adminAddMovie}`),
-        h("form", { class: "admin-form", onSubmit: handleSearch },
-            h("div", { class: "admin-search" }, query, submit),
-            h("div", { class: "admin-row__fields" },
-                h("label", { class: "mini-field" }, h("span", {}, TEXTS.adminGroup), group),
-                h("label", { class: "mini-check" }, optional, h("span", {}, TEXTS.adminOptional)),
-            ),
-            results,
-        ),
-    );
+    return form;
 }

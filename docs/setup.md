@@ -216,6 +216,8 @@ Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny
     (projde celý katalog, pár minut). Další filmy překládá sám import a admin panel; `import.sh` navíc na konci
     doplní, co chybí. Názvy kolekcí, kategorie a poznámky cest jsou v `web/js/i18n/catalog.<jazyk>.json` –
     novou kolekci stačí doplnit tam (jinak se ukáže anglicky).
+18. **Editor a požadavky (V4.3.1):** migrace `20261118110000_editor_requests.sql`, pak znovu nasadit Edge
+    Functions **`admin`** a **`requests`** (Verify JWT dál vypnuté). Funkce `tmdb` beze změny.
 
 **Seed a admin panel (od V3.5.2.1):** seed je zdroj pravdy pro import, ale **úpravy z aplikace se neztratí** –
 databáze si je pamatuje (`universe_items.source`, `universes.source`, tabulka `seed_removals`) a `import.sh`

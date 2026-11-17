@@ -227,17 +227,22 @@ ale může být ve více univerzech.
 autor a správce), `created_at`. Od V3.5.2 i **`kind`** (`films` = libovolné filmy / `collection` = díly jedné série
 TMDB), **`tmdb_collection_id`** (série u požadavku na kolekci – vyplněná právě tehdy, když `kind = 'collection'`,
 omezení `film_requests_series_check`) a **`collection_name`** (název série z TMDB, ≤ 120 znaků).
+Od V4.3.1 i `kind = 'custom'` – **vlastní kolekce** z libovolných filmů; `collection_name` je pak název od uživatele
+(povinný – `film_requests_custom_name_check`), `tmdb_collection_id` je null.
 
 **`film_request_items`** – filmy v požadavku: `id`, `request_id` (FK, cascade), `tmdb_id`, `title`,
 `release_date`, `poster_path` (údaje z TMDB v okamžiku požadavku – film ještě není v `films`), `status`
 (`pending` / `added` / `rejected`), `universe_id` (kam správce film zařadil, null = bez kolekce), `decided_at`.
-Unikátní `(request_id, tmdb_id)`.
+Unikátní `(request_id, tmdb_id)`. Od V4.3.1 u požadavku na kolekci i **`position`** (pořadí od uživatele),
+**`group_label`** (Section), **`franchise`** (Series) a **`label`** (Label) – každý ≤ 60 znaků; správce je při
+schválení dostane předvyplněné v editoru.
 
 **`film_request_votes`** – +1: `(tmdb_id, user_id)` PK, `created_at`.
 
 - RLS: požadavky a jejich filmy vidí **jen autor a správce**; autor smí **zrušit** požadavek, o kterém se ještě
   nerozhodlo. **Zakládat požadavky jde jen přes Edge Function `requests`** (údaje o filmech bere z TMDB sama,
-  limity: ≤ 20 filmů v požadavku, ≤ 5 nevyřízených požadavků). Hlasy: vlastní, jen u filmu, který čeká
+  limity: ≤ 30 filmů v požadavku – do V4.3.1 20, ≤ 5 nevyřízených požadavků; název vlastní kolekce a texty
+  bez zakázaných slov – `is_text_allowed`). Hlasy: vlastní, jen u filmu, který čeká
   (`film_request_pending()`), zrušit vlastní.
 - Rozhodnutí (Edge Function `admin`, akce `request-decide`) platí pro film ve **všech** čekajících požadavcích.
 - Požadavek na kolekci (V3.5.2): funkce `requests` ověří podle TMDB, že všechny filmy patří do jedné série
@@ -272,6 +277,11 @@ Zapisuje do ní jen GitHub Action přes databázovou funkci `ping()`; drží se 
 - **`my_film_counts`** (pohled) – počet zhlédnutí a datum posledního zhlédnutí pro každý film uživatele.
 - **`ping()`** (funkce) – zapíše řádek do `heartbeat` a smaže staré.
 - **`remove_latest_watch(tmdb_id)`** – −1: smaže nejnovější zhlédnutí a vrátí nový počet.
+- **`admin_save_collection(universe_id, universe, categories, items, removed)`** (V4.3.1) – editor kolekce v admin
+  panelu uloží všechny změny **najednou v jedné transakci**: změněné údaje kolekce (název, popis, barva, typ, obal),
+  kategorie, všechny filmy v novém pořadí (oddíl, série, popisek, pořadí v příběhu, volitelný, poznámka; bez `id`
+  = nový film, musí už být ve `films`) a ID odebraných položek. Běží s právy přihlášeného (security invoker) – jen
+  správce (`is_admin()`), platí RLS i triggery pro sync-seed. Přepisuje jen řádky, které se opravdu změnily.
 - **`is_username_available(username)`** – je nickname volný? (smí i nepřihlášený, vrací jen ano / ne)
 - **`email_for_username(username)`** – e-mail k nicku pro přihlášení nickem; smí ji volat **jen `service_role`** (Edge Function `login`).
 - **`remove_watched_from_watchlist()`** (trigger na `watches`) – po zhlédnutí film zmizí z watchlistu.

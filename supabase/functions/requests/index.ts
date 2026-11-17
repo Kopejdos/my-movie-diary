@@ -8,15 +8,20 @@
 //   search  { query }               → hledání v TMDB; u každého filmu, jestli už je
 //                                     v MMD, jestli na něj čeká požadavek a jestli
 //                                     ho uživatel už chce
-//   create  { tmdb_ids[], note? }    → založí požadavek (1–20 filmů). Údaje o filmech
+//   create  { tmdb_ids[], note? }    → založí požadavek (1–30 filmů; do V4.3.1 20). Údaje o filmech
 //                                     (název, rok, plakát) si funkce stáhne z TMDB sama.
 //                                     Film, který už je v MMD, přeskočí; na film, na který
 //                                     už čeká cizí požadavek, dá místo toho +1.
 //   series  { tmdb_id }              → série TMDB, do které film patří (V3.5.2): díly se stavem,
 //                                     jestli už má v MMD kolekci a jestli na ni čeká požadavek
-//   create  { kind: "collection", tmdb_collection_id, tmdb_ids[], note? }
+//   create  { kind: "collection", tmdb_collection_id, tmdb_ids[], items?, note? }
 //                                   → požadavek na kolekci (V3.5.2): VŠECHNY filmy musí být díly
 //                                     té série (jinak chyba not_same_series), aspoň 2 filmy
+//   create  { kind: "custom", name, tmdb_ids[], items?, note? }
+//                                   → vlastní kolekce z libovolných filmů (V4.3.1), 2–30 filmů,
+//                                     název bez zakázaných slov
+//   items = [{ tmdb_id, group_label, franchise, label }] – oddíl, série a popisek navržené
+//           uživatelem (V4.3.1); pořadí filmů = pořadí v tmdb_ids
 //
 // Tajemství: TMDB_READ_TOKEN (stejné jako funkce tmdb a admin).
 // V nastavení funkce musí být vypnuté "Verify JWT" (ověřuje si přístup sama).
@@ -25,7 +30,7 @@
 import { createClient, SupabaseClient } from "npm:@supabase/supabase-js@2";
 
 const TMDB_BASE = "https://api.themoviedb.org/3";
-const MAX_FILMS = 20;          // filmů v jednom požadavku
+const MAX_FILMS = 30;          // filmů v jednom požadavku (do V4.3.1: 20)
 const MAX_PENDING = 5;         // nevyřízených požadavků na uživatele
 const MAX_NOTE = 300;
 
@@ -145,6 +150,7 @@ async function search(db: SupabaseClient, userId: string, query: string) {
     tmdb_id: r.id,
     title: r.title,
     year: r.release_date ? r.release_date.slice(0, 4) : null,
+    release_date: r.release_date || null,
     poster_path: r.poster_path,
     state: inCatalog.has(r.id) ? "in_catalog" : mine.has(r.id) ? "mine" : pending.has(r.id) ? "pending" : "new",
   }));
@@ -203,6 +209,7 @@ async function seriesOf(db: SupabaseClient, userId: string, tmdbId: number) {
         tmdb_id: p.id,
         title: p.title,
         year: p.release_date ? p.release_date.slice(0, 4) : null,
+        release_date: p.release_date || null,        // V4.3.1 – editor požadavku
         poster_path: p.poster_path,
         in_catalog: inCatalog.has(p.id),
       })),
@@ -212,10 +219,101 @@ async function seriesOf(db: SupabaseClient, userId: string, tmdbId: number) {
   };
 }
 
+/** Údaje filmu navržené uživatelem (V4.3.1): oddíl, série, popisek – zkrácené, bez zakázaných slov. */
+type Attributes = { group_label: string | null; franchise: string | null; label: string | null };
+
+const cleanText = (value: unknown, max: number) =>
+  typeof value === "string" && value.trim() ? value.trim().replace(/\s+/g, " ").slice(0, max) : null;
+
+async function textAllowed(db: SupabaseClient, text: string | null) {
+  if (!text) return true;
+  const { data, error } = await db.rpc("is_text_allowed", { p_text: text });
+  if (error) throw new Error(error.message);
+  return data === true;
+}
+
+/** Oddíl / série / popisek pro každý film (podle tmdb_id). Zakázané slovo → chyba text_not_allowed. */
+async function attributesOf(db: SupabaseClient, raw: unknown): Promise<Map<number, Attributes>> {
+  const result = new Map<number, Attributes>();
+  // deno-lint-ignore no-explicit-any
+  for (const entry of (Array.isArray(raw) ? raw : []) as any[]) {
+    const tmdbId = Number(entry?.tmdb_id);
+    if (!Number.isInteger(tmdbId) || tmdbId <= 0) continue;
+    result.set(tmdbId, {
+      group_label: cleanText(entry?.group_label, 60),
+      franchise: cleanText(entry?.franchise, 60),
+      label: cleanText(entry?.label, 60),
+    });
+  }
+  const texts = [...result.values()].flatMap((a) => [a.group_label, a.franchise, a.label]).filter(Boolean).join(" ");
+  if (!(await textAllowed(db, texts))) throw new HttpError(400, "A text contains a word that is not allowed", "text_not_allowed");
+  return result;
+}
+
+/** Počet nevyřízených požadavků uživatele – limit MAX_PENDING. */
+async function checkPendingLimit(db: SupabaseClient, userId: string) {
+  const { data: open, error } = await db
+    .from("film_requests")
+    .select("id, items:film_request_items!inner(status)")
+    .eq("user_id", userId)
+    .eq("items.status", "pending");
+  if (error) throw new Error(error.message);
+  if ((open ?? []).length >= MAX_PENDING) throw new HttpError(429, `At most ${MAX_PENDING} open requests`, "limit");
+}
+
+/** Řádky filmů požadavku na kolekci v pořadí uživatele s jeho oddílem / sérií / popiskem. */
+function collectionItems(requestId: number, ids: number[], details: Map<number, TmdbMovie>, attributes: Map<number, Attributes>) {
+  return ids.filter((id) => details.has(id)).map((id, index) => {
+    const film = details.get(id)!;
+    const extra = attributes.get(id);
+    return {
+      request_id: requestId, tmdb_id: id, title: film.title, release_date: film.release_date || null, poster_path: film.poster_path,
+      position: index + 1,
+      group_label: extra?.group_label ?? null, franchise: extra?.franchise ?? null, label: extra?.label ?? null,
+    };
+  });
+}
+
+/** Seznam ID filmů z požadavku: celá čísla, bez opakování, v pořadí uživatele. */
+const parseIds = (raw: unknown) =>
+  [...new Set(Array.isArray(raw) ? raw.map(Number) : [])].filter((id) => Number.isInteger(id) && id > 0);
+
+/**
+ * Vlastní kolekce (V4.3.1): libovolné filmy (i ty, které už v MMD jsou – patří do nové kolekce),
+ * 2–30 filmů, název bez zakázaných slov. Schválení je na adminovi.
+ */
+async function createCustomRequest(db: SupabaseClient, userId: string, rawName: unknown, tmdbIds: unknown, rawItems: unknown, note: string) {
+  const name = cleanText(rawName, 80);
+  if (!name || name.length < 2) throw new HttpError(400, "Name the collection", "name_required");
+  const ids = parseIds(tmdbIds);
+  if (ids.length < 2) throw new HttpError(400, "A collection needs at least 2 movies", "too_few");
+  if (ids.length > MAX_FILMS) throw new HttpError(400, `At most ${MAX_FILMS} movies`, "too_many");
+  if (!(await textAllowed(db, `${name} ${note}`))) throw new HttpError(400, "A text contains a word that is not allowed", "text_not_allowed");
+  const attributes = await attributesOf(db, rawItems);
+  await checkPendingLimit(db, userId);
+
+  // Údaje o filmech z TMDB (ne z webu – nejdou podvrhnout)
+  const found = await Promise.all(ids.map((id) => tmdbGet<TmdbMovie>(`/movie/${id}`, { language: "en-US" }).catch(() => null)));
+  const details = new Map(found.filter((d): d is TmdbMovie => d !== null && !d.adult).map((d) => [d.id, d]));
+  if (details.size < 2) throw new HttpError(400, "A collection needs at least 2 movies", "too_few");
+
+  const { data: request, error } = await db.from("film_requests").insert({
+    user_id: userId, note: note || null, kind: "custom", collection_name: name,
+  }).select("id").single();
+  if (error) throw new Error(error.message);
+  const { error: itemsError } = await db.from("film_request_items").insert(collectionItems(request.id, ids, details, attributes));
+  if (itemsError) throw new Error(itemsError.message);
+
+  return {
+    request_id: request.id, kind: "custom", collection: name, requested: ids.filter((id) => details.has(id)),
+    voted: [], in_catalog: [], already_mine: [], not_found: ids.filter((id) => !details.has(id)),
+  };
+}
+
 /** Požadavek na kolekci: jen díly jedné série, aspoň 2, série ještě nemá kolekci ani čekající požadavek. */
-async function createCollectionRequest(db: SupabaseClient, userId: string, collectionId: number, tmdbIds: unknown, note: string) {
+async function createCollectionRequest(db: SupabaseClient, userId: string, collectionId: number, tmdbIds: unknown, rawItems: unknown, note: string) {
   if (!Number.isInteger(collectionId) || collectionId <= 0) throw new HttpError(400, "Invalid series", "invalid");
-  const ids = [...new Set(Array.isArray(tmdbIds) ? tmdbIds.map(Number) : [])].filter((id) => Number.isInteger(id) && id > 0);
+  const ids = parseIds(tmdbIds);
   if (ids.length < 2) throw new HttpError(400, "A collection needs at least 2 movies", "too_few");
   if (ids.length > MAX_FILMS) throw new HttpError(400, `At most ${MAX_FILMS} movies`, "too_many");
 
@@ -227,14 +325,9 @@ async function createCollectionRequest(db: SupabaseClient, userId: string, colle
   }
   if (await seriesInMmd(db, [...partById.keys()])) throw new HttpError(409, "This series already has a collection", "collection_exists");
   if (await collectionPending(db, collectionId)) throw new HttpError(409, "This collection is already requested", "collection_pending");
-
-  const { data: open, error: openError } = await db
-    .from("film_requests")
-    .select("id, items:film_request_items!inner(status)")
-    .eq("user_id", userId)
-    .eq("items.status", "pending");
-  if (openError) throw new Error(openError.message);
-  if ((open ?? []).length >= MAX_PENDING) throw new HttpError(429, `At most ${MAX_PENDING} open requests`, "limit");
+  if (!(await textAllowed(db, note))) throw new HttpError(400, "A text contains a word that is not allowed", "text_not_allowed");
+  const attributes = await attributesOf(db, rawItems);
+  await checkPendingLimit(db, userId);
 
   const { data: request, error } = await db.from("film_requests").insert({
     user_id: userId, note: note || null, kind: "collection",
@@ -242,11 +335,9 @@ async function createCollectionRequest(db: SupabaseClient, userId: string, colle
   }).select("id").single();
   if (error) throw new Error(error.message);
 
-  // Údaje o dílech ze série TMDB (i filmy, které už v MMD jsou – patří do nové kolekce)
-  const { error: itemsError } = await db.from("film_request_items").insert(ids.map((id) => {
-    const part = partById.get(id)!;
-    return { request_id: request.id, tmdb_id: id, title: part.title, release_date: part.release_date || null, poster_path: part.poster_path };
-  }));
+  // Údaje o dílech ze série TMDB (i filmy, které už v MMD jsou – patří do nové kolekce),
+  // v pořadí uživatele s jeho oddílem / sérií / popiskem (V4.3.1)
+  const { error: itemsError } = await db.from("film_request_items").insert(collectionItems(request.id, ids, partById, attributes));
   if (itemsError) throw new Error(itemsError.message);
 
   return { request_id: request.id, kind: "collection", collection: collection.name, requested: ids, voted: [], in_catalog: [], already_mine: [], not_found: [] };
@@ -335,9 +426,11 @@ Deno.serve(async (request) => {
       case "search":
         return json(await search(db, userId, String(body.query ?? "")));
       case "create":
-        if (body.kind === "collection") {
+        if (body.kind === "collection" || body.kind === "custom") {
           const note = typeof body.note === "string" ? body.note.trim().slice(0, MAX_NOTE) : "";
-          return json(await createCollectionRequest(db, userId, Number(body.tmdb_collection_id), body.tmdb_ids, note));
+          return json(body.kind === "custom"
+            ? await createCustomRequest(db, userId, body.name, body.tmdb_ids, body.items, note)
+            : await createCollectionRequest(db, userId, Number(body.tmdb_collection_id), body.tmdb_ids, body.items, note));
         }
         return json(await create(db, userId, body.tmdb_ids, body.note));
       case "series":

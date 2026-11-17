@@ -3,6 +3,15 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.3.1 – November 2026
+- Request your own collection from any movies – name it, put the movies in order and you're done
+- Collection requests (a TMDB series or your own) let you set the order and a Section, Series and Label for every movie
+- Up to 30 movies in one request (was 20)
+- Admin: editing a collection collects every change and saves it with one Save – no more reloading after each field
+- Admin: search results stay after adding a movie, so adding three parts of a series takes one search
+- Admin: collection requests open in the same editor, filled in with what the user suggested
+- Better contrast of green "picked" buttons in light mode
+
 ## V4.2.2 – November 2026
 - Movie titles now show in your language – Czech, German, Spanish and Ukrainian titles come straight from TMDB
 - Collections, genres and every step of the curated paths are translated too

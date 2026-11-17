@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v26";       // V4.2.2: přeložené názvy filmů a kolekcí; od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v27";       // V4.3.1: editor kolekce s jedním Save, požadavky s atributy; od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline
@@ -67,6 +67,8 @@ const SHELL = [
     "js/views/friends.js",
     "js/views/compare.js",
     "js/views/requests.js",
+    "js/views/collection-editor.js",
+    "js/views/tmdb-search-panel.js",
     "js/views/admin-requests.js",
     "js/views/admin-search.js",
     "js/views/admin-series.js",

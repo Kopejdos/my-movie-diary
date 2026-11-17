@@ -8,7 +8,7 @@ import { supabase } from "./supabase.js";
 import { check, callFunction } from "./db.js";
 
 /** Nejvíc filmů v jednom požadavku a nevyřízených požadavků (stejně jako ve funkci requests). */
-export const MAX_REQUEST_FILMS = 20;
+export const MAX_REQUEST_FILMS = 30;          // do V4.3.1: 20
 export const MAX_OPEN_REQUESTS = 5;
 export const MAX_NOTE = 300;
 
@@ -37,12 +37,27 @@ export function fetchSeriesForRequest(tmdbId) {
     return callRequests("series", { tmdb_id: tmdbId });
 }
 
+/** Oddíl, série a popisek filmů z editoru (V4.3.1) pro funkci requests. */
+const attributes = (items) => items.map((item) => ({
+    tmdb_id: item.tmdb_id, group_label: item.group_label, franchise: item.franchise, label: item.label,
+}));
+
 /**
  * Požadavek na kolekci: jen díly jedné série (kontroluje funkce requests – jinak chyba
- * not_same_series), aspoň 2 filmy.
+ * not_same_series), aspoň 2 filmy. items = filmy z editoru v pořadí uživatele (V4.3.1).
  */
-export function createCollectionRequest(collectionId, tmdbIds, note) {
-    return callRequests("create", { kind: "collection", tmdb_collection_id: collectionId, tmdb_ids: tmdbIds, note });
+export function createCollectionRequest(collectionId, items, note) {
+    return callRequests("create", {
+        kind: "collection", tmdb_collection_id: collectionId,
+        tmdb_ids: items.map((item) => item.tmdb_id), items: attributes(items), note,
+    });
+}
+
+/** Vlastní kolekce z libovolných filmů (V4.3.1): název, 2–30 filmů v pořadí uživatele. */
+export function createCustomRequest(name, items, note) {
+    return callRequests("create", {
+        kind: "custom", name, tmdb_ids: items.map((item) => item.tmdb_id), items: attributes(items), note,
+    });
 }
 
 /**
@@ -59,10 +74,12 @@ export async function fetchWantedFilms(query = "", status = null) {
 export async function fetchMyRequests() {
     const rows = await supabase
         .from("film_requests")
-        .select("id, note, created_at, kind, collection_name, items:film_request_items(id, tmdb_id, title, release_date, poster_path, status, decided_at, universe:universes(slug, name, color))")
+        .select("id, note, created_at, kind, collection_name, items:film_request_items(id, tmdb_id, title, release_date, poster_path, status, decided_at, position, group_label, franchise, label, universe:universes(slug, name, color))")
         .order("created_at", { ascending: false })
         .then(check);
-    return rows.map((r) => ({ ...r, status: requestStatus(r.items) }));
+    // Filmy požadavku na kolekci v pořadí uživatele (V4.3.1), jinak podle premiéry
+    const byPosition = (a, b) => (a.position ?? 999) - (b.position ?? 999) || (a.release_date ?? "9999").localeCompare(b.release_date ?? "9999");
+    return rows.map((r) => ({ ...r, items: [...r.items].sort(byPosition), status: requestStatus(r.items) }));
 }
 
 /** Stav celého požadavku: pending (něco čeká) | added (vše přidáno) | rejected (vše zamítnuto) | partial. */

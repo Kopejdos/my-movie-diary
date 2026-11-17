@@ -5,6 +5,39 @@ const routes = [];
 let notFoundView = null;
 let container = null;
 let renderCounter = 0;
+let leaveGuard = null;      // { path, check } – neuložené změny (V4.3.1)
+let lastHash = globalThis.location?.hash ?? "";
+
+/**
+ * Hlídání odchodu ze stránky s neuloženými změnami (V4.3.1 – editor kolekce).
+ * check() vrátí text otázky, když je co ztratit (jinak null). Platí jen pro aktuální stránku:
+ * po odchodu (potvrzeném nebo bez změn) se sám zruší. null = zrušit hned.
+ */
+export function setLeaveGuard(check) {
+    leaveGuard = check ? { path: currentPath(), check } : null;
+}
+
+// Zavření karty / obnovení stránky – prohlížeč ukáže vlastní otázku
+window.addEventListener?.("beforeunload", (event) => {
+    if (leaveGuard && leaveGuard.path === currentPath() && leaveGuard.check()) {
+        event.preventDefault();
+        event.returnValue = "";
+    }
+});
+
+/** Změna adresy: s neuloženými změnami se nejdřív zeptá; „Zůstat“ vrátí původní adresu. */
+function onHashChange() {
+    if (leaveGuard && currentPath() !== leaveGuard.path) {
+        const question = leaveGuard.check();
+        if (question && !window.confirm(question)) {
+            window.history.replaceState(window.history.state, "", lastHash || "#/");
+            return;
+        }
+        leaveGuard = null;
+    }
+    lastHash = window.location.hash;
+    render();
+}
 
 /** Zaregistruje cestu: addRoute("/collection/:slug", view). */
 export function addRoute(path, view) {
@@ -42,6 +75,7 @@ export function currentQuery() {
 export function replaceQuery(params) {
     const query = new URLSearchParams(params).toString();
     window.history.replaceState(window.history.state, "", `#${currentPath()}${query ? `?${query}` : ""}`);
+    lastHash = window.location.hash;
 }
 
 /** Přejde na jinou cestu (může obsahovat i ?parametry). */
@@ -85,6 +119,6 @@ function afterRender() {
 /** Spustí router v daném prvku stránky. */
 export function startRouter(target) {
     container = target;
-    window.addEventListener("hashchange", render);
+    window.addEventListener("hashchange", onHashChange);
     return render();
 }

@@ -137,7 +137,7 @@
     --accent: #8f6522;           /* tmavší mosaz – bílý text má kontrast 5 : 1 (V3.6.2) */
     --accent-strong: #7a561c;
     --accent-ink: #ffffff;
-    --success: #1f8a5a;
+    --success: #146640;          /* tmavší zelená – kontrast 4,5 : 1 i na tmavším pozadí (V4.3.1) */
     --danger: #c53a3a;
     --dot: rgba(34, 38, 44, 0.09);
     --shadow: 0 14px 34px rgba(60, 45, 20, 0.14);
@@ -159,7 +159,7 @@
         --accent: #8f6522;
         --accent-strong: #7a561c;
         --accent-ink: #ffffff;
-        --success: #1f8a5a;
+        --success: #146640;          /* tmavší zelená – kontrast 4,5 : 1 i na tmavším pozadí (V4.3.1) */
         --danger: #c53a3a;
         --dot: rgba(34, 38, 44, 0.09);
         --shadow: 0 14px 34px rgba(60, 45, 20, 0.14);
@@ -7216,5 +7216,143 @@ a.friend-row__name:hover {
 @media (max-width: 360px) {
     .profile-tabs .segmented__option {
         padding-inline: 6px;
+    }
+}
+
+/* ---------- Editor kolekce (V4.3.1) – admin panel i požadavek na kolekci ---------- */
+.coll-row--changed {
+    border-color: color-mix(in srgb, var(--u) 70%, var(--border));
+    box-shadow: inset 3px 0 0 var(--u);
+}
+
+/* Odebraný film: ztlumený plakát a název, tlačítko „Undo“ zůstává čitelné */
+.coll-row--removed > :not(.admin-row__actions) {
+    opacity: 0.55;
+}
+
+.coll-row--removed .admin-row__info strong {
+    text-decoration: line-through;
+}
+
+.coll-row__fields {
+    display: grid;
+    gap: 6px;
+}
+
+.coll-editor__empty {
+    padding: 10px 4px;
+}
+
+.coll-editor--request .admin-row--film {
+    background: var(--bg);
+}
+
+.icon-btn--danger {
+    color: var(--danger);
+}
+
+.icon-btn--danger:hover:not(:disabled) {
+    border-color: var(--danger);
+}
+
+.search-result--added {
+    border-color: color-mix(in srgb, var(--u) 60%, var(--border));
+}
+
+/* Lišta s neuloženými změnami – drží se spodního okraje okna */
+.save-bar {
+    position: sticky;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    z-index: 20;
+    margin-top: 18px;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.save-bar[hidden] {
+    display: none;
+}
+
+.save-bar__inner {
+    pointer-events: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px 10px 18px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--u) 60%, var(--border));
+    background: var(--bg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.save-bar__count {
+    font-weight: 600;
+    color: var(--heading);
+}
+
+/* Požadavky na kolekci (V4.3.1) */
+:root[data-theme="light"] .req-result {
+    background: var(--bg);                  /* šedý text roku na tmavším béžovém pozadí neměl kontrast */
+}
+
+.req-custom__name {
+    width: 100%;
+    max-width: 420px;
+}
+
+.req-excluded {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.req-excluded:empty {
+    display: none;
+}
+
+.req-film__attrs {
+    display: block;
+    font-size: 0.82rem;
+}
+
+.admin-request__create--details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 8px;
+}
+
+@media (max-width: 599px) {
+    .save-bar {
+        bottom: calc(var(--tabbar-height) + 8px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .save-bar__inner {
+        border-radius: 16px;
+        padding: 8px 10px 8px 14px;
+    }
+
+    /* Pole pod sebou: popisek vlevo, pole na zbytek šířky (nepřeteče kartu) */
+    .coll-row__fields .admin-row__fields {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 6px;
+    }
+
+    .coll-row__fields .mini-field {
+        display: grid;
+        grid-template-columns: 64px minmax(0, 1fr);
+    }
+
+    .coll-row__fields .mini-field .admin-input {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .coll-row__fields .mini-field .admin-input--number {
+        width: 80px;
     }
 }

@@ -6,7 +6,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V4.2.2** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V4.3.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
@@ -23,7 +23,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Public profiles you can share with a link – opt-in, private by default
 - Friends – mutual friend requests by nickname; friends can see each other's profile even when it's private
 - Compare with a friend – movies in common, taste match from your ratings, recommendations and collections side by side
-- Movie requests – ask for missing movies (several at once) or a whole series as a new collection, +1 what others want, follow the status of your requests
+- Movie requests – ask for missing movies (up to 30 at once), a whole series or your own collection from any movies (with order, sections and labels), +1 what others want, follow the status of your requests
 - Curated paths – step-by-step routes like MCU Essentials or Horror 101, with a note for every step
 - Watchlist across all collections
 - Achievements with levels (Bronze → Platinum) and completed-collection badges
@@ -31,7 +31,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Personal stats – activity, most watched movies, decades, categories, streaks and collections you're closest to finishing
 - Sign in with email or nickname & password, or with Google; password reset and bot protection (Cloudflare Turnstile)
 - Settings ⚙ – System / Light / Dark mode, Modern or Paper classic style, collection colors or one fixed color, compact density and reduced animations; your defaults and account in one place
-- Admin panel: collections, movies (search TMDB right from the app), users and requests – a new collection from a TMDB series in one click; changes are written back into the seed automatically; new parts of TMDB series are spotted for you
+- Admin panel: collections, movies (search TMDB right from the app), users and requests – an editor that saves every change of a collection with one Save, a new collection from a TMDB series or a request in one click; changes are written back into the seed automatically; new parts of TMDB series are spotted for you
 - Five languages – English, Čeština, Deutsch, Español, Українська (follows your browser, or pick one in Settings), including translated movie titles from TMDB and translated collections
 - Phone-friendly: a compact layout with a bottom bar
 - Installable on a phone or computer (PWA), opens even offline

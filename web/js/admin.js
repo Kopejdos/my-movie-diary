@@ -21,6 +21,8 @@ function check({ data, error }) {
 const callAdmin = (action, payload = {}) => callFunction("admin", action, payload);
 
 export const searchTmdb = (query) => callAdmin("search", { query });
+/** Uloží film do katalogu (detail a překlady z TMDB) – před uložením kolekce s novým filmem (V4.3.1). */
+export const addFilmToCatalog = (tmdbId) => callAdmin("add-film", { tmdb_id: tmdbId });
 export const listUsers = () => callAdmin("users");
 export const setUserAdmin = (userId, isAdmin) => callAdmin("set-admin", { user_id: userId, is_admin: isAdmin });
 export const deleteUser = (userId) => callAdmin("delete-user", { user_id: userId });
@@ -46,6 +48,17 @@ export async function decideFilmRequests(items) {
  */
 export async function createCollectionFromSeries(tmdbCollectionId, name, tmdbIds = [], also = []) {
     const result = await callAdmin("request-create-collection", { tmdb_collection_id: tmdbCollectionId, name, tmdb_ids: tmdbIds, also });
+    clearDataCache();
+    return result;
+}
+
+/**
+ * Nová kolekce z editoru (V4.3.1) – schválení požadavku na kolekci (série TMDB i vlastní):
+ * { name, description?, tmdb_collection_id?, items: [{ tmdb_id, group_label, franchise, label,
+ * story_order, is_optional }], also?, reject_ids? }. Vrací { slug, name, films, also, seed }.
+ */
+export async function createCollection(payload) {
+    const result = await callAdmin("create-collection", payload);
     clearDataCache();
     return result;
 }
@@ -136,10 +149,6 @@ export async function createUniverse({ name, slug, description, color }) {
         .then(check);
 }
 
-export async function updateUniverse(id, fields) {
-    await supabase.from("universes").update(fields).eq("id", id).then(check);
-}
-
 export async function deleteUniverse(id) {
     await supabase.from("universes").delete().eq("id", id).then(check);
 }
@@ -157,41 +166,17 @@ export async function swapUniverseOrder(a, b) {
 // ---------------------------------------------------------------------
 
 /**
- * Přidá film do univerza (V3.5.2.1): funkce admin uloží detail z TMDB a zařadí film podle data
- * premiéry (u cesty na konec). Vrací film (title, release_date, status…).
- * Do seedu ho pak dopíše scripts/sync-seed.sh – import ho nesmaže.
+ * Uloží všechny změny kolekce najednou (V4.3.1, databázová funkce admin_save_collection – jedna
+ * transakce): universe = změněné údaje ({ name, description, color, kind, cover_tmdb_id }) nebo null,
+ * categories = ID kategorií nebo null, items = všechny filmy v novém pořadí (nové bez id – musí být
+ * v katalogu, viz addFilmToCatalog), removed = ID odebraných položek.
  */
-export async function addUniverseItem(universeId, tmdbId, { group = null, optional = false } = {}) {
-    return await callAdmin("add-item", { universe_id: universeId, tmdb_id: tmdbId, group: group || null, optional });
-}
-
-export async function updateUniverseItem(id, fields) {
-    await supabase.from("universe_items").update(fields).eq("id", id).then(check);
-}
-
-export async function removeUniverseItem(id) {
-    await supabase.from("universe_items").delete().eq("id", id).then(check);
-}
-
-/** Prohodí pořadí vydání dvou filmů v univerzu. */
-export async function swapItemOrder(a, b) {
-    await Promise.all([
-        supabase.from("universe_items").update({ release_order: b.release_order }).eq("id", a.id).then(check),
-        supabase.from("universe_items").update({ release_order: a.release_order }).eq("id", b.id).then(check),
-    ]);
-}
-
-/** Nahradí kategorie kolekce (smaže stávající přiřazení a vloží nová). */
-export async function setUniverseCategories(universeId, categoryIds) {
-    await supabase.from("universe_categories").delete().eq("universe_id", universeId).then(check);
-    if (categoryIds.length > 0) {
-        await supabase.from("universe_categories")
-            .insert(categoryIds.map((categoryId) => ({ universe_id: universeId, category_id: categoryId })))
-            .then(check);
-    }
-}
-
-/** Nastaví film jako obal univerza (plakát na kartě, záběr v banneru). */
-export async function setUniverseCover(universeId, tmdbId) {
-    await updateUniverse(universeId, { cover_tmdb_id: tmdbId });
+export async function saveCollection(universeId, { universe, categories, items, removed }) {
+    return await supabase.rpc("admin_save_collection", {
+        p_universe_id: universeId,
+        p_universe: universe,
+        p_categories: categories,
+        p_items: items,
+        p_removed: removed,
+    }).then(check);
 }

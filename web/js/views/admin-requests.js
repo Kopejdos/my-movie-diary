@@ -8,12 +8,18 @@
 //     ještě nemá kolekci → nabídka vytvořit kolekci z celé série.
 //   • Seed se už ručně neupravuje: položky z požadavků import nesmaže a skript
 //     scripts/sync-seed.sh je do supabase/seed/universes.json dopíše sám.
+// V4.3.1:
+//   • Požadavek na kolekci (série TMDB i vlastní kolekce z libovolných filmů) se schvaluje
+//     v editoru kolekce (stejný jako v admin panelu i u uživatele) – předvyplněný pořadím,
+//     oddílem, sérií a popiskem od uživatele; správce jen doladí, případně přidá další filmy.
 
-import { listFilmRequests, decideFilmRequests, createCollectionFromSeries } from "../admin.js";
+import { listFilmRequests, decideFilmRequests, createCollectionFromSeries, createCollection, searchTmdb } from "../admin.js";
 import { TEXTS, format, movies } from "../texts.js";
 import { h, mount, poster, yearOf, formatDate, toast, loadingView, errorView } from "../dom.js";
 import { requireAdminView, adminHeader } from "./admin.js";
 import { adminSearch, matchesQuery, noResults } from "./admin-search.js";
+import { createCollectionEditor } from "./collection-editor.js";
+import { tmdbSearchPanel } from "./tmdb-search-panel.js";
 
 export async function adminRequestsView(container, context) {
     if (!requireAdminView(container)) return;
@@ -56,7 +62,7 @@ export async function adminRequestsView(container, context) {
     const render = () => {
         const query = search.query();
         const kind = search.filter();
-        const requests = data.requests.filter((r) => (kind === "all" || (r.kind ?? "films") === kind) &&
+        const requests = data.requests.filter((r) => (kind === "all" || ((r.kind ?? "films") === "films" ? "films" : "collection") === kind) &&
             matchesQuery(query, r.username, r.note, r.collection_name, ...r.items.map((i) => i.title)));
         const series = kind === "films" ? [] : (data.new_collections ?? []).filter((c) =>
             matchesQuery(query, c.tmdb_name, c.name, ...c.items.map((i) => i.title)));
@@ -82,7 +88,7 @@ export async function adminRequestsView(container, context) {
                 ? noResults(() => search.reset())
                 : requests.length === 0
                     ? h("p", { class: "empty-filter" }, TEXTS.adminRequestsEmpty)
-                    : h("ol", { class: "admin-requests" }, requests.map((request) => request.kind === "collection"
+                    : h("ol", { class: "admin-requests" }, requests.map((request) => request.kind === "collection" || request.kind === "custom"
                         ? collectionRequestCard(request, studioPicker(request.items.flatMap((i) => i.suggestions)), reload)
                         : requestCard(request, data.universes, reload))));
     };
@@ -177,43 +183,80 @@ function newCollectionCard(series, studios, reload) {
         studios.element);
 }
 
-/** Požadavek na kolekci: díly jedné série → nová kolekce z vybraných dílů, nebo zamítnutí. */
+/**
+ * Požadavek na kolekci (série TMDB – V3.5.2, vlastní kolekce – V4.3.1): editor předvyplněný pořadím,
+ * oddílem, sérií a popiskem od uživatele. Create = nová kolekce z filmů v editoru; filmy z požadavku,
+ * které v editoru nezůstaly, se zamítnou. Reject = zamítnout celý požadavek.
+ */
 function collectionRequestCard(request, studios, reload) {
-    const rows = request.items.map((item) => {
-        const checkbox = h("input", { type: "checkbox", checked: true, "aria-label": item.title });
-        const element = h("li", { class: "admin-request__film admin-request__film--plain" },
-            h("label", { class: "admin-request__pick" }, checkbox,
-                poster(item.poster_path, item.title, "req-film__poster", false, "tiny"),
-                h("span", { class: "req-wanted__info" },
-                    h("strong", {}, item.title),
-                    h("span", { class: "muted" }, [yearOf(item.release_date), format("requestsWants", item.wants),
-                        `TMDB ${item.tmdb_id}`].filter(Boolean).join(" · ")))));
-        return { item, checkbox, element };
+    let search = null;                  // panel hledání – vznikne až po editoru
+    const editor = createCollectionEditor({
+        items: request.items.map((item) => ({
+            tmdb_id: item.tmdb_id,
+            film: { tmdb_id: item.tmdb_id, title: item.title, poster_path: item.poster_path, release_date: item.release_date },
+            group_label: item.group_label, franchise: item.franchise, label: item.label,
+        })),
+        mode: "admin",
+        showCover: false,
+        onChange: () => search?.refresh(),
+    });
+    search = tmdbSearchPanel({
+        search: searchTmdb,
+        isAdded: (tmdbId) => editor.has(tmdbId),
+        onToggle: (movie, added) => {
+            if (added) editor.removeFilm(movie.tmdb_id);
+            else editor.add({ tmdb_id: movie.tmdb_id, title: movie.title, poster_path: movie.poster_path, release_date: movie.release_date ?? null });
+        },
     });
     const name = nameInput((request.collection_name ?? "").replace(/\s+Collection$/i, ""));
-    const picked = () => rows.filter((r) => r.checkbox.checked);
+    const description = h("input", {
+        class: "admin-request__name", type: "text", maxlength: 200,
+        "aria-label": TEXTS.adminDescription,
+        placeholder: request.kind === "collection" ? TEXTS.adminCollectionDescriptionSeries : TEXTS.adminDescription,
+    });
 
     const createButton = h("button", {
         class: "btn btn--small btn--primary", type: "button",
-        onClick: () => {
-            if (picked().length < 2) {
+        onClick: async () => {
+            const items = editor.items();
+            if (items.length < 2) {
                 toast(TEXTS.adminCollectionRequestTooFew, "error");
                 return;
             }
-            const rest = rows.filter((r) => !r.checkbox.checked).map((r) => r.item.id);
-            createFromSeries(buttons, request.tmdb_collection_id, name.value, picked().map((r) => r.item.tmdb_id), reload, rest, studios.picked());
+            if (!name.value.trim()) {
+                toast(TEXTS.adminNameRequired, "error");
+                return;
+            }
+            const kept = new Set(items.map((item) => item.tmdb_id));
+            buttons.forEach((b) => { b.disabled = true; });
+            try {
+                const result = await createCollection({
+                    name: name.value.trim(),
+                    description: description.value.trim() || null,
+                    tmdb_collection_id: request.kind === "collection" ? request.tmdb_collection_id : null,
+                    items: items.map((item) => ({
+                        tmdb_id: item.tmdb_id, group_label: item.group_label, franchise: item.franchise, label: item.label,
+                        story_order: item.story_order, is_optional: item.is_optional,
+                    })),
+                    also: studios.picked(),
+                    reject_ids: request.items.filter((item) => !kept.has(item.tmdb_id)).map((item) => item.id),
+                });
+                const extra = (result.also ?? []).filter((a) => a.films > 0).map((a) => format("adminAlsoAdded", a.universe, movies(a.films)));
+                toast([format("adminNewCollectionCreated", result.name, movies(result.films)), ...extra].join(" "));
+                await reload(result.seed);
+            } catch (error) {
+                toast(format("errorGeneric", error.message), "error");
+                buttons.forEach((b) => { b.disabled = false; });
+            }
         },
     }, TEXTS.adminNewCollectionCreate);
     const rejectButton = h("button", {
         class: "btn btn--small btn--danger", type: "button",
         onClick: async () => {
-            if (picked().length === 0) {
-                toast(TEXTS.adminRequestsPickSome, "error");
-                return;
-            }
+            if (!window.confirm(format("adminRejectCollectionConfirm", request.collection_name ?? ""))) return;
             buttons.forEach((b) => { b.disabled = true; });
             try {
-                const { results } = await decideFilmRequests(picked().map((r) => ({ id: r.item.id, approve: false })));
+                const { results } = await decideFilmRequests(request.items.map((item) => ({ id: item.id, approve: false })));
                 toast(format("adminRequestsRejected", movies(results.length)));
                 await reload(null);
             } catch (error) {
@@ -221,21 +264,22 @@ function collectionRequestCard(request, studios, reload) {
                 buttons.forEach((b) => { b.disabled = false; });
             }
         },
-    }, TEXTS.adminRequestsReject);
+    }, TEXTS.adminRequestsRejectAll);
     const buttons = [createButton, rejectButton];
 
     return h("li", { class: "admin-request admin-request--collection" },
         h("div", { class: "admin-request__head" },
-            h("span", { class: "eyebrow" }, TEXTS.adminCollectionRequest),
+            h("span", { class: "eyebrow" }, request.kind === "custom" ? TEXTS.adminCustomCollectionRequest : TEXTS.adminCollectionRequest),
             h("strong", {}, request.username ? `@${request.username}` : TEXTS.adminRequestsUnknownUser),
             h("span", { class: "muted" }, formatDate(request.created_at.slice(0, 10))),
             h("span", { class: "muted" }, movies(request.items.length))),
         request.note ? h("p", { class: "req-card__note" }, `“${request.note}”`) : null,
-        h("ul", { class: "admin-request__films" }, rows.map((r) => r.element)),
-        h("div", { class: "admin-request__create" }, name),
+        h("div", { class: "admin-request__create admin-request__create--details" }, name, description),
+        h("p", { class: "hint" }, TEXTS.adminCollectionRequestHint),
+        editor.element,
+        search.element,
         studios.element,
-        h("div", { class: "admin-request__actions" },
-            h("span", { class: "hint" }, TEXTS.adminRequestsSelectedHint), ...buttons),
+        h("div", { class: "admin-request__actions" }, ...buttons),
     );
 }
 
