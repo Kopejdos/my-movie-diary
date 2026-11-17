@@ -13,10 +13,10 @@ import { fetchMyRatings, fetchRatingStats } from "../ratings.js";
 import {
     fetchList, updateList, deleteList, setListCategories, removeFromList, swapListItems, registerListView,
     reportList, listErrorText, visibilityLabel, VISIBILITIES, MAX_TITLE, MAX_DESCRIPTION, MAX_LIST_CATEGORIES,
-    REPORT_REASONS,
+    REPORT_REASONS, followList,
 } from "../lists.js";
 import { setAccent } from "../theme.js";
-import { TEXTS, format } from "../texts.js";
+import { TEXTS, format, followers } from "../texts.js";
 import { h, mount, pill, toast, loadingView, errorView } from "../dom.js";
 import { UniversePage } from "./universe.js";
 import { openModal } from "./modal.js";
@@ -88,6 +88,7 @@ class ListPage extends UniversePage {
         this.backHref = this.mine ? "#/lists" : `#/u/${encodeURIComponent(list.username)}`;
         this.backText = this.mine ? TEXTS.listBackMine : format("listBackUser", list.username);
         this.viewsPill = h("span", { class: "pill" }, format("listViews", list.view_count));
+        this.followersPill = h("span", { class: "pill" }, followers(list.follower_count ?? 0));
     }
 
     setViews(count) {
@@ -101,6 +102,7 @@ class ListPage extends UniversePage {
                 format("listBy", this.listInfo.username)),
             pill(visibilityLabel(this.listInfo.visibility)),
             this.viewsPill,
+            this.followersPill,
         ];
     }
 
@@ -112,7 +114,7 @@ class ListPage extends UniversePage {
                 class: "btn btn--small list-report", type: "button", disabled: Boolean(this.listInfo.reported),
                 onClick: () => this.openReport(),
             }, this.listInfo.reported ? `⚑ ${TEXTS.listReported}` : `⚑ ${TEXTS.listReport}`);
-            return h("div", { class: "list-owner" }, this.reportButton);
+            return h("div", { class: "list-owner" }, this.followButton(), this.reportButton);
         }
         return h("div", { class: "list-owner" },
             this.listInfo.hidden ? h("p", { class: "notice list-hidden-note" }, `⚑ ${TEXTS.listHiddenNote}`) : null,
@@ -121,6 +123,35 @@ class ListPage extends UniversePage {
     }
 
     /** Okno nahlášení: důvod + nepovinná poznámka. */
+    /** ☆ Follow / ★ Following (V4.1.3) – sledovaný seznam je v profilu pod Lists → Following. */
+    followButton() {
+        const button = h("button", { class: "btn btn--small list-follow", type: "button" });
+        const paint = () => {
+            const on = Boolean(this.listInfo.is_following);
+            button.className = `btn btn--small list-follow${on ? " list-follow--on" : ""}`;
+            button.textContent = on ? `★ ${TEXTS.listFollowing}` : `☆ ${TEXTS.listFollow}`;
+            button.setAttribute("aria-pressed", String(on));
+            button.title = on ? TEXTS.listUnfollowHint : TEXTS.listFollowHint;
+        };
+        button.addEventListener("click", async () => {
+            const follow = !this.listInfo.is_following;
+            button.disabled = true;
+            try {
+                const count = await followList(this.listInfo.id, follow);
+                this.listInfo.is_following = follow;
+                this.listInfo.follower_count = count;
+                this.followersPill.textContent = followers(count);
+                toast(follow ? TEXTS.listFollowed : TEXTS.listUnfollowed);
+            } catch (error) {
+                toast(listErrorText(error), "error");
+            }
+            button.disabled = false;
+            paint();
+        });
+        paint();
+        return button;
+    }
+
     openReport() {
         let reason = REPORT_REASONS[0];
         const options = h("div", { class: "report-reasons", role: "radiogroup", "aria-label": TEXTS.listReportReason },

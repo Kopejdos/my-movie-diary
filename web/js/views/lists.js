@@ -1,9 +1,12 @@
 // Obrazovka „My lists“ (#/lists, V3.5.3) – záložka profilu vedle Achievements, Stats, Friends.
+// Od V4.1.3 pod mými seznamy i sledované seznamy (Following).
 // Nahoře založení nového seznamu, pod tím karty mých seznamů (obálka ze 4 plakátů, počet filmů,
 // viditelnost, zobrazení). Karty seznamů používá i veřejný profil.
 
 import { isSignedIn, getProfile } from "../auth.js";
-import { fetchUserLists, createList, VISIBILITIES, MAX_TITLE, MAX_LISTS, listErrorText, visibilityLabel } from "../lists.js";
+import {
+    fetchUserLists, fetchFollowedLists, createList, VISIBILITIES, MAX_TITLE, MAX_LISTS, MAX_FOLLOWS, listErrorText, visibilityLabel,
+} from "../lists.js";
 import { setAccent } from "../theme.js";
 import { TEXTS, format } from "../texts.js";
 import { h, mount, toast, loadingView, errorView } from "../dom.js";
@@ -23,9 +26,12 @@ export async function listsView(container, context) {
     }
     mount(container, profileTabs("lists"), loadingView());
 
-    let lists;
+    let lists, followed;
     try {
-        lists = await fetchUserLists(getProfile()?.username ?? "");
+        [lists, followed] = await Promise.all([
+            fetchUserLists(getProfile()?.username ?? ""),
+            fetchFollowedLists().catch(() => []),         // bez migrace V4.1.3 prostě nic
+        ]);
     } catch (error) {
         if (!context.isCurrent()) return;
         mount(container, profileTabs("lists"),
@@ -72,5 +78,12 @@ export async function listsView(container, context) {
             h("span", { class: "muted" }, format("listsCount", lists.length, MAX_LISTS))),
         lists.length === 0
             ? h("div", { class: "empty-filter" }, TEXTS.listsEmpty)
-            : listGrid(lists, { showVisibility: true }));
+            : listGrid(lists, { showVisibility: true }),
+        // Sledované seznamy (V4.1.3) – změněné od poslední návštěvy nahoře s „Updated“
+        h("div", { class: "section-title" },
+            h("h2", {}, TEXTS.listsFollowingTitle),
+            h("span", { class: "muted" }, format("listsCount", followed.length, MAX_FOLLOWS))),
+        followed.length === 0
+            ? h("div", { class: "empty-filter" }, TEXTS.listsFollowingEmpty)
+            : listGrid(followed, { showAuthor: true }));
 }

@@ -205,7 +205,9 @@ Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny
     Testy logiky webu: v kořeni repozitáře `node --test` (Node.js 20+, viz `tests/README.md`).
 
 13. **Nastavení (V4.0):** bez migrace a bez změny Edge Functions – stačí nahrát web (push).
-14. **Mobil (V4.1.x):** bez migrace a bez změny Edge Functions – stačí nahrát web (push).
+14. **Mobil (V4.1.1–V4.1.2):** bez migrace a bez změny Edge Functions – stačí nahrát web (push).
+15. **Sledování seznamů (V4.1.3):** migrace `20261117100000_list_follows.sql` (sledování, trend, počty
+    zobrazení od nuly – vynulují se jen při prvním spuštění). Edge Functions beze změny.
 
 **Seed a admin panel (od V3.5.2.1):** seed je zdroj pravdy pro import, ale **úpravy z aplikace se neztratí** –
 databáze si je pamatuje (`universe_items.source`, `universes.source`, tabulka `seed_removals`) a `import.sh`

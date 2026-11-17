@@ -205,7 +205,8 @@ Formát **V<hlavní>.<vedlejší>.<oprava>** (např. V1.2.1):
 - **Výjimka V3.5.2.x:** doplňky k hotové části fáze, které nechceme zařadit až za další část plánu, dostanou
   **čtvrté číslo** (V3.5.2.1 – úpravy z aplikace do seedu, V3.5.2.2 – quality of life, V3.5.2.3 – hlídání
   nových dílů; V3.6.1.1 – úprava křivky úrovní).
-- **Výjimka V4.1:** mobil ve dvou částech **V4.1.1–V4.1.2** (třetí číslo = část fáze, jako u V4.3).
+- **Výjimka V4.1:** mobil ve dvou částech **V4.1.1–V4.1.2** (třetí číslo = část fáze, jako u V4.3);
+  **V4.1.3** = komunita (zařazená před jazyky, aby se nové texty překládaly jen jednou).
 - **Výjimka V4.3:** velké doplnění filmů je rozdělené na **V4.3.1–V4.3.6** (třetí číslo = část fáze, jako
   u V3.0); případné opravy dostanou čtvrté číslo (V4.3.1.1…).
 - **V3.6.3** – jen plán a dokumentace (rozplánování kapitoly 4), aplikace beze změny.
@@ -358,6 +359,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 43 | V4.0 | Nastavení ⚙ ✅ | tlačítko ⚙ místo ☾ v hlavičce s panelem: **režim** Light / Dark / System, **styl** Modern / Paper classic, **barva** Collection colors (dnešní) nebo pevná (mosazná, růžová, modrá, zelená, fialová), drobnosti (výchozí pořadí, hustota seznamu, méně animací); rozdělení **Profil** (achievementy, statistiky, přátelé) × **Nastavení** (účet, heslo, veřejný profil, instalace, smazání účtu, **Sign out** + vzhled) |
 | 44a | V4.1.1 | Mobil: základ, přehled a kolekce ✅ | menší vzhled na telefonu (do 599 px), **spodní lišta** (Collections · Search · Soon · Watchlist · Profile), nižší hlavička, „Co dneska?“ jako tři řádky bez plakátu, karty kolekcí 3 na řádek, nižší úvod kolekce, řádek filmu v jednom řádku (~75 px místo 136) |
 | 44b | V4.1.2 | Mobil: profil, ostatní stránky a nové nastavení ✅ | sbalitelné achievementy a statistiky (zapamatuje si stav), kompaktní watchlist, hledání, Coming soon, seznamy, přátelé; **nastavení na telefonu jako menu** s rozbalovacími položkami; admin, požadavky a okna na telefonu; kontrola všech obrazovek na 320–390 px |
+| 44c | V4.1.3 | Komunita: poctivá zobrazení, trend a sledování seznamů ✅ | počty zobrazení od nuly, řazení komunity podle lidí za 30 dní + sledujících, ☆ Follow u cizích seznamů, Lists → Following s „Updated“ |
 | 45 | V4.2 | Jazyky | **angličtina, čeština, němčina, španělština, ukrajinština** (ruština ne); texty webu, názvy filmů z TMDB v daném jazyce (ukládá import), popisy kolekcí; češtinu kontroluje Adam, ostatní ideálně rodilý mluvčí |
 | 46a | V4.3.1 | Editor a požadavky | admin: **úpravy kolekce s jedním Save** (změny se sbírají, *Save* / *Discard*, varování při odchodu), **hledání filmu se po přidání nesmaže**; požadavky: uživatel u filmů nastaví **Section / Series / Label a pořadí**, **vlastní kolekce** z libovolných filmů (ne jen jedna série TMDB), **limit 30 filmů** v požadavku (dřív 20) |
 | 46b | V4.3.2 | Nástroje + westerny | admin: **kolekce z osoby** (režisér / herec, i **průnik dvou osob**), **kolekce ze studia / klíčového slova TMDB**, **ukazatel cíle** (např. 1 264 / 2 000); kategorie **Western** 🤠, **Bud Spencer & Terence Hill**, Leone, westernové výběry |
@@ -1931,6 +1933,30 @@ Druhá polovina mobilu – kapitola V4.1 je hotová.
 - **Menu nastavení si stav nepamatuje** – otevře se vždy přehledně sbalené; pamatují si ho jen achievementy
   a statistiky, kam se člověk vrací.
 - **Okna zespodu jen na telefonu** – na počítači zůstávají uprostřed.
+
+### Fáze 44c – komunita: poctivá zobrazení, trend a sledování seznamů ✅ (17. 11. 2026) – **V4.1.3**
+Podnět: u komunitních seznamů se nezdálo, že by počet zobrazení rostl. Rostl – jen se **nepočítá autor**
+(testovací seznamy jsou pod účtem správce) a přihlášený se počítá **jednou za celou dobu**; startovní čísla
+testovacích seznamů byla vymyšlená.
+- **Zobrazení od nuly** (migrace `20261117100000_list_follows.sql`, jen při prvním spuštění) – čísla jsou
+  teď opravdová. Pravidla počítání zůstávají: autor nikdy, přihlášený jednou navždy, nepřihlášený jednou
+  za den. Nově se ale u každé návštěvy ukládá **den** (i u přihlášených).
+- **Komunita podle trendu:** pořadí = **různí lidé za posledních 30 dní + 3 × sledující**, pak celkový počet
+  zobrazení. Seznam, na který měsíc nikdo nepřijde, klesá; čím víc lidí, tím výš. Celkové číslo 👁 zůstává.
+- **☆ Follow** na cizím seznamu (přihlášený, ne vlastní) → **★ Following**; u seznamu pilulka s počtem
+  sledujících (☆ 3 followers), na kartách „☆ 3“. Limit 200 sledovaných seznamů.
+- **Profil → Lists → Following** – sledované seznamy pod mými; změněné od poslední návštěvy nahoře se
+  štítkem **UPDATED** (zmizí po otevření). Změnou je i odebraný film (nový trigger).
+- Ověřeno: lokální Postgres (autor se nepočítá, přihlášený jednou, nepřihlášený jednou za den, vlastní /
+  soukromý seznam sledovat nejde, Updated po změně a zmizení po návštěvě, trend, opakované spuštění
+  migrace nesmaže počty), webový test sledování na počítači i telefonu.
+
+#### Rozhodnutí ve fázi 44c
+- **Sledují se seznamy, ne lidé** – sledování lidí by z aplikace dělalo sociální síť (zdi, sledující,
+  moderování, soukromí); na lidi jsou přátelé, na oblíbené seznamy záložka Follow.
+- **Trend za 30 dní, ne celkový počet** – starý seznam s mnoha zobrazeními by jinak navždy blokoval nové.
+- **Sledující má váhu 3 návštěv** – sledování je silnější signál než jedno otevření.
+- **Před jazyky (V4.2)** – nové texty se pak přeloží rovnou se vším ostatním.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

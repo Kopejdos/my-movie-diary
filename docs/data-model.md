@@ -88,8 +88,8 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 - **`list_items`** – `list_id` (cascade), `tmdb_id` (FK → `films`), `position` (bez pozice = na konec),
   `note` (≤ 300), `added_at`; PK `(list_id, tmdb_id)`.
 - **`list_categories`** – `list_id`, `category_id`; nejvýš 3 na seznam (trigger).
-- **`list_views`** – `list_id`, `viewer_key` (`u:<uuid>` / `a:<id prohlížeče>`), `viewed_on` (přihlášený pevné
-  datum = jednou navždy, nepřihlášený dnešek = jednou za den); RLS bez pravidel.
+- **`list_views`** – `list_id`, `viewer_key` (`u:<uuid>` / `a:<id prohlížeče>`), `viewed_on` (den návštěvy – viz
+  V4.1.3; do V4.1.2 měl přihlášený pevné datum); RLS bez pravidel.
 - Viditelnost hlídá `can_view_list(owner, visibility)` (veřejný, vlastní, přítel u `friends`, správce).
 - Funkce pro web: `list_info(id)` (údaje + přezdívka autora + kategorie), `user_lists(username)` (seznamy,
   které smím vidět, s počtem filmů a 4 plakáty), `my_lists_for_film(tmdb_id)`, `register_list_view(id, anon_id)`.
@@ -104,6 +104,20 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
   `(list_id, reporter_id)`. Nahlásit jde jen cizí seznam, který uživatel vidí.
 - `community_lists(limit)` – veřejné, neskryté seznamy s aspoň 3 filmy od nejvíc zobrazených (autor,
   4 plakáty, id kategorií); `admin_reported_lists()` a `admin_moderate_list(id, hide)` jen pro správce.
+
+### Sledování seznamů a trend (V4.1.3)
+- **`list_follows`** – `list_id` (cascade), `user_id` (výchozí `auth.uid()`, cascade), `created_at`,
+  `last_seen_at` (poslední návštěva seznamu); PK `(list_id, user_id)`. Uživatel čte jen své řádky, zapisuje se
+  jen přes `follow_list(id, follow)` (vlastní ani neviditelný seznam sledovat nejde, nejvýš 200 seznamů;
+  vrací nový počet sledujících).
+- **`list_views.viewed_on`** – od V4.1.3 skutečný den návštěvy i u přihlášených; do `view_count` se přihlášený
+  dál počítá jednou navždy, nepřihlášený jednou za den, autor nikdy. Počty se při migraci jednou vynulovaly.
+- `register_list_view` sledujícímu zapíše `last_seen_at = now()` (zmizí „Updated“).
+- Čas úpravy seznamu (`lists.updated_at`) posune i odebraný film (trigger `list_items_touch_delete`).
+- `list_info` vrací navíc `follower_count` a `is_following`; `my_followed_lists()` – sledované seznamy, které
+  smím vidět, s `has_update` (`updated_at > last_seen_at`), změněné nahoře.
+- **`community_lists` se řadí podle trendu:** různí lidé za posledních 30 dní (`list_views`) + 3 × počet
+  sledujících, pak celkový počet zobrazení; vrací navíc `follower_count` a `recent_viewers`.
 
 ### Hlídání nových dílů sérií (V3.5.2.3)
 - **`films.tmdb_collection_id`** – série TMDB, do které film patří (`belongs_to_collection`); `0` = žádná,

@@ -26,7 +26,7 @@ export class ListError extends Error {
 /** Výsledek dotazu → data, nebo chyba s kódem z databáze (list_limit, list_text_not_allowed…). */
 function check({ data, error }) {
     if (error) {
-        const code = ["list_text_not_allowed", "list_limit", "list_items_limit", "list_categories_limit"]
+        const code = ["list_text_not_allowed", "list_limit", "list_items_limit", "list_categories_limit", "follow_limit", "list_own"]
             .find((c) => error.message?.includes(c)) ?? (error.code === "23505" ? "duplicate" : null);
         throw new ListError(error.message, code);
     }
@@ -170,6 +170,21 @@ export async function registerListView(id) {
     return typeof data === "number" ? data : null;
 }
 
+export const MAX_FOLLOWS = 200;
+
+/**
+ * Sledovat / přestat sledovat cizí seznam (V4.1.3) – záložka, aby se oblíbené seznamy
+ * neztratily. Vrací nový počet sledujících.
+ */
+export async function followList(id, follow = true) {
+    return check(await supabase.rpc("follow_list", { p_list_id: id, p_follow: follow }));
+}
+
+/** Moje sledované seznamy – nejdřív ty, které autor od mé poslední návštěvy změnil (has_update). */
+export async function fetchFollowedLists() {
+    return check(await supabase.rpc("my_followed_lists")) ?? [];
+}
+
 /** Srozumitelná hláška k chybě seznamu (zakázané slovo, limity…). */
 export function listErrorText(error) {
     const code = error instanceof ListError ? error.code : null;
@@ -179,6 +194,8 @@ export function listErrorText(error) {
         list_items_limit: format("listErrorItems", MAX_LIST_ITEMS),
         list_categories_limit: TEXTS.listErrorCategories,
         duplicate: TEXTS.listErrorDuplicate,
+        follow_limit: format("listErrorFollowLimit", MAX_FOLLOWS),
+        list_own: TEXTS.listErrorFollowOwn,
     }[code] ?? format("errorGeneric", error.message);
 }
 

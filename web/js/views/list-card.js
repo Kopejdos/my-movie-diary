@@ -15,13 +15,18 @@ export function listCard(list, { showVisibility = false, showAuthor = false } = 
                 ? h("span", { class: "list-card__empty", "aria-hidden": "true" }, "☰")
                 : posters.map((path) => h("img", { src: posterUrl(path, "small"), alt: "", loading: "lazy", decoding: "async" }))),
         h("div", { class: "list-card__body" },
+            // sledovaný seznam změněný od mé poslední návštěvy (V4.1.3)
+            list.has_update
+                ? h("span", { class: "list-card__updated", title: TEXTS.listUpdatedAria }, TEXTS.listUpdated)
+                : null,
             h("h3", { class: "list-card__title" }, list.title),
             showAuthor && list.username ? h("p", { class: "list-card__author" }, format("listBy", list.username)) : null,
             list.hidden ? h("p", { class: "list-card__hidden" }, `⚑ ${TEXTS.listHiddenBadge}`) : null,
             h("p", { class: "list-card__meta" },
                 [movies(list.item_count),
                     showVisibility ? visibilityLabel(list.visibility) : null,
-                    list.view_count > 0 ? `👁 ${list.view_count}` : null].filter(Boolean).join(" · "))));
+                    list.view_count > 0 ? `👁 ${list.view_count}` : null,
+                    list.follower_count > 0 ? `☆ ${list.follower_count}` : null].filter(Boolean).join(" · "))));
 }
 
 /** Mřížka karet seznamů. */

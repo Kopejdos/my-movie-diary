@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.1.3 – November 2026
+- Follow community lists: tap ☆ Follow on any list and find it later in Profile → Lists → Following
+- Lists you follow show an UPDATED badge when their author changes something
+- Community lists are now ranked by what's trending – people in the last 30 days plus followers
+- View counts start fresh, so every number is real
+
 ## V4.1.2 – November 2026
 - Fold away what you don't need: achievements, category fans, completed collections and every stats panel can be collapsed – the app remembers it
 - Settings on phones are a tidy menu – tap a row to open it

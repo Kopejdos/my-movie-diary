@@ -173,6 +173,19 @@ export const TEXTS = {
     communityEmpty: "No community lists in this genre yet.",
     searchLists: "Lists",
     listReport: "Report",
+    // Sledování seznamů (V4.1.3)
+    listFollow: "Follow",
+    listFollowing: "Following",
+    listFollowHint: "Save this list to Lists → Following in your profile",
+    listUnfollowHint: "Stop following this list",
+    listFollowed: "List saved to your Following. ★",
+    listUnfollowed: "You no longer follow this list.",
+    listErrorFollowLimit: "You can follow at most {0} lists.",
+    listErrorFollowOwn: "You can't follow your own list.",
+    listsFollowingTitle: "Following",
+    listsFollowingEmpty: "Lists you follow will appear here – open any community list and tap ☆ Follow.",
+    listUpdated: "Updated",
+    listUpdatedAria: "Changed since your last visit",
     listReported: "Reported",
     listReportHint: "Tell the admin what's wrong with this list. Reports are anonymous to the author.",
     listReportReason: "Reason",
@@ -840,6 +853,11 @@ export function collections(count) {
 /** „1 step“ / „12 steps“ – kroky cesty. */
 export function steps(count) {
     return count === 1 ? "1 step" : `${count} steps`;
+}
+
+/** „☆ 1 follower“ / „☆ 12 followers“ – sledující seznamu (V4.1.3). */
+export function followers(count) {
+    return count === 1 ? "☆ 1 follower" : `☆ ${count} followers`;
 }
 
 /** „1 movie“ / „12 movies“ – správné číslo podle počtu. */
