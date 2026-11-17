@@ -357,7 +357,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 |---|---|---|---|
 | 43 | V4.0 | Nastavení ⚙ ✅ | tlačítko ⚙ místo ☾ v hlavičce s panelem: **režim** Light / Dark / System, **styl** Modern / Paper classic, **barva** Collection colors (dnešní) nebo pevná (mosazná, růžová, modrá, zelená, fialová), drobnosti (výchozí pořadí, hustota seznamu, méně animací); rozdělení **Profil** (achievementy, statistiky, přátelé) × **Nastavení** (účet, heslo, veřejný profil, instalace, smazání účtu, **Sign out** + vzhled) |
 | 44a | V4.1.1 | Mobil: základ, přehled a kolekce ✅ | menší vzhled na telefonu (do 599 px), **spodní lišta** (Collections · Search · Soon · Watchlist · Profile), nižší hlavička, „Co dneska?“ jako tři řádky bez plakátu, karty kolekcí 3 na řádek, nižší úvod kolekce, řádek filmu v jednom řádku (~75 px místo 136) |
-| 44b | V4.1.2 | Mobil: profil, ostatní stránky a nové nastavení | sbalitelné achievementy a statistiky (zapamatuje si stav), kompaktní watchlist, hledání, Coming soon, seznamy, přátelé; **nastavení na telefonu jako menu** s rozbalovacími položkami; admin, požadavky a okna na telefonu; kontrola všech obrazovek na 320–390 px |
+| 44b | V4.1.2 | Mobil: profil, ostatní stránky a nové nastavení ✅ | sbalitelné achievementy a statistiky (zapamatuje si stav), kompaktní watchlist, hledání, Coming soon, seznamy, přátelé; **nastavení na telefonu jako menu** s rozbalovacími položkami; admin, požadavky a okna na telefonu; kontrola všech obrazovek na 320–390 px |
 | 45 | V4.2 | Jazyky | **angličtina, čeština, němčina, španělština, ukrajinština** (ruština ne); texty webu, názvy filmů z TMDB v daném jazyce (ukládá import), popisy kolekcí; češtinu kontroluje Adam, ostatní ideálně rodilý mluvčí |
 | 46a | V4.3.1 | Editor a požadavky | admin: **úpravy kolekce s jedním Save** (změny se sbírají, *Save* / *Discard*, varování při odchodu), **hledání filmu se po přidání nesmaže**; požadavky: uživatel u filmů nastaví **Section / Series / Label a pořadí**, **vlastní kolekce** z libovolných filmů (ne jen jedna série TMDB), **limit 30 filmů** v požadavku (dřív 20) |
 | 46b | V4.3.2 | Nástroje + westerny | admin: **kolekce z osoby** (režisér / herec, i **průnik dvou osob**), **kolekce ze studia / klíčového slova TMDB**, **ukazatel cíle** (např. 1 264 / 2 000); kategorie **Western** 🤠, **Bud Spencer & Terence Hill**, Leone, westernové výběry |
@@ -1904,6 +1904,33 @@ v jednom bloku (přebíjí starší úpravy pro úzké obrazovky).
 - **Hranice telefonu 599 px** – tablet na výšku (600+) má dosavadní rozložení i hustotu Compact.
 - **Plochy pro klepnutí ~30 px u tlačítek v řádku filmu** – menší než 40 px, ale řádek je jinak nepoužitelně
   vysoký; hlavní akce („+ Watched“, spodní lišta) mají přes 40 px.
+
+### Fáze 44b – mobil: profil, ostatní stránky a nové nastavení ✅ (17. 11. 2026) – **V4.1.2**
+Druhá polovina mobilu – kapitola V4.1 je hotová.
+- **Sbalitelné sekce** (`views/collapsible.js` – `<details>`, stav v prohlížeči `mmd-fold-…`, platí na všech
+  šířkách): achievementy ve skupinách **Achievements**, **Category fans** (nově zvlášť) a **Completed
+  collections**, každý panel statistik (Activity, Most watched, By decade…). Šipka ▾ / ▴ u nadpisu.
+- **Nastavení na telefonu jako menu** (`phoneMenu()` v `views/settings.js`): řádky Appearance (s krátkým
+  popisem „System · Modern“), Defaults, a pod nadpisem Account: Nickname (@nick), Public profile
+  (Public / Private), Change password, Install the app, Sign out, Delete account (červeně). Klepnutím se
+  řádek rozbalí, stránka se vždy otevře sbalená. Odkaz z veřejného profilu (`#/settings?open=public`)
+  otevře rovnou svou položku. Po otočení telefonu / změně šířky se stránka přestaví (telefon ↔ dva sloupce).
+- **Profil:** menší karta úrovně, **achievementy ve dvou sloupcích** (ikona 30 px, menší texty, úrovně se
+  smrsknou do šířky karty).
+- **Statistiky:** **tři dlaždice na řádek**, menší panely.
+- **Watchlist:** plakát · název · tlačítka vpravo – **„+ Watched“** a **„✕“** (čtečka čte celé texty).
+- **Coming soon, seznamy, požadavky, admin:** menší karty, řádky a tlačítka.
+- **Okna** (Add to list, hodnocení, nahlášení…) se na telefonu otevírají **zespodu** (bottom sheet).
+- **Kontrast:** popisky spodní lišty (dřív šedé na průsvitné liště, ve světlém režimu 4,2 : 1) a datum na
+  odznacích dokončených kolekcí; aktivní položka lišty má akcent jen na ikoně a proužku.
+- Ověřeno: 320 / 390 / 599 px na 16 obrazovkách bez vodorovného posouvání, přístupnost (tmavý / světlý,
+  telefon / počítač), webové testy (nastavení v testech se rozbalí).
+
+#### Rozhodnutí ve fázi 44b
+- **Sbalování platí i na počítači** – kdo nechce Category fans nebo dlouhé panely, sbalí si je jednou.
+- **Menu nastavení si stav nepamatuje** – otevře se vždy přehledně sbalené; pamatují si ho jen achievementy
+  a statistiky, kam se člověk vrací.
+- **Okna zespodu jen na telefonu** – na počítači zůstávají uprostřed.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

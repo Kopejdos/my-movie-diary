@@ -468,6 +468,8 @@ export const TEXTS = {
     publicCardText: "Share your diary: anyone with the link can see your nickname, level, achievements, stats and which movies you've watched (with dates). Your watchlist and email stay private. Friends see your profile either way.",
     publicNeedsNickname: "Choose your own nickname first – then you can share your profile.",
     publicToggle: "Public",
+    publicOn: "Public",
+    publicOff: "Private",
     publicMadePublic: "Your profile is now public.",
     publicMadePrivate: "Your profile is private again.",
     publicLinkLabel: "Link to your public profile",
@@ -561,6 +563,7 @@ export const TEXTS = {
     // Achievementy
     achievementsTitle: "Achievements",
     achievementsSummary: "{0} / {1} unlocked",
+    achievementsFans: "Category fans",
     achievementsCompleted: "Completed collections",
     achievementsCompletedEmpty: "Finish a whole collection to see it here.",
     achievementUnlocked: "🏆 Achievement unlocked: {0}",

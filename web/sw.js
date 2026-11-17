@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v22";       // V4.1.1: mobil; od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v23";       // V4.1.2: mobil (druhá půlka); od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline
@@ -82,6 +82,7 @@ const SHELL = [
     "js/views/profile.js",
     "js/views/settings.js",
     "js/views/appearance.js",
+    "js/views/collapsible.js",
     "js/views/admin.js",
     "js/views/admin-universe.js",
     "js/views/not-found.js",

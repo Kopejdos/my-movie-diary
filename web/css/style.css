@@ -2880,7 +2880,8 @@ button {
 }
 
 .completed-badge__date {
-    color: var(--muted);
+    color: var(--text);         /* na podbarvení kolekce měl muted málo kontrastu (V4.1.2) */
+    opacity: 0.85;
     font-weight: 500;
     font-size: 0.78rem;
 }
@@ -6265,7 +6266,7 @@ a.friend-row__name:hover {
         justify-content: center;
         gap: 3px;
         min-width: 0;
-        color: var(--muted);
+        color: var(--text);                 /* muted měl na průsvitné liště ve světlém režimu málo kontrastu */
         font-size: 10.5px;
         font-weight: 600;
         text-decoration: none;
@@ -6275,8 +6276,13 @@ a.friend-row__name:hover {
         color: var(--heading);
     }
 
+    /* aktivní: ikona a proužek v akcentu, popisek tmavší (akcent na liště nemá všude kontrast textu) */
     .tabbar__item--active {
-        color: var(--u);
+        color: var(--heading);
+    }
+
+    .tabbar__item--active .tabbar__icon {
+        background: var(--u);
     }
 
     /* proužek nad aktivní položkou */
@@ -6716,5 +6722,430 @@ a.friend-row__name:hover {
     /* na telefonu hustota Compact není (V4.1.1) */
     .setting--wide-only {
         display: none;
+    }
+}
+
+/* =====================================================================
+   V4.1.2 – sbalitelné sekce (všechny šířky) a druhá polovina telefonu
+   ===================================================================== */
+
+/* ---------- Sbalitelná sekce (views/collapsible.js – <details>) ---------- */
+.fold {
+    min-width: 0;
+}
+
+.fold__summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+}
+
+.fold__summary::-webkit-details-marker {
+    display: none;
+}
+
+.fold__summary:focus-visible {
+    outline: 2px solid var(--u);
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+.fold__title {
+    margin: 0;
+    min-width: 0;
+}
+
+.fold__meta {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* šipka: ▾ sbaleno, ▴ rozbaleno */
+.fold__chevron {
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    margin: 0 4px 4px auto;
+    border-right: 2px solid var(--muted);
+    border-bottom: 2px solid var(--muted);
+    transform: rotate(45deg);
+    transition: transform 0.15s;
+}
+
+.fold__meta + .fold__chevron {
+    margin-left: 4px;
+}
+
+.fold[open] > .fold__summary .fold__chevron {
+    margin-bottom: -4px;
+    transform: rotate(-135deg);
+}
+
+.fold__summary:hover .fold__chevron {
+    border-color: var(--heading);
+}
+
+/* skupiny achievementů – vypadají jako dosavadní nadpis sekce */
+.fold--section > .fold__summary {
+    margin: 32px 0 14px;
+}
+
+.fold--section:not([open]) > .fold__summary {
+    margin-bottom: 0;
+}
+
+.fold--section .fold__title {
+    font-size: 1.5rem;
+}
+
+/* panel statistik – obsah jako dřív (mřížka s mezerou) */
+.stats-panel > .fold__body {
+    display: grid;
+    gap: 14px;
+    min-width: 0;
+}
+
+.stats-panel:not([open]) {
+    align-self: start;
+}
+
+@media (max-width: 599px) {
+    /* ---------- Profil: menší karta úrovně a achievementy ve dvou sloupcích ---------- */
+    .level-card {
+        gap: 12px;
+        padding: 14px;
+    }
+
+    .level-card__badge {
+        width: 58px;
+    }
+
+    .level-card__number {
+        font-size: 1.6rem;
+    }
+
+    .level-card__title {
+        font-size: 1.35rem;
+    }
+
+    .level-card__next {
+        font-size: 0.8rem;
+    }
+
+    .xp-parts {
+        gap: 5px;
+    }
+
+    .xp-part {
+        padding: 3px 8px;
+        font-size: 0.72rem;
+    }
+
+    .fold--section > .fold__summary {
+        margin: 20px 0 10px;
+    }
+
+    .fold--section .fold__title {
+        font-size: 1.2rem;
+    }
+
+    .fold--section .fold__meta {
+        font-size: 0.8rem;
+    }
+
+    .achievement-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .achievement {
+        grid-template-columns: 30px minmax(0, 1fr);
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .achievement,
+    .achievement__body {
+        min-width: 0;
+    }
+
+    .achievement__body {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* úrovně achievementu se smrsknou do šířky karty (jinak 6 × 22 px přetékalo) */
+    .tier-dots {
+        gap: 3px;
+    }
+
+    .tier-dot {
+        flex: 0 1 18px;
+        min-width: 6px;
+    }
+
+    .achievement__icon {
+        width: 30px;
+        height: 30px;
+        font-size: 1.05rem;
+        border-radius: 8px;
+    }
+
+    .achievement__name {
+        font-size: 0.82rem;
+        overflow-wrap: anywhere;
+    }
+
+    .achievement__desc,
+    .achievement__date {
+        font-size: 0.68rem;
+    }
+
+    .achievement__unit {
+        font-size: 0.66rem;
+    }
+
+    .completed-list {
+        gap: 6px;
+    }
+
+    .completed-badge {
+        padding: 5px 10px 5px 6px;
+        font-size: 0.78rem;
+    }
+
+    /* ---------- Statistiky: tři dlaždice na řádek, menší panely ---------- */
+    .stat-tiles {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+
+    .stat-tile {
+        padding: 10px;
+    }
+
+    .stat-tile__value {
+        font-size: 1.25rem;
+    }
+
+    .stat-tile__label {
+        font-size: 0.72rem;
+    }
+
+    .stat-tile__sub {
+        font-size: 0.64rem;
+    }
+
+    .stats-grid {
+        gap: 10px;
+    }
+
+    .stats-panel {
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .stats-panel__title {
+        font-size: 1rem;
+    }
+
+    .stats-panel > .fold__body {
+        gap: 10px;
+    }
+
+    /* ---------- Watchlist: plakát · název · tlačítka vpravo ---------- */
+    .film--watchlist {
+        grid-template-columns: 40px minmax(0, 1fr) auto;
+        gap: 8px;
+        padding: 6px 8px 6px 6px;
+    }
+
+    .film--watchlist .watchlist-actions {
+        grid-column: auto;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+    }
+
+    .film--watchlist .watchlist-actions .btn {
+        justify-content: center;
+        min-width: 34px;
+        padding: 6px 9px;
+    }
+
+    .film--watchlist .film__meta .pill {
+        padding: 1px 6px;
+        font-size: 0.66rem;
+    }
+
+    /* ---------- Coming soon: menší karty ---------- */
+    .soon-card__star {
+        top: 5px;
+        right: 5px;
+        width: 30px;
+        height: 30px;
+        font-size: 0.95rem;
+    }
+
+    .soon-card__body {
+        padding: 8px;
+        gap: 4px;
+    }
+
+    .soon-card__title {
+        font-size: 0.85rem;
+    }
+
+    .soon-card__date {
+        font-size: 0.7rem;
+    }
+
+    .soon-quarter__title {
+        font-size: 1.05rem;
+    }
+
+    /* ---------- Seznamy, požadavky, admin ---------- */
+    .list-grid {
+        gap: 8px;
+    }
+
+    .req-composer {
+        padding: 14px;
+    }
+
+    .admin-row {
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 10px;
+    }
+
+    .admin-row--film {
+        grid-template-columns: 22px 40px minmax(0, 1fr);
+    }
+
+    .admin-row--film .film__poster {
+        width: 40px;
+    }
+
+    .admin-row__actions .btn {
+        padding: 5px 9px;
+        font-size: 0.75rem;
+    }
+
+    /* ---------- Okna jako list zespodu (bottom sheet) ---------- */
+    .modal-backdrop {
+        place-items: end stretch;
+        padding: 0;
+    }
+
+    .modal {
+        width: 100%;
+        max-height: 88dvh;
+        gap: 12px;
+        padding: 16px 14px calc(16px + env(safe-area-inset-bottom, 0px));
+        border-radius: 18px 18px 0 0;
+        animation: sheet-up 0.18s ease-out;
+    }
+
+    /* ---------- Nastavení jako menu (views/settings.js – phoneMenu) ---------- */
+    .settings-menu {
+        display: grid;
+        gap: 10px;
+    }
+
+    .settings-menu__group {
+        overflow: hidden;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        background: var(--panel);
+    }
+
+    .settings-menu__heading {
+        margin: 10px 4px 0;
+        font-family: var(--font-body);
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+    }
+
+    .fold--menu + .fold--menu,
+    .fold--menu + .settings-menu__guest {
+        border-top: 1px solid var(--border);
+    }
+
+    .fold--menu > .fold__summary {
+        min-height: 48px;
+        padding: 12px 14px;
+    }
+
+    .fold--menu .fold__title {
+        font-family: var(--font-body);
+        font-size: 0.98rem;
+        font-weight: 700;
+        color: var(--heading);
+    }
+
+    .fold--menu .fold__meta {
+        max-width: 55%;
+        font-size: 0.82rem;
+    }
+
+    .fold--menu[open] > .fold__summary {
+        background: var(--panel-hover);
+    }
+
+    .fold--menu > .fold__body {
+        padding: 12px 14px 16px;
+    }
+
+    .fold--danger .fold__title {
+        color: var(--danger);
+    }
+
+    /* karty uvnitř menu bez vlastního rámečku a nadpisu (nadpis je v řádku menu) */
+    .fold--menu .fold__body > .auth-form,
+    .fold--menu .fold__body > .public-card {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: none;
+        box-shadow: none;
+    }
+
+    .fold--menu .fold__body > .auth-form::before,
+    .fold--menu .fold__body > .public-card::before {
+        display: none;
+    }
+
+    .fold--menu .fold__body > .auth-form > h2:first-child,
+    .fold--menu .public-card__title {
+        display: none;
+    }
+
+    .settings-menu__guest {
+        display: grid;
+        gap: 10px;
+        padding: 12px 14px 14px;
+    }
+
+    .settings-menu__guest p {
+        margin: 0;
+    }
+}
+
+@keyframes sheet-up {
+    from {
+        transform: translateY(24px);
+        opacity: 0.6;
     }
 }

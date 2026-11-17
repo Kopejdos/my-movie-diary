@@ -12,6 +12,7 @@ import { navigate } from "../router.js";
 import { setAccent, applyUniverseColor } from "../theme.js";
 import { TEXTS, format, movies } from "../texts.js";
 import { h, mount, poster, formatDate, loadingView, errorView } from "../dom.js";
+import { collapsible } from "./collapsible.js";
 
 export async function statsView(container, context) {
     setAccent(null);
@@ -93,9 +94,14 @@ export function profileTabs(active) {
             }, h("span", { class: "gear-icon", "aria-hidden": "true" }))));
 }
 
-/** Sekce s nadpisem. */
+/** Sekce s nadpisem – dá se sbalit, stav si pamatuje (V4.1.2, klíč podle pořadí panelu). */
 function panel(title, ...content) {
-    return h("section", { class: "stats-panel" }, h("h2", { class: "stats-panel__title" }, title), content);
+    return collapsible({
+        key: `stats-${String(title).toLowerCase().replace(/[^a-z]+/g, "-")}`,
+        title, content,
+        className: "stats-panel",
+        headingClass: "stats-panel__title",
+    });
 }
 
 // ---------------------------------------------------------------------

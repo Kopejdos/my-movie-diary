@@ -3,6 +3,14 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.1.2 – November 2026
+- Fold away what you don't need: achievements, category fans, completed collections and every stats panel can be collapsed – the app remembers it
+- Settings on phones are a tidy menu – tap a row to open it
+- Phones: achievements in two columns, three stat tiles per row, slimmer watchlist rows with "+ Watched" and "✕"
+- Smaller cards and rows in Coming soon, lists, requests and the admin panel
+- Pop-up windows slide up from the bottom on phones
+- Better contrast in the bottom bar and on completed collection badges
+
 ## V4.1.1 – November 2026
 - A new, smaller look on phones – more fits on the screen, like in a regular phone app
 - Bottom bar on phones: Collections, Search, Soon, Watchlist and Profile always at your thumb

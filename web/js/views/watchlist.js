@@ -55,8 +55,13 @@ export async function watchlistView(container, context) {
         // Chystaný film (Coming soon, V3.3) ještě nejde označit jako viděný
         const watched = item.upcoming
             ? null
-            : h("button", { class: "btn btn--small btn--primary", type: "button" }, `+ ${TEXTS.markWatched}`);
-        const remove = h("button", { class: "btn btn--small", type: "button" }, TEXTS.watchlistRemove);
+            : h("button", {
+                class: "btn btn--small btn--primary", type: "button",
+                "data-short": `+ ${TEXTS.markWatchedShort}`,         // telefon (V4.1.2)
+            }, `+ ${TEXTS.markWatched}`);
+        const remove = h("button", {
+            class: "btn btn--small", type: "button", "data-short": "✕", title: TEXTS.watchlistRemove,
+        }, TEXTS.watchlistRemove);
         const buttons = [watched, remove].filter(Boolean);
 
         // Zhlédnutí: databáze film z watchlistu odebere sama (trigger)

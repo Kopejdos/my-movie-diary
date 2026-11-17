@@ -5,6 +5,7 @@ import { getUser } from "../auth.js";
 import { inkFor, applyUniverseColor } from "../theme.js";
 import { TEXTS, format } from "../texts.js";
 import { h, mount, formatDate, loadingView, errorView } from "../dom.js";
+import { collapsible } from "./collapsible.js";
 
 /** Název, popis a jednotka postupu podle klíče achievementu. */
 function describe(card) {
@@ -54,22 +55,35 @@ async function load(section) {
  * (vlastní profil i veřejný profil kohokoli jiného).
  */
 export function achievementsContent(result) {
+    const fans = result.cards.filter((card) => card.key.startsWith("fan-"));
+    const main = result.cards.filter((card) => !card.key.startsWith("fan-"));
     return [
         levelCard(result),
-        h("div", { class: "section-title" },
-            h("h2", {}, TEXTS.achievementsTitle),
-            h("span", { class: "muted" }, format("achievementsSummary", result.unlockedCount, result.totalCount)),
-        ),
-        h("div", { class: "achievement-grid" }, result.cards.map(achievementCard)),
-        h("p", { class: "hint achievements-note" }, TEXTS.achievementsSeenBeforeNote),
-        h("div", { class: "section-title" },
-            h("h2", {}, TEXTS.achievementsCompleted),
-            h("span", { class: "muted" }, String(result.completed.length)),
-        ),
-        result.completed.length > 0
-            ? h("div", { class: "completed-list" }, [...result.completed].reverse().map(completedBadge))
-            : h("p", { class: "muted" }, TEXTS.achievementsCompletedEmpty),
+        // Sbalitelné skupiny (V4.1.2) – hlavní achievementy, fanoušci kategorií, dokončené kolekce;
+        // stav si pamatuje prohlížeč (i na veřejném profilu)
+        foldGroup("achievements-main", TEXTS.achievementsTitle,
+            format("achievementsSummary", unlocked(main), tierTotal(main)),
+            [h("div", { class: "achievement-grid" }, main.map(achievementCard)),
+                h("p", { class: "hint achievements-note" }, TEXTS.achievementsSeenBeforeNote)]),
+        fans.length > 0
+            ? foldGroup("achievements-fans", TEXTS.achievementsFans,
+                format("achievementsSummary", unlocked(fans), tierTotal(fans)),
+                h("div", { class: "achievement-grid" }, fans.map(achievementCard)))
+            : null,
+        foldGroup("achievements-completed", TEXTS.achievementsCompleted, String(result.completed.length),
+            result.completed.length > 0
+                ? h("div", { class: "completed-list" }, [...result.completed].reverse().map(completedBadge))
+                : h("p", { class: "muted" }, TEXTS.achievementsCompletedEmpty)),
     ];
+}
+
+/** Odemčené / všechny úrovně karet (stejně jako souhrn „22 / 57 unlocked“). */
+const unlocked = (cards) => cards.reduce((sum, card) => sum + card.tiers.filter((tier) => tier.unlockedOn).length, 0);
+const tierTotal = (cards) => cards.reduce((sum, card) => sum + card.tiers.length, 0);
+
+/** Sbalitelná skupina s nadpisem jako dosud (section-title). */
+function foldGroup(key, title, meta, content) {
+    return collapsible({ key, title, meta, content, className: "fold--section" });
 }
 
 /** Karta úrovně: číslo, titul, XP do další úrovně a rozpad podle zdroje. */

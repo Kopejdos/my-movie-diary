@@ -11,7 +11,7 @@ import { passwordErrorText } from "./password.js";
 import { createCaptcha, captchaErrorText } from "../captcha.js";
 import { PASSWORD_MIN_LENGTH, USERNAME_PATTERN } from "../config.js";
 import { profileUrl, shareProfile } from "../social.js";
-import { navigate } from "../router.js";
+import { navigate, currentQuery } from "../router.js";
 import { TEXTS, format } from "../texts.js";
 import { setAccent } from "../theme.js";
 import { loadPref, savePref } from "../prefs.js";
@@ -20,12 +20,30 @@ import { field } from "./login.js";
 import { canInstall, promptInstall, isStandalone, isIos } from "../pwa.js";
 import { profileTabs } from "./stats.js";
 import { appearanceControls } from "./appearance.js";
+import { collapsible, PHONE } from "./collapsible.js";
+import { getSettings } from "../settings.js";
 
 export async function settingsView(container) {
     setAccent(null);
     document.title = `${TEXTS.settingsTitle} · ${TEXTS.appName}`;
     const signedIn = isSignedIn();
     const generated = signedIn && hasGeneratedUsername();
+
+    // Telefon (V4.1.2): nastavení jako menu s rozbalovacími položkami; po otočení / změně šířky
+    // se stránka přestaví do druhého rozložení
+    watchLayout(container);
+    if (PHONE.matches) {
+        mount(container,
+            signedIn ? profileTabs("settings") : null,
+            h("section", { class: "page-header" },
+                h("span", { class: "eyebrow" }, TEXTS.appName),
+                h("h1", {}, TEXTS.settingsTitle)),
+            generated ? nicknameCard() : null,
+            phoneMenu(signedIn, generated));
+        if (generated) container.querySelector("input[name=username]")?.focus();
+        else container.querySelector(".fold--menu[open]")?.scrollIntoView({ block: "start" });
+        return;
+    }
 
     mount(container,
         signedIn ? profileTabs("settings") : null,
@@ -62,6 +80,62 @@ export async function settingsView(container) {
                             h("a", { class: "btn", href: "#/register" }, TEXTS.navRegister))))),
     );
     if (generated) container.querySelector("input[name=username]")?.focus();
+}
+
+let layoutWatcher = null;
+
+/** Po přechodu přes hranici telefonu (otočení, změna okna) vykreslí stránku znovu. */
+function watchLayout(container) {
+    if (layoutWatcher) PHONE.removeEventListener?.("change", layoutWatcher);
+    layoutWatcher = () => {
+        if (document.body.contains(container) && location.hash.startsWith("#/settings")) settingsView(container);
+        else PHONE.removeEventListener?.("change", layoutWatcher);
+    };
+    PHONE.addEventListener?.("change", layoutWatcher);
+}
+
+/** Krátký popis aktuálního vzhledu do řádku menu, např. „Dark · Modern“. */
+function appearanceSummary() {
+    const s = getSettings();
+    return [TEXTS[`settingsMode_${s.mode}`], TEXTS[`settingsStyle_${s.style}`]].join(" · ");
+}
+
+/**
+ * Nastavení na telefonu – seznam položek jako v aplikacích (V4.1.2). Každá se rozbalí
+ * klepnutím, takže je vidět jen to, co se právě nastavuje. Stav se nepamatuje – stránka
+ * se vždy otevře sbalená.
+ */
+function phoneMenu(signedIn, generated) {
+    // #/settings?open=public – odkaz z veřejného profilu otevře rovnou svou položku
+    const openKey = currentQuery().get("open");
+    const item = (key, title, content, meta = null, extra = "") => collapsible({
+        key: `settings-${key}`, title, meta, content, open: key === openKey, remember: false,
+        className: `fold--menu ${extra}`.trim(), tag: "h3",
+    });
+    const profile = getProfile();
+    return h("div", { class: "settings-menu" },
+        h("div", { class: "settings-menu__group" },
+            item("appearance", TEXTS.settingsAppearance,
+                [h("p", { class: "muted settings-card__hint" }, TEXTS.settingsAppearanceHint), appearanceControls()],
+                appearanceSummary()),
+            item("defaults", TEXTS.settingsPreferences, defaultsControls(signedIn))),
+        h("h2", { class: "settings-menu__heading" }, TEXTS.settingsAccount),
+        signedIn
+            ? h("div", { class: "settings-menu__group" },
+                generated ? null : item("nickname", TEXTS.username, nicknameCard(), profile?.username ? `@${profile.username}` : null),
+                item("public", TEXTS.publicCardTitle, publicProfileCard(),
+                    profile?.is_public ? TEXTS.publicOn : TEXTS.publicOff),
+                item("password", TEXTS.changePasswordTitle, changePasswordCard()),
+                item("install", TEXTS.installTitle, installCard()),
+                item("signout", TEXTS.navSignOut, signOutCard()),
+                item("delete", TEXTS.deleteTitle, deleteAccountCard(), null, "fold--danger"))
+            : h("div", { class: "settings-menu__group" },
+                item("install", TEXTS.installTitle, installCard()),
+                h("div", { class: "settings-menu__guest" },
+                    h("p", { class: "muted" }, TEXTS.settingsGuestText),
+                    h("div", { class: "settings-actions" },
+                        h("a", { class: "btn btn--primary btn--small", href: "#/login" }, TEXTS.navSignIn),
+                        h("a", { class: "btn btn--small", href: "#/register" }, TEXTS.navRegister)))));
 }
 
 /** Karta s nadpisem a popiskem pro skupinu voleb. */
