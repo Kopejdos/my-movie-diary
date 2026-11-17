@@ -103,6 +103,7 @@ function renderHeader() {
     const profile = getProfile();
     const path = currentPath();
     const pending = user ? getPendingCount() : 0;     // přijaté žádosti o přátelství
+    renderTabbar(user, path, pending);
 
     const navLink = (href, label, active, extraClass = "") =>
         h("a", { class: `nav__link${active ? " nav__link--active" : ""}${extraClass}`, href }, label);
@@ -125,23 +126,24 @@ function renderHeader() {
                 settingsButton(),
                 navLink("#/", TEXTS.navUniverses, path === "/" || path.startsWith("/collection/"), " nav__link--home"),
                 h("a", {
-                    class: `nav__link nav__search${path === "/search" ? " nav__link--active" : ""}`,
+                    class: `nav__link nav__search nav__link--tabbar${path === "/search" ? " nav__link--active" : ""}`,
                     href: "#/search",
                     title: TEXTS.searchShortcut,
                     "aria-label": TEXTS.navSearch,
                 }, h("span", { class: "search-icon", "aria-hidden": "true" }), h("span", { class: "nav__label" }, TEXTS.navSearch)),
                 // Coming soon (V3.3.1) – pro všechny, i nepřihlášené
                 h("a", {
-                    class: `nav__link nav__soon${path === "/coming-soon" ? " nav__link--active" : ""}`,
+                    class: `nav__link nav__soon nav__link--tabbar${path === "/coming-soon" ? " nav__link--active" : ""}`,
                     href: "#/coming-soon",
                     title: TEXTS.navComingSoon,
                     "aria-label": TEXTS.navComingSoon,
                 }, h("span", { class: "calendar-icon", "aria-hidden": "true" }), h("span", { class: "nav__label" }, TEXTS.navComingSoon)),
                 user
                     ? h("a", {
-                        class: `nav__link${path === "/watchlist" ? " nav__link--active" : ""}`,
+                        class: `nav__link nav__link--tabbar${path === "/watchlist" ? " nav__link--active" : ""}`,
                         href: "#/watchlist",
                         title: TEXTS.navWatchlist,
+                        "aria-label": TEXTS.navWatchlist,
                     }, h("span", { "aria-hidden": "true" }, "★ "), h("span", { class: "nav__label" }, TEXTS.navWatchlist))
                     : null,
                 // Požadavky na filmy (V3.5.1) – jen pro přihlášené
@@ -160,7 +162,7 @@ function renderHeader() {
                     ? [
                         // S nevyřízenou žádostí o přátelství vede nick rovnou na Friends (V3.4.1)
                         h("a", {
-                            class: `nav__user${(["/profile", "/stats", "/friends", "/lists", "/settings"].includes(path) || path.startsWith("/compare/")) ? " nav__user--active" : ""}`,
+                            class: `nav__user nav__link--tabbar${isProfilePath(path) ? " nav__user--active" : ""}`,
                             href: pending > 0 ? "#/friends" : "#/profile",
                             title: pending > 0 ? format("friendsPendingAria", pending) : TEXTS.navProfile,
                         },
@@ -172,12 +174,47 @@ function renderHeader() {
                     : authPending && hasStoredSession()
                         ? null                  // přihlášení se teprve ověřuje – tlačítka by jen problikla
                         : [
-                            navLink("#/login", TEXTS.navSignIn, path === "/login"),
+                            navLink("#/login", TEXTS.navSignIn, path === "/login", " nav__link--tabbar"),
                             h("a", { class: "btn btn--primary btn--small", href: "#/register" }, TEXTS.navRegister),
                         ],
             ),
         ),
     );
+}
+
+/** Stránky, které patří k profilu (zvýraznění @nick v hlavičce i Profilu ve spodní liště). */
+function isProfilePath(path) {
+    return ["/profile", "/stats", "/friends", "/lists", "/settings"].includes(path) || path.startsWith("/compare/");
+}
+
+// Spodní lišta na telefonu (V4.1.1) – hlavní místa aplikace na dosah palce; na širší
+// obrazovce je schovaná (style.css) a stejné odkazy jsou v hlavičce
+const tabbar = h("nav", { class: "tabbar", "aria-label": TEXTS.navMain });
+document.body.append(tabbar);
+
+function renderTabbar(user, path, pending) {
+    const tab = (href, icon, label, active, extra = null) =>
+        h("a", {
+            class: `tabbar__item${active ? " tabbar__item--active" : ""}`,
+            href,
+            "aria-current": active ? "page" : null,
+        },
+            h("span", { class: `tabbar__icon tabbar__icon--${icon}`, "aria-hidden": "true" }),
+            h("span", { class: "tabbar__label" }, label),
+            extra);
+    mount(tabbar,
+        tab("#/", "grid", TEXTS.navUniverses, path === "/" || path.startsWith("/collection/")),
+        tab("#/search", "search", TEXTS.navSearch, path === "/search"),
+        tab("#/coming-soon", "calendar", TEXTS.navComingSoonShort, path === "/coming-soon"),
+        user ? tab("#/watchlist", "star", TEXTS.navWatchlist, path === "/watchlist") : null,
+        user
+            ? tab(pending > 0 ? "#/friends" : "#/profile", "user", TEXTS.navProfile, isProfilePath(path),
+                pending > 0
+                    ? h("span", { class: "tabbar__badge", "aria-label": format("friendsPendingAria", pending) }, String(pending))
+                    : level ? h("span", { class: "tabbar__level", "aria-hidden": "true" }, String(level.level)) : null)
+            : authPending && hasStoredSession()
+                ? null
+                : tab("#/login", "user", TEXTS.navSignIn, path === "/login"));
 }
 
 /** Kulaté tlačítko ⚙ – okno se vzhledem (V4.0, dřív přepínač ☀ / ☾). Okno se načte až po kliknutí. */

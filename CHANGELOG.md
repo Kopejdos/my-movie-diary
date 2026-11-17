@@ -3,6 +3,14 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.1.1 – November 2026
+- A new, smaller look on phones – more fits on the screen, like in a regular phone app
+- Bottom bar on phones: Collections, Search, Soon, Watchlist and Profile always at your thumb
+- "What to watch today?" on phones shows three compact rows with a quick "+ Watched"
+- Three collections per row on the Collections page
+- Slimmer collection pages: a shorter header, Up next in one strip and each movie in a single row
+- Fixed the header overflowing on narrow tablets
+
 ## V4.0.1 – November 2026
 - On a computer or a tablet in landscape, your account settings now sit in two columns instead of one narrow strip – less scrolling
 

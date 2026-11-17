@@ -112,6 +112,8 @@ export function todayPanel(data, onWatched) {
                     button.disabled = false;
                 }
             },
+            // na telefonu kratší popisek (style.css – .btn--today[data-short]), čtečka čte celý
+            "data-short": `+ ${TEXTS.markWatchedShort}`,
         }, `+ ${TEXTS.markWatched}`);
         return button;
     }

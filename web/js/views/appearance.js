@@ -15,7 +15,7 @@ let groupCounter = 0;
  * @param {string} legend nadpis skupiny
  * @param {object} [options] { swatches: true } = barevná kolečka (akcent)
  */
-function choiceGroup(key, legend, { swatches = false, hint = null } = {}) {
+function choiceGroup(key, legend, { swatches = false, hint = null, wideOnly = false } = {}) {
     const name = `setting-${key}-${++groupCounter}`;
     const current = getSettings()[key];
     const options = SETTING_OPTIONS[key].map((value) => {
@@ -31,7 +31,8 @@ function choiceGroup(key, legend, { swatches = false, hint = null } = {}) {
             swatches ? h("span", { class: `swatch__dot swatch__dot--${value}`, "aria-hidden": "true" }) : null,
             h("span", { class: swatches ? "swatch__name" : null }, TEXTS[`settings${capitalize(key)}_${value}`]));
     });
-    return h("fieldset", { class: "setting" },
+    // wideOnly: na telefonu se nezobrazuje (hustota – telefon má od V4.1.1 jednu, menší velikost)
+    return h("fieldset", { class: wideOnly ? "setting setting--wide-only" : "setting" },
         h("legend", { class: "setting__legend" }, legend),
         h("div", { class: swatches ? "swatches" : "segmented segmented--choice" }, options),
         hint ? h("p", { class: "hint setting__hint" }, hint) : null);
@@ -45,7 +46,7 @@ export function appearanceControls() {
         choiceGroup("mode", TEXTS.settingsMode),
         choiceGroup("style", TEXTS.settingsStyle),
         choiceGroup("accent", TEXTS.settingsAccent, { swatches: true, hint: TEXTS.settingsAccentHint }),
-        choiceGroup("density", TEXTS.settingsDensity),
+        choiceGroup("density", TEXTS.settingsDensity, { wideOnly: true }),
         choiceGroup("motion", TEXTS.settingsMotion));
 
     const unsubscribe = onSettingsChange((settings) => {

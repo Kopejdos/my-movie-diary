@@ -60,6 +60,7 @@ export const TEXTS = {
     heroWelcomeTitle: "Where do we start?",
     heroWelcomeText: "Pick a collection below and log your first movie.",
     markWatched: "Mark as watched",
+    markWatchedShort: "Watched",
 
     // Co dneska? (V3.3) – tři tipy nahoře na přehledu
     todayEyebrow: "Tonight's pick",
@@ -90,6 +91,8 @@ export const TEXTS = {
     comingSoonToday: "out today",
     dateTba: "Date TBA",
     navComingSoon: "Coming soon",
+    navComingSoonShort: "Soon",
+    navMain: "Main navigation",
     comingSoonEyebrow: "Release calendar",
     comingSoonPageIntro: "Every announced movie from all collections, up to the end of {0} – the soonest at the top.",
     comingSoonPageEmpty: "Nothing announced right now. Check back later!",

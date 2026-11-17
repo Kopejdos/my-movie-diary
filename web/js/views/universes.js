@@ -27,6 +27,7 @@ const COMMUNITY_ROW = 7;
 /** Kolik řad kolekcí ukáže sbalená skupina (na úzkém displeji se 2 sloupci 3 řady). */
 const COLLAPSED_ROWS = 2;
 const COLLAPSED_ROWS_NARROW = 3;
+const PHONE = window.matchMedia("(max-width: 599px)");      // stejná hranice jako v style.css (V4.1)
 
 /** Rozbalené skupiny (druhy kolekcí) – pamatují se do obnovení stránky. */
 const expandedKinds = new Set();
@@ -62,7 +63,9 @@ export function sortUniverses(list, sort) {
 /** Kolik sloupců má mřížka kolekcí při dané šířce (stejně jako CSS .universe-grid). */
 function gridColumns(width) {
     const wide = window.matchMedia("(min-width: 720px)").matches;
-    // stejné hodnoty jako .universe-grid v style.css (hustota Compact od V4.0)
+    // stejné hodnoty jako .universe-grid v style.css – telefon (V4.1.1) má malé karty
+    // a hustotu Compact nepoužívá (V4.0)
+    if (PHONE.matches) return Math.max(1, Math.floor((width + 8) / (88 + 8)));
     const compact = document.documentElement.dataset.density === "compact";
     const [min, gap] = compact
         ? (wide ? [150, 12] : [120, 10])
@@ -267,7 +270,8 @@ export async function universesView(container, context) {
     let sections = [];
     let columns = 0;
     function layoutSection(section) {
-        const rows = columns <= 2 ? COLLAPSED_ROWS_NARROW : COLLAPSED_ROWS;
+        // telefon (V4.1.1): 3 malé karty na řádek → 3 řady; jinak 2 sloupce = 3 řady, víc = 2
+        const rows = columns <= 2 || PHONE.matches ? COLLAPSED_ROWS_NARROW : COLLAPSED_ROWS;
         const limit = columns * rows;
         const total = section.universes.length;
         const tooMany = section.collapsible && total > limit;

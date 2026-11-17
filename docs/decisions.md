@@ -205,6 +205,7 @@ Formát **V<hlavní>.<vedlejší>.<oprava>** (např. V1.2.1):
 - **Výjimka V3.5.2.x:** doplňky k hotové části fáze, které nechceme zařadit až za další část plánu, dostanou
   **čtvrté číslo** (V3.5.2.1 – úpravy z aplikace do seedu, V3.5.2.2 – quality of life, V3.5.2.3 – hlídání
   nových dílů; V3.6.1.1 – úprava křivky úrovní).
+- **Výjimka V4.1:** mobil ve dvou částech **V4.1.1–V4.1.2** (třetí číslo = část fáze, jako u V4.3).
 - **Výjimka V4.3:** velké doplnění filmů je rozdělené na **V4.3.1–V4.3.6** (třetí číslo = část fáze, jako
   u V3.0); případné opravy dostanou čtvrté číslo (V4.3.1.1…).
 - **V3.6.3** – jen plán a dokumentace (rozplánování kapitoly 4), aplikace beze změny.
@@ -355,7 +356,8 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | Fáze | Verze | Název | Obsah |
 |---|---|---|---|
 | 43 | V4.0 | Nastavení ⚙ ✅ | tlačítko ⚙ místo ☾ v hlavičce s panelem: **režim** Light / Dark / System, **styl** Modern / Paper classic, **barva** Collection colors (dnešní) nebo pevná (mosazná, růžová, modrá, zelená, fialová), drobnosti (výchozí pořadí, hustota seznamu, méně animací); rozdělení **Profil** (achievementy, statistiky, přátelé) × **Nastavení** (účet, heslo, veřejný profil, instalace, smazání účtu, **Sign out** + vzhled) |
-| 44 | V4.1 | Mobil a drobná vylepšení | sbalitelné achievementy a statistiky (zapamatuje si stav), **spodní lišta** na telefonu (Collections · Search · Coming soon · Watchlist · Profil), větší plochy pro klepnutí, kontrola všech obrazovek na 320–390 px |
+| 44a | V4.1.1 | Mobil: základ, přehled a kolekce ✅ | menší vzhled na telefonu (do 599 px), **spodní lišta** (Collections · Search · Soon · Watchlist · Profile), nižší hlavička, „Co dneska?“ jako tři řádky bez plakátu, karty kolekcí 3 na řádek, nižší úvod kolekce, řádek filmu v jednom řádku (~75 px místo 136) |
+| 44b | V4.1.2 | Mobil: profil, ostatní stránky a nové nastavení | sbalitelné achievementy a statistiky (zapamatuje si stav), kompaktní watchlist, hledání, Coming soon, seznamy, přátelé; **nastavení na telefonu jako menu** s rozbalovacími položkami; admin, požadavky a okna na telefonu; kontrola všech obrazovek na 320–390 px |
 | 45 | V4.2 | Jazyky | **angličtina, čeština, němčina, španělština, ukrajinština** (ruština ne); texty webu, názvy filmů z TMDB v daném jazyce (ukládá import), popisy kolekcí; češtinu kontroluje Adam, ostatní ideálně rodilý mluvčí |
 | 46a | V4.3.1 | Editor a požadavky | admin: **úpravy kolekce s jedním Save** (změny se sbírají, *Save* / *Discard*, varování při odchodu), **hledání filmu se po přidání nesmaže**; požadavky: uživatel u filmů nastaví **Section / Series / Label a pořadí**, **vlastní kolekce** z libovolných filmů (ne jen jedna série TMDB), **limit 30 filmů** v požadavku (dřív 20) |
 | 46b | V4.3.2 | Nástroje + westerny | admin: **kolekce z osoby** (režisér / herec, i **průnik dvou osob**), **kolekce ze studia / klíčového slova TMDB**, **ukazatel cíle** (např. 1 264 / 2 000); kategorie **Western** 🤠, **Bud Spencer & Terence Hill**, Leone, westernové výběry |
@@ -1871,6 +1873,37 @@ v prohlížeči (`localStorage`, klíč `mmd-settings`).
   Star Wars žlutá); mění se akcent aplikace a stránka kolekce.
 - **Paper classic bez nového písma** – systémová patková písma, žádné stahování navíc (výkon z V3.6.4).
 - **Sign out jen v Settings** – v hlavičce se na telefonu tlačil, odhlašuje se zřídka.
+
+### Fáze 44a – mobil: základ, přehled a kolekce ✅ (15. 11. 2026) – **V4.1.1**
+Telefon (do **599 px**) dostal vlastní, menší vzhled – zhruba 60–75 % dosavadní velikosti, podobně jako
+aplikace typu Netflix. Počítač a tablet se nemění. Všechna pravidla pro telefon jsou na **konci `style.css`**
+v jednom bloku (přebíjí starší úpravy pro úzké obrazovky).
+- **Základ:** písmo 16 → 14 px (`html { font-size: 87.5% }` – zmenší se vše v `rem`), užší okraje (gutter
+  12 px), menší zaoblení, tlačítka, pilulky, žetony, přepínače a nadpisy.
+- **Spodní lišta** (`.tabbar`, vykresluje `renderTabbar()` v `app.js`): **Collections · Search · Soon ·
+  Watchlist · Profile** (host: Collections · Search · Soon · Sign in); ikony podle Feather Icons (MIT);
+  u Profilu úroveň, při žádosti o přátelství červené číslo. Hlavička na telefonu je nižší (48 px) a zůstal
+  v ní jen název, ⚙, požadavky a Admin (host: Register).
+- **„Co dneska?“** – tři řádky jen s popiskem, názvem a důvodem, bez plakátu a pilulek; tlačítka vpravo
+  s krátkým popiskem **„+ Watched“** (čtečka obrazovky čte celé „Mark as watched“ – `data-short`).
+- **Přehled:** karty kolekcí **3 na řádek** (min. 88 px; JS `gridColumns` počítá stejně), sbalené skupiny
+  ukazují 3 řady; menší nadpis, hledání, záložky druhů a žetony žánrů.
+- **Kolekce:** nižší úvod (bez minimální výšky, menší název a popis), **Up next v jednom pásu** (plakát,
+  název, „+ Watched“), pořadí a „Unwatched only“ v jedné řadě.
+- **Řádek filmu** v jednom řádku: plakát 40 px · název (2 řádky) s malými pilulkami a stavem · ☰ ☆ − 1 +
+  (tlačítka 30 px) – **~75 px místo 136 px**; stránka MCU je zhruba o 40 % kratší.
+- **Hustota Compact na telefonu není** – volba se tam nezobrazuje a pravidla platí až od 600 px.
+- **Opraveno při kontrole:** hlavička přetékala na šířce 600–819 px (tablet na výšku) – popisky odkazů se
+  schovají do 860 px, název aplikace do 700 px; pole hledání přetékalo na 320 px.
+- Ověřeno: 320 / 390 / 599 / 600 px bez vodorovného posouvání (přihlášený i host), kontrola přístupnosti
+  (tmavý, světlý, Paper), webové testy upravené na spodní lištu.
+
+#### Rozhodnutí ve fázi 44a
+- **Mobil ve dvou částech místo pěti** (přání 15. 11.) – jde hlavně o rozměry, ne o přepisování logiky.
+- **„Co dneska?“ bez plakátu** – na telefonu stačí název; plakát a pilulky zůstávají na počítači.
+- **Hranice telefonu 599 px** – tablet na výšku (600+) má dosavadní rozložení i hustotu Compact.
+- **Plochy pro klepnutí ~30 px u tlačítek v řádku filmu** – menší než 40 px, ale řádek je jinak nepoužitelně
+  vysoký; hlavní akce („+ Watched“, spodní lišta) mají přes 40 px.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

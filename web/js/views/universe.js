@@ -312,6 +312,8 @@ export class UniversePage {
                 h("button", {
                     class: "btn btn--universe",
                     type: "button",
+                    // na telefonu kratší popisek (V4.1.1, style.css – [data-short]); čtečka čte celý
+                    "data-short": `+ ${TEXTS.markWatchedShort}`,
                     onClick: () => this.change(this.rows.get(film.tmdb_id) ?? null, next, +1),
                 }, `+ ${TEXTS.markWatched}`),
             ),
