@@ -166,6 +166,41 @@ test("balíček V4.3.8: 19 žánrových výběrů a 2 cesty v existujících kat
     }
 });
 
+test("balíček V4.4.1: animáky ve 28 kolekcích, úpravy kolekcí z kontroly seedu", () => {
+    const pack = JSON.parse(readFileSync(new URL("../supabase/packs/v4.4.1-animation.json", import.meta.url), "utf8"));
+    const categories = new Set(["superhero", "scifi", "fantasy", "animation", "anime", "family", "action-adventure", "comedy",
+        "drama", "crime-thriller", "war", "western", "horror", "czech-slovak"]);
+    const kinds = new Set(["series", "studio", "genre", "path", "director"]);
+    assert.equal(pack.universes.length, 28);
+    const slugs = pack.universes.map((u) => u.slug);
+    assert.equal(new Set(slugs).size, slugs.length);
+    for (const universe of pack.universes) {
+        assert.match(universe.slug, /^[a-z0-9-]{2,40}$/, universe.slug);
+        assert.ok(kinds.has(universe.kind), universe.slug);
+        // Bez migrace – jen kategorie, které už v databázi jsou
+        assert.ok(universe.categories.length > 0 && universe.categories.every((c) => categories.has(c)), universe.slug);
+        assert.match(universe.color, /^#[0-9a-f]{6}$/, universe.slug);
+        assert.ok(universe.description && universe.description.length <= 160, universe.slug);
+        const keys = universe.films.map((f) => `${f.title}|${f.year}`);
+        assert.equal(new Set(keys).size, keys.length, `${universe.slug}: film dvakrát`);
+        for (const film of universe.films) {
+            assert.ok(film.title && Number.isInteger(film.year), `${universe.slug}: ${film.title}`);
+        }
+        assert.ok(universe.films.some((f) => !f.optional), `${universe.slug}: žádný povinný film`);
+    }
+    // Režiséři po desetiletích
+    for (const universe of pack.universes.filter((u) => u.kind === "director")) {
+        assert.ok(universe.films.every((f) => /^\d{4}s$/.test(f.group)), universe.slug);
+    }
+    // Úpravy: dvě kolekce přejdou na žánrový výběr, popisy jen krátké
+    assert.equal(pack.update["r-and-revenge"].kind, "genre");
+    assert.equal(pack.update["new-french-extremity"].kind, "genre");
+    for (const [slug, change] of Object.entries(pack.update)) {
+        assert.ok(Object.keys(change).every((key) => ["kind", "description"].includes(key)), slug);
+        assert.ok(change.description.length <= 160, slug);
+    }
+});
+
 test("nextGoal: 2 000, pak po 500", async () => {
     const { nextGoal } = await import("../web/js/admin.js");
     assert.equal(nextGoal(1264), 2000);

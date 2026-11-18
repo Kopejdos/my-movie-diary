@@ -814,6 +814,172 @@
         "path-comedy-classics": {
             "name": "Komödien-Klassiker",
             "description": "Zwölf Komödien, die jeder gesehen haben sollte – von Manche mögen's heiß bis Paddington 2."
+        },
+        "looney-tunes": {
+            "description": "Bugs, Daffy, Wile E. Coyote und die Bande – von den klassischen Kompilationen bis Space Jam und Coyote vs. Acme."
+        },
+        "tom-and-jerry": {
+            "name": "Tom und Jerry",
+            "description": "Die Katze, die Maus und achtzig Jahre Verfolgungsjagd – die Kinofilme plus die Abenteuer direkt fürs Heimkino."
+        },
+        "scooby-doo": {
+            "description": "Zoinks! Die Mystery Inc. entlarvt noch einen Bösewicht – die Realfilme, Scoob! und die besten Fälle direkt fürs Heimkino."
+        },
+        "the-smurfs": {
+            "name": "Die Schlümpfe",
+            "description": "Klein, blau und immer auf der Flucht vor Gargamel – vom Klassiker von 1976 bis zum Neustart mit Rihanna."
+        },
+        "teenage-mutant-ninja-turtles": {
+            "description": "Cowabunga! Vier Schildkröten, ein Ratten-Sensei und jede Menge Pizza – Realfilm, CGI und Mutant Mayhem."
+        },
+        "spongebob": {
+            "name": "SpongeBob Schwammkopf",
+            "description": "Wer wohnt in 'ner Ananas ganz tief im Meer? Alle SpongeBob-Filme, inklusive der Spin-offs über Sandy und Plankton."
+        },
+        "sonic": {
+            "description": "Immer schneller – Segas blauer Igel gegen Jim Carreys Dr. Robotnik."
+        },
+        "garfield": {
+            "description": "Montage, Lasagne und Odie – der faule orange Kater im Realfilm und als Animation."
+        },
+        "alvin-and-the-chipmunks": {
+            "name": "Alvin und die Chipmunks",
+            "description": "Alvinnn! Drei singende Streifenhörnchen und ihr leidgeprüfter Dave."
+        },
+        "peanuts": {
+            "name": "Die Peanuts",
+            "description": "Du meine Güte! Charlie Brown, Snoopy und die Bande auf der großen Leinwand."
+        },
+        "winnie-the-pooh": {
+            "name": "Winnie Puuh",
+            "description": "Ein Bär von sehr geringem Verstand und der Hundertmorgenwald – Puuh, Tigger, Ferkel und Christopher Robin."
+        },
+        "disneytoon-studios": {
+            "description": "Disneys Fortsetzungsfabrik – Der König der Löwen 2, Der Goofy Film, TinkerBell, Planes und die übrigen Nachfolger."
+        },
+        "warner-bros-animation": {
+            "description": "Vom Gigant aus dem All und Happy Feet bis The LEGO Movie – die animierte Seite des Warner-Schilds."
+        },
+        "netflix-animation": {
+            "description": "Klaus, Pinocchio, Nimona, KPop Demon Hunters – die Animationsfilme, die direkt ins Wohnzimmer kamen."
+        },
+        "nickelodeon-animation": {
+            "description": "Rugrats, Jimmy Neutron, SpongeBob und die Turtles – der orange Klecks auf der großen Leinwand."
+        },
+        "don-bluth": {
+            "description": "Der Ex-Disney-Animator, der sich mit Disney anlegte – Mrs. Brisby und das Geheimnis von NIMH, Feivel der Mauswanderer, In einem Land vor unserer Zeit und Anastasia."
+        },
+        "karel-zeman": {
+            "description": "Der tschechische Zauberer der Filmtricks – Jules-Verne-Stiche werden lebendig, Baron Münchhausen reist zum Mond."
+        },
+        "jan-svankmajer": {
+            "description": "Surrealist aus Prag – Stop-Motion-Fleisch, lebende Möbel und eine Alice wie keine andere."
+        },
+        "czech-animation": {
+            "name": "Tschechische Animation",
+            "description": "Puppen, Legetrick und Stop-Motion – von Jiří Trnka bis Auch Mäuse kommen in den Himmel."
+        },
+        "best-animated-feature-winners": {
+            "name": "Oscar-Gewinner: Bester Animationsfilm",
+            "description": "Alle Oscar-Gewinner in der Kategorie Bester Animationsfilm – von Shrek bis KPop Demon Hunters."
+        },
+        "world-animation": {
+            "name": "Animation aus aller Welt",
+            "description": "Jenseits von Hollywood und Japan – französische, spanische, lettische, australische und chinesische Animation, die sich zu suchen lohnt."
+        },
+        "adult-animation": {
+            "name": "Animation für Erwachsene",
+            "description": "Zeichentrick ist nicht nur für Kinder – Fritz the Cat, Heavy Metal, South Park und Sausage Party."
+        },
+        "tv-cartoons-big-screen": {
+            "name": "Zeichentrickserien im Kino",
+            "description": "Samstagmorgen-Lieblinge bekommen einen Film – Die Simpsons, Phineas und Ferb, Bob's Burgers und mehr."
+        },
+        "one-piece": {
+            "description": "Ruffy und die Strohhutpiraten – alle One-Piece-Filme, vom ersten bis Film: Red."
+        },
+        "naruto": {
+            "description": "Echt jetzt! Naruto, Shippuden und Boruto auf der großen Leinwand."
+        },
+        "my-hero-academia": {
+            "description": "Plus Ultra! Deku und die Klasse 1-A in allen vier Filmen."
+        },
+        "demon-slayer": {
+            "description": "Tanjiros Kampf gegen die Dämonen – der Rekordfilm Mugen Train und die Infinity-Castle-Trilogie."
+        },
+        "anime-modern": {
+            "name": "Modernes Anime",
+            "description": "Die neue Welle nach Ghibli – Masaaki Yuasa, Studio Ponoc, Science SARU und die größten Hits der 2020er."
+        },
+        "r-and-revenge": {
+            "description": "Brutale Rachethriller, in denen das Opfer zurückschlägt – von Die Jungfrauenquelle bis I Spit on Your Grave. Nichts für jeden."
+        },
+        "new-french-extremity": {
+            "name": "Neue französische Härte",
+            "description": "Frankreichs schockierendste Horrorwelle – Martyrs, À l'intérieur, Haute tension und Grave. Starker Magen erforderlich."
+        },
+        "rosemary-s-baby": {
+            "name": "Rosemaries Baby",
+            "description": "Polańskis satanischer Klassiker, die TV-Fortsetzung und das Prequel Apartment 7A von 2024."
+        },
+        "scary-movie": {
+            "description": "Die Wayans-Brüder parodieren jeden Horrorhit, der ihnen vor die Linse kommt – von Scream bis Paranormal Activity."
+        },
+        "hellraiser": {
+            "description": "Clive Barkers Rätselwürfel öffnet die Tür zu Pinhead und den Zenobiten – Lust und Schmerz zu gleichen Teilen."
+        },
+        "the-chronicles-of-riddick": {
+            "name": "Riddick",
+            "description": "Vin Diesels Antiheld mit Nachtsicht – von Pitch Black bis zum Planeten Crematoria."
+        },
+        "pacific-rim": {
+            "description": "Riesenroboter gegen Riesenmonster – Guillermo del Toros Liebeserklärung an Kaiju und Mecha."
+        },
+        "fear-street": {
+            "description": "R. L. Stines verfluchte Stadt Shadyside – eine Horrortrilogie von 1994 zurück bis 1666."
+        },
+        "ju-on": {
+            "description": "Der japanische Originalfluch, aus dem The Grudge wurde – ein Haus, das man nie mehr verlässt."
+        },
+        "silent-night-deadly-night": {
+            "description": "Ein Killer im Weihnachtsmannkostüm – die berüchtigtste Weihnachts-Slasher-Reihe."
+        },
+        "the-exorcist": {
+            "name": "Der Exorzist",
+            "description": "Der gruseligste Film aller Zeiten, seine Fortsetzungen, Prequels und Bekenntnis von 2023."
+        },
+        "the-omen": {
+            "name": "Das Omen",
+            "description": "Damien Thorn, der Antichrist, wird erwachsen – vom Klassiker von 1976 bis zum Prequel von 2024."
+        },
+        "one-missed-call": {
+            "description": "Dein Handy klingelt mit deinem eigenen Tod – Takashi Miikes J-Horror-Fluch."
+        },
+        "becky": {
+            "description": "Ein Teenagermädchen gegen Neonazis und Schlimmeres – brutale Rachethriller mit schwarzem Humor."
+        },
+        "firefly": {
+            "description": "Rob Zombies Firefly-Familie – Captain Spaulding, Otis und Baby auf Mordtour."
+        },
+        "the-strangers": {
+            "description": "Drei maskierte Fremde klopfen an die Tür – eine Home-Invasion-Reihe."
+        },
+        "urban-legend": {
+            "name": "Düstere Legenden",
+            "description": "Campus-Killer, die moderne Sagen nachstellen – Slasher-Spaß aus den späten 90ern."
+        },
+        "v-h-s": {
+            "description": "Found-Footage-Anthologien – jedes verfluchte Band ist ein neuer kurzer Horrorfilm."
+        },
+        "final-fantasy-vii": {
+            "description": "Cloud, Sephiroth und Midgar – die Animationsfilme rund um das legendäre Spiel."
+        },
+        "unfriended": {
+            "name": "Unknown User",
+            "description": "Horror, komplett auf einem Laptop-Bildschirm erzählt – eine tote Mitschülerin wählt sich in den Videocall ein."
+        },
+        "rec": {
+            "description": "Ein TV-Team in einem abgeriegelten Wohnhaus gefangen – der spanische Found-Footage-Hit und seine Fortsetzungen."
         }
     },
     "notes": {
@@ -973,7 +1139,9 @@
         "The Dude abides – a cult comedy about bowling and a rug.": "Der Dude bleibt gelassen – eine Kultkomödie über Bowling und einen Teppich.",
         "A romantic comedy with zombies, a pub and a cricket bat.": "Eine romantische Komödie mit Zombies, einem Pub und einem Cricketschläger.",
         "Wes Anderson's elegant caper – a perfect finish.": "Wes Andersons elegante Gaunerkomödie – ein perfekter Abschluss.",
-        "Kindness as comedy – one of the best-reviewed films of all time.": "Freundlichkeit als Komödie – einer der bestbewerteten Filme aller Zeiten."
+        "Kindness as comedy – one of the best-reviewed films of all time.": "Freundlichkeit als Komödie – einer der bestbewerteten Filme aller Zeiten.",
+        "Shelved by Warner Bros. in 2023, rescued and finally released in 2026.": "2023 von Warner Bros. auf Eis gelegt, gerettet und 2026 endlich veröffentlicht.",
+        "Bugs and Daffy share the screen with Mickey and Donald.": "Bugs und Daffy teilen sich die Leinwand mit Micky und Donald."
     },
     "terms": {
         "Phase 1": "Phase 1",
@@ -1099,6 +1267,23 @@
         "Millennium era": "Millennium-Ära",
         "Reiwa era": "Reiwa-Ära",
         "Live action": "Realfilm",
-        "Irish Folklore Trilogy": "Irische Folklore-Trilogie"
+        "Irish Folklore Trilogy": "Irische Folklore-Trilogie",
+        "1960s–1990s": "1960er–1990er",
+        "1970s–1980s": "1970er–1980er",
+        "2010s–2020s": "2010er–2020er",
+        "Animated revival": "Animiertes Comeback",
+        "CGI film": "CGI-Film",
+        "Cameos & direct-to-video": "Gastauftritte & Direct-to-Video",
+        "Cinema": "Kino",
+        "Classic compilations": "Klassische Kompilationen",
+        "Feature films": "Spielfilme",
+        "Films": "Filme",
+        "France & Belgium": "Frankreich & Belgien",
+        "Original trilogy": "Originaltrilogie",
+        "Rest of the world": "Rest der Welt",
+        "Theatrical compilations": "Kino-Kompilationen",
+        "Disney Fairies": "Disney Feen",
+        "The Lion King": "Der König der Löwen",
+        "The Little Mermaid": "Arielle, die Meerjungfrau"
     }
 }

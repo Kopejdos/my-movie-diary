@@ -3,6 +3,15 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.4.1 – November 2026
+- Cartoons! Looney Tunes (with Coyote vs. Acme), Tom and Jerry, Scooby-Doo, The Smurfs, Teenage Mutant Ninja Turtles, SpongeBob, Sonic, Garfield, Alvin and the Chipmunks, Peanuts and Winnie the Pooh
+- Studios DisneyToon, Warner Bros. Animation, Netflix Animation and Nickelodeon
+- Directors Don Bluth, Karel Zeman and Jan Švankmajer
+- Czech Animation, Best Animated Feature Winners, World Animation, Animation for Grown-ups and Cartoons on the Big Screen
+- Anime: One Piece, Naruto, My Hero Academia, Demon Slayer and Modern Anime
+- New descriptions and translations for collections added through requests
+- About 2,700 movies in My Movie Diary now
+
 ## V4.4 – November 2026
 - Level perks: higher levels raise your limits – more open requests, more movies per request, longer lists and more of them
 - Your profile shows what you can do now and what the next level unlocks

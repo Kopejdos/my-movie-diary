@@ -373,6 +373,9 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 46g | V4.3.7 | Anime a česká klasika ✅ | kategorie **Anime** 🎌 a **Czech & Slovak** 🇨🇿 (jediná migrace – dva řádky v `categories`); režiséři Shinkai, Hosoda, Kon; Evangelion, Ghost in the Shell, Pokémon, Dragon Ball, Detective Conan, Klasika anime, Cartoon Saloon; Slunce, seno…, Básníci, Anděl Páně, Saxána, Svěrákovi, České pohádky, Československá nová vlna; cesty Anime Starter a Czech Classics |
 | 46h | V4.3.8 | Žánrové výběry a cesty ✅ | 19 nových žánrových výběrů po 14–17 filmech + cesty Western Starter a Comedy Classics; konec V4.3 – katalog ~2 430 filmů (**cíl 2 000 splněn už ve V4.3.6**) |
 | 47 | V4.4 | Výhody za úroveň a odznaky ✅ | s úrovní rostou limity (otevřené požadavky, filmy v požadavku, velikost a počet seznamů) – hlídá je databáze (úroveň spočítaná v SQL stejně jako ve webu); v profilu **Výhody za úroveň**; odznak **Elite** ★ (přiděluje správce) |
+| 47a | V4.4.1 | Animáky ✅ | Looney Tunes (i Coyote vs. Acme), Tom a Jerry, Scooby-Doo, Šmoulové, Želvy nindža, SpongeBob, Sonic, Garfield, Alvin, Peanuts, Medvídek Pú; studia DisneyToon, Warner Bros. Animation, Netflix a Nickelodeon; režiséři Don Bluth, Karel Zeman a Jan Švankmajer; Česká animace, oscaroví vítězové za animaci, světová animace, animace pro dospělé, seriály v kině; One Piece, Naruto, My Hero Academia, Demon Slayer, Moderní anime; oprava kolekcí z kontroly seedu – katalog ~2 740 filmů |
+| 47b | V4.4.2 | Režiséři, série a výběry | další režiséři (Scorsese, Cameron, Ridley Scott, Coenové, del Toro, Peter Jackson, Peele, Bong Joon-ho, Park Chan-wook, P. T. Anderson, Gerwig, Forman…), série (Now You See Me, Percy Jackson, Pitch Perfect, Legally Blonde, Bill & Ted, Wayne's World, Ace Ventura, Zombieland, Hellboy, Highlander, Addams Family…), výběry (Film Noir, Neo-noir, Zlatá palma, kultovní filmy, road movies, teen komedie), studio Neon – **cíl 3 000** |
+| 47c–d | V4.4.3–V4.4.4 | Velké seznamy a kinematografie | AFI 100, Sight & Sound, Oscar za cizojazyčný film, nejlepší filmy desetiletí, kinematografie zemí (Korea, Itálie, Francie, Indie… – možná nové kategorie = migrace), herci, další režiséři, česká vlna 2 – **cíl 4 000** |
 | 48 | V4.5 | Wrapped | rok v kostce – **poprvé za rok 2027** (prosinec 2027): nováček si na začátku doplní stovky filmů, první celý rok dat bude 2027; filmy „Seen before“ se nepočítají |
 | 49 | V4.6 | Optimalizace před seriály | úklid a výkon s velkým katalogem (načítání, hledání, import), **katalog v mezipaměti prohlížeče** pro opakované návštěvy – připravit půdu pro kapitolu V5 |
 
@@ -470,6 +473,18 @@ Pacific Rim mezitím přidal kamarád přes požadavky – z balíčku vypadnou,
 - Kontrola cíle: **2 000 filmů** (ukazatel z V4.3.2), další cíl 2 500 už jako průběžné doplňování přes
   požadavky a nástroje z V4.3.2.
 
+#### V4.4.1–V4.4.4 – další doplnění filmů (plán 18. 11. 2026)
+**Cíl:** z ~2 440 filmů na **3 000**, pak na **4 000** – před Wrapped (V4.5) a optimalizací (V4.6), aby se
+optimalizovalo na katalogu, jaký opravdu bude. Stejný postup jako ve V4.3: balíčky `add-pack` bez migrací,
+kde to jde; každá část je hotová a vydaná zvlášť.
+
+| Část | Odhad nových filmů | Katalog po vydání |
+|---|---|---|
+| V4.4.1 Animáky | ~295 (skutečně) | ~2 740 |
+| V4.4.2 Režiséři, série a výběry | ~300 | **~3 040 – cíl 3 000** |
+| V4.4.3 Velké seznamy (AFI, Sight & Sound, cizojazyčný Oscar, desetiletí) | ~450 | ~3 500 |
+| V4.4.4 Kinematografie zemí, herci, další režiséři | ~500 | **~4 000** |
+
 #### V4.4 – výhody za úroveň a odznaky (plán 14. 11. 2026)
 - **Výhody za úroveň** – s úrovní rostou limity. Návrh (doladí se před začátkem verze):
 
@@ -517,6 +532,8 @@ Pacific Rim mezitím přidal kamarád přes požadavky – z balíčku vypadnou,
 - **18. 11.: překlady kolekcí a průvodce jako V4.3.4** (V4.3 má osm částí) – obojí se hodí dřív, než přibude
   hodně filmů a nových lidí; obsah se posunul ještě o jednu (V4.3.5–V4.3.8). Katalog mezitím narostl přes
   požadavky na ~1 460 filmů.
+- **18. 11.: před Wrapped ještě filmy (V4.4.1–V4.4.4)** – cíl 3 000, pak 4 000. Wrapped poprvé poběží až
+  v prosinci 2027, takže nespěchá; optimalizace (V4.6) má smysl dělat až na katalogu v konečné velikosti.
 - **Rychlost hlídá V4.6** – po V4.3 bude katalog skoro dvakrát větší (hledání, přehled, import).
 - **V3.5 = obsah od uživatelů** ve třech krocích, které na sebe navazují: bez požadavků nepřibudou filmy, bez
   seznamů není co ukazovat v komunitě.
@@ -2379,6 +2396,35 @@ testovacích seznamů byla vymyšlená.
 - **Elite jako obecná tabulka odznaků** – další odznaky (např. Tester, Founder) půjdou přidat jen rozšířením
   povolených hodnot.
 - **Elite nemění limity** – je to čistě ozdoba, aby nevznikal tlak na správce.
+
+### Fáze 47a – animáky ✅ (18. 11. 2026) – **V4.4.1**
+- **Jen obsah** – bez migrace a beze změn Edge Functions (jen existující kategorie a typy). Balíček
+  `v4.4.1-animation.json` (28 kolekcí, 371 řádků, ~295 nových filmů → katalog ~2 740):
+  - **série:** Looney Tunes (klasické sestřihy, Space Jam, Back in Action, The Day the Earth Blew Up a **Coyote
+    vs. Acme** – v kinech od 28. 8. 2026), Tom a Jerry, Scooby-Doo, Šmoulové, Želvy nindža, SpongeBob, Sonic,
+    Garfield, Alvin a Chipmunkové, Peanuts, Medvídek Pú;
+  - **studia:** DisneyToon Studios (pokračování Disneyho – Lví král II, Goofy, Zvonilka, Letadla), Warner Bros.
+    Animation, Netflix Animation, Nickelodeon Animation;
+  - **režiséři:** Don Bluth, Karel Zeman, Jan Švankmajer;
+  - **výběry:** Česká animace (od Trnky po Myši patří do nebe), Best Animated Feature Winners (všech 25 do
+    KPop Demon Hunters), World Animation, Animation for Grown-ups, Cartoons on the Big Screen;
+  - **anime:** One Piece, Naruto, My Hero Academia, Demon Slayer a výběr Modern Anime.
+  Filmy vydané rovnou na video (Tom a Jerry, Scooby-Doo, Garfield…) jsou **volitelné** – nezdržují dokončení.
+- **Kontrola seedu od kamaráda** (21 nových kolekcí přes požadavky): v balíčku `update` nové krátké popisy
+  (místo dlouhých textů z TMDB), **R & Revenge** a **New French Extremity** jsou žánrový výběr, ne série;
+  všech 21 kolekcí má překlady ve čtyřech jazycích. Co balíček opravit neumí (jen ručně v admin panelu):
+  20 filmů R & Revenge omylem přidaných i do **Warner Bros.** (série „R & Revenge“) – odebrat.
+- Ověřeno: `add-pack` na aktuálním seedu (28 nových, 21 upravených, podruhé nic), `node --test` (74 – nově
+  platnost balíčku V4.4.1), webové testy (záložky typů, kolekce se skupinami a překlady) v češtině, němčině,
+  angličtině a ukrajinštině na 320–1280 px.
+
+#### Rozhodnutí ve fázi 47a
+- **Série animovaných postaviček zvlášť, i když filmy jsou ve studiích** – Space Jam je ve Warner Bros.
+  i v Looney Tunes, Shrek v DreamWorks; série se dokončí jako celek (achievementy, XP).
+- **DTV filmy volitelné, studio DisneyToon celé povinné** – u studia jsou pokračování na videu to hlavní.
+- **České animované filmy pod původními názvy** (jako ve V4.3.7) – TMDB je najde podle původního názvu.
+- **Výběr oscarových vítězů za animaci** sdílí filmy s Pixarem a Disneym (přidává jen 3 nové) – patří k sobě
+  s Best Picture Winners z V4.3.5.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

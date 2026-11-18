@@ -857,6 +857,173 @@
         "path-comedy-classics": {
             "name": "Klasika komedie",
             "description": "Dvanáct komedií, které by měl vidět každý – od Někdo to rád horké po Paddingtona 2."
+        },
+        "looney-tunes": {
+            "description": "Bugs, Daffy, Kojot Wile E. a celá parta – od klasických sestřihů po Space Jam a Coyote vs. Acme."
+        },
+        "tom-and-jerry": {
+            "name": "Tom a Jerry",
+            "description": "Kocour, myš a osmdesát let honiček – filmy z kin i dobrodružství vydaná rovnou na video."
+        },
+        "scooby-doo": {
+            "description": "Páni! Parta detektivů strhává masku dalšímu padouchovi – hrané filmy, Scoob! a nejlepší záhady vydané na videu."
+        },
+        "the-smurfs": {
+            "name": "Šmoulové",
+            "description": "Malí, modří a pořád na útěku před Gargamelem – od klasiky z roku 1976 po nový film s Rihannou."
+        },
+        "teenage-mutant-ninja-turtles": {
+            "name": "Želvy nindža",
+            "description": "Cowabunga! Čtyři želvy, krysí sensei a spousta pizzy – hrané filmy, počítačová animace i Mutantí chaos."
+        },
+        "spongebob": {
+            "name": "SpongeBob v kalhotách",
+            "description": "Kdo bydlí v ananasu na dně moře? Všechny filmy se SpongeBobem včetně odboček o Sandy a Planktonovi."
+        },
+        "sonic": {
+            "name": "Ježek Sonic",
+            "description": "Rychlost je všechno – modrý ježek od Segy proti Dr. Robotnikovi Jima Carreyho."
+        },
+        "garfield": {
+            "description": "Pondělky, lasagne a Odie – líný zrzavý kocour v hraných i animovaných filmech."
+        },
+        "alvin-and-the-chipmunks": {
+            "name": "Alvin a Chipmunkové",
+            "description": "Alvineee! Tři zpívající čipmankové a jejich věčně zkoušený Dave."
+        },
+        "peanuts": {
+            "description": "No to snad ne! Charlie Brown, Snoopy a celá parta na velkém plátně."
+        },
+        "winnie-the-pooh": {
+            "name": "Medvídek Pú",
+            "description": "Medvídek s malým rozumem a Stokorcový les – Pú, Tygr, Prasátko a Kryštůfek Robin."
+        },
+        "disneytoon-studios": {
+            "description": "Disneyho továrna na pokračování – Lví král II, Goofy na výletě, Zvonilka, Letadla a další navazující filmy."
+        },
+        "warner-bros-animation": {
+            "description": "Od Železného obra a Happy Feet po LEGO příběh – animovaná tvář studia Warner."
+        },
+        "netflix-animation": {
+            "description": "Klaus, Pinocchio, Nimona, KPop Demon Hunters – animáky, které zamířily rovnou do obýváku."
+        },
+        "nickelodeon-animation": {
+            "description": "Rugrats, Jimmy Neutron, SpongeBob a Želvy – oranžová kaňka na velkém plátně."
+        },
+        "don-bluth": {
+            "description": "Bývalý animátor Disneyho, který se Disneymu postavil – Tajemství NIMH, Země dinosaurů a Anastázie."
+        },
+        "karel-zeman": {
+            "description": "Český kouzelník filmových triků – rytiny k Vernovi ožívají a baron Prášil letí na Měsíc."
+        },
+        "jan-svankmajer": {
+            "description": "Surrealista z Prahy – oživlé maso, nábytek s vlastní vůlí a Alenka jako žádná jiná."
+        },
+        "czech-animation": {
+            "name": "Česká animace",
+            "description": "Loutky, ploškové animace a stop-motion – od Jiřího Trnky po Myši patří do nebe."
+        },
+        "best-animated-feature-winners": {
+            "name": "Vítězové Oscara za nejlepší animovaný film",
+            "description": "Všichni držitelé Oscara za nejlepší animovaný film – od Shreka po KPop Demon Hunters."
+        },
+        "world-animation": {
+            "name": "Světová animace",
+            "description": "Mimo Hollywood a Japonsko – francouzská, španělská, lotyšská, australská i čínská animace, kterou stojí za to vyhledat."
+        },
+        "adult-animation": {
+            "name": "Animace pro dospělé",
+            "description": "Kreslené filmy nejsou jen pro děti – Kocour Fritz, Heavy Metal, South Park a Párty párky."
+        },
+        "tv-cartoons-big-screen": {
+            "name": "Animované seriály v kině",
+            "description": "Oblíbené seriály ze sobotního rána dostanou vlastní film – Simpsonovi, Phineas a Ferb, Bob's Burgers a další."
+        },
+        "one-piece": {
+            "description": "Luffy a Piráti Slaměného klobouku – všechny filmy One Piece, od prvního po Film Red."
+        },
+        "naruto": {
+            "description": "Věř tomu! Naruto, Shippuden a Boruto na velkém plátně."
+        },
+        "my-hero-academia": {
+            "description": "Plus Ultra! Deku a třída 1-A ve všech čtyřech filmech."
+        },
+        "demon-slayer": {
+            "description": "Tandžiró v boji proti démonům – rekordní Mugen Train a trilogie Nekonečný hrad."
+        },
+        "anime-modern": {
+            "name": "Moderní anime",
+            "description": "Nová vlna po Ghibli – Masaaki Juasa, Studio Ponoc, Science SARU a největší hity 20. let."
+        },
+        "r-and-revenge": {
+            "description": "Brutální thrillery o pomstě, v nichž oběť vrací úder – od Pramene panny po Plivu na tvůj hrob. Nejsou pro každého."
+        },
+        "new-french-extremity": {
+            "name": "Nový francouzský extrém",
+            "description": "Nejšokující vlna francouzského hororu – Martyrs, À l'intérieur, Haute tension a Grave. Chce to silný žaludek."
+        },
+        "rosemary-s-baby": {
+            "name": "Rosemary má děťátko",
+            "description": "Polanského satanistická klasika, její televizní pokračování a prequel Apartment 7A z roku 2024."
+        },
+        "scary-movie": {
+            "description": "Bratři Wayansové parodují každý hororový hit v dohledu – od Vřískotu po Paranormal Activity."
+        },
+        "hellraiser": {
+            "description": "Hlavolam Clivea Barkera otevírá dveře Pinheadovi a cenobitům – rozkoš i bolest stejným dílem."
+        },
+        "the-chronicles-of-riddick": {
+            "name": "Riddick",
+            "description": "Antihrdina Vina Diesela, který vidí ve tmě – od Černočerné tmy po planetu Crematoria."
+        },
+        "pacific-rim": {
+            "description": "Obří roboti proti obřím monstrům – vyznání Guillerma del Tora kaidžú a robotům mecha."
+        },
+        "fear-street": {
+            "name": "Ulice strachu",
+            "description": "Prokleté městečko Shadyside od R. L. Stinea – hororová trilogie od roku 1994 zpátky do roku 1666."
+        },
+        "ju-on": {
+            "description": "Původní japonská kletba, ze které vznikla Nenávist – dům, ze kterého už neodejdeš."
+        },
+        "silent-night-deadly-night": {
+            "description": "Vrah v kostýmu Santa Clause – nejnechvalněji proslulá vánoční slasherová série."
+        },
+        "the-exorcist": {
+            "name": "Vymítač ďábla",
+            "description": "Nejděsivější film všech dob, jeho pokračování, prequely a Vymítač ďábla: Znovuzrození z roku 2023."
+        },
+        "the-omen": {
+            "name": "Přichází Satan!",
+            "description": "Damien Thorn, Antikrist, dospívá – od klasiky z roku 1976 po prequel z roku 2024."
+        },
+        "one-missed-call": {
+            "description": "Telefon ti zazvoní s ohlášením vlastní smrti – J-hororová kletba Takašiho Miikeho."
+        },
+        "becky": {
+            "description": "Dospívající dívka proti neonacistům a ještě horším – brutální thrillery o pomstě s černým humorem."
+        },
+        "firefly": {
+            "description": "Rodina Fireflyů od Roba Zombieho – kapitán Spaulding, Otis a Baby na vražedném tažení."
+        },
+        "the-strangers": {
+            "description": "Tři maskovaní cizinci zaklepou na dveře – série o vpádu do domu."
+        },
+        "urban-legend": {
+            "name": "Městská legenda",
+            "description": "Vrazi na kampusu, kteří kopírují městské legendy – slasherová zábava z konce 90. let."
+        },
+        "v-h-s": {
+            "description": "Found-footage antologie – každá prokletá kazeta je nový krátký horor."
+        },
+        "final-fantasy-vii": {
+            "description": "Cloud, Sephiroth a Midgar – animované filmy kolem legendární hry."
+        },
+        "unfriended": {
+            "description": "Horor odehraný celý na obrazovce notebooku – do videohovoru se připojí mrtvá spolužačka."
+        },
+        "rec": {
+            "description": "Televizní štáb uvězněný v budově v karanténě – španělský found-footage hit a jeho pokračování."
         }
     },
     "notes": {
@@ -1016,7 +1183,9 @@
         "The Dude abides – a cult comedy about bowling and a rug.": "Dude to zvládne – kultovní komedie o bowlingu a koberci.",
         "A romantic comedy with zombies, a pub and a cricket bat.": "Romantická komedie se zombiemi, hospodou a kriketovou pálkou.",
         "Wes Anderson's elegant caper – a perfect finish.": "Elegantní dobrodružství Wese Andersona – dokonalé zakončení.",
-        "Kindness as comedy – one of the best-reviewed films of all time.": "Laskavost jako komedie – jeden z nejlépe hodnocených filmů všech dob."
+        "Kindness as comedy – one of the best-reviewed films of all time.": "Laskavost jako komedie – jeden z nejlépe hodnocených filmů všech dob.",
+        "Shelved by Warner Bros. in 2023, rescued and finally released in 2026.": "Warner Bros. film v roce 2023 uložil do trezoru, podařilo se ho ale zachránit a v roce 2026 konečně vyšel.",
+        "Bugs and Daffy share the screen with Mickey and Donald.": "Bugs a Daffy se tu dělí o plátno s Mickeym a Donaldem."
     },
     "terms": {
         "Phase 1": "Fáze 1",
@@ -1183,6 +1352,31 @@
         "Reiwa era": "Éra Reiwa",
         "The Scorpion King": "Král Škorpión",
         "Live action": "Hraný film",
-        "Irish Folklore Trilogy": "Irská folklorní trilogie"
+        "Irish Folklore Trilogy": "Irská folklorní trilogie",
+        "1960s–1990s": "60.–90. léta",
+        "1970s–1980s": "70. a 80. léta",
+        "2010s–2020s": "Od roku 2010",
+        "Animated revival": "Nová animovaná éra",
+        "CGI film": "Počítačově animovaný film",
+        "Cameos & direct-to-video": "Cameo role a filmy na video",
+        "China": "Čína",
+        "Cinema": "Kino",
+        "Classic compilations": "Klasické sestřihy",
+        "Crossovers": "Crossovery",
+        "Direct-to-video": "Rovnou na video",
+        "Feature films": "Celovečerní filmy",
+        "Films": "Filmy",
+        "France & Belgium": "Francie a Belgie",
+        "Original trilogy": "Původní trilogie",
+        "Rest of the world": "Zbytek světa",
+        "Spin-offs": "Spin-offy",
+        "Theatrical compilations": "Sestřihy pro kina",
+        "Aladdin": "Aladin",
+        "Cinderella": "Popelka",
+        "Disney Fairies": "Disney víly",
+        "Planes": "Letadla",
+        "Teenage Mutant Ninja Turtles": "Želvy nindža",
+        "The Lion King": "Lví král",
+        "The Little Mermaid": "Malá mořská víla"
     }
 }

@@ -242,6 +242,8 @@ Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny
 26. **Výhody za úroveň a Elite (V4.4):** migrace `20261122100000_level_perks.sql`, pak znovu nasadit Edge Functions
     **`requests`** (limity podle úrovně) a **`admin`** (úroveň a odznaky v seznamu uživatelů). Elite se přiděluje
     v admin panelu → Users → *★ Make Elite*.
+27. **Animáky (V4.4.1):** bez migrace a beze změn funkcí – `./scripts/add-pack.sh supabase/packs/v4.4.1-animation.json`
+    (28 nových kolekcí, 21 kolekcím z požadavků nové popisy) a commit seedu. Pak Translations → Check with TMDB.
 
 **Seed a admin panel (od V3.5.2.1):** seed je zdroj pravdy pro import, ale **úpravy z aplikace se neztratí** –
 databáze si je pamatuje (`universe_items.source`, `universes.source`, tabulka `seed_removals`) a `import.sh`
