@@ -2886,7 +2886,7 @@
       "kind": "series",
       "categories": ["crime-thriller", "horror"],
       "color": "#06b6d4",
-      "description": "Three film adaptations of the book series by R. L. Stine.",
+      "description": "R. L. Stine's cursed town of Shadyside – a horror trilogy from 1994 back to 1666.",
       "films": [
         { "title": "Fear Street: 1994", "year": 2021, "tmdb": 591273 },
         { "title": "Fear Street: 1978", "year": 2021, "tmdb": 591274 },
@@ -2899,7 +2899,7 @@
       "kind": "series",
       "categories": ["crime-thriller", "horror"],
       "color": "#8b5cf6",
-      "description": "Japanese horror franchise revolving around a curse born when one person dies with a deep and burning rage.",
+      "description": "The original Japanese curse that became The Grudge – a house you never leave.",
       "films": [
         { "title": "Ju-on: The Curse", "year": 2000, "tmdb": 32250 },
         { "title": "Ju-on: The Curse 2", "year": 2000, "tmdb": 44203 },
@@ -2913,7 +2913,7 @@
       "kind": "series",
       "categories": ["crime-thriller", "horror"],
       "color": "#ef4444",
-      "description": "Series about slashers about childhood traumas that lead to Santa Claus killing sprees, and other horror stories occurring on Christmas.",
+      "description": "A killer in a Santa suit – the most notorious Christmas slasher series.",
       "films": [
         { "title": "Silent Night, Deadly Night", "year": 1984, "tmdb": 27414 },
         { "title": "Silent Night, Deadly Night Part 2", "year": 1987, "tmdb": 50719 },
@@ -2928,7 +2928,7 @@
       "kind": "series",
       "categories": ["horror"],
       "color": "#ef4444",
-      "description": "A horror anthology series focused on fictional accounts of demonic possession, and the efforts of religious authorities to counter it with various acts of faith.",
+      "description": "The scariest film ever made, its sequels, prequels and the 2023 Believer.",
       "films": [
         { "title": "The Exorcist", "year": 1973, "tmdb": 9552 },
         { "title": "Exorcist II: The Heretic", "year": 1977, "tmdb": 11586 },
@@ -2945,7 +2945,7 @@
       "kind": "series",
       "categories": ["crime-thriller", "horror"],
       "color": "#ef4444",
-      "description": "Supernatural horror series centered around Damien Thorn, the Antichrist.",
+      "description": "Damien Thorn, the Antichrist, grows up – from the 1976 classic to The First Omen.",
       "films": [
         { "title": "The Omen", "year": 1976, "tmdb": 794 },
         { "title": "Damien - Omen II", "year": 1978, "tmdb": 10766 },
@@ -2960,7 +2960,7 @@
       "kind": "series",
       "categories": ["crime-thriller", "horror"],
       "color": "#8b5cf6",
-      "description": "Cult Japanese horror franchise revolving around a deadly curse that travels through cellphones.",
+      "description": "Your phone rings with your own death – Takashi Miike's J-horror curse.",
       "films": [
         { "title": "One Missed Call", "year": 2003, "tmdb": 9694 },
         { "title": "One Missed Call 2", "year": 2005, "tmdb": 14021 },
@@ -2973,7 +2973,7 @@
       "kind": "series",
       "categories": ["comedy"],
       "color": "#d946ef",
-      "description": "Scary Movie is a 2000 horror comedy spoof film directed by Keenen Ivory Wayans. It is an American dark comedy that heavily parodies the horror, slasher, and mystery genres.",
+      "description": "The Wayans brothers spoof every horror hit in sight – from Scream to Paranormal Activity.",
       "films": [
         { "title": "Scary Movie", "year": 2000, "tmdb": 4247 },
         { "title": "Scary Movie 2", "year": 2001, "tmdb": 4248 },
@@ -2989,7 +2989,7 @@
       "kind": "series",
       "categories": ["action-adventure", "scifi"],
       "color": "#ef4444",
-      "description": "The Chronicles of Riddick is a science fiction action film series which follows the exploits of the antihero Richard B. Riddick.",
+      "description": "Vin Diesel's night-vision antihero – from Pitch Black to the planet Crematoria.",
       "films": [
         { "title": "Pitch Black", "year": 2000, "tmdb": 2787 },
         { "title": "The Chronicles of Riddick", "year": 2004, "tmdb": 2789 },
@@ -3002,7 +3002,7 @@
       "kind": "series",
       "categories": ["crime-thriller", "horror"],
       "color": "#10b981",
-      "description": "A series of thriller films about a teenage girl facing off against violent men.",
+      "description": "A teenage girl versus neo-Nazis and worse – violent, darkly funny revenge thrillers.",
       "films": [
         { "title": "Becky", "year": 2020, "tmdb": 601844 },
         { "title": "The Wrath of Becky", "year": 2023, "tmdb": 986070 },
@@ -3015,7 +3015,7 @@
       "kind": "series",
       "categories": ["crime-thriller", "horror"],
       "color": "#f97316",
-      "description": "A horror film series written and directed by Rob Zombie, following the exploits of a family of psychopathic killers, including Captain Spaulding, Otis Driftwood, and Baby Firefly as recurring…",
+      "description": "Rob Zombie's Firefly family – Captain Spaulding, Otis and Baby on a killing spree.",
       "films": [
         { "title": "House of 1000 Corpses", "year": 2003, "tmdb": 2662 },
         { "title": "The Devil's Rejects", "year": 2005, "tmdb": 1696 },
@@ -3028,7 +3028,7 @@
       "kind": "series",
       "categories": ["crime-thriller", "horror"],
       "color": "#06b6d4",
-      "description": "Hellraiser is a British horror film franchise is based on the novella The Hellbound Heart by Clive Barker. The films continually features the Cenobite Pinhead.",
+      "description": "Clive Barker's puzzle box opens the door to Pinhead and the Cenobites – pleasure and pain in equal measure.",
       "films": [
         { "title": "Hellraiser", "year": 1987, "tmdb": 9003 },
         { "title": "Hellbound: Hellraiser II", "year": 1988, "tmdb": 9064 },
@@ -3048,7 +3048,7 @@
       "kind": "series",
       "categories": ["crime-thriller", "horror"],
       "color": "#10b981",
-      "description": "An American horror & slasher film series that follows people who are terrorized by three masked assailants: the Man in the Mask, Dollface & Pin-Up Girl.",
+      "description": "Three masked strangers knock on the door – a home-invasion series.",
       "films": [
         { "title": "The Strangers", "year": 2008, "tmdb": 10665, "franchise": "primal" },
         { "title": "The Strangers: Prey at Night", "year": 2018, "tmdb": 371608, "franchise": "primal" },
@@ -3063,7 +3063,7 @@
       "kind": "series",
       "categories": ["crime-thriller", "horror"],
       "color": "#8b5cf6",
-      "description": "These films revolve around urban legends, featuring sinister murders, deadly spirits, and ominous conjurations, typically set in educational institutions like college campuses and high schools.",
+      "description": "Campus killers who copy urban legends – late-90s slasher fun.",
       "films": [
         { "title": "Urban Legend", "year": 1998, "tmdb": 9877 },
         { "title": "Urban Legends: Final Cut", "year": 2000, "tmdb": 12212 },
@@ -3076,7 +3076,7 @@
       "kind": "series",
       "categories": ["crime-thriller", "horror"],
       "color": "#06b6d4",
-      "description": "Found footage anthology films centered around a number of disturbing VHS tapes that are discovered by innocent viewers and the possessive influence of the videos over those who see them.",
+      "description": "Found-footage anthologies – every cursed tape is a new short horror film.",
       "films": [
         { "title": "V/H/S", "year": 2012, "tmdb": 84348 },
         { "title": "V/H/S/2", "year": 2013, "tmdb": 159117 },
@@ -3096,7 +3096,7 @@
       "kind": "series",
       "categories": ["animation", "fantasy"],
       "color": "#f59e0b",
-      "description": "A collection of films based off or closely associated with the Final Fantasy VII video game.",
+      "description": "Cloud, Sephiroth and Midgar – the animated films around the legendary game.",
       "films": [
         { "title": "Final Fantasy VII: Advent Children", "year": 2005, "tmdb": 647 },
         { "title": "Final Fantasy VII: Last Order", "year": 2005, "tmdb": 13274 },
@@ -3109,7 +3109,7 @@
       "kind": "series",
       "categories": ["crime-thriller", "horror"],
       "color": "#d946ef",
-      "description": "An American horror film series presented as computer screen films, being told almost entirely through a laptop computer.",
+      "description": "Horror told entirely on a laptop screen – a dead classmate joins the video call.",
       "films": [
         { "title": "Unfriended", "year": 2014, "tmdb": 277685 },
         { "title": "Unfriended: Dark Web", "year": 2018, "tmdb": 505058 }
@@ -3121,7 +3121,7 @@
       "kind": "series",
       "categories": ["crime-thriller", "horror"],
       "color": "#f59e0b",
-      "description": "Spanish horror film series created by Jaume Balagueró and Paco Plaza, consisting of four movies.",
+      "description": "A news crew trapped in a quarantined building – the Spanish found-footage hit and its sequels.",
       "films": [
         { "title": "[REC]", "year": 2007, "tmdb": 8329 },
         { "title": "[REC]²", "year": 2009, "tmdb": 10664 },
@@ -3135,7 +3135,7 @@
       "kind": "series",
       "categories": ["crime-thriller", "horror"],
       "color": "#d946ef",
-      "description": "Rosemary's Baby Collection",
+      "description": "Polanski's satanic classic, its TV sequel and the 2024 prequel Apartment 7A.",
       "films": [
         { "title": "Rosemary's Baby", "year": 1968, "tmdb": 805 },
         { "title": "Look What's Happened to Rosemary's Baby", "year": 1976, "tmdb": 117258 },
@@ -3145,10 +3145,10 @@
     {
       "slug": "new-french-extremity",
       "name": "New French Extremity",
-      "kind": "series",
+      "kind": "genre",
       "categories": ["crime-thriller", "horror"],
       "color": "#f97316",
-      "description": "Every New French Extremity movie.",
+      "description": "France's most shocking wave of horror – Martyrs, Inside, High Tension and Raw. Strong stomach required.",
       "films": [
         { "title": "Irreversible", "year": 2002, "tmdb": 979 },
         { "title": "In My Skin", "year": 2002, "tmdb": 1836 },
@@ -3347,10 +3347,10 @@
     {
       "slug": "r-and-revenge",
       "name": "R & Revenge",
-      "kind": "series",
+      "kind": "genre",
       "categories": ["crime-thriller", "drama"],
       "color": "#ef4444",
-      "description": "Every R & Revenge movie.",
+      "description": "Brutal revenge thrillers where the victim strikes back – from The Virgin Spring to I Spit on Your Grave. Not for everyone.",
       "films": [
         { "title": "The Virgin Spring", "year": 1960, "tmdb": 11656 },
         { "title": "The Last House on the Left", "year": 1972, "tmdb": 15516 },
@@ -3380,7 +3380,7 @@
       "kind": "series",
       "categories": ["action-adventure", "scifi"],
       "color": "#06b6d4",
-      "description": "An American science fiction mecha action film series which follows humanity fighting Kaiju, the giant monsters set on destroying the world.",
+      "description": "Giant robots against giant monsters – Guillermo del Toro's love letter to kaiju and mecha.",
       "films": [
         { "title": "Pacific Rim", "year": 2013, "tmdb": 68726 },
         { "title": "Pacific Rim: Uprising", "year": 2018, "tmdb": 268896 }
