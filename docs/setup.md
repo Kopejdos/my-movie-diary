@@ -218,6 +218,10 @@ Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny
     novou kolekci stačí doplnit tam (jinak se ukáže anglicky).
 18. **Editor a požadavky (V4.3.1):** migrace `20261118110000_editor_requests.sql`, pak znovu nasadit Edge
     Functions **`admin`** a **`requests`** (Verify JWT dál vypnuté). Funkce `tmdb` beze změny.
+19. **Stavitel kolekcí a westerny (V4.3.2):** migrace `20261118120000_western.sql` (kategorie Western), znovu
+    nasadit Edge Function **`admin`**, pak `./scripts/add-pack.sh supabase/packs/v4.3.2-westerns.json` – propíše
+    do seedu změny z aplikace, přidá kolekce z balíčku na konec seedu (Winnetou dostane kategorii Western)
+    a naimportuje je. Seed pak commitni. Filmy, které import nenašel, jsou v `import-reports/`.
 
 **Seed a admin panel (od V3.5.2.1):** seed je zdroj pravdy pro import, ale **úpravy z aplikace se neztratí** –
 databáze si je pamatuje (`universe_items.source`, `universes.source`, tabulka `seed_removals`) a `import.sh`

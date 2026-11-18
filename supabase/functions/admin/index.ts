@@ -24,7 +24,14 @@
 //   request-decide { items: [{ id, approve, universe_id? }] }
 //                                       → přijme (film do films, případně do kolekce) / zamítne;
 //                                         rozhodnutí platí pro film ve všech požadavcích
-//   create-collection { name, description?, tmdb_collection_id?, items[], also?, reject_ids? }
+//   people-search { query }            → hledání osoby v TMDB (V4.3.2 – stavitel kolekcí)
+//   person-films { person_id, second_person_id? }
+//                                       → filmografie osoby / dvou osob s rolemi (průnik = Together)
+//   company-search { query }, keyword-search { query }
+//                                       → hledání studia / klíčového slova v TMDB
+//   discover-films { company_id | keyword_id, sort: popularity | year | votes, pages? }
+//                                       → filmy studia / klíčového slova (TMDB discover, až 10 × 20)
+//   create-collection { name, description?, kind?, tmdb_collection_id?, items[], also?, reject_ids? }
 //                                       → nová kolekce z editoru (V4.3.1) – schválení požadavku na kolekci
 //                                         (série TMDB i vlastní): filmy v daném pořadí s oddílem, sérií,
 //                                         popiskem; čekající požadavky na ně → added, reject_ids → rejected
@@ -195,6 +202,154 @@ async function search(query: string) {
     poster_path: r.poster_path,
     overview: r.overview,
   }));
+}
+
+// ---------------------------------------------------------------------
+// Stavitel kolekcí (V4.3.2) – kandidáti na kolekci z osoby, dvou osob, studia nebo
+// klíčového slova TMDB. Vrací jen seznam filmů k zaškrtnutí; kolekci pak založí
+// create-collection (stejně jako schválení požadavku).
+// ---------------------------------------------------------------------
+
+interface TmdbCredit {
+  id: number;
+  title: string;
+  original_title: string;
+  release_date: string;
+  poster_path: string | null;
+  vote_count: number;
+  popularity: number;
+  genre_ids: number[];
+  video?: boolean;
+  adult?: boolean;
+  character?: string;
+  job?: string;
+}
+
+/** Kandidát pro web: film + role osob (a = první, b = druhá osoba). */
+interface Candidate {
+  tmdb_id: number;
+  title: string;
+  original_title: string;
+  release_date: string | null;
+  year: string | null;
+  poster_path: string | null;
+  vote_count: number;
+  popularity: number;
+  genre_ids: number[];
+  roles: { a: string[]; b: string[] };
+  in_catalog: boolean;
+}
+
+const candidateOf = (m: TmdbCredit): Candidate => ({
+  tmdb_id: m.id,
+  title: m.title,
+  original_title: m.original_title,
+  release_date: m.release_date || null,
+  year: m.release_date ? m.release_date.slice(0, 4) : null,
+  poster_path: m.poster_path,
+  vote_count: m.vote_count ?? 0,
+  popularity: m.popularity ?? 0,
+  genre_ids: m.genre_ids ?? [],
+  roles: { a: [], b: [] },
+  in_catalog: false,
+});
+
+/** Doplní, které filmy už v MMD jsou (tabulka films). */
+async function markInCatalog(db: SupabaseClient, films: Candidate[]) {
+  const ids = films.map((f) => f.tmdb_id);
+  for (let i = 0; i < ids.length; i += 300) {
+    const { data, error } = await db.from("films").select("tmdb_id").in("tmdb_id", ids.slice(i, i + 300));
+    if (error) throw new Error(error.message);
+    const known = new Set((data ?? []).map((r) => r.tmdb_id));
+    for (const film of films) if (known.has(film.tmdb_id)) film.in_catalog = true;
+  }
+  return films;
+}
+
+/** Hledání osoby v TMDB (režisér, herec…). */
+async function searchPeople(query: string) {
+  if (!query?.trim()) return [];
+  const data = await tmdbGet<{ results: { id: number; name: string; known_for_department: string; profile_path: string | null; known_for?: { title?: string; name?: string }[] }[] }>(
+    "/search/person", { query: query.trim(), include_adult: "false", language: "en-US" });
+  return data.results.slice(0, 10).map((p) => ({
+    id: p.id,
+    name: p.name,
+    department: p.known_for_department,
+    profile_path: p.profile_path,
+    known_for: (p.known_for ?? []).map((k) => k.title ?? k.name).filter(Boolean).slice(0, 3),
+  }));
+}
+
+/**
+ * Filmografie jedné nebo dvou osob. Role: acting (herec), directing (režie), writing, crew (ostatní).
+ * U dvou osob vrací všechny filmy obou – web z rolí pozná průnik (Together) i sólovky.
+ * Bez videí a filmů pro dospělé; dokumenty, počet hlasů a roky filtruje web.
+ */
+async function personFilms(db: SupabaseClient, personId: number, secondId: number | null) {
+  if (!Number.isInteger(personId) || personId <= 0) throw new HttpError(400, "Invalid person");
+  const ids = secondId && Number.isInteger(secondId) && secondId > 0 && secondId !== personId ? [personId, secondId] : [personId];
+  const people = await Promise.all(ids.map((id) => tmdbGet<{ id: number; name: string }>(`/person/${id}`, { language: "en-US" })));
+  const credits = await Promise.all(ids.map((id) =>
+    tmdbGet<{ cast: TmdbCredit[]; crew: TmdbCredit[] }>(`/person/${id}/movie_credits`, { language: "en-US" })));
+
+  const films = new Map<number, Candidate>();
+  credits.forEach((credit, index) => {
+    const key = index === 0 ? "a" : "b";
+    const add = (m: TmdbCredit, role: string) => {
+      if (m.adult || m.video) return;
+      const film = films.get(m.id) ?? candidateOf(m);
+      if (!film.roles[key].includes(role)) film.roles[key].push(role);
+      films.set(m.id, film);
+    };
+    for (const m of credit.cast ?? []) add(m, "acting");
+    for (const m of credit.crew ?? []) {
+      add(m, m.job === "Director" ? "directing" : ["Screenplay", "Writer", "Story"].includes(m.job ?? "") ? "writing" : "crew");
+    }
+  });
+
+  const list = [...films.values()].sort((a, b) => (a.release_date || "9999").localeCompare(b.release_date || "9999"));
+  return { people: people.map((p) => ({ id: p.id, name: p.name })), films: await markInCatalog(db, list) };
+}
+
+/** Hledání studia (produkční společnosti) nebo klíčového slova v TMDB. */
+async function searchCompanyOrKeyword(kind: "company" | "keyword", query: string) {
+  if (!query?.trim()) return [];
+  const data = await tmdbGet<{ results: { id: number; name: string; origin_country?: string; logo_path?: string | null }[] }>(
+    `/search/${kind}`, { query: query.trim() });
+  return data.results.slice(0, 12).map((r) => ({ id: r.id, name: r.name, country: r.origin_country ?? null, logo_path: r.logo_path ?? null }));
+}
+
+/**
+ * Filmy studia nebo klíčového slova (TMDB discover), seřazené podle popularity nebo roku.
+ * pages = kolik stránek po 20 filmech (1–10).
+ */
+async function discoverFilms(db: SupabaseClient, body: Record<string, unknown>) {
+  const companyId = Number(body.company_id);
+  const keywordId = Number(body.keyword_id);
+  const params: Record<string, string> = {
+    include_adult: "false",
+    include_video: "false",
+    language: "en-US",
+    sort_by: body.sort === "year" ? "primary_release_date.asc" : body.sort === "votes" ? "vote_count.desc" : "popularity.desc",
+  };
+  if (Number.isInteger(companyId) && companyId > 0) params.with_companies = String(companyId);
+  else if (Number.isInteger(keywordId) && keywordId > 0) params.with_keywords = String(keywordId);
+  else throw new HttpError(400, "Pick a studio or a keyword");
+  // Řazení podle roku bez filmů bez data a bez úplně neznámých (jinak by začínalo prázdnými záznamy)
+  if (body.sort === "year") params["vote_count.gte"] = "10";
+
+  const pages = Math.min(Math.max(Number(body.pages) || 5, 1), 10);
+  const results: TmdbCredit[] = [];
+  let total = 0;
+  for (let page = 1; page <= pages; page++) {
+    const data = await tmdbGet<{ results: TmdbCredit[]; total_pages: number; total_results: number }>(
+      "/discover/movie", { ...params, page: String(page) });
+    results.push(...data.results);
+    total = data.total_results;
+    if (page >= data.total_pages) break;
+  }
+  const unique = [...new Map(results.map((m) => [m.id, m])).values()].map(candidateOf);
+  return { total, films: await markInCatalog(db, unique) };
 }
 
 /** Stáhne detail filmu z TMDB a uloží ho do tabulky films. */
@@ -615,6 +770,7 @@ function parseItems(raw: unknown): NewCollectionItem[] {
 async function createCollection(db: SupabaseClient, options: {
   name: string;
   description: string | null;
+  kind?: string;
   tmdbCollectionId: number | null;
   items: NewCollectionItem[];
   also: unknown;
@@ -648,8 +804,9 @@ async function createCollection(db: SupabaseClient, options: {
   const today = new Date().toISOString().slice(0, 10);
   const cover = films.find((film) => film.status === "Released" && film.poster_path) ?? films[0];
 
+  const kind = ["series", "studio", "genre", "path"].includes(options.kind ?? "") ? options.kind! : "series";
   const { data: universe, error } = await db.from("universes").insert({
-    slug, name, description, color, kind: "series",
+    slug, name, description, color, kind,
     source: "app",              // nová kolekce z aplikace – sync-seed ji dopíše do seedu (V3.5.2.1)
     sort_order: (last?.[0]?.sort_order ?? 0) + 10,
     cover_tmdb_id: cover?.tmdb_id ?? null,
@@ -715,7 +872,7 @@ async function createCollection(db: SupabaseClient, options: {
     "    {",
     `      "slug": ${JSON.stringify(slug)},`,
     `      "name": ${JSON.stringify(name)},`,
-    `      "kind": "series",`,
+    `      "kind": ${JSON.stringify(kind)},`,
     `      "categories": ${JSON.stringify(categorySlugs).replace(/,/g, ", ")},`,
     `      "color": ${JSON.stringify(color)},`,
     `      "description": ${JSON.stringify(description)},`,
@@ -764,7 +921,7 @@ async function createCollectionFromEditor(db: SupabaseClient, body: Record<strin
   if (!description && tmdbCollectionId) {
     description = (await tmdbGet<{ overview: string }>(`/collection/${tmdbCollectionId}`, { language: "en-US" })).overview || null;
   }
-  const result = await createCollection(db, { name, description, tmdbCollectionId, items, also: body.also });
+  const result = await createCollection(db, { name, description, kind: String(body.kind ?? "series"), tmdbCollectionId, items, also: body.also });
 
   const rejectIds = (Array.isArray(body.reject_ids) ? body.reject_ids : []).map(Number).filter(Number.isInteger);
   if (rejectIds.length > 0) await decideRequests(db, rejectIds.map((id) => ({ id, approve: false })));
@@ -1075,6 +1232,16 @@ Deno.serve(async (request) => {
     switch (body.action) {
       case "search":
         return json(await search(String(body.query ?? "")));
+      case "people-search":
+        return json(await searchPeople(String(body.query ?? "")));
+      case "person-films":
+        return json(await personFilms(db, Number(body.person_id), body.second_person_id ? Number(body.second_person_id) : null));
+      case "company-search":
+        return json(await searchCompanyOrKeyword("company", String(body.query ?? "")));
+      case "keyword-search":
+        return json(await searchCompanyOrKeyword("keyword", String(body.query ?? "")));
+      case "discover-films":
+        return json(await discoverFilms(db, body));
       case "add-film":
         return json(await addFilm(db, Number(body.tmdb_id)));
       case "users":

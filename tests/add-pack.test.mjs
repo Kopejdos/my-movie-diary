@@ -1,0 +1,91 @@
+// Balíček kolekcí do seedu (V4.3.2, scripts/add-pack.mjs): nové kolekce na konec, úpravy
+// existujících, ostatní řádky beze změny, opakované spuštění nic nepřidá.
+import "./setup.mjs";
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { applyPack } from "../scripts/add-pack.mjs";
+
+const SEED = [
+    "{",
+    '  "_comment": "test",',
+    '  "universes": [',
+    "    {",
+    '      "slug": "alpha",',
+    '      "name": "Alpha",',
+    '      "kind": "series",',
+    '      "categories": ["action-adventure"],',
+    '      "description": "Old text",',
+    '      "films": [',
+    '        { "title": "One", "year": 2001 }',
+    "      ]",
+    "    },",
+    "    {",
+    '      "slug": "beta",',
+    '      "name": "Beta",',
+    '      "films": [',
+    '        { "title": "Two", "year": 2002, "tmdb": 2 }',
+    "      ]",
+    "    }",
+    "  ]",
+    "}",
+    "",
+].join("\n");
+
+const PACK = {
+    update: { alpha: { addCategories: ["western"], description: "New text" }, beta: { addCategories: ["comedy"] }, missing: { addCategories: ["x"] } },
+    universes: [
+        { slug: "gamma", name: "Gamma", kind: "genre", categories: ["western"], color: "#123456", films: [{ title: "Three", year: 2003, group: "Together" }] },
+        { slug: "beta", name: "Beta again", films: [] },
+    ],
+};
+
+test("add-pack: nové kolekce na konec, úpravy existujících, platný JSON", () => {
+    const { text, added, updated, skipped } = applyPack(SEED, PACK);
+    const seed = JSON.parse(text);
+    assert.deepEqual(added, ["gamma"]);
+    assert.deepEqual(updated, ["alpha", "beta"]);
+    assert.deepEqual(skipped.sort(), ["beta", "missing"]);
+    assert.deepEqual(seed.universes.map((u) => u.slug), ["alpha", "beta", "gamma"]);
+    assert.deepEqual(seed.universes[0].categories, ["action-adventure", "western"]);
+    assert.equal(seed.universes[0].description, "New text");
+    assert.deepEqual(seed.universes[1].categories, ["comedy"]);          // řádek přibyl před "films"
+    assert.equal(seed.universes[2].films[0].group, "Together");
+    // Ostatní řádky beze změny, nový film ve stylu seedu
+    assert.ok(text.includes('        { "title": "One", "year": 2001 }'));
+    assert.ok(text.includes('        { "title": "Three", "year": 2003, "group": "Together" }'));
+    assert.ok(text.includes('      "categories": ["action-adventure", "western"],'));
+});
+
+test("add-pack: podruhé nic nezmění", () => {
+    const once = applyPack(SEED, PACK).text;
+    const twice = applyPack(once, PACK);
+    assert.equal(twice.text, once);
+    assert.deepEqual(twice.added, []);
+    assert.deepEqual(twice.updated, []);
+});
+
+test("add-pack: zachová konce řádků Windows (CRLF)", () => {
+    const { text } = applyPack(SEED.replace(/\n/g, "\r\n"), PACK);
+    assert.ok(!/[^\r]\n/.test(text));
+    JSON.parse(text);
+});
+
+test("balíček V4.3.2: platný, kolekce mají kategorii western a filmy s rokem", () => {
+    const pack = JSON.parse(readFileSync(new URL("../supabase/packs/v4.3.2-westerns.json", import.meta.url), "utf8"));
+    for (const universe of pack.universes) {
+        assert.ok(universe.categories.includes("western"), universe.slug);
+        assert.ok(universe.films.length >= 3, universe.slug);
+        for (const film of universe.films) assert.ok(film.title && Number.isInteger(film.year), `${universe.slug}: ${film.title}`);
+        const keys = universe.films.map((f) => `${f.title}|${f.year}`);
+        assert.equal(new Set(keys).size, keys.length, `${universe.slug}: film dvakrát`);
+    }
+});
+
+test("nextGoal: 2 000, pak po 500", async () => {
+    const { nextGoal } = await import("../web/js/admin.js");
+    assert.equal(nextGoal(1264), 2000);
+    assert.equal(nextGoal(2000), 2500);
+    assert.equal(nextGoal(2499), 2500);
+    assert.equal(nextGoal(2500), 3000);
+});

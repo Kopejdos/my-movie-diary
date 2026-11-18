@@ -1,0 +1,191 @@
+{
+    "_comment": "Balíček kolekcí V4.3.2 – westerny. Přidá se do seedu příkazem ./scripts/add-pack.sh supabase/packs/v4.3.2-westerns.json (nové kolekce na konec seedu, existujícím jen doplní kategorie), pak se importuje. Formát kolekcí je stejný jako v supabase/seed/universes.json.",
+    "update": {
+        "winnetou": {
+            "addCategories": ["western"],
+            "description": "Karl May's Apache chief and Old Shatterhand – the German westerns of the 1960s."
+        }
+    },
+    "universes": [
+        {
+            "slug": "bud-spencer-terence-hill",
+            "name": "Bud Spencer & Terence Hill",
+            "kind": "series",
+            "categories": ["comedy", "western"],
+            "color": "#c2410c",
+            "description": "Beans, slaps and friendship – every movie the legendary duo made together, plus their best solo adventures.",
+            "films": [
+                { "title": "God Forgives... I Don't!", "year": 1967, "group": "Together" },
+                { "title": "Ace High", "year": 1968, "group": "Together" },
+                { "title": "Boot Hill", "year": 1969, "group": "Together" },
+                { "title": "They Call Me Trinity", "year": 1970, "group": "Together", "franchise": "Trinity" },
+                { "title": "Trinity Is Still My Name", "year": 1971, "group": "Together", "franchise": "Trinity" },
+                { "title": "Blackie the Pirate", "year": 1971, "group": "Together" },
+                { "title": "All the Way, Boys!", "year": 1972, "group": "Together" },
+                { "title": "Watch Out, We're Mad!", "year": 1974, "group": "Together" },
+                { "title": "Two Missionaries", "year": 1974, "group": "Together" },
+                { "title": "Crime Busters", "year": 1977, "group": "Together" },
+                { "title": "Odds and Evens", "year": 1978, "group": "Together" },
+                { "title": "I'm for the Hippopotamus", "year": 1979, "group": "Together" },
+                { "title": "Who Finds a Friend Finds a Treasure", "year": 1981, "group": "Together" },
+                { "title": "Go for It", "year": 1983, "group": "Together" },
+                { "title": "Double Trouble", "year": 1984, "group": "Together" },
+                { "title": "Miami Supercops", "year": 1985, "group": "Together" },
+                { "title": "Troublemakers", "year": 1994, "group": "Together" },
+                { "title": "Flatfoot", "year": 1973, "group": "Bud Spencer", "franchise": "Flatfoot", "optional": true },
+                { "title": "Flatfoot in Hong Kong", "year": 1975, "group": "Bud Spencer", "franchise": "Flatfoot", "optional": true },
+                { "title": "Flatfoot in Africa", "year": 1978, "group": "Bud Spencer", "franchise": "Flatfoot", "optional": true },
+                { "title": "They Called Him Bulldozer", "year": 1978, "group": "Bud Spencer", "optional": true },
+                { "title": "The Sheriff and the Satellite Kid", "year": 1979, "group": "Bud Spencer", "optional": true },
+                { "title": "Flatfoot in Egypt", "year": 1980, "group": "Bud Spencer", "franchise": "Flatfoot", "optional": true },
+                { "title": "Buddy Goes West", "year": 1981, "group": "Bud Spencer", "optional": true },
+                { "title": "Banana Joe", "year": 1982, "group": "Bud Spencer", "optional": true },
+                { "title": "My Name Is Nobody", "year": 1973, "group": "Terence Hill", "optional": true },
+                { "title": "Mr. Billion", "year": 1977, "group": "Terence Hill", "optional": true },
+                { "title": "Super Fuzz", "year": 1980, "group": "Terence Hill", "optional": true },
+                { "title": "Don Camillo", "year": 1983, "group": "Terence Hill", "optional": true },
+                { "title": "Renegade", "year": 1987, "group": "Terence Hill", "optional": true },
+                { "title": "Lucky Luke", "year": 1991, "group": "Terence Hill", "optional": true }
+            ]
+        },
+        {
+            "slug": "sergio-leone",
+            "name": "Sergio Leone",
+            "kind": "series",
+            "categories": ["western"],
+            "color": "#b45309",
+            "description": "The maestro of the spaghetti western – the Dollars trilogy, the Once Upon a Time trilogy and where it all began.",
+            "films": [
+                { "title": "The Colossus of Rhodes", "year": 1961, "group": "Early work", "optional": true },
+                { "title": "A Fistful of Dollars", "year": 1964, "group": "Dollars Trilogy", "label": "Part 1" },
+                { "title": "For a Few Dollars More", "year": 1965, "group": "Dollars Trilogy", "label": "Part 2" },
+                { "title": "The Good, the Bad and the Ugly", "year": 1966, "group": "Dollars Trilogy", "label": "Part 3" },
+                { "title": "Once Upon a Time in the West", "year": 1968, "group": "Once Upon a Time Trilogy", "label": "Part 1" },
+                { "title": "Duck, You Sucker", "year": 1971, "group": "Once Upon a Time Trilogy", "label": "Part 2" },
+                { "title": "My Name Is Nobody", "year": 1973, "group": "Once Upon a Time Trilogy", "label": "Produced by Leone", "optional": true },
+                { "title": "Once Upon a Time in America", "year": 1984, "group": "Once Upon a Time Trilogy", "label": "Part 3" }
+            ]
+        },
+        {
+            "slug": "django",
+            "name": "Django",
+            "kind": "series",
+            "categories": ["western"],
+            "color": "#7f1d1d",
+            "description": "A coffin, a machine gun and a man named Django – the original, its official sequel and the films it inspired.",
+            "films": [
+                { "title": "Django", "year": 1966, "group": "Original" },
+                { "title": "Django, Prepare a Coffin", "year": 1968, "group": "Original", "label": "Unofficial", "optional": true },
+                { "title": "Django Strikes Again", "year": 1987, "group": "Original" },
+                { "title": "Django Unchained", "year": 2012, "group": "Homage", "optional": true }
+            ]
+        },
+        {
+            "slug": "magnificent-seven",
+            "name": "The Magnificent Seven",
+            "kind": "series",
+            "categories": ["western"],
+            "color": "#a16207",
+            "description": "Seven gunmen, one village – the classic, its sequels, the 2016 remake and the samurai film that started it all.",
+            "films": [
+                { "title": "Seven Samurai", "year": 1954, "group": "The original", "optional": true },
+                { "title": "The Magnificent Seven", "year": 1960, "group": "Original series" },
+                { "title": "Return of the Seven", "year": 1966, "group": "Original series" },
+                { "title": "Guns of the Magnificent Seven", "year": 1969, "group": "Original series" },
+                { "title": "The Magnificent Seven Ride!", "year": 1972, "group": "Original series" },
+                { "title": "The Magnificent Seven", "year": 2016, "group": "Remake" }
+            ]
+        },
+        {
+            "slug": "western-classics",
+            "name": "Western Classics",
+            "kind": "genre",
+            "categories": ["western"],
+            "color": "#d97706",
+            "description": "Stagecoaches, showdowns and wide open plains – the Hollywood westerns that defined the genre.",
+            "films": [
+                { "title": "Stagecoach", "year": 1939 },
+                { "title": "My Darling Clementine", "year": 1946 },
+                { "title": "Red River", "year": 1948 },
+                { "title": "Fort Apache", "year": 1948 },
+                { "title": "She Wore a Yellow Ribbon", "year": 1949 },
+                { "title": "High Noon", "year": 1952 },
+                { "title": "Shane", "year": 1953 },
+                { "title": "Johnny Guitar", "year": 1954 },
+                { "title": "The Searchers", "year": 1956 },
+                { "title": "3:10 to Yuma", "year": 1957 },
+                { "title": "Rio Bravo", "year": 1959 },
+                { "title": "The Magnificent Seven", "year": 1960 },
+                { "title": "The Man Who Shot Liberty Valance", "year": 1962 },
+                { "title": "How the West Was Won", "year": 1962 },
+                { "title": "The Wild Bunch", "year": 1969 },
+                { "title": "Butch Cassidy and the Sundance Kid", "year": 1969 },
+                { "title": "True Grit", "year": 1969 },
+                { "title": "Little Big Man", "year": 1970 },
+                { "title": "McCabe & Mrs. Miller", "year": 1971 },
+                { "title": "The Outlaw Josey Wales", "year": 1976 },
+                { "title": "The Shootist", "year": 1976 }
+            ]
+        },
+        {
+            "slug": "western-spaghetti",
+            "name": "Spaghetti Western",
+            "kind": "genre",
+            "categories": ["western"],
+            "color": "#9a3412",
+            "description": "Italian westerns – dusty close-ups, Morricone scores and antiheroes with fast guns.",
+            "films": [
+                { "title": "A Fistful of Dollars", "year": 1964 },
+                { "title": "For a Few Dollars More", "year": 1965 },
+                { "title": "Django", "year": 1966 },
+                { "title": "Navajo Joe", "year": 1966 },
+                { "title": "The Big Gundown", "year": 1966 },
+                { "title": "The Good, the Bad and the Ugly", "year": 1966 },
+                { "title": "A Bullet for the General", "year": 1966 },
+                { "title": "Face to Face", "year": 1967 },
+                { "title": "Death Rides a Horse", "year": 1967 },
+                { "title": "Day of Anger", "year": 1967 },
+                { "title": "The Great Silence", "year": 1968 },
+                { "title": "Once Upon a Time in the West", "year": 1968 },
+                { "title": "The Mercenary", "year": 1968 },
+                { "title": "Sabata", "year": 1969 },
+                { "title": "Compañeros", "year": 1970 },
+                { "title": "They Call Me Trinity", "year": 1970 },
+                { "title": "Duck, You Sucker", "year": 1971 },
+                { "title": "My Name Is Nobody", "year": 1973 },
+                { "title": "Keoma", "year": 1976 }
+            ]
+        },
+        {
+            "slug": "western-modern",
+            "name": "Modern Westerns",
+            "kind": "genre",
+            "categories": ["western"],
+            "color": "#78716c",
+            "description": "The frontier revisited – darker, stranger westerns from Unforgiven to The Power of the Dog.",
+            "films": [
+                { "title": "Dances with Wolves", "year": 1990 },
+                { "title": "Unforgiven", "year": 1992 },
+                { "title": "Tombstone", "year": 1993 },
+                { "title": "Dead Man", "year": 1995 },
+                { "title": "Open Range", "year": 2003 },
+                { "title": "The Proposition", "year": 2005 },
+                { "title": "3:10 to Yuma", "year": 2007 },
+                { "title": "The Assassination of Jesse James by the Coward Robert Ford", "year": 2007 },
+                { "title": "No Country for Old Men", "year": 2007 },
+                { "title": "True Grit", "year": 2010 },
+                { "title": "Django Unchained", "year": 2012 },
+                { "title": "The Homesman", "year": 2014 },
+                { "title": "Bone Tomahawk", "year": 2015 },
+                { "title": "The Revenant", "year": 2015 },
+                { "title": "The Hateful Eight", "year": 2015 },
+                { "title": "Hell or High Water", "year": 2016 },
+                { "title": "Hostiles", "year": 2017 },
+                { "title": "The Sisters Brothers", "year": 2018 },
+                { "title": "The Ballad of Buster Scruggs", "year": 2018 },
+                { "title": "The Power of the Dog", "year": 2021 },
+                { "title": "The Harder They Fall", "year": 2021 }
+            ]
+        }
+    ]
+}

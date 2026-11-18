@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v27";       // V4.3.1: editor kolekce s jedním Save, požadavky s atributy; od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v28";       // V4.3.2: stavitel kolekcí, westerny; od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline
@@ -89,6 +89,7 @@ const SHELL = [
     "js/views/collapsible.js",
     "js/views/admin.js",
     "js/views/admin-universe.js",
+    "js/views/admin-builder.js",
     "js/views/not-found.js",
     "icons/icon-192.png",
     "icons/icon-512.png",

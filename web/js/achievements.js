@@ -41,10 +41,18 @@ export const PATHFINDER_TIERS = [1, 3, 5];
 /** Ikony kategorií (neznámá kategorie dostane hvězdu). */
 export const CATEGORY_ICONS = {
     superhero: "🦸",
-    "scifi-fantasy": "🚀",
+    "scifi-fantasy": "🚀",      // do V3.1.2
+    scifi: "🚀",
+    fantasy: "🐉",
     animation: "🎨",
     "action-adventure": "💥",
     horror: "🔪",
+    comedy: "😂",
+    "crime-thriller": "🕵️",
+    family: "🧸",
+    war: "🎖️",
+    drama: "🎭",
+    western: "🤠",              // V4.3.2
 };
 
 export function tierLabel(index, count) {

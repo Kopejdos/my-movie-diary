@@ -52,6 +52,31 @@ export async function createCollectionFromSeries(tmdbCollectionId, name, tmdbIds
     return result;
 }
 
+// ---------------------------------------------------------------------
+// Stavitel kolekcí (V4.3.2) – kandidáti z osoby, dvou osob, studia nebo klíčového slova TMDB
+// ---------------------------------------------------------------------
+
+export const searchPeople = (query) => callAdmin("people-search", { query });
+/** Filmografie osoby (nebo dvou osob – průnik pozná web z rolí a / b). */
+export const fetchPersonFilms = (personId, secondPersonId = null) =>
+    callAdmin("person-films", { person_id: personId, second_person_id: secondPersonId });
+export const searchCompanies = (query) => callAdmin("company-search", { query });
+export const searchKeywords = (query) => callAdmin("keyword-search", { query });
+/** Filmy studia / klíčového slova: { company_id | keyword_id, sort, pages } → { total, films }. */
+export const discoverFilms = (options) => callAdmin("discover-films", options);
+
+/** Další cíl katalogu (V4.3.2): 2 000 filmů, potom po 500 (2 500, 3 000…). */
+export function nextGoal(count) {
+    return count < 2000 ? 2000 : (Math.floor(count / 500) + 1) * 500;
+}
+
+/** Počet filmů v katalogu (tabulka films) – ukazatel cíle v admin panelu (V4.3.2). */
+export async function countCatalogFilms() {
+    const { count, error } = await supabase.from("films").select("tmdb_id", { count: "exact", head: true });
+    if (error) throw new Error(error.message);
+    return count ?? 0;
+}
+
 /**
  * Nová kolekce z editoru (V4.3.1) – schválení požadavku na kolekci (série TMDB i vlastní):
  * { name, description?, tmdb_collection_id?, items: [{ tmdb_id, group_label, franchise, label,

@@ -6,7 +6,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V4.3.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V4.3.2** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
@@ -32,6 +32,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Sign in with email or nickname & password, or with Google; password reset and bot protection (Cloudflare Turnstile)
 - Settings ⚙ – System / Light / Dark mode, Modern or Paper classic style, collection colors or one fixed color, compact density and reduced animations; your defaults and account in one place
 - Admin panel: collections, movies (search TMDB right from the app), users and requests – an editor that saves every change of a collection with one Save, a new collection from a TMDB series or a request in one click; changes are written back into the seed automatically; new parts of TMDB series are spotted for you
+- Collection builder for admins: a person's filmography, two people together (Bud Spencer & Terence Hill), a studio or a TMDB keyword → tick the movies → a new collection; a progress bar towards the next catalog goal
 - Five languages – English, Čeština, Deutsch, Español, Українська (follows your browser, or pick one in Settings), including translated movie titles from TMDB and translated collections
 - Phone-friendly: a compact layout with a bottom bar
 - Installable on a phone or computer (PWA), opens even offline
@@ -54,8 +55,8 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 my-movie-diary/
 ├── .github/workflows/   GitHub Actions (Pages deployment, keep-alive)
 ├── docs/                project documentation
-├── scripts/             helper scripts (movie import, seed sync, title translations)
-├── supabase/            database migrations and Edge Functions
+├── scripts/             helper scripts (movie import, seed sync, title translations, collection packs)
+├── supabase/            database migrations, Edge Functions, the seed and collection packs (`supabase/packs/`)
 ├── tests/               automated tests of the app logic (`node --test`)
 └── web/                 the website itself (deployed to GitHub Pages)
 ```

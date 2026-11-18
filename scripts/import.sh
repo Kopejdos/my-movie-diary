@@ -38,8 +38,11 @@ else
     targets=("$@")
 fi
 
-read -r -s -p "Admin key: " KEY
-echo
+KEY="${MMD_KEY:-}"           # add-pack.sh ho předá, ať se nezadává znovu (V4.3.2)
+if [ -z "$KEY" ]; then
+    read -r -s -p "Admin key: " KEY
+    echo
+fi
 mkdir -p "$REPORTS"
 
 # Nejdřív propsat do seedu změny z aplikace (požadavky, admin panel), ať je seed úplný

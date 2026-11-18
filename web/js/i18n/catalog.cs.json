@@ -10,125 +10,450 @@
         "crime-thriller": "Krimi a thriller",
         "family": "Rodinné",
         "war": "Válečné",
-        "drama": "Drama"
+        "drama": "Drama",
+        "western": "Western"
     },
     "collections": {
-        "mcu": { "description": "Sága Infinity a Sága multivesmíru – všechny filmy MCU." },
-        "x-men": { "description": "Sága X-Menů od 20th Century Fox včetně Wolverina a Deadpoola." },
-        "spider-man": { "description": "Každý Spider-Man na velkém plátně – Raimi, Webb, MCU i Paralelní světy." },
-        "dceu": { "description": "Od Muže z oceli po Aquamana a ztracené království." },
-        "dcu": { "description": "Nový DC Universe Jamese Gunna a Petera Safrana – Kapitola první: Bohové a monstra." },
-        "batman": { "description": "Všechny Batmanovy ságy na plátně – Burton a Schumacher, Nolanova trilogie Temný rytíř a The Batman Matta Reevese; Joker a animované filmy navíc." },
-        "star-wars": { "description": "Sága Skywalkerů a samostatné filmy Star Wars – televizní filmy navíc." },
-        "wizarding-world": { "name": "Kouzelnický svět", "description": "Harry Potter a Fantastická zvířata." },
-        "middle-earth": { "name": "Středozem", "description": "Pán prstenů a Hobit – plus klasické animované filmy navíc." },
-        "jurassic-park": { "description": "Jurský park a Jurský svět." },
-        "fast-and-furious": { "name": "Rychle a zběsile", "description": "Rodina. Celá sága Rychle a zběsile." },
-        "pirates-of-the-caribbean": { "name": "Piráti z Karibiku", "description": "Dobrodružství kapitána Jacka Sparrowa." },
-        "alien": { "name": "Vetřelec", "description": "Ve vesmíru tě nikdo neuslyší křičet – sága Vetřelec, prequely a crossovery." },
-        "studio-ghibli": { "description": "Celovečerní filmy Studia Ghibli." },
-        "asterix-and-obelix": { "name": "Asterix a Obelix", "description": "Nezdolní Galové – animované i hrané filmy." },
-        "maze-runner": { "name": "Labyrint", "description": "Utíkej. Přežij. Uteč. Trilogie Labyrint." },
-        "mad-max": { "description": "Jaký to den! Jaký krásný den! Sága pustiny Maxe Rockatanskyho." },
-        "avatar": { "description": "Cesta Jamese Camerona na Pandoru." },
-        "james-bond": { "description": "Všech 25 oficiálních filmů o agentovi 007 od Dr. No po Není čas zemřít – plus dva neoficiální navíc." },
-        "mission-impossible": { "description": "Ethan Hunt a IMF – osm nemožných misí." },
-        "john-wick": { "description": "Válka Baby Jagy s Nejvyšší radou – plus spin-off Ballerina." },
-        "indiana-jones": { "description": "Bič, klobouk a dávné relikvie – všech pět dobrodružství." },
-        "the-matrix": { "name": "Matrix", "description": "Červená, nebo modrá pilulka? Sága Matrix." },
-        "terminator": { "description": "„Vrátím se.“ – všechny filmy Terminátor." },
-        "robocop": { "description": "Napůl člověk, napůl stroj, policista celý – nejlepší strážce Detroitu od roku 1987 po remake z roku 2014." },
-        "rocky-creed": { "name": "Rocky a Creed", "description": "Od schodů ve Filadelfii po Adonise Creeda – celý zápas." },
-        "back-to-the-future": { "name": "Návrat do budoucnosti", "description": "Hrome! Martyho a Docovy cesty časem." },
-        "die-hard": { "name": "Smrtonosná past", "description": "Jupí jej – John McClane na nesprávném místě v nesprávnou dobu." },
-        "hunger-games": { "name": "Hunger Games", "description": "Ať vám štěstí přeje – příběh Katniss a prequely z Panemu." },
-        "twilight": { "name": "Twilight sága", "description": "Bella, Edward a Jacob – všech pět filmů ságy Stmívání." },
-        "planet-of-the-apes": { "name": "Planeta opic", "description": "Původní série, remake Tima Burtona a sága o Caesarovi." },
-        "transformers": { "description": "Autoboti, vpřed – filmy Michaela Baye, Bumblebee, Probuzení monster a animované filmy." },
-        "star-trek": { "description": "Odvážně tam, kam se nikdo nevydal – posádky Původní série a Nové generace a časová linie Kelvin." },
-        "bourne": { "description": "Jason Bourne si vzpomíná – špionážní trilogie, její pokračování a spin-off Bourneův odkaz." },
-        "men-in-black": { "name": "Muži v černém", "description": "Chrání Zemi před spodinou vesmíru." },
-        "ghostbusters": { "name": "Krotitelé duchů", "description": "Komu zavoláš? – původní filmy, reboot i nová generace." },
-        "predator": { "description": "Dokonalý lovec – všechny filmy Predátor, crossovery Vetřelec vs. Predátor navíc." },
-        "rambo": { "description": "Pět válek Johna Ramba, od První krve po Poslední krev." },
-        "the-godfather": { "name": "Kmotr", "description": "Nabídka, která se neodmítá – trilogie o Corleonech." },
-        "knives-out": { "name": "Na nože", "description": "Případy Benoita Blanca." },
-        "paddington": { "description": "Marmeláda, dobré vychování a nejlaskavější medvídek v Londýně." },
-        "kingsman": { "description": "Způsoby dělají člověka – tajná služba, její pokračování a prequel z první světové války." },
-        "jumanji": { "description": "Hra, která tě vtáhne – od Robina Williamse po pokračování ve videohře." },
-        "karate-kid": { "description": "Navoskovat, vyleštit – Daniel LaRusso, Dre Parker a Karate Kid: Legendy." },
-        "disney": { "name": "Animované filmy Disney", "description": "Klasika Walt Disney Animation Studios – od Sněhurky po dnešek. Hrané remaky jsou volitelné." },
-        "pixar": { "description": "Do nekonečna a ještě dál – všechny celovečerní filmy Pixaru." },
-        "dreamworks": { "description": "Shrek, Kung Fu Panda, Jak vycvičit draka a všechny další filmy DreamWorks Animation." },
-        "marvel": { "description": "Všechny filmy podle komiksů Marvel – MCU, X-Meni od Foxu, Spider-Man od Sony a všechno, co bylo předtím." },
-        "dc": { "description": "Všechny filmy DC na velkém plátně – klasický Superman, každý Batman, DCEU, nový DCU a další." },
-        "warner-bros": { "description": "Velké série Warner Bros. – Harry Potter, Středozem, DC, Matrix, MonsterVerse, Duna – plus milníky od Casablanky po Hříšníky." },
-        "lucasfilm": { "description": "Studio George Lucase – Star Wars, Indiana Jones, Willow a další." },
-        "jerry-bruckheimer-films": { "description": "Producent filmů Armageddon, Top Gun, Mizerové, Skála a Piráti z Karibiku." },
-        "illumination": { "description": "Mimoni, Já, padouch, Zpívej, Tajný život mazlíčků a Super Mario." },
-        "sony-pictures-animation": { "description": "Paralelní světy, Hotel Transylvánie, K-popové lovkyně démonů a všechny další filmy Sony Pictures Animation." },
-        "blue-sky-studios": { "description": "Doba ledová, Rio a další filmy studia Blue Sky (2002–2019)." },
-        "laika": { "description": "Ručně dělaná loutková animace – Koralína, Kubo a kouzelný meč a další." },
-        "aardman": { "description": "Wallace a Gromit, Slepičí úlet, Ovečka Shaun a další plastelínové filmy studia Aardman." },
-        "conjuring": { "name": "Svět V zajetí démonů", "description": "Případy Eda a Lorraine Warrenových – V zajetí démonů, Annabelle, Sestra a další." },
-        "saw": { "description": "Chci si s tebou zahrát hru." },
-        "scream": { "name": "Vřískot", "description": "Jaký je tvůj oblíbený horor?" },
-        "halloween": { "description": "Noc, kdy se vrátil domů – Michael Myers ve všech časových liniích." },
-        "final-destination": { "name": "Nezvratný osud", "description": "Smrt se ošálit nedá." },
-        "insidious": { "description": "Temná říše čeká – rodina Lambertových a Elise Rainierová." },
-        "nightmare-on-elm-street": { "name": "Noční můra v Elm Street", "description": "Raz, dva, Freddy jde si pro tebe." },
-        "friday-the-13th": { "name": "Pátek třináctého", "description": "Tábor Crystal Lake a Jason Voorhees." },
-        "texas-chainsaw-massacre": { "name": "Texaský masakr motorovou pilou", "description": "Leatherface a rodina Sawyerových – původní texaská noční můra a všechno, co přišlo potom." },
-        "wrong-turn": { "name": "Pach krve", "description": "Nikdy neopouštěj hlavní silnici – horor z lesů v kopcích Západní Virginie." },
-        "black-christmas": { "name": "Černé Vánoce", "description": "Dům sesterstva, telefonáty a původní slasher – plus oba remaky." },
-        "terrifier": { "description": "Klaun Art – tichý, usměvavý a nesmírně krvavý." },
-        "happy-death-day": { "name": "Šťastný den smrti", "description": "Pořád tytéž narozeniny, pořád tentýž maskovaný vrah – znovu a znovu." },
-        "x-trilogy": { "name": "Trilogie X", "description": "Trilogie Ti Westa – Maxine, Pearl a farma v Texasu." },
-        "horror-slasher": { "description": "Maskovaní vrazi, poslední přeživší a počty mrtvých – nejdůležitější slashery." },
-        "horror-supernatural": { "name": "Nadpřirozeno a paranormální jevy", "description": "Kletby, entity a věci, které by neměly existovat." },
-        "horror-haunted-house": { "name": "Strašidelný dům", "description": "Vrzající podlahy, studená místa a domy, které tě nechtějí pustit." },
-        "horror-demonic": { "name": "Démoni a exorcismus", "description": "Posednutí, vymítání a sám ďábel." },
-        "horror-psychological": { "name": "Psychologický horor", "description": "Když je nejděsivějším místem tvoje vlastní mysl." },
-        "horror-found-footage": { "description": "Roztřesené kamery, noční vidění a nahrávky, které se nikdy neměly najít." },
-        "horror-zombie": { "description": "Od Romerových chodících mrtvol po nakažené sprintery." },
-        "horror-body": { "name": "Body horor", "description": "Maso, které mutuje, taje a mění se – tělo jako monstrum." },
-        "horror-creature": { "name": "Monstra", "description": "Nestvůry z hlubin, z pouště i ze tmy." },
-        "horror-vampire": { "name": "Upíři", "description": "Hrabata, noční chodci a bytosti, které pijí krev." },
-        "horror-werewolf": { "name": "Vlkodlaci", "description": "Úplněk, stříbrné kulky a bestie uvnitř." },
-        "horror-scifi": { "name": "Sci-fi horor", "description": "Ve vesmíru – i v laboratoři – tě nikdo neuslyší křičet." },
-        "horror-folk": { "name": "Folk horor", "description": "Odlehlé vesnice, staré rituály a krajina, která se obrací proti tobě." },
-        "horror-comedy": { "name": "Hororová komedie", "description": "Strach a smích napůl." },
-        "horror-gore": { "name": "Gore a splatter", "description": "Kýble krve – praktické efekty dotažené na hranu." },
-        "horror-extreme": { "name": "Extrém a mučení", "description": "Nejbrutálnější a nejznepokojivější kouty žánru. Ne pro slabé povahy." },
-        "horror-cosmic": { "name": "Kosmický horor", "description": "Lovecraftovská hrůza – síly příliš obrovské a prastaré, než aby je člověk pochopil." },
-        "horror-gothic": { "name": "Gotický horor", "description": "Rozpadající se hrady, svíčky a temná romantika." },
-        "horror-giallo": { "description": "Italské thrillery – černé rukavice, břitvy a křiklavé barvy." },
-        "horror-eco": { "name": "Eko-horor", "description": "Příroda vrací úder – zvířata, rostliny i planeta sama." },
-        "horror-elevated": { "name": "Artový horor", "description": "Pomalý artový horor o žalu, traumatu a všem mezi tím." },
-        "horror-j-horror": { "name": "J-horor", "description": "Japonský horor – mstiví duchové, prokleté kazety a tichá hrůza." },
-        "scifi-time-travel": { "name": "Cestování časem", "description": "Paradoxy, smyčky a druhé šance – nejlepší filmy o ohýbání času." },
-        "scifi-space": { "name": "Vesmírná dobrodružství", "description": "Rakety, hvězdné lodě a osamělí astronauti – od Vesmírné odysey po Projekt Hail Mary." },
-        "scifi-cyberpunk": { "name": "Kyberpunk a dystopie", "description": "Neonová města, kyborgové a budoucnost, která se pokazila." },
-        "crime-heist": { "name": "Filmy o loupežích", "description": "Propracované plány, dokonalé party a jedna akce, která se zvrtne." },
-        "action-martial-arts": { "name": "Bojová umění", "description": "Legendy kung-fu, eposy wuxia a nejlepší choreografie soubojů, jaké kdy vznikly." },
-        "action-80s": { "name": "Akční 80. léta", "description": "Hlášky, výbuchy a hrdinové, kterým nikdy nedojdou náboje." },
-        "war-classics": { "name": "Válečné filmy", "description": "Od zákopů první světové války po Vietnam a dál – válka na velkém plátně." },
-        "holiday-christmas": { "name": "Vánoční filmy", "description": "Sníh, dárky a rodinný chaos – od Života je krásný po Tři oříšky pro Popelku." },
-        "path-mcu-essentials": { "name": "MCU: to hlavní", "description": "12 filmů, které potřebuješ před Endgame – v pořadí příběhu, po stopách Kamenů nekonečna." },
-        "path-star-wars-first-watch": { "name": "Star Wars poprvé", "description": "Nejlepší pořadí pro první zhlédnutí: prequely jako vzpomínka po velkém odhalení, potom sequely." },
-        "path-superhero-hall-of-fame": { "name": "Síň slávy superhrdinů", "description": "Milníky žánru hrdinu po hrdinovi – Spider-Man, Avengers, Batman, X-Meni a nová éra DC." },
-        "path-fantasy-starter": { "name": "Úvod do fantasy", "description": "Od prvních krůčků do světa magie po epické bitvy – pozvolný vstup do fantasy." },
-        "path-animation-essentials": { "name": "Animace: to hlavní", "description": "Od rodinných oblíbenců po mistrovská díla – Pixar, DreamWorks, Disneyho klasika, Ghibli a další." },
-        "path-horror-101": { "name": "Horor pro začátečníky", "description": "Od zábavných vstupních lekačů po filmy, které lidi straší dodnes – 16 kroků a klasika po cestě." },
-        "lethal-weapon": { "name": "Smrtonosná zbraň", "description": "Policejní dvojka Mel Gibson a Danny Glover – čtyři filmy od roku 1987, všechny úspěšné v kinech." },
-        "winnetou": { "description": "Vinnetou – indiánský hrdina románů Karla Maye a jeho filmová dobrodružství na Divokém západě." },
-        "the-hills-have-eyes-original": { "name": "Hory mají oči", "description": "Dva příběhy o kanibalské řeži, oba napsal a režíroval Wes Craven – o klanu mutantů, který číhá v poušti." },
-        "i-spit-on-your-grave": { "name": "Plivu na váš hrob", "description": "Brutální příběhy pomsty – původní film, remake z roku 2010 a jeho pokračování." },
-        "the-purge": { "name": "Očista", "description": "Dystopická Amerika, kde je jednu noc v roce legální jakýkoli zločin. Horor, akce a společenská kritika v jednom." },
-        "ring": { "name": "Kruh", "description": "Hororová série podle románů Kódžiho Suzukiho o prokleté videokazetě, která za sedm dní zabije každého, kdo ji zhlédne." },
-        "the-grudge": { "name": "Nenávist", "description": "Americká hororová série podle japonské Ju-on Takašiho Šimizua – o kletbě zrozené z prudkého hněvu zavražděné ženy." },
-        "resident-evil": { "description": "Volně podle videoher Capcom – hrdinka Alice proti Umbrella Corporation a zombie apokalypse." },
-        "silent-hill": { "description": "Hororová série podle stejnojmenné survival hororové videohry." }
+        "mcu": {
+            "description": "Sága Infinity a Sága multivesmíru – všechny filmy MCU."
+        },
+        "x-men": {
+            "description": "Sága X-Menů od 20th Century Fox včetně Wolverina a Deadpoola."
+        },
+        "spider-man": {
+            "description": "Každý Spider-Man na velkém plátně – Raimi, Webb, MCU i Paralelní světy."
+        },
+        "dceu": {
+            "description": "Od Muže z oceli po Aquamana a ztracené království."
+        },
+        "dcu": {
+            "description": "Nový DC Universe Jamese Gunna a Petera Safrana – Kapitola první: Bohové a monstra."
+        },
+        "batman": {
+            "description": "Všechny Batmanovy ságy na plátně – Burton a Schumacher, Nolanova trilogie Temný rytíř a The Batman Matta Reevese; Joker a animované filmy navíc."
+        },
+        "star-wars": {
+            "description": "Sága Skywalkerů a samostatné filmy Star Wars – televizní filmy navíc."
+        },
+        "wizarding-world": {
+            "name": "Kouzelnický svět",
+            "description": "Harry Potter a Fantastická zvířata."
+        },
+        "middle-earth": {
+            "name": "Středozem",
+            "description": "Pán prstenů a Hobit – plus klasické animované filmy navíc."
+        },
+        "jurassic-park": {
+            "description": "Jurský park a Jurský svět."
+        },
+        "fast-and-furious": {
+            "name": "Rychle a zběsile",
+            "description": "Rodina. Celá sága Rychle a zběsile."
+        },
+        "pirates-of-the-caribbean": {
+            "name": "Piráti z Karibiku",
+            "description": "Dobrodružství kapitána Jacka Sparrowa."
+        },
+        "alien": {
+            "name": "Vetřelec",
+            "description": "Ve vesmíru tě nikdo neuslyší křičet – sága Vetřelec, prequely a crossovery."
+        },
+        "studio-ghibli": {
+            "description": "Celovečerní filmy Studia Ghibli."
+        },
+        "asterix-and-obelix": {
+            "name": "Asterix a Obelix",
+            "description": "Nezdolní Galové – animované i hrané filmy."
+        },
+        "maze-runner": {
+            "name": "Labyrint",
+            "description": "Utíkej. Přežij. Uteč. Trilogie Labyrint."
+        },
+        "mad-max": {
+            "description": "Jaký to den! Jaký krásný den! Sága pustiny Maxe Rockatanskyho."
+        },
+        "avatar": {
+            "description": "Cesta Jamese Camerona na Pandoru."
+        },
+        "james-bond": {
+            "description": "Všech 25 oficiálních filmů o agentovi 007 od Dr. No po Není čas zemřít – plus dva neoficiální navíc."
+        },
+        "mission-impossible": {
+            "description": "Ethan Hunt a IMF – osm nemožných misí."
+        },
+        "john-wick": {
+            "description": "Válka Baby Jagy s Nejvyšší radou – plus spin-off Ballerina."
+        },
+        "indiana-jones": {
+            "description": "Bič, klobouk a dávné relikvie – všech pět dobrodružství."
+        },
+        "the-matrix": {
+            "name": "Matrix",
+            "description": "Červená, nebo modrá pilulka? Sága Matrix."
+        },
+        "terminator": {
+            "description": "„Vrátím se.“ – všechny filmy Terminátor."
+        },
+        "robocop": {
+            "description": "Napůl člověk, napůl stroj, policista celý – nejlepší strážce Detroitu od roku 1987 po remake z roku 2014."
+        },
+        "rocky-creed": {
+            "name": "Rocky a Creed",
+            "description": "Od schodů ve Filadelfii po Adonise Creeda – celý zápas."
+        },
+        "back-to-the-future": {
+            "name": "Návrat do budoucnosti",
+            "description": "Hrome! Martyho a Docovy cesty časem."
+        },
+        "die-hard": {
+            "name": "Smrtonosná past",
+            "description": "Jupí jej – John McClane na nesprávném místě v nesprávnou dobu."
+        },
+        "hunger-games": {
+            "name": "Hunger Games",
+            "description": "Ať vám štěstí přeje – příběh Katniss a prequely z Panemu."
+        },
+        "twilight": {
+            "name": "Twilight sága",
+            "description": "Bella, Edward a Jacob – všech pět filmů ságy Stmívání."
+        },
+        "planet-of-the-apes": {
+            "name": "Planeta opic",
+            "description": "Původní série, remake Tima Burtona a sága o Caesarovi."
+        },
+        "transformers": {
+            "description": "Autoboti, vpřed – filmy Michaela Baye, Bumblebee, Probuzení monster a animované filmy."
+        },
+        "star-trek": {
+            "description": "Odvážně tam, kam se nikdo nevydal – posádky Původní série a Nové generace a časová linie Kelvin."
+        },
+        "bourne": {
+            "description": "Jason Bourne si vzpomíná – špionážní trilogie, její pokračování a spin-off Bourneův odkaz."
+        },
+        "men-in-black": {
+            "name": "Muži v černém",
+            "description": "Chrání Zemi před spodinou vesmíru."
+        },
+        "ghostbusters": {
+            "name": "Krotitelé duchů",
+            "description": "Komu zavoláš? – původní filmy, reboot i nová generace."
+        },
+        "predator": {
+            "description": "Dokonalý lovec – všechny filmy Predátor, crossovery Vetřelec vs. Predátor navíc."
+        },
+        "rambo": {
+            "description": "Pět válek Johna Ramba, od První krve po Poslední krev."
+        },
+        "the-godfather": {
+            "name": "Kmotr",
+            "description": "Nabídka, která se neodmítá – trilogie o Corleonech."
+        },
+        "knives-out": {
+            "name": "Na nože",
+            "description": "Případy Benoita Blanca."
+        },
+        "paddington": {
+            "description": "Marmeláda, dobré vychování a nejlaskavější medvídek v Londýně."
+        },
+        "kingsman": {
+            "description": "Způsoby dělají člověka – tajná služba, její pokračování a prequel z první světové války."
+        },
+        "jumanji": {
+            "description": "Hra, která tě vtáhne – od Robina Williamse po pokračování ve videohře."
+        },
+        "karate-kid": {
+            "description": "Navoskovat, vyleštit – Daniel LaRusso, Dre Parker a Karate Kid: Legendy."
+        },
+        "disney": {
+            "name": "Animované filmy Disney",
+            "description": "Klasika Walt Disney Animation Studios – od Sněhurky po dnešek. Hrané remaky jsou volitelné."
+        },
+        "pixar": {
+            "description": "Do nekonečna a ještě dál – všechny celovečerní filmy Pixaru."
+        },
+        "dreamworks": {
+            "description": "Shrek, Kung Fu Panda, Jak vycvičit draka a všechny další filmy DreamWorks Animation."
+        },
+        "marvel": {
+            "description": "Všechny filmy podle komiksů Marvel – MCU, X-Meni od Foxu, Spider-Man od Sony a všechno, co bylo předtím."
+        },
+        "dc": {
+            "description": "Všechny filmy DC na velkém plátně – klasický Superman, každý Batman, DCEU, nový DCU a další."
+        },
+        "warner-bros": {
+            "description": "Velké série Warner Bros. – Harry Potter, Středozem, DC, Matrix, MonsterVerse, Duna – plus milníky od Casablanky po Hříšníky."
+        },
+        "lucasfilm": {
+            "description": "Studio George Lucase – Star Wars, Indiana Jones, Willow a další."
+        },
+        "jerry-bruckheimer-films": {
+            "description": "Producent filmů Armageddon, Top Gun, Mizerové, Skála a Piráti z Karibiku."
+        },
+        "illumination": {
+            "description": "Mimoni, Já, padouch, Zpívej, Tajný život mazlíčků a Super Mario."
+        },
+        "sony-pictures-animation": {
+            "description": "Paralelní světy, Hotel Transylvánie, K-popové lovkyně démonů a všechny další filmy Sony Pictures Animation."
+        },
+        "blue-sky-studios": {
+            "description": "Doba ledová, Rio a další filmy studia Blue Sky (2002–2019)."
+        },
+        "laika": {
+            "description": "Ručně dělaná loutková animace – Koralína, Kubo a kouzelný meč a další."
+        },
+        "aardman": {
+            "description": "Wallace a Gromit, Slepičí úlet, Ovečka Shaun a další plastelínové filmy studia Aardman."
+        },
+        "conjuring": {
+            "name": "Svět V zajetí démonů",
+            "description": "Případy Eda a Lorraine Warrenových – V zajetí démonů, Annabelle, Sestra a další."
+        },
+        "saw": {
+            "description": "Chci si s tebou zahrát hru."
+        },
+        "scream": {
+            "name": "Vřískot",
+            "description": "Jaký je tvůj oblíbený horor?"
+        },
+        "halloween": {
+            "description": "Noc, kdy se vrátil domů – Michael Myers ve všech časových liniích."
+        },
+        "final-destination": {
+            "name": "Nezvratný osud",
+            "description": "Smrt se ošálit nedá."
+        },
+        "insidious": {
+            "description": "Temná říše čeká – rodina Lambertových a Elise Rainierová."
+        },
+        "nightmare-on-elm-street": {
+            "name": "Noční můra v Elm Street",
+            "description": "Raz, dva, Freddy jde si pro tebe."
+        },
+        "friday-the-13th": {
+            "name": "Pátek třináctého",
+            "description": "Tábor Crystal Lake a Jason Voorhees."
+        },
+        "texas-chainsaw-massacre": {
+            "name": "Texaský masakr motorovou pilou",
+            "description": "Leatherface a rodina Sawyerových – původní texaská noční můra a všechno, co přišlo potom."
+        },
+        "wrong-turn": {
+            "name": "Pach krve",
+            "description": "Nikdy neopouštěj hlavní silnici – horor z lesů v kopcích Západní Virginie."
+        },
+        "black-christmas": {
+            "name": "Černé Vánoce",
+            "description": "Dům sesterstva, telefonáty a původní slasher – plus oba remaky."
+        },
+        "terrifier": {
+            "description": "Klaun Art – tichý, usměvavý a nesmírně krvavý."
+        },
+        "happy-death-day": {
+            "name": "Šťastný den smrti",
+            "description": "Pořád tytéž narozeniny, pořád tentýž maskovaný vrah – znovu a znovu."
+        },
+        "x-trilogy": {
+            "name": "Trilogie X",
+            "description": "Trilogie Ti Westa – Maxine, Pearl a farma v Texasu."
+        },
+        "horror-slasher": {
+            "description": "Maskovaní vrazi, poslední přeživší a počty mrtvých – nejdůležitější slashery."
+        },
+        "horror-supernatural": {
+            "name": "Nadpřirozeno a paranormální jevy",
+            "description": "Kletby, entity a věci, které by neměly existovat."
+        },
+        "horror-haunted-house": {
+            "name": "Strašidelný dům",
+            "description": "Vrzající podlahy, studená místa a domy, které tě nechtějí pustit."
+        },
+        "horror-demonic": {
+            "name": "Démoni a exorcismus",
+            "description": "Posednutí, vymítání a sám ďábel."
+        },
+        "horror-psychological": {
+            "name": "Psychologický horor",
+            "description": "Když je nejděsivějším místem tvoje vlastní mysl."
+        },
+        "horror-found-footage": {
+            "description": "Roztřesené kamery, noční vidění a nahrávky, které se nikdy neměly najít."
+        },
+        "horror-zombie": {
+            "description": "Od Romerových chodících mrtvol po nakažené sprintery."
+        },
+        "horror-body": {
+            "name": "Body horor",
+            "description": "Maso, které mutuje, taje a mění se – tělo jako monstrum."
+        },
+        "horror-creature": {
+            "name": "Monstra",
+            "description": "Nestvůry z hlubin, z pouště i ze tmy."
+        },
+        "horror-vampire": {
+            "name": "Upíři",
+            "description": "Hrabata, noční chodci a bytosti, které pijí krev."
+        },
+        "horror-werewolf": {
+            "name": "Vlkodlaci",
+            "description": "Úplněk, stříbrné kulky a bestie uvnitř."
+        },
+        "horror-scifi": {
+            "name": "Sci-fi horor",
+            "description": "Ve vesmíru – i v laboratoři – tě nikdo neuslyší křičet."
+        },
+        "horror-folk": {
+            "name": "Folk horor",
+            "description": "Odlehlé vesnice, staré rituály a krajina, která se obrací proti tobě."
+        },
+        "horror-comedy": {
+            "name": "Hororová komedie",
+            "description": "Strach a smích napůl."
+        },
+        "horror-gore": {
+            "name": "Gore a splatter",
+            "description": "Kýble krve – praktické efekty dotažené na hranu."
+        },
+        "horror-extreme": {
+            "name": "Extrém a mučení",
+            "description": "Nejbrutálnější a nejznepokojivější kouty žánru. Ne pro slabé povahy."
+        },
+        "horror-cosmic": {
+            "name": "Kosmický horor",
+            "description": "Lovecraftovská hrůza – síly příliš obrovské a prastaré, než aby je člověk pochopil."
+        },
+        "horror-gothic": {
+            "name": "Gotický horor",
+            "description": "Rozpadající se hrady, svíčky a temná romantika."
+        },
+        "horror-giallo": {
+            "description": "Italské thrillery – černé rukavice, břitvy a křiklavé barvy."
+        },
+        "horror-eco": {
+            "name": "Eko-horor",
+            "description": "Příroda vrací úder – zvířata, rostliny i planeta sama."
+        },
+        "horror-elevated": {
+            "name": "Artový horor",
+            "description": "Pomalý artový horor o žalu, traumatu a všem mezi tím."
+        },
+        "horror-j-horror": {
+            "name": "J-horor",
+            "description": "Japonský horor – mstiví duchové, prokleté kazety a tichá hrůza."
+        },
+        "scifi-time-travel": {
+            "name": "Cestování časem",
+            "description": "Paradoxy, smyčky a druhé šance – nejlepší filmy o ohýbání času."
+        },
+        "scifi-space": {
+            "name": "Vesmírná dobrodružství",
+            "description": "Rakety, hvězdné lodě a osamělí astronauti – od Vesmírné odysey po Projekt Hail Mary."
+        },
+        "scifi-cyberpunk": {
+            "name": "Kyberpunk a dystopie",
+            "description": "Neonová města, kyborgové a budoucnost, která se pokazila."
+        },
+        "crime-heist": {
+            "name": "Filmy o loupežích",
+            "description": "Propracované plány, dokonalé party a jedna akce, která se zvrtne."
+        },
+        "action-martial-arts": {
+            "name": "Bojová umění",
+            "description": "Legendy kung-fu, eposy wuxia a nejlepší choreografie soubojů, jaké kdy vznikly."
+        },
+        "action-80s": {
+            "name": "Akční 80. léta",
+            "description": "Hlášky, výbuchy a hrdinové, kterým nikdy nedojdou náboje."
+        },
+        "war-classics": {
+            "name": "Válečné filmy",
+            "description": "Od zákopů první světové války po Vietnam a dál – válka na velkém plátně."
+        },
+        "holiday-christmas": {
+            "name": "Vánoční filmy",
+            "description": "Sníh, dárky a rodinný chaos – od Života je krásný po Tři oříšky pro Popelku."
+        },
+        "path-mcu-essentials": {
+            "name": "MCU: to hlavní",
+            "description": "12 filmů, které potřebuješ před Endgame – v pořadí příběhu, po stopách Kamenů nekonečna."
+        },
+        "path-star-wars-first-watch": {
+            "name": "Star Wars poprvé",
+            "description": "Nejlepší pořadí pro první zhlédnutí: prequely jako vzpomínka po velkém odhalení, potom sequely."
+        },
+        "path-superhero-hall-of-fame": {
+            "name": "Síň slávy superhrdinů",
+            "description": "Milníky žánru hrdinu po hrdinovi – Spider-Man, Avengers, Batman, X-Meni a nová éra DC."
+        },
+        "path-fantasy-starter": {
+            "name": "Úvod do fantasy",
+            "description": "Od prvních krůčků do světa magie po epické bitvy – pozvolný vstup do fantasy."
+        },
+        "path-animation-essentials": {
+            "name": "Animace: to hlavní",
+            "description": "Od rodinných oblíbenců po mistrovská díla – Pixar, DreamWorks, Disneyho klasika, Ghibli a další."
+        },
+        "path-horror-101": {
+            "name": "Horor pro začátečníky",
+            "description": "Od zábavných vstupních lekačů po filmy, které lidi straší dodnes – 16 kroků a klasika po cestě."
+        },
+        "lethal-weapon": {
+            "name": "Smrtonosná zbraň",
+            "description": "Policejní dvojka Mel Gibson a Danny Glover – čtyři filmy od roku 1987, všechny úspěšné v kinech."
+        },
+        "winnetou": {
+            "name": "Vinnetou",
+            "description": "Apačský náčelník Karla Maye a Old Shatterhand – německé westerny 60. let."
+        },
+        "the-hills-have-eyes-original": {
+            "name": "Hory mají oči",
+            "description": "Dva příběhy o kanibalské řeži, oba napsal a režíroval Wes Craven – o klanu mutantů, který číhá v poušti."
+        },
+        "i-spit-on-your-grave": {
+            "name": "Plivu na váš hrob",
+            "description": "Brutální příběhy pomsty – původní film, remake z roku 2010 a jeho pokračování."
+        },
+        "the-purge": {
+            "name": "Očista",
+            "description": "Dystopická Amerika, kde je jednu noc v roce legální jakýkoli zločin. Horor, akce a společenská kritika v jednom."
+        },
+        "ring": {
+            "name": "Kruh",
+            "description": "Hororová série podle románů Kódžiho Suzukiho o prokleté videokazetě, která za sedm dní zabije každého, kdo ji zhlédne."
+        },
+        "the-grudge": {
+            "name": "Nenávist",
+            "description": "Americká hororová série podle japonské Ju-on Takašiho Šimizua – o kletbě zrozené z prudkého hněvu zavražděné ženy."
+        },
+        "resident-evil": {
+            "description": "Volně podle videoher Capcom – hrdinka Alice proti Umbrella Corporation a zombie apokalypse."
+        },
+        "silent-hill": {
+            "description": "Hororová série podle stejnojmenné survival hororové videohry."
+        },
+        "bud-spencer-terence-hill": {
+            "description": "Fazole, facky a přátelství – všechny filmy legendární dvojice a k tomu jejich nejlepší sólovky."
+        },
+        "sergio-leone": {
+            "description": "Mistr spaghetti westernu – dolarová trilogie, trilogie Tenkrát… a kde to všechno začalo."
+        },
+        "django": {
+            "description": "Rakev, kulomet a muž jménem Django – původní film, oficiální pokračování a filmy, které inspiroval."
+        },
+        "magnificent-seven": {
+            "name": "Sedm statečných",
+            "description": "Sedm pistolníků, jedna vesnice – klasika, její pokračování, remake z roku 2016 a samurajský film, kterým to všechno začalo."
+        },
+        "western-classics": {
+            "name": "Klasické westerny",
+            "description": "Dostavníky, souboje a širé pláně – hollywoodské westerny, které žánr definovaly."
+        },
+        "western-spaghetti": {
+            "description": "Italské westerny – zaprášené detaily tváří, Morriconeho hudba a antihrdinové s rychlou rukou."
+        },
+        "western-modern": {
+            "name": "Moderní westerny",
+            "description": "Divoký západ znovu – temnější a podivnější westerny od Nesmiřitelných po Sílu psa."
+        }
     },
     "notes": {
         "Start in the 1940s: Steve Rogers' origin and the first Infinity Stone, the Tesseract.": "Začni ve 40. letech: počátky Steva Rogerse a první Kámen nekonečna, Tesserakt.",
@@ -338,6 +663,19 @@
         "The Avengers": "Avengers",
         "Sony's Spider-Man Universe": "Spider-Man od Sony",
         "Spider-Verse": "Paralelní světy",
-        "Burton & Schumacher": "Burton a Schumacher"
+        "Burton & Schumacher": "Burton a Schumacher",
+        "Together": "Spolu",
+        "Flatfoot": "Piedone",
+        "Early work": "Začátky",
+        "Dollars Trilogy": "Dolarová trilogie",
+        "Once Upon a Time Trilogy": "Trilogie Tenkrát…",
+        "Part 1": "1. díl",
+        "Part 2": "2. díl",
+        "Part 3": "3. díl",
+        "Produced by Leone": "Produkce Leone",
+        "Original": "Původní",
+        "Unofficial": "Neoficiální",
+        "Homage": "Pocta",
+        "The original": "Předloha"
     }
 }

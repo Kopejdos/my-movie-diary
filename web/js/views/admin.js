@@ -7,10 +7,10 @@ import { getProfile, getUser, isSignedIn } from "../auth.js";
 import {
     listUniversesForAdmin, createUniverse, deleteUniverse, swapUniverseOrder, slugify,
     listUsers, setUserAdmin, deleteUser, resetUsername,
-    listBlockedWords, addBlockedWord, removeBlockedWord,
+    listBlockedWords, addBlockedWord, removeBlockedWord, countCatalogFilms, nextGoal,
 } from "../admin.js";
 import { setAccent } from "../theme.js";
-import { TEXTS, format, movies, collections } from "../texts.js";
+import { TEXTS, format, movies, collections, LOCALE } from "../texts.js";
 import { h, mount, pill, formatDate, toast, loadingView, errorView } from "../dom.js";
 import { field } from "./login.js";
 import { fetchSearchData } from "../data.js";
@@ -38,6 +38,7 @@ export function adminHeader(active) {
         h("h1", {}, TEXTS.adminTitle),
         h("nav", { class: "tabs" },
             tab("#/admin", TEXTS.adminTabUniverses, "universes"),
+            tab("#/admin/builder", TEXTS.adminTabBuilder, "builder"),
             tab("#/admin/users", TEXTS.adminTabUsers, "users"),
             tab("#/admin/words", TEXTS.adminTabWords, "words"),
             tab("#/admin/requests", TEXTS.adminTabRequests, "requests"),
@@ -134,6 +135,7 @@ export async function adminUniversesView(container, context) {
 
     mount(container,
         adminHeader("universes"),
+        goalPanel(),                     // ukazatel cíle – počet filmů v katalogu (V4.3.2)
         seriesUpdatesPanel(),            // nové díly sérií (V3.5.2.3)
         newUniverseForm(),
         h("div", { class: "section-title" },
@@ -143,6 +145,30 @@ export async function adminUniversesView(container, context) {
         search.element,
         list,
     );
+}
+
+/** Ukazatel cíle: „1 264 / 2 000 filmů“ s pruhem; počet se načte na pozadí. */
+function goalPanel() {
+    const box = h("section", { class: "admin-goal", "aria-live": "polite" },
+        h("span", { class: "muted" }, TEXTS.loading));
+    countCatalogFilms()
+        .then((count) => {
+            const goal = nextGoal(count);
+            const percent = Math.min(100, Math.round((count / goal) * 100));
+            const number = (value) => value.toLocaleString(LOCALE);
+            mount(box,
+                h("div", { class: "admin-goal__text" },
+                    h("span", { class: "eyebrow" }, TEXTS.adminGoalTitle),
+                    h("strong", {}, format("adminGoalCount", number(count), number(goal))),
+                    h("span", { class: "muted" }, format("adminGoalLeft", number(goal - count)))),
+                h("div", {
+                    class: "progress progress--large admin-goal__bar", role: "progressbar",
+                    "aria-valuemin": 0, "aria-valuemax": goal, "aria-valuenow": count,
+                    "aria-label": TEXTS.adminGoalTitle,
+                }, h("div", { class: "progress__bar", style: `width: ${percent}%` })));
+        })
+        .catch(() => mount(box));
+    return box;
 }
 
 /** Řádek univerza: barva, název, počet filmů, posun, úprava, smazání. */

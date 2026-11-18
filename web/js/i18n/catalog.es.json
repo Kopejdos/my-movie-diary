@@ -10,125 +10,442 @@
         "crime-thriller": "Crimen y suspense",
         "family": "Familia",
         "war": "Bélico",
-        "drama": "Drama"
+        "drama": "Drama",
+        "western": "Wéstern"
     },
     "collections": {
-        "mcu": { "description": "La Saga del Infinito y la Saga del Multiverso: todas las películas del MCU." },
-        "x-men": { "description": "La saga X-Men de 20th Century Fox, con Lobezno y Deadpool." },
-        "spider-man": { "description": "Todos los Spider-Man de la gran pantalla: Raimi, Webb, el MCU y el Spider-Verso." },
-        "dceu": { "description": "De El hombre de acero a Aquaman y el reino perdido." },
-        "dcu": { "description": "El nuevo Universo DC de James Gunn y Peter Safran: Capítulo uno, Dioses y monstruos." },
-        "batman": { "description": "Todas las sagas de Batman en el cine: Burton y Schumacher, la trilogía El caballero oscuro de Nolan y The Batman de Matt Reeves, con Joker y las películas animadas como extra." },
-        "star-wars": { "description": "La saga Skywalker y las películas independientes de Star Wars, con los telefilmes como extra." },
-        "wizarding-world": { "name": "Mundo Mágico", "description": "Harry Potter y Animales fantásticos." },
-        "middle-earth": { "name": "Tierra Media", "description": "El Señor de los Anillos y El Hobbit, más las clásicas películas animadas como extra." },
-        "jurassic-park": { "description": "Jurassic Park y Jurassic World." },
-        "fast-and-furious": { "description": "Familia. Toda la saga Fast & Furious." },
-        "pirates-of-the-caribbean": { "name": "Piratas del Caribe", "description": "Las aventuras del capitán Jack Sparrow." },
-        "alien": { "description": "En el espacio nadie puede oír tus gritos: la saga Alien, precuelas y crossovers." },
-        "studio-ghibli": { "description": "Los largometrajes del Studio Ghibli." },
-        "asterix-and-obelix": { "name": "Astérix y Obélix", "description": "Los irreductibles galos: películas animadas y de imagen real." },
-        "maze-runner": { "name": "El corredor del laberinto", "description": "Corre. Sobrevive. Escapa. La trilogía El corredor del laberinto." },
-        "mad-max": { "description": "¡Qué día! ¡Qué día tan maravilloso! La saga del páramo de Max Rockatansky." },
-        "avatar": { "description": "El viaje de James Cameron a Pandora." },
-        "james-bond": { "description": "Las 25 películas oficiales de 007, de Agente 007 contra el Dr. No a Sin tiempo para morir, más las dos no oficiales como extra." },
-        "mission-impossible": { "description": "Ethan Hunt y la FMI: ocho misiones imposibles." },
-        "john-wick": { "description": "La guerra de Baba Yaga contra la Alta Mesa, más el spin-off Ballerina." },
-        "indiana-jones": { "description": "Látigo, sombrero y reliquias antiguas: las cinco aventuras." },
-        "the-matrix": { "name": "Matrix", "description": "¿Pastilla roja o azul? La saga Matrix." },
-        "terminator": { "description": "«Volveré». Todas las películas de Terminator." },
-        "robocop": { "description": "Mitad hombre, mitad máquina, todo policía: el mejor agente de Detroit, de 1987 al remake de 2014." },
-        "rocky-creed": { "name": "Rocky y Creed", "description": "De las escaleras de Filadelfia a Adonis Creed: el combate completo." },
-        "back-to-the-future": { "name": "Regreso al futuro", "description": "¡Santo cielo! Los viajes en el tiempo de Marty y Doc." },
-        "die-hard": { "name": "La jungla de cristal", "description": "Yippee-ki-yay: John McClane en el lugar equivocado en el peor momento." },
-        "hunger-games": { "name": "Los juegos del hambre", "description": "Que la suerte esté siempre de vuestra parte: la historia de Katniss y las precuelas de Panem." },
-        "twilight": { "name": "La saga Crepúsculo", "description": "Bella, Edward y Jacob: las cinco películas de Crepúsculo." },
-        "planet-of-the-apes": { "name": "El planeta de los simios", "description": "La serie original, el remake de Tim Burton y la saga de César." },
-        "transformers": { "description": "Autobots, ¡en marcha! Las películas de Michael Bay, Bumblebee, El despertar de las bestias y las animadas." },
-        "star-trek": { "description": "Ir valientemente: las tripulaciones de la Serie Original y La nueva generación y la línea temporal Kelvin." },
-        "bourne": { "description": "Jason Bourne recuerda: la trilogía de espías, su secuela y el spin-off El legado de Bourne." },
-        "men-in-black": { "description": "Protegen la Tierra de la escoria del universo." },
-        "ghostbusters": { "name": "Cazafantasmas", "description": "¿A quién vas a llamar? Las originales, el reinicio y la nueva generación." },
-        "predator": { "description": "El cazador definitivo: todas las películas de Predator, con los crossovers Alien vs. Predator como extra." },
-        "rambo": { "description": "Las cinco guerras de John Rambo, de Acorralado a Last Blood." },
-        "the-godfather": { "name": "El padrino", "description": "Una oferta que no podrás rechazar: la trilogía de los Corleone." },
-        "knives-out": { "name": "Puñales por la espalda", "description": "Los misterios de Benoit Blanc." },
-        "paddington": { "description": "Mermelada, buenos modales y el oso más amable de Londres." },
-        "kingsman": { "description": "Los modales hacen al hombre: el servicio secreto, su secuela y la precuela de la Primera Guerra Mundial." },
-        "jumanji": { "description": "El juego que te atrapa: de Robin Williams a las secuelas de videojuego." },
-        "karate-kid": { "description": "Dar cera, pulir cera: Daniel LaRusso, Dre Parker y Karate Kid: Legends." },
-        "disney": { "name": "Animación Disney", "description": "Los clásicos de Walt Disney Animation Studios, de Blancanieves a hoy. Los remakes de imagen real son opcionales." },
-        "pixar": { "description": "Hasta el infinito y más allá: todos los largometrajes de Pixar." },
-        "dreamworks": { "description": "Shrek, Kung Fu Panda, Cómo entrenar a tu dragón y todas las demás películas de DreamWorks Animation." },
-        "marvel": { "description": "Todas las películas basadas en Marvel Comics: el MCU, los X-Men de Fox, el Spider-Man de Sony y todo lo anterior." },
-        "dc": { "description": "Todas las películas de DC en cine: el Superman clásico, todos los Batman, el DCEU, el nuevo DCU y más." },
-        "warner-bros": { "description": "Las grandes franquicias de Warner Bros. (Harry Potter, Tierra Media, DC, Matrix, MonsterVerse, Dune) más películas clave, de Casablanca a Los pecadores." },
-        "lucasfilm": { "description": "El estudio de George Lucas: Star Wars, Indiana Jones, Willow y más." },
-        "jerry-bruckheimer-films": { "description": "El productor de Armageddon, Top Gun, Dos policías rebeldes, La roca y Piratas del Caribe." },
-        "illumination": { "description": "Los Minions, Gru, mi villano favorito, ¡Canta!, Mascotas y Super Mario." },
-        "sony-pictures-animation": { "description": "Spider-Verso, Hotel Transilvania, Las guerreras K-pop y todas las demás películas de Sony Pictures Animation." },
-        "blue-sky-studios": { "description": "Ice Age, Río y el resto de películas de Blue Sky (2002–2019)." },
-        "laika": { "description": "Stop-motion artesanal: Los mundos de Coraline, Kubo y las dos cuerdas mágicas y más." },
-        "aardman": { "description": "Wallace y Gromit, Evasión en la granja, La oveja Shaun y las demás películas de plastilina de Aardman." },
-        "conjuring": { "name": "Universo Expediente Warren", "description": "Los casos de Ed y Lorraine Warren: Expediente Warren, Annabelle, La monja y más." },
-        "saw": { "description": "Quiero jugar a un juego." },
-        "scream": { "description": "¿Cuál es tu película de miedo favorita?" },
-        "halloween": { "description": "La noche que ÉL volvió a casa: Michael Myers en todas sus líneas temporales." },
-        "final-destination": { "name": "Destino final", "description": "No puedes engañar a la muerte." },
-        "insidious": { "description": "El Más Allá te espera: la familia Lambert y Elise Rainier." },
-        "nightmare-on-elm-street": { "name": "Pesadilla en Elm Street", "description": "Uno, dos, Freddy viene a por ti." },
-        "friday-the-13th": { "name": "Viernes 13", "description": "El campamento Crystal Lake y Jason Voorhees." },
-        "texas-chainsaw-massacre": { "name": "La matanza de Texas", "description": "Leatherface y la familia Sawyer: la pesadilla tejana original y todo lo que vino después." },
-        "wrong-turn": { "name": "Km. 666", "description": "Nunca te salgas de la carretera principal: terror rural en las colinas de Virginia Occidental." },
-        "black-christmas": { "name": "Navidad negra", "description": "La casa de la hermandad, las llamadas y el slasher original, más los dos remakes." },
-        "terrifier": { "description": "Art el Payaso: silencioso, sonriente y extremadamente sangriento." },
-        "happy-death-day": { "name": "Feliz día de tu muerte", "description": "El mismo cumpleaños, el mismo asesino enmascarado, una y otra vez." },
-        "x-trilogy": { "name": "Trilogía X", "description": "La trilogía de Ti West: Maxine, Pearl y una granja en Texas." },
-        "horror-slasher": { "description": "Asesinos enmascarados, chicas finales y recuentos de cadáveres: los slashers imprescindibles." },
-        "horror-supernatural": { "name": "Sobrenatural y paranormal", "description": "Maldiciones, entidades y cosas que no deberían existir." },
-        "horror-haunted-house": { "name": "Casas encantadas", "description": "Suelos que crujen, rincones helados y casas que no quieren dejarte salir." },
-        "horror-demonic": { "name": "Demonios y exorcismos", "description": "Posesiones, exorcismos y el mismísimo diablo." },
-        "horror-psychological": { "name": "Terror psicológico", "description": "Cuando el lugar más aterrador es tu propia mente." },
-        "horror-found-footage": { "description": "Cámaras temblorosas, visión nocturna y cintas que nunca debieron encontrarse." },
-        "horror-zombie": { "name": "Zombis", "description": "De los muertos vivientes de Romero a los infectados que corren." },
-        "horror-body": { "name": "Terror corporal", "description": "Carne que muta, se derrite y se transforma: el cuerpo como monstruo." },
-        "horror-creature": { "name": "Criaturas", "description": "Monstruos de las profundidades, del desierto y de la oscuridad." },
-        "horror-vampire": { "name": "Vampiros", "description": "Condes, criaturas de la noche y seres que beben sangre." },
-        "horror-werewolf": { "name": "Hombres lobo", "description": "Lunas llenas, balas de plata y la bestia interior." },
-        "horror-scifi": { "name": "Terror de ciencia ficción", "description": "En el espacio, y en el laboratorio, nadie puede oír tus gritos." },
-        "horror-folk": { "description": "Pueblos aislados, viejos rituales y la propia tierra volviéndose contra ti." },
-        "horror-comedy": { "name": "Comedia de terror", "description": "Sustos y risas a partes iguales." },
-        "horror-gore": { "name": "Gore y splatter", "description": "Cubos de sangre: efectos prácticos llevados al límite." },
-        "horror-extreme": { "name": "Extremo y tortura", "description": "Los rincones más brutales y perturbadores del género. No apto para aprensivos." },
-        "horror-cosmic": { "name": "Terror cósmico", "description": "Pavor lovecraftiano: fuerzas demasiado vastas y antiguas para comprenderlas." },
-        "horror-gothic": { "name": "Terror gótico", "description": "Castillos en ruinas, velas y romance oscuro." },
-        "horror-giallo": { "description": "Thrillers italianos: guantes negros, navajas y colores chillones." },
-        "horror-eco": { "name": "Ecoterror", "description": "La naturaleza contraataca: animales, plantas y el propio planeta." },
-        "horror-elevated": { "name": "Terror de autor", "description": "Terror pausado y de autor sobre el duelo, el trauma y todo lo demás." },
-        "horror-j-horror": { "description": "Terror japonés: espíritus vengativos, cintas malditas y un miedo silencioso." },
-        "scifi-time-travel": { "name": "Viajes en el tiempo", "description": "Paradojas, bucles y segundas oportunidades: las mejores películas sobre doblar el tiempo." },
-        "scifi-space": { "name": "Aventuras espaciales", "description": "Cohetes, naves estelares y astronautas solitarios: de 2001 a Proyecto Hail Mary." },
-        "scifi-cyberpunk": { "name": "Ciberpunk y distopía", "description": "Ciudades de neón, cíborgs y futuros que salieron mal." },
-        "crime-heist": { "name": "Películas de atracos", "description": "Planes elaborados, equipos perfectos y ese golpe que se tuerce." },
-        "action-martial-arts": { "name": "Artes marciales", "description": "Leyendas del kung-fu, epopeyas wuxia y las mejores coreografías de lucha jamás filmadas." },
-        "action-80s": { "name": "Acción de los 80", "description": "Frases míticas, explosiones y héroes a los que nunca se les acaba la munición." },
-        "war-classics": { "name": "Cine bélico", "description": "De las trincheras de la Primera Guerra Mundial a Vietnam y más allá: la guerra en la gran pantalla." },
-        "holiday-christmas": { "name": "Películas navideñas", "description": "Nieve, regalos y caos familiar: de ¡Qué bello es vivir! a Tres deseos para Cenicienta." },
-        "path-mcu-essentials": { "name": "MCU: lo esencial", "description": "Las 12 películas que necesitas antes de Endgame, en orden cronológico y siguiendo las Gemas del Infinito." },
-        "path-star-wars-first-watch": { "name": "Star Wars por primera vez", "description": "El mejor orden para quien la ve por primera vez: las precuelas como flashback tras la gran revelación y luego las secuelas." },
-        "path-superhero-hall-of-fame": { "name": "Salón de la fama superheroico", "description": "Los hitos del género, héroe a héroe: Spider-Man, los Vengadores, Batman, los X-Men y la nueva era de DC." },
-        "path-fantasy-starter": { "name": "Iniciación a la fantasía", "description": "De los primeros pasos en la magia a las batallas épicas: una entrada suave a la fantasía." },
-        "path-animation-essentials": { "name": "Animación: lo esencial", "description": "De los favoritos familiares a las obras maestras del arte: Pixar, DreamWorks, clásicos Disney, Ghibli y más." },
-        "path-horror-101": { "name": "Terror para principiantes", "description": "De sustos divertidos para empezar a películas que aún persiguen a la gente: 16 pasos, con los clásicos por el camino." },
-        "lethal-weapon": { "name": "Arma letal", "description": "Saga de pareja de policías con Mel Gibson y Danny Glover: cuatro películas desde 1987, todas éxitos de taquilla." },
-        "winnetou": { "description": "Winnetou, el héroe apache de las novelas de Karl May, y sus aventuras en el Salvaje Oeste." },
-        "the-hills-have-eyes-original": { "name": "Las colinas tienen ojos", "description": "Dos historias de carnicería caníbal, ambas escritas y dirigidas por Wes Craven, sobre un clan de mutantes que acecha en el desierto." },
-        "i-spit-on-your-grave": { "name": "Escupiré sobre tu tumba", "description": "Brutales historias de venganza: la original, el remake de 2010 y sus secuelas." },
-        "the-purge": { "name": "La purga", "description": "Una América distópica donde una noche al año todo crimen es legal. Terror, acción y crítica social en uno." },
-        "ring": { "description": "Saga de terror basada en las novelas de Kōji Suzuki sobre una cinta maldita que mata a quien la ve siete días después." },
-        "the-grudge": { "description": "Saga de terror estadounidense basada en la japonesa Ju-on de Takashi Shimizu, sobre una maldición nacida de la ira de una mujer asesinada." },
-        "resident-evil": { "description": "Basada libremente en los videojuegos de Capcom: la heroína Alice contra Umbrella Corporation y el apocalipsis zombi." },
-        "silent-hill": { "description": "Saga de terror basada en el videojuego de survival horror del mismo nombre." }
+        "mcu": {
+            "description": "La Saga del Infinito y la Saga del Multiverso: todas las películas del MCU."
+        },
+        "x-men": {
+            "description": "La saga X-Men de 20th Century Fox, con Lobezno y Deadpool."
+        },
+        "spider-man": {
+            "description": "Todos los Spider-Man de la gran pantalla: Raimi, Webb, el MCU y el Spider-Verso."
+        },
+        "dceu": {
+            "description": "De El hombre de acero a Aquaman y el reino perdido."
+        },
+        "dcu": {
+            "description": "El nuevo Universo DC de James Gunn y Peter Safran: Capítulo uno, Dioses y monstruos."
+        },
+        "batman": {
+            "description": "Todas las sagas de Batman en el cine: Burton y Schumacher, la trilogía El caballero oscuro de Nolan y The Batman de Matt Reeves, con Joker y las películas animadas como extra."
+        },
+        "star-wars": {
+            "description": "La saga Skywalker y las películas independientes de Star Wars, con los telefilmes como extra."
+        },
+        "wizarding-world": {
+            "name": "Mundo Mágico",
+            "description": "Harry Potter y Animales fantásticos."
+        },
+        "middle-earth": {
+            "name": "Tierra Media",
+            "description": "El Señor de los Anillos y El Hobbit, más las clásicas películas animadas como extra."
+        },
+        "jurassic-park": {
+            "description": "Jurassic Park y Jurassic World."
+        },
+        "fast-and-furious": {
+            "description": "Familia. Toda la saga Fast & Furious."
+        },
+        "pirates-of-the-caribbean": {
+            "name": "Piratas del Caribe",
+            "description": "Las aventuras del capitán Jack Sparrow."
+        },
+        "alien": {
+            "description": "En el espacio nadie puede oír tus gritos: la saga Alien, precuelas y crossovers."
+        },
+        "studio-ghibli": {
+            "description": "Los largometrajes del Studio Ghibli."
+        },
+        "asterix-and-obelix": {
+            "name": "Astérix y Obélix",
+            "description": "Los irreductibles galos: películas animadas y de imagen real."
+        },
+        "maze-runner": {
+            "name": "El corredor del laberinto",
+            "description": "Corre. Sobrevive. Escapa. La trilogía El corredor del laberinto."
+        },
+        "mad-max": {
+            "description": "¡Qué día! ¡Qué día tan maravilloso! La saga del páramo de Max Rockatansky."
+        },
+        "avatar": {
+            "description": "El viaje de James Cameron a Pandora."
+        },
+        "james-bond": {
+            "description": "Las 25 películas oficiales de 007, de Agente 007 contra el Dr. No a Sin tiempo para morir, más las dos no oficiales como extra."
+        },
+        "mission-impossible": {
+            "description": "Ethan Hunt y la FMI: ocho misiones imposibles."
+        },
+        "john-wick": {
+            "description": "La guerra de Baba Yaga contra la Alta Mesa, más el spin-off Ballerina."
+        },
+        "indiana-jones": {
+            "description": "Látigo, sombrero y reliquias antiguas: las cinco aventuras."
+        },
+        "the-matrix": {
+            "name": "Matrix",
+            "description": "¿Pastilla roja o azul? La saga Matrix."
+        },
+        "terminator": {
+            "description": "«Volveré». Todas las películas de Terminator."
+        },
+        "robocop": {
+            "description": "Mitad hombre, mitad máquina, todo policía: el mejor agente de Detroit, de 1987 al remake de 2014."
+        },
+        "rocky-creed": {
+            "name": "Rocky y Creed",
+            "description": "De las escaleras de Filadelfia a Adonis Creed: el combate completo."
+        },
+        "back-to-the-future": {
+            "name": "Regreso al futuro",
+            "description": "¡Santo cielo! Los viajes en el tiempo de Marty y Doc."
+        },
+        "die-hard": {
+            "name": "La jungla de cristal",
+            "description": "Yippee-ki-yay: John McClane en el lugar equivocado en el peor momento."
+        },
+        "hunger-games": {
+            "name": "Los juegos del hambre",
+            "description": "Que la suerte esté siempre de vuestra parte: la historia de Katniss y las precuelas de Panem."
+        },
+        "twilight": {
+            "name": "La saga Crepúsculo",
+            "description": "Bella, Edward y Jacob: las cinco películas de Crepúsculo."
+        },
+        "planet-of-the-apes": {
+            "name": "El planeta de los simios",
+            "description": "La serie original, el remake de Tim Burton y la saga de César."
+        },
+        "transformers": {
+            "description": "Autobots, ¡en marcha! Las películas de Michael Bay, Bumblebee, El despertar de las bestias y las animadas."
+        },
+        "star-trek": {
+            "description": "Ir valientemente: las tripulaciones de la Serie Original y La nueva generación y la línea temporal Kelvin."
+        },
+        "bourne": {
+            "description": "Jason Bourne recuerda: la trilogía de espías, su secuela y el spin-off El legado de Bourne."
+        },
+        "men-in-black": {
+            "description": "Protegen la Tierra de la escoria del universo."
+        },
+        "ghostbusters": {
+            "name": "Cazafantasmas",
+            "description": "¿A quién vas a llamar? Las originales, el reinicio y la nueva generación."
+        },
+        "predator": {
+            "description": "El cazador definitivo: todas las películas de Predator, con los crossovers Alien vs. Predator como extra."
+        },
+        "rambo": {
+            "description": "Las cinco guerras de John Rambo, de Acorralado a Last Blood."
+        },
+        "the-godfather": {
+            "name": "El padrino",
+            "description": "Una oferta que no podrás rechazar: la trilogía de los Corleone."
+        },
+        "knives-out": {
+            "name": "Puñales por la espalda",
+            "description": "Los misterios de Benoit Blanc."
+        },
+        "paddington": {
+            "description": "Mermelada, buenos modales y el oso más amable de Londres."
+        },
+        "kingsman": {
+            "description": "Los modales hacen al hombre: el servicio secreto, su secuela y la precuela de la Primera Guerra Mundial."
+        },
+        "jumanji": {
+            "description": "El juego que te atrapa: de Robin Williams a las secuelas de videojuego."
+        },
+        "karate-kid": {
+            "description": "Dar cera, pulir cera: Daniel LaRusso, Dre Parker y Karate Kid: Legends."
+        },
+        "disney": {
+            "name": "Animación Disney",
+            "description": "Los clásicos de Walt Disney Animation Studios, de Blancanieves a hoy. Los remakes de imagen real son opcionales."
+        },
+        "pixar": {
+            "description": "Hasta el infinito y más allá: todos los largometrajes de Pixar."
+        },
+        "dreamworks": {
+            "description": "Shrek, Kung Fu Panda, Cómo entrenar a tu dragón y todas las demás películas de DreamWorks Animation."
+        },
+        "marvel": {
+            "description": "Todas las películas basadas en Marvel Comics: el MCU, los X-Men de Fox, el Spider-Man de Sony y todo lo anterior."
+        },
+        "dc": {
+            "description": "Todas las películas de DC en cine: el Superman clásico, todos los Batman, el DCEU, el nuevo DCU y más."
+        },
+        "warner-bros": {
+            "description": "Las grandes franquicias de Warner Bros. (Harry Potter, Tierra Media, DC, Matrix, MonsterVerse, Dune) más películas clave, de Casablanca a Los pecadores."
+        },
+        "lucasfilm": {
+            "description": "El estudio de George Lucas: Star Wars, Indiana Jones, Willow y más."
+        },
+        "jerry-bruckheimer-films": {
+            "description": "El productor de Armageddon, Top Gun, Dos policías rebeldes, La roca y Piratas del Caribe."
+        },
+        "illumination": {
+            "description": "Los Minions, Gru, mi villano favorito, ¡Canta!, Mascotas y Super Mario."
+        },
+        "sony-pictures-animation": {
+            "description": "Spider-Verso, Hotel Transilvania, Las guerreras K-pop y todas las demás películas de Sony Pictures Animation."
+        },
+        "blue-sky-studios": {
+            "description": "Ice Age, Río y el resto de películas de Blue Sky (2002–2019)."
+        },
+        "laika": {
+            "description": "Stop-motion artesanal: Los mundos de Coraline, Kubo y las dos cuerdas mágicas y más."
+        },
+        "aardman": {
+            "description": "Wallace y Gromit, Evasión en la granja, La oveja Shaun y las demás películas de plastilina de Aardman."
+        },
+        "conjuring": {
+            "name": "Universo Expediente Warren",
+            "description": "Los casos de Ed y Lorraine Warren: Expediente Warren, Annabelle, La monja y más."
+        },
+        "saw": {
+            "description": "Quiero jugar a un juego."
+        },
+        "scream": {
+            "description": "¿Cuál es tu película de miedo favorita?"
+        },
+        "halloween": {
+            "description": "La noche que ÉL volvió a casa: Michael Myers en todas sus líneas temporales."
+        },
+        "final-destination": {
+            "name": "Destino final",
+            "description": "No puedes engañar a la muerte."
+        },
+        "insidious": {
+            "description": "El Más Allá te espera: la familia Lambert y Elise Rainier."
+        },
+        "nightmare-on-elm-street": {
+            "name": "Pesadilla en Elm Street",
+            "description": "Uno, dos, Freddy viene a por ti."
+        },
+        "friday-the-13th": {
+            "name": "Viernes 13",
+            "description": "El campamento Crystal Lake y Jason Voorhees."
+        },
+        "texas-chainsaw-massacre": {
+            "name": "La matanza de Texas",
+            "description": "Leatherface y la familia Sawyer: la pesadilla tejana original y todo lo que vino después."
+        },
+        "wrong-turn": {
+            "name": "Km. 666",
+            "description": "Nunca te salgas de la carretera principal: terror rural en las colinas de Virginia Occidental."
+        },
+        "black-christmas": {
+            "name": "Navidad negra",
+            "description": "La casa de la hermandad, las llamadas y el slasher original, más los dos remakes."
+        },
+        "terrifier": {
+            "description": "Art el Payaso: silencioso, sonriente y extremadamente sangriento."
+        },
+        "happy-death-day": {
+            "name": "Feliz día de tu muerte",
+            "description": "El mismo cumpleaños, el mismo asesino enmascarado, una y otra vez."
+        },
+        "x-trilogy": {
+            "name": "Trilogía X",
+            "description": "La trilogía de Ti West: Maxine, Pearl y una granja en Texas."
+        },
+        "horror-slasher": {
+            "description": "Asesinos enmascarados, chicas finales y recuentos de cadáveres: los slashers imprescindibles."
+        },
+        "horror-supernatural": {
+            "name": "Sobrenatural y paranormal",
+            "description": "Maldiciones, entidades y cosas que no deberían existir."
+        },
+        "horror-haunted-house": {
+            "name": "Casas encantadas",
+            "description": "Suelos que crujen, rincones helados y casas que no quieren dejarte salir."
+        },
+        "horror-demonic": {
+            "name": "Demonios y exorcismos",
+            "description": "Posesiones, exorcismos y el mismísimo diablo."
+        },
+        "horror-psychological": {
+            "name": "Terror psicológico",
+            "description": "Cuando el lugar más aterrador es tu propia mente."
+        },
+        "horror-found-footage": {
+            "description": "Cámaras temblorosas, visión nocturna y cintas que nunca debieron encontrarse."
+        },
+        "horror-zombie": {
+            "name": "Zombis",
+            "description": "De los muertos vivientes de Romero a los infectados que corren."
+        },
+        "horror-body": {
+            "name": "Terror corporal",
+            "description": "Carne que muta, se derrite y se transforma: el cuerpo como monstruo."
+        },
+        "horror-creature": {
+            "name": "Criaturas",
+            "description": "Monstruos de las profundidades, del desierto y de la oscuridad."
+        },
+        "horror-vampire": {
+            "name": "Vampiros",
+            "description": "Condes, criaturas de la noche y seres que beben sangre."
+        },
+        "horror-werewolf": {
+            "name": "Hombres lobo",
+            "description": "Lunas llenas, balas de plata y la bestia interior."
+        },
+        "horror-scifi": {
+            "name": "Terror de ciencia ficción",
+            "description": "En el espacio, y en el laboratorio, nadie puede oír tus gritos."
+        },
+        "horror-folk": {
+            "description": "Pueblos aislados, viejos rituales y la propia tierra volviéndose contra ti."
+        },
+        "horror-comedy": {
+            "name": "Comedia de terror",
+            "description": "Sustos y risas a partes iguales."
+        },
+        "horror-gore": {
+            "name": "Gore y splatter",
+            "description": "Cubos de sangre: efectos prácticos llevados al límite."
+        },
+        "horror-extreme": {
+            "name": "Extremo y tortura",
+            "description": "Los rincones más brutales y perturbadores del género. No apto para aprensivos."
+        },
+        "horror-cosmic": {
+            "name": "Terror cósmico",
+            "description": "Pavor lovecraftiano: fuerzas demasiado vastas y antiguas para comprenderlas."
+        },
+        "horror-gothic": {
+            "name": "Terror gótico",
+            "description": "Castillos en ruinas, velas y romance oscuro."
+        },
+        "horror-giallo": {
+            "description": "Thrillers italianos: guantes negros, navajas y colores chillones."
+        },
+        "horror-eco": {
+            "name": "Ecoterror",
+            "description": "La naturaleza contraataca: animales, plantas y el propio planeta."
+        },
+        "horror-elevated": {
+            "name": "Terror de autor",
+            "description": "Terror pausado y de autor sobre el duelo, el trauma y todo lo demás."
+        },
+        "horror-j-horror": {
+            "description": "Terror japonés: espíritus vengativos, cintas malditas y un miedo silencioso."
+        },
+        "scifi-time-travel": {
+            "name": "Viajes en el tiempo",
+            "description": "Paradojas, bucles y segundas oportunidades: las mejores películas sobre doblar el tiempo."
+        },
+        "scifi-space": {
+            "name": "Aventuras espaciales",
+            "description": "Cohetes, naves estelares y astronautas solitarios: de 2001 a Proyecto Hail Mary."
+        },
+        "scifi-cyberpunk": {
+            "name": "Ciberpunk y distopía",
+            "description": "Ciudades de neón, cíborgs y futuros que salieron mal."
+        },
+        "crime-heist": {
+            "name": "Películas de atracos",
+            "description": "Planes elaborados, equipos perfectos y ese golpe que se tuerce."
+        },
+        "action-martial-arts": {
+            "name": "Artes marciales",
+            "description": "Leyendas del kung-fu, epopeyas wuxia y las mejores coreografías de lucha jamás filmadas."
+        },
+        "action-80s": {
+            "name": "Acción de los 80",
+            "description": "Frases míticas, explosiones y héroes a los que nunca se les acaba la munición."
+        },
+        "war-classics": {
+            "name": "Cine bélico",
+            "description": "De las trincheras de la Primera Guerra Mundial a Vietnam y más allá: la guerra en la gran pantalla."
+        },
+        "holiday-christmas": {
+            "name": "Películas navideñas",
+            "description": "Nieve, regalos y caos familiar: de ¡Qué bello es vivir! a Tres deseos para Cenicienta."
+        },
+        "path-mcu-essentials": {
+            "name": "MCU: lo esencial",
+            "description": "Las 12 películas que necesitas antes de Endgame, en orden cronológico y siguiendo las Gemas del Infinito."
+        },
+        "path-star-wars-first-watch": {
+            "name": "Star Wars por primera vez",
+            "description": "El mejor orden para quien la ve por primera vez: las precuelas como flashback tras la gran revelación y luego las secuelas."
+        },
+        "path-superhero-hall-of-fame": {
+            "name": "Salón de la fama superheroico",
+            "description": "Los hitos del género, héroe a héroe: Spider-Man, los Vengadores, Batman, los X-Men y la nueva era de DC."
+        },
+        "path-fantasy-starter": {
+            "name": "Iniciación a la fantasía",
+            "description": "De los primeros pasos en la magia a las batallas épicas: una entrada suave a la fantasía."
+        },
+        "path-animation-essentials": {
+            "name": "Animación: lo esencial",
+            "description": "De los favoritos familiares a las obras maestras del arte: Pixar, DreamWorks, clásicos Disney, Ghibli y más."
+        },
+        "path-horror-101": {
+            "name": "Terror para principiantes",
+            "description": "De sustos divertidos para empezar a películas que aún persiguen a la gente: 16 pasos, con los clásicos por el camino."
+        },
+        "lethal-weapon": {
+            "name": "Arma letal",
+            "description": "Saga de pareja de policías con Mel Gibson y Danny Glover: cuatro películas desde 1987, todas éxitos de taquilla."
+        },
+        "winnetou": {
+            "description": "El jefe apache de Karl May y Old Shatterhand: los wésterns alemanes de los años 60."
+        },
+        "the-hills-have-eyes-original": {
+            "name": "Las colinas tienen ojos",
+            "description": "Dos historias de carnicería caníbal, ambas escritas y dirigidas por Wes Craven, sobre un clan de mutantes que acecha en el desierto."
+        },
+        "i-spit-on-your-grave": {
+            "name": "Escupiré sobre tu tumba",
+            "description": "Brutales historias de venganza: la original, el remake de 2010 y sus secuelas."
+        },
+        "the-purge": {
+            "name": "La purga",
+            "description": "Una América distópica donde una noche al año todo crimen es legal. Terror, acción y crítica social en uno."
+        },
+        "ring": {
+            "description": "Saga de terror basada en las novelas de Kōji Suzuki sobre una cinta maldita que mata a quien la ve siete días después."
+        },
+        "the-grudge": {
+            "description": "Saga de terror estadounidense basada en la japonesa Ju-on de Takashi Shimizu, sobre una maldición nacida de la ira de una mujer asesinada."
+        },
+        "resident-evil": {
+            "description": "Basada libremente en los videojuegos de Capcom: la heroína Alice contra Umbrella Corporation y el apocalipsis zombi."
+        },
+        "silent-hill": {
+            "description": "Saga de terror basada en el videojuego de survival horror del mismo nombre."
+        },
+        "bud-spencer-terence-hill": {
+            "description": "Judías, bofetadas y amistad: todas las películas del legendario dúo juntos y sus mejores aventuras en solitario."
+        },
+        "sergio-leone": {
+            "description": "El maestro del spaghetti western: la trilogía del dólar, la trilogía Érase una vez… y donde empezó todo."
+        },
+        "django": {
+            "description": "Un ataúd, una ametralladora y un hombre llamado Django: el original, su secuela oficial y las películas que inspiró."
+        },
+        "magnificent-seven": {
+            "name": "Los siete magníficos",
+            "description": "Siete pistoleros, un pueblo: el clásico, sus secuelas, el remake de 2016 y la película de samuráis con la que empezó todo."
+        },
+        "western-classics": {
+            "name": "Wésterns clásicos",
+            "description": "Diligencias, duelos y grandes llanuras: los wésterns de Hollywood que definieron el género."
+        },
+        "western-spaghetti": {
+            "description": "Wésterns italianos: primeros planos polvorientos, música de Morricone y antihéroes de gatillo fácil."
+        },
+        "western-modern": {
+            "name": "Wésterns modernos",
+            "description": "La frontera revisitada: wésterns más oscuros y extraños, de Sin perdón a El poder del perro."
+        }
     },
     "notes": {
         "Start in the 1940s: Steve Rogers' origin and the first Infinity Stone, the Tesseract.": "Empieza en los años 40: el origen de Steve Rogers y la primera Gema del Infinito, el Teseracto.",
@@ -336,6 +653,18 @@
         "Wolverine": "Lobezno",
         "Sony's Spider-Man Universe": "Universo Spider-Man de Sony",
         "Spider-Verse": "Spider-Verso",
-        "Burton & Schumacher": "Burton y Schumacher"
+        "Burton & Schumacher": "Burton y Schumacher",
+        "Together": "Juntos",
+        "Flatfoot": "Piedone",
+        "Early work": "Primeras obras",
+        "Dollars Trilogy": "Trilogía del dólar",
+        "Once Upon a Time Trilogy": "Trilogía Érase una vez…",
+        "Part 1": "Parte 1",
+        "Part 2": "Parte 2",
+        "Part 3": "Parte 3",
+        "Produced by Leone": "Producida por Leone",
+        "Unofficial": "No oficial",
+        "Homage": "Homenaje",
+        "The original": "La original"
     }
 }

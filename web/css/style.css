@@ -7356,3 +7356,147 @@ a.friend-row__name:hover {
         width: 80px;
     }
 }
+
+/* ---------- Ukazatel cíle a stavitel kolekcí (V4.3.2) ---------- */
+.admin-goal {
+    display: grid;
+    gap: 8px;
+    margin: 0 0 18px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--panel);
+}
+
+.admin-goal__text {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 12px;
+}
+
+.admin-goal__text strong {
+    font-size: 1.1rem;
+    color: var(--heading);
+}
+
+.builder__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.builder-two {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+}
+
+.builder-picker {
+    display: grid;
+    gap: 8px;
+}
+
+.builder-results {
+    display: grid;
+    gap: 6px;
+}
+
+.builder-result {
+    display: grid;
+    gap: 2px;
+    text-align: left;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    cursor: pointer;
+}
+
+.builder-result:hover,
+.builder-result:focus-visible {
+    border-color: var(--u);
+}
+
+.builder-picked {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+    padding: 8px 12px;
+    border: 1px solid color-mix(in srgb, var(--u) 60%, var(--border));
+    border-radius: 10px;
+}
+
+.builder-filters {
+    margin: 4px 0 10px;
+}
+
+.builder-bulk {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.builder-count {
+    font-weight: 600;
+    color: var(--heading);
+    margin-right: 6px;
+}
+
+.builder-list {
+    list-style: none;
+    margin: 0 0 18px;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 6px;
+}
+
+.builder-film {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px 6px 8px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--panel);
+    cursor: pointer;
+}
+
+.builder-film:has(input:checked) {
+    border-color: color-mix(in srgb, var(--u) 65%, var(--border));
+}
+
+.builder-film input {
+    width: 18px;
+    height: 18px;
+    flex: none;
+    accent-color: var(--u);
+}
+
+.builder-film__info {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+}
+
+.builder-film__info strong {
+    overflow-wrap: anywhere;
+}
+
+.builder-create[hidden] {
+    display: none;
+}
+
+@media (max-width: 599px) {
+    .builder-list {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

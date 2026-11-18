@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.3.2 – November 2026
+- Westerns 🤠 – a new Western category with Bud Spencer & Terence Hill, Sergio Leone, Django, The Magnificent Seven, Western Classics, Spaghetti Western and Modern Westerns; Winnetou joins too
+- Admin: collection builder – a person's movies, two people together, a studio or a TMDB keyword; filter, tick and create
+- Admin: catalog goal – how many movies are in My Movie Diary and how far it is to the next goal
+- Genre fan achievements have their own icons for every category
+
 ## V4.3.1 – November 2026
 - Request your own collection from any movies – name it, put the movies in order and you're done
 - Collection requests (a TMDB series or your own) let you set the order and a Section, Series and Label for every movie

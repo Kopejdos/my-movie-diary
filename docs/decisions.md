@@ -365,7 +365,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 45a | V4.2.1 | Jazyky: rozhraní ✅ | **angličtina, čeština, němčina, španělština, ukrajinština** (ruština ne) – všechny texty webu, data a čísla podle jazyka, volba v Settings (výchozí podle prohlížeče); admin panel zůstává anglicky |
 | 45b | V4.2.2 | Jazyky: data ✅ | **názvy filmů z TMDB** v daném jazyce (import / admin panel, `scripts/translate.sh`), **názvy a popisy kolekcí, kategorie, poznámky cest** a obecné popisky (soubory `catalog.<jazyk>.json`), hledání i podle anglického názvu a v cyrilici, patička v jazyce aplikace |
 | 46a | V4.3.1 | Editor a požadavky ✅ | admin: **úpravy kolekce s jedním Save** (změny se sbírají, *Save* / *Discard*, varování při odchodu), **hledání filmu se po přidání nesmaže**; požadavky: uživatel u filmů nastaví **Section / Series / Label a pořadí**, **vlastní kolekce** z libovolných filmů (ne jen jedna série TMDB), **limit 30 filmů** v požadavku (dřív 20) |
-| 46b | V4.3.2 | Nástroje + westerny | admin: **kolekce z osoby** (režisér / herec, i **průnik dvou osob**), **kolekce ze studia / klíčového slova TMDB**, **ukazatel cíle** (např. 1 264 / 2 000); kategorie **Western** 🤠, **Bud Spencer & Terence Hill**, Leone, westernové výběry |
+| 46b | V4.3.2 | Nástroje + westerny ✅ | admin: **kolekce z osoby** (režisér / herec, i **průnik dvou osob**), **kolekce ze studia / klíčového slova TMDB**, **ukazatel cíle** (např. 1 264 / 2 000); kategorie **Western** 🤠, **Bud Spencer & Terence Hill**, Leone, westernové výběry |
 | 46c | V4.3.3 | Režiséři a klasika | nový typ kolekce **Director** (záložka *Directors*), 10 režisérů, **Best Picture Winners**, Universal Monsters, Hammer, Louis de Funès, Belmondo |
 | 46d | V4.3.4 | Série a monstra | ~40 komediálních, akčních, sci-fi / fantasy a hororových sérií, **Godzilla + MonsterVerse**, King Kong; studia A24, Blumhouse, Amblin, Toho |
 | 46e | V4.3.5 | Anime a česká klasika | kategorie **Anime** 🎌 a **Czech & Slovak** 🇨🇿; Shinkai, Hosoda, Kon, Evangelion, Pokémon, Dragon Ball, Detective Conan, Cartoon Saloon; Slunce, seno…, Básníci, Anděl Páně, české pohádky, Svěrák |
@@ -2065,6 +2065,41 @@ testovacích seznamů byla vymyšlená.
 - **Uživatel v požadavku nemá pořadí v příběhu, volitelný ani obal** – to doladí správce; uživatel řeší jen
   to, co o kolekci ví (pořadí a pojmenování skupin).
 - **Vlastní kolekce smí obsahovat filmy, které už v MMD jsou** – patří do nové kolekce stejně jako díly série.
+
+### Fáze 46b – nástroje a westerny ✅ (18. 11. 2026) – **V4.3.2**
+- **Stavitel kolekcí** (admin panel, záložka *Builder*, `web/js/views/admin-builder.js`): zdroj **Person**
+  (filmografie z TMDB), **Two people** (společné filmy = *Together* a sólovky každého), **Studio** (produkční
+  společnost) nebo **Keyword** (klíčové slovo TMDB). Filtry: role (herectví / režie / scénář), u dvou osob
+  *Together only* / jen jedna osoba, minimální počet hlasů, od–do roku, bez dokumentů, skrýt filmy, které už
+  v MMD jsou. Předvybrané je, co projde filtrem a v MMD ještě není. Kolekce se založí stejnou akcí jako schválení
+  požadavku (`create-collection`, nově i s typem kolekce) – oddíly bez dělení, po desetiletích nebo
+  *Together / jméno osoby* (pojmenovatelné). Nové akce Edge Function `admin`: `people-search`, `person-films`,
+  `company-search`, `keyword-search`, `discover-films`.
+- **Ukazatel cíle** v přehledu admin panelu: počet filmů v katalogu a pruh k dalšímu cíli (2 000, pak po 500).
+- **Balíčky kolekcí** (`supabase/packs/*.json`, `scripts/add-pack.sh` + `add-pack.mjs`): obsah verze přichází
+  jako balíček ve formátu seedu. Skript nejdřív propíše do seedu změny z aplikace (sync-seed), pak přidá nové
+  kolekce na konec seedu a existujícím doplní kategorie / popis – jako text, ostatní řádky se nemění – a kolekce
+  naimportuje. Jde spustit opakovaně. Seed tak zůstává jediný zdroj pravdy a ve zipu dál není.
+- **Kategorie Western** 🤠 (migrace `20261118120000_western.sql`) a balíček `v4.3.2-westerns.json`:
+  **Bud Spencer & Terence Hill** (17 společných filmů + sólovky jako volitelné: Piedone, Nobody…, série Trinity
+  a Flatfoot), **Sergio Leone** (dolarová trilogie, trilogie Tenkrát…, Colossus of Rhodes a My Name Is Nobody
+  volitelně), **Django**, **The Magnificent Seven** (Sedm samurajů volitelně), výběry **Western Classics** (21),
+  **Spaghetti Western** (19) a **Modern Westerns** (21). Winnetou dostal kategorii Western a krátký popis.
+  Celkem ~95 nových filmů (část už v katalogu byla). Překlady názvů a popisů ve všech čtyřech jazycích.
+- Ikony kategorií u achievementů fanoušků pro všechny kategorie (dřív jen pět původních).
+- Ověřeno: migrace na lokálním Postgresu (i opakovaně), `add-pack` na kopii seedu (nové kolekce, Winnetou,
+  podruhé beze změny, CRLF), testy (`node --test` – 54), webové testy stavitele (dvě osoby, Together, filtr,
+  založení se skupinami, studio s řazením), ukazatel cíle, telefon bez přetečení.
+
+#### Rozhodnutí ve fázi 46b
+- **Obsah jako balíček, ne přepsaný seed** – seed u Adama obsahuje změny z aplikace, které tady nemám; balíček
+  se do něj jen přidá. Další části V4.3 přijdou stejně (`v4.3.3-…json`).
+- **Filmy v balíčku podle názvu a roku** (bez TMDB ID) – import hledá rok premiéry, pak libovolné vydání,
+  pak bez roku; co nesedí, je v reportu a opraví se v adminu (editor) nebo doplněním `"tmdb"`.
+- **Sólovky Buda a Terence jako volitelné** – kolekce je hlavně o dvojici; sólovky se do postupu nepočítají.
+- **Stavitel nezakládá typ Director** – ten přijde ve V4.3.3; Sergio Leone je zatím série.
+- **Řazení ve stavitelské kolekci po skupinách** (Together → první osoba → druhá), uvnitř podle premiéry – oddíly
+  v pohledu kolekce tak drží pohromadě.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).
