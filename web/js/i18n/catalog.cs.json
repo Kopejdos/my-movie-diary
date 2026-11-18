@@ -453,6 +453,61 @@
         "western-modern": {
             "name": "Moderní westerny",
             "description": "Divoký západ znovu – temnější a podivnější westerny od Nesmiřitelných po Sílu psa."
+        },
+        "christopher-nolan": {
+            "description": "Čas, paměť a velkolepá podívaná – všechny filmy Christophera Nolana od nízkorozpočtového Sledování až po jeho nejnovější film."
+        },
+        "quentin-tarantino": {
+            "description": "Deset filmů, nekonečné dialogy a spousta krve – Tarantinova filmografie od Gaunerů po Tenkrát v Hollywoodu."
+        },
+        "stanley-kubrick": {
+            "description": "Perfekcionista, který ovládl každý žánr, na který sáhl – válku, sci-fi, horor i satiru. Jeho dva první filmy jsou volitelné."
+        },
+        "alfred-hitchcock": {
+            "description": "Mistr napětí – to nejdůležitější od Hitchcocka od 39 stupňů po Rodinné spiknutí; rané britské filmy a vzácnější tituly jsou volitelné."
+        },
+        "steven-spielberg": {
+            "description": "Žraloci, dinosauři, mimozemšťané i dějiny – půl století Spielberga od Duelu až po jeho nejnovější film."
+        },
+        "tim-burton": {
+            "description": "Gotické, vtipné a trochu smutné – filmy Tima Burtona od Pee-weeho velkého dobrodružství po Beetlejuice Beetlejuice. Ukradené Vánoce (režie Henry Selick) jsou volitelné."
+        },
+        "wes-anderson": {
+            "description": "Symetrie, pastelové barvy a melancholický humor – všechny celovečerní filmy Wese Andersona a navíc oscarový Henry Sugar."
+        },
+        "david-fincher": {
+            "description": "Sérioví vrazi, posedlost a dokonalé záběry – David Fincher od Vetřelce³ až po jeho nejnovější film."
+        },
+        "denis-villeneuve": {
+            "description": "Od québeckých dramat až na Arrakis – filmy Denise Villeneuva; jeho první dva celovečerní filmy jsou volitelné."
+        },
+        "akira-kurosawa": {
+            "description": "Samurajové, déšť a lidské srdce – to nejdůležitější od Kurosawy od Opilého anděla po Sny; vzácnější filmy jsou volitelné."
+        },
+        "best-picture-winners": {
+            "name": "Vítězové Oscara za nejlepší film",
+            "description": "Všichni vítězové Oscara za nejlepší film – od Křídel (1927) po Jednu bitvu za druhou, desetiletí po desetiletí."
+        },
+        "universal-monsters": {
+            "name": "Monstra studia Universal",
+            "description": "Drákula, Frankenstein, mumie, neviditelný muž, vlkodlak a netvor z Černé laguny – monstra, která vynalezla filmový horor. Slabší pokračování jsou volitelná."
+        },
+        "hammer-films": {
+            "description": "Britské studio, které vrátilo gotický horor na plátna v barvách – Christopher Lee, Peter Cushing a spousta krve."
+        },
+        "louis-de-funes": {
+            "description": "Francouzský král komedie – četník ze Saint-Tropez, Fantomas a jeho nejoblíbenější filmy."
+        },
+        "jean-paul-belmondo": {
+            "description": "Bebel – od francouzské nové vlny po akční hity, ve kterých si kaskadérské kousky dělal sám."
+        },
+        "path-nolan-essentials": {
+            "name": "Nolan: to hlavní",
+            "description": "Kde s Christopherem Nolanem začít – devět kroků od divácky nejvstřícnějších filmů po hlavolamy."
+        },
+        "path-oscar-essentials": {
+            "name": "Oscar: to hlavní",
+            "description": "Čtrnáct vítězů Oscara za nejlepší film, které by měl vidět každý filmový fanoušek – od screwball komedie po multivesmír."
         }
     },
     "notes": {
@@ -533,7 +588,30 @@
         "Kubrick, Nicholson and the Overlook Hotel – the scares get heavier from here.": "Kubrick, Nicholson a hotel Overlook – odtud už strach přituhuje.",
         "Raw, grimy terror made on a tiny budget.": "Syrová, špinavá hrůza natočená za pár korun.",
         "Often called the scariest film ever made.": "Často označovaný za nejděsivější film všech dob.",
-        "The final boss: modern grief horror that gets under your skin.": "Finální boss: moderní horor o žalu, který se dostane pod kůži."
+        "The final boss: modern grief horror that gets under your skin.": "Finální boss: moderní horor o žalu, který se dostane pod kůži.",
+        "The perfect way in: a heist movie inside dreams – big ideas, clear rules, a great ride.": "Ideální začátek: loupež uvnitř snů – velké nápady, jasná pravidla, skvělá jízda.",
+        "Two rival magicians and a story that is itself a magic trick. Watch closely.": "Dva soupeřící kouzelníci a příběh, který je sám kouzelnickým trikem. Dívej se pozorně.",
+        "Nolan takes Batman seriously – the origin story that rebooted superhero movies.": "Nolan bere Batmana vážně – příběh o počátcích, který restartoval superhrdinské filmy.",
+        "Heath Ledger's Joker and a crime epic that happens to star Batman.": "Joker Heathe Ledgera a kriminální epos, ve kterém shodou okolností hraje Batman.",
+        "The breakthrough: a story told backwards by a man who can't make new memories.": "Průlom: příběh vyprávěný pozpátku mužem, který si nedokáže vytvářet nové vzpomínky.",
+        "Space, time and a father's love – the most emotional film he has made.": "Vesmír, čas a otcovská láska – jeho nejemotivnější film.",
+        "Land, sea and air on three clocks – a war film built like a ticking watch.": "Země, moře a vzduch na trojích hodinách – válečný film postavený jako tikající hodinky.",
+        "The father of the atomic bomb – the film that finally won him the Oscar.": "Otec atomové bomby – film, který mu konečně vynesl Oscara.",
+        "Save the most puzzling for last: time runs forwards and backwards at once.": "To nejzamotanější si nech nakonec: čas tu běží dopředu i dozadu zároveň.",
+        "The first film to win all five top Oscars – and still a perfect romantic comedy.": "První film, který získal všech pět hlavních Oscarů – a pořád dokonalá romantická komedie.",
+        "Love, war and the most quoted lines in film history.": "Láska, válka a nejcitovanější repliky v dějinách filmu.",
+        "Sharp, witty and merciless – Bette Davis and the backstage world of theatre.": "Ostrý, vtipný a nemilosrdný – Bette Davisová a zákulisí divadla.",
+        "Billy Wilder's bittersweet comedy about loneliness in the big city.": "Hořkosladká komedie Billyho Wildera o samotě ve velkoměstě.",
+        "The desert epic that defines the word epic – see it on the biggest screen you can.": "Pouštní velkofilm, který definuje slovo epický – pusť si ho na co největší obrazovce.",
+        "The family saga everything else is measured against.": "Rodinná sága, se kterou se měří všechno ostatní.",
+        "Jack Nicholson against the system – funny, angry and heartbreaking.": "Jack Nicholson proti systému – vtipný, rozzlobený a srdcervoucí.",
+        "The comedy that changed how romantic comedies talk.": "Komedie, která změnila, jak romantické komedie mluví.",
+        "Mozart through the eyes of his jealous rival – music as a matter of life and death.": "Mozart očima svého žárlivého soka – hudba jako otázka života a smrti.",
+        "The only horror film to win Best Picture – meet Hannibal Lecter.": "Jediný horor, který vyhrál Oscara za nejlepší film – seznam se s Hannibalem Lecterem.",
+        "Spielberg's Holocaust drama – hard to watch, impossible to forget.": "Spielbergovo drama o holocaustu – těžké na sledování, nemožné zapomenout.",
+        "The Coen brothers' relentless thriller with one of cinema's scariest killers.": "Neúprosný thriller bratrů Coenů s jedním z nejděsivějších zabijáků filmu.",
+        "The first non-English-language winner – a class satire that turns into a thriller.": "První vítěz v jiném jazyce než angličtině – třídní satira, ze které se stane thriller.",
+        "Multiverse kung fu, a tax audit and a mother and daughter – wild and very moving.": "Kung-fu v multivesmíru, daňová kontrola a matka s dcerou – šílené a velmi dojemné."
     },
     "terms": {
         "Phase 1": "Fáze 1",
@@ -676,6 +754,21 @@
         "Original": "Původní",
         "Unofficial": "Neoficiální",
         "Homage": "Pocta",
-        "The original": "Předloha"
+        "The original": "Předloha",
+        "1920s": "20. léta",
+        "1930s": "30. léta",
+        "TV movie": "TV film",
+        "Produced": "Jako producent",
+        "Short": "Krátký film",
+        "Jurassic Park": "Jurský park",
+        "Dune": "Duna",
+        "Dracula": "Drákula",
+        "The Mummy": "Mumie",
+        "The Invisible Man": "Neviditelný",
+        "The Wolf Man": "Vlkodlak",
+        "Creature from the Black Lagoon": "Netvor z Černé laguny",
+        "The Phantom of the Opera": "Fantom opery",
+        "Le Gendarme": "Četník",
+        "Fantômas": "Fantomas"
     }
 }

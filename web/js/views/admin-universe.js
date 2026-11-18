@@ -19,7 +19,7 @@ import { requireAdminView } from "./admin.js";
 import { createCollectionEditor, unsavedText } from "./collection-editor.js";
 import { tmdbSearchPanel } from "./tmdb-search-panel.js";
 
-const KINDS = [["series", "kindSeries"], ["studio", "kindStudio"], ["genre", "kindGenre"], ["path", "kindPathOption"]];
+const KINDS = [["series", "kindSeries"], ["studio", "kindStudio"], ["director", "kindDirectorOption"], ["genre", "kindGenre"], ["path", "kindPathOption"]];
 
 export async function adminUniverseView(container, context) {
     if (!requireAdminView(container)) return;

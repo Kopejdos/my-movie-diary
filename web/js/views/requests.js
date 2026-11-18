@@ -480,7 +480,7 @@ class RequestsPage {
         this.similarTimer = setTimeout(async () => {
             try {
                 const similar = (await fetchSimilarCollections(ids, name))
-                    .filter((c) => c.name_match || c.kind === "series" || c.kind === "path");
+                    .filter((c) => c.name_match || ["series", "path", "director"].includes(c.kind));
                 this.similarBox.hidden = similar.length === 0;
                 mount(this.similarBox, similar.length === 0 ? null : [
                     h("strong", {}, TEXTS.requestsSimilar),

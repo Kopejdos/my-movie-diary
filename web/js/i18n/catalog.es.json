@@ -445,6 +445,61 @@
         "western-modern": {
             "name": "Wésterns modernos",
             "description": "La frontera revisitada: wésterns más oscuros y extraños, de Sin perdón a El poder del perro."
+        },
+        "christopher-nolan": {
+            "description": "Tiempo, memoria y espectáculo: todas las películas de Christopher Nolan, desde la modestísima Following hasta su estreno más reciente."
+        },
+        "quentin-tarantino": {
+            "description": "Diez películas, diálogos interminables y mucha sangre: la filmografía de Tarantino, de Reservoir Dogs a Érase una vez en… Hollywood."
+        },
+        "stanley-kubrick": {
+            "description": "Un perfeccionista que dominó todos los géneros que tocó: guerra, ciencia ficción, terror y sátira. Sus dos primeras películas son opcionales."
+        },
+        "alfred-hitchcock": {
+            "description": "El maestro del suspense: lo esencial de Hitchcock, de 39 escalones a La trama; las primeras películas británicas y los títulos menos conocidos son opcionales."
+        },
+        "steven-spielberg": {
+            "description": "Tiburones, dinosaurios, extraterrestres e historia: medio siglo de Spielberg, de El diablo sobre ruedas a su estreno más reciente."
+        },
+        "tim-burton": {
+            "description": "Gótico, divertido y un poco triste: las películas de Tim Burton, de La gran aventura de Pee-wee a Bitelchús Bitelchús. Pesadilla antes de Navidad (dirigida por Henry Selick) es opcional."
+        },
+        "wes-anderson": {
+            "description": "Simetría, colores pastel y humor melancólico: todos los largometrajes de Wes Anderson, con el oscarizado Henry Sugar como extra."
+        },
+        "david-fincher": {
+            "description": "Asesinos en serie, obsesión y planos perfectos: David Fincher, de Alien 3 a su estreno más reciente."
+        },
+        "denis-villeneuve": {
+            "description": "De los dramas de Quebec a Arrakis: las películas de Denis Villeneuve; sus dos primeros largometrajes son opcionales."
+        },
+        "akira-kurosawa": {
+            "description": "Samuráis, lluvia y el corazón humano: lo esencial de Kurosawa, de El ángel ebrio a Los sueños; sus títulos menos conocidos son opcionales."
+        },
+        "best-picture-winners": {
+            "name": "Ganadoras del Óscar a la mejor película",
+            "description": "Todas las ganadoras del Óscar a la mejor película, de Alas (1927) a Una batalla tras otra, década a década."
+        },
+        "universal-monsters": {
+            "name": "Monstruos de Universal",
+            "description": "Drácula, Frankenstein, la momia, el hombre invisible, el hombre lobo y la criatura de la laguna: los monstruos que inventaron el cine de terror. Las secuelas menores son opcionales."
+        },
+        "hammer-films": {
+            "description": "El estudio británico que devolvió el terror gótico a la pantalla en color: Christopher Lee, Peter Cushing y mucha sangre."
+        },
+        "louis-de-funes": {
+            "description": "El rey de la comedia francesa: el gendarme de Saint-Tropez, Fantomas y sus éxitos más queridos."
+        },
+        "jean-paul-belmondo": {
+            "description": "Bébel: de la Nouvelle Vague a los éxitos de acción en los que hacía él mismo sus escenas de riesgo."
+        },
+        "path-nolan-essentials": {
+            "name": "Nolan: lo esencial",
+            "description": "Por dónde empezar con Christopher Nolan: nueve pasos de las películas más accesibles a las más enrevesadas."
+        },
+        "path-oscar-essentials": {
+            "name": "Óscar: lo esencial",
+            "description": "Catorce ganadoras del Óscar a la mejor película que todo cinéfilo debería ver: de la screwball comedy al multiverso."
         }
     },
     "notes": {
@@ -525,7 +580,30 @@
         "Kubrick, Nicholson and the Overlook Hotel – the scares get heavier from here.": "Kubrick, Nicholson y el hotel Overlook: a partir de aquí, el miedo aprieta.",
         "Raw, grimy terror made on a tiny budget.": "Terror crudo y sucio con un presupuesto mínimo.",
         "Often called the scariest film ever made.": "A menudo considerada la película más aterradora jamás hecha.",
-        "The final boss: modern grief horror that gets under your skin.": "El jefe final: terror moderno sobre el duelo que se te mete bajo la piel."
+        "The final boss: modern grief horror that gets under your skin.": "El jefe final: terror moderno sobre el duelo que se te mete bajo la piel.",
+        "The perfect way in: a heist movie inside dreams – big ideas, clear rules, a great ride.": "La puerta de entrada perfecta: un atraco dentro de los sueños, con grandes ideas, reglas claras y mucha emoción.",
+        "Two rival magicians and a story that is itself a magic trick. Watch closely.": "Dos magos rivales y una historia que es en sí misma un truco de magia. Mira con atención.",
+        "Nolan takes Batman seriously – the origin story that rebooted superhero movies.": "Nolan se toma en serio a Batman: el origen que reinició el cine de superhéroes.",
+        "Heath Ledger's Joker and a crime epic that happens to star Batman.": "El Joker de Heath Ledger y una epopeya criminal que, casualmente, protagoniza Batman.",
+        "The breakthrough: a story told backwards by a man who can't make new memories.": "La revelación: una historia contada al revés por un hombre que no puede crear nuevos recuerdos.",
+        "Space, time and a father's love – the most emotional film he has made.": "Espacio, tiempo y el amor de un padre: su película más emotiva.",
+        "Land, sea and air on three clocks – a war film built like a ticking watch.": "Tierra, mar y aire con tres relojes distintos: una película bélica construida como un reloj en marcha.",
+        "The father of the atomic bomb – the film that finally won him the Oscar.": "El padre de la bomba atómica: la película que por fin le dio el Óscar.",
+        "Save the most puzzling for last: time runs forwards and backwards at once.": "Deja lo más enrevesado para el final: el tiempo corre hacia delante y hacia atrás a la vez.",
+        "The first film to win all five top Oscars – and still a perfect romantic comedy.": "La primera película en ganar los cinco Óscar principales, y sigue siendo una comedia romántica perfecta.",
+        "Love, war and the most quoted lines in film history.": "Amor, guerra y las frases más citadas de la historia del cine.",
+        "Sharp, witty and merciless – Bette Davis and the backstage world of theatre.": "Afilada, ingeniosa y despiadada: Bette Davis y las bambalinas del teatro.",
+        "Billy Wilder's bittersweet comedy about loneliness in the big city.": "La comedia agridulce de Billy Wilder sobre la soledad en la gran ciudad.",
+        "The desert epic that defines the word epic – see it on the biggest screen you can.": "La epopeya del desierto que define la palabra épico: mírala en la pantalla más grande que puedas.",
+        "The family saga everything else is measured against.": "La saga familiar con la que se mide todo lo demás.",
+        "Jack Nicholson against the system – funny, angry and heartbreaking.": "Jack Nicholson contra el sistema: divertida, rabiosa y desgarradora.",
+        "The comedy that changed how romantic comedies talk.": "La comedia que cambió la forma de hablar de las comedias románticas.",
+        "Mozart through the eyes of his jealous rival – music as a matter of life and death.": "Mozart visto por su celoso rival: la música como cuestión de vida o muerte.",
+        "The only horror film to win Best Picture – meet Hannibal Lecter.": "La única película de terror que ha ganado el Óscar a la mejor película: te presentamos a Hannibal Lecter.",
+        "Spielberg's Holocaust drama – hard to watch, impossible to forget.": "El drama de Spielberg sobre el Holocausto: duro de ver e imposible de olvidar.",
+        "The Coen brothers' relentless thriller with one of cinema's scariest killers.": "El implacable thriller de los hermanos Coen con uno de los asesinos más aterradores del cine.",
+        "The first non-English-language winner – a class satire that turns into a thriller.": "La primera ganadora en un idioma distinto del inglés: una sátira de clases que se convierte en thriller.",
+        "Multiverse kung fu, a tax audit and a mother and daughter – wild and very moving.": "Kung-fu multiversal, una inspección de Hacienda y una madre y su hija: una locura muy emotiva."
     },
     "terms": {
         "Phase 1": "Fase 1",
@@ -665,6 +743,20 @@
         "Produced by Leone": "Producida por Leone",
         "Unofficial": "No oficial",
         "Homage": "Homenaje",
-        "The original": "La original"
+        "The original": "La original",
+        "1920s": "Años 20",
+        "1930s": "Años 30",
+        "TV movie": "Telefilme",
+        "Produced": "Como productor",
+        "Short": "Cortometraje",
+        "Jurassic Park": "Parque Jurásico",
+        "Dracula": "Drácula",
+        "The Mummy": "La momia",
+        "The Invisible Man": "El hombre invisible",
+        "The Wolf Man": "El hombre lobo",
+        "Creature from the Black Lagoon": "La mujer y el monstruo",
+        "The Phantom of the Opera": "El fantasma de la ópera",
+        "Le Gendarme": "El gendarme",
+        "Fantômas": "Fantomas"
     }
 }

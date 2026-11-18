@@ -229,6 +229,7 @@ export class UniversePage {
                     pill(this.isPath ? steps(required) : movies(required), true),
                     universe.kind === "genre" ? pill(TEXTS.kindGenre) : null,
                     this.isPath ? pill(`🧭 ${TEXTS.kindPathBadge}`) : null,
+                    universe.kind === "director" ? pill(`🎬 ${TEXTS.kindDirectorBadge}`) : null,
                     this.bannerPills(),
                     (universe.categories ?? [])
                         .sort((a, b) => a.sort_order - b.sort_order)

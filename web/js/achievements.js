@@ -38,6 +38,9 @@ export const CATEGORY_FAN_TIERS = [1, 3, 5];
 /** Pathfinder – úrovně podle počtu dokončených cest (V1.8). */
 export const PATHFINDER_TIERS = [1, 3, 5];
 
+/** Auteur – úrovně podle počtu dokončených kolekcí režisérů (V4.3.5). */
+export const AUTEUR_TIERS = [1, 3, 5];
+
 /** Ikony kategorií (neznámá kategorie dostane hvězdu). */
 export const CATEGORY_ICONS = {
     superhero: "🦸",
@@ -211,6 +214,19 @@ export function computeAchievements({ watches, universes, items, categories, lin
             tiers: scaledTiers(PATHFINDER_TIERS, pathCount),
             value: donePaths.length,
             reached: donePaths.map((c) => c.date),
+        }));
+    }
+
+    // Auteur – dokončené kolekce režisérů (V4.3.5), stejně jako Pathfinder
+    const directorCount = universes.filter((u) => u.kind === "director" && requiredByUniverse.has(u.id)).length;
+    if (directorCount > 0) {
+        const doneDirectors = completed.filter((c) => c.universe.kind === "director");
+        cards.push(buildCard({
+            key: "auteur",
+            icon: "🎥",
+            tiers: scaledTiers(AUTEUR_TIERS, directorCount),
+            value: doneDirectors.length,
+            reached: doneDirectors.map((c) => c.date),
         }));
     }
 

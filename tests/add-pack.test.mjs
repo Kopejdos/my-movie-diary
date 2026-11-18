@@ -82,6 +82,27 @@ test("balíček V4.3.2: platný, kolekce mají kategorii western a filmy s rokem
     }
 });
 
+test("balíček V4.3.5: režiséři mají typ director a filmy po desetiletích, cesty mají poznámky", () => {
+    const pack = JSON.parse(readFileSync(new URL("../supabase/packs/v4.3.5-directors.json", import.meta.url), "utf8"));
+    const kinds = new Set(["series", "studio", "genre", "path", "director"]);
+    assert.equal(pack.update["sergio-leone"].kind, "director");
+    assert.equal(pack.universes.filter((u) => u.kind === "director").length, 10);
+    for (const universe of pack.universes) {
+        assert.match(universe.slug, /^[a-z0-9-]{2,40}$/, universe.slug);
+        assert.ok(kinds.has(universe.kind), universe.slug);
+        assert.ok(universe.categories.length > 0 && universe.description, universe.slug);
+        const keys = universe.films.map((f) => `${f.title}|${f.year}`);
+        assert.equal(new Set(keys).size, keys.length, `${universe.slug}: film dvakrát`);
+        for (const film of universe.films) {
+            assert.ok(film.title && Number.isInteger(film.year), `${universe.slug}: ${film.title}`);
+            if (universe.kind === "director") assert.equal(film.group, `${Math.floor(film.year / 10) * 10}s`, `${universe.slug}: ${film.title}`);
+            if (universe.kind === "path") assert.ok(film.note && film.note.length <= 300, `${universe.slug}: ${film.title}`);
+        }
+    }
+    // Vítězové Oscara za nejlepší film: 98 ročníků (1927 – 2025), jeden film za ročník
+    assert.equal(pack.universes.find((u) => u.slug === "best-picture-winners").films.length, 98);
+});
+
 test("nextGoal: 2 000, pak po 500", async () => {
     const { nextGoal } = await import("../web/js/admin.js");
     assert.equal(nextGoal(1264), 2000);

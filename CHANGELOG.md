@@ -3,6 +3,14 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.3.5 – November 2026
+- Directors 🎬 – a new kind of collection with its own tab: Nolan, Tarantino, Kubrick, Hitchcock, Spielberg, Burton, Wes Anderson, Fincher, Villeneuve, Kurosawa and Sergio Leone, decade by decade
+- New achievement: Auteur – finish the collections of your favourite directors
+- Best Picture Winners – all 98 Oscar winners, from Wings to One Battle After Another
+- Universal Monsters, Hammer Films, Louis de Funès and Jean-Paul Belmondo
+- New paths: Nolan Essentials and Oscar Essentials
+- About 330 new movies
+
 ## V4.3.4 – November 2026
 - New here? A short tour shows what every button does – on the Collections page and the first time you open a collection
 - Help page: buttons at a glance, how everything works and the rules – in all five languages (link in the footer)

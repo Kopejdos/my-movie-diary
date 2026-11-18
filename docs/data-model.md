@@ -90,7 +90,7 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 | `name` | `text` | „Marvel Cinematic Universe“ |
 | `description` | `text` | |
 | `color` | `text` | barva univerza `#rrggbb` (záře, karty, tlačítka) |
-| `kind` | `text` | typ kolekce: `series` / `studio` / `genre` (žánrový výběr) / `path` (cesta, od V1.8) |
+| `kind` | `text` | typ kolekce: `series` / `studio` / `genre` (žánrový výběr) / `path` (cesta, od V1.8) / `director` (režisér, od V4.3.5) |
 | `cover_tmdb_id` | `integer` FK → `films` | film, jehož plakát je na kartičce |
 | `sort_order` | `integer` | pořadí na hlavní obrazovce |
 

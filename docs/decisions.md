@@ -368,7 +368,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 46b | V4.3.2 | Nástroje + westerny ✅ | admin: **kolekce z osoby** (režisér / herec, i **průnik dvou osob**), **kolekce ze studia / klíčového slova TMDB**, **ukazatel cíle** (např. 1 264 / 2 000); kategorie **Western** 🤠, **Bud Spencer & Terence Hill**, Leone, westernové výběry |
 | 46c | V4.3.3 | Požadavky: odpovědi a podobné kolekce ✅ | zamítnutí s **důvodem a poznámkou** pro uživatele, zamítnutý požadavek na kolekci jde **upravit a poslat znovu**, „New answer“; upozornění na **podobnou kolekci**, která už v MMD je (uživatel, admin u požadavku i ve staviteli) |
 | 46d | V4.3.4 | Překlady kolekcí a průvodce ✅ | admin: záložka **Translations** – názvy a popisy kolekcí ve 4 jazycích, **kontrola s TMDB** (název série / prvního filmu), *Use* / *Keep ours* / ruční oprava bez nového vydání; nové kolekce ze série TMDB dostanou přeložený název samy; **průvodce pro nováčky** (prohlídka přehledu a tlačítek u filmů) a stránka **Help** |
-| 46e | V4.3.5 | Režiséři a klasika | nový typ kolekce **Director** (záložka *Directors*), 10 režisérů, **Best Picture Winners**, Universal Monsters, Hammer, Louis de Funès, Belmondo |
+| 46e | V4.3.5 | Režiséři a klasika ✅ | nový typ kolekce **Director** (záložka *Directors*, achievement **Auteur**), 10 režisérů + Sergio Leone, **Best Picture Winners** (98), Universal Monsters, Hammer, Louis de Funès, Belmondo, cesty Nolan Essentials a Oscar Essentials |
 | 46f | V4.3.6 | Série a monstra | ~40 komediálních, akčních, sci-fi / fantasy a hororových sérií, **Godzilla + MonsterVerse**, King Kong; studia A24, Blumhouse, Amblin, Toho |
 | 46g | V4.3.7 | Anime a česká klasika | kategorie **Anime** 🎌 a **Czech & Slovak** 🇨🇿; Shinkai, Hosoda, Kon, Evangelion, Pokémon, Dragon Ball, Detective Conan, Cartoon Saloon; Slunce, seno…, Básníci, Anděl Páně, české pohádky, Svěrák |
 | 46h | V4.3.8 | Žánrové výběry a cesty | ~20 nových žánrových výběrů po 12–15 filmech + 7 nových cest; **cíl 2 000 filmů splněn** |
@@ -388,7 +388,7 @@ mezi kolekcemi opakují – kolekce režiséra sdílí filmy se studii, výběry
 | V4.3.2 Nástroje + westerny | ~120 | ~1 380 |
 | V4.3.3 Požadavky: odpovědi a podobné kolekce | – (nástroje) | ~1 380 |
 | V4.3.4 Překlady kolekcí a průvodce | – (nástroje) | ~1 460 (filmy přidané přes požadavky) |
-| V4.3.5 Režiséři a klasika | ~250 | ~1 710 |
+| V4.3.5 Režiséři a klasika | ~330 (skutečně) | ~1 790 |
 | V4.3.6 Série a monstra | ~230 | ~1 940 |
 | V4.3.7 Anime a česká klasika | ~180 | ~2 120 |
 | V4.3.8 Žánrové výběry a cesty | ~150 | **~2 270** |
@@ -438,9 +438,10 @@ mezi kolekcemi opakují – kolekce režiséra sdílí filmy se studii, výběry
 - **Best Picture Winners** – všichni vítězové Oscara za nejlepší film (skoro 100), skupiny po desetiletích.
 - Studia **Universal Monsters** (Dracula, Frankenstein, The Mummy, The Wolf Man… a pokračování) a **Hammer Films**.
 - **Louis de Funès** (Četníci ze Saint-Tropez, Fantomas) a **Jean-Paul Belmondo**.
-- Cesty **Nolan in Order** a **Oscar Essentials**.
+- Cesty **Nolan in Order** a **Oscar Essentials** (nakonec *Nolan Essentials* – viz fáze 46e).
 
-**V4.3.6 – Série a monstra**
+**V4.3.6 – Série a monstra** (pozn. 18. 11.: Scary Movie, Hellraiser, The Exorcist, The Omen, [REC], Riddick a
+Pacific Rim mezitím přidal kamarád přes požadavky – z balíčku vypadnou, místo nich jiné série)
 - **Komedie:** Police Academy, The Naked Gun, Hot Shots!, Scary Movie, Austin Powers, American Pie, Home Alone,
   Night at the Museum, Rush Hour, Bad Boys, Beverly Hills Cop, The Hangover.
 - **Akční:** The Expendables, Taken, The Transporter, The Equalizer, Underworld, Riddick, Ip Man,
@@ -2200,6 +2201,48 @@ testovacích seznamů byla vymyšlená.
   (cíl je pro každou velikost jiný prvek). Krok, jehož tlačítko na stránce není, se přeskočí.
 - **Prohlídka jednou pro každého** – i stávající uživatelé ji uvidí jednou (jde přeskočit jedním klepnutím).
 - **Pravidla v nápovědě srozumitelně, závazné jsou podmínky** – odkaz na Terms of Service zůstává.
+
+### Fáze 46e – režiséři a klasika ✅ (18. 11. 2026) – **V4.3.5**
+- **Typ kolekce Director** (migrace `20261120100000_directors.sql` – `universes.kind` nově i `director`):
+  na přehledu záložka **Directors** mezi Studios a Genre picks (s popiskem), na kartě a v záhlaví kolekce
+  odznak **🎬 Director**, filmy po desetiletích (oddíly 1990s, 2000s…). Admin: typ v editoru kolekce, filtr
+  v seznamu kolekcí, stavitel nabídne typ Director sám, když je zdroj osoba s rolí režie. Upozornění na podobnou
+  kolekci (V4.3.3) bere režiséry jako série. U požadavku na film navrhne Edge Function `admin` i kolekci
+  režiséra (podle režiséra filmu v TMDB – stejné jméno jako kolekce).
+- **Achievement Auteur** 🎥 – dokončené kolekce režisérů, úrovně 1 / 3 / 5 (zkrácené na počet režisérů v katalogu,
+  jako Pathfinder). Počítá ho web, databáze se nemění.
+- **Balíček `v4.3.5-directors.json`** (17 kolekcí, 426 řádků, ~330 nových filmů – katalog ~1 790):
+  - režiséři: **Christopher Nolan** (13, i The Odyssey 2026), **Quentin Tarantino** (10), **Stanley Kubrick** (13,
+    dva první volitelně), **Alfred Hitchcock** (38, 23 povinných – rané britské a vzácnější volitelně),
+    **Steven Spielberg** (35, Duel volitelně, i Disclosure Day 2026), **Tim Burton** (21, Ukradené Vánoce volitelně),
+    **Wes Anderson** (13, Henry Sugar volitelně), **David Fincher** (13, i The Adventures of Cliff Booth – premiéra
+    26. 11. 2026, do té doby v Coming soon), **Denis Villeneuve** (12, Duna: Část třetí jako chystaná, dva první
+    volitelně), **Akira Kurosawa** (23, 17 povinných); **Sergio Leone** se přepne ze série na režiséra (`update`);
+  - **Best Picture Winners** – všech 98 vítězů Oscara za nejlepší film (Wings 1927 – One Battle After Another 2025),
+    oddíly po desetiletích (typ Genre pick, kategorie Drama);
+  - studia **Universal Monsters** (26, slabší pokračování volitelně, pohled By series = Dracula, Frankenstein,
+    Mumie…) a **Hammer Films** (34);
+  - **Louis de Funès** (26 – Četník, Fantomas, Grande Vadrouille…) a **Jean-Paul Belmondo** (28) jako série;
+  - cesty **Nolan Essentials** (9 kroků) a **Oscar Essentials** (14 kroků) s poznámkami.
+  Překlady názvů, popisů, poznámek cest a popisků (1920s, 1930s, TV movie, Mumie, Četník…) ve všech čtyřech jazycích.
+- Ověřeno: migrace na lokálním Postgresu (i opakovaně, neznámý typ odmítne), `add-pack` na aktuálním seedu
+  (17 nových kolekcí, Sergio Leone → director, podruhé beze změny), testy (`node --test` – 66, nově Auteur
+  a platnost balíčku V4.3.5), webové testy přehledu ve třech jazycích (záložka, odznak, oddíly, cesta), telefon
+  320–390 px bez přetečení.
+
+#### Rozhodnutí ve fázi 46e
+- **Director jako typ kolekce, ne kategorie** – režisér je druh kolekce (jako studio), žánr se dál určuje
+  kategoriemi (Nolan = Sci-fi + Crime & Thriller).
+- **Herci (de Funès, Belmondo, Bud & Terence) zůstávají sériemi** – samostatný typ „Actor“ by měl jen pár
+  kolekcí; až jich bude víc, dá se přidat stejně jako Director.
+- **Best Picture Winners jako Genre pick** – je to kurátorský výběr, ne série ani studio; 98 filmů všech
+  povinných je výzva pro completionisty.
+- **Nolan Essentials místo „Nolan in Order“** – pořadí vydání už ukazuje kolekce režiséra; cesta má smysl jako
+  doporučené pořadí, kde začít (od Inception po Tenet).
+- **Hitchcock a Kurosawa ne kompletně** – oba natočili přes 30 filmů; povinné jsou ty podstatné, zbytek volitelně,
+  aby šla kolekce dokončit.
+- **Chystané filmy rovnou v kolekci** (Cliff Booth, Duna: Část třetí) – import je uloží jako chystané a v den
+  premiéry se započítají samy.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

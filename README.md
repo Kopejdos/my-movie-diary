@@ -25,8 +25,9 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Compare with a friend – movies in common, taste match from your ratings, recommendations and collections side by side
 - Movie requests – ask for missing movies (up to 30 at once), a whole series or your own collection from any movies (with order, sections and labels), +1 what others want, follow the status of your requests (with the reason when one is rejected – edit a collection request and send it again), a warning when a similar collection already exists
 - Curated paths – step-by-step routes like MCU Essentials or Horror 101, with a note for every step
+- Director collections – Nolan, Tarantino, Kubrick, Hitchcock and more, decade by decade
 - Watchlist across all collections
-- Achievements with levels (Bronze → Platinum) and completed-collection badges
+- Achievements with levels (Bronze → Platinum) and completed-collection badges – Pathfinder for paths, Auteur for directors
 - XP and levels with movie-themed titles – from Extra to Legend
 - Personal stats – activity, most watched movies, decades, categories, streaks and collections you're closest to finishing
 - Sign in with email or nickname & password, or with Google; password reset and bot protection (Cloudflare Turnstile)

@@ -68,3 +68,30 @@ test("součet XP sedí s rozpadem", () => {
     assert.equal(total, films + rewatches + collections + achievements);
     assert.equal(result.level.xp, total);
 });
+
+test("Auteur (V4.3.5): dokončené kolekce režisérů, úrovně podle počtu režisérů v katalogu", () => {
+    const directors = {
+        universes: [
+            { id: 1, slug: "nolan", name: "Christopher Nolan", kind: "director" },
+            { id: 2, slug: "kubrick", name: "Stanley Kubrick", kind: "director" },
+            { id: 3, slug: "alien", name: "Alien", kind: "series" },
+        ],
+        items: [
+            { universe_id: 1, tmdb_id: 1 }, { universe_id: 1, tmdb_id: 2 },
+            { universe_id: 2, tmdb_id: 3 }, { universe_id: 2, tmdb_id: 4 },
+            { universe_id: 3, tmdb_id: 5 },
+        ],
+        categories: [],
+        links: [],
+    };
+    const result = computeAchievements({ ...directors,
+        watches: [watch(1, "2026-01-01"), watch(2, "2026-01-02"), watch(5, "2026-01-03")] });
+    const auteur = card(result, "auteur");
+    assert.equal(auteur.value, 1);                                  // série Alien se nepočítá
+    assert.deepEqual(auteur.tiers.map((t) => t.threshold), [1, 2]); // 1 / 3 / 5 zkrácené na 2 režiséry
+    assert.equal(auteur.tiers[0].unlockedOn, "2026-01-02");
+    assert.equal(auteur.tiers[1].unlockedOn, null);
+
+    // Bez kolekcí režisérů se karta neukáže
+    assert.equal(card(computeAchievements({ ...catalog, watches: [] }), "auteur"), undefined);
+});

@@ -55,7 +55,7 @@ interface SeedUniverse {
   slug: string;
   name: string;
   color?: string;      // #rrggbb
-  kind?: "series" | "studio" | "genre" | "path";
+  kind?: "series" | "studio" | "genre" | "path" | "director";
   categories?: string[];  // slugy kategorií (tabulka categories)
   description?: string;
   films: SeedFilm[];

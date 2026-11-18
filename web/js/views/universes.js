@@ -406,13 +406,16 @@ function searchEntry() {
 function kindLabel(kind) {
     return {
         path: TEXTS.kindPath, series: TEXTS.kindSeries, studio: TEXTS.kindStudio, genre: TEXTS.kindGenre,
+        director: TEXTS.kindDirector,
         community: TEXTS.kindCommunity,
     }[kind] ?? kind;
 }
 
 function kindHeading(kind) {
     const label = kindLabel(kind);
-    const hint = { genre: TEXTS.kindGenreHint, path: TEXTS.kindPathHint, community: TEXTS.kindCommunityHint }[kind];
+    const hint = {
+        genre: TEXTS.kindGenreHint, path: TEXTS.kindPathHint, director: TEXTS.kindDirectorHint, community: TEXTS.kindCommunityHint,
+    }[kind];
     return h("div", { class: "kind-heading" },
         h("h3", {}, label),
         hint ? h("span", { class: "muted" }, hint) : null,
@@ -455,6 +458,7 @@ export function universeCard(universe, signedIn, eager = false) {
         ),
         complete ? h("span", { class: "universe-card__badge" }, `✓ ${TEXTS.complete}`) : null,
         universe.kind === "path" ? h("span", { class: "universe-card__kind" }, `🧭 ${TEXTS.kindPathBadge}`) : null,
+        universe.kind === "director" ? h("span", { class: "universe-card__kind" }, `🎬 ${TEXTS.kindDirectorBadge}`) : null,   // V4.3.5
         h("div", { class: "universe-card__body" },
             h("h2", { class: "universe-card__title" }, universe.name),
             signedIn

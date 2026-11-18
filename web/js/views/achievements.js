@@ -25,6 +25,7 @@ function describe(card) {
         rewatcher: ["achRewatcherName", "achRewatcherDesc", "achUnitRewatch"],
         completionist: ["achCompletionistName", "achCompletionistDesc", "achUnitCollections"],
         pathfinder: ["achPathfinderName", "achPathfinderDesc", "achUnitPaths"],
+        auteur: ["achAuteurName", "achAuteurDesc", "achUnitDirectors"],
     };
     const [name, desc, unit] = map[card.key];
     return { name: TEXTS[name], desc: format(desc, t), unit: format(unit, Math.min(card.value, t), t) };

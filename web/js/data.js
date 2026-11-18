@@ -98,8 +98,8 @@ export async function fetchSearchData() {
     return { universes, items, otherFilms };
 }
 
-/** Pořadí typů kolekcí na přehledu – cesty až na konci (V3.0.1; dřív byly první). */
-export const KIND_ORDER = ["series", "studio", "genre", "path"];
+/** Pořadí typů kolekcí na přehledu – cesty až na konci (V3.0.1; dřív byly první), režiséři za studii (V4.3.5). */
+export const KIND_ORDER = ["series", "studio", "director", "genre", "path"];
 
 /**
  * Jedno univerzum podle adresy (slug) včetně filmů v pořadí vydání, nebo null.

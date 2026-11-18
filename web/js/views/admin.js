@@ -98,6 +98,7 @@ export async function adminUniversesView(container, context) {
             { value: "all", label: TEXTS.kindAll },
             { value: "series", label: TEXTS.kindSeries },
             { value: "studio", label: TEXTS.kindStudio },
+            { value: "director", label: TEXTS.kindDirector },
             { value: "genre", label: TEXTS.kindGenre },
             { value: "path", label: TEXTS.kindPath },
         ],
@@ -223,7 +224,7 @@ function universeRow(universe, previous, next, reload, { query = "", film = null
 
 /** Popisek druhu kolekce v řádku (série se neoznačuje). */
 function kindPillLabel(kind) {
-    return { studio: TEXTS.kindStudio, genre: TEXTS.kindGenre, path: TEXTS.kindPath }[kind] ?? kind;
+    return { studio: TEXTS.kindStudio, genre: TEXTS.kindGenre, path: TEXTS.kindPath, director: TEXTS.kindDirector }[kind] ?? kind;
 }
 
 /** Formulář pro nové univerzum (rozbalovací). */

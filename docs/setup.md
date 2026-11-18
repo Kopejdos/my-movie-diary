@@ -227,6 +227,10 @@ Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny
 21. **Překlady kolekcí a průvodce (V4.3.4):** migrace `20261119100000_collection_translations.sql`, pak znovu
     nasadit Edge Function **`admin`**. Potom v admin panelu záložka **Translations → Check with TMDB** a projít
     rozdíly (*Use* / *Keep ours* / oprava). Opravy se ukážou po obnovení stránky, bez nového vydání.
+22. **Režiséři a klasika (V4.3.5):** migrace `20261120100000_directors.sql` (typ kolekce `director`), znovu
+    nasadit Edge Function **`admin`** (`tmdb` má jen upravený typ – nasazovat nemusí), pak `./scripts/add-pack.sh supabase/packs/v4.3.5-directors.json`
+    (propíše změny z aplikace do seedu, přidá 17 kolekcí, Sergia Leoneho přepne na režiséra a naimportuje).
+    Seed pak commitni; nenalezené filmy jsou v `import-reports/`.
 
 **Seed a admin panel (od V3.5.2.1):** seed je zdroj pravdy pro import, ale **úpravy z aplikace se neztratí** –
 databáze si je pamatuje (`universe_items.source`, `universes.source`, tabulka `seed_removals`) a `import.sh`

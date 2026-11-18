@@ -492,6 +492,73 @@
         "western-modern": {
             "name": "Сучасні вестерни",
             "description": "Дикий Захід по-новому — темніші й дивніші вестерни від «Непрощеного» до «Влади пса»."
+        },
+        "christopher-nolan": {
+            "name": "Крістофер Нолан",
+            "description": "Час, пам'ять і видовище – усі фільми Крістофера Нолана, від малобюджетного «Переслідування» до найновішого."
+        },
+        "quentin-tarantino": {
+            "name": "Квентін Тарантіно",
+            "description": "Десять фільмів, нескінченні діалоги й багато крові – фільмографія Тарантіно від «Скажених псів» до «Одного разу в… Голлівуді»."
+        },
+        "stanley-kubrick": {
+            "name": "Стенлі Кубрик",
+            "description": "Перфекціоніст, який підкорив кожен жанр, до якого брався, – війну, фантастику, жахи й сатиру. Два його найперші фільми необов'язкові."
+        },
+        "alfred-hitchcock": {
+            "name": "Альфред Гічкок",
+            "description": "Майстер саспенсу – найважливіше з Гічкока від «39 сходинок» до «Сімейної змови»; ранні британські фільми й рідкісніші стрічки необов'язкові."
+        },
+        "steven-spielberg": {
+            "name": "Стівен Спілберг",
+            "description": "Акули, динозаври, прибульці та історія – пів століття Спілберга, від «Дуелі» до найновішого фільму."
+        },
+        "tim-burton": {
+            "name": "Тім Бертон",
+            "description": "Готично, смішно й трохи сумно – фільми Тіма Бертона від «Великої пригоди Пі-Ві» до «Бітлджюс Бітлджюс». «Жах перед Різдвом» (режисер Генрі Селік) – необов'язковий."
+        },
+        "wes-anderson": {
+            "name": "Вес Андерсон",
+            "description": "Симетрія, пастельні кольори й меланхолійний гумор – усі повнометражні фільми Веса Андерсона, а на додачу оскароносний «Генрі Шугар»."
+        },
+        "david-fincher": {
+            "name": "Девід Фінчер",
+            "description": "Серійні вбивці, одержимість і бездоганні кадри – Девід Фінчер від «Чужого 3» до найновішого фільму."
+        },
+        "denis-villeneuve": {
+            "name": "Дені Вільнев",
+            "description": "Від квебекських драм до Арракіса – фільми Дені Вільнева; два його перші повнометражні фільми необов'язкові."
+        },
+        "akira-kurosawa": {
+            "name": "Акіра Куросава",
+            "description": "Самураї, дощ і людське серце – найважливіше з Куросави від «П'яного ангела» до «Снів»; рідкісніші фільми необов'язкові."
+        },
+        "best-picture-winners": {
+            "name": "Переможці «Оскара» за найкращий фільм",
+            "description": "Усі переможці «Оскара» за найкращий фільм – від «Крил» (1927) до «Битви за битвою», десятиліття за десятиліттям."
+        },
+        "universal-monsters": {
+            "name": "Монстри Universal",
+            "description": "Дракула, Франкенштейн, мумія, людина-невидимка, людина-вовк та істота з Чорної лагуни – монстри, які вигадали кіножахи. Слабші продовження необов'язкові."
+        },
+        "hammer-films": {
+            "description": "Британська студія, що повернула готичні жахи на екран у кольорі, – Крістофер Лі, Пітер Кушинг і море крові."
+        },
+        "louis-de-funes": {
+            "name": "Луї де Фюнес",
+            "description": "Король французької комедії – жандарм із Сен-Тропе, Фантомас і його найулюбленіші хіти."
+        },
+        "jean-paul-belmondo": {
+            "name": "Жан-Поль Бельмондо",
+            "description": "Бебель – від французької «нової хвилі» до бойовиків, у яких він сам виконував трюки."
+        },
+        "path-nolan-essentials": {
+            "name": "Нолан: головне",
+            "description": "З чого почати знайомство з Крістофером Ноланом – дев'ять кроків від найдоступніших фільмів до найзаплутаніших."
+        },
+        "path-oscar-essentials": {
+            "name": "Оскар: головне",
+            "description": "Чотирнадцять переможців «Оскара» за найкращий фільм, які варто побачити кожному кіноману, – від ексцентричної комедії до мультивсесвіту."
         }
     },
     "notes": {
@@ -572,7 +639,30 @@
         "Kubrick, Nicholson and the Overlook Hotel – the scares get heavier from here.": "Кубрик, Ніколсон і готель «Оверлук» — далі страх лише посилюється.",
         "Raw, grimy terror made on a tiny budget.": "Сирий, брудний жах, знятий за мізерний бюджет.",
         "Often called the scariest film ever made.": "Його часто називають найстрашнішим фільмом усіх часів.",
-        "The final boss: modern grief horror that gets under your skin.": "Фінальний бос: сучасний горор про горе, що проникає під шкіру."
+        "The final boss: modern grief horror that gets under your skin.": "Фінальний бос: сучасний горор про горе, що проникає під шкіру.",
+        "The perfect way in: a heist movie inside dreams – big ideas, clear rules, a great ride.": "Ідеальний початок: пограбування всередині снів – великі ідеї, зрозумілі правила, захопливий шлях.",
+        "Two rival magicians and a story that is itself a magic trick. Watch closely.": "Два суперники-фокусники й історія, яка сама є фокусом. Дивись уважно.",
+        "Nolan takes Batman seriously – the origin story that rebooted superhero movies.": "Нолан сприймає Бетмена всерйоз – історія походження, що перезапустила супергеройське кіно.",
+        "Heath Ledger's Joker and a crime epic that happens to star Batman.": "Джокер Гіта Леджера і кримінальний епос, у якому випадково грає Бетмен.",
+        "The breakthrough: a story told backwards by a man who can't make new memories.": "Прорив: історія, розказана задом наперед чоловіком, який не може запам'ятовувати нове.",
+        "Space, time and a father's love – the most emotional film he has made.": "Космос, час і батьківська любов – його найемоційніший фільм.",
+        "Land, sea and air on three clocks – a war film built like a ticking watch.": "Суходіл, море й повітря на трьох годинниках – воєнний фільм, побудований як цокання годинника.",
+        "The father of the atomic bomb – the film that finally won him the Oscar.": "Батько атомної бомби – фільм, який нарешті приніс йому «Оскар».",
+        "Save the most puzzling for last: time runs forwards and backwards at once.": "Найзаплутаніше залиш на кінець: час тут іде вперед і назад водночас.",
+        "The first film to win all five top Oscars – and still a perfect romantic comedy.": "Перший фільм, що здобув усі п'ять головних «Оскарів», – і досі ідеальна романтична комедія.",
+        "Love, war and the most quoted lines in film history.": "Кохання, війна й найцитованіші репліки в історії кіно.",
+        "Sharp, witty and merciless – Bette Davis and the backstage world of theatre.": "Гострий, дотепний і нещадний – Бетт Девіс і закулісся театру.",
+        "Billy Wilder's bittersweet comedy about loneliness in the big city.": "Гірко-солодка комедія Біллі Вайлдера про самотність у великому місті.",
+        "The desert epic that defines the word epic – see it on the biggest screen you can.": "Пустельний епос, що визначає саме слово «епічний», – дивись на найбільшому екрані, який маєш.",
+        "The family saga everything else is measured against.": "Родинна сага, з якою порівнюють усе інше.",
+        "Jack Nicholson against the system – funny, angry and heartbreaking.": "Джек Ніколсон проти системи – смішно, гнівно й до сліз.",
+        "The comedy that changed how romantic comedies talk.": "Комедія, яка змінила те, як говорять романтичні комедії.",
+        "Mozart through the eyes of his jealous rival – music as a matter of life and death.": "Моцарт очима заздрісного суперника – музика як питання життя і смерті.",
+        "The only horror film to win Best Picture – meet Hannibal Lecter.": "Єдиний фільм жахів, що переміг у категорії «Найкращий фільм», – знайомся з Ганнібалом Лектером.",
+        "Spielberg's Holocaust drama – hard to watch, impossible to forget.": "Драма Спілберга про Голокост – важко дивитися, неможливо забути.",
+        "The Coen brothers' relentless thriller with one of cinema's scariest killers.": "Невблаганний трилер братів Коен з одним із найстрашніших убивць в історії кіно.",
+        "The first non-English-language winner – a class satire that turns into a thriller.": "Перший переможець не англійською мовою – класова сатира, що перетворюється на трилер.",
+        "Multiverse kung fu, a tax audit and a mother and daughter – wild and very moving.": "Кунг-фу в мультивсесвіті, податкова перевірка, мати й донька – шалено й дуже зворушливо."
     },
     "terms": {
         "Phase 1": "Фаза 1",
@@ -771,6 +861,24 @@
         "Original": "Оригінал",
         "Unofficial": "Неофіційний",
         "Homage": "Данина",
-        "The original": "Першоджерело"
+        "The original": "Першоджерело",
+        "1920s": "1920-ті",
+        "1930s": "1930-ті",
+        "TV movie": "Телефільм",
+        "Produced": "Як продюсер",
+        "Short": "Короткометражка",
+        "Jurassic Park": "Парк Юрського періоду",
+        "Kill Bill": "Убити Білла",
+        "Batman": "Бетмен",
+        "Dracula": "Дракула",
+        "Frankenstein": "Франкенштейн",
+        "The Mummy": "Мумія",
+        "The Invisible Man": "Людина-невидимка",
+        "The Wolf Man": "Людина-вовк",
+        "Creature from the Black Lagoon": "Істота з Чорної лагуни",
+        "The Phantom of the Opera": "Привид опери",
+        "Quatermass": "Куотермасс",
+        "Le Gendarme": "Жандарм",
+        "Fantômas": "Фантомас"
     }
 }

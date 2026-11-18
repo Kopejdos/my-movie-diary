@@ -20,7 +20,8 @@
 //   set-admin    { user_id, is_admin }  → udělí / odebere správce (ne sám sobě)
 //   delete-user  { user_id }            → smaže účet i všechna jeho data (ne sám sebe)
 //   reset-username { user_id }          → automatický nick + skrytý profil (V2.3, ne sám sobě)
-//   requests     {}                     → nevyřízené požadavky na filmy s návrhem kolekce (V3.5.1)
+//   requests     {}                     → nevyřízené požadavky na filmy s návrhem kolekce (V3.5.1;
+//                                         od V4.3.5 i kolekce režiséra podle režiséra filmu)
 //   request-decide { items: [{ id, approve, universe_id?, reason?, note?, only_this? }] }
 //                                       → přijme (film do films, případně do kolekce) / zamítne;
 //                                         rozhodnutí platí pro film ve všech požadavcích – zamítnutí
@@ -658,7 +659,9 @@ async function mapLimited<T, R>(items: T[], limit: number, worker: (item: T) => 
  * Série první, pak studia.
  */
 async function suggestCollections(db: SupabaseClient, tmdbId: number, universes: UniverseLite[]) {
-  const details = await tmdbGet<TmdbMovieDetails>(`/movie/${tmdbId}`, { language: "en-US" });
+  // credits = režisér filmu → kolekce režiséra stejného jména (V4.3.5)
+  const details = await tmdbGet<TmdbMovieDetails & { credits?: { crew?: { job: string; name: string }[] } }>(
+    `/movie/${tmdbId}`, { language: "en-US", append_to_response: "credits" });
   const byId = new Map(universes.map((u) => [u.id, u]));
   const suggestions = new Map<number, { universe_id: number; slug: string; name: string; kind: string; reason: string }>();
   let series: { id: number; name: string; parts: number } | null = null;     // série v TMDB (V3.5.2)
@@ -691,7 +694,18 @@ async function suggestCollections(db: SupabaseClient, tmdbId: number, universes:
     }
   }
 
-  const rank = (kind: string) => ["series", "genre", "studio", "path"].indexOf(kind);
+  // Kolekce režiséra (V4.3.5): název kolekce = jméno režiséra filmu (bez ohledu na diakritiku a velikost)
+  const plain = (text: string) => text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+  const directors = (details.credits?.crew ?? []).filter((c) => c.job === "Director").map((c) => c.name);
+  for (const universe of universes) {
+    if (universe.kind !== "director" || suggestions.has(universe.id)) continue;
+    const director = directors.find((name) => plain(name) === plain(universe.name));
+    if (director) {
+      suggestions.set(universe.id, { universe_id: universe.id, slug: universe.slug, name: universe.name, kind: universe.kind, reason: `Director: ${director}` });
+    }
+  }
+
+  const rank = (kind: string) => ["series", "director", "genre", "studio", "path"].indexOf(kind);
   return {
     suggestions: [...suggestions.values()].sort((a, b) => rank(a.kind) - rank(b.kind) || a.name.localeCompare(b.name)),
     // série má vlastní kolekci v MMD, když aspoň jeden návrh přišel ze „stejné série“ a je to série
@@ -963,7 +977,7 @@ async function createCollection(db: SupabaseClient, options: {
   const today = new Date().toISOString().slice(0, 10);
   const cover = films.find((film) => film.status === "Released" && film.poster_path) ?? films[0];
 
-  const kind = ["series", "studio", "genre", "path"].includes(options.kind ?? "") ? options.kind! : "series";
+  const kind = ["series", "studio", "genre", "path", "director"].includes(options.kind ?? "") ? options.kind! : "series";
   const { data: universe, error } = await db.from("universes").insert({
     slug, name, description, color, kind,
     source: "app",              // nová kolekce z aplikace – sync-seed ji dopíše do seedu (V3.5.2.1)

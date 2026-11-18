@@ -284,7 +284,7 @@ function collectionRequestCard(request, studios, reload) {
         request.note ? h("p", { class: "req-card__note" }, `“${request.note}”`) : null,
         similarBox(request.items.map((item) => item.tmdb_id), request.collection_name, (found) => {
             // Podobná kolekce existuje → předvybraný důvod „similar“ s jejím názvem
-            const match = found.find((c) => c.name_match || c.kind === "series" || c.kind === "path");
+            const match = found.find((c) => c.name_match || ["series", "path", "director"].includes(c.kind));
             if (match) reason.preset("similar", match.name);
         }),
         h("div", { class: "admin-request__create admin-request__create--details" }, name, description),
@@ -339,7 +339,7 @@ export function similarBox(tmdbIds, name, onFound = () => {}) {
                     h("span", { class: "muted" }, [
                         c.overlap >= 1 ? format("adminSimilarItem", c.overlap, tmdbIds.length, c.total) : null,
                         c.name_match ? TEXTS.adminSimilarName : null,
-                        TEXTS[{ series: "kindSeries", studio: "kindStudio", genre: "kindGenre", path: "kindPath" }[c.kind] ?? "kindSeries"],
+                        TEXTS[{ series: "kindSeries", studio: "kindStudio", genre: "kindGenre", path: "kindPath", director: "kindDirector" }[c.kind] ?? "kindSeries"],
                     ].filter(Boolean).join(" · "))))));
             onFound(found);
         })

@@ -9,7 +9,7 @@
 // tlačítko Shuffle posune semínko a nabídne jiné filmy.
 
 /** Pořadí, ve kterém se pro film hledá „jeho“ kolekce (série je nejvýstižnější). */
-const KIND_RANK = { series: 0, path: 1, genre: 2, studio: 3 };
+const KIND_RANK = { series: 0, path: 1, director: 2, genre: 3, studio: 4 };
 
 /** Malý generátor náhodných čísel se semínkem (mulberry32) – stejné semínko = stejná čísla. */
 export function seededRandom(seedText) {

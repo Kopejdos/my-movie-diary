@@ -19,7 +19,7 @@ import { similarBox } from "./admin-requests.js";
 
 const SOURCES = ["person", "two", "studio", "keyword"];
 const DOCUMENTARY = 99;                 // žánr TMDB „Documentary“
-const KINDS = [["series", "kindSeries"], ["studio", "kindStudio"], ["genre", "kindGenre"], ["path", "kindPathOption"]];
+const KINDS = [["series", "kindSeries"], ["studio", "kindStudio"], ["director", "kindDirectorOption"], ["genre", "kindGenre"], ["path", "kindPathOption"]];
 
 export function adminBuilderView(container) {
     if (!requireAdminView(container)) return;
@@ -314,7 +314,9 @@ export function adminBuilderView(container) {
         create.name.value = state.source === "two" && a && b ? `${a.name} & ${b.name}` : state.picked.a?.name ?? "";
         create.groupA.value = a?.name ?? "";
         create.groupB.value = b?.name ?? "";
-        create.kind.value = state.source === "studio" ? "studio" : state.source === "keyword" ? "genre" : "series";
+        // Režisér (role režie u jedné osoby) → kolekce typu Director (V4.3.5)
+        create.kind.value = state.source === "studio" ? "studio" : state.source === "keyword" ? "genre"
+            : state.source === "person" && filters.role.value === "directing" ? "director" : "series";
         mount(create.grouping,
             h("option", { value: "none" }, TEXTS.adminBuilderGroup_none),
             h("option", { value: "decade" }, TEXTS.adminBuilderGroup_decade),

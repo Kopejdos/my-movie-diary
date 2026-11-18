@@ -24,7 +24,7 @@ const PAGE = 30;                                    // kolik kolekcí se vykresl
 const SUGGESTIONS_KEY = "mmd-admin-tmdb-names";     // výsledek kontroly s TMDB (po dobu návštěvy)
 const LANG_KEY = "mmd-admin-translations-lang";
 const LANG_LABELS = { cs: "CS", de: "DE", es: "ES", uk: "UK" };
-const KIND_LABELS = { series: "kindSeries", studio: "kindStudio", genre: "kindGenre", path: "kindPathOption" };
+const KIND_LABELS = { series: "kindSeries", studio: "kindStudio", genre: "kindGenre", path: "kindPathOption", director: "kindDirectorOption" };
 
 /** Návrhy z TMDB – Map universe_id → { names } (v paměti a v sessionStorage). */
 let suggestions = loadSuggestions();

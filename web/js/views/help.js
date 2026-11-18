@@ -25,6 +25,7 @@ function legend() {
         [icon("gear-icon"), TEXTS.helpKeySettings],
         [sample("help-key__sample--level", "9"), TEXTS.helpKeyLevel],
         [sample("help-key__sample--wide", `🧭 ${TEXTS.kindPathBadge}`), TEXTS.helpKeyPath],
+        [sample("help-key__sample--wide", `🎬 ${TEXTS.kindDirectorBadge}`), TEXTS.helpKeyDirector],
         [sample("help-key__sample--wide", `✓ ${TEXTS.complete}`), TEXTS.helpKeyComplete],
     ];
 }
