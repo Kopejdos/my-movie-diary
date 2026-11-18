@@ -6,8 +6,10 @@
 //
 // Balíček (supabase/packs/*.json) má stejný formát kolekcí jako seed:
 //   "universes": [ … ]   nové kolekce – přidají se na konec seedu (kolekce, která v seedu už je, se přeskočí)
-//   "update": { slug: { "addCategories": [ … ], "description": "…", "name": "…", "color": "…" } }
-//                        úpravy kolekcí, které už v seedu jsou
+//   "update": { slug: { "addCategories": [ … ], "description": "…", "name": "…", "color": "…",
+//                       "addFilms": [ { "title": "…", "year": 2026 } ] } }
+//                        úpravy kolekcí, které už v seedu jsou; addFilms (V4.4.5) přidá filmy na konec
+//                        kolekce (film, který v ní už je – stejný název a rok –, se přeskočí)
 // Seed se upravuje jako text – ostatní řádky zůstanou do písmene stejné (git diff ukáže jen změny).
 // Jde spustit opakovaně: podruhé nic nepřidá. Poslední řádek výstupu = slugy k importu.
 // =====================================================================
@@ -51,6 +53,30 @@ function findBlock(lines, slug) {
     while (end < lines.length && !new RegExp(`^${indent}\\},?\\s*$`).test(lines[end])) end++;
     const filmsLine = lines.slice(start, end).findIndex((line) => /^\s*"films":/.test(line));
     return { start, end, filmsLine: filmsLine < 0 ? end : start + filmsLine };
+}
+
+/**
+ * Přidá filmy na konec pole "films" bloku kolekce (V4.4.5). Odsazení podle posledního filmu.
+ * Vrací true, když něco přidal.
+ */
+function appendFilms(lines, block, films) {
+    if (films.length === 0) return false;
+    let close = block.end - 1;
+    while (close > block.filmsLine && !/^\s*\]\s*$/.test(lines[close])) close--;
+    if (close === block.filmsLine) {
+        // "films": [] na jednom řádku → rozepsat
+        const indent = lines[block.filmsLine].match(/^\s*/)[0];
+        const comma = /,\s*$/.test(lines[block.filmsLine]) ? "," : "";
+        lines.splice(block.filmsLine, 1, `${indent}"films": [`,
+            ...films.map((film, i) => `${indent}  ${formatObject(film)}${i < films.length - 1 ? "," : ""}`), `${indent}]${comma}`);
+        return true;
+    }
+    let last = close - 1;
+    while (last > block.filmsLine && lines[last].trim() === "") last--;
+    const indent = last > block.filmsLine ? lines[last].match(/^\s*/)[0] : `${lines[close].match(/^\s*/)[0]}  `;
+    if (last > block.filmsLine && !/,\s*$/.test(lines[last])) lines[last] = lines[last].replace(/\s*$/, ",");
+    lines.splice(close, 0, ...films.map((film, i) => `${indent}${formatObject(film)}${i < films.length - 1 ? "," : ""}`));
+    return true;
 }
 
 /** Nastaví (nebo vloží před "films") řádek hlavičky kolekce. */
@@ -100,6 +126,11 @@ export function applyPack(text, pack) {
             if (change[key] !== undefined && change[key] !== current[key]) {
                 changed = setHeader(lines, findBlock(lines, slug), key, change[key]) || changed;
             }
+        }
+        if (Array.isArray(change.addFilms)) {
+            const have = new Set((current.films ?? []).map((f) => `${f.title}|${f.year ?? ""}`));
+            const fresh = change.addFilms.filter((f) => !have.has(`${f.title}|${f.year ?? ""}`));
+            changed = appendFilms(lines, findBlock(lines, slug), fresh) || changed;
         }
         if (changed) updated.push(slug);
     }

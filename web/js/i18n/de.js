@@ -95,6 +95,12 @@ export default {
     comingSoonQuarter: "{0} – {1} {2}",
     comingSoonQuarterTag: "Q{0}",
     comingSoonTbaGroup: "Datum noch offen",
+    // hledání a filtr (V4.4.5)
+    comingSoonSearch: "Kommende Filme oder Sammlungen suchen…",
+    comingSoonWatchlistOnly: "Meine Watchlist",
+    comingSoonFiltered: "{0} von {1} Filmen",
+    comingSoonFilterEmpty: "Kein kommender Film passt zu Suche oder Filter.",
+    comingSoonFilterReset: "Alle kommenden Filme zeigen",
 
     rateAction: "Bewerten",
     rateYours: "Deine Bewertung: {0} ★ – klicken zum Ändern",

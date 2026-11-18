@@ -278,6 +278,31 @@ test("balíček V4.4.4: 10 kinematografií zemí a 40 režisérů po desetiletí
     }
 });
 
+test("add-pack: addFilms přidá filmy na konec kolekce, existující přeskočí (V4.4.5)", () => {
+    const pack = { update: { alpha: { addFilms: [{ title: "One", year: 2001 }, { title: "Four", year: 2027, group: "2020s" }] } } };
+    const { text, updated } = applyPack(SEED, pack);
+    assert.deepEqual(updated, ["alpha"]);
+    const alpha = JSON.parse(text).universes.find((u) => u.slug === "alpha");
+    assert.deepEqual(alpha.films, [{ title: "One", year: 2001 }, { title: "Four", year: 2027, group: "2020s" }]);
+    assert.ok(text.includes('        { "title": "One", "year": 2001 },\n        { "title": "Four", "year": 2027, "group": "2020s" }\n      ]'));
+    // podruhé nic
+    const again = applyPack(text, pack);
+    assert.equal(again.text, text);
+    assert.deepEqual(again.updated, []);
+});
+
+test("balíček V4.4.5: jen addFilms do existujících kolekcí, filmy s rokem", () => {
+    const pack = JSON.parse(readFileSync(new URL("../supabase/packs/v4.4.5-coming-soon.json", import.meta.url), "utf8"));
+    assert.equal(pack.universes, undefined);
+    for (const [slug, change] of Object.entries(pack.update)) {
+        assert.deepEqual(Object.keys(change), ["addFilms"], slug);
+        for (const film of change.addFilms) {
+            assert.ok(film.title && Number.isInteger(film.year) && film.year >= 2026, `${slug}: ${film.title}`);
+            if (film.group) assert.equal(film.group, `${Math.floor(film.year / 10) * 10}s`, `${slug}: ${film.title}`);
+        }
+    }
+});
+
 test("nextGoal: 2 000, pak po 500", async () => {
     const { nextGoal } = await import("../web/js/admin.js");
     assert.equal(nextGoal(1264), 2000);

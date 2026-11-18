@@ -100,6 +100,12 @@ export default {
     comingSoonQuarter: "{0} – {1} {2}",
     comingSoonQuarterTag: "Q{0}",
     comingSoonTbaGroup: "Date to be announced",
+    // hledání a filtr (V4.4.5)
+    comingSoonSearch: "Search upcoming movies or collections…",
+    comingSoonWatchlistOnly: "My watchlist",
+    comingSoonFiltered: "{0} of {1} movies",
+    comingSoonFilterEmpty: "No upcoming movies match your search or filter.",
+    comingSoonFilterReset: "Show all upcoming movies",
 
     // Hodnocení (V3.2)
     rateAction: "Rate",

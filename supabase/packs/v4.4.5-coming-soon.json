@@ -1,0 +1,50 @@
+{
+    "_comment": "Balíček V4.4.5 – chystané a letos vydané filmy do kolekcí z V4.4.x (režiséři, série, studia): jen \"update\" s \"addFilms\" – filmy se přidají na konec existujících kolekcí, které už v seedu jsou. Přidá se příkazem ./scripts/add-pack.sh supabase/packs/v4.4.5-coming-soon.json. Bez migrace.",
+    "update": {
+        "steven-soderbergh": { "addFilms": [
+            { "title": "The Christophers", "year": 2026, "group": "2020s" }
+        ] },
+        "guy-ritchie": { "addFilms": [
+            { "title": "In the Grey", "year": 2026, "group": "2020s" },
+            { "title": "Wife & Dog", "year": 2026, "group": "2020s" }
+        ] },
+        "m-night-shyamalan": { "addFilms": [
+            { "title": "Remain", "year": 2027, "group": "2020s" }
+        ] },
+        "pedro-almodovar": { "addFilms": [
+            { "title": "Bitter Christmas", "year": 2026, "group": "2020s" }
+        ] },
+        "alejandro-gonzalez-inarritu": { "addFilms": [
+            { "title": "Digger", "year": 2026, "group": "2020s" }
+        ] },
+        "martin-mcdonagh": { "addFilms": [
+            { "title": "Wild Horse Nine", "year": 2026, "group": "2020s" }
+        ] },
+        "mike-flanagan": { "addFilms": [
+            { "title": "Exorcist: Martyrs", "year": 2027, "group": "2020s" }
+        ] },
+        "hirokazu-kore-eda": { "addFilms": [
+            { "title": "Sheep in the Box", "year": 2026, "group": "2020s" }
+        ] },
+        "james-cameron": { "addFilms": [
+            { "title": "Avatar 4", "year": 2029, "group": "2020s" },
+            { "title": "Avatar 5", "year": 2031, "group": "2030s" }
+        ] },
+        "neon": { "addFilms": [
+            { "title": "The Christophers", "year": 2026, "group": "2020s" },
+            { "title": "Sheep in the Box", "year": 2026, "group": "2020s" }
+        ] },
+        "warner-bros-animation": { "addFilms": [
+            { "title": "The Cat in the Hat", "year": 2026, "group": "2020s" }
+        ] },
+        "the-exorcist": { "addFilms": [
+            { "title": "Exorcist: Martyrs", "year": 2027 }
+        ] },
+        "jackass": { "addFilms": [
+            { "title": "Jackass: Best and Last", "year": 2026 }
+        ] },
+        "sonic": { "addFilms": [
+            { "title": "Sonic the Hedgehog 4", "year": 2027 }
+        ] }
+    }
+}

@@ -403,7 +403,7 @@ function searchEntry() {
 
 /** Nadpis skupiny podle typu kolekce. */
 /** Název druhu kolekce. */
-function kindLabel(kind) {
+export function kindLabel(kind) {
     return {
         path: TEXTS.kindPath, series: TEXTS.kindSeries, studio: TEXTS.kindStudio, genre: TEXTS.kindGenre,
         director: TEXTS.kindDirector,

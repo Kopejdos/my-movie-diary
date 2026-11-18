@@ -95,6 +95,12 @@ export default {
     comingSoonQuarter: "{0} – {1} {2}",
     comingSoonQuarterTag: "{0} кв.",
     comingSoonTbaGroup: "Дата ще невідома",
+    // hledání a filtr (V4.4.5)
+    comingSoonSearch: "Шукай майбутні фільми або колекції…",
+    comingSoonWatchlistOnly: "Лише «Подивитися»",
+    comingSoonFiltered: "{0} з {1} фільмів",
+    comingSoonFilterEmpty: "Жоден майбутній фільм не відповідає пошуку чи фільтру.",
+    comingSoonFilterReset: "Показати всі майбутні фільми",
 
     rateAction: "Оцінити",
     rateYours: "Твоя оцінка: {0} ★ — натисни, щоб змінити",

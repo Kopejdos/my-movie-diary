@@ -2935,7 +2935,8 @@
         { "title": "The Exorcist III", "year": 1990, "tmdb": 11587 },
         { "title": "Exorcist: The Beginning", "year": 2004, "tmdb": 11026 },
         { "title": "Dominion: Prequel to The Exorcist", "year": 2005, "tmdb": 12700 },
-        { "title": "The Exorcist: Believer", "year": 2023, "tmdb": 807172 }
+        { "title": "The Exorcist: Believer", "year": 2023, "tmdb": 807172 },
+        { "title": "Exorcist: Martyrs", "year": 2027 }
       ]
     },
     {
@@ -5966,7 +5967,8 @@
       "films": [
         { "title": "Sonic the Hedgehog", "year": 2020 },
         { "title": "Sonic the Hedgehog 2", "year": 2022 },
-        { "title": "Sonic the Hedgehog 3", "year": 2024 }
+        { "title": "Sonic the Hedgehog 3", "year": 2024 },
+        { "title": "Sonic the Hedgehog 4", "year": 2027 }
       ]
     },
     {
@@ -6111,7 +6113,8 @@
         { "title": "Space Jam: A New Legacy", "year": 2021, "group": "2020s" },
         { "title": "DC League of Super-Pets", "year": 2022, "group": "2020s" },
         { "title": "The Day the Earth Blew Up: A Looney Tunes Movie", "year": 2025, "group": "2020s" },
-        { "title": "Coyote vs. Acme", "year": 2026, "group": "2020s" }
+        { "title": "Coyote vs. Acme", "year": 2026, "group": "2020s" },
+        { "title": "The Cat in the Hat", "year": 2026, "group": "2020s" }
       ]
     },
     {
@@ -6538,7 +6541,9 @@
         { "title": "Ghosts of the Abyss", "year": 2003, "group": "2000s", "optional": true, "label": "Documentary" },
         { "title": "Avatar", "year": 2009, "group": "2000s" },
         { "title": "Avatar: The Way of Water", "year": 2022, "group": "2020s" },
-        { "title": "Avatar: Fire and Ash", "year": 2025, "group": "2020s" }
+        { "title": "Avatar: Fire and Ash", "year": 2025, "group": "2020s" },
+        { "title": "Avatar 4", "year": 2029, "group": "2020s" },
+        { "title": "Avatar 5", "year": 2031, "group": "2030s" }
       ]
     },
     {
@@ -7157,7 +7162,8 @@
         { "title": "Jackass Number Two", "year": 2006 },
         { "title": "Jackass 3D", "year": 2010 },
         { "title": "Jackass Presents: Bad Grandpa", "year": 2013 },
-        { "title": "Jackass Forever", "year": 2022 }
+        { "title": "Jackass Forever", "year": 2022 },
+        { "title": "Jackass: Best and Last", "year": 2026 }
       ]
     },
     {
@@ -7541,7 +7547,9 @@
         { "title": "Anora", "year": 2024, "group": "2020s" },
         { "title": "The Monkey", "year": 2025, "group": "2020s" },
         { "title": "It Was Just an Accident", "year": 2025, "group": "2020s" },
-        { "title": "Sentimental Value", "year": 2025, "group": "2020s" }
+        { "title": "Sentimental Value", "year": 2025, "group": "2020s" },
+        { "title": "The Christophers", "year": 2026, "group": "2020s" },
+        { "title": "Sheep in the Box", "year": 2026, "group": "2020s" }
       ]
     },
     {
@@ -8078,7 +8086,8 @@
         { "title": "Julieta", "year": 2016, "group": "2010s" },
         { "title": "Pain and Glory", "year": 2019, "group": "2010s" },
         { "title": "Parallel Mothers", "year": 2021, "group": "2020s" },
-        { "title": "The Room Next Door", "year": 2024, "group": "2020s" }
+        { "title": "The Room Next Door", "year": 2024, "group": "2020s" },
+        { "title": "Bitter Christmas", "year": 2026, "group": "2020s" }
       ]
     },
     {
@@ -8609,7 +8618,8 @@
         { "title": "Kimi", "year": 2022, "group": "2020s" },
         { "title": "Magic Mike's Last Dance", "year": 2023, "group": "2020s" },
         { "title": "Presence", "year": 2024, "group": "2020s" },
-        { "title": "Black Bag", "year": 2025, "group": "2020s" }
+        { "title": "Black Bag", "year": 2025, "group": "2020s" },
+        { "title": "The Christophers", "year": 2026, "group": "2020s" }
       ]
     },
     {
@@ -8763,7 +8773,9 @@
         { "title": "Operation Fortune: Ruse de Guerre", "year": 2023, "group": "2020s" },
         { "title": "Guy Ritchie's The Covenant", "year": 2023, "group": "2020s" },
         { "title": "The Ministry of Ungentlemanly Warfare", "year": 2024, "group": "2020s" },
-        { "title": "Fountain of Youth", "year": 2025, "group": "2020s" }
+        { "title": "Fountain of Youth", "year": 2025, "group": "2020s" },
+        { "title": "In the Grey", "year": 2026, "group": "2020s" },
+        { "title": "Wife & Dog", "year": 2026, "group": "2020s" }
       ]
     },
     {
@@ -8876,7 +8888,8 @@
         { "title": "Glass", "year": 2019, "group": "2010s" },
         { "title": "Old", "year": 2021, "group": "2020s" },
         { "title": "Knock at the Cabin", "year": 2023, "group": "2020s" },
-        { "title": "Trap", "year": 2024, "group": "2020s" }
+        { "title": "Trap", "year": 2024, "group": "2020s" },
+        { "title": "Remain", "year": 2027, "group": "2020s" }
       ]
     },
     {
@@ -9100,7 +9113,8 @@
         { "title": "Ouija: Origin of Evil", "year": 2016, "group": "2010s" },
         { "title": "Gerald's Game", "year": 2017, "group": "2010s" },
         { "title": "Doctor Sleep", "year": 2019, "group": "2010s" },
-        { "title": "The Life of Chuck", "year": 2024, "group": "2020s" }
+        { "title": "The Life of Chuck", "year": 2024, "group": "2020s" },
+        { "title": "Exorcist: Martyrs", "year": 2027, "group": "2020s" }
       ]
     },
     {
@@ -9228,7 +9242,8 @@
         { "title": "Biutiful", "year": 2010, "group": "2010s" },
         { "title": "Birdman", "year": 2014, "group": "2010s" },
         { "title": "The Revenant", "year": 2015, "group": "2010s" },
-        { "title": "Bardo, False Chronicle of a Handful of Truths", "year": 2022, "group": "2020s" }
+        { "title": "Bardo, False Chronicle of a Handful of Truths", "year": 2022, "group": "2020s" },
+        { "title": "Digger", "year": 2026, "group": "2020s" }
       ]
     },
     {
@@ -9272,7 +9287,8 @@
         { "title": "Shoplifters", "year": 2018, "group": "2010s" },
         { "title": "The Truth", "year": 2019, "group": "2010s" },
         { "title": "Broker", "year": 2022, "group": "2020s" },
-        { "title": "Monster", "year": 2023, "group": "2020s" }
+        { "title": "Monster", "year": 2023, "group": "2020s" },
+        { "title": "Sheep in the Box", "year": 2026, "group": "2020s" }
       ]
     },
     {
@@ -9428,7 +9444,8 @@
         { "title": "In Bruges", "year": 2008, "group": "2000s" },
         { "title": "Seven Psychopaths", "year": 2012, "group": "2010s" },
         { "title": "Three Billboards Outside Ebbing, Missouri", "year": 2017, "group": "2010s" },
-        { "title": "The Banshees of Inisherin", "year": 2022, "group": "2020s" }
+        { "title": "The Banshees of Inisherin", "year": 2022, "group": "2020s" },
+        { "title": "Wild Horse Nine", "year": 2026, "group": "2020s" }
       ]
     },
     {

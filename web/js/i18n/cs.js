@@ -101,6 +101,12 @@ export default {
     comingSoonQuarter: "{0} – {1} {2}",
     comingSoonQuarterTag: "Q{0}",
     comingSoonTbaGroup: "Datum zatím neznámé",
+    // hledání a filtr (V4.4.5)
+    comingSoonSearch: "Hledej chystané filmy nebo kolekce…",
+    comingSoonWatchlistOnly: "Můj watchlist",
+    comingSoonFiltered: "{0} z {1} filmů",
+    comingSoonFilterEmpty: "Hledání ani filtru neodpovídá žádný chystaný film.",
+    comingSoonFilterReset: "Zobrazit všechny chystané filmy",
 
     // Hodnocení
     rateAction: "Ohodnotit",

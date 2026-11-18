@@ -3,6 +3,11 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.4.5 – November 2026
+- Coming soon has a search box – find upcoming movies by title, year or collection
+- Filter Coming soon like the Collections page – by collection type and genre – or show just your watchlist
+- Newly announced and recent movies added to the new collections: Avatar 4 and 5, Sonic the Hedgehog 4, Remain, Exorcist: Martyrs, Digger, Wild Horse Nine, The Christophers, Bitter Christmas and more
+
 ## V4.4.4 – November 2026
 - World cinema: Korean, Italian, French, Indian, Japanese, British, Hong Kong, Spanish & Latin American, German and Nordic picks
 - 40 new directors – Soderbergh, Spike Lee, Zemeckis, Ron Howard, Danny Boyle, Guy Ritchie, Lanthimos, Linklater, Shyamalan, Tony Scott, Kathryn Bigelow, John Woo, Luc Besson, Kore-eda, Ang Lee and many more

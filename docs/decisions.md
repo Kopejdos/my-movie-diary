@@ -377,6 +377,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 47b | V4.4.2 | Režiséři, série a výběry ✅ | 16 režisérů (Scorsese, Cameron, Ridley Scott, Coenové, del Toro, Peter Jackson, Raimi, Carpenter, Lynch, Coppola, Bong Joon-ho, Park Chan-wook, P. T. Anderson, Gerwig, Edgar Wright, Forman), 47 sérií (Ocean's, Now You See Me, Hellboy, Addams Family, Highlander, Starship Troopers, Shaft, Herbie, Spy Kids…), studio Neon, výběry Film Noir, Neo-noir, Zlatá palma (od 1990), kultovní filmy, road movies, teen komedie – **katalog přes 3 000 (~3 150)** |
 | 47c | V4.4.3 | Velké seznamy a klasici ✅ | **AFI 100** v pořadí žebříčku, všech 70 vítězů **Oscara za mezinárodní film** (se zemí), 14 režisérů: Bergman, Fellini, Tarkovskij, Wong Kar-wai, Ozu, Kieślowski, Almodóvar, Chaplin, Keaton, Wilder, Lumet, Eastwood, Mann, De Palma – katalog ~3 440 |
 | 47d | V4.4.4 | Kinematografie zemí a režiséři ✅ | 10 kinematografií zemí jako žánrové výběry (Korea, Itálie, Francie, Indie, Hongkong, Španělsko a Latinská Amerika, Německo, Severské země, Japonsko, Británie) a 40 režisérů (Soderbergh, Spike Lee, Zemeckis, Ron Howard, Boyle, Ritchie, Lanthimos, Linklater, Shyamalan, Tony Scott, Bigelow, John Woo, Besson, von Trier, Haneke, Kore-eda, Zhang Yimou, Ang Lee, Menzel, Chytilová, Lipský, Vorlíček…) – **katalog ~4 000** |
+| 47e | V4.4.5 | Coming soon: hledání a filtr ✅ | na stránce Coming soon **hledání** (název, rok, kolekce) a **filtr** jako na přehledu (druh kolekce, žánr) + **jen můj watchlist**; balíčky umí **přidat filmy do existujících kolekcí** (`addFilms`) – 14 chystaných a letos vydaných filmů do kolekcí z V4.4.x |
 | 48 | V4.5 | Wrapped | rok v kostce – **poprvé za rok 2027** (prosinec 2027): nováček si na začátku doplní stovky filmů, první celý rok dat bude 2027; filmy „Seen before“ se nepočítají |
 | 49 | V4.6 | Optimalizace před seriály | úklid a výkon s velkým katalogem (načítání, hledání, import), **katalog v mezipaměti prohlížeče** pro opakované návštěvy – připravit půdu pro kapitolu V5 |
 
@@ -2507,6 +2508,33 @@ testovacích seznamů byla vymyšlená.
 - Katalog **z ~2 440 na ~4 000 filmů**, 164 nových kolekcí (animáky, 73 režisérů, 58 sérií, velké
   seznamy AFI 100, Zlatá palma a mezinárodní Oscar, kinematografie zemí) – vše bez migrace, jen balíčky.
 - Další na řadě: **V4.5 Wrapped**, pak **V4.6 optimalizace** na katalogu v konečné velikosti.
+
+### Fáze 47e – Coming soon: hledání a filtr ✅ (18. 11. 2026) – **V4.4.5**
+- **Stránka Coming soon** (`views/upcoming.js`, logika `js/soon-filter.js`):
+  - **hledání** nad chystanými filmy – název, původní název, rok premiéry i název kolekce („cameron“ najde
+    Avatar 4 a 5), bez diakritiky, „spiderman“ = „Spider-Man“; text je v adrese (`#/coming-soon?q=avatar`);
+  - **filtr jako na přehledu** – záložky druhu kolekce (Series, Studios, Directors…) a žánry v barvách
+    kategorií, s počty filmů; druh i žánr musí sedět na tutéž kolekci filmu; volba se pamatuje;
+  - přihlášený má přepínač **★ Můj watchlist**; počet „12 z 40 filmů“; prázdný výsledek nabídne zrušit filtr.
+- **Balíčky: `addFilms`** (`scripts/add-pack.mjs`) – `"update": { slug: { "addFilms": [ … ] } }` přidá filmy na
+  konec kolekce, která už v seedu je (film se stejným názvem a rokem přeskočí); kolekce se pak naimportuje.
+  Dřív šly přes balíček přidat jen celé nové kolekce.
+- **Kontrola chystaných filmů po V4.4.x** – balíček `v4.4.5-coming-soon.json` (14 filmů do 14 kolekcí):
+  Soderbergh – The Christophers, Guy Ritchie – In the Grey a Wife & Dog, Shyamalan – Remain (2027), Almodóvar –
+  Bitter Christmas, Iñárritu – Digger, McDonagh – Wild Horse Nine, Flanagan a The Exorcist – Exorcist: Martyrs
+  (2027), Kore-eda a Neon – Sheep in the Box, James Cameron – Avatar 4 a 5, Warner Bros. Animation – The Cat
+  in the Hat, Jackass – Best and Last, Sonic – Sonic the Hedgehog 4 (2027). Avatar 4/5, Narnie, Spider-Verse,
+  Shrek 5 a další už v katalogu byly.
+- Ověřeno: `add-pack` s `addFilms` (14 kolekcí upraveno, podruhé nic), `node --test` (82 – nově
+  `soon-filter.test.mjs` a `addFilms` v `add-pack.test.mjs`), webové testy stránky Coming soon v češtině,
+  angličtině a němčině na 320–1280 px, světlý i tmavý režim, host i přihlášený.
+
+#### Rozhodnutí ve fázi 47e
+- **Filtr stejný jako na přehledu** – druh + žánr už lidé znají; film patří do filtru, když aspoň jedna jeho
+  kolekce odpovídá obojímu najednou (jinak by Studio + Superhero ukázalo i Pixar kvůli jiné kolekci).
+- **Text hledání v adrese, filtr v prohlížeči** – odkaz „#/coming-soon?q=marvel“ jde poslat; druh a žánr
+  jsou osobní volba (jako na přehledu).
+- **`addFilms` jen přidává** – odebrání filmu dál přes admin panel (zaznamená se do `seed_removals`).
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

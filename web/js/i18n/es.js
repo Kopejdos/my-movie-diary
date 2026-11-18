@@ -95,6 +95,12 @@ export default {
     comingSoonQuarter: "{0} – {1} {2}",
     comingSoonQuarterTag: "T{0}",
     comingSoonTbaGroup: "Fecha por confirmar",
+    // hledání a filtr (V4.4.5)
+    comingSoonSearch: "Busca próximas películas o colecciones…",
+    comingSoonWatchlistOnly: "Mis pendientes",
+    comingSoonFiltered: "{0} de {1} películas",
+    comingSoonFilterEmpty: "Ninguna próxima película coincide con la búsqueda o el filtro.",
+    comingSoonFilterReset: "Ver todas las próximas películas",
 
     rateAction: "Valorar",
     rateYours: "Tu valoración: {0} ★ – haz clic para cambiarla",
