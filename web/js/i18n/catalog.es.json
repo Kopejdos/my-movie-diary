@@ -756,6 +756,89 @@
         "path-czech-classics": {
             "name": "Clásicos checos",
             "description": "Doce películas checas de los 60 al 2000 que todo el país se sabe de memoria, con dos Óscar y cuatro nominaciones por el camino."
+        },
+        "action-90s": {
+            "name": "Acción de los 90",
+            "description": "Más grande, más ruidosa, más frases míticas: la década de Speed, Cara a cara y La roca."
+        },
+        "action-disaster": {
+            "name": "Cine de catástrofes",
+            "description": "Fuego, agua, tornados y asteroides: el fin del mundo, de dos horas en dos horas."
+        },
+        "drama-sports": {
+            "name": "Películas de deportes",
+            "description": "Rings de boxeo, circuitos y la canasta en el último segundo: las mejores películas sobre ganar y perder."
+        },
+        "musicals": {
+            "name": "Musicales",
+            "description": "A cantar: de Cantando bajo la lluvia a Wicked."
+        },
+        "drama-biopics": {
+            "description": "Vidas reales en la gran pantalla: rebeldes, genios, estrellas y estafadores."
+        },
+        "crime-mafia": {
+            "name": "Mafia y gánsteres",
+            "description": "Hombres de honor, negocios de familia y el precio de la lealtad: los grandes filmes de gánsteres más allá de El padrino."
+        },
+        "drama-prison": {
+            "name": "Películas de cárceles",
+            "description": "Entre rejas: fugas, amistades y esperanza tras los muros."
+        },
+        "drama-courtroom": {
+            "name": "Dramas judiciales",
+            "description": "¡Protesto! Doce hombres sin piedad, algunos hombres buenos y juicios que dependieron de un solo testigo."
+        },
+        "action-spy": {
+            "name": "Cine de espías",
+            "description": "Buzones muertos, agentes dobles y la Guerra Fría: espías más allá de Bond, Bourne y Misión imposible."
+        },
+        "action-survival": {
+            "name": "Supervivencia",
+            "description": "Solo contra la naturaleza: montañas, océanos, hielo y espacio."
+        },
+        "scifi-post-apocalyptic": {
+            "name": "Postapocalipsis",
+            "description": "Después del fin: páramos, supervivientes y lo que queda de la humanidad."
+        },
+        "scifi-alien-invasion": {
+            "name": "Invasión alienígena",
+            "description": "Vinieron del espacio exterior: ladrones de cuerpos, naves nodriza y vecinos muy malos."
+        },
+        "scifi-ai-robots": {
+            "name": "IA y robots",
+            "description": "Máquinas que piensan, sienten o se rebelan: de Metrópolis a Robot salvaje."
+        },
+        "action-sword-sandal": {
+            "name": "Péplum",
+            "description": "Gladiadores, héroes griegos y legiones romanas: el mundo antiguo en la gran pantalla."
+        },
+        "comedy-rom-com": {
+            "name": "Comedias románticas",
+            "description": "Encuentros casuales, malentendidos y una carrera al aeropuerto: las comedias románticas que todos vuelven a ver."
+        },
+        "drama-coming-of-age": {
+            "name": "Crecer",
+            "description": "Primer amor, últimos veranos y hacerse mayor: películas sobre convertirse en uno mismo."
+        },
+        "comedy-spoof": {
+            "name": "Parodias",
+            "description": "Nada es sagrado: westerns, terror, ciencia ficción y estrellas del rock reciben su parodia."
+        },
+        "action-buddy-cop": {
+            "name": "Parejas de policías",
+            "description": "Dos policías, nada en común y un caso: las parejas dispares de la comedia de acción."
+        },
+        "family-dogs": {
+            "name": "Películas de perros",
+            "description": "Perros buenísimos: leales, valientes, divertidos y que seguro te harán llorar al menos una vez."
+        },
+        "path-western-starter": {
+            "name": "Iniciación al western",
+            "description": "Diez westerns de La diligencia a Valor de ley: la mejor manera de entrar en el género."
+        },
+        "path-comedy-classics": {
+            "name": "Clásicos de la comedia",
+            "description": "Doce comedias que todo el mundo debería ver, de Con faldas y a lo loco a Paddington 2."
         }
     },
     "notes": {
@@ -893,7 +976,29 @@
         "A new teacher, a boy and Prague after the war – Jan Svěrák's breakthrough.": "Un maestro nuevo, un niño y la Praga de posguerra: el gran salto de Jan Svěrák.",
         "A grumpy cellist and a little Russian boy – the Oscar for Best Foreign Language Film.": "Un violonchelista gruñón y un niño ruso: el Óscar a la mejor película de habla no inglesa.",
         "Two families, Christmas 1967 and the Prague Spring – a comedy and a farewell.": "Dos familias, la Navidad de 1967 y la Primavera de Praga: una comedia y una despedida.",
-        "Hiding a Jewish man during the war – dark humour and an Oscar nomination.": "Esconder a un hombre judío durante la guerra: humor negro y una nominación al Óscar."
+        "Hiding a Jewish man during the war – dark humour and an Oscar nomination.": "Esconder a un hombre judío durante la guerra: humor negro y una nominación al Óscar.",
+        "Where the classic western begins – John Ford, Monument Valley and a young John Wayne.": "Aquí empieza el western clásico: John Ford, Monument Valley y un joven John Wayne.",
+        "A marshal alone against four killers, told in almost real time.": "Un sheriff solo contra cuatro asesinos, contado casi en tiempo real.",
+        "A gunfighter who wants to hang up his guns – and the boy who looks up to him.": "Un pistolero que quiere colgar las armas y el niño que lo admira.",
+        "John Wayne's darkest role – often called the greatest western ever made.": "El papel más oscuro de John Wayne, considerado a menudo el mejor western de la historia.",
+        "A sheriff, a drunk, an old man and a kid hold the jail – pure fun.": "Un sheriff, un borracho, un viejo y un chaval defienden la cárcel: pura diversión.",
+        "Seven gunmen defend a village – the western remake of Seven Samurai.": "Siete pistoleros defienden un pueblo: el remake western de Los siete samuráis.",
+        "Sergio Leone's spaghetti epic and that final standoff.": "La epopeya spaghetti de Sergio Leone y ese duelo final.",
+        "Newman and Redford as charming outlaws on the run.": "Newman y Redford como encantadores forajidos a la fuga.",
+        "Clint Eastwood takes the myth apart – the western grows old.": "Clint Eastwood desmonta el mito: el western envejece.",
+        "The Coen brothers' version: a girl, a marshal and a long ride for justice.": "La versión de los hermanos Coen: una chica, un sheriff y una larga cabalgada en busca de justicia.",
+        "Two musicians in disguise and the best last line in film history.": "Dos músicos disfrazados y la mejor última frase de la historia del cine.",
+        "Kubrick turns nuclear war into black comedy.": "Kubrick convierte la guerra nuclear en comedia negra.",
+        "King Arthur, coconuts and the Black Knight – endlessly quotable.": "El rey Arturo, cocos y el Caballero Negro: citable hasta el infinito.",
+        "Woody Allen's romantic comedy that broke all the rules.": "La comedia romántica de Woody Allen que rompió todas las reglas.",
+        "A joke every few seconds – and don't call me Shirley.": "Un chiste cada pocos segundos, y no me llames Shirley.",
+        "Who you gonna call? Comedy, horror and a giant marshmallow man.": "¿A quién vas a llamar? Comedia, terror y un hombre de malvavisco gigante.",
+        "Leslie Nielsen keeps a straight face while everything falls apart.": "Leslie Nielsen mantiene la cara seria mientras todo se desmorona.",
+        "Bill Murray lives the same day again and again – funny and wise.": "Bill Murray vive el mismo día una y otra vez: divertida y sabia.",
+        "The Dude abides – a cult comedy about bowling and a rug.": "El Nota aguanta: una comedia de culto sobre bolos y una alfombra.",
+        "A romantic comedy with zombies, a pub and a cricket bat.": "Una comedia romántica con zombis, un pub y un bate de críquet.",
+        "Wes Anderson's elegant caper – a perfect finish.": "La elegante aventura de Wes Anderson: un final perfecto.",
+        "Kindness as comedy – one of the best-reviewed films of all time.": "La bondad como comedia: una de las películas mejor valoradas de todos los tiempos."
     },
     "terms": {
         "Phase 1": "Fase 1",

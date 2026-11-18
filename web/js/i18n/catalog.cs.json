@@ -773,6 +773,90 @@
         "path-czech-classics": {
             "name": "Česká klasika",
             "description": "Dvanáct českých filmů od 60. let do roku 2000, které každý v Česku zná nazpaměť – po cestě dva Oscary a čtyři nominace."
+        },
+        "action-90s": {
+            "name": "Akční 90. léta",
+            "description": "Větší, hlasitější, víc hlášek – dekáda Nebezpečné rychlosti, Tváří v tvář a Skály."
+        },
+        "action-disaster": {
+            "name": "Katastrofické filmy",
+            "description": "Oheň, voda, tornáda a asteroidy – konec světa po dvou hodinách."
+        },
+        "drama-sports": {
+            "name": "Sportovní filmy",
+            "description": "Boxerské ringy, závodní okruhy a koš v poslední vteřině – nejlepší filmy o vítězství a prohrách."
+        },
+        "musicals": {
+            "name": "Muzikály",
+            "description": "Zpívej s námi – od Zpívání v dešti po Wicked."
+        },
+        "drama-biopics": {
+            "name": "Životopisné filmy",
+            "description": "Skutečné životy na plátně – rebelové, géniové, hvězdy i podvodníci."
+        },
+        "crime-mafia": {
+            "name": "Mafie a gangsteři",
+            "description": "Mafiáni, rodinný byznys a cena loajality – velké gangsterky i mimo Kmotra."
+        },
+        "drama-prison": {
+            "name": "Vězeňské filmy",
+            "description": "Za mřížemi – útěky, přátelství a naděje mezi zdmi."
+        },
+        "drama-courtroom": {
+            "name": "Soudní dramata",
+            "description": "Námitka! Dvanáct rozhněvaných mužů, pár správných chlapů a procesy, které rozhodl jediný svědek."
+        },
+        "action-spy": {
+            "name": "Špionážní filmy",
+            "description": "Mrtvé schránky, dvojití agenti a studená válka – špioni i mimo Bonda, Bournea a Mission: Impossible."
+        },
+        "action-survival": {
+            "name": "Boj o přežití",
+            "description": "Sám proti přírodě – hory, oceány, led i vesmír."
+        },
+        "scifi-post-apocalyptic": {
+            "name": "Postapokalypsa",
+            "description": "Po konci – pustiny, přeživší a to, co zbylo z lidstva."
+        },
+        "scifi-alien-invasion": {
+            "name": "Mimozemská invaze",
+            "description": "Přišli z vesmíru – únosci těl, mateřské lodě a hodně zlí sousedé."
+        },
+        "scifi-ai-robots": {
+            "name": "Umělá inteligence a roboti",
+            "description": "Stroje, které myslí, cítí nebo se bouří – od Metropolis po Divokého robota."
+        },
+        "action-sword-sandal": {
+            "name": "Antické velkofilmy",
+            "description": "Gladiátoři, řečtí hrdinové a římské legie – antický svět na velkém plátně."
+        },
+        "comedy-rom-com": {
+            "name": "Romantické komedie",
+            "description": "Náhodná setkání, nedorozumění a běh na letiště – romantické komedie, které si lidé pouštějí znovu."
+        },
+        "drama-coming-of-age": {
+            "name": "Dospívání",
+            "description": "První láska, poslední prázdniny a dospívání – filmy o tom, jak se stát sám sebou."
+        },
+        "comedy-spoof": {
+            "name": "Parodie",
+            "description": "Nic není svaté – westerny, horory, sci-fi i rockové hvězdy dostanou svou parodii."
+        },
+        "action-buddy-cop": {
+            "name": "Policejní dvojice",
+            "description": "Dva poldové, nic společného, jeden případ – nesourodé dvojice akčních komedií."
+        },
+        "family-dogs": {
+            "name": "Filmy se psy",
+            "description": "Hodní pejsci – věrní, stateční, legrační a zaručeně tě aspoň jednou rozpláčou."
+        },
+        "path-western-starter": {
+            "name": "Úvod do westernu",
+            "description": "Deset westernů od Dostavníku po Opravdovou kuráž – nejlepší cesta do žánru."
+        },
+        "path-comedy-classics": {
+            "name": "Klasika komedie",
+            "description": "Dvanáct komedií, které by měl vidět každý – od Někdo to rád horké po Paddingtona 2."
         }
     },
     "notes": {
@@ -910,7 +994,29 @@
         "A new teacher, a boy and Prague after the war – Jan Svěrák's breakthrough.": "Nový učitel, kluk a Praha po válce – průlom Jana Svěráka.",
         "A grumpy cellist and a little Russian boy – the Oscar for Best Foreign Language Film.": "Bručoun violoncellista a malý ruský kluk – Oscar za nejlepší cizojazyčný film.",
         "Two families, Christmas 1967 and the Prague Spring – a comedy and a farewell.": "Dvě rodiny, Vánoce 1967 a pražské jaro – komedie i rozloučení.",
-        "Hiding a Jewish man during the war – dark humour and an Oscar nomination.": "Ukrývání Žida za války – černý humor a nominace na Oscara."
+        "Hiding a Jewish man during the war – dark humour and an Oscar nomination.": "Ukrývání Žida za války – černý humor a nominace na Oscara.",
+        "Where the classic western begins – John Ford, Monument Valley and a young John Wayne.": "Tady začíná klasický western – John Ford, Monument Valley a mladý John Wayne.",
+        "A marshal alone against four killers, told in almost real time.": "Šerif sám proti čtyřem zabijákům, vyprávěno skoro v reálném čase.",
+        "A gunfighter who wants to hang up his guns – and the boy who looks up to him.": "Pistolník, který chce pověsit kolty na hřebík – a kluk, který k němu vzhlíží.",
+        "John Wayne's darkest role – often called the greatest western ever made.": "Nejtemnější role Johna Wayna – často označovaná za nejlepší western všech dob.",
+        "A sheriff, a drunk, an old man and a kid hold the jail – pure fun.": "Šerif, opilec, stařík a mladík brání vězení – čistá zábava.",
+        "Seven gunmen defend a village – the western remake of Seven Samurai.": "Sedm pistolníků brání vesnici – westernový remake Sedmi samurajů.",
+        "Sergio Leone's spaghetti epic and that final standoff.": "Leoneho spaghetti epos a to finální střetnutí.",
+        "Newman and Redford as charming outlaws on the run.": "Newman a Redford jako okouzlující psanci na útěku.",
+        "Clint Eastwood takes the myth apart – the western grows old.": "Clint Eastwood rozebírá mýtus – western stárne.",
+        "The Coen brothers' version: a girl, a marshal and a long ride for justice.": "Verze bratrů Coenů: dívka, šerif a dlouhá cesta za spravedlností.",
+        "Two musicians in disguise and the best last line in film history.": "Dva muzikanti v přestrojení a nejlepší poslední věta v dějinách filmu.",
+        "Kubrick turns nuclear war into black comedy.": "Kubrick dělá z jaderné války černou komedii.",
+        "King Arthur, coconuts and the Black Knight – endlessly quotable.": "Král Artuš, kokosy a Černý rytíř – nekonečně citovatelné.",
+        "Woody Allen's romantic comedy that broke all the rules.": "Romantická komedie Woodyho Allena, která porušila všechna pravidla.",
+        "A joke every few seconds – and don't call me Shirley.": "Vtip každých pár vteřin – a neříkej mi Shirley.",
+        "Who you gonna call? Comedy, horror and a giant marshmallow man.": "Komu zavoláš? Komedie, horor a obří marshmallowový muž.",
+        "Leslie Nielsen keeps a straight face while everything falls apart.": "Leslie Nielsen drží vážnou tvář, zatímco se všechno rozpadá.",
+        "Bill Murray lives the same day again and again – funny and wise.": "Bill Murray prožívá pořád tentýž den – vtipné i moudré.",
+        "The Dude abides – a cult comedy about bowling and a rug.": "Dude to zvládne – kultovní komedie o bowlingu a koberci.",
+        "A romantic comedy with zombies, a pub and a cricket bat.": "Romantická komedie se zombiemi, hospodou a kriketovou pálkou.",
+        "Wes Anderson's elegant caper – a perfect finish.": "Elegantní dobrodružství Wese Andersona – dokonalé zakončení.",
+        "Kindness as comedy – one of the best-reviewed films of all time.": "Laskavost jako komedie – jeden z nejlépe hodnocených filmů všech dob."
     },
     "terms": {
         "Phase 1": "Fáze 1",

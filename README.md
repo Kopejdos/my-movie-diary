@@ -40,7 +40,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Installable on a phone or computer (PWA), opens even offline
 
 **Coming next** – new features
-- V4 – better admin & request tools, lots of new movies (first goal: 2,000), perks for higher levels and a yearly Wrapped; V5 – TV shows
+- V4 – perks for higher levels and badges, a yearly Wrapped and speed-ups for the bigger catalog (over 2,400 movies now); V5 – TV shows
 
 ## Tech stack
 

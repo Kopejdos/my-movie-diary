@@ -4,7 +4,7 @@
 
 // Verze aplikace a měsíc poslední aktualizace – zobrazují se v patičce.
 // Při vydání nové verze změnit tady + záznam do CHANGELOG.md + tag (viz docs/decisions.md → Verzování).
-export const APP_VERSION = "V4.3.7";
+export const APP_VERSION = "V4.3.8";
 export const APP_UPDATED = "2026-11";            // rok-měsíc; název měsíce se ukáže v jazyce aplikace (V4.2)
 
 export const SUPABASE_URL = "https://vvnexfdnfvwbwluazwoo.supabase.co";

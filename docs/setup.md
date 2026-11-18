@@ -237,6 +237,8 @@ Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny
 24. **Anime a česká klasika (V4.3.7):** nejdřív migrace `20261121100000_anime_czech.sql` (kategorie Anime
     a Czech & Slovak – bez ní import balíček odmítne), Edge Functions beze změny, pak `./scripts/add-pack.sh
     supabase/packs/v4.3.7-anime-czech.json` a commit seedu. Pak zase Translations → Check with TMDB.
+25. **Žánrové výběry a cesty (V4.3.8):** bez migrace a beze změn funkcí – `./scripts/add-pack.sh
+    supabase/packs/v4.3.8-genre-picks.json` a commit seedu.
 
 **Seed a admin panel (od V3.5.2.1):** seed je zdroj pravdy pro import, ale **úpravy z aplikace se neztratí** –
 databáze si je pamatuje (`universe_items.source`, `universes.source`, tabulka `seed_removals`) a `import.sh`

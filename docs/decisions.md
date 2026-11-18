@@ -371,7 +371,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 46e | V4.3.5 | Režiséři a klasika ✅ | nový typ kolekce **Director** (záložka *Directors*, achievement **Auteur**), 10 režisérů + Sergio Leone, **Best Picture Winners** (98), Universal Monsters, Hammer, Louis de Funès, Belmondo, cesty Nolan Essentials a Oscar Essentials |
 | 46f | V4.3.6 | Série a monstra ✅ | 41 sérií (komedie, akční, sci-fi / fantasy, horory), **Godzilla** (Toho + MonsterVerse), **King Kong**; studia A24, Blumhouse, Amblin, Toho; cesta **Kaiju 101** – bez migrace a změn funkcí |
 | 46g | V4.3.7 | Anime a česká klasika ✅ | kategorie **Anime** 🎌 a **Czech & Slovak** 🇨🇿 (jediná migrace – dva řádky v `categories`); režiséři Shinkai, Hosoda, Kon; Evangelion, Ghost in the Shell, Pokémon, Dragon Ball, Detective Conan, Klasika anime, Cartoon Saloon; Slunce, seno…, Básníci, Anděl Páně, Saxána, Svěrákovi, České pohádky, Československá nová vlna; cesty Anime Starter a Czech Classics |
-| 46h | V4.3.8 | Žánrové výběry a cesty | ~20 nových žánrových výběrů po 12–15 filmech + 7 nových cest; **cíl 2 000 filmů splněn** |
+| 46h | V4.3.8 | Žánrové výběry a cesty ✅ | 19 nových žánrových výběrů po 14–17 filmech + cesty Western Starter a Comedy Classics; konec V4.3 – katalog ~2 430 filmů (**cíl 2 000 splněn už ve V4.3.6**) |
 | 47 | V4.4 | Výhody za úroveň a odznaky | s úrovní rostou limity (otevřené požadavky, filmy v požadavku, velikost a počet seznamů) – přehled „co odemkne další úroveň“ v profilu; odznak **Elite** pro vybrané lidi (jen ozdoba) |
 | 48 | V4.5 | Wrapped | rok v kostce – **poprvé za rok 2027** (prosinec 2027): nováček si na začátku doplní stovky filmů, první celý rok dat bude 2027; filmy „Seen before“ se nepočítají |
 | 49 | V4.6 | Optimalizace před seriály | úklid a výkon s velkým katalogem (načítání, hledání, import), **katalog v mezipaměti prohlížeče** pro opakované návštěvy – připravit půdu pro kapitolu V5 |
@@ -391,7 +391,7 @@ mezi kolekcemi opakují – kolekce režiséra sdílí filmy se studii, výběry
 | V4.3.5 Režiséři a klasika | ~330 (skutečně) | ~1 790 |
 | V4.3.6 Série a monstra | ~240 (skutečně) | ~2 030 – **cíl 2 000 splněn** |
 | V4.3.7 Anime a česká klasika | ~190 (skutečně) | ~2 220 |
-| V4.3.8 Žánrové výběry a cesty | ~150 | **~2 270** |
+| V4.3.8 Žánrové výběry a cesty | ~215 (skutečně) | **~2 430** |
 
 **V4.3.1 – Editor a požadavky** (plán 14. 11. 2026 – bez nových filmů, aby se ve zbytku V4.3 dobře přidávalo)
 - **Úpravy kolekce s jedním Save:** změny filmů (Section, Series, Label, Story #, Optional, pořadí šipkami,
@@ -2310,6 +2310,28 @@ testovacích seznamů byla vymyšlená.
   výběry a cesty mají anglický název a překlady.
 - **Svěrákovi jako jedna kolekce otce a syna** – filmy podle scénářů Zdeňka Svěráka a filmy Jana Svěráka;
   Vesničko má středisková (režie Menzel, scénář Svěrák) patří k nim.
+
+### Fáze 46h – žánrové výběry a cesty ✅ (18. 11. 2026) – **V4.3.8, konec V4.3**
+- **Jen obsah** – bez migrace a beze změn Edge Functions (jen existující kategorie). Balíček
+  `v4.3.8-genre-picks.json` (21 kolekcí, 317 řádků, ~215 nových filmů → katalog ~2 430):
+  - **19 žánrových výběrů** po 14–17 filmech: 90s Action, Disaster Movies, Sports Movies, Musicals, Biopics,
+    Mafia & Gangster, Prison Movies, Courtroom Dramas, Spy Movies (mimo Bonda, Bournea a Mission: Impossible),
+    Survival, Post-apocalyptic, Alien Invasion, AI & Robots, Sword & Sandal, Rom-coms, Coming of Age,
+    Spoof & Parody, Buddy Cop, Dog Movies;
+  - cesty **Western Starter** (10 kroků od Dostavníku po Opravdovou kuráž) a **Comedy Classics** (12 kroků
+    od Někdo to rád horké po Paddingtona 2).
+  Výběry záměrně sahají i po filmech z dřívějších částí (Rocky, Titanic, Gladiator, Oppenheimer…) – proto byly
+  na konci. Názvy, popisy a poznámky cest ve všech čtyřech jazycích.
+- Ověřeno: `add-pack` na seedu se všemi balíčky V4.3.5–V4.3.7 (21 nových kolekcí), `node --test` (69 – nově
+  platnost balíčku V4.3.8: jen existující kategorie), webové testy v češtině, španělštině a angličtině na 320–1280 px.
+
+#### Shrnutí V4.3 (14.–18. 11. 2026)
+- Katalog **z 1 264 na ~2 430 filmů** (z toho ~200 přidal kamarád přes požadavky), přes 130 nových kolekcí;
+  nové typy a kategorie: **Director**, **Western**, **Anime**, **Czech & Slovak**.
+- Nástroje, které zůstávají pro další cíle (2 500, 3 000…): editor kolekcí s jedním Save, stavitel kolekcí
+  (osoba, dvě osoby, studio, klíčové slovo), balíčky `add-pack`, odpovědi na požadavky s důvodem, upozornění
+  na podobné kolekce, překlady kolekcí s kontrolou proti TMDB, průvodce a nápověda.
+- Další na řadě: **V4.4 – výhody za úroveň a odznaky**.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

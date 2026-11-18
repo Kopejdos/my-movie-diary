@@ -146,6 +146,26 @@ test("balíček V4.3.7: anime a česká klasika v nových kategoriích, Studio G
     }
 });
 
+test("balíček V4.3.8: 19 žánrových výběrů a 2 cesty v existujících kategoriích", () => {
+    const pack = JSON.parse(readFileSync(new URL("../supabase/packs/v4.3.8-genre-picks.json", import.meta.url), "utf8"));
+    const categories = new Set(["superhero", "scifi", "fantasy", "animation", "anime", "family", "action-adventure", "comedy",
+        "drama", "crime-thriller", "war", "western", "horror", "czech-slovak"]);
+    assert.equal(pack.universes.filter((u) => u.kind === "genre").length, 19);
+    assert.equal(pack.universes.filter((u) => u.kind === "path").length, 2);
+    for (const universe of pack.universes) {
+        assert.match(universe.slug, /^[a-z0-9-]{2,40}$/, universe.slug);
+        // Bez migrace – jen kategorie, které už v databázi jsou
+        assert.ok(universe.categories.length > 0 && universe.categories.every((c) => categories.has(c)), universe.slug);
+        assert.ok(universe.films.length >= 10 && universe.films.length <= 17, universe.slug);
+        const keys = universe.films.map((f) => `${f.title}|${f.year}`);
+        assert.equal(new Set(keys).size, keys.length, `${universe.slug}: film dvakrát`);
+        for (const film of universe.films) {
+            assert.ok(film.title && Number.isInteger(film.year), `${universe.slug}: ${film.title}`);
+            if (universe.kind === "path") assert.ok(film.note && film.note.length <= 300, `${universe.slug}: ${film.title}`);
+        }
+    }
+});
+
 test("nextGoal: 2 000, pak po 500", async () => {
     const { nextGoal } = await import("../web/js/admin.js");
     assert.equal(nextGoal(1264), 2000);

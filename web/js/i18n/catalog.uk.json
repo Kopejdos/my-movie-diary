@@ -846,6 +846,90 @@
         "path-czech-classics": {
             "name": "Чеська класика",
             "description": "Дванадцять чеських фільмів від 60-х до 2000 року, які в Чехії знають напам'ять, – дорогою два «Оскари» й чотири номінації."
+        },
+        "action-90s": {
+            "name": "Бойовики 90-х",
+            "description": "Більше, гучніше, більше крилатих фраз – десятиліття «Швидкості», «Без обличчя» і «Скелі»."
+        },
+        "action-disaster": {
+            "name": "Фільми-катастрофи",
+            "description": "Вогонь, вода, торнадо й астероїди – кінець світу по дві години."
+        },
+        "drama-sports": {
+            "name": "Спортивні фільми",
+            "description": "Боксерські ринги, гоночні траси й кидок на останній секунді – найкращі фільми про перемоги й поразки."
+        },
+        "musicals": {
+            "name": "Мюзикли",
+            "description": "Співай разом – від «Співу під дощем» до «Чародійки»."
+        },
+        "drama-biopics": {
+            "name": "Байопіки",
+            "description": "Справжні життя на великому екрані – бунтарі, генії, зірки й шахраї."
+        },
+        "crime-mafia": {
+            "name": "Мафія і гангстери",
+            "description": "Люди честі, сімейний бізнес і ціна вірності – великі гангстерські фільми поза «Хрещеним батьком»."
+        },
+        "drama-prison": {
+            "name": "Фільми про в'язницю",
+            "description": "За ґратами – втечі, дружба й надія між стінами."
+        },
+        "drama-courtroom": {
+            "name": "Судові драми",
+            "description": "Заперечую! Дванадцять розгніваних чоловіків, кілька хороших хлопців і процеси, що трималися на одному свідкові."
+        },
+        "action-spy": {
+            "name": "Шпигунські фільми",
+            "description": "Схованки, подвійні агенти й холодна війна – шпигуни поза Бондом, Борном і «Місією нездійсненною»."
+        },
+        "action-survival": {
+            "name": "Виживання",
+            "description": "Сам проти природи – гори, океани, лід і космос."
+        },
+        "scifi-post-apocalyptic": {
+            "name": "Постапокаліпсис",
+            "description": "Після кінця – пустки, ті, хто вижив, і те, що лишилося від людства."
+        },
+        "scifi-alien-invasion": {
+            "name": "Вторгнення прибульців",
+            "description": "Вони прийшли з космосу – викрадачі тіл, кораблі-матки й дуже погані сусіди."
+        },
+        "scifi-ai-robots": {
+            "name": "ШІ та роботи",
+            "description": "Машини, що думають, відчувають або бунтують, – від «Метрополіса» до «Дикого робота»."
+        },
+        "action-sword-sandal": {
+            "name": "Пеплуми",
+            "description": "Гладіатори, грецькі герої й римські легіони – античний світ на великому екрані."
+        },
+        "comedy-rom-com": {
+            "name": "Романтичні комедії",
+            "description": "Випадкові зустрічі, непорозуміння й біг до аеропорту – романтичні комедії, які переглядають знову."
+        },
+        "drama-coming-of-age": {
+            "name": "Дорослішання",
+            "description": "Перше кохання, останні канікули й дорослішання – фільми про те, як стати собою."
+        },
+        "comedy-spoof": {
+            "name": "Пародії",
+            "description": "Нічого святого – вестерни, жахи, фантастика й рок-зірки отримують свою пародію."
+        },
+        "action-buddy-cop": {
+            "name": "Поліцейські напарники",
+            "description": "Двоє копів, нічого спільного, одна справа – дивні пари екшн-комедій."
+        },
+        "family-dogs": {
+            "name": "Фільми про собак",
+            "description": "Хороші песики – вірні, хоробрі, кумедні й неодмінно хоч раз змусять заплакати."
+        },
+        "path-western-starter": {
+            "name": "Вступ до вестерну",
+            "description": "Десять вестернів від «Диліжанса» до «Справжньої мужності» – найкращий вхід у жанр."
+        },
+        "path-comedy-classics": {
+            "name": "Класика комедії",
+            "description": "Дванадцять комедій, які варто побачити кожному, – від «У джазі тільки дівчата» до «Паддінгтона 2»."
         }
     },
     "notes": {
@@ -983,7 +1067,29 @@
         "A new teacher, a boy and Prague after the war – Jan Svěrák's breakthrough.": "Новий учитель, хлопчик і Прага після війни – прорив Яна Свєрака.",
         "A grumpy cellist and a little Russian boy – the Oscar for Best Foreign Language Film.": "Буркотливий віолончеліст і маленький російський хлопчик – «Оскар» за найкращий іншомовний фільм.",
         "Two families, Christmas 1967 and the Prague Spring – a comedy and a farewell.": "Дві родини, Різдво 1967 року й Празька весна – комедія і прощання.",
-        "Hiding a Jewish man during the war – dark humour and an Oscar nomination.": "Переховування єврея під час війни – чорний гумор і номінація на «Оскар»."
+        "Hiding a Jewish man during the war – dark humour and an Oscar nomination.": "Переховування єврея під час війни – чорний гумор і номінація на «Оскар».",
+        "Where the classic western begins – John Ford, Monument Valley and a young John Wayne.": "Тут починається класичний вестерн – Джон Форд, Долина монументів і молодий Джон Вейн.",
+        "A marshal alone against four killers, told in almost real time.": "Маршал сам проти чотирьох убивць, майже в реальному часі.",
+        "A gunfighter who wants to hang up his guns – and the boy who looks up to him.": "Стрілець, який хоче покласти зброю, – і хлопчик, що на нього рівняється.",
+        "John Wayne's darkest role – often called the greatest western ever made.": "Найпохмуріша роль Джона Вейна – часто його називають найкращим вестерном усіх часів.",
+        "A sheriff, a drunk, an old man and a kid hold the jail – pure fun.": "Шериф, п'яниця, старий і юнак обороняють в'язницю – чиста розвага.",
+        "Seven gunmen defend a village – the western remake of Seven Samurai.": "Семеро стрільців захищають село – вестерн-рімейк «Семи самураїв».",
+        "Sergio Leone's spaghetti epic and that final standoff.": "Спагеті-епос Серджо Леоне і той фінальний поєдинок.",
+        "Newman and Redford as charming outlaws on the run.": "Ньюмен і Редфорд як чарівні розбійники у втечі.",
+        "Clint Eastwood takes the myth apart – the western grows old.": "Клінт Іствуд розбирає міф – вестерн старіє.",
+        "The Coen brothers' version: a girl, a marshal and a long ride for justice.": "Версія братів Коен: дівчина, маршал і довгий шлях до справедливості.",
+        "Two musicians in disguise and the best last line in film history.": "Двоє музикантів у перевдяганні й найкраща остання фраза в історії кіно.",
+        "Kubrick turns nuclear war into black comedy.": "Кубрик перетворює ядерну війну на чорну комедію.",
+        "King Arthur, coconuts and the Black Knight – endlessly quotable.": "Король Артур, кокоси й Чорний лицар – безкінечно цитовано.",
+        "Woody Allen's romantic comedy that broke all the rules.": "Романтична комедія Вуді Аллена, що порушила всі правила.",
+        "A joke every few seconds – and don't call me Shirley.": "Жарт кожні кілька секунд – і не називай мене Ширлі.",
+        "Who you gonna call? Comedy, horror and a giant marshmallow man.": "Кому ти подзвониш? Комедія, жахи й гігантський зефірний чоловік.",
+        "Leslie Nielsen keeps a straight face while everything falls apart.": "Леслі Нільсен зберігає серйозне обличчя, поки все розвалюється.",
+        "Bill Murray lives the same day again and again – funny and wise.": "Білл Мюррей проживає той самий день знову й знову – смішно й мудро.",
+        "The Dude abides – a cult comedy about bowling and a rug.": "Чувак не здається – культова комедія про боулінг і килим.",
+        "A romantic comedy with zombies, a pub and a cricket bat.": "Романтична комедія із зомбі, пабом і битою для крикету.",
+        "Wes Anderson's elegant caper – a perfect finish.": "Елегантна пригода Веса Андерсона – ідеальне завершення.",
+        "Kindness as comedy – one of the best-reviewed films of all time.": "Доброта як комедія – один із найкраще оцінених фільмів усіх часів."
     },
     "terms": {
         "Phase 1": "Фаза 1",
