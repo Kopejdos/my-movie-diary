@@ -1024,6 +1024,249 @@
         },
         "rec": {
             "description": "Televizní štáb uvězněný v budově v karanténě – španělský found-footage hit a jeho pokračování."
+        },
+        "martin-scorsese": {
+            "description": "Špinavé ulice, mafiáni a osamělí muži – od Taxikáře po Zabijáky rozkvetlého měsíce."
+        },
+        "james-cameron": {
+            "description": "Král světa – Terminátor, Vetřelci, Titanic a cesta na Pandoru."
+        },
+        "ridley-scott": {
+            "description": "Pět desetiletí velkofilmů – Vetřelec, Blade Runner, Gladiátor, Marťan i Napoleon."
+        },
+        "coen-brothers": {
+            "name": "Joel a Ethan Coenovi",
+            "description": "Únosy, které se pokazí, bowling a smůla – bratři Coenové spolu i každý zvlášť."
+        },
+        "guillermo-del-toro": {
+            "description": "Monstra se srdcem – Faunův labyrint, Tvář vody, Pinocchio a Frankenstein."
+        },
+        "peter-jackson": {
+            "description": "Od novozélandských splatterových komedií po Středozemi – Braindead, Pán prstenů a King Kong."
+        },
+        "sam-raimi": {
+            "description": "Groovy! Smrtelné zlo, Darkman, původní trilogie Spider-Mana a Stáhni mě do pekla."
+        },
+        "john-carpenter": {
+            "description": "Mistr syntezátorové hudby a hororu v obležení – Halloween, Věc, Útěk z New Yorku a Oni žijí."
+        },
+        "david-lynch": {
+            "description": "Sny, rudé závěsy a tajemství malých měst – Mazací hlava, Modrý samet, Mulholland Drive."
+        },
+        "francis-ford-coppola": {
+            "description": "Kmotr, Apokalypsa a padesát let riskování – až po Megalopolis."
+        },
+        "bong-joon-ho": {
+            "description": "Třídní boj v každém žánru – Vzpomínky na vraždu, The Host, Snowpiercer a oscarový Parazit."
+        },
+        "park-chan-wook": {
+            "description": "Pomsta podávaná krásně – trilogie pomsty, Služka a Rozhodnutí odejít."
+        },
+        "paul-thomas-anderson": {
+            "description": "Hříšné noci, Magnolie, Až na krev – velké sborové příběhy a posedlí samotáři až po Jednu bitvu za druhou."
+        },
+        "greta-gerwig": {
+            "description": "Lady Bird, Malé ženy, Barbie – a příště výlet do Narnie."
+        },
+        "edgar-wright": {
+            "description": "Švihové panorámy, ostré střihy a pivo ve Winchesteru – Soumrak mrtvých, Jednotka příliš rychlého nasazení, Baby Driver."
+        },
+        "milos-forman": {
+            "description": "Od československé nové vlny ke dvěma Oscarům za režii – Přelet nad kukaččím hnízdem a Amadeus."
+        },
+        "now-you-see-me": {
+            "name": "Podfukáři",
+            "description": "Čtyři jezdci okrádají banky přímo na pódiu – čím blíž se díváš, tím míň vidíš."
+        },
+        "oceans": {
+            "name": "Dannyho parťáci",
+            "description": "Parta Dannyho Oceana a nejelegantnější loupeže v Las Vegas – plus původní film s Rat Packem a Ocean's 8."
+        },
+        "percy-jackson": {
+            "description": "Poloboh, syn Poseidona, na dobrodružstvích z řeckých bájí v současné Americe."
+        },
+        "pitch-perfect": {
+            "name": "Ladíme!",
+            "description": "A cappella jako hrom! Barden Bellas si prozpívají cestu vysokou školou i dál."
+        },
+        "legally-blonde": {
+            "name": "Pravá blondýnka",
+            "description": "Elle Woods dobývá Harvard i Washington – v růžové."
+        },
+        "bill-and-ted": {
+            "name": "Bill a Ted",
+            "description": "Buďte k sobě skvělí! Dva frajeři, telefonní budka pro cesty časem a písnička, která zachrání svět."
+        },
+        "waynes-world": {
+            "name": "Waynův svět",
+            "description": "Party on, Wayne! Party on, Garth! Pořad z kabelovky jde do kina."
+        },
+        "ace-ventura": {
+            "description": "Takže dobrá! Jim Carrey jako zvířecí detektiv."
+        },
+        "zombieland": {
+            "description": "Pravidlo č. 32: užívej si maličkostí – výlet napříč zombie apokalypsou."
+        },
+        "hellboy": {
+            "description": "Démon, který pracuje pro ty dobré – filmy del Tora, reboot z roku 2019 a The Crooked Man."
+        },
+        "highlander": {
+            "description": "Zůstat může jen jeden – nesmrtelní šermíři napříč staletími."
+        },
+        "the-addams-family": {
+            "name": "Addamsova rodina",
+            "description": "Strašidelní a podivní – filmy z 90. let s Raulem Juliou a Anjelicou Huston a animovaný reboot."
+        },
+        "kick-ass": {
+            "description": "Co kdyby si kostým oblékl skutečný puberťák? Kick-Ass, Hit-Girl a spousta krve."
+        },
+        "shaft": {
+            "description": "Soukromé očko, na které ženské letí – tři generace Johna Shafta."
+        },
+        "crocodile-dundee": {
+            "name": "Krokodýl Dundee",
+            "description": "Tohle že je nůž? Australský lovec krokodýlů v New Yorku a Los Angeles."
+        },
+        "the-mighty-ducks": {
+            "description": "Kvák, kvák, kvák! Beznadějný dětský hokejový tým se učí létat spolu."
+        },
+        "honey-i-shrunk-the-kids": {
+            "name": "Miláčku, zmenšil jsem děti",
+            "description": "Vynálezy Wayna Szalinského rodinu zmenší, zvětší a zase zmenší."
+        },
+        "bridget-jones": {
+            "description": "Velké kalhotky, deník a pan Darcy – Renée Zellweger během 25 let."
+        },
+        "mean-girls": {
+            "name": "Protivný sprostý holky",
+            "description": "Ve středu nosíme růžovou – klasika z roku 2004 a muzikál z roku 2024."
+        },
+        "the-princess-diaries": {
+            "name": "Deník princezny",
+            "description": "Puberťačka ze San Franciska zjistí, že je princeznou Genovie."
+        },
+        "jackass": {
+            "description": "Nezkoušejte to doma – Johnny Knoxville a kamarádi se zraňují schválně."
+        },
+        "fifty-shades": {
+            "name": "Padesát odstínů",
+            "description": "Anastasia Steeleová a Christian Grey – trilogie podle bestsellerů."
+        },
+        "starship-troopers": {
+            "name": "Hvězdná pěchota",
+            "description": "Chcete vědět víc? Verhoevenova satira o válce s Brouky a její pokračování."
+        },
+        "independence-day": {
+            "name": "Den nezávislosti",
+            "description": "Vítejte na Zemi! Mimozemská mateřská loď útočí na Den nezávislosti."
+        },
+        "universal-soldier": {
+            "name": "Univerzální voják",
+            "description": "Van Damme a Lundgren jako mrtví vojáci, které oživili, aby bojovali znovu."
+        },
+        "sin-city": {
+            "name": "Sin City – město hříchu",
+            "description": "Černobílé Basin City Franka Millera, kde nikdy nepřestane pršet."
+        },
+        "300": {
+            "description": "Tohle je Sparta! Thermopyly a Salamína ve stylu Zacka Snydera."
+        },
+        "crank": {
+            "description": "Jason Statham musí držet adrenalin nahoře – jinak se mu zastaví srdce."
+        },
+        "the-boondock-saints": {
+            "name": "Svatí z Bostonu",
+            "description": "Dva irští bratři čistí Boston – kultovní dvojice mstitelů."
+        },
+        "the-blair-witch": {
+            "name": "Záhada Blair Witch",
+            "description": "Tři studenti odešli do lesa – film, který proslavil found footage."
+        },
+        "cube": {
+            "name": "Kostka",
+            "description": "Cizí lidé se probudí v bludišti smrtících místností – a nikdo neví proč."
+        },
+        "the-crow": {
+            "name": "Vrána",
+            "description": "Nemůže pršet pořád – gotický mstitel a jeho pokračování."
+        },
+        "the-descent": {
+            "name": "Pád do tmy",
+            "description": "Šest žen, jeskynní systém a něco hladového ve tmě."
+        },
+        "critters": {
+            "description": "Malí, chlupatí, mimozemští a hodně hladoví – monstrózní série z 80. let."
+        },
+        "leprechaun": {
+            "name": "Skřítek",
+            "description": "Nesahej mu na zlato – vražedný skřítek Warwicka Davise, dokonce i ve vesmíru."
+        },
+        "herbie": {
+            "description": "Volkswagen Brouk s vlastní hlavou – číslo 53 znovu na trati."
+        },
+        "spy-kids": {
+            "description": "Dětští tajní agenti Roberta Rodrigueze a jejich vychytávky."
+        },
+        "diary-of-a-wimpy-kid": {
+            "name": "Deník malého poseroutky",
+            "description": "Greg Heffley přežívá druhý stupeň – hrané filmy i animovaný reboot."
+        },
+        "freaky-friday": {
+            "name": "Mezi námi děvčaty",
+            "description": "Matka a dcera si vymění těla – třikrát, během padesáti let."
+        },
+        "free-willy": {
+            "name": "Zachraňte Willyho",
+            "description": "Kluk, kosatka a skok na svobodu."
+        },
+        "babe": {
+            "description": "Dobrá práce, prasátko – ovčácké prase a jeho výlet do velkoměsta."
+        },
+        "stuart-little": {
+            "name": "Myšák Stuart Little",
+            "description": "Myšák adoptovaný rodinou Littleových v New Yorku."
+        },
+        "dr-dolittle": {
+            "description": "Doktor, který mluví se zvířaty – Rex Harrison, Eddie Murphy i Robert Downey Jr."
+        },
+        "cheaper-by-the-dozen": {
+            "name": "Dvanáct do tuctu",
+            "description": "Dvanáct dětí, dva rodiče a totální chaos."
+        },
+        "nanny-mcphee": {
+            "name": "Kouzelná chůva Nanny McPhee",
+            "description": "Když mě potřebujete, ale nechcete, zůstanu – kouzelná chůva Emmy Thompsonové."
+        },
+        "beethoven": {
+            "description": "Uslintaný bernardýn obrátí rodinu Newtonových vzhůru nohama."
+        },
+        "big-mommas-house": {
+            "name": "Agent v sukni",
+            "description": "Martin Lawrence v utajení jako babička."
+        },
+        "neon": {
+            "description": "Nezávislý distributor s rekordní sérií vítězů Zlaté palmy – Parazit, Titane, Anora a Longlegs."
+        },
+        "crime-film-noir": {
+            "description": "Fatální ženy, soukromá očka a stíny žaluzií – černobílé kriminálky 40. a 50. let."
+        },
+        "crime-neo-noir": {
+            "description": "Noir v barvě – Čínská čtvrť, L.A. – Přísně tajné, Drive a města, která nikdy nespí."
+        },
+        "palme-dor-winners": {
+            "name": "Vítězové Zlaté palmy",
+            "description": "Všichni vítězové Zlaté palmy z Cannes od roku 1990 – od Zběsilosti v srdci po Fjord."
+        },
+        "cult-classics": {
+            "name": "Kultovní filmy",
+            "description": "Propadáky, půlnoční projekce a citovatelné podivnosti, které si diváky našly později."
+        },
+        "drama-road-movies": {
+            "description": "Na cestu – motorky, silná auta, autobusy a lidé, které cestou potkáš."
+        },
+        "comedy-teen": {
+            "name": "Teenagerské komedie",
+            "description": "Plesy, mejdany a rodiče mimo město – středoškolské komedie od Fast Times po Bottoms."
         }
     },
     "notes": {
@@ -1377,6 +1620,8 @@
         "Planes": "Letadla",
         "Teenage Mutant Ninja Turtles": "Želvy nindža",
         "The Lion King": "Lví král",
-        "The Little Mermaid": "Malá mořská víla"
+        "The Little Mermaid": "Malá mořská víla",
+        "Documentary": "Dokument",
+        "Reboots": "Restarty"
     }
 }

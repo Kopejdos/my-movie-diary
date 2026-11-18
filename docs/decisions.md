@@ -374,7 +374,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 46h | V4.3.8 | Žánrové výběry a cesty ✅ | 19 nových žánrových výběrů po 14–17 filmech + cesty Western Starter a Comedy Classics; konec V4.3 – katalog ~2 430 filmů (**cíl 2 000 splněn už ve V4.3.6**) |
 | 47 | V4.4 | Výhody za úroveň a odznaky ✅ | s úrovní rostou limity (otevřené požadavky, filmy v požadavku, velikost a počet seznamů) – hlídá je databáze (úroveň spočítaná v SQL stejně jako ve webu); v profilu **Výhody za úroveň**; odznak **Elite** ★ (přiděluje správce) |
 | 47a | V4.4.1 | Animáky ✅ | Looney Tunes (i Coyote vs. Acme), Tom a Jerry, Scooby-Doo, Šmoulové, Želvy nindža, SpongeBob, Sonic, Garfield, Alvin, Peanuts, Medvídek Pú; studia DisneyToon, Warner Bros. Animation, Netflix a Nickelodeon; režiséři Don Bluth, Karel Zeman a Jan Švankmajer; Česká animace, oscaroví vítězové za animaci, světová animace, animace pro dospělé, seriály v kině; One Piece, Naruto, My Hero Academia, Demon Slayer, Moderní anime; oprava kolekcí z kontroly seedu – katalog ~2 740 filmů |
-| 47b | V4.4.2 | Režiséři, série a výběry | další režiséři (Scorsese, Cameron, Ridley Scott, Coenové, del Toro, Peter Jackson, Peele, Bong Joon-ho, Park Chan-wook, P. T. Anderson, Gerwig, Forman…), série (Now You See Me, Percy Jackson, Pitch Perfect, Legally Blonde, Bill & Ted, Wayne's World, Ace Ventura, Zombieland, Hellboy, Highlander, Addams Family…), výběry (Film Noir, Neo-noir, Zlatá palma, kultovní filmy, road movies, teen komedie), studio Neon – **cíl 3 000** |
+| 47b | V4.4.2 | Režiséři, série a výběry ✅ | 16 režisérů (Scorsese, Cameron, Ridley Scott, Coenové, del Toro, Peter Jackson, Raimi, Carpenter, Lynch, Coppola, Bong Joon-ho, Park Chan-wook, P. T. Anderson, Gerwig, Edgar Wright, Forman), 47 sérií (Ocean's, Now You See Me, Hellboy, Addams Family, Highlander, Starship Troopers, Shaft, Herbie, Spy Kids…), studio Neon, výběry Film Noir, Neo-noir, Zlatá palma (od 1990), kultovní filmy, road movies, teen komedie – **katalog přes 3 000 (~3 150)** |
 | 47c–d | V4.4.3–V4.4.4 | Velké seznamy a kinematografie | AFI 100, Sight & Sound, Oscar za cizojazyčný film, nejlepší filmy desetiletí, kinematografie zemí (Korea, Itálie, Francie, Indie… – možná nové kategorie = migrace), herci, další režiséři, česká vlna 2 – **cíl 4 000** |
 | 48 | V4.5 | Wrapped | rok v kostce – **poprvé za rok 2027** (prosinec 2027): nováček si na začátku doplní stovky filmů, první celý rok dat bude 2027; filmy „Seen before“ se nepočítají |
 | 49 | V4.6 | Optimalizace před seriály | úklid a výkon s velkým katalogem (načítání, hledání, import), **katalog v mezipaměti prohlížeče** pro opakované návštěvy – připravit půdu pro kapitolu V5 |
@@ -481,9 +481,9 @@ kde to jde; každá část je hotová a vydaná zvlášť.
 | Část | Odhad nových filmů | Katalog po vydání |
 |---|---|---|
 | V4.4.1 Animáky | ~295 (skutečně) | ~2 740 |
-| V4.4.2 Režiséři, série a výběry | ~300 | **~3 040 – cíl 3 000** |
-| V4.4.3 Velké seznamy (AFI, Sight & Sound, cizojazyčný Oscar, desetiletí) | ~450 | ~3 500 |
-| V4.4.4 Kinematografie zemí, herci, další režiséři | ~500 | **~4 000** |
+| V4.4.2 Režiséři, série a výběry | ~410 (skutečně) | **~3 150 – cíl 3 000 splněn** |
+| V4.4.3 Velké seznamy (AFI, Sight & Sound, cizojazyčný Oscar, desetiletí) | ~400 | ~3 550 |
+| V4.4.4 Kinematografie zemí, herci, další režiséři | ~450 | **~4 000** |
 
 #### V4.4 – výhody za úroveň a odznaky (plán 14. 11. 2026)
 - **Výhody za úroveň** – s úrovní rostou limity. Návrh (doladí se před začátkem verze):
@@ -2425,6 +2425,34 @@ testovacích seznamů byla vymyšlená.
 - **České animované filmy pod původními názvy** (jako ve V4.3.7) – TMDB je najde podle původního názvu.
 - **Výběr oscarových vítězů za animaci** sdílí filmy s Pixarem a Disneym (přidává jen 3 nové) – patří k sobě
   s Best Picture Winners z V4.3.5.
+
+### Fáze 47b – režiséři, série a výběry ✅ (18. 11. 2026) – **V4.4.2**
+- **Jen obsah** – bez migrace a beze změn Edge Functions. Balíček `v4.4.2-directors-series.json` (70 kolekcí,
+  541 řádků, ~410 nových filmů → katalog **~3 150, cíl 3 000 splněn**):
+  - **16 režisérů** po desetiletích: Martin Scorsese, James Cameron, Ridley Scott (včetně The Dog Stars),
+    Joel & Ethan Coenovi (sólové filmy se štítkem jména), Guillermo del Toro, Peter Jackson, Sam Raimi,
+    John Carpenter, David Lynch, Francis Ford Coppola, Bong Joon-ho, Park Chan-wook, Paul Thomas Anderson,
+    Greta Gerwig (s chystanou Narnií – únor 2027), Edgar Wright a Miloš Forman (české filmy pod původními názvy);
+    dokumenty jsou volitelné se štítkem *Documentary*;
+  - **47 sérií** – komedie (Ocean's, Now You See Me, Pitch Perfect, Legally Blonde, Bill & Ted, Wayne's World,
+    Ace Ventura, Bridget Jones, Mean Girls, Jackass…), akce a sci-fi (Hellboy, Highlander, Kick-Ass, Shaft,
+    Starship Troopers, Independence Day, Universal Soldier, Sin City, 300, Crank…), horory (Blair Witch, Cube,
+    The Crow, The Descent, Critters, Leprechaun, Zombieland, Addams Family) a rodinné (Herbie, Spy Kids, Diary
+    of a Wimpy Kid, Freaky Friday, Free Willy, Babe, Stuart Little, Dr. Dolittle, Beethoven…);
+  - **studio Neon** (Parazit, Titane, Anora, Longlegs…);
+  - **výběry:** Film Noir (40. a 50. léta), Neo-noir, **Palme d'Or Winners** (všech 38 od roku 1990 až po
+    Fjord z roku 2026), Cult Classics, Road Movies, Teen Comedies (bez filmů z výběru Coming of Age).
+- Ověřeno: `add-pack` na seedu po V4.4.1 (70 nových, podruhé nic), `node --test` (75 – nově platnost balíčku
+  V4.4.2: desetiletí režiséra sedí s rokem filmu), webové testy v češtině, němčině, angličtině a ukrajinštině
+  na 320–1280 px.
+
+#### Rozhodnutí ve fázi 47b
+- **Coenovi jako jedna kolekce** – sólové filmy (Tragédie Macbetha, Drive-Away Dolls, Honey Don't!) patří k nim
+  se štítkem jména, samostatné kolekce by měly po jednom až dvou filmech.
+- **Malé série (2 filmy) jsou v pořádku** – Kick-Ass, Sin City nebo Crank se dokončí rychle a v hledání
+  i na přehledu je dobré je mít jako celek.
+- **Zlatá palma od roku 1990** – starší vítězové jsou často těžko k vidění; případně se doplní ve V4.4.3
+  s velkými seznamy.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

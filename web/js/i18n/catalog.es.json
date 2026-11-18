@@ -1005,6 +1005,247 @@
         },
         "rec": {
             "description": "Un equipo de televisión atrapado en un edificio en cuarentena: el éxito español de metraje encontrado y sus secuelas."
+        },
+        "martin-scorsese": {
+            "description": "Malas calles, mafiosos y hombres solitarios: de Taxi Driver a Los asesinos de la luna."
+        },
+        "james-cameron": {
+            "description": "El rey del mundo: Terminator, Aliens, Titanic y el viaje a Pandora."
+        },
+        "ridley-scott": {
+            "description": "Cinco décadas de epopeyas: Alien, Blade Runner, Gladiator, Marte y Napoleón."
+        },
+        "coen-brothers": {
+            "name": "Joel y Ethan Coen",
+            "description": "Secuestros que salen mal, bolos y mala suerte: los hermanos Coen, juntos y por separado."
+        },
+        "guillermo-del-toro": {
+            "description": "Monstruos con corazón: El laberinto del fauno, La forma del agua, Pinocho y Frankenstein."
+        },
+        "peter-jackson": {
+            "description": "De las comedias gore de Nueva Zelanda a la Tierra Media: Braindead, El Señor de los Anillos y King Kong."
+        },
+        "sam-raimi": {
+            "description": "¡Groovy! Posesión infernal, Darkman, la trilogía original de Spider-Man y Arrástrame al infierno."
+        },
+        "john-carpenter": {
+            "description": "El maestro de las bandas sonoras de sintetizador y el terror de asedio: La noche de Halloween, La cosa, 1997: Rescate en Nueva York y Están vivos."
+        },
+        "david-lynch": {
+            "description": "Sueños, cortinas rojas y secretos de pueblo: Cabeza borradora, Terciopelo azul, Mulholland Drive."
+        },
+        "francis-ford-coppola": {
+            "description": "El padrino, Apocalypse Now y cincuenta años de riesgo, hasta Megalópolis."
+        },
+        "bong-joon-ho": {
+            "description": "La lucha de clases en todos los géneros: Memories of Murder, The Host, Snowpiercer y la oscarizada Parásitos."
+        },
+        "park-chan-wook": {
+            "description": "La venganza servida con belleza: la trilogía de la venganza, La doncella y Decision to Leave."
+        },
+        "paul-thomas-anderson": {
+            "description": "Boogie Nights, Magnolia, Pozos de ambición: epopeyas corales y solitarios obsesivos hasta Una batalla tras otra."
+        },
+        "greta-gerwig": {
+            "description": "Lady Bird, Mujercitas, Barbie y, a continuación, un viaje a Narnia."
+        },
+        "edgar-wright": {
+            "description": "Barridos, cortes bruscos y una pinta en el Winchester: Zombies Party, Arma fatal, Baby Driver."
+        },
+        "milos-forman": {
+            "description": "De la Nueva Ola checoslovaca a dos Óscar a la mejor dirección: Alguien voló sobre el nido del cuco y Amadeus."
+        },
+        "now-you-see-me": {
+            "name": "Ahora me ves",
+            "description": "Los Cuatro Jinetes roban bancos en pleno escenario: cuanto más miras, menos ves."
+        },
+        "oceans": {
+            "description": "La banda de Danny Ocean y los golpes más elegantes de Las Vegas, además del original del Rat Pack y Ocean's 8."
+        },
+        "percy-jackson": {
+            "description": "Un semidiós hijo de Poseidón vive aventuras de la mitología griega en la América actual."
+        },
+        "pitch-perfect": {
+            "name": "Dando la nota",
+            "description": "¡A capela total! Las Barden Bellas cantan durante la universidad y más allá."
+        },
+        "legally-blonde": {
+            "name": "Una rubia muy legal",
+            "description": "Elle Woods conquista Harvard y Washington, de rosa."
+        },
+        "bill-and-ted": {
+            "description": "¡Sed excelentes los unos con los otros! Dos colegas, una cabina telefónica que viaja en el tiempo y una canción que salvará el mundo."
+        },
+        "waynes-world": {
+            "name": "¡Qué desparrame!",
+            "description": "¡De fiesta, Wayne! ¡De fiesta, Garth! El programa de la tele por cable salta al cine."
+        },
+        "ace-ventura": {
+            "description": "¡Muy bieeen! Jim Carrey como el detective de mascotas."
+        },
+        "zombieland": {
+            "name": "Bienvenidos a Zombieland",
+            "description": "Regla n.º 32: disfruta de las pequeñas cosas. Un viaje por carretera a través del apocalipsis zombi."
+        },
+        "hellboy": {
+            "description": "El demonio que trabaja para los buenos: las películas de del Toro, el reinicio de 2019 y The Crooked Man."
+        },
+        "highlander": {
+            "name": "Los inmortales",
+            "description": "Solo puede quedar uno: espadachines inmortales a lo largo de los siglos."
+        },
+        "the-addams-family": {
+            "name": "La familia Addams",
+            "description": "Espeluznantes y estrafalarios: las películas de los 90 con Raul Julia y Anjelica Huston y el reinicio animado."
+        },
+        "kick-ass": {
+            "description": "¿Y si un adolescente de verdad se pusiera un disfraz? Kick-Ass, Hit-Girl y mucha sangre."
+        },
+        "shaft": {
+            "description": "El detective privado que vuelve locas a todas: tres generaciones de John Shaft."
+        },
+        "crocodile-dundee": {
+            "name": "Cocodrilo Dundee",
+            "description": "¿Eso es un cuchillo? El cazador australiano en Nueva York y Los Ángeles."
+        },
+        "the-mighty-ducks": {
+            "name": "Somos los mejores",
+            "description": "¡Cuac, cuac, cuac! Un equipo infantil de hockey sin esperanza aprende a volar unido."
+        },
+        "honey-i-shrunk-the-kids": {
+            "name": "Cariño, he encogido a los niños",
+            "description": "Los inventos de Wayne Szalinski encogen, agrandan y vuelven a encoger a la familia."
+        },
+        "bridget-jones": {
+            "description": "Bragas enormes, un diario y el señor Darcy: Renée Zellweger a lo largo de 25 años."
+        },
+        "mean-girls": {
+            "name": "Chicas malas",
+            "description": "Los miércoles vestimos de rosa: el clásico de 2004 y el musical de 2024."
+        },
+        "the-princess-diaries": {
+            "name": "Princesa por sorpresa",
+            "description": "Una adolescente de San Francisco descubre que es la princesa de Genovia."
+        },
+        "jackass": {
+            "description": "No lo intentéis en casa: Johnny Knoxville y sus amigos haciéndose daño a propósito."
+        },
+        "fifty-shades": {
+            "name": "Cincuenta sombras",
+            "description": "Anastasia Steele y Christian Grey: la trilogía basada en las novelas superventas."
+        },
+        "starship-troopers": {
+            "name": "Starship Troopers: Las brigadas del espacio",
+            "description": "¿Quieres saber más? La sátira de Verhoeven contra los bichos y sus secuelas."
+        },
+        "independence-day": {
+            "description": "¡Bienvenidos a la Tierra! La nave nodriza alienígena ataca el 4 de julio."
+        },
+        "universal-soldier": {
+            "name": "Soldado universal",
+            "description": "Van Damme y Lundgren como soldados muertos devueltos a la vida para volver a luchar."
+        },
+        "sin-city": {
+            "description": "La Basin City en blanco y negro de Frank Miller, donde nunca deja de llover."
+        },
+        "300": {
+            "description": "¡Esto es Esparta! Las Termópilas y Salamina al estilo de Zack Snyder."
+        },
+        "crank": {
+            "description": "Jason Statham tiene que mantener la adrenalina alta o su corazón se parará."
+        },
+        "the-boondock-saints": {
+            "name": "Los elegidos",
+            "description": "Dos hermanos irlandeses limpian Boston: un dúo de justicieros de culto."
+        },
+        "the-blair-witch": {
+            "name": "El proyecto de la bruja de Blair",
+            "description": "Tres estudiantes se adentraron en el bosque: la película que hizo famoso el metraje encontrado."
+        },
+        "cube": {
+            "description": "Desconocidos despiertan en un laberinto de habitaciones mortales y nadie sabe por qué."
+        },
+        "the-crow": {
+            "name": "El cuervo",
+            "description": "No puede llover eternamente: el vengador gótico y sus secuelas."
+        },
+        "the-descent": {
+            "description": "Seis mujeres, una red de cuevas y algo hambriento en la oscuridad."
+        },
+        "critters": {
+            "description": "Pequeños, peludos, alienígenas y muy hambrientos: la saga de criaturas de los 80."
+        },
+        "leprechaun": {
+            "description": "No toques su oro: el duende asesino de Warwick Davis, incluso en el espacio."
+        },
+        "herbie": {
+            "description": "El Volkswagen Escarabajo con mente propia: el número 53 vuelve a correr."
+        },
+        "spy-kids": {
+            "description": "Los niños agentes secretos de Robert Rodriguez y sus artilugios."
+        },
+        "diary-of-a-wimpy-kid": {
+            "name": "El diario de Greg",
+            "description": "Greg Heffley sobrevive a la secundaria: las películas de imagen real y el reinicio animado."
+        },
+        "freaky-friday": {
+            "name": "Viernes loco",
+            "description": "Madre e hija intercambian sus cuerpos: tres veces, a lo largo de cincuenta años."
+        },
+        "free-willy": {
+            "name": "Liberad a Willy",
+            "description": "Un niño, una orca y el salto hacia la libertad."
+        },
+        "babe": {
+            "description": "Bien hecho, cerdito: el cerdito pastor y su viaje a la gran ciudad."
+        },
+        "stuart-little": {
+            "description": "Un ratón adoptado por la familia Little en Nueva York."
+        },
+        "dr-dolittle": {
+            "name": "Doctor Dolittle",
+            "description": "El doctor que habla con los animales: Rex Harrison, Eddie Murphy y Robert Downey Jr."
+        },
+        "cheaper-by-the-dozen": {
+            "name": "Doce fuera de casa",
+            "description": "Doce hijos, dos padres y caos total."
+        },
+        "nanny-mcphee": {
+            "name": "La niñera mágica",
+            "description": "Cuando me necesitéis pero no me queráis, me quedaré: la niñera mágica de Emma Thompson."
+        },
+        "beethoven": {
+            "description": "Un san bernardo babeante pone patas arriba a la familia Newton."
+        },
+        "big-mommas-house": {
+            "name": "Esta abuela es un peligro",
+            "description": "Martin Lawrence infiltrado como abuela."
+        },
+        "neon": {
+            "description": "La distribuidora independiente detrás de una racha récord de Palmas de Oro: Parásitos, Titane, Anora y Longlegs."
+        },
+        "crime-film-noir": {
+            "name": "Cine negro",
+            "description": "Mujeres fatales, detectives privados y sombras de persiana: los clásicos policiacos en blanco y negro de los 40 y 50."
+        },
+        "crime-neo-noir": {
+            "description": "Cine negro en color: Chinatown, L.A. Confidential, Drive y las ciudades que nunca duermen."
+        },
+        "palme-dor-winners": {
+            "name": "Ganadoras de la Palma de Oro",
+            "description": "Todas las ganadoras de la Palma de Oro de Cannes desde 1990: de Corazón salvaje a Fjord."
+        },
+        "cult-classics": {
+            "name": "Películas de culto",
+            "description": "Fracasos, sesiones de medianoche y rarezas citables que encontraron su público más tarde."
+        },
+        "drama-road-movies": {
+            "name": "Películas de carretera",
+            "description": "A la carretera: motos, coches potentes, autobuses y la gente que encuentras por el camino."
+        },
+        "comedy-teen": {
+            "name": "Comedias adolescentes",
+            "description": "Bailes de graduación, fiestas y padres fuera de casa: comedias de instituto de Aquel excitante curso a Bottoms."
         }
     },
     "notes": {
@@ -1353,6 +1594,8 @@
         "SpongeBob": "Bob Esponja",
         "Teenage Mutant Ninja Turtles": "Las Tortugas Ninja",
         "The Lion King": "El rey león",
-        "The Little Mermaid": "La sirenita"
+        "The Little Mermaid": "La sirenita",
+        "Documentary": "Documental",
+        "Reboots": "Reinicios"
     }
 }

@@ -1,0 +1,1246 @@
+{
+    "_comment": "Balíček kolekcí V4.4.2 – režiséři (Scorsese, Cameron, Ridley Scott, Coenové, del Toro, Peter Jackson, Raimi, Carpenter, Lynch, Coppola, Bong Joon-ho, Park Chan-wook, P. T. Anderson, Gerwig, Edgar Wright, Forman), přes 40 sérií, studio Neon a výběry Film Noir, Neo-noir, Zlatá palma, kultovní filmy, road movies a teen komedie. Přidá se do seedu příkazem ./scripts/add-pack.sh supabase/packs/v4.4.2-directors-series.json (nové kolekce na konec seedu), pak se importuje. Bez migrace.",
+    "universes": [
+        {
+            "slug": "martin-scorsese",
+            "name": "Martin Scorsese",
+            "kind": "director",
+            "categories": ["crime-thriller", "drama"],
+            "color": "#b91c1c",
+            "description": "Mean streets, wise guys and God's lonely men – from Taxi Driver to Killers of the Flower Moon.",
+            "films": [
+                { "title": "Who's That Knocking at My Door", "year": 1967, "group": "1960s" },
+                { "title": "Boxcar Bertha", "year": 1972, "group": "1970s" },
+                { "title": "Mean Streets", "year": 1973, "group": "1970s" },
+                { "title": "Alice Doesn't Live Here Anymore", "year": 1974, "group": "1970s" },
+                { "title": "Taxi Driver", "year": 1976, "group": "1970s" },
+                { "title": "New York, New York", "year": 1977, "group": "1970s" },
+                { "title": "The Last Waltz", "year": 1978, "group": "1970s", "optional": true, "label": "Documentary" },
+                { "title": "Raging Bull", "year": 1980, "group": "1980s" },
+                { "title": "The King of Comedy", "year": 1982, "group": "1980s" },
+                { "title": "After Hours", "year": 1985, "group": "1980s" },
+                { "title": "The Color of Money", "year": 1986, "group": "1980s" },
+                { "title": "The Last Temptation of Christ", "year": 1988, "group": "1980s" },
+                { "title": "Goodfellas", "year": 1990, "group": "1990s" },
+                { "title": "Cape Fear", "year": 1991, "group": "1990s" },
+                { "title": "The Age of Innocence", "year": 1993, "group": "1990s" },
+                { "title": "Casino", "year": 1995, "group": "1990s" },
+                { "title": "Kundun", "year": 1997, "group": "1990s" },
+                { "title": "Bringing Out the Dead", "year": 1999, "group": "1990s" },
+                { "title": "Gangs of New York", "year": 2002, "group": "2000s" },
+                { "title": "The Aviator", "year": 2004, "group": "2000s" },
+                { "title": "The Departed", "year": 2006, "group": "2000s" },
+                { "title": "Shine a Light", "year": 2008, "group": "2000s", "optional": true, "label": "Documentary" },
+                { "title": "Shutter Island", "year": 2010, "group": "2010s" },
+                { "title": "Hugo", "year": 2011, "group": "2010s" },
+                { "title": "The Wolf of Wall Street", "year": 2013, "group": "2010s" },
+                { "title": "Silence", "year": 2016, "group": "2010s" },
+                { "title": "The Irishman", "year": 2019, "group": "2010s" },
+                { "title": "Killers of the Flower Moon", "year": 2023, "group": "2020s" }
+            ]
+        },
+        {
+            "slug": "james-cameron",
+            "name": "James Cameron",
+            "kind": "director",
+            "categories": ["scifi", "action-adventure"],
+            "color": "#0369a1",
+            "description": "The king of the world – Terminator, Aliens, Titanic and the journey to Pandora.",
+            "films": [
+                { "title": "Piranha II: The Spawning", "year": 1981, "group": "1980s", "optional": true },
+                { "title": "The Terminator", "year": 1984, "group": "1980s" },
+                { "title": "Aliens", "year": 1986, "group": "1980s" },
+                { "title": "The Abyss", "year": 1989, "group": "1980s" },
+                { "title": "Terminator 2: Judgment Day", "year": 1991, "group": "1990s" },
+                { "title": "True Lies", "year": 1994, "group": "1990s" },
+                { "title": "Titanic", "year": 1997, "group": "1990s" },
+                { "title": "Ghosts of the Abyss", "year": 2003, "group": "2000s", "optional": true, "label": "Documentary" },
+                { "title": "Avatar", "year": 2009, "group": "2000s" },
+                { "title": "Avatar: The Way of Water", "year": 2022, "group": "2020s" },
+                { "title": "Avatar: Fire and Ash", "year": 2025, "group": "2020s" }
+            ]
+        },
+        {
+            "slug": "ridley-scott",
+            "name": "Ridley Scott",
+            "kind": "director",
+            "categories": ["scifi", "action-adventure", "drama"],
+            "color": "#78716c",
+            "description": "Five decades of epics – Alien, Blade Runner, Gladiator, The Martian and Napoleon.",
+            "films": [
+                { "title": "The Duellists", "year": 1977, "group": "1970s" },
+                { "title": "Alien", "year": 1979, "group": "1970s" },
+                { "title": "Blade Runner", "year": 1982, "group": "1980s" },
+                { "title": "Legend", "year": 1985, "group": "1980s" },
+                { "title": "Someone to Watch Over Me", "year": 1987, "group": "1980s" },
+                { "title": "Black Rain", "year": 1989, "group": "1980s" },
+                { "title": "Thelma & Louise", "year": 1991, "group": "1990s" },
+                { "title": "1492: Conquest of Paradise", "year": 1992, "group": "1990s" },
+                { "title": "White Squall", "year": 1996, "group": "1990s" },
+                { "title": "G.I. Jane", "year": 1997, "group": "1990s" },
+                { "title": "Gladiator", "year": 2000, "group": "2000s" },
+                { "title": "Hannibal", "year": 2001, "group": "2000s" },
+                { "title": "Black Hawk Down", "year": 2001, "group": "2000s" },
+                { "title": "Matchstick Men", "year": 2003, "group": "2000s" },
+                { "title": "Kingdom of Heaven", "year": 2005, "group": "2000s" },
+                { "title": "A Good Year", "year": 2006, "group": "2000s" },
+                { "title": "American Gangster", "year": 2007, "group": "2000s" },
+                { "title": "Body of Lies", "year": 2008, "group": "2000s" },
+                { "title": "Robin Hood", "year": 2010, "group": "2010s" },
+                { "title": "Prometheus", "year": 2012, "group": "2010s" },
+                { "title": "The Counselor", "year": 2013, "group": "2010s" },
+                { "title": "Exodus: Gods and Kings", "year": 2014, "group": "2010s" },
+                { "title": "The Martian", "year": 2015, "group": "2010s" },
+                { "title": "Alien: Covenant", "year": 2017, "group": "2010s" },
+                { "title": "All the Money in the World", "year": 2017, "group": "2010s" },
+                { "title": "The Last Duel", "year": 2021, "group": "2020s" },
+                { "title": "House of Gucci", "year": 2021, "group": "2020s" },
+                { "title": "Napoleon", "year": 2023, "group": "2020s" },
+                { "title": "Gladiator II", "year": 2024, "group": "2020s" },
+                { "title": "The Dog Stars", "year": 2026, "group": "2020s" }
+            ]
+        },
+        {
+            "slug": "coen-brothers",
+            "name": "Joel & Ethan Coen",
+            "kind": "director",
+            "categories": ["crime-thriller", "comedy"],
+            "color": "#a16207",
+            "description": "Kidnappings gone wrong, bowling and bad luck – the Coen brothers, together and solo.",
+            "films": [
+                { "title": "Blood Simple", "year": 1984, "group": "1980s" },
+                { "title": "Raising Arizona", "year": 1987, "group": "1980s" },
+                { "title": "Miller's Crossing", "year": 1990, "group": "1990s" },
+                { "title": "Barton Fink", "year": 1991, "group": "1990s" },
+                { "title": "The Hudsucker Proxy", "year": 1994, "group": "1990s" },
+                { "title": "Fargo", "year": 1996, "group": "1990s" },
+                { "title": "The Big Lebowski", "year": 1998, "group": "1990s" },
+                { "title": "O Brother, Where Art Thou?", "year": 2000, "group": "2000s" },
+                { "title": "The Man Who Wasn't There", "year": 2001, "group": "2000s" },
+                { "title": "Intolerable Cruelty", "year": 2003, "group": "2000s" },
+                { "title": "The Ladykillers", "year": 2004, "group": "2000s" },
+                { "title": "No Country for Old Men", "year": 2007, "group": "2000s" },
+                { "title": "Burn After Reading", "year": 2008, "group": "2000s" },
+                { "title": "A Serious Man", "year": 2009, "group": "2000s" },
+                { "title": "True Grit", "year": 2010, "group": "2010s" },
+                { "title": "Inside Llewyn Davis", "year": 2013, "group": "2010s" },
+                { "title": "Hail, Caesar!", "year": 2016, "group": "2010s" },
+                { "title": "The Ballad of Buster Scruggs", "year": 2018, "group": "2010s" },
+                { "title": "The Tragedy of Macbeth", "year": 2021, "group": "2020s", "label": "Joel Coen" },
+                { "title": "Drive-Away Dolls", "year": 2024, "group": "2020s", "label": "Ethan Coen" },
+                { "title": "Honey Don't!", "year": 2025, "group": "2020s", "label": "Ethan Coen" }
+            ]
+        },
+        {
+            "slug": "guillermo-del-toro",
+            "name": "Guillermo del Toro",
+            "kind": "director",
+            "categories": ["fantasy", "horror"],
+            "color": "#15803d",
+            "description": "Monsters with a heart – Pan's Labyrinth, The Shape of Water, Pinocchio and Frankenstein.",
+            "films": [
+                { "title": "Cronos", "year": 1993, "group": "1990s" },
+                { "title": "Mimic", "year": 1997, "group": "1990s" },
+                { "title": "The Devil's Backbone", "year": 2001, "group": "2000s" },
+                { "title": "Blade II", "year": 2002, "group": "2000s" },
+                { "title": "Hellboy", "year": 2004, "group": "2000s" },
+                { "title": "Pan's Labyrinth", "year": 2006, "group": "2000s" },
+                { "title": "Hellboy II: The Golden Army", "year": 2008, "group": "2000s" },
+                { "title": "Pacific Rim", "year": 2013, "group": "2010s" },
+                { "title": "Crimson Peak", "year": 2015, "group": "2010s" },
+                { "title": "The Shape of Water", "year": 2017, "group": "2010s" },
+                { "title": "Nightmare Alley", "year": 2021, "group": "2020s" },
+                { "title": "Guillermo del Toro's Pinocchio", "year": 2022, "group": "2020s" },
+                { "title": "Frankenstein", "year": 2025, "group": "2020s" }
+            ]
+        },
+        {
+            "slug": "peter-jackson",
+            "name": "Peter Jackson",
+            "kind": "director",
+            "categories": ["fantasy", "horror"],
+            "color": "#166534",
+            "description": "From splatter comedies in New Zealand to Middle-earth – Braindead, The Lord of the Rings and King Kong.",
+            "films": [
+                { "title": "Bad Taste", "year": 1987, "group": "1980s" },
+                { "title": "Meet the Feebles", "year": 1989, "group": "1980s" },
+                { "title": "Braindead", "year": 1992, "group": "1990s" },
+                { "title": "Heavenly Creatures", "year": 1994, "group": "1990s" },
+                { "title": "The Frighteners", "year": 1996, "group": "1990s" },
+                { "title": "The Lord of the Rings: The Fellowship of the Ring", "year": 2001, "group": "2000s" },
+                { "title": "The Lord of the Rings: The Two Towers", "year": 2002, "group": "2000s" },
+                { "title": "The Lord of the Rings: The Return of the King", "year": 2003, "group": "2000s" },
+                { "title": "King Kong", "year": 2005, "group": "2000s" },
+                { "title": "The Lovely Bones", "year": 2009, "group": "2000s" },
+                { "title": "The Hobbit: An Unexpected Journey", "year": 2012, "group": "2010s" },
+                { "title": "The Hobbit: The Desolation of Smaug", "year": 2013, "group": "2010s" },
+                { "title": "The Hobbit: The Battle of the Five Armies", "year": 2014, "group": "2010s" },
+                { "title": "They Shall Not Grow Old", "year": 2018, "group": "2010s", "optional": true, "label": "Documentary" }
+            ]
+        },
+        {
+            "slug": "sam-raimi",
+            "name": "Sam Raimi",
+            "kind": "director",
+            "categories": ["horror", "superhero"],
+            "color": "#9f1239",
+            "description": "Groovy! The Evil Dead, Darkman, the original Spider-Man trilogy and Drag Me to Hell.",
+            "films": [
+                { "title": "The Evil Dead", "year": 1981, "group": "1980s" },
+                { "title": "Crimewave", "year": 1985, "group": "1980s" },
+                { "title": "Evil Dead II", "year": 1987, "group": "1980s" },
+                { "title": "Darkman", "year": 1990, "group": "1990s" },
+                { "title": "Army of Darkness", "year": 1992, "group": "1990s" },
+                { "title": "The Quick and the Dead", "year": 1995, "group": "1990s" },
+                { "title": "A Simple Plan", "year": 1998, "group": "1990s" },
+                { "title": "For Love of the Game", "year": 1999, "group": "1990s" },
+                { "title": "The Gift", "year": 2000, "group": "2000s" },
+                { "title": "Spider-Man", "year": 2002, "group": "2000s" },
+                { "title": "Spider-Man 2", "year": 2004, "group": "2000s" },
+                { "title": "Spider-Man 3", "year": 2007, "group": "2000s" },
+                { "title": "Drag Me to Hell", "year": 2009, "group": "2000s" },
+                { "title": "Oz the Great and Powerful", "year": 2013, "group": "2010s" },
+                { "title": "Doctor Strange in the Multiverse of Madness", "year": 2022, "group": "2020s" },
+                { "title": "Send Help", "year": 2026, "group": "2020s" }
+            ]
+        },
+        {
+            "slug": "john-carpenter",
+            "name": "John Carpenter",
+            "kind": "director",
+            "categories": ["horror", "scifi"],
+            "color": "#1f2937",
+            "description": "The master of synth scores and siege horror – Halloween, The Thing, Escape from New York and They Live.",
+            "films": [
+                { "title": "Dark Star", "year": 1974, "group": "1970s" },
+                { "title": "Assault on Precinct 13", "year": 1976, "group": "1970s" },
+                { "title": "Halloween", "year": 1978, "group": "1970s" },
+                { "title": "The Fog", "year": 1980, "group": "1980s" },
+                { "title": "Escape from New York", "year": 1981, "group": "1980s" },
+                { "title": "The Thing", "year": 1982, "group": "1980s" },
+                { "title": "Christine", "year": 1983, "group": "1980s" },
+                { "title": "Starman", "year": 1984, "group": "1980s" },
+                { "title": "Big Trouble in Little China", "year": 1986, "group": "1980s" },
+                { "title": "Prince of Darkness", "year": 1987, "group": "1980s" },
+                { "title": "They Live", "year": 1988, "group": "1980s" },
+                { "title": "Memoirs of an Invisible Man", "year": 1992, "group": "1990s" },
+                { "title": "In the Mouth of Madness", "year": 1994, "group": "1990s" },
+                { "title": "Village of the Damned", "year": 1995, "group": "1990s" },
+                { "title": "Escape from L.A.", "year": 1996, "group": "1990s" },
+                { "title": "Vampires", "year": 1998, "group": "1990s" },
+                { "title": "Ghosts of Mars", "year": 2001, "group": "2000s" },
+                { "title": "The Ward", "year": 2010, "group": "2010s" }
+            ]
+        },
+        {
+            "slug": "david-lynch",
+            "name": "David Lynch",
+            "kind": "director",
+            "categories": ["drama", "horror"],
+            "color": "#7f1d1d",
+            "description": "Dreams, red curtains and small-town secrets – Eraserhead, Blue Velvet, Mulholland Drive.",
+            "films": [
+                { "title": "Eraserhead", "year": 1977, "group": "1970s" },
+                { "title": "The Elephant Man", "year": 1980, "group": "1980s" },
+                { "title": "Dune", "year": 1984, "group": "1980s" },
+                { "title": "Blue Velvet", "year": 1986, "group": "1980s" },
+                { "title": "Wild at Heart", "year": 1990, "group": "1990s" },
+                { "title": "Twin Peaks: Fire Walk with Me", "year": 1992, "group": "1990s" },
+                { "title": "Lost Highway", "year": 1997, "group": "1990s" },
+                { "title": "The Straight Story", "year": 1999, "group": "1990s" },
+                { "title": "Mulholland Drive", "year": 2001, "group": "2000s" },
+                { "title": "Inland Empire", "year": 2006, "group": "2000s" }
+            ]
+        },
+        {
+            "slug": "francis-ford-coppola",
+            "name": "Francis Ford Coppola",
+            "kind": "director",
+            "categories": ["drama", "crime-thriller"],
+            "color": "#92400e",
+            "description": "The Godfather, Apocalypse Now and fifty years of risk – all the way to Megalopolis.",
+            "films": [
+                { "title": "Dementia 13", "year": 1963, "group": "1960s" },
+                { "title": "You're a Big Boy Now", "year": 1966, "group": "1960s" },
+                { "title": "Finian's Rainbow", "year": 1968, "group": "1960s" },
+                { "title": "The Rain People", "year": 1969, "group": "1960s" },
+                { "title": "The Godfather", "year": 1972, "group": "1970s" },
+                { "title": "The Conversation", "year": 1974, "group": "1970s" },
+                { "title": "The Godfather Part II", "year": 1974, "group": "1970s" },
+                { "title": "Apocalypse Now", "year": 1979, "group": "1970s" },
+                { "title": "One from the Heart", "year": 1981, "group": "1980s" },
+                { "title": "The Outsiders", "year": 1983, "group": "1980s" },
+                { "title": "Rumble Fish", "year": 1983, "group": "1980s" },
+                { "title": "The Cotton Club", "year": 1984, "group": "1980s" },
+                { "title": "Peggy Sue Got Married", "year": 1986, "group": "1980s" },
+                { "title": "Gardens of Stone", "year": 1987, "group": "1980s" },
+                { "title": "Tucker: The Man and His Dream", "year": 1988, "group": "1980s" },
+                { "title": "The Godfather Part III", "year": 1990, "group": "1990s" },
+                { "title": "Bram Stoker's Dracula", "year": 1992, "group": "1990s" },
+                { "title": "Jack", "year": 1996, "group": "1990s" },
+                { "title": "The Rainmaker", "year": 1997, "group": "1990s" },
+                { "title": "Youth Without Youth", "year": 2007, "group": "2000s" },
+                { "title": "Tetro", "year": 2009, "group": "2000s" },
+                { "title": "Twixt", "year": 2011, "group": "2010s" },
+                { "title": "Megalopolis", "year": 2024, "group": "2020s" }
+            ]
+        },
+        {
+            "slug": "bong-joon-ho",
+            "name": "Bong Joon-ho",
+            "kind": "director",
+            "categories": ["crime-thriller", "scifi"],
+            "color": "#0f766e",
+            "description": "Class war in every genre – Memories of Murder, The Host, Snowpiercer and the Oscar-winning Parasite.",
+            "films": [
+                { "title": "Barking Dogs Never Bite", "year": 2000, "group": "2000s" },
+                { "title": "Memories of Murder", "year": 2003, "group": "2000s" },
+                { "title": "The Host", "year": 2006, "group": "2000s" },
+                { "title": "Mother", "year": 2009, "group": "2000s" },
+                { "title": "Snowpiercer", "year": 2013, "group": "2010s" },
+                { "title": "Okja", "year": 2017, "group": "2010s" },
+                { "title": "Parasite", "year": 2019, "group": "2010s" },
+                { "title": "Mickey 17", "year": 2025, "group": "2020s" }
+            ]
+        },
+        {
+            "slug": "park-chan-wook",
+            "name": "Park Chan-wook",
+            "kind": "director",
+            "categories": ["crime-thriller", "drama"],
+            "color": "#6d28d9",
+            "description": "Revenge served beautifully – the Vengeance trilogy, The Handmaiden and Decision to Leave.",
+            "films": [
+                { "title": "Joint Security Area", "year": 2000, "group": "2000s" },
+                { "title": "Sympathy for Mr. Vengeance", "year": 2002, "group": "2000s" },
+                { "title": "Oldboy", "year": 2003, "group": "2000s" },
+                { "title": "Lady Vengeance", "year": 2005, "group": "2000s" },
+                { "title": "I'm a Cyborg, But That's OK", "year": 2006, "group": "2000s" },
+                { "title": "Thirst", "year": 2009, "group": "2000s" },
+                { "title": "Stoker", "year": 2013, "group": "2010s" },
+                { "title": "The Handmaiden", "year": 2016, "group": "2010s" },
+                { "title": "Decision to Leave", "year": 2022, "group": "2020s" },
+                { "title": "No Other Choice", "year": 2025, "group": "2020s" }
+            ]
+        },
+        {
+            "slug": "paul-thomas-anderson",
+            "name": "Paul Thomas Anderson",
+            "kind": "director",
+            "categories": ["drama"],
+            "color": "#c2410c",
+            "description": "Boogie Nights, Magnolia, There Will Be Blood – ensemble epics and obsessive loners up to One Battle After Another.",
+            "films": [
+                { "title": "Hard Eight", "year": 1996, "group": "1990s" },
+                { "title": "Boogie Nights", "year": 1997, "group": "1990s" },
+                { "title": "Magnolia", "year": 1999, "group": "1990s" },
+                { "title": "Punch-Drunk Love", "year": 2002, "group": "2000s" },
+                { "title": "There Will Be Blood", "year": 2007, "group": "2000s" },
+                { "title": "The Master", "year": 2012, "group": "2010s" },
+                { "title": "Inherent Vice", "year": 2014, "group": "2010s" },
+                { "title": "Phantom Thread", "year": 2017, "group": "2010s" },
+                { "title": "Licorice Pizza", "year": 2021, "group": "2020s" },
+                { "title": "One Battle After Another", "year": 2025, "group": "2020s" }
+            ]
+        },
+        {
+            "slug": "greta-gerwig",
+            "name": "Greta Gerwig",
+            "kind": "director",
+            "categories": ["drama", "comedy"],
+            "color": "#ec4899",
+            "description": "Lady Bird, Little Women, Barbie – and next, a trip to Narnia.",
+            "films": [
+                { "title": "Lady Bird", "year": 2017, "group": "2010s" },
+                { "title": "Little Women", "year": 2019, "group": "2010s" },
+                { "title": "Barbie", "year": 2023, "group": "2020s" },
+                { "title": "Narnia: The Magician's Nephew", "year": 2027, "group": "2020s" }
+            ]
+        },
+        {
+            "slug": "edgar-wright",
+            "name": "Edgar Wright",
+            "kind": "director",
+            "categories": ["comedy", "action-adventure"],
+            "color": "#dc2626",
+            "description": "Whip-pans, smash cuts and a pint at the Winchester – Shaun of the Dead, Hot Fuzz, Baby Driver.",
+            "films": [
+                { "title": "Shaun of the Dead", "year": 2004, "group": "2000s" },
+                { "title": "Hot Fuzz", "year": 2007, "group": "2000s" },
+                { "title": "Scott Pilgrim vs. the World", "year": 2010, "group": "2010s" },
+                { "title": "The World's End", "year": 2013, "group": "2010s" },
+                { "title": "Baby Driver", "year": 2017, "group": "2010s" },
+                { "title": "The Sparks Brothers", "year": 2021, "group": "2020s", "optional": true, "label": "Documentary" },
+                { "title": "Last Night in Soho", "year": 2021, "group": "2020s" },
+                { "title": "The Running Man", "year": 2025, "group": "2020s" }
+            ]
+        },
+        {
+            "slug": "milos-forman",
+            "name": "Miloš Forman",
+            "kind": "director",
+            "categories": ["czech-slovak", "drama"],
+            "color": "#1d4ed8",
+            "description": "From the Czechoslovak New Wave to two Oscars for Best Director – Cuckoo's Nest and Amadeus.",
+            "films": [
+                { "title": "Černý Petr", "year": 1964, "group": "1960s" },
+                { "title": "Lásky jedné plavovlásky", "year": 1965, "group": "1960s" },
+                { "title": "Hoří, má panenko", "year": 1967, "group": "1960s" },
+                { "title": "Taking Off", "year": 1971, "group": "1970s" },
+                { "title": "One Flew Over the Cuckoo's Nest", "year": 1975, "group": "1970s" },
+                { "title": "Hair", "year": 1979, "group": "1970s" },
+                { "title": "Ragtime", "year": 1981, "group": "1980s" },
+                { "title": "Amadeus", "year": 1984, "group": "1980s" },
+                { "title": "Valmont", "year": 1989, "group": "1980s" },
+                { "title": "The People vs. Larry Flynt", "year": 1996, "group": "1990s" },
+                { "title": "Man on the Moon", "year": 1999, "group": "1990s" },
+                { "title": "Goya's Ghosts", "year": 2006, "group": "2000s" }
+            ]
+        },
+        {
+            "slug": "now-you-see-me",
+            "name": "Now You See Me",
+            "kind": "series",
+            "categories": ["crime-thriller", "action-adventure"],
+            "color": "#7c3aed",
+            "description": "The Four Horsemen rob banks on stage – the closer you look, the less you see.",
+            "films": [
+                { "title": "Now You See Me", "year": 2013 },
+                { "title": "Now You See Me 2", "year": 2016 },
+                { "title": "Now You See Me: Now You Don't", "year": 2025 }
+            ]
+        },
+        {
+            "slug": "oceans",
+            "name": "Ocean's",
+            "kind": "series",
+            "categories": ["crime-thriller", "comedy"],
+            "color": "#0891b2",
+            "description": "Danny Ocean's crew and the coolest heists in Las Vegas – plus the Rat Pack original and Ocean's 8.",
+            "films": [
+                { "title": "Ocean's Eleven", "year": 2001 },
+                { "title": "Ocean's Twelve", "year": 2004 },
+                { "title": "Ocean's Thirteen", "year": 2007 },
+                { "title": "Ocean's 8", "year": 2018 },
+                { "title": "Ocean's 11", "year": 1960, "group": "Original", "optional": true }
+            ]
+        },
+        {
+            "slug": "percy-jackson",
+            "name": "Percy Jackson",
+            "kind": "series",
+            "categories": ["fantasy", "family"],
+            "color": "#0284c7",
+            "description": "A demigod son of Poseidon on Greek-myth adventures in modern America.",
+            "films": [
+                { "title": "Percy Jackson & the Olympians: The Lightning Thief", "year": 2010 },
+                { "title": "Percy Jackson: Sea of Monsters", "year": 2013 }
+            ]
+        },
+        {
+            "slug": "pitch-perfect",
+            "name": "Pitch Perfect",
+            "kind": "series",
+            "categories": ["comedy"],
+            "color": "#db2777",
+            "description": "Aca-awesome! The Barden Bellas sing their way through college and beyond.",
+            "films": [
+                { "title": "Pitch Perfect", "year": 2012 },
+                { "title": "Pitch Perfect 2", "year": 2015 },
+                { "title": "Pitch Perfect 3", "year": 2017 }
+            ]
+        },
+        {
+            "slug": "legally-blonde",
+            "name": "Legally Blonde",
+            "kind": "series",
+            "categories": ["comedy"],
+            "color": "#f472b6",
+            "description": "Elle Woods takes Harvard Law – and Washington – in pink.",
+            "films": [
+                { "title": "Legally Blonde", "year": 2001 },
+                { "title": "Legally Blonde 2: Red, White & Blonde", "year": 2003 },
+                { "title": "Legally Blondes", "year": 2009, "optional": true }
+            ]
+        },
+        {
+            "slug": "bill-and-ted",
+            "name": "Bill & Ted",
+            "kind": "series",
+            "categories": ["comedy", "scifi"],
+            "color": "#f59e0b",
+            "description": "Be excellent to each other! Two dudes, a time-travelling phone booth and a song to save the world.",
+            "films": [
+                { "title": "Bill & Ted's Excellent Adventure", "year": 1989 },
+                { "title": "Bill & Ted's Bogus Journey", "year": 1991 },
+                { "title": "Bill & Ted Face the Music", "year": 2020 }
+            ]
+        },
+        {
+            "slug": "waynes-world",
+            "name": "Wayne's World",
+            "kind": "series",
+            "categories": ["comedy"],
+            "color": "#2563eb",
+            "description": "Party on, Wayne! Party on, Garth! The cable-access show goes to the movies.",
+            "films": [
+                { "title": "Wayne's World", "year": 1992 },
+                { "title": "Wayne's World 2", "year": 1993 }
+            ]
+        },
+        {
+            "slug": "ace-ventura",
+            "name": "Ace Ventura",
+            "kind": "series",
+            "categories": ["comedy"],
+            "color": "#16a34a",
+            "description": "Allllrighty then! Jim Carrey as the pet detective.",
+            "films": [
+                { "title": "Ace Ventura: Pet Detective", "year": 1994 },
+                { "title": "Ace Ventura: When Nature Calls", "year": 1995 },
+                { "title": "Ace Ventura Jr.: Pet Detective", "year": 2009, "optional": true }
+            ]
+        },
+        {
+            "slug": "zombieland",
+            "name": "Zombieland",
+            "kind": "series",
+            "categories": ["horror", "comedy"],
+            "color": "#65a30d",
+            "description": "Rule #32: enjoy the little things – a road trip through the zombie apocalypse.",
+            "films": [
+                { "title": "Zombieland", "year": 2009 },
+                { "title": "Zombieland: Double Tap", "year": 2019 }
+            ]
+        },
+        {
+            "slug": "hellboy",
+            "name": "Hellboy",
+            "kind": "series",
+            "categories": ["superhero", "fantasy"],
+            "color": "#dc2626",
+            "description": "The demon who works for the good guys – del Toro's films, the 2019 reboot and The Crooked Man.",
+            "films": [
+                { "title": "Hellboy", "year": 2004, "group": "Guillermo del Toro" },
+                { "title": "Hellboy II: The Golden Army", "year": 2008, "group": "Guillermo del Toro" },
+                { "title": "Hellboy", "year": 2019, "group": "Reboots" },
+                { "title": "Hellboy: The Crooked Man", "year": 2024, "group": "Reboots" },
+                { "title": "Hellboy: Sword of Storms", "year": 2006, "group": "Animated", "optional": true },
+                { "title": "Hellboy: Blood and Iron", "year": 2007, "group": "Animated", "optional": true }
+            ]
+        },
+        {
+            "slug": "highlander",
+            "name": "Highlander",
+            "kind": "series",
+            "categories": ["fantasy", "action-adventure"],
+            "color": "#475569",
+            "description": "There can be only one – immortal swordsmen across the centuries.",
+            "films": [
+                { "title": "Highlander", "year": 1986 },
+                { "title": "Highlander II: The Quickening", "year": 1991 },
+                { "title": "Highlander III: The Sorcerer", "year": 1994 },
+                { "title": "Highlander: Endgame", "year": 2000 },
+                { "title": "Highlander: The Source", "year": 2007, "optional": true }
+            ]
+        },
+        {
+            "slug": "the-addams-family",
+            "name": "The Addams Family",
+            "kind": "series",
+            "categories": ["comedy", "horror", "family"],
+            "color": "#334155",
+            "description": "They're creepy and they're kooky – the 90s films with Raul Julia and Anjelica Huston and the animated reboot.",
+            "films": [
+                { "title": "The Addams Family", "year": 1991, "group": "Live action" },
+                { "title": "Addams Family Values", "year": 1993, "group": "Live action" },
+                { "title": "Addams Family Reunion", "year": 1998, "group": "Live action", "optional": true },
+                { "title": "The Addams Family", "year": 2019, "group": "Animated" },
+                { "title": "The Addams Family 2", "year": 2021, "group": "Animated" }
+            ]
+        },
+        {
+            "slug": "kick-ass",
+            "name": "Kick-Ass",
+            "kind": "series",
+            "categories": ["superhero", "action-adventure"],
+            "color": "#facc15",
+            "description": "What if a real teenager put on a costume? Kick-Ass, Hit-Girl and a lot of blood.",
+            "films": [
+                { "title": "Kick-Ass", "year": 2010 },
+                { "title": "Kick-Ass 2", "year": 2013 }
+            ]
+        },
+        {
+            "slug": "shaft",
+            "name": "Shaft",
+            "kind": "series",
+            "categories": ["crime-thriller", "action-adventure"],
+            "color": "#78350f",
+            "description": "Who's the private dick that's a sex machine to all the chicks? Three generations of John Shaft.",
+            "films": [
+                { "title": "Shaft", "year": 1971 },
+                { "title": "Shaft's Big Score!", "year": 1972 },
+                { "title": "Shaft in Africa", "year": 1973 },
+                { "title": "Shaft", "year": 2000 },
+                { "title": "Shaft", "year": 2019 }
+            ]
+        },
+        {
+            "slug": "crocodile-dundee",
+            "name": "Crocodile Dundee",
+            "kind": "series",
+            "categories": ["comedy", "action-adventure"],
+            "color": "#a16207",
+            "description": "That's not a knife – the Australian bushman in New York and Los Angeles.",
+            "films": [
+                { "title": "Crocodile Dundee", "year": 1986 },
+                { "title": "Crocodile Dundee II", "year": 1988 },
+                { "title": "Crocodile Dundee in Los Angeles", "year": 2001 }
+            ]
+        },
+        {
+            "slug": "the-mighty-ducks",
+            "name": "The Mighty Ducks",
+            "kind": "series",
+            "categories": ["family", "comedy", "drama"],
+            "color": "#15803d",
+            "description": "Quack, quack, quack! A hopeless kids' hockey team learns to fly together.",
+            "films": [
+                { "title": "The Mighty Ducks", "year": 1992 },
+                { "title": "D2: The Mighty Ducks", "year": 1994 },
+                { "title": "D3: The Mighty Ducks", "year": 1996 }
+            ]
+        },
+        {
+            "slug": "honey-i-shrunk-the-kids",
+            "name": "Honey, I Shrunk the Kids",
+            "kind": "series",
+            "categories": ["family", "comedy", "scifi"],
+            "color": "#22c55e",
+            "description": "Wayne Szalinski's inventions shrink, enlarge and shrink the family again.",
+            "films": [
+                { "title": "Honey, I Shrunk the Kids", "year": 1989 },
+                { "title": "Honey, I Blew Up the Kid", "year": 1992 },
+                { "title": "Honey, We Shrunk Ourselves", "year": 1997, "optional": true }
+            ]
+        },
+        {
+            "slug": "bridget-jones",
+            "name": "Bridget Jones",
+            "kind": "series",
+            "categories": ["comedy"],
+            "color": "#e11d48",
+            "description": "Big knickers, a diary and Mr. Darcy – Renée Zellweger across 25 years.",
+            "films": [
+                { "title": "Bridget Jones's Diary", "year": 2001 },
+                { "title": "Bridget Jones: The Edge of Reason", "year": 2004 },
+                { "title": "Bridget Jones's Baby", "year": 2016 },
+                { "title": "Bridget Jones: Mad About the Boy", "year": 2025 }
+            ]
+        },
+        {
+            "slug": "mean-girls",
+            "name": "Mean Girls",
+            "kind": "series",
+            "categories": ["comedy"],
+            "color": "#ec4899",
+            "description": "On Wednesdays we wear pink – the 2004 classic and the 2024 musical.",
+            "films": [
+                { "title": "Mean Girls", "year": 2004 },
+                { "title": "Mean Girls", "year": 2024 },
+                { "title": "Mean Girls 2", "year": 2011, "optional": true }
+            ]
+        },
+        {
+            "slug": "the-princess-diaries",
+            "name": "The Princess Diaries",
+            "kind": "series",
+            "categories": ["comedy", "family"],
+            "color": "#c084fc",
+            "description": "A San Francisco teenager finds out she is the princess of Genovia.",
+            "films": [
+                { "title": "The Princess Diaries", "year": 2001 },
+                { "title": "The Princess Diaries 2: Royal Engagement", "year": 2004 }
+            ]
+        },
+        {
+            "slug": "jackass",
+            "name": "Jackass",
+            "kind": "series",
+            "categories": ["comedy"],
+            "color": "#ef4444",
+            "description": "Don't try this at home – Johnny Knoxville and friends getting hurt on purpose.",
+            "films": [
+                { "title": "Jackass: The Movie", "year": 2002 },
+                { "title": "Jackass Number Two", "year": 2006 },
+                { "title": "Jackass 3D", "year": 2010 },
+                { "title": "Jackass Presents: Bad Grandpa", "year": 2013 },
+                { "title": "Jackass Forever", "year": 2022 }
+            ]
+        },
+        {
+            "slug": "fifty-shades",
+            "name": "Fifty Shades",
+            "kind": "series",
+            "categories": ["drama"],
+            "color": "#475569",
+            "description": "Anastasia Steele and Christian Grey – the trilogy from the bestselling novels.",
+            "films": [
+                { "title": "Fifty Shades of Grey", "year": 2015 },
+                { "title": "Fifty Shades Darker", "year": 2017 },
+                { "title": "Fifty Shades Freed", "year": 2018 }
+            ]
+        },
+        {
+            "slug": "starship-troopers",
+            "name": "Starship Troopers",
+            "kind": "series",
+            "categories": ["scifi", "action-adventure"],
+            "color": "#0ea5e9",
+            "description": "Would you like to know more? Verhoeven's satire against the Bugs and its sequels.",
+            "films": [
+                { "title": "Starship Troopers", "year": 1997, "group": "Live action" },
+                { "title": "Starship Troopers 2: Hero of the Federation", "year": 2004, "group": "Live action" },
+                { "title": "Starship Troopers 3: Marauder", "year": 2008, "group": "Live action" },
+                { "title": "Starship Troopers: Invasion", "year": 2012, "group": "Animated", "optional": true },
+                { "title": "Starship Troopers: Traitor of Mars", "year": 2017, "group": "Animated", "optional": true }
+            ]
+        },
+        {
+            "slug": "independence-day",
+            "name": "Independence Day",
+            "kind": "series",
+            "categories": ["scifi", "action-adventure"],
+            "color": "#1d4ed8",
+            "description": "Welcome to Earth! The alien mothership attacks on the Fourth of July.",
+            "films": [
+                { "title": "Independence Day", "year": 1996 },
+                { "title": "Independence Day: Resurgence", "year": 2016 }
+            ]
+        },
+        {
+            "slug": "universal-soldier",
+            "name": "Universal Soldier",
+            "kind": "series",
+            "categories": ["action-adventure", "scifi"],
+            "color": "#4b5563",
+            "description": "Van Damme and Lundgren as dead soldiers brought back to fight again.",
+            "films": [
+                { "title": "Universal Soldier", "year": 1992 },
+                { "title": "Universal Soldier: The Return", "year": 1999 },
+                { "title": "Universal Soldier: Regeneration", "year": 2009 },
+                { "title": "Universal Soldier: Day of Reckoning", "year": 2012 }
+            ]
+        },
+        {
+            "slug": "sin-city",
+            "name": "Sin City",
+            "kind": "series",
+            "categories": ["crime-thriller", "action-adventure"],
+            "color": "#111827",
+            "description": "Frank Miller's black-and-white Basin City, where the rain never stops.",
+            "films": [
+                { "title": "Sin City", "year": 2005 },
+                { "title": "Sin City: A Dame to Kill For", "year": 2014 }
+            ]
+        },
+        {
+            "slug": "300",
+            "name": "300",
+            "kind": "series",
+            "categories": ["action-adventure", "war"],
+            "color": "#b45309",
+            "description": "This is Sparta! Thermopylae and Salamis in Zack Snyder style.",
+            "films": [
+                { "title": "300", "year": 2006 },
+                { "title": "300: Rise of an Empire", "year": 2014 }
+            ]
+        },
+        {
+            "slug": "crank",
+            "name": "Crank",
+            "kind": "series",
+            "categories": ["action-adventure"],
+            "color": "#f97316",
+            "description": "Jason Statham must keep his adrenaline up – or his heart stops.",
+            "films": [
+                { "title": "Crank", "year": 2006 },
+                { "title": "Crank: High Voltage", "year": 2009 }
+            ]
+        },
+        {
+            "slug": "the-boondock-saints",
+            "name": "The Boondock Saints",
+            "kind": "series",
+            "categories": ["crime-thriller", "action-adventure"],
+            "color": "#166534",
+            "description": "Two Irish brothers clean up Boston – a cult vigilante duo.",
+            "films": [
+                { "title": "The Boondock Saints", "year": 1999 },
+                { "title": "The Boondock Saints II: All Saints Day", "year": 2009 }
+            ]
+        },
+        {
+            "slug": "the-blair-witch",
+            "name": "The Blair Witch",
+            "kind": "series",
+            "categories": ["horror"],
+            "color": "#3f6212",
+            "description": "Three students went into the woods – the film that made found footage famous.",
+            "films": [
+                { "title": "The Blair Witch Project", "year": 1999 },
+                { "title": "Book of Shadows: Blair Witch 2", "year": 2000 },
+                { "title": "Blair Witch", "year": 2016 }
+            ]
+        },
+        {
+            "slug": "cube",
+            "name": "Cube",
+            "kind": "series",
+            "categories": ["horror", "scifi"],
+            "color": "#0d9488",
+            "description": "Strangers wake up in a maze of deadly rooms – and nobody knows why.",
+            "films": [
+                { "title": "Cube", "year": 1997 },
+                { "title": "Cube 2: Hypercube", "year": 2002 },
+                { "title": "Cube Zero", "year": 2004 }
+            ]
+        },
+        {
+            "slug": "the-crow",
+            "name": "The Crow",
+            "kind": "series",
+            "categories": ["fantasy", "action-adventure"],
+            "color": "#18181b",
+            "description": "It can't rain all the time – the gothic avenger and his sequels.",
+            "films": [
+                { "title": "The Crow", "year": 1994 },
+                { "title": "The Crow: City of Angels", "year": 1996 },
+                { "title": "The Crow", "year": 2024 },
+                { "title": "The Crow: Salvation", "year": 2000, "optional": true },
+                { "title": "The Crow: Wicked Prayer", "year": 2005, "optional": true }
+            ]
+        },
+        {
+            "slug": "the-descent",
+            "name": "The Descent",
+            "kind": "series",
+            "categories": ["horror"],
+            "color": "#7f1d1d",
+            "description": "Six women, one cave system and something hungry in the dark.",
+            "films": [
+                { "title": "The Descent", "year": 2005 },
+                { "title": "The Descent: Part 2", "year": 2009 }
+            ]
+        },
+        {
+            "slug": "critters",
+            "name": "Critters",
+            "kind": "series",
+            "categories": ["horror", "comedy", "scifi"],
+            "color": "#a3e635",
+            "description": "Small, furry, alien and very hungry – the 80s creature-feature series.",
+            "films": [
+                { "title": "Critters", "year": 1986 },
+                { "title": "Critters 2", "year": 1988 },
+                { "title": "Critters 3", "year": 1991 },
+                { "title": "Critters 4", "year": 1992 },
+                { "title": "Critters Attack!", "year": 2019 }
+            ]
+        },
+        {
+            "slug": "leprechaun",
+            "name": "Leprechaun",
+            "kind": "series",
+            "categories": ["horror", "comedy"],
+            "color": "#16a34a",
+            "description": "Don't touch his gold – Warwick Davis's killer leprechaun, even in space.",
+            "films": [
+                { "title": "Leprechaun", "year": 1993 },
+                { "title": "Leprechaun 2", "year": 1994 },
+                { "title": "Leprechaun 3", "year": 1995 },
+                { "title": "Leprechaun 4: In Space", "year": 1997 },
+                { "title": "Leprechaun in the Hood", "year": 2000 },
+                { "title": "Leprechaun: Back 2 tha Hood", "year": 2003 },
+                { "title": "Leprechaun: Origins", "year": 2014 },
+                { "title": "Leprechaun Returns", "year": 2018 }
+            ]
+        },
+        {
+            "slug": "herbie",
+            "name": "Herbie",
+            "kind": "series",
+            "categories": ["family", "comedy"],
+            "color": "#e5e7eb",
+            "description": "The Volkswagen Beetle with a mind of its own – number 53 races again.",
+            "films": [
+                { "title": "The Love Bug", "year": 1968 },
+                { "title": "Herbie Rides Again", "year": 1974 },
+                { "title": "Herbie Goes to Monte Carlo", "year": 1977 },
+                { "title": "Herbie Goes Bananas", "year": 1980 },
+                { "title": "Herbie: Fully Loaded", "year": 2005 }
+            ]
+        },
+        {
+            "slug": "spy-kids",
+            "name": "Spy Kids",
+            "kind": "series",
+            "categories": ["family", "action-adventure"],
+            "color": "#06b6d4",
+            "description": "Robert Rodriguez's kid secret agents and their gadgets.",
+            "films": [
+                { "title": "Spy Kids", "year": 2001 },
+                { "title": "Spy Kids 2: The Island of Lost Dreams", "year": 2002 },
+                { "title": "Spy Kids 3-D: Game Over", "year": 2003 },
+                { "title": "Spy Kids: All the Time in the World", "year": 2011 },
+                { "title": "Spy Kids: Armageddon", "year": 2023 }
+            ]
+        },
+        {
+            "slug": "diary-of-a-wimpy-kid",
+            "name": "Diary of a Wimpy Kid",
+            "kind": "series",
+            "categories": ["family", "comedy"],
+            "color": "#eab308",
+            "description": "Greg Heffley survives middle school – the live-action films and the animated reboot.",
+            "films": [
+                { "title": "Diary of a Wimpy Kid", "year": 2010, "group": "Live action" },
+                { "title": "Diary of a Wimpy Kid: Rodrick Rules", "year": 2011, "group": "Live action" },
+                { "title": "Diary of a Wimpy Kid: Dog Days", "year": 2012, "group": "Live action" },
+                { "title": "Diary of a Wimpy Kid: The Long Haul", "year": 2017, "group": "Live action" },
+                { "title": "Diary of a Wimpy Kid", "year": 2021, "group": "Animated", "optional": true },
+                { "title": "Diary of a Wimpy Kid: Rodrick Rules", "year": 2022, "group": "Animated", "optional": true },
+                { "title": "Diary of a Wimpy Kid Christmas: Cabin Fever", "year": 2023, "group": "Animated", "optional": true }
+            ]
+        },
+        {
+            "slug": "freaky-friday",
+            "name": "Freaky Friday",
+            "kind": "series",
+            "categories": ["family", "comedy"],
+            "color": "#f472b6",
+            "description": "Mother and daughter swap bodies – three times, across fifty years.",
+            "films": [
+                { "title": "Freaky Friday", "year": 1976 },
+                { "title": "Freaky Friday", "year": 2003 },
+                { "title": "Freakier Friday", "year": 2025 }
+            ]
+        },
+        {
+            "slug": "free-willy",
+            "name": "Free Willy",
+            "kind": "series",
+            "categories": ["family", "drama"],
+            "color": "#0369a1",
+            "description": "A boy, an orca and the jump to freedom.",
+            "films": [
+                { "title": "Free Willy", "year": 1993 },
+                { "title": "Free Willy 2: The Adventure Home", "year": 1995 },
+                { "title": "Free Willy 3: The Rescue", "year": 1997 }
+            ]
+        },
+        {
+            "slug": "babe",
+            "name": "Babe",
+            "kind": "series",
+            "categories": ["family"],
+            "color": "#f9a8d4",
+            "description": "That'll do, pig – the sheep-pig and his trip to the big city.",
+            "films": [
+                { "title": "Babe", "year": 1995 },
+                { "title": "Babe: Pig in the City", "year": 1998 }
+            ]
+        },
+        {
+            "slug": "stuart-little",
+            "name": "Stuart Little",
+            "kind": "series",
+            "categories": ["family", "comedy"],
+            "color": "#fbbf24",
+            "description": "A mouse adopted by the Little family in New York.",
+            "films": [
+                { "title": "Stuart Little", "year": 1999 },
+                { "title": "Stuart Little 2", "year": 2002 }
+            ]
+        },
+        {
+            "slug": "dr-dolittle",
+            "name": "Dr. Dolittle",
+            "kind": "series",
+            "categories": ["family", "comedy"],
+            "color": "#84cc16",
+            "description": "The doctor who talks to animals – Rex Harrison, Eddie Murphy and Robert Downey Jr.",
+            "films": [
+                { "title": "Doctor Dolittle", "year": 1967 },
+                { "title": "Dr. Dolittle", "year": 1998 },
+                { "title": "Dr. Dolittle 2", "year": 2001 },
+                { "title": "Dolittle", "year": 2020 }
+            ]
+        },
+        {
+            "slug": "cheaper-by-the-dozen",
+            "name": "Cheaper by the Dozen",
+            "kind": "series",
+            "categories": ["family", "comedy"],
+            "color": "#f97316",
+            "description": "Twelve kids, two parents and total chaos.",
+            "films": [
+                { "title": "Cheaper by the Dozen", "year": 2003 },
+                { "title": "Cheaper by the Dozen 2", "year": 2005 },
+                { "title": "Cheaper by the Dozen", "year": 2022 }
+            ]
+        },
+        {
+            "slug": "nanny-mcphee",
+            "name": "Nanny McPhee",
+            "kind": "series",
+            "categories": ["family", "fantasy"],
+            "color": "#4d7c0f",
+            "description": "When you need me but do not want me, then I will stay – Emma Thompson's magical nanny.",
+            "films": [
+                { "title": "Nanny McPhee", "year": 2005 },
+                { "title": "Nanny McPhee and the Big Bang", "year": 2010 }
+            ]
+        },
+        {
+            "slug": "beethoven",
+            "name": "Beethoven",
+            "kind": "series",
+            "categories": ["family", "comedy"],
+            "color": "#a16207",
+            "description": "A slobbering St. Bernard turns the Newton family upside down.",
+            "films": [
+                { "title": "Beethoven", "year": 1992 },
+                { "title": "Beethoven's 2nd", "year": 1993 },
+                { "title": "Beethoven's 3rd", "year": 2000, "group": "Direct-to-video", "optional": true },
+                { "title": "Beethoven's 4th", "year": 2001, "group": "Direct-to-video", "optional": true },
+                { "title": "Beethoven's 5th", "year": 2003, "group": "Direct-to-video", "optional": true },
+                { "title": "Beethoven's Big Break", "year": 2008, "group": "Direct-to-video", "optional": true }
+            ]
+        },
+        {
+            "slug": "big-mommas-house",
+            "name": "Big Momma's House",
+            "kind": "series",
+            "categories": ["comedy", "crime-thriller"],
+            "color": "#ea580c",
+            "description": "Martin Lawrence undercover as a grandmother.",
+            "films": [
+                { "title": "Big Momma's House", "year": 2000 },
+                { "title": "Big Momma's House 2", "year": 2006 },
+                { "title": "Big Mommas: Like Father, Like Son", "year": 2011 }
+            ]
+        },
+        {
+            "slug": "neon",
+            "name": "Neon",
+            "kind": "studio",
+            "categories": ["drama", "horror"],
+            "color": "#f43f5e",
+            "description": "The indie distributor behind a record run of Palme d'Or winners – Parasite, Titane, Anora and Longlegs.",
+            "films": [
+                { "title": "Ingrid Goes West", "year": 2017, "group": "2010s" },
+                { "title": "I, Tonya", "year": 2017, "group": "2010s" },
+                { "title": "Assassination Nation", "year": 2018, "group": "2010s" },
+                { "title": "Monos", "year": 2019, "group": "2010s" },
+                { "title": "Parasite", "year": 2019, "group": "2010s" },
+                { "title": "Portrait of a Lady on Fire", "year": 2019, "group": "2010s" },
+                { "title": "Palm Springs", "year": 2020, "group": "2020s" },
+                { "title": "Pig", "year": 2021, "group": "2020s" },
+                { "title": "Titane", "year": 2021, "group": "2020s" },
+                { "title": "Spencer", "year": 2021, "group": "2020s" },
+                { "title": "Flee", "year": 2021, "group": "2020s" },
+                { "title": "Crimes of the Future", "year": 2022, "group": "2020s" },
+                { "title": "Triangle of Sadness", "year": 2022, "group": "2020s" },
+                { "title": "Infinity Pool", "year": 2023, "group": "2020s" },
+                { "title": "Anatomy of a Fall", "year": 2023, "group": "2020s" },
+                { "title": "Immaculate", "year": 2024, "group": "2020s" },
+                { "title": "Longlegs", "year": 2024, "group": "2020s" },
+                { "title": "Anora", "year": 2024, "group": "2020s" },
+                { "title": "The Monkey", "year": 2025, "group": "2020s" },
+                { "title": "It Was Just an Accident", "year": 2025, "group": "2020s" },
+                { "title": "Sentimental Value", "year": 2025, "group": "2020s" }
+            ]
+        },
+        {
+            "slug": "crime-film-noir",
+            "name": "Film Noir",
+            "kind": "genre",
+            "categories": ["crime-thriller"],
+            "color": "#27272a",
+            "description": "Femmes fatales, private eyes and venetian-blind shadows – the black-and-white crime classics of the 40s and 50s.",
+            "films": [
+                { "title": "The Maltese Falcon", "year": 1941, "group": "1940s" },
+                { "title": "Double Indemnity", "year": 1944, "group": "1940s" },
+                { "title": "Laura", "year": 1944, "group": "1940s" },
+                { "title": "Murder, My Sweet", "year": 1944, "group": "1940s" },
+                { "title": "Mildred Pierce", "year": 1945, "group": "1940s" },
+                { "title": "The Big Sleep", "year": 1946, "group": "1940s" },
+                { "title": "The Killers", "year": 1946, "group": "1940s" },
+                { "title": "Gilda", "year": 1946, "group": "1940s" },
+                { "title": "Out of the Past", "year": 1947, "group": "1940s" },
+                { "title": "The Lady from Shanghai", "year": 1947, "group": "1940s" },
+                { "title": "The Third Man", "year": 1949, "group": "1940s" },
+                { "title": "White Heat", "year": 1949, "group": "1940s" },
+                { "title": "Sunset Boulevard", "year": 1950, "group": "1950s" },
+                { "title": "In a Lonely Place", "year": 1950, "group": "1950s" },
+                { "title": "The Asphalt Jungle", "year": 1950, "group": "1950s" },
+                { "title": "Kiss Me Deadly", "year": 1955, "group": "1950s" },
+                { "title": "The Night of the Hunter", "year": 1955, "group": "1950s" },
+                { "title": "Touch of Evil", "year": 1958, "group": "1950s" }
+            ]
+        },
+        {
+            "slug": "crime-neo-noir",
+            "name": "Neo-noir",
+            "kind": "genre",
+            "categories": ["crime-thriller"],
+            "color": "#4c1d95",
+            "description": "Noir in colour – Chinatown, L.A. Confidential, Drive and the cities that never sleep.",
+            "films": [
+                { "title": "The Long Goodbye", "year": 1973 },
+                { "title": "Chinatown", "year": 1974 },
+                { "title": "Night Moves", "year": 1975 },
+                { "title": "Body Heat", "year": 1981 },
+                { "title": "Blood Simple", "year": 1984 },
+                { "title": "Blue Velvet", "year": 1986 },
+                { "title": "The Last Seduction", "year": 1994 },
+                { "title": "Devil in a Blue Dress", "year": 1995 },
+                { "title": "The Usual Suspects", "year": 1995 },
+                { "title": "L.A. Confidential", "year": 1997 },
+                { "title": "Memento", "year": 2000 },
+                { "title": "Mulholland Drive", "year": 2001 },
+                { "title": "Sin City", "year": 2005 },
+                { "title": "Drive", "year": 2011 },
+                { "title": "Nightcrawler", "year": 2014 },
+                { "title": "Inherent Vice", "year": 2014 }
+            ]
+        },
+        {
+            "slug": "palme-dor-winners",
+            "name": "Palme d'Or Winners",
+            "kind": "genre",
+            "categories": ["drama"],
+            "color": "#ca8a04",
+            "description": "Every winner of the Cannes Palme d'Or since 1990 – from Wild at Heart to Fjord.",
+            "films": [
+                { "title": "Wild at Heart", "year": 1990, "group": "1990s" },
+                { "title": "Barton Fink", "year": 1991, "group": "1990s" },
+                { "title": "The Best Intentions", "year": 1992, "group": "1990s" },
+                { "title": "The Piano", "year": 1993, "group": "1990s" },
+                { "title": "Farewell My Concubine", "year": 1993, "group": "1990s" },
+                { "title": "Pulp Fiction", "year": 1994, "group": "1990s" },
+                { "title": "Underground", "year": 1995, "group": "1990s" },
+                { "title": "Secrets & Lies", "year": 1996, "group": "1990s" },
+                { "title": "Taste of Cherry", "year": 1997, "group": "1990s" },
+                { "title": "The Eel", "year": 1997, "group": "1990s" },
+                { "title": "Eternity and a Day", "year": 1998, "group": "1990s" },
+                { "title": "Rosetta", "year": 1999, "group": "1990s" },
+                { "title": "Dancer in the Dark", "year": 2000, "group": "2000s" },
+                { "title": "The Son's Room", "year": 2001, "group": "2000s" },
+                { "title": "The Pianist", "year": 2002, "group": "2000s" },
+                { "title": "Elephant", "year": 2003, "group": "2000s" },
+                { "title": "Fahrenheit 9/11", "year": 2004, "group": "2000s" },
+                { "title": "L'Enfant", "year": 2005, "group": "2000s" },
+                { "title": "The Wind That Shakes the Barley", "year": 2006, "group": "2000s" },
+                { "title": "4 Months, 3 Weeks and 2 Days", "year": 2007, "group": "2000s" },
+                { "title": "The Class", "year": 2008, "group": "2000s" },
+                { "title": "The White Ribbon", "year": 2009, "group": "2000s" },
+                { "title": "Uncle Boonmee Who Can Recall His Past Lives", "year": 2010, "group": "2010s" },
+                { "title": "The Tree of Life", "year": 2011, "group": "2010s" },
+                { "title": "Amour", "year": 2012, "group": "2010s" },
+                { "title": "Blue Is the Warmest Color", "year": 2013, "group": "2010s" },
+                { "title": "Winter Sleep", "year": 2014, "group": "2010s" },
+                { "title": "Dheepan", "year": 2015, "group": "2010s" },
+                { "title": "I, Daniel Blake", "year": 2016, "group": "2010s" },
+                { "title": "The Square", "year": 2017, "group": "2010s" },
+                { "title": "Shoplifters", "year": 2018, "group": "2010s" },
+                { "title": "Parasite", "year": 2019, "group": "2010s" },
+                { "title": "Titane", "year": 2021, "group": "2020s" },
+                { "title": "Triangle of Sadness", "year": 2022, "group": "2020s" },
+                { "title": "Anatomy of a Fall", "year": 2023, "group": "2020s" },
+                { "title": "Anora", "year": 2024, "group": "2020s" },
+                { "title": "It Was Just an Accident", "year": 2025, "group": "2020s" },
+                { "title": "Fjord", "year": 2026, "group": "2020s" }
+            ]
+        },
+        {
+            "slug": "cult-classics",
+            "name": "Cult Classics",
+            "kind": "genre",
+            "categories": ["comedy", "drama"],
+            "color": "#a21caf",
+            "description": "Flops, midnight movies and quotable oddities that found their audience later.",
+            "films": [
+                { "title": "Barbarella", "year": 1968 },
+                { "title": "Harold and Maude", "year": 1971 },
+                { "title": "Pink Flamingos", "year": 1972 },
+                { "title": "The Rocky Horror Picture Show", "year": 1975 },
+                { "title": "The Warriors", "year": 1979 },
+                { "title": "Repo Man", "year": 1984 },
+                { "title": "This Is Spinal Tap", "year": 1984 },
+                { "title": "Withnail & I", "year": 1987 },
+                { "title": "The Princess Bride", "year": 1987 },
+                { "title": "Clerks", "year": 1994 },
+                { "title": "Office Space", "year": 1999 },
+                { "title": "Donnie Darko", "year": 2001 },
+                { "title": "The Room", "year": 2003 },
+                { "title": "Napoleon Dynamite", "year": 2004 },
+                { "title": "Hot Rod", "year": 2007 },
+                { "title": "Scott Pilgrim vs. the World", "year": 2010 }
+            ]
+        },
+        {
+            "slug": "drama-road-movies",
+            "name": "Road Movies",
+            "kind": "genre",
+            "categories": ["drama", "comedy"],
+            "color": "#d97706",
+            "description": "Hit the road – motorbikes, muscle cars, buses and the people you meet along the way.",
+            "films": [
+                { "title": "Easy Rider", "year": 1969 },
+                { "title": "Vanishing Point", "year": 1971 },
+                { "title": "Badlands", "year": 1973 },
+                { "title": "Paper Moon", "year": 1973 },
+                { "title": "Smokey and the Bandit", "year": 1977 },
+                { "title": "Paris, Texas", "year": 1984 },
+                { "title": "Planes, Trains and Automobiles", "year": 1987 },
+                { "title": "Midnight Run", "year": 1988 },
+                { "title": "Rain Man", "year": 1988 },
+                { "title": "Thelma & Louise", "year": 1991 },
+                { "title": "Y Tu Mamá También", "year": 2001 },
+                { "title": "The Motorcycle Diaries", "year": 2004 },
+                { "title": "Little Miss Sunshine", "year": 2006 },
+                { "title": "Into the Wild", "year": 2007 },
+                { "title": "Nebraska", "year": 2013 }
+            ]
+        },
+        {
+            "slug": "comedy-teen",
+            "name": "Teen Comedies",
+            "kind": "genre",
+            "categories": ["comedy"],
+            "color": "#f43f5e",
+            "description": "Proms, parties and parents out of town – high-school comedies from Fast Times to Bottoms.",
+            "films": [
+                { "title": "Fast Times at Ridgemont High", "year": 1982 },
+                { "title": "Sixteen Candles", "year": 1984 },
+                { "title": "Weird Science", "year": 1985 },
+                { "title": "Ferris Bueller's Day Off", "year": 1986 },
+                { "title": "Can't Buy Me Love", "year": 1987 },
+                { "title": "Heathers", "year": 1988 },
+                { "title": "Clueless", "year": 1995 },
+                { "title": "10 Things I Hate About You", "year": 1999 },
+                { "title": "Never Been Kissed", "year": 1999 },
+                { "title": "She's All That", "year": 1999 },
+                { "title": "Bring It On", "year": 2000 },
+                { "title": "EuroTrip", "year": 2004 },
+                { "title": "Easy A", "year": 2010 },
+                { "title": "21 Jump Street", "year": 2012 },
+                { "title": "Blockers", "year": 2018 },
+                { "title": "Bottoms", "year": 2023 }
+            ]
+        }
+    ]
+}

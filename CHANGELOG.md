@@ -3,6 +3,13 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.4.2 – November 2026
+- 16 new directors: Martin Scorsese, James Cameron, Ridley Scott, the Coen brothers, Guillermo del Toro, Peter Jackson, Sam Raimi, John Carpenter, David Lynch, Francis Ford Coppola, Bong Joon-ho, Park Chan-wook, Paul Thomas Anderson, Greta Gerwig, Edgar Wright and Miloš Forman
+- Over 40 new series – Ocean's, Now You See Me, Hellboy, The Addams Family, Highlander, Starship Troopers, Bridget Jones, Mean Girls, Spy Kids, Herbie and many more
+- Studio Neon
+- New picks: Film Noir, Neo-noir, Palme d'Or Winners, Cult Classics, Road Movies and Teen Comedies
+- My Movie Diary now has over 3,000 movies 🎉
+
 ## V4.4.1 – November 2026
 - Cartoons! Looney Tunes (with Coyote vs. Acme), Tom and Jerry, Scooby-Doo, The Smurfs, Teenage Mutant Ninja Turtles, SpongeBob, Sonic, Garfield, Alvin and the Chipmunks, Peanuts and Winnie the Pooh
 - Studios DisneyToon, Warner Bros. Animation, Netflix Animation and Nickelodeon

@@ -201,6 +201,34 @@ test("balíček V4.4.1: animáky ve 28 kolekcích, úpravy kolekcí z kontroly s
     }
 });
 
+test("balíček V4.4.2: 16 režisérů po desetiletích, přes 40 sérií, Neon a 6 výběrů", () => {
+    const pack = JSON.parse(readFileSync(new URL("../supabase/packs/v4.4.2-directors-series.json", import.meta.url), "utf8"));
+    const categories = new Set(["superhero", "scifi", "fantasy", "animation", "anime", "family", "action-adventure", "comedy",
+        "drama", "crime-thriller", "war", "western", "horror", "czech-slovak"]);
+    const count = (kind) => pack.universes.filter((u) => u.kind === kind).length;
+    assert.equal(count("director"), 16);
+    assert.equal(count("studio"), 1);
+    assert.equal(count("genre"), 6);
+    assert.ok(count("series") >= 40);
+    const slugs = pack.universes.map((u) => u.slug);
+    assert.equal(new Set(slugs).size, slugs.length);
+    for (const universe of pack.universes) {
+        assert.match(universe.slug, /^[a-z0-9-]{2,40}$/, universe.slug);
+        // Bez migrace – jen kategorie, které už v databázi jsou
+        assert.ok(universe.categories.length > 0 && universe.categories.every((c) => categories.has(c)), universe.slug);
+        assert.match(universe.color, /^#[0-9a-f]{6}$/, universe.slug);
+        assert.ok(universe.description && universe.description.length <= 160, universe.slug);
+        const keys = universe.films.map((f) => `${f.title}|${f.year}`);
+        assert.equal(new Set(keys).size, keys.length, `${universe.slug}: film dvakrát`);
+        for (const film of universe.films) {
+            assert.ok(film.title && Number.isInteger(film.year), `${universe.slug}: ${film.title}`);
+            // Desetiletí režiséra odpovídá roku filmu
+            if (universe.kind === "director") assert.equal(film.group, `${Math.floor(film.year / 10) * 10}s`, `${universe.slug}: ${film.title}`);
+        }
+        assert.ok(universe.films.some((f) => !f.optional), `${universe.slug}: žádný povinný film`);
+    }
+});
+
 test("nextGoal: 2 000, pak po 500", async () => {
     const { nextGoal } = await import("../web/js/admin.js");
     assert.equal(nextGoal(1264), 2000);

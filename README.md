@@ -6,11 +6,11 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V4.4.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V4.4.2** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
-- 280+ collections, curated paths and 2,700+ movies from TMDB – MCU, Star Wars, James Bond, Mission: Impossible, Marvel, DC, Warner Bros., Lucasfilm, Disney, Pixar, DreamWorks, Illumination, Studio Ghibli, horror series, hand-picked horror genres and themed picks (Time Travel, Heist, Christmas…), each with its own color and banner
+- 350+ collections, curated paths and 3,000+ movies from TMDB – MCU, Star Wars, James Bond, Mission: Impossible, Marvel, DC, Warner Bros., Lucasfilm, Disney, Pixar, DreamWorks, Illumination, Studio Ghibli, horror series, hand-picked horror genres and themed picks (Time Travel, Heist, Christmas…), each with its own color and banner
 - Two-level filter: collection type (series, studios, genre picks, paths), then genre (Superhero, Sci-fi, Fantasy, Animation, Horror…); collections sorted A–Z, by recently added or by your progress; view a collection by release, in story order or by series
 - +1 / −1 viewing counter – every viewing is logged with a date; movies you saw long ago can be marked *Seen before* (one by one or a whole collection)
 - Your own lists – any movies from My Movie Diary, in your order; private, for friends or public – trending public ones show up in **Community** and in search; follow the ones you like
@@ -25,7 +25,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Compare with a friend – movies in common, taste match from your ratings, recommendations and collections side by side
 - Movie requests – ask for missing movies (up to 30 at once), a whole series or your own collection from any movies (with order, sections and labels), +1 what others want, follow the status of your requests (with the reason when one is rejected – edit a collection request and send it again), a warning when a similar collection already exists
 - Curated paths – step-by-step routes like MCU Essentials or Horror 101, with a note for every step
-- Director collections – Nolan, Tarantino, Kubrick, Hitchcock and more, decade by decade
+- Director collections – Nolan, Tarantino, Kubrick, Hitchcock, Scorsese, the Coen brothers and over 25 more, decade by decade
 - Watchlist across all collections
 - Achievements with levels (Bronze → Platinum) and completed-collection badges – Pathfinder for paths, Auteur for directors
 - XP and levels with movie-themed titles – from Extra to Legend; higher levels raise your limits (requests, lists)
