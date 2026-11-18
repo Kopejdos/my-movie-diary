@@ -1,0 +1,426 @@
+{
+    "_comment": "Balíček kolekcí V4.3.7 – anime a česká klasika. Nejdřív migrace 20261121100000_anime_czech.sql (kategorie anime a czech-slovak), pak ./scripts/add-pack.sh supabase/packs/v4.3.7-anime-czech.json (nové kolekce na konec seedu, Studio Ghibli dostane kategorii Anime), pak se importuje. Formát kolekcí je stejný jako v supabase/seed/universes.json.",
+    "update": {
+        "studio-ghibli": {
+            "addCategories": ["anime"]
+        }
+    },
+    "universes": [
+        {
+            "slug": "makoto-shinkai",
+            "name": "Makoto Shinkai",
+            "kind": "director",
+            "categories": ["anime", "drama"],
+            "color": "#38bdf8",
+            "description": "Skies, trains and longing – the films of Makoto Shinkai, from his early work to Your Name. and Suzume. The short Voices of a Distant Star is optional.",
+            "films": [
+                { "title": "Voices of a Distant Star", "year": 2002, "optional": true, "label": "Short", "group": "2000s" },
+                { "title": "The Place Promised in Our Early Days", "year": 2004, "group": "2000s" },
+                { "title": "5 Centimeters per Second", "year": 2007, "group": "2000s" },
+                { "title": "Children Who Chase Lost Voices", "year": 2011, "group": "2010s" },
+                { "title": "The Garden of Words", "year": 2013, "group": "2010s" },
+                { "title": "Your Name.", "year": 2016, "group": "2010s" },
+                { "title": "Weathering with You", "year": 2019, "group": "2010s" },
+                { "title": "Suzume", "year": 2022, "group": "2020s" }
+            ]
+        },
+        {
+            "slug": "mamoru-hosoda",
+            "name": "Mamoru Hosoda",
+            "kind": "director",
+            "categories": ["anime", "family"],
+            "color": "#f97316",
+            "description": "Families, summers and other worlds – Mamoru Hosoda from The Girl Who Leapt Through Time to Scarlet. His Digimon and One Piece films are optional.",
+            "films": [
+                { "title": "Digimon Adventure: Our War Game!", "year": 2000, "optional": true, "group": "2000s" },
+                { "title": "One Piece: Baron Omatsuri and the Secret Island", "year": 2005, "optional": true, "group": "2000s" },
+                { "title": "The Girl Who Leapt Through Time", "year": 2006, "group": "2000s" },
+                { "title": "Summer Wars", "year": 2009, "group": "2000s" },
+                { "title": "Wolf Children", "year": 2012, "group": "2010s" },
+                { "title": "The Boy and the Beast", "year": 2015, "group": "2010s" },
+                { "title": "Mirai", "year": 2018, "group": "2010s" },
+                { "title": "Belle", "year": 2021, "group": "2020s" },
+                { "title": "Scarlet", "year": 2025, "group": "2020s" }
+            ]
+        },
+        {
+            "slug": "satoshi-kon",
+            "name": "Satoshi Kon",
+            "kind": "director",
+            "categories": ["anime", "crime-thriller"],
+            "color": "#a855f7",
+            "description": "Dreams, films and reality blurring into one – all four features of Satoshi Kon.",
+            "films": [
+                { "title": "Perfect Blue", "year": 1997, "group": "1990s" },
+                { "title": "Millennium Actress", "year": 2001, "group": "2000s" },
+                { "title": "Tokyo Godfathers", "year": 2003, "group": "2000s" },
+                { "title": "Paprika", "year": 2006, "group": "2000s" }
+            ]
+        },
+        {
+            "slug": "evangelion",
+            "name": "Evangelion",
+            "kind": "series",
+            "categories": ["anime", "scifi"],
+            "color": "#7c3aed",
+            "description": "Get in the robot, Shinji – The End of Evangelion and the four Rebuild films. Death & Rebirth (a recap) is optional.",
+            "films": [
+                { "title": "Neon Genesis Evangelion: Death & Rebirth", "year": 1997, "group": "Original", "optional": true },
+                { "title": "The End of Evangelion", "year": 1997, "group": "Original" },
+                { "title": "Evangelion: 1.0 You Are (Not) Alone", "year": 2007, "group": "Rebuild" },
+                { "title": "Evangelion: 2.0 You Can (Not) Advance", "year": 2009, "group": "Rebuild" },
+                { "title": "Evangelion: 3.0 You Can (Not) Redo", "year": 2012, "group": "Rebuild" },
+                { "title": "Evangelion: 3.0+1.0 Thrice Upon a Time", "year": 2021, "group": "Rebuild" }
+            ]
+        },
+        {
+            "slug": "ghost-in-the-shell",
+            "name": "Ghost in the Shell",
+            "kind": "series",
+            "categories": ["anime", "scifi"],
+            "color": "#0d9488",
+            "description": "Major Kusanagi and the ghost in the machine – Mamoru Oshii's two films, with the later films and the 2017 live-action remake as extras.",
+            "films": [
+                { "title": "Ghost in the Shell", "year": 1995 },
+                { "title": "Ghost in the Shell 2: Innocence", "year": 2004 },
+                { "title": "Ghost in the Shell: Stand Alone Complex - Solid State Society", "year": 2006, "optional": true },
+                { "title": "Ghost in the Shell 2.0", "year": 2008, "optional": true },
+                { "title": "Ghost in the Shell: The New Movie", "year": 2015, "optional": true },
+                { "title": "Ghost in the Shell", "year": 2017, "optional": true, "label": "Live action" }
+            ]
+        },
+        {
+            "slug": "pokemon",
+            "name": "Pokémon",
+            "kind": "series",
+            "categories": ["anime", "family"],
+            "color": "#eab308",
+            "description": "Gotta catch 'em all – every Pokémon movie from Mewtwo Strikes Back to Secrets of the Jungle, with Detective Pikachu as a live-action extra.",
+            "films": [
+                { "title": "Pokémon: The First Movie", "year": 1998 },
+                { "title": "Pokémon: The Movie 2000", "year": 1999 },
+                { "title": "Pokémon 3: The Movie", "year": 2000 },
+                { "title": "Pokémon 4Ever", "year": 2001 },
+                { "title": "Pokémon Heroes", "year": 2002 },
+                { "title": "Pokémon: Jirachi Wish Maker", "year": 2003 },
+                { "title": "Pokémon: Destiny Deoxys", "year": 2004 },
+                { "title": "Pokémon: Lucario and the Mystery of Mew", "year": 2005 },
+                { "title": "Pokémon Ranger and the Temple of the Sea", "year": 2006 },
+                { "title": "Pokémon: The Rise of Darkrai", "year": 2007 },
+                { "title": "Pokémon: Giratina and the Sky Warrior", "year": 2008 },
+                { "title": "Pokémon: Arceus and the Jewel of Life", "year": 2009 },
+                { "title": "Pokémon: Zoroark: Master of Illusions", "year": 2010 },
+                { "title": "Pokémon the Movie: White - Victini and Zekrom", "year": 2011 },
+                { "title": "Pokémon the Movie: Kyurem vs. the Sword of Justice", "year": 2012 },
+                { "title": "Pokémon the Movie: Genesect and the Legend Awakened", "year": 2013 },
+                { "title": "Pokémon the Movie: Diancie and the Cocoon of Destruction", "year": 2014 },
+                { "title": "Pokémon the Movie: Hoopa and the Clash of Ages", "year": 2015 },
+                { "title": "Pokémon the Movie: Volcanion and the Mechanical Marvel", "year": 2016 },
+                { "title": "Pokémon the Movie: I Choose You!", "year": 2017 },
+                { "title": "Pokémon the Movie: The Power of Us", "year": 2018 },
+                { "title": "Pokémon: Mewtwo Strikes Back - Evolution", "year": 2019 },
+                { "title": "Pokémon Detective Pikachu", "year": 2019, "optional": true, "label": "Live action" },
+                { "title": "Pokémon the Movie: Secrets of the Jungle", "year": 2020 }
+            ]
+        },
+        {
+            "slug": "dragon-ball",
+            "name": "Dragon Ball",
+            "kind": "series",
+            "categories": ["anime", "action-adventure"],
+            "color": "#f59e0b",
+            "description": "Goku and the Saiyans on the big screen – the four Dragon Ball Super era films, with the classic 1986–1996 movies as optional extras.",
+            "films": [
+                { "title": "Dragon Ball: Curse of the Blood Rubies", "year": 1986, "group": "Dragon Ball", "optional": true },
+                { "title": "Dragon Ball: Sleeping Princess in Devil's Castle", "year": 1987, "group": "Dragon Ball", "optional": true },
+                { "title": "Dragon Ball: Mystical Adventure", "year": 1988, "group": "Dragon Ball", "optional": true },
+                { "title": "Dragon Ball Z: Dead Zone", "year": 1989, "group": "Dragon Ball Z", "optional": true },
+                { "title": "Dragon Ball Z: The World's Strongest", "year": 1990, "group": "Dragon Ball Z", "optional": true },
+                { "title": "Dragon Ball Z: The Tree of Might", "year": 1990, "group": "Dragon Ball Z", "optional": true },
+                { "title": "Dragon Ball Z: Lord Slug", "year": 1991, "group": "Dragon Ball Z", "optional": true },
+                { "title": "Dragon Ball Z: Cooler's Revenge", "year": 1991, "group": "Dragon Ball Z", "optional": true },
+                { "title": "Dragon Ball Z: The Return of Cooler", "year": 1992, "group": "Dragon Ball Z", "optional": true },
+                { "title": "Dragon Ball Z: Super Android 13!", "year": 1992, "group": "Dragon Ball Z", "optional": true },
+                { "title": "Dragon Ball Z: Broly - The Legendary Super Saiyan", "year": 1993, "group": "Dragon Ball Z", "optional": true },
+                { "title": "Dragon Ball Z: Bojack Unbound", "year": 1993, "group": "Dragon Ball Z", "optional": true },
+                { "title": "Dragon Ball Z: Broly - Second Coming", "year": 1994, "group": "Dragon Ball Z", "optional": true },
+                { "title": "Dragon Ball Z: Bio-Broly", "year": 1994, "group": "Dragon Ball Z", "optional": true },
+                { "title": "Dragon Ball Z: Fusion Reborn", "year": 1995, "group": "Dragon Ball Z", "optional": true },
+                { "title": "Dragon Ball Z: Wrath of the Dragon", "year": 1995, "group": "Dragon Ball Z", "optional": true },
+                { "title": "Dragon Ball: The Path to Power", "year": 1996, "group": "Dragon Ball", "optional": true },
+                { "title": "Dragon Ball Z: Battle of Gods", "year": 2013, "group": "Dragon Ball Super" },
+                { "title": "Dragon Ball Z: Resurrection 'F'", "year": 2015, "group": "Dragon Ball Super" },
+                { "title": "Dragon Ball Super: Broly", "year": 2018, "group": "Dragon Ball Super" },
+                { "title": "Dragon Ball Super: Super Hero", "year": 2022, "group": "Dragon Ball Super" }
+            ]
+        },
+        {
+            "slug": "detective-conan",
+            "name": "Detective Conan",
+            "kind": "series",
+            "categories": ["anime", "crime-thriller"],
+            "color": "#1d4ed8",
+            "description": "There is always only one truth! Every Detective Conan movie, a new case every spring since 1997.",
+            "films": [
+                { "title": "Detective Conan: The Time-Bombed Skyscraper", "year": 1997, "group": "1990s" },
+                { "title": "Detective Conan: The Fourteenth Target", "year": 1998, "group": "1990s" },
+                { "title": "Detective Conan: The Last Wizard of the Century", "year": 1999, "group": "1990s" },
+                { "title": "Detective Conan: Captured in Her Eyes", "year": 2000, "group": "2000s" },
+                { "title": "Detective Conan: Countdown to Heaven", "year": 2001, "group": "2000s" },
+                { "title": "Detective Conan: The Phantom of Baker Street", "year": 2002, "group": "2000s" },
+                { "title": "Detective Conan: Crossroad in the Ancient Capital", "year": 2003, "group": "2000s" },
+                { "title": "Detective Conan: Magician of the Silver Sky", "year": 2004, "group": "2000s" },
+                { "title": "Detective Conan: Strategy Above the Depths", "year": 2005, "group": "2000s" },
+                { "title": "Detective Conan: The Private Eyes' Requiem", "year": 2006, "group": "2000s" },
+                { "title": "Detective Conan: Jolly Roger in the Deep Azure", "year": 2007, "group": "2000s" },
+                { "title": "Detective Conan: Full Score of Fear", "year": 2008, "group": "2000s" },
+                { "title": "Detective Conan: The Raven Chaser", "year": 2009, "group": "2000s" },
+                { "title": "Detective Conan: The Lost Ship in the Sky", "year": 2010, "group": "2010s" },
+                { "title": "Detective Conan: Quarter of Silence", "year": 2011, "group": "2010s" },
+                { "title": "Detective Conan: The Eleventh Striker", "year": 2012, "group": "2010s" },
+                { "title": "Detective Conan: Private Eye in the Distant Sea", "year": 2013, "group": "2010s" },
+                { "title": "Detective Conan: Dimensional Sniper", "year": 2014, "group": "2010s" },
+                { "title": "Detective Conan: Sunflowers of Inferno", "year": 2015, "group": "2010s" },
+                { "title": "Detective Conan: The Darkest Nightmare", "year": 2016, "group": "2010s" },
+                { "title": "Detective Conan: The Crimson Love Letter", "year": 2017, "group": "2010s" },
+                { "title": "Detective Conan: Zero the Enforcer", "year": 2018, "group": "2010s" },
+                { "title": "Detective Conan: The Fist of Blue Sapphire", "year": 2019, "group": "2010s" },
+                { "title": "Detective Conan: The Scarlet Bullet", "year": 2021, "group": "2020s" },
+                { "title": "Detective Conan: The Bride of Halloween", "year": 2022, "group": "2020s" },
+                { "title": "Detective Conan: Black Iron Submarine", "year": 2023, "group": "2020s" },
+                { "title": "Detective Conan: The Million-Dollar Pentagram", "year": 2024, "group": "2020s" },
+                { "title": "Detective Conan: One-Eyed Flashback", "year": 2025, "group": "2020s" }
+            ]
+        },
+        {
+            "slug": "anime-classics",
+            "name": "Anime Classics",
+            "kind": "genre",
+            "categories": ["anime"],
+            "color": "#e11d48",
+            "description": "The anime films everyone should know – from Akira to Look Back. Studio Ghibli has its own collection.",
+            "films": [
+                { "title": "Akira", "year": 1988, "group": "1980s" },
+                { "title": "Grave of the Fireflies", "year": 1988, "group": "1980s" },
+                { "title": "Patlabor 2: The Movie", "year": 1993, "group": "1990s" },
+                { "title": "Ninja Scroll", "year": 1993, "group": "1990s" },
+                { "title": "Ghost in the Shell", "year": 1995, "group": "1990s" },
+                { "title": "Perfect Blue", "year": 1997, "group": "1990s" },
+                { "title": "Jin-Roh: The Wolf Brigade", "year": 1999, "group": "1990s" },
+                { "title": "Millennium Actress", "year": 2001, "group": "2000s" },
+                { "title": "Metropolis", "year": 2001, "group": "2000s" },
+                { "title": "Cowboy Bebop: The Movie", "year": 2001, "group": "2000s" },
+                { "title": "Mind Game", "year": 2004, "group": "2000s" },
+                { "title": "Tekkonkinkreet", "year": 2006, "group": "2000s" },
+                { "title": "Paprika", "year": 2006, "group": "2000s" },
+                { "title": "The Girl Who Leapt Through Time", "year": 2006, "group": "2000s" },
+                { "title": "Summer Wars", "year": 2009, "group": "2000s" },
+                { "title": "Redline", "year": 2009, "group": "2000s" },
+                { "title": "Wolf Children", "year": 2012, "group": "2010s" },
+                { "title": "A Silent Voice", "year": 2016, "group": "2010s" },
+                { "title": "Your Name.", "year": 2016, "group": "2010s" },
+                { "title": "In This Corner of the World", "year": 2016, "group": "2010s" },
+                { "title": "Demon Slayer: Mugen Train", "year": 2020, "group": "2020s" },
+                { "title": "Jujutsu Kaisen 0", "year": 2021, "group": "2020s" },
+                { "title": "The First Slam Dunk", "year": 2022, "group": "2020s" },
+                { "title": "Look Back", "year": 2024, "group": "2020s" }
+            ]
+        },
+        {
+            "slug": "cartoon-saloon",
+            "name": "Cartoon Saloon",
+            "kind": "studio",
+            "categories": ["animation", "family"],
+            "color": "#16a34a",
+            "description": "Hand-drawn magic from Ireland – the Irish Folklore Trilogy and more from the studio behind Wolfwalkers.",
+            "films": [
+                { "title": "The Secret of Kells", "year": 2009, "franchise": "Irish Folklore Trilogy" },
+                { "title": "Song of the Sea", "year": 2014, "franchise": "Irish Folklore Trilogy" },
+                { "title": "The Breadwinner", "year": 2017 },
+                { "title": "Wolfwalkers", "year": 2020, "franchise": "Irish Folklore Trilogy" },
+                { "title": "My Father's Dragon", "year": 2022 }
+            ]
+        },
+        {
+            "slug": "slunce-seno",
+            "name": "Slunce, seno…",
+            "kind": "series",
+            "categories": ["czech-slovak", "comedy"],
+            "color": "#facc15",
+            "description": "Zdeněk Troška's village comedies from Hoštice – the Czech cult trilogy about a city boy, a farm and a very nosy village.",
+            "films": [
+                { "title": "Slunce, seno, jahody", "year": 1984 },
+                { "title": "Slunce, seno a pár facek", "year": 1989 },
+                { "title": "Slunce, seno, erotika", "year": 1991 }
+            ]
+        },
+        {
+            "slug": "basnici",
+            "name": "Básníci",
+            "kind": "series",
+            "categories": ["czech-slovak", "comedy"],
+            "color": "#0ea5e9",
+            "description": "Štěpán Šafránek and Kendy from medical school to middle age – six films over thirty-four years.",
+            "films": [
+                { "title": "Jak svět přichází o básníky", "year": 1982 },
+                { "title": "Jak básníci přicházejí o iluze", "year": 1984 },
+                { "title": "Jak básníkům chutná život", "year": 1987 },
+                { "title": "Konec básníků v Čechách", "year": 1993 },
+                { "title": "Jak básníci neztrácejí naději", "year": 2004 },
+                { "title": "Jak básníci čekají na zázrak", "year": 2016 }
+            ]
+        },
+        {
+            "slug": "andel-pane",
+            "name": "Anděl Páně",
+            "kind": "series",
+            "categories": ["czech-slovak", "family"],
+            "color": "#f59e0b",
+            "description": "An angel and a devil on a Christmas mission on Earth – the modern Czech fairy tale classic.",
+            "films": [
+                { "title": "Anděl Páně", "year": 2005 },
+                { "title": "Anděl Páně 2", "year": 2016 }
+            ]
+        },
+        {
+            "slug": "saxana",
+            "name": "Saxána",
+            "kind": "series",
+            "categories": ["czech-slovak", "family"],
+            "color": "#db2777",
+            "description": "The witch girl on a broomstick – the 1972 classic and its sequel forty years later.",
+            "films": [
+                { "title": "Dívka na koštěti", "year": 1972 },
+                { "title": "Saxána a Lexikon kouzel", "year": 2011 }
+            ]
+        },
+        {
+            "slug": "sverak",
+            "name": "Zdeněk & Jan Svěrák",
+            "kind": "series",
+            "categories": ["czech-slovak", "comedy"],
+            "color": "#65a30d",
+            "description": "Father and son: Zdeněk Svěrák's comedies with Ladislav Smoljak and the Cimrman films, then Jan Svěrák's Oscar-winning Kolya and more. Two of Jan's films are optional.",
+            "films": [
+                { "title": "Jáchyme, hoď ho do stroje!", "year": 1974, "group": "1970s" },
+                { "title": "Marečku, podejte mi pero!", "year": 1976, "group": "1970s" },
+                { "title": "Na samotě u lesa", "year": 1976, "group": "1970s" },
+                { "title": "Kulový blesk", "year": 1978, "group": "1970s" },
+                { "title": "Vrchní, prchni!", "year": 1981, "group": "1980s" },
+                { "title": "Jára Cimrman ležící, spící", "year": 1983, "group": "1980s" },
+                { "title": "Rozpuštěný a vypuštěný", "year": 1984, "group": "1980s" },
+                { "title": "Vesničko má středisková", "year": 1985, "group": "1980s" },
+                { "title": "Nejistá sezóna", "year": 1988, "group": "1980s" },
+                { "title": "Obecná škola", "year": 1991, "group": "1990s" },
+                { "title": "Akumulátor 1", "year": 1994, "group": "1990s" },
+                { "title": "Jízda", "year": 1994, "optional": true, "group": "1990s" },
+                { "title": "Kolja", "year": 1996, "group": "1990s" },
+                { "title": "Tmavomodrý svět", "year": 2001, "group": "2000s" },
+                { "title": "Vratné lahve", "year": 2007, "group": "2000s" },
+                { "title": "Kuky se vrací", "year": 2010, "optional": true, "group": "2010s" },
+                { "title": "Tři bratři", "year": 2014, "group": "2010s" },
+                { "title": "Po strništi bos", "year": 2017, "group": "2010s" },
+                { "title": "Betlémské světlo", "year": 2022, "group": "2020s" }
+            ]
+        },
+        {
+            "slug": "czech-fairy-tales",
+            "name": "Czech Fairy Tales",
+            "kind": "genre",
+            "categories": ["czech-slovak", "family"],
+            "color": "#c026d3",
+            "description": "Princesses, devils and clever Honzas – the fairy tales every Czech and Slovak grew up with.",
+            "films": [
+                { "title": "Císařův pekař – Pekařův císař", "year": 1951, "group": "1950s" },
+                { "title": "Pyšná princezna", "year": 1952, "group": "1950s" },
+                { "title": "Byl jednou jeden král…", "year": 1954, "group": "1950s" },
+                { "title": "Obušku, z pytle ven!", "year": 1955, "group": "1950s" },
+                { "title": "Hrátky s čertem", "year": 1956, "group": "1950s" },
+                { "title": "Princezna se zlatou hvězdou", "year": 1959, "group": "1950s" },
+                { "title": "Tři zlaté vlasy děda Vševěda", "year": 1963, "group": "1960s" },
+                { "title": "Šíleně smutná princezna", "year": 1968, "group": "1960s" },
+                { "title": "Princ Bajaja", "year": 1971, "group": "1970s" },
+                { "title": "Šest medvědů s Cibulkou", "year": 1972, "group": "1970s" },
+                { "title": "Tři oříšky pro Popelku", "year": 1973, "group": "1970s" },
+                { "title": "Malá mořská víla", "year": 1976, "group": "1970s" },
+                { "title": "Jak se budí princezny", "year": 1977, "group": "1970s" },
+                { "title": "Tři veteráni", "year": 1983, "group": "1980s" },
+                { "title": "S čerty nejsou žerty", "year": 1984, "group": "1980s" },
+                { "title": "Nesmrtelná teta", "year": 1993, "group": "1990s" },
+                { "title": "Princezna ze mlejna", "year": 1994, "group": "1990s" },
+                { "title": "Lotrando a Zubejda", "year": 1997, "group": "1990s" },
+                { "title": "Anděl Páně", "year": 2005, "group": "2000s" },
+                { "title": "Čertova nevěsta", "year": 2011, "group": "2010s" },
+                { "title": "Tajemství staré bambitky", "year": 2011, "group": "2010s" }
+            ]
+        },
+        {
+            "slug": "czechoslovak-new-wave",
+            "name": "Czechoslovak New Wave",
+            "kind": "genre",
+            "categories": ["czech-slovak", "drama"],
+            "color": "#475569",
+            "description": "The 1960s golden age – Forman, Menzel, Chytilová, Němec and Vláčil, before the films were banned after 1968.",
+            "films": [
+                { "title": "Démanty noci", "year": 1964, "group": "1960s" },
+                { "title": "Obchod na korze", "year": 1965, "group": "1960s" },
+                { "title": "Lásky jedné plavovlásky", "year": 1965, "group": "1960s" },
+                { "title": "Intimní osvětlení", "year": 1965, "group": "1960s" },
+                { "title": "Sedmikrásky", "year": 1966, "group": "1960s" },
+                { "title": "Ostře sledované vlaky", "year": 1966, "group": "1960s" },
+                { "title": "O slavnosti a hostech", "year": 1966, "group": "1960s" },
+                { "title": "Hoří, má panenko", "year": 1967, "group": "1960s" },
+                { "title": "Marketa Lazarová", "year": 1967, "group": "1960s" },
+                { "title": "Údolí včel", "year": 1967, "group": "1960s" },
+                { "title": "Rozmarné léto", "year": 1968, "group": "1960s" },
+                { "title": "Spalovač mrtvol", "year": 1968, "group": "1960s" },
+                { "title": "Žert", "year": 1969, "group": "1960s" },
+                { "title": "Skřivánci na niti", "year": 1969, "group": "1960s" },
+                { "title": "Valerie a týden divů", "year": 1970, "group": "1970s" },
+                { "title": "Ucho", "year": 1970, "group": "1970s" }
+            ]
+        },
+        {
+            "slug": "path-anime-starter",
+            "name": "Anime Starter",
+            "kind": "path",
+            "categories": ["anime"],
+            "color": "#fb7185",
+            "description": "New to anime? Ten steps from Totoro to Perfect Blue – from the gentlest to the darkest.",
+            "films": [
+                { "title": "My Neighbor Totoro", "year": 1988, "note": "Start gently: two sisters, a forest spirit and a cat bus – pure joy." },
+                { "title": "Spirited Away", "year": 2001, "note": "Miyazaki's masterpiece and the first anime to win the Oscar for Best Animated Feature." },
+                { "title": "Your Name.", "year": 2016, "note": "Two teenagers swap bodies – a romance with a twist that made anime a worldwide hit." },
+                { "title": "Wolf Children", "year": 2012, "note": "A mother raising two children who are also wolves – warm, quiet and moving." },
+                { "title": "A Silent Voice", "year": 2016, "note": "A former bully and the deaf girl he hurt – a story about forgiveness." },
+                { "title": "Demon Slayer: Mugen Train", "year": 2020, "note": "Pure shōnen action – the highest-grossing Japanese film of its time." },
+                { "title": "Akira", "year": 1988, "note": "Neo-Tokyo, motorbikes and psychic power – the film that showed the West what anime can do." },
+                { "title": "Ghost in the Shell", "year": 1995, "note": "Cyborgs and the soul – one of the films that inspired The Matrix." },
+                { "title": "Paprika", "year": 2006, "note": "A dream detective and a parade of madness – Satoshi Kon at his most playful." },
+                { "title": "Perfect Blue", "year": 1997, "note": "Save the darkest for last: a pop idol loses her grip on reality. A psychological thriller." }
+            ]
+        },
+        {
+            "slug": "path-czech-classics",
+            "name": "Czech Classics",
+            "kind": "path",
+            "categories": ["czech-slovak"],
+            "color": "#3b82f6",
+            "description": "Twelve Czech films from the 1960s to 2000 that everyone in the country knows by heart – with two Oscar winners and four nominees on the way.",
+            "films": [
+                { "title": "Limonádový Joe", "year": 1964, "note": "A singing western parody where the hero drinks only Kolaloka – the perfect start." },
+                { "title": "Ostře sledované vlaky", "year": 1966, "note": "Menzel's Oscar winner: a young railway worker, the war and growing up." },
+                { "title": "Hoří, má panenko", "year": 1967, "note": "Forman's firemen's ball – a comedy so sharp it was banned for twenty years." },
+                { "title": "Tři oříšky pro Popelku", "year": 1973, "note": "The Christmas fairy tale of Czech television – Cinderella on horseback." },
+                { "title": "Jáchyme, hoď ho do stroje!", "year": 1974, "note": "Smoljak and Svěrák's comedy about a man who becomes a car mechanic thanks to a computer." },
+                { "title": "Adéla ještě nevečeřela", "year": 1977, "note": "Nick Carter in Prague against a carnivorous plant – a crazy detective parody." },
+                { "title": "Slunce, seno, jahody", "year": 1984, "note": "The cult village comedy – everybody in Czechia can quote it." },
+                { "title": "Vesničko má středisková", "year": 1985, "note": "Menzel's warm village comedy, nominated for an Oscar." },
+                { "title": "Obecná škola", "year": 1991, "note": "A new teacher, a boy and Prague after the war – Jan Svěrák's breakthrough." },
+                { "title": "Kolja", "year": 1996, "note": "A grumpy cellist and a little Russian boy – the Oscar for Best Foreign Language Film." },
+                { "title": "Pelíšky", "year": 1999, "note": "Two families, Christmas 1967 and the Prague Spring – a comedy and a farewell." },
+                { "title": "Musíme si pomáhat", "year": 2000, "note": "Hiding a Jewish man during the war – dark humour and an Oscar nomination." }
+            ]
+        }
+    ]
+}

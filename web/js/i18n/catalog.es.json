@@ -11,7 +11,9 @@
         "family": "Familia",
         "war": "Bélico",
         "drama": "Drama",
-        "western": "Wéstern"
+        "western": "Wéstern",
+        "anime": "Anime",
+        "czech-slovak": "Checo y eslovaco"
     },
     "collections": {
         "mcu": {
@@ -692,6 +694,68 @@
         "path-kaiju-101": {
             "name": "Kaiju para principiantes",
             "description": "Monstruos gigantes, del King Kong de 1933 a Godzilla Minus One: doce pasos por la historia del kaiju."
+        },
+        "makoto-shinkai": {
+            "description": "Cielos, trenes y nostalgia: las películas de Makoto Shinkai, de sus inicios a Your Name. y Suzume. El corto Voices of a Distant Star es opcional."
+        },
+        "mamoru-hosoda": {
+            "description": "Familias, veranos y otros mundos: Mamoru Hosoda, de La chica que saltaba a través del tiempo a Scarlet. Sus películas de Digimon y One Piece son opcionales."
+        },
+        "satoshi-kon": {
+            "description": "Sueños, cine y realidad que se funden en uno: los cuatro largometrajes de Satoshi Kon."
+        },
+        "evangelion": {
+            "description": "Sube al robot, Shinji: The End of Evangelion y las cuatro películas Rebuild. Death & Rebirth (un resumen) es opcional."
+        },
+        "ghost-in-the-shell": {
+            "description": "La mayor Kusanagi y el fantasma en la máquina: las dos películas de Mamoru Oshii, con las posteriores y el remake de imagen real de 2017 como extras."
+        },
+        "pokemon": {
+            "description": "¡Hazte con todos! Todas las películas de Pokémon, de Mewtwo contraataca a Los secretos de la selva, con Detective Pikachu como extra de imagen real."
+        },
+        "dragon-ball": {
+            "description": "Goku y los saiyanos en la gran pantalla: las cuatro películas de la era Dragon Ball Super, con las clásicas de 1986–1996 como extras opcionales."
+        },
+        "detective-conan": {
+            "description": "¡Solo hay una verdad! Todas las películas de Detective Conan: un caso nuevo cada primavera desde 1997."
+        },
+        "anime-classics": {
+            "name": "Clásicos del anime",
+            "description": "Las películas de anime que todo el mundo debería conocer, de Akira a Look Back. Studio Ghibli tiene su propia colección."
+        },
+        "cartoon-saloon": {
+            "description": "Magia dibujada a mano desde Irlanda: la trilogía del folclore irlandés y más del estudio de Wolfwalkers."
+        },
+        "slunce-seno": {
+            "description": "Las comedias rurales de Zdeněk Troška en Hoštice: la trilogía checa de culto sobre un chico de ciudad, una granja y un pueblo muy cotilla."
+        },
+        "basnici": {
+            "description": "Štěpán Šafránek y Kendy, de la facultad de medicina a la mediana edad: seis películas en treinta y cuatro años."
+        },
+        "andel-pane": {
+            "description": "Un ángel y un diablo en una misión navideña en la Tierra: el clásico moderno del cuento de hadas checo."
+        },
+        "saxana": {
+            "description": "La niña bruja de la escoba: el clásico de 1972 y su secuela cuarenta años después."
+        },
+        "sverak": {
+            "description": "Padre e hijo: las comedias de Zdeněk Svěrák con Ladislav Smoljak y las películas de Cimrman, y después Kolya, el Óscar de Jan Svěrák, y más. Dos películas de Jan son opcionales."
+        },
+        "czech-fairy-tales": {
+            "name": "Cuentos de hadas checos",
+            "description": "Princesas, diablos y Juanes muy listos: los cuentos con los que han crecido todos los checos y eslovacos."
+        },
+        "czechoslovak-new-wave": {
+            "name": "Nueva ola checoslovaca",
+            "description": "La edad de oro de los 60: Forman, Menzel, Chytilová, Němec y Vláčil, antes de que sus películas se prohibieran tras 1968."
+        },
+        "path-anime-starter": {
+            "name": "Iniciación al anime",
+            "description": "¿Nuevo en el anime? Diez pasos de Totoro a Perfect Blue, del más tierno al más oscuro."
+        },
+        "path-czech-classics": {
+            "name": "Clásicos checos",
+            "description": "Doce películas checas de los 60 al 2000 que todo el país se sabe de memoria, con dos Óscar y cuatro nominaciones por el camino."
         }
     },
     "notes": {
@@ -807,7 +871,29 @@
         "Giant robots against kaiju – Guillermo del Toro's love letter to the genre.": "Robots gigantes contra kaiju: la carta de amor de Guillermo del Toro al género.",
         "Godzilla as a disaster that Japan's bureaucracy can't handle – sharp and surprising.": "Godzilla como un desastre que la burocracia japonesa no sabe gestionar: mordaz y sorprendente.",
         "Kong joins the MonsterVerse – the 70s, helicopters and a very big island.": "Kong se une al MonsterVerse: los 70, helicópteros y una isla muy grande.",
-        "Post-war Japan faces Godzilla – the first Godzilla film to win an Oscar.": "El Japón de posguerra frente a Godzilla: la primera película de Godzilla que ganó un Óscar."
+        "Post-war Japan faces Godzilla – the first Godzilla film to win an Oscar.": "El Japón de posguerra frente a Godzilla: la primera película de Godzilla que ganó un Óscar.",
+        "Start gently: two sisters, a forest spirit and a cat bus – pure joy.": "Empieza con suavidad: dos hermanas, un espíritu del bosque y un gatobús. Pura alegría.",
+        "Miyazaki's masterpiece and the first anime to win the Oscar for Best Animated Feature.": "La obra maestra de Miyazaki y el primer anime que ganó el Óscar a la mejor película de animación.",
+        "Two teenagers swap bodies – a romance with a twist that made anime a worldwide hit.": "Dos adolescentes intercambian sus cuerpos: un romance con giro que convirtió el anime en un éxito mundial.",
+        "A mother raising two children who are also wolves – warm, quiet and moving.": "Una madre cría a dos hijos que también son lobos: cálida, tranquila y conmovedora.",
+        "A former bully and the deaf girl he hurt – a story about forgiveness.": "Un antiguo acosador y la chica sorda a la que hizo daño: una historia sobre el perdón.",
+        "Pure shōnen action – the highest-grossing Japanese film of its time.": "Acción shōnen pura: en su momento, la película japonesa más taquillera.",
+        "Neo-Tokyo, motorbikes and psychic power – the film that showed the West what anime can do.": "Neo-Tokio, motos y poderes psíquicos: la película que mostró a Occidente lo que puede hacer el anime.",
+        "Cyborgs and the soul – one of the films that inspired The Matrix.": "Cíborgs y el alma: una de las películas que inspiraron Matrix.",
+        "A dream detective and a parade of madness – Satoshi Kon at his most playful.": "Una detective de los sueños y un desfile de locura: Satoshi Kon en su versión más juguetona.",
+        "Save the darkest for last: a pop idol loses her grip on reality. A psychological thriller.": "Deja lo más oscuro para el final: una ídolo del pop pierde el contacto con la realidad. Un thriller psicológico.",
+        "A singing western parody where the hero drinks only Kolaloka – the perfect start.": "Una parodia musical del western en la que el héroe solo bebe Kolaloka: el comienzo perfecto.",
+        "Menzel's Oscar winner: a young railway worker, the war and growing up.": "El Óscar de Menzel: un joven ferroviario, la guerra y hacerse mayor.",
+        "Forman's firemen's ball – a comedy so sharp it was banned for twenty years.": "El baile de bomberos de Forman: una comedia tan mordaz que estuvo prohibida veinte años.",
+        "The Christmas fairy tale of Czech television – Cinderella on horseback.": "El cuento navideño de la televisión checa: Cenicienta a caballo.",
+        "Smoljak and Svěrák's comedy about a man who becomes a car mechanic thanks to a computer.": "La comedia de Smoljak y Svěrák sobre un hombre al que un ordenador convierte en mecánico de coches.",
+        "Nick Carter in Prague against a carnivorous plant – a crazy detective parody.": "Nick Carter en Praga contra una planta carnívora: una disparatada parodia de detectives.",
+        "The cult village comedy – everybody in Czechia can quote it.": "La comedia rural de culto: en Chequia todo el mundo sabe citarla.",
+        "Menzel's warm village comedy, nominated for an Oscar.": "La entrañable comedia rural de Menzel, nominada al Óscar.",
+        "A new teacher, a boy and Prague after the war – Jan Svěrák's breakthrough.": "Un maestro nuevo, un niño y la Praga de posguerra: el gran salto de Jan Svěrák.",
+        "A grumpy cellist and a little Russian boy – the Oscar for Best Foreign Language Film.": "Un violonchelista gruñón y un niño ruso: el Óscar a la mejor película de habla no inglesa.",
+        "Two families, Christmas 1967 and the Prague Spring – a comedy and a farewell.": "Dos familias, la Navidad de 1967 y la Primavera de Praga: una comedia y una despedida.",
+        "Hiding a Jewish man during the war – dark humour and an Oscar nomination.": "Esconder a un hombre judío durante la guerra: humor negro y una nominación al Óscar."
     },
     "terms": {
         "Phase 1": "Fase 1",
@@ -968,6 +1054,8 @@
         "Heisei era": "Era Heisei",
         "Millennium era": "Era Millennium",
         "Reiwa era": "Era Reiwa",
-        "The Scorpion King": "El rey Escorpión"
+        "The Scorpion King": "El rey Escorpión",
+        "Live action": "Imagen real",
+        "Irish Folklore Trilogy": "Trilogía del folclore irlandés"
     }
 }

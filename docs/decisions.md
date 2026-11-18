@@ -370,7 +370,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 46d | V4.3.4 | Překlady kolekcí a průvodce ✅ | admin: záložka **Translations** – názvy a popisy kolekcí ve 4 jazycích, **kontrola s TMDB** (název série / prvního filmu), *Use* / *Keep ours* / ruční oprava bez nového vydání; nové kolekce ze série TMDB dostanou přeložený název samy; **průvodce pro nováčky** (prohlídka přehledu a tlačítek u filmů) a stránka **Help** |
 | 46e | V4.3.5 | Režiséři a klasika ✅ | nový typ kolekce **Director** (záložka *Directors*, achievement **Auteur**), 10 režisérů + Sergio Leone, **Best Picture Winners** (98), Universal Monsters, Hammer, Louis de Funès, Belmondo, cesty Nolan Essentials a Oscar Essentials |
 | 46f | V4.3.6 | Série a monstra ✅ | 41 sérií (komedie, akční, sci-fi / fantasy, horory), **Godzilla** (Toho + MonsterVerse), **King Kong**; studia A24, Blumhouse, Amblin, Toho; cesta **Kaiju 101** – bez migrace a změn funkcí |
-| 46g | V4.3.7 | Anime a česká klasika | kategorie **Anime** 🎌 a **Czech & Slovak** 🇨🇿; Shinkai, Hosoda, Kon, Evangelion, Pokémon, Dragon Ball, Detective Conan, Cartoon Saloon; Slunce, seno…, Básníci, Anděl Páně, české pohádky, Svěrák |
+| 46g | V4.3.7 | Anime a česká klasika ✅ | kategorie **Anime** 🎌 a **Czech & Slovak** 🇨🇿 (jediná migrace – dva řádky v `categories`); režiséři Shinkai, Hosoda, Kon; Evangelion, Ghost in the Shell, Pokémon, Dragon Ball, Detective Conan, Klasika anime, Cartoon Saloon; Slunce, seno…, Básníci, Anděl Páně, Saxána, Svěrákovi, České pohádky, Československá nová vlna; cesty Anime Starter a Czech Classics |
 | 46h | V4.3.8 | Žánrové výběry a cesty | ~20 nových žánrových výběrů po 12–15 filmech + 7 nových cest; **cíl 2 000 filmů splněn** |
 | 47 | V4.4 | Výhody za úroveň a odznaky | s úrovní rostou limity (otevřené požadavky, filmy v požadavku, velikost a počet seznamů) – přehled „co odemkne další úroveň“ v profilu; odznak **Elite** pro vybrané lidi (jen ozdoba) |
 | 48 | V4.5 | Wrapped | rok v kostce – **poprvé za rok 2027** (prosinec 2027): nováček si na začátku doplní stovky filmů, první celý rok dat bude 2027; filmy „Seen before“ se nepočítají |
@@ -390,7 +390,7 @@ mezi kolekcemi opakují – kolekce režiséra sdílí filmy se studii, výběry
 | V4.3.4 Překlady kolekcí a průvodce | – (nástroje) | ~1 460 (filmy přidané přes požadavky) |
 | V4.3.5 Režiséři a klasika | ~330 (skutečně) | ~1 790 |
 | V4.3.6 Série a monstra | ~240 (skutečně) | ~2 030 – **cíl 2 000 splněn** |
-| V4.3.7 Anime a česká klasika | ~180 | ~2 120 |
+| V4.3.7 Anime a česká klasika | ~190 (skutečně) | ~2 220 |
 | V4.3.8 Žánrové výběry a cesty | ~150 | **~2 270** |
 
 **V4.3.1 – Editor a požadavky** (plán 14. 11. 2026 – bez nových filmů, aby se ve zbytku V4.3 dobře přidávalo)
@@ -2276,6 +2276,40 @@ testovacích seznamů byla vymyšlená.
   názvů; ručně jen ty jisté.
 - **Godzilla v oddílech podle ér, americké filmy na konci** – oddíly v pořadí vydání se nestřídají
   (MonsterVerse a Reiwa by se jinak prolínaly).
+
+### Fáze 46g – anime a česká klasika ✅ (18. 11. 2026) – **V4.3.7**
+- **Migrace `20261121100000_anime_czech.sql`** – jen dvě nové kategorie **Anime** 🎌 (barva #f43f5e, hned za
+  Animation) a **Czech & Slovak** 🇨🇿 (#2563eb, na konci). Musí být dřív než import – kolekci s neznámou
+  kategorií import odmítne. Edge Functions beze změny. Web: ikony kategorií pro achievementy fanoušků
+  a překlady názvů kategorií.
+- **Balíček `v4.3.7-anime-czech.json`** (19 kolekcí, 226 řádků, ~190 nových filmů → katalog ~2 220):
+  - **anime:** režiséři **Makoto Shinkai** (8), **Mamoru Hosoda** (9, Digimon a One Piece volitelně, i Scarlet 2025),
+    **Satoshi Kon** (4); série **Evangelion** (The End + Rebuild), **Ghost in the Shell** (dva filmy Oshiie,
+    zbytek volitelně), **Pokémon** (23 filmů + Detektiv Pikachu volitelně), **Dragon Ball** (4 filmy éry Super
+    povinně, 17 klasických volitelně), **Detective Conan** (28 filmů 1997–2025); výběr **Anime Classics** (24);
+    studio **Cartoon Saloon** (5, kategorie Animation); **Studio Ghibli** dostane kategorii Anime (`update`);
+  - **česká a slovenská klasika:** **Slunce, seno…** (3), **Básníci** (6), **Anděl Páně** (2), **Saxána** (2),
+    **Zdeněk & Jan Svěrák** (19 – Smoljak & Svěrák, Cimrman, Jan Svěrák), výběry **České pohádky** (21)
+    a **Československá nová vlna** (16);
+  - cesty **Anime Starter** (10 kroků od Totora po Perfect Blue) a **Czech Classics** (12 kroků od Limonádového
+    Joea po Musíme si pomáhat).
+- České filmy jsou v balíčku pod **původními názvy** (TMDB je najde podle původního názvu); v aplikaci se ukážou
+  v jazyce uživatele z TMDB – česky česky, jinde podle překladu TMDB (často anglicky).
+- Ověřeno: migrace na lokálním Postgresu (i opakovaně), `add-pack` na seedu s balíčky V4.3.5 a V4.3.6
+  (19 kolekcí, Ghibli + Anime, podruhé nic), `node --test` (68 – nově platnost balíčku V4.3.7), webové testy
+  (filtr Anime a Czech & Slovak, kolekce, cesta, achievementy fanoušků) v češtině, němčině a angličtině
+  na 320–1280 px.
+
+#### Rozhodnutí ve fázi 46g
+- **Anime jako vlastní kategorie vedle Animation** – Animation zůstává západní animaci (Disney, Pixar…);
+  Ghibli je v obou. Kategorie se dá filtrovat a má vlastní achievement fanouška.
+- **Shinkai, Hosoda a Kon jako režiséři** (typ z V4.3.5), Pokémon, Dragon Ball a Conan jako série.
+- **Dragon Ball: povinné jen filmy éry Super** – staré filmy z let 1986–1996 jsou mimo kánon a je jich 17;
+  jako volitelné nezdržují dokončení.
+- **České série pod českými názvy i v angličtině** (Slunce, seno…, Básníci) – anglické názvy by nikdo neznal;
+  výběry a cesty mají anglický název a překlady.
+- **Svěrákovi jako jedna kolekce otce a syna** – filmy podle scénářů Zdeňka Svěráka a filmy Jana Svěráka;
+  Vesničko má středisková (režie Menzel, scénář Svěrák) patří k nim.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

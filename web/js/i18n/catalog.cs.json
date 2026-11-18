@@ -11,7 +11,9 @@
         "family": "Rodinné",
         "war": "Válečné",
         "drama": "Drama",
-        "western": "Western"
+        "western": "Western",
+        "anime": "Anime",
+        "czech-slovak": "České a slovenské"
     },
     "collections": {
         "mcu": {
@@ -708,6 +710,69 @@
         "path-kaiju-101": {
             "name": "Kaiju pro začátečníky",
             "description": "Obří monstra od King Konga z roku 1933 po Godzillu Minus One – dvanáct kroků dějinami kaiju."
+        },
+        "makoto-shinkai": {
+            "description": "Nebe, vlaky a stesk – filmy Makota Šinkaie od raných prací po Tvé jméno a Suzume. Krátký film Voices of a Distant Star je volitelný."
+        },
+        "mamoru-hosoda": {
+            "description": "Rodiny, léta a jiné světy – Mamoru Hosoda od Dívky, která proskočila časem, po Scarlet. Jeho filmy Digimon a One Piece jsou volitelné."
+        },
+        "satoshi-kon": {
+            "description": "Sny, filmy a realita, které splývají v jedno – všechny čtyři celovečerní filmy Satošiho Kona."
+        },
+        "evangelion": {
+            "description": "Nastup do robota, Šindži – The End of Evangelion a čtyři filmy Rebuild. Death & Rebirth (sestřih) je volitelný."
+        },
+        "ghost-in-the-shell": {
+            "description": "Major Kusanagi a duch ve stroji – dva filmy Mamorua Ošiie, pozdější filmy a hraný remake z roku 2017 jako bonus."
+        },
+        "pokemon": {
+            "description": "Chyť je všechny – všechny filmy Pokémon od Mewtwo vrací úder po Tajemství džungle a hraný Detektiv Pikachu jako bonus."
+        },
+        "dragon-ball": {
+            "description": "Goku a Saiyané na velkém plátně – čtyři filmy z éry Dragon Ball Super, klasické filmy z let 1986–1996 jako volitelný bonus."
+        },
+        "detective-conan": {
+            "name": "Detektiv Conan",
+            "description": "Pravda je vždycky jen jedna! Všechny filmy s Detektivem Conanem – každé jaro nový případ od roku 1997."
+        },
+        "anime-classics": {
+            "name": "Klasika anime",
+            "description": "Anime filmy, které by měl znát každý – od Akiry po Look Back. Studio Ghibli má vlastní kolekci."
+        },
+        "cartoon-saloon": {
+            "description": "Ručně kreslená kouzla z Irska – Irská folklorní trilogie a další filmy studia, které natočilo Vlčí srdce."
+        },
+        "slunce-seno": {
+            "description": "Vesnické komedie Zdeňka Trošky z Hoštic – kultovní česká trilogie o kluku z města, statku a hodně zvědavé vesnici."
+        },
+        "basnici": {
+            "description": "Štěpán Šafránek a Kendy od medicíny až po střední věk – šest filmů za třicet čtyři let."
+        },
+        "andel-pane": {
+            "description": "Anděl a čert na vánoční misi na Zemi – moderní klasika české pohádky."
+        },
+        "saxana": {
+            "description": "Čarodějnice na koštěti – klasika z roku 1972 a její pokračování o čtyřicet let později."
+        },
+        "sverak": {
+            "description": "Otec a syn: komedie Zdeňka Svěráka s Ladislavem Smoljakem a filmy o Cimrmanovi, pak Kolja Jana Svěráka oceněný Oscarem a další. Dva Janovy filmy jsou volitelné."
+        },
+        "czech-fairy-tales": {
+            "name": "České pohádky",
+            "description": "Princezny, čerti a chytří Honzové – pohádky, na kterých vyrostl každý Čech a Slovák."
+        },
+        "czechoslovak-new-wave": {
+            "name": "Československá nová vlna",
+            "description": "Zlatý věk 60. let – Forman, Menzel, Chytilová, Němec a Vláčil, než byly filmy po roce 1968 zakázány."
+        },
+        "path-anime-starter": {
+            "name": "Úvod do anime",
+            "description": "S anime začínáš? Deset kroků od Totora po Perfect Blue – od nejjemnějšího po nejtemnější."
+        },
+        "path-czech-classics": {
+            "name": "Česká klasika",
+            "description": "Dvanáct českých filmů od 60. let do roku 2000, které každý v Česku zná nazpaměť – po cestě dva Oscary a čtyři nominace."
         }
     },
     "notes": {
@@ -823,7 +888,29 @@
         "Giant robots against kaiju – Guillermo del Toro's love letter to the genre.": "Obří roboti proti kaiju – milostný dopis žánru od Guillerma del Tora.",
         "Godzilla as a disaster that Japan's bureaucracy can't handle – sharp and surprising.": "Godzilla jako katastrofa, kterou japonská byrokracie nezvládá – ostré a překvapivé.",
         "Kong joins the MonsterVerse – the 70s, helicopters and a very big island.": "Kong vstupuje do MonsterVerse – 70. léta, vrtulníky a hodně velký ostrov.",
-        "Post-war Japan faces Godzilla – the first Godzilla film to win an Oscar.": "Poválečné Japonsko čelí Godzille – první film s Godzillou, který vyhrál Oscara."
+        "Post-war Japan faces Godzilla – the first Godzilla film to win an Oscar.": "Poválečné Japonsko čelí Godzille – první film s Godzillou, který vyhrál Oscara.",
+        "Start gently: two sisters, a forest spirit and a cat bus – pure joy.": "Začni zlehka: dvě sestry, lesní duch a kočkobus – čistá radost.",
+        "Miyazaki's masterpiece and the first anime to win the Oscar for Best Animated Feature.": "Mijazakiho mistrovské dílo a první anime, které vyhrálo Oscara za nejlepší animovaný film.",
+        "Two teenagers swap bodies – a romance with a twist that made anime a worldwide hit.": "Dva teenageři si vymění těla – romance se zvratem, díky níž se anime stalo světovým hitem.",
+        "A mother raising two children who are also wolves – warm, quiet and moving.": "Matka vychovává dvě děti, které jsou zároveň vlci – vřelé, tiché a dojemné.",
+        "A former bully and the deaf girl he hurt – a story about forgiveness.": "Bývalý šikanátor a neslyšící dívka, které ublížil – příběh o odpuštění.",
+        "Pure shōnen action – the highest-grossing Japanese film of its time.": "Čistá šónen akce – ve své době nejvýdělečnější japonský film.",
+        "Neo-Tokyo, motorbikes and psychic power – the film that showed the West what anime can do.": "Neo-Tokio, motorky a psychické síly – film, který Západu ukázal, co anime dokáže.",
+        "Cyborgs and the soul – one of the films that inspired The Matrix.": "Kyborgové a duše – jeden z filmů, které inspirovaly Matrix.",
+        "A dream detective and a parade of madness – Satoshi Kon at his most playful.": "Detektivka ve snech a přehlídka šílenství – Satoši Kon v nejhravější podobě.",
+        "Save the darkest for last: a pop idol loses her grip on reality. A psychological thriller.": "To nejtemnější si nech nakonec: popová idolka ztrácí kontakt s realitou. Psychologický thriller.",
+        "A singing western parody where the hero drinks only Kolaloka – the perfect start.": "Zpívaná westernová parodie, ve které hrdina pije jen Kolaloku – ideální začátek.",
+        "Menzel's Oscar winner: a young railway worker, the war and growing up.": "Menzelův oscarový film: mladý železničář, válka a dospívání.",
+        "Forman's firemen's ball – a comedy so sharp it was banned for twenty years.": "Formanův hasičský bál – komedie tak ostrá, že byla dvacet let zakázaná.",
+        "The Christmas fairy tale of Czech television – Cinderella on horseback.": "Vánoční pohádka české televize – Popelka na koni.",
+        "Smoljak and Svěrák's comedy about a man who becomes a car mechanic thanks to a computer.": "Smoljakova a Svěrákova komedie o muži, ze kterého počítač udělá automechanika.",
+        "Nick Carter in Prague against a carnivorous plant – a crazy detective parody.": "Nick Carter v Praze proti masožravé rostlině – bláznivá detektivní parodie.",
+        "The cult village comedy – everybody in Czechia can quote it.": "Kultovní vesnická komedie – v Česku ji umí citovat každý.",
+        "Menzel's warm village comedy, nominated for an Oscar.": "Menzelova laskavá vesnická komedie nominovaná na Oscara.",
+        "A new teacher, a boy and Prague after the war – Jan Svěrák's breakthrough.": "Nový učitel, kluk a Praha po válce – průlom Jana Svěráka.",
+        "A grumpy cellist and a little Russian boy – the Oscar for Best Foreign Language Film.": "Bručoun violoncellista a malý ruský kluk – Oscar za nejlepší cizojazyčný film.",
+        "Two families, Christmas 1967 and the Prague Spring – a comedy and a farewell.": "Dvě rodiny, Vánoce 1967 a pražské jaro – komedie i rozloučení.",
+        "Hiding a Jewish man during the war – dark humour and an Oscar nomination.": "Ukrývání Žida za války – černý humor a nominace na Oscara."
     },
     "terms": {
         "Phase 1": "Fáze 1",
@@ -988,6 +1075,8 @@
         "Heisei era": "Éra Heisei",
         "Millennium era": "Éra Millennium",
         "Reiwa era": "Éra Reiwa",
-        "The Scorpion King": "Král Škorpión"
+        "The Scorpion King": "Král Škorpión",
+        "Live action": "Hraný film",
+        "Irish Folklore Trilogy": "Irská folklorní trilogie"
     }
 }

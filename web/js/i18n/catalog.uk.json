@@ -11,7 +11,9 @@
         "family": "Сімейні",
         "war": "Воєнні",
         "drama": "Драма",
-        "western": "Вестерн"
+        "western": "Вестерн",
+        "anime": "Аніме",
+        "czech-slovak": "Чеське і словацьке"
     },
     "collections": {
         "mcu": {
@@ -774,6 +776,76 @@
         "path-kaiju-101": {
             "name": "Кайдзю для початківців",
             "description": "Гігантські монстри від «Кінг-Конга» 1933 року до «Ґодзілли: Мінус один» – дванадцять кроків історією кайдзю."
+        },
+        "makoto-shinkai": {
+            "name": "Макото Сінкай",
+            "description": "Небо, потяги й туга – фільми Макото Сінкая від ранніх робіт до «Твого імені» та «Судзуме». Короткометражка Voices of a Distant Star необов'язкова."
+        },
+        "mamoru-hosoda": {
+            "name": "Мамору Хосода",
+            "description": "Родини, літо й інші світи – Мамору Хосода від «Дівчинки, що стрибала крізь час» до «Скарлет». Його фільми Digimon і One Piece необов'язкові."
+        },
+        "satoshi-kon": {
+            "name": "Сатосі Кон",
+            "description": "Сни, кіно й реальність, що зливаються в одне, – усі чотири повнометражні фільми Сатосі Кона."
+        },
+        "evangelion": {
+            "name": "Євангеліон",
+            "description": "Сідай у робота, Сіндзі, – The End of Evangelion і чотири фільми Rebuild. Death & Rebirth (компіляція) необов'язковий."
+        },
+        "ghost-in-the-shell": {
+            "name": "Привид у броні",
+            "description": "Майор Кусанаґі й привид у машині – два фільми Мамору Осії, а пізніші фільми та ігровий рімейк 2017 року як бонус."
+        },
+        "pokemon": {
+            "name": "Покемон",
+            "description": "Злови їх усіх – усі фільми про покемонів від «Мьюту завдає удару у відповідь» до «Таємниць джунглів» і ігровий «Детектив Пікачу» як бонус."
+        },
+        "dragon-ball": {
+            "description": "Ґоку й саяни на великому екрані – чотири фільми ери Dragon Ball Super, а класичні фільми 1986–1996 років як необов'язковий бонус."
+        },
+        "detective-conan": {
+            "name": "Детектив Конан",
+            "description": "Істина завжди лише одна! Усі фільми про детектива Конана – щовесни нова справа з 1997 року."
+        },
+        "anime-classics": {
+            "name": "Класика аніме",
+            "description": "Аніме-фільми, які варто знати кожному, – від «Акіри» до «Озирнись». Студія Ґіблі має власну колекцію."
+        },
+        "cartoon-saloon": {
+            "description": "Мальована вручну магія з Ірландії – трилогія ірландського фольклору та інші фільми студії, що створила «Вовкоходів»."
+        },
+        "slunce-seno": {
+            "description": "Сільські комедії Зденека Трошки з Гоштіце – культова чеська трилогія про хлопця з міста, ферму й дуже цікаве село."
+        },
+        "basnici": {
+            "description": "Штєпан Шафранек і Кенді від медичного факультету до середнього віку – шість фільмів за тридцять чотири роки."
+        },
+        "andel-pane": {
+            "description": "Ангел і чорт на різдвяній місії на Землі – сучасна класика чеської казки."
+        },
+        "saxana": {
+            "description": "Дівчинка-відьма на мітлі – класика 1972 року та її продовження через сорок років."
+        },
+        "sverak": {
+            "name": "Зденек і Ян Свєраки",
+            "description": "Батько й син: комедії Зденека Свєрака з Ладиславом Смоляком і фільми про Цимрмана, а потім оскароносний «Коля» Яна Свєрака та інші. Два фільми Яна необов'язкові."
+        },
+        "czech-fairy-tales": {
+            "name": "Чеські казки",
+            "description": "Принцеси, чорти й кмітливі Гонзи – казки, на яких виріс кожен чех і словак."
+        },
+        "czechoslovak-new-wave": {
+            "name": "Чехословацька нова хвиля",
+            "description": "Золота доба 60-х – Форман, Мензел, Хитілова, Немец і Влачіл, поки після 1968 року фільми не заборонили."
+        },
+        "path-anime-starter": {
+            "name": "Вступ до аніме",
+            "description": "Тільки знайомишся з аніме? Десять кроків від «Тоторо» до «Ідеальної блакиті» – від найлагіднішого до найпохмурішого."
+        },
+        "path-czech-classics": {
+            "name": "Чеська класика",
+            "description": "Дванадцять чеських фільмів від 60-х до 2000 року, які в Чехії знають напам'ять, – дорогою два «Оскари» й чотири номінації."
         }
     },
     "notes": {
@@ -889,7 +961,29 @@
         "Giant robots against kaiju – Guillermo del Toro's love letter to the genre.": "Гігантські роботи проти кайдзю – любовний лист Гільєрмо дель Торо цьому жанру.",
         "Godzilla as a disaster that Japan's bureaucracy can't handle – sharp and surprising.": "Ґодзілла як катастрофа, з якою не дає ради японська бюрократія, – гостро й несподівано.",
         "Kong joins the MonsterVerse – the 70s, helicopters and a very big island.": "Конг приєднується до MonsterVerse – 70-ті, гелікоптери й дуже великий острів.",
-        "Post-war Japan faces Godzilla – the first Godzilla film to win an Oscar.": "Повоєнна Японія проти Ґодзілли – перший фільм про Ґодзіллу, що здобув «Оскар»."
+        "Post-war Japan faces Godzilla – the first Godzilla film to win an Oscar.": "Повоєнна Японія проти Ґодзілли – перший фільм про Ґодзіллу, що здобув «Оскар».",
+        "Start gently: two sisters, a forest spirit and a cat bus – pure joy.": "Почни м'яко: дві сестри, лісовий дух і котобус – чиста радість.",
+        "Miyazaki's masterpiece and the first anime to win the Oscar for Best Animated Feature.": "Шедевр Міядзакі й перше аніме, що здобуло «Оскар» за найкращий анімаційний фільм.",
+        "Two teenagers swap bodies – a romance with a twist that made anime a worldwide hit.": "Двоє підлітків обмінюються тілами – романтична історія з поворотом, що зробила аніме світовим хітом.",
+        "A mother raising two children who are also wolves – warm, quiet and moving.": "Мати виховує двох дітей, які водночас вовки, – тепло, тихо й зворушливо.",
+        "A former bully and the deaf girl he hurt – a story about forgiveness.": "Колишній кривдник і глуха дівчина, якій він зробив боляче, – історія про прощення.",
+        "Pure shōnen action – the highest-grossing Japanese film of its time.": "Чистий сьонен-екшн – свого часу найкасовіший японський фільм.",
+        "Neo-Tokyo, motorbikes and psychic power – the film that showed the West what anime can do.": "Нео-Токіо, мотоцикли й надздібності – фільм, що показав Заходу, на що здатне аніме.",
+        "Cyborgs and the soul – one of the films that inspired The Matrix.": "Кіборги й душа – один із фільмів, що надихнули «Матрицю».",
+        "A dream detective and a parade of madness – Satoshi Kon at his most playful.": "Детективка у снах і парад божевілля – Сатосі Кон у найграйливішій формі.",
+        "Save the darkest for last: a pop idol loses her grip on reality. A psychological thriller.": "Найпохмуріше залиш на кінець: поп-ідол втрачає зв'язок із реальністю. Психологічний трилер.",
+        "A singing western parody where the hero drinks only Kolaloka – the perfect start.": "Співоча пародія на вестерн, де герой п'є лише Колалоку, – ідеальний початок.",
+        "Menzel's Oscar winner: a young railway worker, the war and growing up.": "Оскароносний фільм Мензела: молодий залізничник, війна й дорослішання.",
+        "Forman's firemen's ball – a comedy so sharp it was banned for twenty years.": "Пожежний бал Формана – комедія настільки гостра, що її двадцять років забороняли.",
+        "The Christmas fairy tale of Czech television – Cinderella on horseback.": "Різдвяна казка чеського телебачення – Попелюшка верхи на коні.",
+        "Smoljak and Svěrák's comedy about a man who becomes a car mechanic thanks to a computer.": "Комедія Смоляка і Свєрака про чоловіка, якого комп'ютер робить автомеханіком.",
+        "Nick Carter in Prague against a carnivorous plant – a crazy detective parody.": "Нік Картер у Празі проти м'ясоїдної рослини – божевільна детективна пародія.",
+        "The cult village comedy – everybody in Czechia can quote it.": "Культова сільська комедія – у Чехії її цитує кожен.",
+        "Menzel's warm village comedy, nominated for an Oscar.": "Тепла сільська комедія Мензела, номінована на «Оскар».",
+        "A new teacher, a boy and Prague after the war – Jan Svěrák's breakthrough.": "Новий учитель, хлопчик і Прага після війни – прорив Яна Свєрака.",
+        "A grumpy cellist and a little Russian boy – the Oscar for Best Foreign Language Film.": "Буркотливий віолончеліст і маленький російський хлопчик – «Оскар» за найкращий іншомовний фільм.",
+        "Two families, Christmas 1967 and the Prague Spring – a comedy and a farewell.": "Дві родини, Різдво 1967 року й Празька весна – комедія і прощання.",
+        "Hiding a Jewish man during the war – dark humour and an Oscar nomination.": "Переховування єврея під час війни – чорний гумор і номінація на «Оскар»."
     },
     "terms": {
         "Phase 1": "Фаза 1",
@@ -1116,6 +1210,8 @@
         "Hollywood": "Голлівуд",
         "The Scorpion King": "Цар скорпіонів",
         "David Lynch": "Девід Лінч",
-        "Denis Villeneuve": "Дені Вільнев"
+        "Denis Villeneuve": "Дені Вільнев",
+        "Live action": "Ігровий фільм",
+        "Irish Folklore Trilogy": "Трилогія ірландського фольклору"
     }
 }

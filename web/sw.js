@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v32";       // V4.3.6: série a monstra (nové kolekce a překlady); od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v33";       // V4.3.7: anime a česká klasika (kategorie Anime, Czech & Slovak); od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline

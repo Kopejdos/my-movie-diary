@@ -56,6 +56,8 @@ export const CATEGORY_ICONS = {
     war: "🎖️",
     drama: "🎭",
     western: "🤠",              // V4.3.2
+    anime: "🎌",                // V4.3.7
+    "czech-slovak": "🇨🇿",       // V4.3.7
 };
 
 export function tierLabel(index, count) {

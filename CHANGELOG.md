@@ -3,6 +3,13 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.3.7 – November 2026
+- New categories: Anime 🎌 and Czech & Slovak 🇨🇿 – with their own fan achievements
+- Anime: Makoto Shinkai, Mamoru Hosoda, Satoshi Kon, Evangelion, Ghost in the Shell, Pokémon, Dragon Ball, Detective Conan and Anime Classics; Studio Ghibli joins Anime
+- Czech classics: Slunce, seno…, Básníci, Anděl Páně, Saxána, Zdeněk & Jan Svěrák, Czech Fairy Tales and the Czechoslovak New Wave
+- New paths: Anime Starter and Czech Classics
+- Cartoon Saloon – the Irish studio behind Wolfwalkers
+
 ## V4.3.6 – November 2026
 - Over 40 new series – Police Academy, The Naked Gun, Home Alone, Bad Boys, Taken, Dirty Harry, Dune, Narnia, Jaws, Child's Play, Evil Dead, 28 Days Later and many more
 - Godzilla 🦖 – the Toho eras and the MonsterVerse – and King Kong

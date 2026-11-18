@@ -124,6 +124,28 @@ test("balíček V4.3.6: platný, bez kolekcí, které už v katalogu jsou, cesta
     }
 });
 
+test("balíček V4.3.7: anime a česká klasika v nových kategoriích, Studio Ghibli dostane Anime", () => {
+    const pack = JSON.parse(readFileSync(new URL("../supabase/packs/v4.3.7-anime-czech.json", import.meta.url), "utf8"));
+    assert.deepEqual(pack.update["studio-ghibli"].addCategories, ["anime"]);
+    const slugs = pack.universes.map((u) => u.slug);
+    assert.equal(new Set(slugs).size, slugs.length);
+    for (const universe of pack.universes) {
+        assert.match(universe.slug, /^[a-z0-9-]{2,40}$/, universe.slug);
+        assert.ok(universe.categories.length > 0 && universe.description, universe.slug);
+        // Každá kolekce je v nové kategorii, kromě irského studia Cartoon Saloon (Animation)
+        if (universe.slug !== "cartoon-saloon") {
+            assert.ok(universe.categories.includes("anime") || universe.categories.includes("czech-slovak"), universe.slug);
+        }
+        const keys = universe.films.map((f) => `${f.title}|${f.year}`);
+        assert.equal(new Set(keys).size, keys.length, `${universe.slug}: film dvakrát`);
+        for (const film of universe.films) {
+            assert.ok(film.title && Number.isInteger(film.year), `${universe.slug}: ${film.title}`);
+            if (universe.kind === "path") assert.ok(film.note && film.note.length <= 300, `${universe.slug}: ${film.title}`);
+        }
+        assert.ok(universe.films.some((f) => !f.optional), `${universe.slug}: žádný povinný film`);
+    }
+});
+
 test("nextGoal: 2 000, pak po 500", async () => {
     const { nextGoal } = await import("../web/js/admin.js");
     assert.equal(nextGoal(1264), 2000);
