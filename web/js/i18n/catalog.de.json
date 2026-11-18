@@ -1262,6 +1262,166 @@
         },
         "brian-de-palma": {
             "description": "Split Screens, Voyeure und Hitchcock auf Steroiden – Carrie, Scarface, Die Unbestechlichen, Mission: Impossible."
+        },
+        "cinema-korea": {
+            "name": "Koreanisches Kino",
+            "description": "Mehr als Bong und Park – Rache, Zombies, Serienmörder und Herzschmerz der koreanischen Neuen Welle."
+        },
+        "cinema-italy": {
+            "name": "Italienisches Kino",
+            "description": "Neorealismus, Dolce Vita und Commedia all'italiana – von Rom, offene Stadt bis Ich Capitano."
+        },
+        "cinema-france": {
+            "name": "Französisches Kino",
+            "description": "Von Kinder des Olymp und der Nouvelle Vague bis Hass, Die fabelhafte Welt der Amélie und Ziemlich beste Freunde."
+        },
+        "cinema-india": {
+            "name": "Indisches Kino",
+            "description": "Satyajit Ray, Bollywood-Romantik und Tollywood-Spektakel – von Apus Weg ins Leben bis RRR."
+        },
+        "cinema-hong-kong": {
+            "name": "Hongkong-Action",
+            "description": "Heroic Bloodshed, Stunts ohne Seile und Undercover-Cops – John Woo, Jackie Chan, Johnnie To und Infernal Affairs."
+        },
+        "cinema-spain-latin-america": {
+            "name": "Spanisches & lateinamerikanisches Kino",
+            "description": "Von Der Geist des Bienenstocks bis City of God und Die Schneegesellschaft – spanischsprachiges und brasilianisches Kino."
+        },
+        "cinema-germany": {
+            "name": "Deutsches Kino",
+            "description": "Expressionistische Albträume, Werner Herzog, der Neue Deutsche Film und Good Bye, Lenin!"
+        },
+        "cinema-nordic": {
+            "name": "Nordisches Kino",
+            "description": "Dogma, Nordic Noir und schwarzer Humor aus Dänemark, Schweden, Norwegen und Finnland."
+        },
+        "cinema-japan": {
+            "name": "Japanisches Kino",
+            "description": "Realfilm aus Japan jenseits von Kurosawa – Mizoguchi, Samurai, Takeshi Kitano, Battle Royale und Perfect Days."
+        },
+        "cinema-britain": {
+            "name": "Britisches Kino",
+            "description": "Ealing-Komödien, Powell & Pressburger, Kitchen-Sink-Realismus und Richard Curtis – ein Jahrhundert britischer Film."
+        },
+        "steven-soderbergh": {
+            "description": "Coups, Pandemien und Indie-Experimente – von Sex, Lügen und Video bis Black Bag."
+        },
+        "spike-lee": {
+            "description": "Brooklyn, Race und gerechter Zorn – Do the Right Thing, Malcolm X, Inside Man, BlacKkKlansman."
+        },
+        "robert-zemeckis": {
+            "description": "Zeitmaschinen, Toons und ein Mann auf einer Bank – Zurück in die Zukunft, Falsches Spiel mit Roger Rabbit, Forrest Gump, Cast Away."
+        },
+        "ron-howard": {
+            "description": "Houston, wir haben ein Problem – Splash, Apollo 13, A Beautiful Mind, Rush und fünf Jahrzehnte Publikumslieblinge."
+        },
+        "danny-boyle": {
+            "description": "Wähle das Leben – Trainspotting, 28 Days Later, Slumdog Millionär und 28 Years Later."
+        },
+        "guy-ritchie": {
+            "description": "Diamanten, Hunde und Cockney-Gangster – Bube, Dame, König, grAS, Snatch, Sherlock Holmes und The Gentlemen."
+        },
+        "darren-aronofsky": {
+            "description": "Besessenheit bis zum Zerbrechen – Requiem for a Dream, Black Swan, The Whale."
+        },
+        "yorgos-lanthimos": {
+            "description": "Trocken, sehr seltsam und sehr komisch – Dogtooth, The Lobster, The Favourite, Poor Things."
+        },
+        "sofia-coppola": {
+            "description": "Einsame Mädchen in goldenen Käfigen – The Virgin Suicides, Lost in Translation, Marie Antoinette, Priscilla."
+        },
+        "richard-linklater": {
+            "description": "Reden, Gehen und vergehende Zeit – die Before-Trilogie, Dazed and Confused, School of Rock und Boyhood."
+        },
+        "m-night-shyamalan": {
+            "description": "Ich sehe tote Menschen – Wendungen, Aliens und Superhelden in Philadelphia, von The Sixth Sense bis Trap."
+        },
+        "michael-bay": {
+            "description": "Explosionen, Sonnenuntergänge und Helden in Zeitlupe – Bad Boys, The Rock, Armageddon und Transformers."
+        },
+        "roland-emmerich": {
+            "description": "Der Meister der Katastrophe – Stargate, Independence Day, The Day After Tomorrow und 2012."
+        },
+        "terry-gilliam": {
+            "description": "Monty Pythons Animator entfesselt – Time Bandits, Brazil, 12 Monkeys und Fear and Loathing in Las Vegas."
+        },
+        "oliver-stone": {
+            "description": "Vietnam, Wall Street und amerikanische Präsidenten – Platoon, JFK, Natural Born Killers."
+        },
+        "rob-reiner": {
+            "description": "Von This Is Spinal Tap über Die Braut des Prinzen und Harry und Sally bis Misery – Klassiker in jedem Genre."
+        },
+        "mel-brooks": {
+            "description": "Frühling für Hitler und Frankenstein Junior – der König der Parodie, von The Producers bis Spaceballs."
+        },
+        "robert-rodriguez": {
+            "description": "Eine Ein-Mann-Filmcrew – El Mariachi, From Dusk Till Dawn, Sin City und Spy Kids."
+        },
+        "wes-craven": {
+            "description": "Freddy Krueger, Ghostface und die Regeln des Horrors – der Meister, der das Genre immer neu erfand."
+        },
+        "mike-flanagan": {
+            "description": "Horror mit gebrochenem Herzen – Oculus, Das Spiel, Doctor Sleeps Erwachen und The Life of Chuck."
+        },
+        "tony-scott": {
+            "description": "Satte Farben und Adrenalin – Top Gun, True Romance, Crimson Tide, Mann unter Feuer und Unstoppable."
+        },
+        "kathryn-bigelow": {
+            "description": "Surfer, Soldaten und Spione – Gefährliche Brandung, Tödliches Kommando, Zero Dark Thirty; die erste Frau mit dem Regie-Oscar."
+        },
+        "john-woo": {
+            "description": "Zwei Pistolen, Zeitlupe und weiße Tauben – von A Better Tomorrow und Hard Boiled bis Im Körper des Feindes."
+        },
+        "jane-campion": {
+            "description": "Begehren, Unterdrückung und wilde Landschaften – Ein Engel an meiner Tafel, Das Piano, The Power of the Dog."
+        },
+        "martin-mcdonagh": {
+            "description": "Rabenschwarze Komödie mit Gewissen – Brügge sehen… und sterben?, 7 Psychos, Three Billboards, The Banshees of Inisherin."
+        },
+        "luc-besson": {
+            "description": "Killerinnen, Taucher und eine blaue Opernsängerin – Nikita, Léon – Der Profi, Das fünfte Element und Lucy."
+        },
+        "lars-von-trier": {
+            "description": "Dogma, Depression und Provokation – Breaking the Waves, Dancer in the Dark, Dogville, Melancholia."
+        },
+        "michael-haneke": {
+            "description": "Kalt, präzise und unvergesslich – Funny Games, Die Klavierspielerin, Caché, Liebe."
+        },
+        "terrence-malick": {
+            "description": "Geflüsterte Off-Stimmen und das Licht der goldenen Stunde – Badlands, In der Glut des Südens, Der schmale Grat, The Tree of Life."
+        },
+        "alfonso-cuaron": {
+            "description": "Lange Einstellungen und ein großes Herz – Y Tu Mamá También, Der Gefangene von Askaban, Children of Men, Gravity, Roma."
+        },
+        "alejandro-gonzalez-inarritu": {
+            "description": "Leben, die aufeinanderprallen – Amores Perros, Babel, Birdman und The Revenant."
+        },
+        "taika-waititi": {
+            "description": "Kiwi-Komödie mit Herz – 5 Zimmer Küche Sarg, Wo die wilden Menschen jagen, Thor: Tag der Entscheidung, Jojo Rabbit."
+        },
+        "hirokazu-kore-eda": {
+            "description": "Familien, in die wir hineingeboren werden, und Familien, die wir wählen – Nobody Knows, Still Walking, Shoplifters."
+        },
+        "zhang-yimou": {
+            "description": "Rote Laternen und fliegende Dolche – von Rotes Kornfeld bis Hero und Full River Red."
+        },
+        "ang-lee": {
+            "description": "Von Küchen in Taipeh bis Brokeback Mountain und Life of Pi – jedes Genre, immer menschlich."
+        },
+        "abbas-kiarostami": {
+            "description": "Autos, Straßen und die Grenze zwischen Fiktion und Leben – Close-Up, Der Geschmack der Kirsche, Die Liebesfälscher."
+        },
+        "jiri-menzel": {
+            "description": "Sanfter Humor und Hrabal – die Oscar-prämierten Liebe nach Fahrplan, Kurzgeschnitten, Ich habe den englischen König bedient."
+        },
+        "vera-chytilova": {
+            "description": "Die Rebellin der tschechoslowakischen Neuen Welle – Tausendschönchen, Panelstory und scharfe Satire bis zum Schluss."
+        },
+        "oldrich-lipsky": {
+            "description": "Tschechische Parodie in Bestform – Limonaden-Joe, Adele hat noch nicht zu Abend gegessen, Jáchyme, hoď ho do stroje!"
+        },
+        "vaclav-vorlicek": {
+            "description": "Märchen und fantastische Komödien – Drei Haselnüsse für Aschenbrödel, Wer will Jessie umbringen?, Das Mädchen auf dem Besenstiel."
         }
     },
     "notes": {
@@ -1595,6 +1755,7 @@
         "South Korea": "Südkorea",
         "United Kingdom": "Vereinigtes Königreich",
         "Brazil": "Brasilien",
-        "Norway": "Norwegen"
+        "Norway": "Norwegen",
+        "with Terry Jones": "mit Terry Jones"
     }
 }

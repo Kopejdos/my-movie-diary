@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.4.4 – November 2026
+- World cinema: Korean, Italian, French, Indian, Japanese, British, Hong Kong, Spanish & Latin American, German and Nordic picks
+- 40 new directors – Soderbergh, Spike Lee, Zemeckis, Ron Howard, Danny Boyle, Guy Ritchie, Lanthimos, Linklater, Shyamalan, Tony Scott, Kathryn Bigelow, John Woo, Luc Besson, Kore-eda, Ang Lee and many more
+- Czech directors Jiří Menzel, Věra Chytilová, Oldřich Lipský and Václav Vorlíček
+- My Movie Diary now has about 4,000 movies 🎉
+
 ## V4.4.3 – November 2026
 - AFI's 100 Greatest American Films – in ranking order, from Citizen Kane to Ben-Hur
 - Best International Feature Winners – all 70 Oscar winners since 1956, with their country

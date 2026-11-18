@@ -1319,6 +1319,168 @@
         },
         "brian-de-palma": {
             "description": "Rozdělené plátno, voyeuři a Hitchcock na steroidech – Carrie, Zjizvená tvář, Neúplatní, Mission: Impossible."
+        },
+        "cinema-korea": {
+            "name": "Korejský film",
+            "description": "Nejen Bong a Park – pomsta, zombie, sérioví vrazi i zlomená srdce korejské nové vlny."
+        },
+        "cinema-italy": {
+            "name": "Italský film",
+            "description": "Neorealismus, sladký život a komedie po italsku – od Říma, otevřeného města po Io Capitano."
+        },
+        "cinema-france": {
+            "name": "Francouzský film",
+            "description": "Od Dětí ráje a nové vlny po Nenávist, Amélii z Montmartru a Nedotknutelné."
+        },
+        "cinema-india": {
+            "name": "Indický film",
+            "description": "Satyajit Ray, bollywoodské romance a velkolepé Tollywoodské podívané – od Písně o cestě po RRR."
+        },
+        "cinema-hong-kong": {
+            "name": "Hongkongská akce",
+            "description": "Hrdinské krveprolití, kousky bez lan a policisté v utajení – John Woo, Jackie Chan, Johnnie To a Infernal Affairs."
+        },
+        "cinema-spain-latin-america": {
+            "name": "Španělský a latinskoamerický film",
+            "description": "Od Ducha úlu po Město bohů a Sněžné bratrstvo – kino ve španělštině a z Brazílie."
+        },
+        "cinema-germany": {
+            "name": "Německý film",
+            "description": "Expresionistické noční můry, Werner Herzog, nový německý film a Good Bye, Lenin!"
+        },
+        "cinema-nordic": {
+            "name": "Severský film",
+            "description": "Dogma, severská krimi a černý humor z Dánska, Švédska, Norska a Finska."
+        },
+        "cinema-japan": {
+            "name": "Japonský film",
+            "description": "Hraný japonský film i mimo Kurosawu – Mizoguči, samurajové, Takeši Kitano, Battle Royale a Perfektní dny."
+        },
+        "cinema-britain": {
+            "name": "Britský film",
+            "description": "Komedie z Ealingu, Powell a Pressburger, sociální realismus a Richard Curtis – sto let britského filmu."
+        },
+        "steven-soderbergh": {
+            "description": "Loupeže, pandemie a nezávislé experimenty – od Sexu, lží a videa po Black Bag."
+        },
+        "spike-lee": {
+            "description": "Brooklyn, rasa a spravedlivý hněv – Jednej správně, Malcolm X, Muž uvnitř, BlacKkKlansman."
+        },
+        "robert-zemeckis": {
+            "description": "Stroje času, kreslené postavičky a muž na lavičce – Návrat do budoucnosti, Falešná hra s králíkem Rogerem, Forrest Gump, Trosečník."
+        },
+        "ron-howard": {
+            "description": "Houstone, máme problém – Žbluňk!, Apollo 13, Čistá duše, Rivalové a pět desetiletí filmů pro diváky."
+        },
+        "danny-boyle": {
+            "description": "Vyber si život – Trainspotting, 28 dní poté, Milionář z chatrče a 28 let poté."
+        },
+        "guy-ritchie": {
+            "description": "Diamanty, psi a cockneyští gangsteři – Sbal prachy a vypadni, Podfu(c)k, Sherlock Holmes a Gentlemani."
+        },
+        "darren-aronofsky": {
+            "description": "Posedlost až do zlomení – Requiem za sen, Černá labuť, Velryba."
+        },
+        "yorgos-lanthimos": {
+            "description": "S kamennou tváří, hodně podivně a hodně vtipně – Špičák, Humr, Favoritka, Chudáčci."
+        },
+        "sofia-coppola": {
+            "description": "Osamělé dívky ve zlatých klecích – Smrt panen, Ztraceno v překladu, Marie Antoinetta, Priscilla."
+        },
+        "richard-linklater": {
+            "description": "Povídání, procházky a plynoucí čas – trilogie Před…, Omámení a zmatení, Škola ročku a Chlapectví."
+        },
+        "m-night-shyamalan": {
+            "description": "Vidím mrtvé lidi – zvraty, mimozemšťané a superhrdinové ve Filadelfii, od Šestého smyslu po Past."
+        },
+        "michael-bay": {
+            "description": "Výbuchy, západy slunce a hrdinové ve zpomaleném záběru – Mizerové, Skála, Armageddon a Transformers."
+        },
+        "roland-emmerich": {
+            "description": "Mistr katastrof – Hvězdná brána, Den nezávislosti, Den poté a 2012."
+        },
+        "terry-gilliam": {
+            "description": "Animátor Monty Pythonů naplno – Zloději času, Brazil, 12 opic a Strach a hnus v Las Vegas."
+        },
+        "oliver-stone": {
+            "description": "Vietnam, Wall Street a američtí prezidenti – Četa, JFK, Takoví normální zabijáci."
+        },
+        "rob-reiner": {
+            "description": "Od Hraje skupina Spinal Tap po Princeznu nevěstu, Když Harry potkal Sally a Misery nechce zemřít – klasika v každém žánru."
+        },
+        "mel-brooks": {
+            "description": "Jaro pro Hitlera a Mladý Frankenstein – král parodií, od Producentů po Spaceballs."
+        },
+        "robert-rodriguez": {
+            "description": "Filmový štáb v jedné osobě – El Mariachi, Od soumraku do úsvitu, Sin City a Spy Kids."
+        },
+        "wes-craven": {
+            "description": "Freddy Krueger, Ghostface a pravidla hororu – mistr, který žánr pořád znovu vynalézal."
+        },
+        "mike-flanagan": {
+            "description": "Horor se zlomeným srdcem – Oculus, Geraldova hra, Doktor Spánek a Život Chucka."
+        },
+        "tony-scott": {
+            "description": "Syté barvy a adrenalin – Top Gun, Pravdivá romance, Krvavý příliv, Muž v ohni a Nezastavitelný."
+        },
+        "kathryn-bigelow": {
+            "description": "Surfaři, vojáci a špioni – Bod zlomu, Smrt čeká všude, 30 minut po půlnoci; první žena s Oscarem za režii."
+        },
+        "john-woo": {
+            "description": "Dvě pistole, zpomalené záběry a bílé holubice – od Lepšího zítřka a Hard Boiled po Tváří v tvář."
+        },
+        "jane-campion": {
+            "description": "Touha, potlačení a divoká krajina – Anděl u mého stolu, Piano, Síla psa."
+        },
+        "martin-mcdonagh": {
+            "description": "Temná komedie se svědomím – V Bruggách, Sedm psychopatů, Tři billboardy kousek za Ebbingem, Víly z Inisherinu."
+        },
+        "luc-besson": {
+            "description": "Nájemné vražedkyně, potápěči a modrá operní pěvkyně – Brutální Nikita, Leon, Pátý element a Lucy."
+        },
+        "lars-von-trier": {
+            "description": "Dogma, deprese a provokace – Prolomit vlny, Tanec v temnotách, Dogville, Melancholia."
+        },
+        "michael-haneke": {
+            "description": "Chladný, přesný a nezapomenutelný – Funny Games, Pianistka, Skrytá vina, Láska."
+        },
+        "terrence-malick": {
+            "description": "Šeptaný komentář a světlo zlaté hodinky – Zapadákov, Nebeské dny, Tenká červená linie, Strom života."
+        },
+        "alfonso-cuaron": {
+            "description": "Dlouhé záběry a velké srdce – A tvoje máma taky, Vězeň z Azkabanu, Potomci lidí, Gravitace, Roma."
+        },
+        "alejandro-gonzalez-inarritu": {
+            "description": "Životy, které se srazí – Amores perros, Babel, Birdman a REVENANT Zmrtvýchvstání."
+        },
+        "taika-waititi": {
+            "description": "Novozélandská komedie se srdcem – Co děláme v temnotách, Hunt for the Wilderpeople, Thor: Ragnarok, Králíček Jojo."
+        },
+        "hirokazu-kore-eda": {
+            "name": "Hirokazu Koreeda",
+            "description": "Rodiny, do kterých se narodíme, a rodiny, které si vybereme – Nikdo to neví, Still Walking, Zloději."
+        },
+        "zhang-yimou": {
+            "name": "Čang I-mou",
+            "description": "Rudé lucerny a létající dýky – od Rudého čiroku po Hrdinu a Full River Red."
+        },
+        "ang-lee": {
+            "description": "Od tchajpejských kuchyní po Zkrocenou horu a Pí a jeho život – každý žánr, vždy lidsky."
+        },
+        "abbas-kiarostami": {
+            "description": "Auta, cesty a hranice mezi fikcí a životem – Close-Up, Chuť třešní, Věrná kopie."
+        },
+        "jiri-menzel": {
+            "description": "Laskavý humor a Hrabal – oscarové Ostře sledované vlaky, Postřižiny, Obsluhoval jsem anglického krále."
+        },
+        "vera-chytilova": {
+            "description": "Rebelka československé nové vlny – Sedmikrásky, Panelstory a ostrá satira až do konce."
+        },
+        "oldrich-lipsky": {
+            "description": "Česká parodie v nejlepší formě – Limonádový Joe, Adéla ještě nevečeřela, Jáchyme, hoď ho do stroje!"
+        },
+        "vaclav-vorlicek": {
+            "description": "Pohádky a fantastické komedie – Tři oříšky pro Popelku, Kdo chce zabít Jessii?, Dívka na koštěti."
         }
     },
     "notes": {
@@ -1703,6 +1865,7 @@
         "South Korea": "Jižní Korea",
         "United Kingdom": "Velká Británie",
         "Brazil": "Brazílie",
-        "Norway": "Norsko"
+        "Norway": "Norsko",
+        "with Terry Jones": "s Terrym Jonesem"
     }
 }

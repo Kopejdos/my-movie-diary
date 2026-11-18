@@ -376,7 +376,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 47a | V4.4.1 | Animáky ✅ | Looney Tunes (i Coyote vs. Acme), Tom a Jerry, Scooby-Doo, Šmoulové, Želvy nindža, SpongeBob, Sonic, Garfield, Alvin, Peanuts, Medvídek Pú; studia DisneyToon, Warner Bros. Animation, Netflix a Nickelodeon; režiséři Don Bluth, Karel Zeman a Jan Švankmajer; Česká animace, oscaroví vítězové za animaci, světová animace, animace pro dospělé, seriály v kině; One Piece, Naruto, My Hero Academia, Demon Slayer, Moderní anime; oprava kolekcí z kontroly seedu – katalog ~2 740 filmů |
 | 47b | V4.4.2 | Režiséři, série a výběry ✅ | 16 režisérů (Scorsese, Cameron, Ridley Scott, Coenové, del Toro, Peter Jackson, Raimi, Carpenter, Lynch, Coppola, Bong Joon-ho, Park Chan-wook, P. T. Anderson, Gerwig, Edgar Wright, Forman), 47 sérií (Ocean's, Now You See Me, Hellboy, Addams Family, Highlander, Starship Troopers, Shaft, Herbie, Spy Kids…), studio Neon, výběry Film Noir, Neo-noir, Zlatá palma (od 1990), kultovní filmy, road movies, teen komedie – **katalog přes 3 000 (~3 150)** |
 | 47c | V4.4.3 | Velké seznamy a klasici ✅ | **AFI 100** v pořadí žebříčku, všech 70 vítězů **Oscara za mezinárodní film** (se zemí), 14 režisérů: Bergman, Fellini, Tarkovskij, Wong Kar-wai, Ozu, Kieślowski, Almodóvar, Chaplin, Keaton, Wilder, Lumet, Eastwood, Mann, De Palma – katalog ~3 440 |
-| 47d | V4.4.4 | Kinematografie zemí a herci | kinematografie zemí (Korea, Itálie, Francie, Indie… – možná nové kategorie = migrace), herci, další režiséři, česká vlna 2 – **cíl 4 000** |
+| 47d | V4.4.4 | Kinematografie zemí a režiséři ✅ | 10 kinematografií zemí jako žánrové výběry (Korea, Itálie, Francie, Indie, Hongkong, Španělsko a Latinská Amerika, Německo, Severské země, Japonsko, Británie) a 40 režisérů (Soderbergh, Spike Lee, Zemeckis, Ron Howard, Boyle, Ritchie, Lanthimos, Linklater, Shyamalan, Tony Scott, Bigelow, John Woo, Besson, von Trier, Haneke, Kore-eda, Zhang Yimou, Ang Lee, Menzel, Chytilová, Lipský, Vorlíček…) – **katalog ~4 000** |
 | 48 | V4.5 | Wrapped | rok v kostce – **poprvé za rok 2027** (prosinec 2027): nováček si na začátku doplní stovky filmů, první celý rok dat bude 2027; filmy „Seen before“ se nepočítají |
 | 49 | V4.6 | Optimalizace před seriály | úklid a výkon s velkým katalogem (načítání, hledání, import), **katalog v mezipaměti prohlížeče** pro opakované návštěvy – připravit půdu pro kapitolu V5 |
 
@@ -484,7 +484,7 @@ kde to jde; každá část je hotová a vydaná zvlášť.
 | V4.4.1 Animáky | ~295 (skutečně) | ~2 740 |
 | V4.4.2 Režiséři, série a výběry | ~410 (skutečně) | **~3 150 – cíl 3 000 splněn** |
 | V4.4.3 Velké seznamy a klasici (AFI 100, mezinárodní Oscar, 14 režisérů) | ~285 (skutečně) | ~3 440 |
-| V4.4.4 Kinematografie zemí, herci, další režiséři | ~560 | **~4 000** |
+| V4.4.4 Kinematografie zemí a režiséři | ~575 (skutečně) | **~4 000 – cíl splněn** |
 
 #### V4.4 – výhody za úroveň a odznaky (plán 14. 11. 2026)
 - **Výhody za úroveň** – s úrovní rostou limity. Návrh (doladí se před začátkem verze):
@@ -2479,6 +2479,34 @@ testovacích seznamů byla vymyšlená.
 - **AFI 100 jako žánrový výběr** – nejde o studio ani sérii; dokončení se počítá jako u ostatních výběrů.
 - **U plodných režisérů výběr** (Bergman od roku 1953, Lumet 18 z 44 filmů) – popis to říká („the essential“);
   u ostatních kompletní filmografie celovečerních filmů.
+
+### Fáze 47d – kinematografie zemí a režiséři ✅ (18. 11. 2026) – **V4.4.4, konec doplňování**
+- **Jen obsah** – bez migrace a beze změn Edge Functions. Balíček `v4.4.4-world-directors.json` (50 kolekcí,
+  752 řádků, ~575 nových filmů → katalog **~4 000**):
+  - **10 kinematografií zemí** jako žánrové výběry po desetiletích: Korean, Italian, French, Indian, Japanese
+    (hraný film), British Cinema, Hong Kong Action, Spanish & Latin American, German a Nordic Cinema – každá
+    15–23 filmů, záměrně mimo režiséry a výběry z dřívějška (Kurosawa, Fellini, anime, giallo…);
+  - **40 režisérů** po desetiletích – Hollywood (Soderbergh, Spike Lee, Zemeckis, Ron Howard, Linklater,
+    Shyamalan, Bay, Emmerich, Stone, Reiner, Mel Brooks, Rodriguez, Craven, Flanagan, Tony Scott, Bigelow),
+    Británie a Irsko (Boyle, Ritchie, Gilliam, McDonagh), Evropa (Besson, von Trier, Haneke, Lanthimos),
+    Mexiko (Cuarón, Iñárritu), Asie a Oceánie (Kore-eda, Zhang Yimou, Ang Lee, John Woo, Kiarostami, Waititi,
+    Campion), další (Aronofsky, Sofia Coppola, Malick) a **čeští režiséři** pod původními názvy: Jiří Menzel,
+    Věra Chytilová, Oldřich Lipský a Václav Vorlíček.
+- Ověřeno: `add-pack` na seedu po V4.4.3 (50 nových, podruhé nic), `node --test` (77 – nově platnost balíčku
+  V4.4.4), webové testy v češtině, němčině, angličtině a ukrajinštině na 320–1280 px.
+
+#### Rozhodnutí ve fázi 47d
+- **Země jako žánrové výběry, ne nové kategorie** – bez migrace; filtr podle země by potřeboval ~10 nových
+  kategorií (a achievementů fanoušků), což by přehled spíš zahltilo. Jde doplnit později jednou migrací.
+- **Herci vypadli** – kolekce herce by potřebovala nový typ kolekce (migrace, záložka, achievement); případně
+  samostatná verze po V4.6.
+- **Na záložce Directors je teď 87 kolekcí** – podnět pro V4.6 (výkon přehledu a hledání s ~420 kolekcemi
+  a ~4 000 filmy).
+
+#### Shrnutí V4.4.1–V4.4.4 (18. 11. 2026)
+- Katalog **z ~2 440 na ~4 000 filmů**, 164 nových kolekcí (animáky, 73 režisérů, 58 sérií, velké
+  seznamy AFI 100, Zlatá palma a mezinárodní Oscar, kinematografie zemí) – vše bez migrace, jen balíčky.
+- Další na řadě: **V4.5 Wrapped**, pak **V4.6 optimalizace** na katalogu v konečné velikosti.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).
