@@ -500,6 +500,198 @@
         "path-oscar-essentials": {
             "name": "Óscar: lo esencial",
             "description": "Catorce ganadoras del Óscar a la mejor película que todo cinéfilo debería ver: de la screwball comedy al multiverso."
+        },
+        "police-academy": {
+            "name": "Loca academia de policía",
+            "description": "Mahoney, Tackleberry, Hightower y los reclutas más caóticos que jamás han llevado placa."
+        },
+        "the-naked-gun": {
+            "name": "Agárralo como puedas",
+            "description": "El teniente Frank Drebin protege la ciudad, con un chiste en cada plano. Y de propina, el regreso de 2025."
+        },
+        "hot-shots": {
+            "description": "Top Gun y Rambo al estilo de Aterriza como puedas: Charlie Sheen en dos parodias."
+        },
+        "austin-powers": {
+            "description": "Yeah, baby! El agente internacional del misterio contra el Dr. Maligno."
+        },
+        "american-pie": {
+            "description": "Jim, Stifler y la pandilla, del baile de graduación al reencuentro; los spin-offs directos a vídeo son opcionales."
+        },
+        "home-alone": {
+            "name": "Solo en casa",
+            "description": "Kevin McCallister, dos ladrones y un montón de trampas; las secuelas posteriores son opcionales."
+        },
+        "night-at-the-museum": {
+            "name": "Noche en el museo",
+            "description": "Cuando el museo cierra, las piezas cobran vida: Ben Stiller como vigilante nocturno."
+        },
+        "rush-hour": {
+            "name": "Hora punta",
+            "description": "Las patadas de Jackie Chan y la lengua de Chris Tucker: la trilogía de policías."
+        },
+        "bad-boys": {
+            "name": "Dos policías rebeldes",
+            "description": "Bad boys, bad boys, whatcha gonna do? Will Smith y Martin Lawrence en Miami."
+        },
+        "beverly-hills-cop": {
+            "name": "Superdetective en Hollywood",
+            "description": "Axel Foley, de Detroit, en la tierra de las palmeras: el papel más famoso de Eddie Murphy."
+        },
+        "the-hangover": {
+            "name": "Resacón en Las Vegas",
+            "description": "Lo que pasa en Las Vegas… la manada se despierta sin idea de lo que ocurrió anoche."
+        },
+        "meet-the-parents": {
+            "name": "Los padres de ella",
+            "description": "Greg Focker y el suegro del infierno: Ben Stiller contra Robert De Niro."
+        },
+        "the-expendables": {
+            "name": "Los mercenarios",
+            "description": "Stallone, Statham y todas las leyendas del cine de acción de los 80 y 90 en un mismo equipo."
+        },
+        "taken": {
+            "name": "Venganza",
+            "description": "Liam Neeson y un conjunto muy particular de habilidades."
+        },
+        "the-transporter": {
+            "description": "Regla número uno: el trato nunca se cambia. Jason Statham al volante; el reboot es opcional."
+        },
+        "the-equalizer": {
+            "description": "Denzel Washington como Robert McCall, un hombre tranquilo que repara injusticias."
+        },
+        "underworld": {
+            "description": "Vampiros contra licántropos: Kate Beckinsale como la ejecutora Selene."
+        },
+        "ip-man": {
+            "description": "Donnie Yen como el gran maestro de wing chun que enseñó a Bruce Lee."
+        },
+        "has-fallen": {
+            "name": "Objetivo: la Casa Blanca",
+            "description": "El agente del Servicio Secreto Mike Banning (Gerard Butler) salva al presidente una y otra vez."
+        },
+        "dirty-harry": {
+            "name": "Harry el sucio",
+            "description": "Clint Eastwood como el inspector Harry Callahan. ¿Te sientes afortunado?"
+        },
+        "death-wish": {
+            "name": "El justiciero de la ciudad",
+            "description": "Charles Bronson como el justiciero Paul Kersey; el remake de 2018 con Bruce Willis es opcional."
+        },
+        "the-raid": {
+            "name": "Redada asesina",
+            "description": "Artes marciales indonesias a toda velocidad: de la mejor acción jamás rodada."
+        },
+        "dune": {
+            "description": "Arrakis en la gran pantalla: la versión de David Lynch de 1984 y la saga de Denis Villeneuve."
+        },
+        "tron": {
+            "description": "Dentro del ordenador: motos de luz, programas y la Red."
+        },
+        "the-chronicles-of-narnia": {
+            "name": "Las crónicas de Narnia",
+            "description": "A través del armario hasta Narnia: Aslan, la Bruja Blanca y los hermanos Pevensie."
+        },
+        "divergent": {
+            "description": "Un Chicago del futuro dividido en facciones, y Tris, que no encaja en ninguna."
+        },
+        "mortal-kombat": {
+            "description": "¡Finish him! El videojuego de lucha en la gran pantalla, de los 90 a las nuevas películas."
+        },
+        "the-mummy": {
+            "name": "La momia",
+            "description": "Rick O'Connell, Evelyn e Imhotep: la trilogía de aventuras y El rey Escorpión. Las demás secuelas y el reboot de 2017 son opcionales."
+        },
+        "cloverfield": {
+            "description": "Algo ha atacado Nueva York: tres películas vagamente conectadas de J. J. Abrams."
+        },
+        "a-quiet-place": {
+            "name": "Un lugar tranquilo",
+            "description": "Si te oyen, te cazan. No hagas ruido."
+        },
+        "tremors": {
+            "name": "Temblores",
+            "description": "Gusanos gigantes bajo el desierto de Perfection, Nevada; las secuelas directas a vídeo son opcionales."
+        },
+        "jaws": {
+            "name": "Tiburón",
+            "description": "Vas a necesitar un barco más grande. El tiburón de Spielberg y sus secuelas; la 3-D y La venganza son opcionales."
+        },
+        "childs-play": {
+            "name": "Muñeco diabólico",
+            "description": "Hola, soy Chucky. ¿Jugamos? El muñeco asesino desde 1988; el remake de 2019 es opcional."
+        },
+        "paranormal-activity": {
+            "description": "El éxito del found footage que empezó con una cámara en el dormitorio."
+        },
+        "evil-dead": {
+            "name": "Posesión infernal",
+            "description": "El Necronomicón, una cabaña en el bosque y Ash con su motosierra, además de las nuevas películas."
+        },
+        "candyman": {
+            "description": "Di su nombre cinco veces delante del espejo… La tercera película es opcional."
+        },
+        "poltergeist": {
+            "description": "Ya están aquí. El clásico de casas encantadas y sus secuelas; el remake de 2015 es opcional."
+        },
+        "hostel": {
+            "description": "Un viaje de mochileros a Eslovaquia sale muy mal: el terror de tortura de Eli Roth. La tercera parte es opcional."
+        },
+        "jeepers-creepers": {
+            "description": "Cada 23 primaveras, durante 23 días, el Creeper sale a comer. Las secuelas posteriores son opcionales."
+        },
+        "28-days-later": {
+            "name": "28 días después",
+            "description": "El virus de la ira vacía Gran Bretaña: la saga de infectados de Danny Boyle y Alex Garland."
+        },
+        "romero-living-dead": {
+            "name": "Los muertos vivientes de Romero",
+            "description": "Las películas de zombis de George A. Romero, padre del zombi moderno, desde La noche de los muertos vivientes."
+        },
+        "phantasm": {
+            "name": "Phantasma",
+            "description": "¡Boooy! El Hombre Alto y sus esferas plateadas voladoras."
+        },
+        "hannibal-lecter": {
+            "description": "El Dr. Lecter, de Hunter a Hannibal, el origen del mal; El dragón rojo y Hunter cuentan la misma historia."
+        },
+        "it": {
+            "description": "Pennywise y el Club de los Perdedores en Derry: It de Stephen King en dos capítulos."
+        },
+        "smile": {
+            "description": "Una maldición que se transmite con una sonrisa que nunca olvidarás."
+        },
+        "sinister": {
+            "description": "Viejas películas caseras y Bughuul, el devorador de niños."
+        },
+        "pet-sematary": {
+            "name": "Cementerio de animales",
+            "description": "A veces, muerto es mejor. El cementerio de Stephen King; la secuela y la precuela son opcionales."
+        },
+        "gremlins": {
+            "description": "Tres reglas: nada de luz intensa, nada de agua y nunca darle de comer después de medianoche."
+        },
+        "godzilla": {
+            "description": "El rey de los monstruos: lo esencial de Toho desde 1954 hasta Godzilla Minus One y el MonsterVerse de Hollywood. El resto de cada era es opcional."
+        },
+        "king-kong": {
+            "description": "La octava maravilla del mundo: del original de 1933 a Peter Jackson y el MonsterVerse."
+        },
+        "a24": {
+            "description": "El estudio independiente que redefinió el terror y el cine de autor: una selección de sus mejores películas."
+        },
+        "blumhouse": {
+            "description": "Presupuestos pequeños, grandes sustos: el estudio detrás de Paranormal Activity, Déjame salir y M3GAN."
+        },
+        "amblin": {
+            "description": "El chico en bicicleta delante de la luna: la productora de Spielberg y las aventuras que definieron los 80."
+        },
+        "toho": {
+            "description": "El gran estudio de Japón: Godzilla, los samuráis de Kurosawa y los éxitos de anime que llevó a los cines."
+        },
+        "path-kaiju-101": {
+            "name": "Kaiju para principiantes",
+            "description": "Monstruos gigantes, del King Kong de 1933 a Godzilla Minus One: doce pasos por la historia del kaiju."
         }
     },
     "notes": {
@@ -603,7 +795,19 @@
         "Spielberg's Holocaust drama – hard to watch, impossible to forget.": "El drama de Spielberg sobre el Holocausto: duro de ver e imposible de olvidar.",
         "The Coen brothers' relentless thriller with one of cinema's scariest killers.": "El implacable thriller de los hermanos Coen con uno de los asesinos más aterradores del cine.",
         "The first non-English-language winner – a class satire that turns into a thriller.": "La primera ganadora en un idioma distinto del inglés: una sátira de clases que se convierte en thriller.",
-        "Multiverse kung fu, a tax audit and a mother and daughter – wild and very moving.": "Kung-fu multiversal, una inspección de Hacienda y una madre y su hija: una locura muy emotiva."
+        "Multiverse kung fu, a tax audit and a mother and daughter – wild and very moving.": "Kung-fu multiversal, una inspección de Hacienda y una madre y su hija: una locura muy emotiva.",
+        "Where it all began: a monster born from the atomic bomb – a dark, serious film, not a romp.": "Donde empezó todo: un monstruo nacido de la bomba atómica; una película oscura y seria, nada de juerga.",
+        "The ape who started the giant-monster movie – stop-motion magic that still works.": "El simio con el que nació el cine de monstruos gigantes: magia stop-motion que sigue funcionando.",
+        "A giant moth, two tiny fairies and a monster who protects rather than destroys.": "Una polilla gigante, dos hadas diminutas y un monstruo que protege en vez de destruir.",
+        "Godzilla turns hero: the start of monster team-ups against a bigger threat.": "Godzilla se vuelve héroe: el inicio de las alianzas de monstruos contra una amenaza mayor.",
+        "Every Toho monster in one film – pure Saturday-matinee fun.": "Todos los monstruos de Toho en una película: pura diversión de sesión matinal.",
+        "Godzilla's flying-turtle rival, rebooted in style for the 90s.": "La tortuga voladora rival de Godzilla, reiniciada con estilo para los 90.",
+        "Bong Joon-ho's river monster – a family drama, a comedy and a creature film at once.": "El monstruo del río de Bong Joon-ho: drama familiar, comedia y cine de criaturas a la vez.",
+        "A monster attack filmed on a party guest's camcorder.": "El ataque de un monstruo grabado con la cámara de un invitado a una fiesta.",
+        "Giant robots against kaiju – Guillermo del Toro's love letter to the genre.": "Robots gigantes contra kaiju: la carta de amor de Guillermo del Toro al género.",
+        "Godzilla as a disaster that Japan's bureaucracy can't handle – sharp and surprising.": "Godzilla como un desastre que la burocracia japonesa no sabe gestionar: mordaz y sorprendente.",
+        "Kong joins the MonsterVerse – the 70s, helicopters and a very big island.": "Kong se une al MonsterVerse: los 70, helicópteros y una isla muy grande.",
+        "Post-war Japan faces Godzilla – the first Godzilla film to win an Oscar.": "El Japón de posguerra frente a Godzilla: la primera película de Godzilla que ganó un Óscar."
     },
     "terms": {
         "Phase 1": "Fase 1",
@@ -757,6 +961,13 @@
         "Creature from the Black Lagoon": "La mujer y el monstruo",
         "The Phantom of the Opera": "El fantasma de la ópera",
         "Le Gendarme": "El gendarme",
-        "Fantômas": "Fantomas"
+        "Fantômas": "Fantomas",
+        "Presents": "Presenta",
+        "2025 movie": "Película de 2025",
+        "Shōwa era": "Era Shōwa",
+        "Heisei era": "Era Heisei",
+        "Millennium era": "Era Millennium",
+        "Reiwa era": "Era Reiwa",
+        "The Scorpion King": "El rey Escorpión"
     }
 }

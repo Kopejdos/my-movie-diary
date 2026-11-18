@@ -3,6 +3,13 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.3.6 – November 2026
+- Over 40 new series – Police Academy, The Naked Gun, Home Alone, Bad Boys, Taken, Dirty Harry, Dune, Narnia, Jaws, Child's Play, Evil Dead, 28 Days Later and many more
+- Godzilla 🦖 – the Toho eras and the MonsterVerse – and King Kong
+- Studios A24, Blumhouse, Amblin and Toho
+- New path: Kaiju 101
+- My Movie Diary now has over 2,000 movies 🎉
+
 ## V4.3.5 – November 2026
 - Directors 🎬 – a new kind of collection with its own tab: Nolan, Tarantino, Kubrick, Hitchcock, Spielberg, Burton, Wes Anderson, Fincher, Villeneuve, Kurosawa and Sergio Leone, decade by decade
 - New achievement: Auteur – finish the collections of your favourite directors

@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v31";       // V4.3.5: typ kolekce Director, režiséři a klasika; od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v32";       // V4.3.6: série a monstra (nové kolekce a překlady); od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline

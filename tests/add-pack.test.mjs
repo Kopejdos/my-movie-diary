@@ -103,6 +103,27 @@ test("balíček V4.3.5: režiséři mají typ director a filmy po desetiletích,
     assert.equal(pack.universes.find((u) => u.slug === "best-picture-winners").films.length, 98);
 });
 
+test("balíček V4.3.6: platný, bez kolekcí, které už v katalogu jsou, cesta s poznámkami", () => {
+    const pack = JSON.parse(readFileSync(new URL("../supabase/packs/v4.3.6-series-monsters.json", import.meta.url), "utf8"));
+    const kinds = new Set(["series", "studio", "genre", "path", "director"]);
+    // Přidal je kamarád přes požadavky před V4.3.6 – v balíčku být nesmí
+    const already = ["scary-movie", "hellraiser", "the-exorcist", "the-omen", "rec", "the-chronicles-of-riddick", "pacific-rim"];
+    const slugs = pack.universes.map((u) => u.slug);
+    assert.equal(new Set(slugs).size, slugs.length);
+    for (const slug of already) assert.ok(!slugs.includes(slug), slug);
+    for (const universe of pack.universes) {
+        assert.match(universe.slug, /^[a-z0-9-]{2,40}$/, universe.slug);
+        assert.ok(kinds.has(universe.kind) && universe.categories.length > 0 && universe.description, universe.slug);
+        const keys = universe.films.map((f) => `${f.title}|${f.year}`);
+        assert.equal(new Set(keys).size, keys.length, `${universe.slug}: film dvakrát`);
+        for (const film of universe.films) {
+            assert.ok(film.title && Number.isInteger(film.year), `${universe.slug}: ${film.title}`);
+            if (universe.kind === "path") assert.ok(film.note && film.note.length <= 300, `${universe.slug}: ${film.title}`);
+        }
+        assert.ok(universe.films.some((f) => !f.optional), `${universe.slug}: žádný povinný film`);
+    }
+});
+
 test("nextGoal: 2 000, pak po 500", async () => {
     const { nextGoal } = await import("../web/js/admin.js");
     assert.equal(nextGoal(1264), 2000);

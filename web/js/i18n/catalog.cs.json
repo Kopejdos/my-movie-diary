@@ -508,6 +508,206 @@
         "path-oscar-essentials": {
             "name": "Oscar: to hlavní",
             "description": "Čtrnáct vítězů Oscara za nejlepší film, které by měl vidět každý filmový fanoušek – od screwball komedie po multivesmír."
+        },
+        "police-academy": {
+            "name": "Policejní akademie",
+            "description": "Mahoney, Tackleberry, Hightower a nejchaotičtější rekruti, kteří kdy dostali odznak."
+        },
+        "the-naked-gun": {
+            "name": "Bláznivá střela",
+            "description": "Poručík Frank Drebin chrání město – a v každém záběru je vtip. Navíc návrat z roku 2025."
+        },
+        "hot-shots": {
+            "name": "Žhavé výstřely",
+            "description": "Top Gun a Rambo ve stylu Připoutejte se – Charlie Sheen ve dvou parodiích."
+        },
+        "austin-powers": {
+            "description": "Yeah, baby! Mezinárodní záhadný muž proti Dr. Zlovi."
+        },
+        "american-pie": {
+            "name": "Prci, prci, prcičky",
+            "description": "Jim, Stifler a parta od maturitního plesu po sraz po letech – spin-offy na DVD jsou volitelné."
+        },
+        "home-alone": {
+            "name": "Sám doma",
+            "description": "Kevin McCallister, dva lupiči a spousta pastí – pozdější pokračování jsou volitelná."
+        },
+        "night-at-the-museum": {
+            "name": "Noc v muzeu",
+            "description": "Když se muzeum zavře, exponáty ožijí – Ben Stiller jako noční hlídač."
+        },
+        "rush-hour": {
+            "name": "Křižovatka smrti",
+            "description": "Kopance Jackieho Chana a pusa Chrise Tuckera – parťácká trilogie."
+        },
+        "bad-boys": {
+            "name": "Mizerové",
+            "description": "Bad boys, bad boys, whatcha gonna do? Will Smith a Martin Lawrence v Miami."
+        },
+        "beverly-hills-cop": {
+            "name": "Policajt v Beverly Hills",
+            "description": "Axel Foley z Detroitu v zemi palem – životní role Eddieho Murphyho."
+        },
+        "the-hangover": {
+            "name": "Pařba ve Vegas",
+            "description": "Co se stane ve Vegas… vlčí smečka se probudí a netuší, co se včera stalo."
+        },
+        "meet-the-parents": {
+            "name": "Fotr je lotr",
+            "description": "Greg Focker a tchán z pekla – Ben Stiller proti Robertu De Nirovi."
+        },
+        "the-expendables": {
+            "name": "Expendables: Postradatelní",
+            "description": "Stallone, Statham a všechny akční legendy 80. a 90. let v jednom týmu."
+        },
+        "taken": {
+            "name": "96 hodin",
+            "description": "Liam Neeson a velmi specifické schopnosti."
+        },
+        "the-transporter": {
+            "name": "Kurýr",
+            "description": "Pravidlo číslo jedna: dohoda se nemění. Jason Statham za volantem – reboot je volitelný."
+        },
+        "the-equalizer": {
+            "name": "Equalizer",
+            "description": "Denzel Washington jako Robert McCall – tichý muž, který napravuje křivdy."
+        },
+        "underworld": {
+            "description": "Upíři proti lykanům – Kate Beckinsale jako popravčí Selene."
+        },
+        "ip-man": {
+            "description": "Donnie Yen jako velmistr wing čchun, který učil Bruce Lee."
+        },
+        "has-fallen": {
+            "name": "Pád Bílého domu",
+            "description": "Agent tajné služby Mike Banning (Gerard Butler) zachraňuje prezidenta – znovu a znovu."
+        },
+        "dirty-harry": {
+            "name": "Drsný Harry",
+            "description": "Clint Eastwood jako inspektor Harry Callahan. Cítíš se jako šťastlivec?"
+        },
+        "death-wish": {
+            "name": "Přání smrti",
+            "description": "Charles Bronson jako mstitel Paul Kersey – remake s Brucem Willisem z roku 2018 je volitelný."
+        },
+        "the-raid": {
+            "name": "Zátah",
+            "description": "Indonéská bojová umění v plné rychlosti – jedna z nejlepších akcí, jaké kdy vznikly."
+        },
+        "dune": {
+            "name": "Duna",
+            "description": "Arrakis na velkém plátně – verze Davida Lynche z roku 1984 a sága Denise Villeneuva."
+        },
+        "tron": {
+            "description": "Uvnitř počítače – světelné motorky, programy a Mřížka."
+        },
+        "the-chronicles-of-narnia": {
+            "name": "Letopisy Narnie",
+            "description": "Skrz skříň do Narnie – Aslan, Bílá čarodějnice a sourozenci Pevensieovi."
+        },
+        "divergent": {
+            "name": "Divergence",
+            "description": "Budoucí Chicago rozdělené na frakce – a Tris, která nepatří do žádné."
+        },
+        "mortal-kombat": {
+            "description": "Finish him! Bojová hra na velkém plátně – od 90. let po nové filmy."
+        },
+        "the-mummy": {
+            "name": "Mumie",
+            "description": "Rick O'Connell, Evelyn a Imhotep – dobrodružná trilogie a Král Škorpión. Další spin-offy a reboot z roku 2017 jsou volitelné."
+        },
+        "cloverfield": {
+            "description": "Něco zaútočilo na New York – tři volně propojené filmy od J. J. Abramse."
+        },
+        "a-quiet-place": {
+            "name": "Tiché místo",
+            "description": "Když tě uslyší, uloví tě. Ani hlásku."
+        },
+        "tremors": {
+            "name": "Chvění",
+            "description": "Obří červi pod pouští u Perfection v Nevadě – pokračování na DVD jsou volitelná."
+        },
+        "jaws": {
+            "name": "Čelisti",
+            "description": "Budeme potřebovat větší loď. Spielbergův žralok a pokračování – 3-D a Pomsta jsou volitelné."
+        },
+        "childs-play": {
+            "name": "Dětská hra",
+            "description": "Ahoj, já jsem Chucky. Budeme si hrát? Vražedná panenka od roku 1988 – remake z roku 2019 je volitelný."
+        },
+        "paranormal-activity": {
+            "description": "Found-footage hit, který začal kamerou v ložnici."
+        },
+        "evil-dead": {
+            "name": "Smrtelné zlo",
+            "description": "Necronomicon, chata v lese a Ash s motorovou pilou – a k tomu nové filmy."
+        },
+        "candyman": {
+            "description": "Řekni jeho jméno pětkrát před zrcadlem… Třetí film je volitelný."
+        },
+        "poltergeist": {
+            "description": "Už jsou tady. Klasika o strašidelném domě a její pokračování – remake z roku 2015 je volitelný."
+        },
+        "hostel": {
+            "description": "Výlet s batohem na Slovensko se hodně pokazí – mučírenský horor Eliho Rotha. Třetí díl je volitelný."
+        },
+        "jeepers-creepers": {
+            "description": "Každé 23. jaro se 23 dní může Creeper krmit. Pozdější pokračování jsou volitelná."
+        },
+        "28-days-later": {
+            "name": "28 dní poté",
+            "description": "Virus vzteku vylidní Británii – sága o nakažených od Dannyho Boylea a Alexe Garlanda."
+        },
+        "romero-living-dead": {
+            "name": "Živí mrtví George A. Romera",
+            "description": "Zombie filmy George A. Romera – otce moderních zombie, od Noci oživlých mrtvol dál."
+        },
+        "phantasm": {
+            "name": "Fantazma",
+            "description": "Boooy! Vysoký muž a jeho létající stříbrné koule."
+        },
+        "hannibal-lecter": {
+            "description": "Dr. Lecter od Lovce lidí po Hannibala: Zrození – Červený drak a Lovec lidí vyprávějí stejný příběh."
+        },
+        "it": {
+            "name": "To",
+            "description": "Pennywise a Klub otloukánků v Derry – Kingovo To ve dvou kapitolách."
+        },
+        "smile": {
+            "name": "Úsměv",
+            "description": "Kletba, která se šíří s úsměvem, na který nezapomeneš."
+        },
+        "sinister": {
+            "description": "Staré domácí filmy a Bughuul, požírač dětí."
+        },
+        "pet-sematary": {
+            "name": "Řbitov zvířátek",
+            "description": "Někdy je lepší být mrtvý. Kingův hřbitov – pokračování a prequel jsou volitelné."
+        },
+        "gremlins": {
+            "description": "Tři pravidla: žádné ostré světlo, žádná voda a nikdy ho nekrm po půlnoci."
+        },
+        "godzilla": {
+            "description": "Král monster – to podstatné od Toho z let 1954 až po Godzillu Minus One a hollywoodský MonsterVerse. Ostatní filmy každé éry jsou volitelné."
+        },
+        "king-kong": {
+            "description": "Osmý div světa – od originálu z roku 1933 přes Petera Jacksona po MonsterVerse."
+        },
+        "a24": {
+            "description": "Nezávislé studio, které nově definovalo horor i artové filmy – výběr jeho nejlepších filmů."
+        },
+        "blumhouse": {
+            "description": "Malé rozpočty, velký strach – studio za Paranormal Activity, Uteč a M3GAN."
+        },
+        "amblin": {
+            "description": "Kluk na kole před měsícem – Spielbergova společnost a dobrodružství, která definovala 80. léta."
+        },
+        "toho": {
+            "description": "Velké japonské studio – Godzilla, Kurosawovi samurajové a anime hity, které uvedlo do kin."
+        },
+        "path-kaiju-101": {
+            "name": "Kaiju pro začátečníky",
+            "description": "Obří monstra od King Konga z roku 1933 po Godzillu Minus One – dvanáct kroků dějinami kaiju."
         }
     },
     "notes": {
@@ -611,7 +811,19 @@
         "Spielberg's Holocaust drama – hard to watch, impossible to forget.": "Spielbergovo drama o holocaustu – těžké na sledování, nemožné zapomenout.",
         "The Coen brothers' relentless thriller with one of cinema's scariest killers.": "Neúprosný thriller bratrů Coenů s jedním z nejděsivějších zabijáků filmu.",
         "The first non-English-language winner – a class satire that turns into a thriller.": "První vítěz v jiném jazyce než angličtině – třídní satira, ze které se stane thriller.",
-        "Multiverse kung fu, a tax audit and a mother and daughter – wild and very moving.": "Kung-fu v multivesmíru, daňová kontrola a matka s dcerou – šílené a velmi dojemné."
+        "Multiverse kung fu, a tax audit and a mother and daughter – wild and very moving.": "Kung-fu v multivesmíru, daňová kontrola a matka s dcerou – šílené a velmi dojemné.",
+        "Where it all began: a monster born from the atomic bomb – a dark, serious film, not a romp.": "Kde všechno začalo: monstrum zrozené z atomové bomby – temný, vážný film, žádná legrace.",
+        "The ape who started the giant-monster movie – stop-motion magic that still works.": "Opičák, kterým začaly filmy o obřích monstrech – kouzlo animace, které funguje dodnes.",
+        "A giant moth, two tiny fairies and a monster who protects rather than destroys.": "Obří můra, dvě drobné víly a monstrum, které chrání místo ničení.",
+        "Godzilla turns hero: the start of monster team-ups against a bigger threat.": "Godzilla se stává hrdinou: začátek spojenectví monster proti větší hrozbě.",
+        "Every Toho monster in one film – pure Saturday-matinee fun.": "Všechna monstra od Toho v jednom filmu – čistá sobotní zábava.",
+        "Godzilla's flying-turtle rival, rebooted in style for the 90s.": "Godzillův rival, létající želva, ve stylovém restartu pro 90. léta.",
+        "Bong Joon-ho's river monster – a family drama, a comedy and a creature film at once.": "Říční monstrum Bonga Džun-hoa – rodinné drama, komedie a monster film zároveň.",
+        "A monster attack filmed on a party guest's camcorder.": "Útok monstra natočený na kameru jednoho z hostů večírku.",
+        "Giant robots against kaiju – Guillermo del Toro's love letter to the genre.": "Obří roboti proti kaiju – milostný dopis žánru od Guillerma del Tora.",
+        "Godzilla as a disaster that Japan's bureaucracy can't handle – sharp and surprising.": "Godzilla jako katastrofa, kterou japonská byrokracie nezvládá – ostré a překvapivé.",
+        "Kong joins the MonsterVerse – the 70s, helicopters and a very big island.": "Kong vstupuje do MonsterVerse – 70. léta, vrtulníky a hodně velký ostrov.",
+        "Post-war Japan faces Godzilla – the first Godzilla film to win an Oscar.": "Poválečné Japonsko čelí Godzille – první film s Godzillou, který vyhrál Oscara."
     },
     "terms": {
         "Phase 1": "Fáze 1",
@@ -769,6 +981,13 @@
         "Creature from the Black Lagoon": "Netvor z Černé laguny",
         "The Phantom of the Opera": "Fantom opery",
         "Le Gendarme": "Četník",
-        "Fantômas": "Fantomas"
+        "Fantômas": "Fantomas",
+        "Presents": "Uvádí",
+        "2025 movie": "Film z roku 2025",
+        "Shōwa era": "Éra Šówa",
+        "Heisei era": "Éra Heisei",
+        "Millennium era": "Éra Millennium",
+        "Reiwa era": "Éra Reiwa",
+        "The Scorpion King": "Král Škorpión"
     }
 }

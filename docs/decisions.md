@@ -369,7 +369,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 46c | V4.3.3 | Požadavky: odpovědi a podobné kolekce ✅ | zamítnutí s **důvodem a poznámkou** pro uživatele, zamítnutý požadavek na kolekci jde **upravit a poslat znovu**, „New answer“; upozornění na **podobnou kolekci**, která už v MMD je (uživatel, admin u požadavku i ve staviteli) |
 | 46d | V4.3.4 | Překlady kolekcí a průvodce ✅ | admin: záložka **Translations** – názvy a popisy kolekcí ve 4 jazycích, **kontrola s TMDB** (název série / prvního filmu), *Use* / *Keep ours* / ruční oprava bez nového vydání; nové kolekce ze série TMDB dostanou přeložený název samy; **průvodce pro nováčky** (prohlídka přehledu a tlačítek u filmů) a stránka **Help** |
 | 46e | V4.3.5 | Režiséři a klasika ✅ | nový typ kolekce **Director** (záložka *Directors*, achievement **Auteur**), 10 režisérů + Sergio Leone, **Best Picture Winners** (98), Universal Monsters, Hammer, Louis de Funès, Belmondo, cesty Nolan Essentials a Oscar Essentials |
-| 46f | V4.3.6 | Série a monstra | ~40 komediálních, akčních, sci-fi / fantasy a hororových sérií, **Godzilla + MonsterVerse**, King Kong; studia A24, Blumhouse, Amblin, Toho |
+| 46f | V4.3.6 | Série a monstra ✅ | 41 sérií (komedie, akční, sci-fi / fantasy, horory), **Godzilla** (Toho + MonsterVerse), **King Kong**; studia A24, Blumhouse, Amblin, Toho; cesta **Kaiju 101** – bez migrace a změn funkcí |
 | 46g | V4.3.7 | Anime a česká klasika | kategorie **Anime** 🎌 a **Czech & Slovak** 🇨🇿; Shinkai, Hosoda, Kon, Evangelion, Pokémon, Dragon Ball, Detective Conan, Cartoon Saloon; Slunce, seno…, Básníci, Anděl Páně, české pohádky, Svěrák |
 | 46h | V4.3.8 | Žánrové výběry a cesty | ~20 nových žánrových výběrů po 12–15 filmech + 7 nových cest; **cíl 2 000 filmů splněn** |
 | 47 | V4.4 | Výhody za úroveň a odznaky | s úrovní rostou limity (otevřené požadavky, filmy v požadavku, velikost a počet seznamů) – přehled „co odemkne další úroveň“ v profilu; odznak **Elite** pro vybrané lidi (jen ozdoba) |
@@ -389,7 +389,7 @@ mezi kolekcemi opakují – kolekce režiséra sdílí filmy se studii, výběry
 | V4.3.3 Požadavky: odpovědi a podobné kolekce | – (nástroje) | ~1 380 |
 | V4.3.4 Překlady kolekcí a průvodce | – (nástroje) | ~1 460 (filmy přidané přes požadavky) |
 | V4.3.5 Režiséři a klasika | ~330 (skutečně) | ~1 790 |
-| V4.3.6 Série a monstra | ~230 | ~1 940 |
+| V4.3.6 Série a monstra | ~240 (skutečně) | ~2 030 – **cíl 2 000 splněn** |
 | V4.3.7 Anime a česká klasika | ~180 | ~2 120 |
 | V4.3.8 Žánrové výběry a cesty | ~150 | **~2 270** |
 
@@ -2243,6 +2243,39 @@ testovacích seznamů byla vymyšlená.
   aby šla kolekce dokončit.
 - **Chystané filmy rovnou v kolekci** (Cliff Booth, Duna: Část třetí) – import je uloží jako chystané a v den
   premiéry se započítají samy.
+
+### Fáze 46f – série a monstra ✅ (18. 11. 2026) – **V4.3.6**
+- **Jen obsah** – bez migrace a beze změn Edge Functions; balíček `v4.3.6-series-monsters.json` (55 kolekcí,
+  357 řádků, ~240 nových filmů → katalog ~2 030, **cíl 2 000 splněn** už touto částí):
+  - **komedie:** Police Academy, The Naked Gun (i 2025), Hot Shots!, Austin Powers, American Pie (spin-offy
+    volitelně), Home Alone (3+ volitelně), Night at the Museum, Rush Hour, Bad Boys, Beverly Hills Cop,
+    The Hangover, **Meet the Parents** (místo Scary Movie, které už v katalogu je);
+  - **akční:** The Expendables, Taken, The Transporter, The Equalizer, Underworld, Ip Man, Has Fallen,
+    Dirty Harry, Death Wish, **The Raid** (místo Riddicka);
+  - **sci-fi a fantasy:** Dune (Lynch + Villeneuve), Tron (i Ares), Letopisy Narnie, Divergence, Mortal Kombat
+    (i II z roku 2026), The Mummy + The Scorpion King, Cloverfield, A Quiet Place, Tremors, Jaws;
+  - **horory:** Child's Play, Paranormal Activity, Evil Dead, Candyman, Poltergeist, Hostel, Jeepers Creepers,
+    28 Days Later (i The Bone Temple), Romero's Living Dead, Phantasm, Hannibal Lecter a navíc **It, Smile,
+    Sinister, Pet Sematary, Gremlins** (místo Hellraiseru, Exorcisty, Omenu a [REC], které už v katalogu jsou);
+  - **monstra:** **Godzilla** (36 – povinná podstatná díla každé éry, zbytek volitelně; oddíly Shōwa / Heisei /
+    Millennium / Reiwa / Hollywood, MonsterVerse jako série uvnitř), **King Kong** (i MonsterVerse);
+  - studia **A24** (29), **Blumhouse** (22), **Amblin Entertainment** (24), **Toho** (23) – výběr, oddíly po desetiletích;
+  - cesta **Kaiju 101** (12 kroků, i Pacific Rim, který přidal kamarád).
+- Překlady: popisy všech kolekcí, poznámky cesty a popisky (éry Godzilly…) ve čtyřech jazycích. **Názvy jen tam,
+  kde je místní název jistý** (Policejní akademie, Bláznivá střela, Sám doma, Mizerové, Čelisti…); ostatní se
+  ukážou anglicky, dokud je správce nepřevezme z TMDB (Translations → Check with TMDB → *Use TMDB for untranslated*).
+- Ověřeno: `add-pack` na seedu s balíčkem V4.3.5 (55 nových kolekcí, podruhé nic), `node --test` (67 – nově
+  platnost balíčku V4.3.6), webové testy (přehled, Godzilla s érami, cesta, studio) v češtině, ukrajinštině
+  a angličtině na 320–1280 px.
+
+#### Rozhodnutí ve fázi 46f
+- **Série od kamaráda se neduplikují** – Scary Movie, Hellraiser, The Exorcist, The Omen, [REC], Riddick
+  a Pacific Rim vypadly a nahradily je jiné; slugy nových kolekcí odpovídají tomu, co by vytvořil admin panel,
+  takže kolekce se stejným názvem `add-pack` přeskočí.
+- **Názvy kolekcí v jiných jazycích přes TMDB** – nástroj z V4.3.4 je spolehlivější než můj odhad místních
+  názvů; ručně jen ty jisté.
+- **Godzilla v oddílech podle ér, americké filmy na konci** – oddíly v pořadí vydání se nestřídají
+  (MonsterVerse a Reiwa by se jinak prolínaly).
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

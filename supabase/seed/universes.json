@@ -3980,6 +3980,913 @@
         { "title": "Parasite", "year": 2019, "note": "The first non-English-language winner – a class satire that turns into a thriller." },
         { "title": "Everything Everywhere All at Once", "year": 2022, "note": "Multiverse kung fu, a tax audit and a mother and daughter – wild and very moving." }
       ]
+    },
+    {
+      "slug": "police-academy",
+      "name": "Police Academy",
+      "kind": "series",
+      "categories": ["comedy"],
+      "color": "#1e40af",
+      "description": "Mahoney, Tackleberry, Hightower and the most chaotic recruits ever to wear a badge.",
+      "films": [
+        { "title": "Police Academy", "year": 1984 },
+        { "title": "Police Academy 2: Their First Assignment", "year": 1985 },
+        { "title": "Police Academy 3: Back in Training", "year": 1986 },
+        { "title": "Police Academy 4: Citizens on Patrol", "year": 1987 },
+        { "title": "Police Academy 5: Assignment: Miami Beach", "year": 1988 },
+        { "title": "Police Academy 6: City Under Siege", "year": 1989 },
+        { "title": "Police Academy: Mission to Moscow", "year": 1994 }
+      ]
+    },
+    {
+      "slug": "the-naked-gun",
+      "name": "The Naked Gun",
+      "kind": "series",
+      "categories": ["comedy", "crime-thriller"],
+      "color": "#b91c1c",
+      "description": "Lieutenant Frank Drebin keeps the city safe – and a joke in every frame. With the 2025 return as a bonus.",
+      "films": [
+        { "title": "The Naked Gun: From the Files of Police Squad!", "year": 1988 },
+        { "title": "The Naked Gun 2½: The Smell of Fear", "year": 1991 },
+        { "title": "Naked Gun 33⅓: The Final Insult", "year": 1994 },
+        { "title": "The Naked Gun", "year": 2025, "label": "2025 movie" }
+      ]
+    },
+    {
+      "slug": "hot-shots",
+      "name": "Hot Shots!",
+      "kind": "series",
+      "categories": ["comedy"],
+      "color": "#0369a1",
+      "description": "Top Gun and Rambo get the Airplane! treatment – Charlie Sheen in two spoofs.",
+      "films": [
+        { "title": "Hot Shots!", "year": 1991 },
+        { "title": "Hot Shots! Part Deux", "year": 1993 }
+      ]
+    },
+    {
+      "slug": "austin-powers",
+      "name": "Austin Powers",
+      "kind": "series",
+      "categories": ["comedy"],
+      "color": "#c026d3",
+      "description": "Yeah, baby! The International Man of Mystery against Dr. Evil.",
+      "films": [
+        { "title": "Austin Powers: International Man of Mystery", "year": 1997 },
+        { "title": "Austin Powers: The Spy Who Shagged Me", "year": 1999 },
+        { "title": "Austin Powers in Goldmember", "year": 2002 }
+      ]
+    },
+    {
+      "slug": "american-pie",
+      "name": "American Pie",
+      "kind": "series",
+      "categories": ["comedy"],
+      "color": "#ea580c",
+      "description": "Jim, Stifler and the gang from prom night to the reunion – the direct-to-video spin-offs are optional.",
+      "films": [
+        { "title": "American Pie", "year": 1999 },
+        { "title": "American Pie 2", "year": 2001 },
+        { "title": "American Wedding", "year": 2003 },
+        { "title": "American Pie Presents: Band Camp", "year": 2005, "group": "Presents", "optional": true },
+        { "title": "American Pie Presents: The Naked Mile", "year": 2006, "group": "Presents", "optional": true },
+        { "title": "American Pie Presents: Beta House", "year": 2007, "group": "Presents", "optional": true },
+        { "title": "American Pie Presents: The Book of Love", "year": 2009, "group": "Presents", "optional": true },
+        { "title": "American Reunion", "year": 2012 },
+        { "title": "American Pie Presents: Girls' Rules", "year": 2020, "group": "Presents", "optional": true }
+      ]
+    },
+    {
+      "slug": "home-alone",
+      "name": "Home Alone",
+      "kind": "series",
+      "categories": ["comedy", "family"],
+      "color": "#dc2626",
+      "description": "Kevin McCallister, two burglars and a lot of booby traps – the later sequels are optional.",
+      "films": [
+        { "title": "Home Alone", "year": 1990 },
+        { "title": "Home Alone 2: Lost in New York", "year": 1992 },
+        { "title": "Home Alone 3", "year": 1997, "optional": true },
+        { "title": "Home Alone 4", "year": 2002, "optional": true },
+        { "title": "Home Alone: The Holiday Heist", "year": 2012, "optional": true },
+        { "title": "Home Sweet Home Alone", "year": 2021, "optional": true }
+      ]
+    },
+    {
+      "slug": "night-at-the-museum",
+      "name": "Night at the Museum",
+      "kind": "series",
+      "categories": ["comedy", "family"],
+      "color": "#a16207",
+      "description": "When the museum closes, the exhibits come to life – Ben Stiller as the night guard.",
+      "films": [
+        { "title": "Night at the Museum", "year": 2006 },
+        { "title": "Night at the Museum: Battle of the Smithsonian", "year": 2009 },
+        { "title": "Night at the Museum: Secret of the Tomb", "year": 2014 },
+        { "title": "Night at the Museum: Kahmunrah Rises Again", "year": 2022, "optional": true, "label": "Animated" }
+      ]
+    },
+    {
+      "slug": "rush-hour",
+      "name": "Rush Hour",
+      "kind": "series",
+      "categories": ["action-adventure", "comedy"],
+      "color": "#e11d48",
+      "description": "Jackie Chan's kicks and Chris Tucker's mouth – the buddy-cop trilogy.",
+      "films": [
+        { "title": "Rush Hour", "year": 1998 },
+        { "title": "Rush Hour 2", "year": 2001 },
+        { "title": "Rush Hour 3", "year": 2007 }
+      ]
+    },
+    {
+      "slug": "bad-boys",
+      "name": "Bad Boys",
+      "kind": "series",
+      "categories": ["action-adventure", "comedy"],
+      "color": "#0891b2",
+      "description": "Bad boys, bad boys, whatcha gonna do? Will Smith and Martin Lawrence in Miami.",
+      "films": [
+        { "title": "Bad Boys", "year": 1995 },
+        { "title": "Bad Boys II", "year": 2003 },
+        { "title": "Bad Boys for Life", "year": 2020 },
+        { "title": "Bad Boys: Ride or Die", "year": 2024 }
+      ]
+    },
+    {
+      "slug": "beverly-hills-cop",
+      "name": "Beverly Hills Cop",
+      "kind": "series",
+      "categories": ["action-adventure", "comedy"],
+      "color": "#2563eb",
+      "description": "Axel Foley from Detroit in the land of palm trees – Eddie Murphy's signature role.",
+      "films": [
+        { "title": "Beverly Hills Cop", "year": 1984 },
+        { "title": "Beverly Hills Cop II", "year": 1987 },
+        { "title": "Beverly Hills Cop III", "year": 1994 },
+        { "title": "Beverly Hills Cop: Axel F", "year": 2024 }
+      ]
+    },
+    {
+      "slug": "the-hangover",
+      "name": "The Hangover",
+      "kind": "series",
+      "categories": ["comedy"],
+      "color": "#ca8a04",
+      "description": "What happens in Vegas… the Wolfpack wakes up with no idea what happened last night.",
+      "films": [
+        { "title": "The Hangover", "year": 2009 },
+        { "title": "The Hangover Part II", "year": 2011 },
+        { "title": "The Hangover Part III", "year": 2013 }
+      ]
+    },
+    {
+      "slug": "meet-the-parents",
+      "name": "Meet the Parents",
+      "kind": "series",
+      "categories": ["comedy"],
+      "color": "#7c3aed",
+      "description": "Greg Focker and the father-in-law from hell – Ben Stiller against Robert De Niro.",
+      "films": [
+        { "title": "Meet the Parents", "year": 2000 },
+        { "title": "Meet the Fockers", "year": 2004 },
+        { "title": "Little Fockers", "year": 2010 }
+      ]
+    },
+    {
+      "slug": "the-expendables",
+      "name": "The Expendables",
+      "kind": "series",
+      "categories": ["action-adventure"],
+      "color": "#57534e",
+      "description": "Stallone, Statham and every action legend of the 80s and 90s in one team.",
+      "films": [
+        { "title": "The Expendables", "year": 2010 },
+        { "title": "The Expendables 2", "year": 2012 },
+        { "title": "The Expendables 3", "year": 2014 },
+        { "title": "Expend4bles", "year": 2023 }
+      ]
+    },
+    {
+      "slug": "taken",
+      "name": "Taken",
+      "kind": "series",
+      "categories": ["action-adventure", "crime-thriller"],
+      "color": "#334155",
+      "description": "Liam Neeson and a very particular set of skills.",
+      "films": [
+        { "title": "Taken", "year": 2008 },
+        { "title": "Taken 2", "year": 2012 },
+        { "title": "Taken 3", "year": 2014 }
+      ]
+    },
+    {
+      "slug": "the-transporter",
+      "name": "The Transporter",
+      "kind": "series",
+      "categories": ["action-adventure"],
+      "color": "#475569",
+      "description": "Rule number one: never change the deal. Jason Statham behind the wheel – the reboot is optional.",
+      "films": [
+        { "title": "The Transporter", "year": 2002 },
+        { "title": "Transporter 2", "year": 2005 },
+        { "title": "Transporter 3", "year": 2008 },
+        { "title": "The Transporter Refueled", "year": 2015, "optional": true }
+      ]
+    },
+    {
+      "slug": "the-equalizer",
+      "name": "The Equalizer",
+      "kind": "series",
+      "categories": ["action-adventure", "crime-thriller"],
+      "color": "#44403c",
+      "description": "Denzel Washington as Robert McCall – a quiet man who rights wrongs.",
+      "films": [
+        { "title": "The Equalizer", "year": 2014 },
+        { "title": "The Equalizer 2", "year": 2018 },
+        { "title": "The Equalizer 3", "year": 2023 }
+      ]
+    },
+    {
+      "slug": "underworld",
+      "name": "Underworld",
+      "kind": "series",
+      "categories": ["action-adventure", "horror"],
+      "color": "#1e3a8a",
+      "description": "Vampires against Lycans – Kate Beckinsale as the death dealer Selene.",
+      "films": [
+        { "title": "Underworld", "year": 2003 },
+        { "title": "Underworld: Evolution", "year": 2006 },
+        { "title": "Underworld: Rise of the Lycans", "year": 2009, "story": 1 },
+        { "title": "Underworld: Awakening", "year": 2012 },
+        { "title": "Underworld: Blood Wars", "year": 2016 }
+      ]
+    },
+    {
+      "slug": "ip-man",
+      "name": "Ip Man",
+      "kind": "series",
+      "categories": ["action-adventure", "drama"],
+      "color": "#9a3412",
+      "description": "Donnie Yen as the Wing Chun grandmaster who taught Bruce Lee.",
+      "films": [
+        { "title": "Ip Man", "year": 2008 },
+        { "title": "Ip Man 2", "year": 2010 },
+        { "title": "Ip Man 3", "year": 2015 },
+        { "title": "Master Z: Ip Man Legacy", "year": 2018, "optional": true, "label": "Spin-off" },
+        { "title": "Ip Man 4: The Finale", "year": 2019 }
+      ]
+    },
+    {
+      "slug": "has-fallen",
+      "name": "Has Fallen",
+      "kind": "series",
+      "categories": ["action-adventure"],
+      "color": "#991b1b",
+      "description": "Secret Service agent Mike Banning (Gerard Butler) saves the President – again and again.",
+      "films": [
+        { "title": "Olympus Has Fallen", "year": 2013 },
+        { "title": "London Has Fallen", "year": 2016 },
+        { "title": "Angel Has Fallen", "year": 2019 }
+      ]
+    },
+    {
+      "slug": "dirty-harry",
+      "name": "Dirty Harry",
+      "kind": "series",
+      "categories": ["crime-thriller", "action-adventure"],
+      "color": "#78350f",
+      "description": "Clint Eastwood as Inspector Harry Callahan. Do you feel lucky?",
+      "films": [
+        { "title": "Dirty Harry", "year": 1971 },
+        { "title": "Magnum Force", "year": 1973 },
+        { "title": "The Enforcer", "year": 1976 },
+        { "title": "Sudden Impact", "year": 1983 },
+        { "title": "The Dead Pool", "year": 1988 }
+      ]
+    },
+    {
+      "slug": "death-wish",
+      "name": "Death Wish",
+      "kind": "series",
+      "categories": ["crime-thriller", "action-adventure"],
+      "color": "#7f1d1d",
+      "description": "Charles Bronson as the vigilante Paul Kersey – the 2018 remake with Bruce Willis is optional.",
+      "films": [
+        { "title": "Death Wish", "year": 1974 },
+        { "title": "Death Wish II", "year": 1982 },
+        { "title": "Death Wish 3", "year": 1985 },
+        { "title": "Death Wish 4: The Crackdown", "year": 1987 },
+        { "title": "Death Wish V: The Face of Death", "year": 1994 },
+        { "title": "Death Wish", "year": 2018, "optional": true, "label": "Remake" }
+      ]
+    },
+    {
+      "slug": "the-raid",
+      "name": "The Raid",
+      "kind": "series",
+      "categories": ["action-adventure", "crime-thriller"],
+      "color": "#b45309",
+      "description": "Indonesian martial arts at full speed – some of the best action ever filmed.",
+      "films": [
+        { "title": "The Raid", "year": 2011 },
+        { "title": "The Raid 2", "year": 2014 }
+      ]
+    },
+    {
+      "slug": "dune",
+      "name": "Dune",
+      "kind": "series",
+      "categories": ["scifi"],
+      "color": "#d97706",
+      "description": "Arrakis on the big screen – David Lynch's 1984 version and Denis Villeneuve's saga.",
+      "films": [
+        { "title": "Dune", "year": 1984, "franchise": "David Lynch" },
+        { "title": "Dune", "year": 2021, "franchise": "Denis Villeneuve" },
+        { "title": "Dune: Part Two", "year": 2024, "franchise": "Denis Villeneuve" },
+        { "title": "Dune: Part Three", "year": 2026, "franchise": "Denis Villeneuve" }
+      ]
+    },
+    {
+      "slug": "tron",
+      "name": "Tron",
+      "kind": "series",
+      "categories": ["scifi", "action-adventure"],
+      "color": "#0ea5e9",
+      "description": "Inside the computer – light cycles, programs and the Grid.",
+      "films": [
+        { "title": "Tron", "year": 1982 },
+        { "title": "Tron: Legacy", "year": 2010 },
+        { "title": "Tron: Ares", "year": 2025 }
+      ]
+    },
+    {
+      "slug": "the-chronicles-of-narnia",
+      "name": "The Chronicles of Narnia",
+      "kind": "series",
+      "categories": ["fantasy", "family"],
+      "color": "#15803d",
+      "description": "Through the wardrobe into Narnia – Aslan, the White Witch and the Pevensie children.",
+      "films": [
+        { "title": "The Chronicles of Narnia: The Lion, the Witch and the Wardrobe", "year": 2005 },
+        { "title": "The Chronicles of Narnia: Prince Caspian", "year": 2008 },
+        { "title": "The Chronicles of Narnia: The Voyage of the Dawn Treader", "year": 2010 }
+      ]
+    },
+    {
+      "slug": "divergent",
+      "name": "Divergent",
+      "kind": "series",
+      "categories": ["scifi", "action-adventure"],
+      "color": "#4f46e5",
+      "description": "A future Chicago divided into factions – and Tris, who doesn't fit any of them.",
+      "films": [
+        { "title": "Divergent", "year": 2014 },
+        { "title": "The Divergent Series: Insurgent", "year": 2015 },
+        { "title": "The Divergent Series: Allegiant", "year": 2016 }
+      ]
+    },
+    {
+      "slug": "mortal-kombat",
+      "name": "Mortal Kombat",
+      "kind": "series",
+      "categories": ["action-adventure", "fantasy"],
+      "color": "#b91c1c",
+      "description": "Finish him! The fighting game on the big screen – from the 90s to the new films.",
+      "films": [
+        { "title": "Mortal Kombat", "year": 1995 },
+        { "title": "Mortal Kombat: Annihilation", "year": 1997 },
+        { "title": "Mortal Kombat", "year": 2021 },
+        { "title": "Mortal Kombat II", "year": 2026 }
+      ]
+    },
+    {
+      "slug": "the-mummy",
+      "name": "The Mummy",
+      "kind": "series",
+      "categories": ["action-adventure", "fantasy"],
+      "color": "#ca8a04",
+      "description": "Rick O'Connell, Evelyn and Imhotep – the adventure trilogy and The Scorpion King. The spin-off sequels and the 2017 reboot are optional.",
+      "films": [
+        { "title": "The Mummy", "year": 1999, "franchise": "The Mummy" },
+        { "title": "The Mummy Returns", "year": 2001, "franchise": "The Mummy" },
+        { "title": "The Scorpion King", "year": 2002, "franchise": "The Scorpion King" },
+        { "title": "The Scorpion King 2: Rise of a Warrior", "year": 2008, "optional": true, "franchise": "The Scorpion King" },
+        { "title": "The Mummy: Tomb of the Dragon Emperor", "year": 2008, "franchise": "The Mummy" },
+        { "title": "The Scorpion King 3: Battle for Redemption", "year": 2012, "optional": true, "franchise": "The Scorpion King" },
+        { "title": "The Scorpion King 4: Quest for Power", "year": 2015, "optional": true, "franchise": "The Scorpion King" },
+        { "title": "The Mummy", "year": 2017, "optional": true, "label": "Reboot" },
+        { "title": "The Scorpion King: Book of Souls", "year": 2018, "optional": true, "franchise": "The Scorpion King" }
+      ]
+    },
+    {
+      "slug": "cloverfield",
+      "name": "Cloverfield",
+      "kind": "series",
+      "categories": ["scifi", "horror"],
+      "color": "#64748b",
+      "description": "Something attacked New York – three loosely connected films from J. J. Abrams.",
+      "films": [
+        { "title": "Cloverfield", "year": 2008 },
+        { "title": "10 Cloverfield Lane", "year": 2016 },
+        { "title": "The Cloverfield Paradox", "year": 2018 }
+      ]
+    },
+    {
+      "slug": "a-quiet-place",
+      "name": "A Quiet Place",
+      "kind": "series",
+      "categories": ["horror", "scifi"],
+      "color": "#57534e",
+      "description": "If they hear you, they hunt you. Don't make a sound.",
+      "films": [
+        { "title": "A Quiet Place", "year": 2018 },
+        { "title": "A Quiet Place Part II", "year": 2021 },
+        { "title": "A Quiet Place: Day One", "year": 2024, "story": 1 }
+      ]
+    },
+    {
+      "slug": "tremors",
+      "name": "Tremors",
+      "kind": "series",
+      "categories": ["horror", "comedy"],
+      "color": "#a16207",
+      "description": "Giant worms under the desert of Perfection, Nevada – the direct-to-video sequels are optional.",
+      "films": [
+        { "title": "Tremors", "year": 1990 },
+        { "title": "Tremors 2: Aftershocks", "year": 1996 },
+        { "title": "Tremors 3: Back to Perfection", "year": 2001, "optional": true },
+        { "title": "Tremors 4: The Legend Begins", "year": 2004, "optional": true },
+        { "title": "Tremors 5: Bloodlines", "year": 2015, "optional": true },
+        { "title": "Tremors: A Cold Day in Hell", "year": 2018, "optional": true },
+        { "title": "Tremors: Shrieker Island", "year": 2020, "optional": true }
+      ]
+    },
+    {
+      "slug": "jaws",
+      "name": "Jaws",
+      "kind": "series",
+      "categories": ["horror", "action-adventure"],
+      "color": "#0369a1",
+      "description": "You're gonna need a bigger boat. Spielberg's shark and its sequels – 3-D and The Revenge are optional.",
+      "films": [
+        { "title": "Jaws", "year": 1975 },
+        { "title": "Jaws 2", "year": 1978 },
+        { "title": "Jaws 3-D", "year": 1983, "optional": true },
+        { "title": "Jaws: The Revenge", "year": 1987, "optional": true }
+      ]
+    },
+    {
+      "slug": "childs-play",
+      "name": "Child's Play",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#dc2626",
+      "description": "Hi, I'm Chucky. Wanna play? The killer doll from 1988 onwards – the 2019 remake is optional.",
+      "films": [
+        { "title": "Child's Play", "year": 1988 },
+        { "title": "Child's Play 2", "year": 1990 },
+        { "title": "Child's Play 3", "year": 1991 },
+        { "title": "Bride of Chucky", "year": 1998 },
+        { "title": "Seed of Chucky", "year": 2004 },
+        { "title": "Curse of Chucky", "year": 2013 },
+        { "title": "Cult of Chucky", "year": 2017 },
+        { "title": "Child's Play", "year": 2019, "optional": true, "label": "Remake" }
+      ]
+    },
+    {
+      "slug": "paranormal-activity",
+      "name": "Paranormal Activity",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#1f2937",
+      "description": "The found-footage hit that started with a camera in the bedroom.",
+      "films": [
+        { "title": "Paranormal Activity", "year": 2007 },
+        { "title": "Paranormal Activity 2", "year": 2010 },
+        { "title": "Paranormal Activity 3", "year": 2011 },
+        { "title": "Paranormal Activity 4", "year": 2012 },
+        { "title": "Paranormal Activity: The Marked Ones", "year": 2014 },
+        { "title": "Paranormal Activity: The Ghost Dimension", "year": 2015 },
+        { "title": "Paranormal Activity: Next of Kin", "year": 2021 }
+      ]
+    },
+    {
+      "slug": "evil-dead",
+      "name": "Evil Dead",
+      "kind": "series",
+      "categories": ["horror", "comedy"],
+      "color": "#7f1d1d",
+      "description": "The Necronomicon, a cabin in the woods and Ash with his chainsaw – plus the new films.",
+      "films": [
+        { "title": "The Evil Dead", "year": 1981 },
+        { "title": "Evil Dead II", "year": 1987 },
+        { "title": "Army of Darkness", "year": 1992 },
+        { "title": "Evil Dead", "year": 2013 },
+        { "title": "Evil Dead Rise", "year": 2023 }
+      ]
+    },
+    {
+      "slug": "candyman",
+      "name": "Candyman",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#9f1239",
+      "description": "Say his name five times in front of a mirror… The third film is optional.",
+      "films": [
+        { "title": "Candyman", "year": 1992 },
+        { "title": "Candyman: Farewell to the Flesh", "year": 1995 },
+        { "title": "Candyman: Day of the Dead", "year": 1999, "optional": true },
+        { "title": "Candyman", "year": 2021 }
+      ]
+    },
+    {
+      "slug": "poltergeist",
+      "name": "Poltergeist",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#6d28d9",
+      "description": "They're here. The haunted-house classic and its sequels – the 2015 remake is optional.",
+      "films": [
+        { "title": "Poltergeist", "year": 1982 },
+        { "title": "Poltergeist II: The Other Side", "year": 1986 },
+        { "title": "Poltergeist III", "year": 1988 },
+        { "title": "Poltergeist", "year": 2015, "optional": true, "label": "Remake" }
+      ]
+    },
+    {
+      "slug": "hostel",
+      "name": "Hostel",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#991b1b",
+      "description": "Backpacking in Slovakia goes very wrong – Eli Roth's torture horror. Part III is optional.",
+      "films": [
+        { "title": "Hostel", "year": 2005 },
+        { "title": "Hostel: Part II", "year": 2007 },
+        { "title": "Hostel: Part III", "year": 2011, "optional": true }
+      ]
+    },
+    {
+      "slug": "jeepers-creepers",
+      "name": "Jeepers Creepers",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#854d0e",
+      "description": "Every 23rd spring, for 23 days, the Creeper gets to eat. The later sequels are optional.",
+      "films": [
+        { "title": "Jeepers Creepers", "year": 2001 },
+        { "title": "Jeepers Creepers 2", "year": 2003 },
+        { "title": "Jeepers Creepers 3", "year": 2017, "optional": true },
+        { "title": "Jeepers Creepers: Reborn", "year": 2022, "optional": true }
+      ]
+    },
+    {
+      "slug": "28-days-later",
+      "name": "28 Days Later",
+      "kind": "series",
+      "categories": ["horror", "scifi"],
+      "color": "#b91c1c",
+      "description": "The Rage virus empties Britain – Danny Boyle and Alex Garland's infected saga.",
+      "films": [
+        { "title": "28 Days Later", "year": 2002 },
+        { "title": "28 Weeks Later", "year": 2007 },
+        { "title": "28 Years Later", "year": 2025 },
+        { "title": "28 Years Later: The Bone Temple", "year": 2026 }
+      ]
+    },
+    {
+      "slug": "romero-living-dead",
+      "name": "Romero's Living Dead",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#3f6212",
+      "description": "George A. Romero's zombie films – the father of the modern zombie, from Night of the Living Dead on.",
+      "films": [
+        { "title": "Night of the Living Dead", "year": 1968 },
+        { "title": "Dawn of the Dead", "year": 1978 },
+        { "title": "Day of the Dead", "year": 1985 },
+        { "title": "Land of the Dead", "year": 2005 },
+        { "title": "Diary of the Dead", "year": 2007 },
+        { "title": "Survival of the Dead", "year": 2009 }
+      ]
+    },
+    {
+      "slug": "phantasm",
+      "name": "Phantasm",
+      "kind": "series",
+      "categories": ["horror", "fantasy"],
+      "color": "#71717a",
+      "description": "Boooy! The Tall Man and his flying silver spheres.",
+      "films": [
+        { "title": "Phantasm", "year": 1979 },
+        { "title": "Phantasm II", "year": 1988 },
+        { "title": "Phantasm III: Lord of the Dead", "year": 1994 },
+        { "title": "Phantasm IV: Oblivion", "year": 1998 },
+        { "title": "Phantasm: Ravager", "year": 2016 }
+      ]
+    },
+    {
+      "slug": "hannibal-lecter",
+      "name": "Hannibal Lecter",
+      "kind": "series",
+      "categories": ["crime-thriller", "horror"],
+      "color": "#7c2d12",
+      "description": "Dr. Lecter, from Manhunter to Hannibal Rising – Red Dragon and Manhunter tell the same story.",
+      "films": [
+        { "title": "Manhunter", "year": 1986 },
+        { "title": "The Silence of the Lambs", "year": 1991 },
+        { "title": "Hannibal", "year": 2001 },
+        { "title": "Red Dragon", "year": 2002 },
+        { "title": "Hannibal Rising", "year": 2007 }
+      ]
+    },
+    {
+      "slug": "it",
+      "name": "It",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#dc2626",
+      "description": "Pennywise and the Losers' Club in Derry – Stephen King's It in two chapters.",
+      "films": [
+        { "title": "It", "year": 2017 },
+        { "title": "It Chapter Two", "year": 2019 }
+      ]
+    },
+    {
+      "slug": "smile",
+      "name": "Smile",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#be123c",
+      "description": "A curse that passes on with a smile you will never forget.",
+      "films": [
+        { "title": "Smile", "year": 2022 },
+        { "title": "Smile 2", "year": 2024 }
+      ]
+    },
+    {
+      "slug": "sinister",
+      "name": "Sinister",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#292524",
+      "description": "Old home movies and Bughuul, the eater of children.",
+      "films": [
+        { "title": "Sinister", "year": 2012 },
+        { "title": "Sinister 2", "year": 2015 }
+      ]
+    },
+    {
+      "slug": "pet-sematary",
+      "name": "Pet Sematary",
+      "kind": "series",
+      "categories": ["horror"],
+      "color": "#4d7c0f",
+      "description": "Sometimes dead is better. Stephen King's cemetery – the sequel and the prequel are optional.",
+      "films": [
+        { "title": "Pet Sematary", "year": 1989 },
+        { "title": "Pet Sematary Two", "year": 1992, "optional": true },
+        { "title": "Pet Sematary", "year": 2019, "label": "Remake" },
+        { "title": "Pet Sematary: Bloodlines", "year": 2023, "optional": true }
+      ]
+    },
+    {
+      "slug": "gremlins",
+      "name": "Gremlins",
+      "kind": "series",
+      "categories": ["comedy", "horror"],
+      "color": "#16a34a",
+      "description": "Three rules: no bright light, no water and never feed him after midnight.",
+      "films": [
+        { "title": "Gremlins", "year": 1984 },
+        { "title": "Gremlins 2: The New Batch", "year": 1990 }
+      ]
+    },
+    {
+      "slug": "godzilla",
+      "name": "Godzilla",
+      "kind": "series",
+      "categories": ["scifi", "action-adventure"],
+      "color": "#15803d",
+      "description": "The King of the Monsters – the essential Toho films from 1954 to Godzilla Minus One and Hollywood's MonsterVerse. The rest of each era is optional.",
+      "films": [
+        { "title": "Godzilla", "year": 1954, "group": "Shōwa era" },
+        { "title": "Godzilla Raids Again", "year": 1955, "group": "Shōwa era", "optional": true },
+        { "title": "King Kong vs. Godzilla", "year": 1962, "group": "Shōwa era", "optional": true },
+        { "title": "Mothra vs. Godzilla", "year": 1964, "group": "Shōwa era" },
+        { "title": "Ghidorah, the Three-Headed Monster", "year": 1964, "group": "Shōwa era" },
+        { "title": "Invasion of Astro-Monster", "year": 1965, "group": "Shōwa era", "optional": true },
+        { "title": "Ebirah, Horror of the Deep", "year": 1966, "group": "Shōwa era", "optional": true },
+        { "title": "Son of Godzilla", "year": 1967, "group": "Shōwa era", "optional": true },
+        { "title": "Destroy All Monsters", "year": 1968, "group": "Shōwa era" },
+        { "title": "All Monsters Attack", "year": 1969, "group": "Shōwa era", "optional": true },
+        { "title": "Godzilla vs. Hedorah", "year": 1971, "group": "Shōwa era", "optional": true },
+        { "title": "Godzilla vs. Gigan", "year": 1972, "group": "Shōwa era", "optional": true },
+        { "title": "Godzilla vs. Megalon", "year": 1973, "group": "Shōwa era", "optional": true },
+        { "title": "Godzilla vs. Mechagodzilla", "year": 1974, "group": "Shōwa era" },
+        { "title": "Terror of Mechagodzilla", "year": 1975, "group": "Shōwa era", "optional": true },
+        { "title": "The Return of Godzilla", "year": 1984, "group": "Heisei era" },
+        { "title": "Godzilla vs. Biollante", "year": 1989, "group": "Heisei era" },
+        { "title": "Godzilla vs. King Ghidorah", "year": 1991, "group": "Heisei era" },
+        { "title": "Godzilla vs. Mothra", "year": 1992, "group": "Heisei era", "optional": true },
+        { "title": "Godzilla vs. Mechagodzilla II", "year": 1993, "group": "Heisei era", "optional": true },
+        { "title": "Godzilla vs. SpaceGodzilla", "year": 1994, "group": "Heisei era", "optional": true },
+        { "title": "Godzilla vs. Destoroyah", "year": 1995, "group": "Heisei era" },
+        { "title": "Godzilla 2000: Millennium", "year": 1999, "group": "Millennium era" },
+        { "title": "Godzilla vs. Megaguirus", "year": 2000, "group": "Millennium era", "optional": true },
+        { "title": "Godzilla, Mothra and King Ghidorah: Giant Monsters All-Out Attack", "year": 2001, "group": "Millennium era" },
+        { "title": "Godzilla Against MechaGodzilla", "year": 2002, "group": "Millennium era", "optional": true },
+        { "title": "Godzilla: Tokyo S.O.S.", "year": 2003, "group": "Millennium era", "optional": true },
+        { "title": "Godzilla: Final Wars", "year": 2004, "group": "Millennium era" },
+        { "title": "Shin Godzilla", "year": 2016, "group": "Reiwa era" },
+        { "title": "Godzilla Minus One", "year": 2023, "group": "Reiwa era" },
+        { "title": "Godzilla", "year": 1998, "group": "Hollywood", "optional": true, "label": "TriStar" },
+        { "title": "Godzilla", "year": 2014, "group": "Hollywood", "franchise": "MonsterVerse" },
+        { "title": "Kong: Skull Island", "year": 2017, "group": "Hollywood", "franchise": "MonsterVerse" },
+        { "title": "Godzilla: King of the Monsters", "year": 2019, "group": "Hollywood", "franchise": "MonsterVerse" },
+        { "title": "Godzilla vs. Kong", "year": 2021, "group": "Hollywood", "franchise": "MonsterVerse" },
+        { "title": "Godzilla x Kong: The New Empire", "year": 2024, "group": "Hollywood", "franchise": "MonsterVerse" }
+      ]
+    },
+    {
+      "slug": "king-kong",
+      "name": "King Kong",
+      "kind": "series",
+      "categories": ["action-adventure", "scifi"],
+      "color": "#78350f",
+      "description": "The eighth wonder of the world – from the 1933 original to Peter Jackson and the MonsterVerse.",
+      "films": [
+        { "title": "King Kong", "year": 1933 },
+        { "title": "Son of Kong", "year": 1933, "optional": true },
+        { "title": "King Kong vs. Godzilla", "year": 1962, "optional": true },
+        { "title": "King Kong", "year": 1976 },
+        { "title": "King Kong Lives", "year": 1986, "optional": true },
+        { "title": "King Kong", "year": 2005 },
+        { "title": "Kong: Skull Island", "year": 2017, "franchise": "MonsterVerse" },
+        { "title": "Godzilla vs. Kong", "year": 2021, "franchise": "MonsterVerse" },
+        { "title": "Godzilla x Kong: The New Empire", "year": 2024, "franchise": "MonsterVerse" }
+      ]
+    },
+    {
+      "slug": "a24",
+      "name": "A24",
+      "kind": "studio",
+      "categories": ["drama", "horror"],
+      "color": "#111827",
+      "description": "The indie studio that redefined horror and arthouse – a selection of its best films.",
+      "films": [
+        { "title": "Ex Machina", "year": 2015, "group": "2010s" },
+        { "title": "The Witch", "year": 2015, "group": "2010s" },
+        { "title": "Room", "year": 2015, "group": "2010s" },
+        { "title": "Green Room", "year": 2015, "group": "2010s" },
+        { "title": "The Lobster", "year": 2015, "group": "2010s" },
+        { "title": "Moonlight", "year": 2016, "group": "2010s" },
+        { "title": "It Comes at Night", "year": 2017, "group": "2010s" },
+        { "title": "Lady Bird", "year": 2017, "group": "2010s" },
+        { "title": "The Florida Project", "year": 2017, "group": "2010s" },
+        { "title": "The Disaster Artist", "year": 2017, "group": "2010s" },
+        { "title": "Hereditary", "year": 2018, "group": "2010s" },
+        { "title": "Eighth Grade", "year": 2018, "group": "2010s" },
+        { "title": "Midsommar", "year": 2019, "group": "2010s" },
+        { "title": "Uncut Gems", "year": 2019, "group": "2010s" },
+        { "title": "The Lighthouse", "year": 2019, "group": "2010s" },
+        { "title": "Minari", "year": 2020, "group": "2020s" },
+        { "title": "The Green Knight", "year": 2021, "group": "2020s" },
+        { "title": "Marcel the Shell with Shoes On", "year": 2022, "group": "2020s" },
+        { "title": "X", "year": 2022, "group": "2020s" },
+        { "title": "Pearl", "year": 2022, "group": "2020s" },
+        { "title": "Everything Everywhere All at Once", "year": 2022, "group": "2020s" },
+        { "title": "The Whale", "year": 2022, "group": "2020s" },
+        { "title": "Talk to Me", "year": 2023, "group": "2020s" },
+        { "title": "Past Lives", "year": 2023, "group": "2020s" },
+        { "title": "The Zone of Interest", "year": 2023, "group": "2020s" },
+        { "title": "The Iron Claw", "year": 2023, "group": "2020s" },
+        { "title": "Civil War", "year": 2024, "group": "2020s" },
+        { "title": "Heretic", "year": 2024, "group": "2020s" },
+        { "title": "Marty Supreme", "year": 2025, "group": "2020s" }
+      ]
+    },
+    {
+      "slug": "blumhouse",
+      "name": "Blumhouse",
+      "kind": "studio",
+      "categories": ["horror"],
+      "color": "#262626",
+      "description": "Small budgets, big scares – the studio behind Paranormal Activity, Get Out and M3GAN.",
+      "films": [
+        { "title": "Paranormal Activity", "year": 2007, "group": "2000s" },
+        { "title": "Insidious", "year": 2010, "group": "2010s" },
+        { "title": "Sinister", "year": 2012, "group": "2010s" },
+        { "title": "The Purge", "year": 2013, "group": "2010s" },
+        { "title": "Whiplash", "year": 2014, "group": "2010s" },
+        { "title": "Unfriended", "year": 2014, "group": "2010s" },
+        { "title": "The Gift", "year": 2015, "group": "2010s" },
+        { "title": "Split", "year": 2016, "group": "2010s" },
+        { "title": "Ouija: Origin of Evil", "year": 2016, "group": "2010s" },
+        { "title": "Get Out", "year": 2017, "group": "2010s" },
+        { "title": "Happy Death Day", "year": 2017, "group": "2010s" },
+        { "title": "Upgrade", "year": 2018, "group": "2010s" },
+        { "title": "Halloween", "year": 2018, "group": "2010s" },
+        { "title": "BlacKkKlansman", "year": 2018, "group": "2010s" },
+        { "title": "Glass", "year": 2019, "group": "2010s" },
+        { "title": "The Invisible Man", "year": 2020, "group": "2020s" },
+        { "title": "Freaky", "year": 2020, "group": "2020s" },
+        { "title": "The Black Phone", "year": 2022, "group": "2020s" },
+        { "title": "M3GAN", "year": 2022, "group": "2020s" },
+        { "title": "Five Nights at Freddy's", "year": 2023, "group": "2020s" },
+        { "title": "Speak No Evil", "year": 2024, "group": "2020s" },
+        { "title": "Wolf Man", "year": 2025, "group": "2020s" }
+      ]
+    },
+    {
+      "slug": "amblin",
+      "name": "Amblin Entertainment",
+      "kind": "studio",
+      "categories": ["family", "scifi"],
+      "color": "#1d4ed8",
+      "description": "The boy on the bike in front of the moon – Spielberg's company and the adventures that defined the 80s.",
+      "films": [
+        { "title": "E.T. the Extra-Terrestrial", "year": 1982, "group": "1980s" },
+        { "title": "Gremlins", "year": 1984, "group": "1980s" },
+        { "title": "Back to the Future", "year": 1985, "group": "1980s" },
+        { "title": "The Goonies", "year": 1985, "group": "1980s" },
+        { "title": "Young Sherlock Holmes", "year": 1985, "optional": true, "group": "1980s" },
+        { "title": "An American Tail", "year": 1986, "group": "1980s" },
+        { "title": "Innerspace", "year": 1987, "group": "1980s" },
+        { "title": "*batteries not included", "year": 1987, "optional": true, "group": "1980s" },
+        { "title": "Who Framed Roger Rabbit", "year": 1988, "group": "1980s" },
+        { "title": "The Land Before Time", "year": 1988, "group": "1980s" },
+        { "title": "Back to the Future Part II", "year": 1989, "group": "1980s" },
+        { "title": "Back to the Future Part III", "year": 1990, "group": "1990s" },
+        { "title": "Gremlins 2: The New Batch", "year": 1990, "group": "1990s" },
+        { "title": "Arachnophobia", "year": 1990, "group": "1990s" },
+        { "title": "Hook", "year": 1991, "group": "1990s" },
+        { "title": "Jurassic Park", "year": 1993, "group": "1990s" },
+        { "title": "The Flintstones", "year": 1994, "group": "1990s" },
+        { "title": "Casper", "year": 1995, "group": "1990s" },
+        { "title": "Twister", "year": 1996, "group": "1990s" },
+        { "title": "Men in Black", "year": 1997, "group": "1990s" },
+        { "title": "The Mask of Zorro", "year": 1998, "group": "1990s" },
+        { "title": "Super 8", "year": 2011, "group": "2010s" },
+        { "title": "Ready Player One", "year": 2018, "group": "2010s" },
+        { "title": "1917", "year": 2019, "group": "2010s" }
+      ]
+    },
+    {
+      "slug": "toho",
+      "name": "Toho",
+      "kind": "studio",
+      "categories": ["scifi", "drama"],
+      "color": "#be123c",
+      "description": "Japan's great studio – Godzilla, Kurosawa's samurai and the anime hits it brought to cinemas.",
+      "films": [
+        { "title": "Seven Samurai", "year": 1954, "group": "1950s" },
+        { "title": "Godzilla", "year": 1954, "group": "1950s" },
+        { "title": "Rodan", "year": 1956, "group": "1950s" },
+        { "title": "The Mysterians", "year": 1957, "group": "1950s" },
+        { "title": "Throne of Blood", "year": 1957, "group": "1950s" },
+        { "title": "The Hidden Fortress", "year": 1958, "group": "1950s" },
+        { "title": "Mothra", "year": 1961, "group": "1960s" },
+        { "title": "Yojimbo", "year": 1961, "group": "1960s" },
+        { "title": "Sanjuro", "year": 1962, "group": "1960s" },
+        { "title": "High and Low", "year": 1963, "group": "1960s" },
+        { "title": "Kwaidan", "year": 1964, "group": "1960s" },
+        { "title": "The Sword of Doom", "year": 1966, "group": "1960s" },
+        { "title": "Japan's Longest Day", "year": 1967, "group": "1960s" },
+        { "title": "Kagemusha", "year": 1980, "group": "1980s" },
+        { "title": "Princess Mononoke", "year": 1997, "group": "1990s" },
+        { "title": "Spirited Away", "year": 2001, "group": "2000s" },
+        { "title": "Your Name.", "year": 2016, "group": "2010s" },
+        { "title": "Shin Godzilla", "year": 2016, "group": "2010s" },
+        { "title": "Weathering with You", "year": 2019, "group": "2010s" },
+        { "title": "Suzume", "year": 2022, "group": "2020s" },
+        { "title": "Shin Ultraman", "year": 2022, "group": "2020s" },
+        { "title": "Godzilla Minus One", "year": 2023, "group": "2020s" },
+        { "title": "The Boy and the Heron", "year": 2023, "group": "2020s" }
+      ]
+    },
+    {
+      "slug": "path-kaiju-101",
+      "name": "Kaiju 101",
+      "kind": "path",
+      "categories": ["scifi"],
+      "color": "#16a34a",
+      "description": "Giant monsters from the 1933 King Kong to Godzilla Minus One – twelve steps through the history of kaiju.",
+      "films": [
+        { "title": "Godzilla", "year": 1954, "note": "Where it all began: a monster born from the atomic bomb – a dark, serious film, not a romp." },
+        { "title": "King Kong", "year": 1933, "note": "The ape who started the giant-monster movie – stop-motion magic that still works." },
+        { "title": "Mothra", "year": 1961, "note": "A giant moth, two tiny fairies and a monster who protects rather than destroys." },
+        { "title": "Ghidorah, the Three-Headed Monster", "year": 1964, "note": "Godzilla turns hero: the start of monster team-ups against a bigger threat." },
+        { "title": "Destroy All Monsters", "year": 1968, "note": "Every Toho monster in one film – pure Saturday-matinee fun." },
+        { "title": "Gamera: Guardian of the Universe", "year": 1995, "note": "Godzilla's flying-turtle rival, rebooted in style for the 90s." },
+        { "title": "The Host", "year": 2006, "note": "Bong Joon-ho's river monster – a family drama, a comedy and a creature film at once." },
+        { "title": "Cloverfield", "year": 2008, "note": "A monster attack filmed on a party guest's camcorder." },
+        { "title": "Pacific Rim", "year": 2013, "note": "Giant robots against kaiju – Guillermo del Toro's love letter to the genre." },
+        { "title": "Shin Godzilla", "year": 2016, "note": "Godzilla as a disaster that Japan's bureaucracy can't handle – sharp and surprising." },
+        { "title": "Kong: Skull Island", "year": 2017, "note": "Kong joins the MonsterVerse – the 70s, helicopters and a very big island." },
+        { "title": "Godzilla Minus One", "year": 2023, "note": "Post-war Japan faces Godzilla – the first Godzilla film to win an Oscar." }
+      ]
     }
   ]
 }
