@@ -135,8 +135,8 @@ function section(title, count, rows, extraClass = "") {
 /** Řádek člověka: iniciála, @nick (odkaz na profil u přátel), datum a tlačítka. */
 function personRow(person, meta, actions, linkProfile = false) {
     const name = linkProfile
-        ? h("a", { class: "friend-row__name", href: `#/u/${encodeURIComponent(person.username)}` }, `@${person.username}`)
-        : h("strong", { class: "friend-row__name" }, `@${person.username}`);
+        ? h("a", { class: "friend-row__name", href: `#/u/${encodeURIComponent(person.username)}`, "data-badge-user": person.username }, `@${person.username}`)
+        : h("strong", { class: "friend-row__name", "data-badge-user": person.username }, `@${person.username}`);
     return h("li", { class: "friend-row" },
         h("span", { class: "user-result__avatar", "aria-hidden": "true" }, person.username.charAt(0).toUpperCase()),
         h("span", { class: "friend-row__info" }, name, h("span", { class: "muted" }, meta)),

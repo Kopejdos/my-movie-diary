@@ -14,6 +14,8 @@ import { warmOverview, invalidateProgress } from "./data.js";
 import { getPendingCount, refreshPendingCount, resetFriends } from "./social.js";
 import { fetchCommunityLists } from "./lists.js";
 import { tourFor, loadSeen } from "./guide.js";
+import { applyBadges } from "./badges.js";
+import { resetPerks } from "./perks.js";
 
 // Přehled a detail kolekce se načítají hned (první, co uživatel uvidí);
 // ostatní obrazovky až při prvním otevření – méně JavaScriptu při startu (V2.1.1)
@@ -174,7 +176,7 @@ function renderHeader() {
                             title: pending > 0 ? format("friendsPendingAria", pending) : TEXTS.navProfile,
                         },
                             level ? h("span", { class: "nav__level", title: `${level.title} · ${level.xp} XP` }, String(level.level)) : null,
-                            h("span", { class: "nav__nick" }, profile ? `@${profile.username}` : ""),
+                            h("span", { class: "nav__nick", "data-badge-user": profile?.username ?? null, "data-badge-compact": "1" }, profile ? `@${profile.username}` : ""),
                             pending > 0 ? h("span", { class: "nav__badge", "aria-hidden": "true" }, String(pending)) : null),
                         // Sign out je od V4.0 v Settings (⚙ → All settings, nebo záložka v profilu)
                     ]
@@ -187,6 +189,7 @@ function renderHeader() {
             ),
         ),
     );
+    applyBadges(header);         // odznak Elite u vlastního nicku (V4.4)
 }
 
 /** Stránky, které patří k profilu (zvýraznění @nick v hlavičce i Profilu ve spodní liště). */
@@ -251,6 +254,7 @@ onAuthChange(({ user, profile }) => {
     if (userId === lastUserId) return;   // jen obnova tokenu nebo načtení profilu
     const signedInNow = userId !== null && lastUserId === null;
     lastUserId = userId;
+    resetPerks();                  // výhody za úroveň patří jinému (nebo žádnému) uživateli (V4.4)
     invalidateProgress();          // postup patří jinému (nebo žádnému) uživateli
     if (!userId) {
         level = null;              // po odhlášení zmizí odznak úrovně
@@ -287,6 +291,13 @@ document.addEventListener("route-rendered", () => {
     friendsCheckedAt = Date.now();
     whenIdle(refreshPendingCount, 500);
 });
+
+// Odznaky u nicků (V4.4): kdekoli na stránce stačí data-badge-user – nové nicky se dozdobí samy
+let badgeTimer = 0;
+new MutationObserver(() => {
+    clearTimeout(badgeTimer);
+    badgeTimer = setTimeout(() => applyBadges(main), 80);
+}).observe(main, { childList: true, subtree: true });
 
 // Průvodce pro nováčky (V4.3.4): prohlídka přehledu při první návštěvě, prohlídka tlačítek u filmů
 // při prvním otevření kolekce. Kód prohlídky se načte, jen když se opravdu má ukázat.

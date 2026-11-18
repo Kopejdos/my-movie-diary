@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v34";       // V4.3.8: žánrové výběry a cesty (konec V4.3); od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v35";       // V4.4: výhody za úroveň, odznak Elite; od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline
@@ -53,6 +53,8 @@ const SHELL = [
     "js/lists.js",
     "js/settings.js",
     "js/guide.js",
+    "js/perks.js",
+    "js/badges.js",
     "js/collection-texts.js",
     "js/views/universes.js",
     "js/views/universe.js",

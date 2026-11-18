@@ -7897,3 +7897,162 @@ a.friend-row__name:hover {
 .help-key__sample--icon {
     color: var(--text);
 }
+
+/* =====================================================================
+   V4.4 – výhody za úroveň (profil) a odznak Elite
+   ===================================================================== */
+.perks {
+    display: grid;
+    gap: 14px;
+}
+
+.perks__intro {
+    margin: 0;
+}
+
+.perks__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+}
+
+.perk {
+    display: grid;
+    gap: 2px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+}
+
+.perk__value {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--heading);
+}
+
+.perk__old {
+    color: var(--muted);
+    font-size: 1rem;
+    text-decoration: line-through;
+}
+
+.perk__label {
+    font-size: 0.82rem;
+    color: var(--muted);
+}
+
+.perks__next {
+    display: grid;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 14px;
+    border: 1px dashed var(--accent);
+}
+
+.perks__next-title,
+.perks__max {
+    margin: 0;
+}
+
+.perks__all summary {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.perks__table-wrap {
+    overflow-x: auto;
+    margin-top: 10px;
+}
+
+.perks__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+}
+
+.perks__table th,
+.perks__table td {
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--border);
+    text-align: right;
+    white-space: nowrap;
+}
+
+.perks__table th:first-child {
+    text-align: left;
+}
+
+.perks__table thead th {
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.perks__row--current th,
+.perks__row--current td {
+    color: var(--heading);
+    font-weight: 700;
+    background: var(--panel);
+}
+
+/* Odznak Elite u nicku */
+.user-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    align-self: center;
+    margin-left: 6px;
+    padding: 1px 8px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    line-height: 1.6;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.user-badge--elite {
+    color: #2a1d00;
+    background: linear-gradient(135deg, #fde68a, #f59e0b 55%, #fbbf24);
+    box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.45);
+}
+
+.profile-hero__name + .user-badge {
+    margin: 4px 0 0;
+    font-size: 0.85rem;
+}
+
+.friend-row__info > .user-badge {
+    margin-left: 0;
+}
+
+.user-badge--compact {
+    margin-left: 4px;
+    padding: 0;
+    width: 18px;
+    height: 18px;
+    justify-content: center;
+    font-size: 0.7rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+/* tabulka všech úrovní se na úzkém telefonu posouvá sama, stránka ne */
+.perks,
+.perks > *,
+.perks__all {
+    min-width: 0;
+    max-width: 100%;
+}
+
+@media (max-width: 599px) {
+    .perks__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .perk__value {
+        font-size: 1.15rem;
+    }
+}

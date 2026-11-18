@@ -6,7 +6,7 @@
 import { getProfile, getUser, isSignedIn } from "../auth.js";
 import {
     listUniversesForAdmin, createUniverse, deleteUniverse, swapUniverseOrder, slugify,
-    listUsers, setUserAdmin, deleteUser, resetUsername,
+    listUsers, setUserAdmin, deleteUser, resetUsername, setUserBadge,
     listBlockedWords, addBlockedWord, removeBlockedWord, countCatalogFilms, nextGoal,
 } from "../admin.js";
 import { setAccent } from "../theme.js";
@@ -16,6 +16,7 @@ import { field } from "./login.js";
 import { fetchSearchData } from "../data.js";
 import { adminSearch, matchesQuery, highlight, noResults } from "./admin-search.js";
 import { seriesUpdatesPanel } from "./admin-series.js";
+import { badgeChip, forgetBadges } from "../badges.js";
 
 /** Je přihlášený správce? Jinak ukáže hlášku a vrátí false. */
 export function requireAdminView(container) {
@@ -308,6 +309,7 @@ export async function adminUsersView(container, context) {
     const filters = [
         { value: "all", label: TEXTS.kindAll },
         { value: "admins", label: TEXTS.adminFilterAdmins },
+        { value: "elite", label: `★ ${TEXTS.badge_elite}` },
         { value: "google", label: "Google" },
         { value: "email", label: "Email" },
     ];
@@ -318,6 +320,7 @@ export async function adminUsersView(container, context) {
     const byFilter = {
         all: () => true,
         admins: (u) => u.is_admin,
+        elite: (u) => (u.badges ?? []).includes("elite"),
         google: (u) => u.provider === "google",
         email: (u) => u.provider !== "google",
         flagged: (u) => u.flagged,
@@ -371,19 +374,34 @@ function userRow(user, isSelf, reload, query = "") {
             h("div", { class: "pills" },
                 user.flagged ? h("span", { class: "pill pill--danger", title: TEXTS.adminFlaggedHint }, `⚠ ${TEXTS.adminFlagged}`) : null,
                 user.is_admin ? pill(TEXTS.profileAdmin, true) : null,
+                (user.badges ?? []).includes("elite") ? badgeChip("elite") : null,
                 isSelf ? pill(TEXTS.adminYou, true) : null,
+                user.level ? pill(format("levelLabel", user.level)) : null,
                 user.is_public ? pill(TEXTS.adminPublic) : null,
                 pill(user.provider === "google" ? "Google" : "Email"),
                 pill(format("adminWatches", user.watch_count)),
                 pill(format("adminJoined", formatDate(user.created_at?.slice(0, 10)))),
             ),
         ),
-        isSelf ? null : h("div", { class: "admin-row__actions" },
+        h("div", { class: "admin-row__actions" },
+            // Elite (V4.4) – jen ozdoba; může ho dostat i správce sám
             h("button", {
+                class: `btn btn--small${(user.badges ?? []).includes("elite") ? " btn--primary" : ""}`, type: "button",
+                "aria-pressed": String((user.badges ?? []).includes("elite")),
+                title: TEXTS.adminEliteHint,
+                onClick: () => {
+                    const on = !(user.badges ?? []).includes("elite");
+                    run(async () => {
+                        await setUserBadge(user.id, "elite", on);
+                        forgetBadges(user.username);
+                    }, on ? format("adminEliteGranted", name) : format("adminEliteRemoved", name));
+                },
+            }, (user.badges ?? []).includes("elite") ? TEXTS.adminEliteRemove : TEXTS.adminEliteGrant),
+            isSelf ? null : h("button", {
                 class: "btn btn--small", type: "button",
                 onClick: () => run(() => setUserAdmin(user.id, !user.is_admin), TEXTS.adminSaved),
             }, user.is_admin ? TEXTS.adminRemoveAdmin : TEXTS.adminMakeAdmin),
-            h("button", {
+            isSelf ? null : h("button", {
                 class: `btn btn--small${user.flagged ? " btn--primary" : ""}`, type: "button",
                 title: TEXTS.adminResetNicknameHint,
                 onClick: () => {
@@ -391,7 +409,7 @@ function userRow(user, isSelf, reload, query = "") {
                     run(() => resetUsername(user.id), TEXTS.adminNicknameReset);
                 },
             }, TEXTS.adminResetNickname),
-            h("button", {
+            isSelf ? null : h("button", {
                 class: "btn btn--small btn--danger", type: "button",
                 onClick: () => {
                     if (!window.confirm(format("adminConfirmDeleteUser", name))) return;

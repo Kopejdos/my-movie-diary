@@ -28,6 +28,15 @@ export const setUserAdmin = (userId, isAdmin) => callAdmin("set-admin", { user_i
 export const deleteUser = (userId) => callAdmin("delete-user", { user_id: userId });
 export const resetUsername = (userId) => callAdmin("reset-username", { user_id: userId });
 
+/** Přidá / odebere odznak uživateli (V4.4 – Elite; pravidla RLS pustí jen správce). */
+export async function setUserBadge(userId, badge, on) {
+    const query = on
+        ? supabase.from("user_badges").insert({ user_id: userId, badge })
+        : supabase.from("user_badges").delete().eq("user_id", userId).eq("badge", badge);
+    const { error } = await query;
+    if (error && error.code !== "23505") throw new Error(error.message);       // už ho má = v pořádku
+}
+
 // Požadavky na filmy (V3.5.1)
 /** Nevyřízené požadavky s návrhem kolekcí: { requests: [...], universes: [...] }. */
 export const listFilmRequests = () => callAdmin("requests");

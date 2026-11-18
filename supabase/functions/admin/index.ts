@@ -16,7 +16,8 @@
 //   add-item     { universe_id, tmdb_id, group?, optional? }
 //                                       → film do films a do kolekce, zařazený podle data premiéry
 //                                         (V3.5.2.1); sync-seed ho dopíše do seedu
-//   users        {}                     → seznam uživatelů (nick, e-mail, správce, počet zhlédnutí)
+//   users        {}                     → seznam uživatelů (nick, e-mail, správce, počet zhlédnutí;
+//                                         od V4.4 i odznaky a úroveň z databáze)
 //   set-admin    { user_id, is_admin }  → udělí / odebere správce (ne sám sobě)
 //   delete-user  { user_id }            → smaže účet i všechna jeho data (ne sám sebe)
 //   reset-username { user_id }          → automatický nick + skrytý profil (V2.3, ne sám sobě)
@@ -554,15 +555,24 @@ async function listUsers(db: SupabaseClient) {
     { data: profiles, error: profileError },
     { data: watches, error: watchError },
     { data: flagged, error: flaggedError },
+    { data: badges },
+    { data: progress },
   ] = await Promise.all([
     db.from("profiles").select("id, username, is_admin, is_public, created_at"),
     db.from("watches").select("user_id"),
     db.rpc("flagged_profile_ids"),
+    db.from("user_badges").select("user_id, badge"),          // V4.4 – bez migrace chyba → bez odznaků
+    db.from("user_progress").select("user_id, level"),
   ]);
   if (profileError) throw new Error(profileError.message);
   if (watchError) throw new Error(watchError.message);
   if (flaggedError) throw new Error(flaggedError.message);
   const flaggedIds = new Set((flagged ?? []) as string[]);
+  const badgesOf = new Map<string, string[]>();
+  for (const b of (badges ?? []) as { user_id: string; badge: string }[]) {
+    badgesOf.set(b.user_id, [...(badgesOf.get(b.user_id) ?? []), b.badge]);
+  }
+  const levelOf = new Map(((progress ?? []) as { user_id: string; level: number }[]).map((p) => [p.user_id, p.level]));
 
   const profileById = new Map((profiles ?? []).map((p) => [p.id, p]));
   const watchCount = new Map<string, number>();
@@ -582,6 +592,8 @@ async function listUsers(db: SupabaseClient) {
         created_at: user.created_at,
         last_sign_in_at: user.last_sign_in_at ?? null,
         watch_count: watchCount.get(user.id) ?? 0,
+        badges: badgesOf.get(user.id) ?? [],                 // V4.4 – Elite
+        level: levelOf.get(user.id) ?? null,                  // úroveň z databáze (null = ještě nespočítaná)
       };
     })
     .sort((a, b) => (a.username ?? "").localeCompare(b.username ?? ""));

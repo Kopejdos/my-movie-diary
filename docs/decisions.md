@@ -372,7 +372,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 46f | V4.3.6 | Série a monstra ✅ | 41 sérií (komedie, akční, sci-fi / fantasy, horory), **Godzilla** (Toho + MonsterVerse), **King Kong**; studia A24, Blumhouse, Amblin, Toho; cesta **Kaiju 101** – bez migrace a změn funkcí |
 | 46g | V4.3.7 | Anime a česká klasika ✅ | kategorie **Anime** 🎌 a **Czech & Slovak** 🇨🇿 (jediná migrace – dva řádky v `categories`); režiséři Shinkai, Hosoda, Kon; Evangelion, Ghost in the Shell, Pokémon, Dragon Ball, Detective Conan, Klasika anime, Cartoon Saloon; Slunce, seno…, Básníci, Anděl Páně, Saxána, Svěrákovi, České pohádky, Československá nová vlna; cesty Anime Starter a Czech Classics |
 | 46h | V4.3.8 | Žánrové výběry a cesty ✅ | 19 nových žánrových výběrů po 14–17 filmech + cesty Western Starter a Comedy Classics; konec V4.3 – katalog ~2 430 filmů (**cíl 2 000 splněn už ve V4.3.6**) |
-| 47 | V4.4 | Výhody za úroveň a odznaky | s úrovní rostou limity (otevřené požadavky, filmy v požadavku, velikost a počet seznamů) – přehled „co odemkne další úroveň“ v profilu; odznak **Elite** pro vybrané lidi (jen ozdoba) |
+| 47 | V4.4 | Výhody za úroveň a odznaky ✅ | s úrovní rostou limity (otevřené požadavky, filmy v požadavku, velikost a počet seznamů) – hlídá je databáze (úroveň spočítaná v SQL stejně jako ve webu); v profilu **Výhody za úroveň**; odznak **Elite** ★ (přiděluje správce) |
 | 48 | V4.5 | Wrapped | rok v kostce – **poprvé za rok 2027** (prosinec 2027): nováček si na začátku doplní stovky filmů, první celý rok dat bude 2027; filmy „Seen before“ se nepočítají |
 | 49 | V4.6 | Optimalizace před seriály | úklid a výkon s velkým katalogem (načítání, hledání, import), **katalog v mezipaměti prohlížeče** pro opakované návštěvy – připravit půdu pro kapitolu V5 |
 
@@ -2332,6 +2332,53 @@ testovacích seznamů byla vymyšlená.
   (osoba, dvě osoby, studio, klíčové slovo), balíčky `add-pack`, odpovědi na požadavky s důvodem, upozornění
   na podobné kolekce, překlady kolekcí s kontrolou proti TMDB, průvodce a nápověda.
 - Další na řadě: **V4.4 – výhody za úroveň a odznaky**.
+
+### Fáze 47 – výhody za úroveň a odznaky ✅ (18. 11. 2026) – **V4.4**
+- **Úroveň v databázi** (migrace `20261122100000_level_perks.sql`): `compute_user_xp` počítá XP přesně jako web
+  (nové filmy, opakování, dokončené kolekce, všechny achievementy včetně fanoušků kategorií, Pathfinder a Auteur),
+  `level_from_xp` stejný vzorec úrovní. Výsledek se ukládá do `user_progress`; každé zhlédnutí ho označí jako
+  zastaralý (trigger jednou za příkaz – i hromadné „Seen before“), přepočítá se při další kontrole limitu,
+  nejpozději po dni (změny katalogu, premiéry).
+- **Shoda JS × SQL ověřená**: 25 náhodných scénářů (30–400 filmů, 3–60 kolekcí všech typů, kategorie, volitelné
+  a chystané filmy, Seen before, opakování) – XP i úroveň z `computeAchievements` a z `compute_user_xp` se
+  shodují do bodu; vzorec `xpForLevel` pro úrovně 1–60 taky. `tests/perks.test.mjs` hlídá, že tabulka výhod
+  a konstanty XP jsou v JS a SQL stejné.
+- **Výhody za úroveň** (tabulka podle plánu – úroveň 1 = dnešní limity, nikomu se nic nesníží):
+
+  | Úroveň | Otevřené požadavky | Filmů v požadavku | Filmů v seznamu | Seznamů |
+  |---|---|---|---|---|
+  | 1 Extra | 5 | 30 | 300 | 50 |
+  | 5 Stunt Double | 6 | 30 | 400 | 50 |
+  | 10 Lead Actor | 7 | 40 | 500 | 60 |
+  | 16 Producer | 8 | 40 | 600 | 70 |
+  | 20 Studio Head | 9 | 50 | 800 | 80 |
+  | 25 Legend | 10 | 50 | 1 000 | 100 |
+
+  Hlídá je **Edge Function `requests`** (`user_perks` – filmy v požadavku, nevyřízené požadavky) a **triggery
+  seznamů** (`check_list`, `check_list_item` – počet seznamů, filmy v seznamu). Bez migrace platí základní limity.
+- **Web** (`web/js/perks.js`): limity z `my_perks()`; v profilu sbalitelná sekce **Výhody za úroveň** – co teď
+  smím, co odemkne další úroveň (s počtem chybějících XP) a tabulka všech úrovní; u hlášky o limitu věta
+  „Úroveň 10 ho zvedne na 40“. Stránka Požadavky, Seznamy a okno „Přidat do seznamu“ berou limity podle úrovně.
+- **Odznak Elite ★** (`user_badges`, `web/js/badges.js`): jen ozdoba – zlatý štítek u nicku na veřejném profilu,
+  mezi přáteli, u autora seznamu (komunita, detail seznamu) a hvězda u vlastního nicku v hlavičce. Přiděluje
+  a odebírá jen správce (admin → Users: tlačítko *Make Elite*, filtr ★ Elite; u uživatele i úroveň z databáze).
+  Odznaky se načítají jedním dotazem `badges_for` podle nicků na stránce.
+- Nápověda a průvodce zmiňují, že limity rostou s úrovní, a co je Elite. Vše v pěti jazycích.
+- Ověřeno: migrace na lokálním Postgresu (i opakovaně; limit seznamů 50 → 100 na úrovni 25; anon ani uživatel
+  nesmí volat výpočet XP ani si přidat Elite; `stale` po zhlédnutí), `node --test` (73), webové testy
+  (výhody v profilu na úrovni 12, požadavky s limitem 40, Elite v hlavičce / u přátel / na profilu, admin
+  přidá Elite), axe bez chyb ve světlém i tmavém režimu, telefon 320 px bez přetečení.
+
+#### Rozhodnutí ve fázi 47
+- **Limity hlídá databáze, ne prohlížeč** – XP počítá SQL stejně jako web; ruční shoda ověřená na náhodných
+  datech, konstanty hlídá test. Úroveň v hlavičce dál počítá web (okamžitě po +1), limity podle databáze.
+- **Uložená úroveň místo výpočtu při každém filmu v seznamu** – přidání 300 filmů do seznamu by jinak počítalo
+  XP 300×. Zhlédnutí úroveň jen označí; přepočet až při další kontrole limitu.
+- **„Dnes“ pro chystané filmy podle Europe/Prague** – web bere místní čas prohlížeče; rozdíl je nanejvýš pár
+  hodin v den premiéry.
+- **Elite jako obecná tabulka odznaků** – další odznaky (např. Tester, Founder) půjdou přidat jen rozšířením
+  povolených hodnot.
+- **Elite nemění limity** – je to čistě ozdoba, aby nevznikal tlak na správce.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

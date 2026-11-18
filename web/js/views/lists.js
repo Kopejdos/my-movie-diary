@@ -5,7 +5,7 @@
 
 import { isSignedIn, getProfile } from "../auth.js";
 import {
-    fetchUserLists, fetchFollowedLists, createList, VISIBILITIES, MAX_TITLE, MAX_LISTS, MAX_FOLLOWS, listErrorText, visibilityLabel,
+    fetchUserLists, fetchFollowedLists, createList, VISIBILITIES, MAX_TITLE, MAX_FOLLOWS, listErrorText, visibilityLabel,
 } from "../lists.js";
 import { setAccent } from "../theme.js";
 import { TEXTS, format } from "../texts.js";
@@ -14,6 +14,7 @@ import { listGrid } from "./list-card.js";
 
 export { listCard, listGrid } from "./list-card.js";
 import { profileTabs } from "./stats.js";
+import { currentPerks, loadPerks } from "../perks.js";
 
 export async function listsView(container, context) {
     setAccent(null);
@@ -31,6 +32,7 @@ export async function listsView(container, context) {
         [lists, followed] = await Promise.all([
             fetchUserLists(getProfile()?.username ?? ""),
             fetchFollowedLists().catch(() => []),         // bez migrace V4.1.3 prostě nic
+            loadPerks(),                                  // počet seznamů podle úrovně (V4.4)
         ]);
     } catch (error) {
         if (!context.isCurrent()) return;
@@ -47,7 +49,7 @@ export async function listsView(container, context) {
     });
     const visibility = h("select", { class: "admin-input admin-select", "aria-label": TEXTS.listVisibility },
         VISIBILITIES.map((v) => h("option", { value: v }, visibilityLabel(v))));
-    const submit = h("button", { class: "btn btn--primary", type: "submit", disabled: lists.length >= MAX_LISTS }, TEXTS.listCreate);
+    const submit = h("button", { class: "btn btn--primary", type: "submit", disabled: lists.length >= currentPerks().lists }, TEXTS.listCreate);
     const form = h("form", {
         class: "admin-form list-new",
         onSubmit: async (event) => {
@@ -75,7 +77,7 @@ export async function listsView(container, context) {
         form,
         h("div", { class: "section-title" },
             h("h2", {}, TEXTS.listsTitle),
-            h("span", { class: "muted" }, format("listsCount", lists.length, MAX_LISTS))),
+            h("span", { class: "muted" }, format("listsCount", lists.length, currentPerks().lists))),
         lists.length === 0
             ? h("div", { class: "empty-filter" }, TEXTS.listsEmpty)
             : listGrid(lists, { showVisibility: true }),

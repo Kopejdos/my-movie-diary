@@ -8,7 +8,7 @@
 //   search  { query }               → hledání v TMDB; u každého filmu, jestli už je
 //                                     v MMD, jestli na něj čeká požadavek a jestli
 //                                     ho uživatel už chce
-//   create  { tmdb_ids[], note? }    → založí požadavek (1–30 filmů; do V4.3.1 20). Údaje o filmech
+//   create  { tmdb_ids[], note? }    → založí požadavek (1–30 filmů podle úrovně až 50; do V4.3.1 20). Údaje o filmech
 //                                     (název, rok, plakát) si funkce stáhne z TMDB sama.
 //                                     Film, který už je v MMD, přeskočí; na film, na který
 //                                     už čeká cizí požadavek, dá místo toho +1.
@@ -23,6 +23,10 @@
 //   items = [{ tmdb_id, group_label, franchise, label }] – oddíl, série a popisek navržené
 //           uživatelem (V4.3.1); pořadí filmů = pořadí v tmdb_ids
 //
+// Limity podle úrovně uživatele (V4.4): počet filmů v požadavku a nevyřízených požadavků
+// bere funkce z databáze (user_perks – úroveň spočítaná stejně jako ve webu). Bez migrace
+// V4.4 platí základní limity (30 filmů, 5 požadavků).
+//
 // Tajemství: TMDB_READ_TOKEN (stejné jako funkce tmdb a admin).
 // V nastavení funkce musí být vypnuté "Verify JWT" (ověřuje si přístup sama).
 // =====================================================================
@@ -30,9 +34,22 @@
 import { createClient, SupabaseClient } from "npm:@supabase/supabase-js@2";
 
 const TMDB_BASE = "https://api.themoviedb.org/3";
-const MAX_FILMS = 30;          // filmů v jednom požadavku (do V4.3.1: 20)
-const MAX_PENDING = 5;         // nevyřízených požadavků na uživatele
 const MAX_NOTE = 300;
+
+/** Limity uživatele: filmů v požadavku a nevyřízených požadavků (V4.4 – podle úrovně). */
+interface Limits { films: number; pending: number }
+const BASE_LIMITS: Limits = { films: 30, pending: 5 };     // úroveň 1 (do V4.3.1: 20 filmů)
+
+/** Limity podle úrovně z databáze (user_perks); při chybě základní. */
+async function limitsOf(db: SupabaseClient, userId: string): Promise<Limits> {
+  const { data, error } = await db.rpc("user_perks", { p_user: userId });
+  const perks = (data as { perks?: { request_films?: number; open_requests?: number } } | null)?.perks;
+  if (error || !perks) {
+    if (error) console.error("user_perks:", error.message);
+    return BASE_LIMITS;
+  }
+  return { films: perks.request_films ?? BASE_LIMITS.films, pending: perks.open_requests ?? BASE_LIMITS.pending };
+}
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -250,15 +267,15 @@ async function attributesOf(db: SupabaseClient, raw: unknown): Promise<Map<numbe
   return result;
 }
 
-/** Počet nevyřízených požadavků uživatele – limit MAX_PENDING. */
-async function checkPendingLimit(db: SupabaseClient, userId: string) {
+/** Počet nevyřízených požadavků uživatele – limit podle úrovně. */
+async function checkPendingLimit(db: SupabaseClient, userId: string, limits: Limits) {
   const { data: open, error } = await db
     .from("film_requests")
     .select("id, items:film_request_items!inner(status)")
     .eq("user_id", userId)
     .eq("items.status", "pending");
   if (error) throw new Error(error.message);
-  if ((open ?? []).length >= MAX_PENDING) throw new HttpError(429, `At most ${MAX_PENDING} open requests`, "limit");
+  if ((open ?? []).length >= limits.pending) throw new HttpError(429, `At most ${limits.pending} open requests`, "limit");
 }
 
 /** Řádky filmů požadavku na kolekci v pořadí uživatele s jeho oddílem / sérií / popiskem. */
@@ -282,15 +299,15 @@ const parseIds = (raw: unknown) =>
  * Vlastní kolekce (V4.3.1): libovolné filmy (i ty, které už v MMD jsou – patří do nové kolekce),
  * 2–30 filmů, název bez zakázaných slov. Schválení je na adminovi.
  */
-async function createCustomRequest(db: SupabaseClient, userId: string, rawName: unknown, tmdbIds: unknown, rawItems: unknown, note: string) {
+async function createCustomRequest(db: SupabaseClient, userId: string, rawName: unknown, tmdbIds: unknown, rawItems: unknown, note: string, limits: Limits) {
   const name = cleanText(rawName, 80);
   if (!name || name.length < 2) throw new HttpError(400, "Name the collection", "name_required");
   const ids = parseIds(tmdbIds);
   if (ids.length < 2) throw new HttpError(400, "A collection needs at least 2 movies", "too_few");
-  if (ids.length > MAX_FILMS) throw new HttpError(400, `At most ${MAX_FILMS} movies`, "too_many");
+  if (ids.length > limits.films) throw new HttpError(400, `At most ${limits.films} movies`, "too_many");
   if (!(await textAllowed(db, `${name} ${note}`))) throw new HttpError(400, "A text contains a word that is not allowed", "text_not_allowed");
   const attributes = await attributesOf(db, rawItems);
-  await checkPendingLimit(db, userId);
+  await checkPendingLimit(db, userId, limits);
 
   // Údaje o filmech z TMDB (ne z webu – nejdou podvrhnout)
   const found = await Promise.all(ids.map((id) => tmdbGet<TmdbMovie>(`/movie/${id}`, { language: "en-US" }).catch(() => null)));
@@ -311,11 +328,11 @@ async function createCustomRequest(db: SupabaseClient, userId: string, rawName: 
 }
 
 /** Požadavek na kolekci: jen díly jedné série, aspoň 2, série ještě nemá kolekci ani čekající požadavek. */
-async function createCollectionRequest(db: SupabaseClient, userId: string, collectionId: number, tmdbIds: unknown, rawItems: unknown, note: string) {
+async function createCollectionRequest(db: SupabaseClient, userId: string, collectionId: number, tmdbIds: unknown, rawItems: unknown, note: string, limits: Limits) {
   if (!Number.isInteger(collectionId) || collectionId <= 0) throw new HttpError(400, "Invalid series", "invalid");
   const ids = parseIds(tmdbIds);
   if (ids.length < 2) throw new HttpError(400, "A collection needs at least 2 movies", "too_few");
-  if (ids.length > MAX_FILMS) throw new HttpError(400, `At most ${MAX_FILMS} movies`, "too_many");
+  if (ids.length > limits.films) throw new HttpError(400, `At most ${limits.films} movies`, "too_many");
 
   const collection = await tmdbGet<TmdbCollection>(`/collection/${collectionId}`, { language: "en-US" });
   const partById = new Map(collection.parts.filter((p) => !p.adult).map((p) => [p.id, p]));
@@ -327,7 +344,7 @@ async function createCollectionRequest(db: SupabaseClient, userId: string, colle
   if (await collectionPending(db, collectionId)) throw new HttpError(409, "This collection is already requested", "collection_pending");
   if (!(await textAllowed(db, note))) throw new HttpError(400, "A text contains a word that is not allowed", "text_not_allowed");
   const attributes = await attributesOf(db, rawItems);
-  await checkPendingLimit(db, userId);
+  await checkPendingLimit(db, userId, limits);
 
   const { data: request, error } = await db.from("film_requests").insert({
     user_id: userId, note: note || null, kind: "collection",
@@ -344,11 +361,11 @@ async function createCollectionRequest(db: SupabaseClient, userId: string, colle
 }
 
 /** Založí požadavek na filmy. Vrací, co se s kterým filmem stalo. */
-async function create(db: SupabaseClient, userId: string, tmdbIds: unknown, note: unknown) {
+async function create(db: SupabaseClient, userId: string, tmdbIds: unknown, note: unknown, limits: Limits) {
   const ids = [...new Set(Array.isArray(tmdbIds) ? tmdbIds.map(Number) : [])]
     .filter((id) => Number.isInteger(id) && id > 0);
   if (ids.length === 0) throw new HttpError(400, "Pick at least one movie", "empty");
-  if (ids.length > MAX_FILMS) throw new HttpError(400, `At most ${MAX_FILMS} movies`, "too_many");
+  if (ids.length > limits.films) throw new HttpError(400, `At most ${limits.films} movies`, "too_many");
   const text = typeof note === "string" ? note.trim().slice(0, MAX_NOTE) : "";
 
   // Nevyřízené požadavky uživatele (aspoň jeden film čeká)
@@ -363,8 +380,8 @@ async function create(db: SupabaseClient, userId: string, tmdbIds: unknown, note
   const toRequest = ids.filter((id) => !inCatalog.has(id) && !pending.has(id));
   const toVote = ids.filter((id) => pending.has(id) && !mine.has(id));
 
-  if (toRequest.length > 0 && (open ?? []).length >= MAX_PENDING) {
-    throw new HttpError(429, `At most ${MAX_PENDING} open requests`, "limit");
+  if (toRequest.length > 0 && (open ?? []).length >= limits.pending) {
+    throw new HttpError(429, `At most ${limits.pending} open requests`, "limit");
   }
 
   // Údaje o filmech z TMDB (ne z webu – nejdou podvrhnout)
@@ -425,14 +442,16 @@ Deno.serve(async (request) => {
     switch (body.action) {
       case "search":
         return json(await search(db, userId, String(body.query ?? "")));
-      case "create":
+      case "create": {
+        const limits = await limitsOf(db, userId);
         if (body.kind === "collection" || body.kind === "custom") {
           const note = typeof body.note === "string" ? body.note.trim().slice(0, MAX_NOTE) : "";
           return json(body.kind === "custom"
-            ? await createCustomRequest(db, userId, body.name, body.tmdb_ids, body.items, note)
-            : await createCollectionRequest(db, userId, Number(body.tmdb_collection_id), body.tmdb_ids, body.items, note));
+            ? await createCustomRequest(db, userId, body.name, body.tmdb_ids, body.items, note, limits)
+            : await createCollectionRequest(db, userId, Number(body.tmdb_collection_id), body.tmdb_ids, body.items, note, limits));
         }
-        return json(await create(db, userId, body.tmdb_ids, body.note));
+        return json(await create(db, userId, body.tmdb_ids, body.note, limits));
+      }
       case "series":
         return json(await seriesOf(db, userId, Number(body.tmdb_id)));
       default:

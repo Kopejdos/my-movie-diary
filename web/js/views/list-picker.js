@@ -2,7 +2,8 @@
 // Ukáže moje seznamy se zaškrtávátkem (je v něm film?) – zaškrtnutí film hned přidá / odebere.
 // Dole jde rovnou založit nový seznam (soukromý) s tímhle filmem.
 
-import { fetchListsForFilm, addToList, removeFromList, createList, listErrorText, visibilityIcon, MAX_TITLE, MAX_LISTS } from "../lists.js";
+import { fetchListsForFilm, addToList, removeFromList, createList, listErrorText, visibilityIcon, MAX_TITLE } from "../lists.js";
+import { currentPerks, loadPerks } from "../perks.js";
 import { TEXTS, format, movies } from "../texts.js";
 import { h, mount, toast } from "../dom.js";
 import { openModal } from "./modal.js";
@@ -52,12 +53,12 @@ export function openListPicker(film) {
     async function load() {
         let lists;
         try {
-            lists = await fetchListsForFilm(film.tmdb_id);
+            [lists] = await Promise.all([fetchListsForFilm(film.tmdb_id), loadPerks()]);
         } catch (error) {
             mount(body, h("p", { class: "muted" }, format("errorGeneric", error.message)));
             return;
         }
-        createButton.disabled = lists.length >= MAX_LISTS;
+        createButton.disabled = lists.length >= currentPerks().lists;       // podle úrovně (V4.4)
         if (lists.length === 0) {
             mount(body, h("p", { class: "muted list-picker__empty" }, TEXTS.listPickerEmpty));
             return;

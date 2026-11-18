@@ -57,7 +57,7 @@ export async function publicProfileView(container, context) {
                 h("div", { class: "profile-hero__avatar", "aria-hidden": "true" }, found.profile.username.charAt(0).toUpperCase()),
                 h("div", { class: "profile-hero__body" },
                     h("span", { class: "eyebrow" }, `🔒 ${TEXTS.friendsPrivateEyebrow}`),
-                    h("h1", { class: "profile-hero__name" }, `@${found.profile.username}`),
+                    h("h1", { class: "profile-hero__name", "data-badge-user": found.profile.username }, `@${found.profile.username}`),
                     h("p", { class: "muted profile-hero__meta" }, TEXTS.friendsPrivateText),
                     h("div", { class: "profile-hero__actions" },
                         // Po přijetí přátelství se profil načte znovu – přítel už data uvidí
@@ -128,7 +128,7 @@ function profileHero(profile, level, totals, isOwn, friendship, reload) {
         h("div", { class: "profile-hero__avatar", "aria-hidden": "true" }, profile.username.charAt(0).toUpperCase()),
         h("div", { class: "profile-hero__body" },
             h("span", { class: "eyebrow" }, format("levelLabel", level.level), " · ", level.title),
-            h("h1", { class: "profile-hero__name" }, `@${profile.username}`),
+            h("h1", { class: "profile-hero__name", "data-badge-user": profile.username }, `@${profile.username}`),
             h("p", { class: "muted profile-hero__meta" },
                 format("publicMemberSince", new Date(profile.memberSince).toLocaleDateString(LOCALE, { month: "long", year: "numeric" })),
                 " · ",

@@ -28,7 +28,8 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Director collections – Nolan, Tarantino, Kubrick, Hitchcock and more, decade by decade
 - Watchlist across all collections
 - Achievements with levels (Bronze → Platinum) and completed-collection badges – Pathfinder for paths, Auteur for directors
-- XP and levels with movie-themed titles – from Extra to Legend
+- XP and levels with movie-themed titles – from Extra to Legend; higher levels raise your limits (requests, lists)
+- Elite ★ badge for special members, given by the admin
 - Personal stats – activity, most watched movies, decades, categories, streaks and collections you're closest to finishing
 - Sign in with email or nickname & password, or with Google; password reset and bot protection (Cloudflare Turnstile)
 - Settings ⚙ – System / Light / Dark mode, Modern or Paper classic style, collection colors or one fixed color, compact density and reduced animations; your defaults and account in one place
@@ -40,7 +41,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Installable on a phone or computer (PWA), opens even offline
 
 **Coming next** – new features
-- V4 – perks for higher levels and badges, a yearly Wrapped and speed-ups for the bigger catalog (over 2,400 movies now); V5 – TV shows
+- V4 – a yearly Wrapped and speed-ups for the bigger catalog (over 2,400 movies now); V5 – TV shows
 
 ## Tech stack
 

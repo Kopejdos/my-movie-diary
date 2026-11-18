@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.4 – November 2026
+- Level perks: higher levels raise your limits – more open requests, more movies per request, longer lists and more of them
+- Your profile shows what you can do now and what the next level unlocks
+- Elite ★ – a special badge from the admin, shown next to the nickname
+- Limits are checked by the server, with your level calculated the same way as in the app
+
 ## V4.3.8 – November 2026
 - 19 new genre picks: 90s Action, Disaster, Sports, Musicals, Biopics, Mafia & Gangster, Prison, Courtroom, Spy, Survival, Post-apocalyptic, Alien Invasion, AI & Robots, Sword & Sandal, Rom-coms, Coming of Age, Spoof & Parody, Buddy Cop and Dog Movies
 - New paths: Western Starter and Comedy Classics

@@ -8,7 +8,9 @@ import { isUpcoming } from "./data.js";
 import { cached, invalidate } from "./cache.js";
 import { catalogReady, localizeRows } from "./catalog-i18n.js";
 import { TEXTS, format } from "./texts.js";
+import { currentPerks, limitHint } from "./perks.js";
 
+// Počet seznamů a filmů v seznamu rostou s úrovní (V4.4, perks.js) – tady jen základ (úroveň 1)
 export const MAX_LISTS = 50;
 export const MAX_LIST_ITEMS = 300;
 export const MAX_TITLE = 80;
@@ -193,8 +195,9 @@ export function listErrorText(error) {
     const code = error instanceof ListError ? error.code : null;
     return {
         list_text_not_allowed: TEXTS.listErrorWords,
-        list_limit: format("listErrorLimit", MAX_LISTS),
-        list_items_limit: format("listErrorItems", MAX_LIST_ITEMS),
+        // limity podle úrovně (V4.4) + kterou úrovní se zvednou
+        list_limit: format("listErrorLimit", currentPerks().lists) + limitHint("lists"),
+        list_items_limit: format("listErrorItems", currentPerks().listFilms) + limitHint("listFilms"),
         list_categories_limit: TEXTS.listErrorCategories,
         duplicate: TEXTS.listErrorDuplicate,
         follow_limit: format("listErrorFollowLimit", MAX_FOLLOWS),

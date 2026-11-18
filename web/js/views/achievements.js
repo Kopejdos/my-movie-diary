@@ -1,6 +1,7 @@
 // Sekce „Achievements“ na profilu – karty odznaků a dokončené kolekce.
 
-import { fetchAchievementData, computeAchievements, markSeen } from "../achievements.js";
+import { fetchAchievementData, computeAchievements, markSeen, xpForLevel } from "../achievements.js";
+import { PERKS, PERK_KEYS, perksFor, nextPerks, loadPerks, levelTitle } from "../perks.js";
 import { getUser } from "../auth.js";
 import { inkFor, applyUniverseColor } from "../theme.js";
 import { TEXTS, format } from "../texts.js";
@@ -48,7 +49,56 @@ async function load(section) {
     }
     const user = getUser();
     if (user) markSeen(user.id, result.unlockedKeys);
-    mount(section, achievementsContent(result));
+    const content = achievementsContent(result);
+    // Výhody za úroveň (V4.4) – jen na vlastním profilu, hned pod kartou úrovně
+    content.splice(1, 0, perksSection(result));
+    mount(section, content);
+}
+
+/**
+ * Výhody za úroveň (V4.4): co teď smím, co odemkne další úroveň a přehled všech úrovní.
+ * Úroveň z databáze (ta limity hlídá); než se načte (nebo bez migrace), úroveň z výpočtu webu.
+ */
+function perksSection(result) {
+    const body = h("div", { class: "perks" });
+    const paint = (level) => {
+        const now = perksFor(level);
+        const next = nextPerks(level);
+        const tile = (key, value, previous = null) => h("div", { class: "perk" },
+            h("span", { class: "perk__value" }, previous !== null && previous !== value
+                ? [h("span", { class: "perk__old" }, String(previous)), " → ", String(value)]
+                : String(value)),
+            h("span", { class: "perk__label" }, TEXTS[`perk_${key}`]));
+        mount(body,
+            h("p", { class: "hint perks__intro" }, TEXTS.perksIntro),
+            h("div", { class: "perks__grid" }, PERK_KEYS.map((key) => tile(key, now[key]))),
+            next
+                ? h("div", { class: "perks__next" },
+                    h("p", { class: "perks__next-title" },
+                        h("strong", {}, format("perksNext", next.level, levelTitle(next.level))), " ",
+                        h("span", { class: "muted" }, format("perksNextXp", Math.max(0, xpForLevel(next.level) - result.xp.total)))),
+                    h("div", { class: "perks__grid" },
+                        PERK_KEYS.filter((key) => next[key] !== now[key]).map((key) => tile(key, next[key], now[key]))))
+                : h("p", { class: "perks__max" }, TEXTS.perksMax),
+            h("details", { class: "perks__all" },
+                h("summary", {}, TEXTS.perksAll),
+                h("div", { class: "perks__table-wrap" },
+                    h("table", { class: "perks__table" },
+                        h("thead", {}, h("tr", {},
+                            h("th", { scope: "col" }, TEXTS.perksLevel),
+                            PERK_KEYS.map((key) => h("th", { scope: "col" }, TEXTS[`perk_${key}`])))),
+                        h("tbody", {}, PERKS.map((row) => h("tr", { class: row.level === now.level ? "perks__row--current" : null },
+                            h("th", { scope: "row" }, `${row.level} · ${levelTitle(row.level)}`),
+                            PERK_KEYS.map((key) => h("td", {}, String(row[key]))))))))));
+    };
+    paint(result.level.level);
+    loadPerks().then((perks) => {
+        if (perks.level && perks.level !== result.level.level && body.isConnected) paint(perks.level);
+    });
+    return collapsible({
+        key: "achievements-perks", title: TEXTS.perksTitle, meta: format("perksMeta", result.level.level),
+        content: body, className: "fold--section",
+    });
 }
 
 /**

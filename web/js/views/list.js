@@ -99,7 +99,7 @@ class ListPage extends UniversePage {
     bannerPills() {
         return [
             h("a", { class: "pill pill--link", href: `#/u/${encodeURIComponent(this.listInfo.username)}` },
-                format("listBy", this.listInfo.username)),
+                h("span", { "data-badge-user": this.listInfo.username }, format("listBy", this.listInfo.username))),
             pill(visibilityLabel(this.listInfo.visibility)),
             this.viewsPill,
             this.followersPill,

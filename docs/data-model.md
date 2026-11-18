@@ -261,7 +261,7 @@ Od V4.3.3 u zamítnutého filmu **`reject_reason`** (`in_mmd` / `similar` / `not
 
 - RLS: požadavky a jejich filmy vidí **jen autor a správce**; autor smí **zrušit** požadavek, o kterém se ještě
   nerozhodlo. **Zakládat požadavky jde jen přes Edge Function `requests`** (údaje o filmech bere z TMDB sama,
-  limity: ≤ 30 filmů v požadavku – do V4.3.1 20, ≤ 5 nevyřízených požadavků; název vlastní kolekce a texty
+  limity podle úrovně (V4.4, `user_perks`): 30–50 filmů v požadavku – do V4.3.1 20, 5–10 nevyřízených požadavků; název vlastní kolekce a texty
   bez zakázaných slov – `is_text_allowed`). Hlasy: vlastní, jen u filmu, který čeká
   (`film_request_pending()`), zrušit vlastní.
 - Rozhodnutí (Edge Function `admin`, akce `request-decide`) platí pro film ve **všech** čekajících požadavcích;
@@ -277,6 +277,25 @@ Od V4.3.3 u zamítnutého filmu **`reject_reason`** (`in_mmd` / `similar` / `not
   Vrací `slug`, `name`, `kind`, `overlap`, `total`, `name_match`. Jen veřejné údaje katalogu – smí kdokoli.
 - **`other_films`** (pohled) – filmy v `films`, které nejsou v žádné kolekci (schválené požadavky, filmy přidané
   adminem). Čte se v hledání; na profilu a ve statistikách jsou jako *Other movies*.
+
+### Úroveň a výhody (V4.4)
+**`user_progress`** – úroveň spočítaná v databázi: `user_id` (PK, FK → `profiles`, cascade), `xp`, `level`,
+`stale` (po zhlédnutí přepočítat), `computed_at`. Číst smí jen vlastník, zapisují jen funkce níže.
+- **`compute_user_xp(user)`** – XP přesně jako web (`achievements.js`): 10 za nový film, 3 za další zhlédnutí,
+  10 za každý povinný film dokončené kolekce, XP za úrovně achievementů (First, Collector, Screen Time, Marathon,
+  Rewatcher, Completionist, Pathfinder, Auteur, fanoušci kategorií – 25 / 50 / 100 / 200 / 400 / 800). Chystané
+  filmy (premiéra po dnešku podle Europe/Prague) se nepočítají. Jen `service_role` a další funkce.
+- **`xp_for_level(level)`**, **`level_from_xp(xp)`**, **`tiers_xp`**, **`scaled_tiers`** – stejné vzorce jako web.
+- **`user_level(user)`** – uložená úroveň, nebo nově spočítaná (když je `stale` nebo starší než den).
+  Triggery `watches_progress_*` (insert / update / delete, jednou za příkaz) nastaví `stale`.
+- **`level_perks(level)`** – limity podle úrovně (stejná tabulka jako `web/js/perks.js`):
+  úroveň 1: 5 otevřených požadavků, 30 filmů v požadavku, 300 filmů v seznamu, 50 seznamů; 5: 6 / 30 / 400 / 50;
+  10: 7 / 40 / 500 / 60; 16: 8 / 40 / 600 / 70; 20: 9 / 50 / 800 / 80; 25: 10 / 50 / 1 000 / 100.
+- **`user_perks(user)`** (Edge Function `requests`) a **`my_perks()`** (web) – `{ level, xp, perks, next }`;
+  **`user_limit(user, perk)`** – jeden limit pro triggery seznamů (`check_list`, `check_list_item`).
+
+**`user_badges`** – odznaky: `(user_id, badge)` PK, `badge` zatím jen `elite`, `granted_at`. Číst smí kdokoli,
+přidat / odebrat jen správce (`is_admin()`). **`badges_for(usernames[])`** – odznaky podle nicků (jen nick a odznaky).
 
 ### `blocked_words` – zakázaná slova v nickách (V2.3)
 
@@ -352,6 +371,8 @@ Výpočty běží v databázi, ne v prohlížeči – web dostane hotová čísl
 | `profiles` | jen vlastní řádek; profily ostatních jen přes funkce `public_profile` / `search_people` (veřejné a přátelé) | jen vlastní řádek, jen sloupce `username` a `is_public` |
 | `watches` | jen vlastní řádky; zhlédnutí veřejných profilů a přátel (film + datum) jen přes `public_profile` | jen vlastní řádky |
 | `friendships` | jen vlastní řádky (kde jsem jedna ze stran) | nikdo přímo – jen funkce přátel (V3.4.1) |
+| `user_progress` | jen vlastník | jen funkce (`user_level`, triggery) (V4.4) |
+| `user_badges` | kdokoli | jen správce (V4.4) |
 | `film_requests`, `film_request_items` | autor a správce; souhrn pro všechny přihlášené přes `wanted_films` | založit jen Edge Function `requests`; autor smí zrušit nerozhodnutý požadavek; rozhodnutí jen funkce `admin` (V3.5.1) |
 | `film_request_votes` | jen vlastní | vlastní +1 u čekajícího filmu (V3.5.1) |
 | `watchlist` | jen vlastní řádky (vždy soukromý) | jen vlastní řádky |

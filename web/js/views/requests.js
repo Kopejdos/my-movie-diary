@@ -16,7 +16,7 @@ import {
     searchTmdbForRequest, createFilmRequest, fetchWantedFilms, fetchMyRequests, voteForFilm,
     cancelFilmRequest, openRequestCount, fetchSeriesForRequest, createCollectionRequest, createCustomRequest,
     fetchSimilarCollections,
-    MAX_REQUEST_FILMS, MAX_OPEN_REQUESTS, MAX_NOTE,
+    MAX_NOTE,
 } from "../requests.js";
 import { isSignedIn } from "../auth.js";
 import { navigate } from "../router.js";
@@ -25,6 +25,11 @@ import { TEXTS, format, movies } from "../texts.js";
 import { h, mount, poster, yearOf, toast, loadingView, errorView, formatDate } from "../dom.js";
 import { collectionPill } from "./film-controls.js";
 import { createCollectionEditor } from "./collection-editor.js";
+import { currentPerks, loadPerks, limitHint } from "../perks.js";
+
+/** Limity podle úrovně (V4.4): filmů v jednom požadavku a nevyřízených požadavků. */
+const maxFilms = () => currentPerks().requestFilms;
+const maxOpen = () => currentPerks().openRequests;
 
 const SEARCH_DELAY = 350;          // ms po posledním znaku, než se zeptáme TMDB
 const WANTED_TABS = ["pending", "added", "rejected"];
@@ -54,7 +59,7 @@ export async function requestsView(container, context) {
 
     let mine, wanted;
     try {
-        [mine, wanted] = await Promise.all([fetchMyRequests(), fetchWantedFilms("", "pending")]);
+        [mine, wanted] = await Promise.all([fetchMyRequests(), fetchWantedFilms("", "pending"), loadPerks()]);
     } catch (error) {
         if (!context.isCurrent()) return;
         mount(container, errorView(format("errorGeneric", error.message), () => requestsView(container, context)));
@@ -67,7 +72,7 @@ export async function requestsView(container, context) {
         h("section", { class: "page-header" },
             h("span", { class: "eyebrow" }, h("span", { class: "request-icon", "aria-hidden": "true" }), TEXTS.requestsEyebrow),
             h("h1", {}, TEXTS.requestsTitle),
-            h("p", { class: "muted" }, format("requestsIntro", MAX_REQUEST_FILMS)),
+            h("p", { class: "muted" }, format("requestsIntro", maxFilms())),
         ),
         page.composer,
         page.mineSection,
@@ -174,9 +179,9 @@ class RequestsPage {
             onClick: () => this.setMode(mode),
         }, TEXTS[`requestsMode_${mode}`])));
         this.modeHint.textContent = {
-            films: format("requestsModeHint_films", MAX_REQUEST_FILMS),
+            films: format("requestsModeHint_films", maxFilms()),
             collection: TEXTS.requestsModeHint_collection,
-            custom: format("requestsModeHint_custom", MAX_REQUEST_FILMS),
+            custom: format("requestsModeHint_custom", maxFilms()),
         }[this.mode];
         this.searchInput.placeholder = this.mode === "collection" ? TEXTS.requestsSeriesSearchPlaceholder : TEXTS.requestsSearchPlaceholder;
         this.searchInput.setAttribute("aria-label", this.searchInput.placeholder);
@@ -205,8 +210,8 @@ class RequestsPage {
 
     renderLimit() {
         const open = openRequestCount(this.mine);
-        this.limitNote.textContent = open >= MAX_OPEN_REQUESTS ? format("requestsLimitNote", MAX_OPEN_REQUESTS) : "";
-        this.limitNote.hidden = open < MAX_OPEN_REQUESTS;
+        this.limitNote.textContent = open >= maxOpen() ? format("requestsLimitNote", maxOpen()) + limitHint("openRequests") : "";
+        this.limitNote.hidden = open < maxOpen();
     }
 
     async search(text) {
@@ -286,8 +291,8 @@ class RequestsPage {
             onClick: () => {
                 if (picked) {
                     this.customEditor.removeFilm(film.tmdb_id);
-                } else if (this.customEditor.count() >= MAX_REQUEST_FILMS) {
-                    toast(format("requestsTooMany", MAX_REQUEST_FILMS), "error");
+                } else if (this.customEditor.count() >= maxFilms()) {
+                    toast(format("requestsTooMany", maxFilms()) + limitHint("requestFilms"), "error");
                 } else {
                     this.customEditor.add(editorFilm(film));
                 }
@@ -314,7 +319,7 @@ class RequestsPage {
             } else {
                 this.series = data;
                 this.seriesEditor = createCollectionEditor({
-                    items: data.collection.parts.slice(0, MAX_REQUEST_FILMS).map((part) => ({ tmdb_id: part.tmdb_id, film: editorFilm(part) })),
+                    items: data.collection.parts.slice(0, maxFilms()).map((part) => ({ tmdb_id: part.tmdb_id, film: editorFilm(part) })),
                     mode: "request",
                     onChange: () => this.editorChanged(),
                 });
@@ -337,8 +342,8 @@ class RequestsPage {
     togglePart(part) {
         if (this.seriesEditor.has(part.tmdb_id)) {
             this.seriesEditor.removeFilm(part.tmdb_id);
-        } else if (this.seriesEditor.count() >= MAX_REQUEST_FILMS) {
-            toast(format("requestsTooMany", MAX_REQUEST_FILMS), "error");
+        } else if (this.seriesEditor.count() >= maxFilms()) {
+            toast(format("requestsTooMany", maxFilms()) + limitHint("requestFilms"), "error");
         } else {
             this.seriesEditor.add(editorFilm(part));
         }
@@ -397,7 +402,7 @@ class RequestsPage {
                 }, `+ ${part.title}${part.year ? ` (${part.year})` : ""}`)));
         } else {
             mount(this.countLine,
-                format("requestsSelected", count, MAX_REQUEST_FILMS),
+                format("requestsSelected", count, maxFilms()),
                 count < 2 ? h("span", { class: "muted" }, ` · ${TEXTS.requestsSeriesTooFew}`) : null);
             // Prázdná vlastní kolekce: jak přidat filmy; jinak k čemu jsou pole
             if (this.customHint) this.customHint.textContent = count === 0 ? TEXTS.requestsCustomHint : TEXTS.requestsEditorHint;
@@ -454,8 +459,8 @@ class RequestsPage {
         if (this.selected.has(film.tmdb_id)) {
             this.selected.delete(film.tmdb_id);
         } else {
-            if (this.selected.size >= MAX_REQUEST_FILMS) {
-                toast(format("requestsTooMany", MAX_REQUEST_FILMS), "error");
+            if (this.selected.size >= maxFilms()) {
+                toast(format("requestsTooMany", maxFilms()) + limitHint("requestFilms"), "error");
                 return;
             }
             this.selected.set(film.tmdb_id, film);
@@ -550,7 +555,7 @@ class RequestsPage {
                 films.length === 0
                     ? h("p", { class: "hint req-selected__empty" }, TEXTS.requestsPickHint)
                     : [
-                        h("p", { class: "req-selected__count" }, format("requestsSelected", films.length, MAX_REQUEST_FILMS)),
+                        h("p", { class: "req-selected__count" }, format("requestsSelected", films.length, maxFilms())),
                         h("div", { class: "chips chips--wrap" }, films.map((film) => h("button", {
                             class: "chip chip--active req-chip", type: "button",
                             title: TEXTS.requestsRemovePick, "aria-label": `${TEXTS.requestsRemovePick}: ${film.title}`,
@@ -566,10 +571,10 @@ class RequestsPage {
         return {
             not_same_series: `${TEXTS.requestsNuhUh} ${format("requestsNotSameSeriesAny", name)}`,
             too_few: TEXTS.requestsSeriesTooFew,
-            too_many: format("requestsTooMany", MAX_REQUEST_FILMS),
+            too_many: format("requestsTooMany", maxFilms()) + limitHint("requestFilms"),
             collection_exists: format("requestsSeriesInMmd", name),
             collection_pending: format("requestsSeriesPending", name),
-            limit: format("requestsLimitNote", MAX_OPEN_REQUESTS),
+            limit: format("requestsLimitNote", maxOpen()) + limitHint("openRequests"),
             name_required: TEXTS.requestsCustomNameRequired,
             text_not_allowed: TEXTS.requestsTextNotAllowed,
         }[error.code] ?? format("errorGeneric", error.message);

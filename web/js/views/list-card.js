@@ -20,7 +20,7 @@ export function listCard(list, { showVisibility = false, showAuthor = false } = 
                 ? h("span", { class: "list-card__updated", title: TEXTS.listUpdatedAria }, TEXTS.listUpdated)
                 : null,
             h("h3", { class: "list-card__title" }, list.title),
-            showAuthor && list.username ? h("p", { class: "list-card__author" }, format("listBy", list.username)) : null,
+            showAuthor && list.username ? h("p", { class: "list-card__author" }, h("span", { "data-badge-user": list.username }, format("listBy", list.username))) : null,
             list.hidden ? h("p", { class: "list-card__hidden" }, `⚑ ${TEXTS.listHiddenBadge}`) : null,
             h("p", { class: "list-card__meta" },
                 [movies(list.item_count),

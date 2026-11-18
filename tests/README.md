@@ -27,6 +27,7 @@ Jeden soubor: `node --test tests/levels.test.mjs`.
 | `add-pack.test.mjs` | balíček kolekcí do seedu (V4.3.2): nové kolekce na konec, úpravy existujících, ostatní řádky beze změny, opakované spuštění nic nepřidá, CRLF; platnost balíčků V4.3.2, V4.3.5 (režiséři po desetiletích, cesty s poznámkami, 98 vítězů Oscara) V4.3.6 (bez kolekcí, které už v katalogu jsou) V4.3.7 (nové kategorie, Ghibli + Anime) a V4.3.8 (jen existující kategorie); další cíl katalogu (2 000, pak po 500) |
 | `collection-texts.test.mjs` | překlady kolekcí (V4.3.4): oprava z databáze → soubor → angličtina, rozdíly proti návrhům z TMDB (ne u „Keep ours“), co uložit po ruční úpravě (návrat na soubor = smazání opravy) |
 | `guide.test.mjs` | průvodce pro nováčky (V4.3.4): která prohlídka se kde spustí, kratší verze bez přihlášení, texty všech kroků, zapamatování i bez úložiště |
+| `perks.test.mjs` | výhody za úroveň (V4.4): tabulka limitů v JS = SQL (`level_perks`), limity se s úrovní nesnižují, další úroveň / která úroveň zvedne limit, vzorec úrovní a XP achievementů v JS = SQL |
 | `theme.test.mjs` | každá barva kolekce ze `supabase/seed/universes.json` dá tlačítko s kontrastem aspoň 4,5 : 1 (WCAG AA) |
 
 ## Pomocné soubory
