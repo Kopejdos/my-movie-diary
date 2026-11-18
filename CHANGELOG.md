@@ -3,6 +3,13 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.3.4 – November 2026
+- New here? A short tour shows what every button does – on the Collections page and the first time you open a collection
+- Help page: buttons at a glance, how everything works and the rules – in all five languages (link in the footer)
+- Better collection names in other languages – e.g. Czech "Všechno nejhorší" for Happy Death Day
+- Admin: Translations tab – check collection names against TMDB, use or keep them, or fix a translation without a new release
+- Admin: new collections from a TMDB series get their translated names automatically
+
 ## V4.3.3 – November 2026
 - Rejected requests now say why – a reason and a note from the admin, shown in your language
 - A rejected collection request can be edited and sent again in one click

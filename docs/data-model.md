@@ -64,6 +64,23 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
   místo ~1 300 řádků.
 - **Kolekce, kategorie, poznámky cest a obecné popisky** (Phase 1, Remake…) v databázi nejsou – jsou
   v souborech `web/js/i18n/catalog.<jazyk>.json` a verzují se s webem (`web/js/catalog-i18n.js`).
+  Od V4.3.4 je názvy a popisy kolekcí můžou přepsat opravy v `universe_translations` (níže).
+
+### `universe_translations` – opravy překladů kolekcí (V4.3.4)
+| Sloupec | Typ | Poznámka |
+|---|---|---|
+| `universe_id` | `bigint` FK → `universes` (cascade) | PK spolu s `lang` |
+| `lang` | `text` | `cs` / `de` / `es` / `uk` |
+| `name` | `text` | 1–80 znaků; `null` = název ze souboru (nebo anglický) |
+| `description` | `text` | 1–400 znaků; `null` = popis ze souboru (nebo anglický) |
+| `source` | `text` | `manual` (správce ho napsal nebo potvrdil „Keep ours“) / `tmdb` (převzatý z TMDB) |
+| `updated_at` | `timestamptz` | |
+
+- Web bere **opravu → soubor `catalog.<jazyk>.json` → angličtinu**, po jednotlivých polích. Opravy čte funkcí
+  **`collection_texts(lang)`** – jeden objekt `{ slug: { name?, description? } }`.
+- Číst smí kdokoli, zapisovat jen správce (`is_admin()`) – záložka *Translations* v admin panelu. Edge Function
+  `admin` sem zapíše název a popis série z TMDB při založení kolekce ze série (`source = 'tmdb'`) a akcí
+  `collection-names` vrací návrhy názvů pro kontrolu (nic neukládá).
 
 ### `universes` – univerza
 | Sloupec | Typ | Poznámka |

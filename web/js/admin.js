@@ -205,3 +205,56 @@ export async function saveCollection(universeId, { universe, categories, items, 
         p_removed: removed,
     }).then(check);
 }
+
+// ---------------------------------------------------------------------
+// Překlady kolekcí (V4.3.4, záložka Translations)
+// ---------------------------------------------------------------------
+
+/** Výsledek dotazu bez mazání mezipaměti (jen čtení). */
+function read({ data, error }) {
+    if (error) throw new Error(error.message);
+    return data;
+}
+
+/**
+ * Data pro záložku Translations: kolekce, opravy z databáze a výchozí překlady ze souborů
+ * catalog.<jazyk>.json (soubor, který chybí, = žádné překlady).
+ */
+export async function fetchTranslationData(langs) {
+    const [universes, rows, files] = await Promise.all([
+        supabase.from("universes").select("id, slug, name, description, kind, sort_order").order("sort_order").then(read),
+        supabase.from("universe_translations").select("universe_id, lang, name, description, source, updated_at").then(read),
+        Promise.all(langs.map((lang) => fetch(new URL(`./i18n/catalog.${lang}.json`, import.meta.url), { cache: "no-cache" })
+            .then((response) => (response.ok ? response.json() : null))
+            .catch(() => null))),
+    ]);
+    return { universes, rows, files: Object.fromEntries(langs.map((lang, i) => [lang, files[i] ?? { collections: {} }])) };
+}
+
+/** Uloží opravu názvu / popisu kolekce v jazyce (source "manual" = od správce, "tmdb" = převzatý z TMDB). */
+export async function saveCollectionTranslation(universeId, lang, { name, description, source }) {
+    return await supabase.from("universe_translations")
+        .upsert({ universe_id: universeId, lang, name, description, source, updated_at: new Date().toISOString() },
+            { onConflict: "universe_id,lang" })
+        .select("universe_id, lang, name, description, source, updated_at")
+        .single()
+        .then(check);
+}
+
+/** Smaže opravu – web zase vezme překlad ze souboru (nebo angličtinu). */
+export async function deleteCollectionTranslation(universeId, lang) {
+    await supabase.from("universe_translations").delete().eq("universe_id", universeId).eq("lang", lang).then(check);
+}
+
+/** Návrhy názvů sérií z TMDB (Edge Function admin, collection-names) – všechny série nebo vybrané. */
+export const checkCollectionNames = (universeIds = []) => callAdmin("collection-names", { universe_ids: universeIds });
+
+/** Více oprav najednou (převzetí návrhů z TMDB) – [{ universe_id, lang, name, description, source }]. */
+export async function saveCollectionTranslations(rows) {
+    if (rows.length === 0) return [];
+    const now = new Date().toISOString();
+    return await supabase.from("universe_translations")
+        .upsert(rows.map((row) => ({ ...row, updated_at: now })), { onConflict: "universe_id,lang" })
+        .select("universe_id, lang, name, description, source, updated_at")
+        .then(check);
+}

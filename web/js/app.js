@@ -13,6 +13,7 @@ import { refreshAchievements, tierLabel } from "./achievements.js";
 import { warmOverview, invalidateProgress } from "./data.js";
 import { getPendingCount, refreshPendingCount, resetFriends } from "./social.js";
 import { fetchCommunityLists } from "./lists.js";
+import { tourFor, loadSeen } from "./guide.js";
 
 // Přehled a detail kolekce se načítají hned (první, co uživatel uvidí);
 // ostatní obrazovky až při prvním otevření – méně JavaScriptu při startu (V2.1.1)
@@ -50,7 +51,9 @@ const listsView = lazy(() => import("./views/lists.js"), "listsView");
 const listView = lazy(() => import("./views/list.js"), "listView");
 const adminUniverseView = lazy(() => import("./views/admin-universe.js"), "adminUniverseView");
 const adminBuilderView = lazy(() => import("./views/admin-builder.js"), "adminBuilderView");
+const adminTranslationsView = lazy(() => import("./views/admin-translations.js"), "adminTranslationsView");
 const aboutView = lazy(() => import("./views/about.js"), "aboutView");
+const helpView = lazy(() => import("./views/help.js"), "helpView");
 const forgotPasswordView = lazy(() => import("./views/password.js"), "forgotPasswordView");
 const resetPasswordView = lazy(() => import("./views/password.js"), "resetPasswordView");
 
@@ -79,6 +82,7 @@ addRoute("/friends", friendsView);
 addRoute("/compare/:username", compareView);
 addRoute("/u/:username", publicProfileView);
 addRoute("/about", aboutView);
+addRoute("/help", helpView);
 addRoute("/forgot", forgotPasswordView);
 addRoute("/reset-password", resetPasswordView);
 addRoute("/admin", adminUniversesView);
@@ -87,6 +91,7 @@ addRoute("/admin/words", adminWordsView);
 addRoute("/admin/requests", adminRequestsView);
 addRoute("/admin/reports", adminReportsView);
 addRoute("/admin/builder", adminBuilderView);
+addRoute("/admin/translations", adminTranslationsView);
 addRoute("/requests", requestsView);
 addRoute("/lists", listsView);
 addRoute("/list/:id", listView);
@@ -281,6 +286,16 @@ document.addEventListener("route-rendered", () => {
     if (!getUser() || Date.now() - friendsCheckedAt < 60_000 || currentPath() === "/friends") return;
     friendsCheckedAt = Date.now();
     whenIdle(refreshPendingCount, 500);
+});
+
+// Průvodce pro nováčky (V4.3.4): prohlídka přehledu při první návštěvě, prohlídka tlačítek u filmů
+// při prvním otevření kolekce. Kód prohlídky se načte, jen když se opravdu má ukázat.
+document.addEventListener("route-rendered", () => {
+    const name = tourFor(currentPath(), Boolean(getUser()), loadSeen());
+    if (!name) return;
+    setTimeout(() => {
+        import("./views/guide.js").then(({ startTour }) => startTour(name)).catch(() => { });
+    }, 700);
 });
 
 // Aplikace na plochu: service worker, tlačítko Install, stav připojení

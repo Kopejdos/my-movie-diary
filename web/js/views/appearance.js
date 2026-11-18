@@ -94,6 +94,7 @@ export function openAppearancePanel() {
             appearanceControls(),
             h("div", { class: "modal__foot" },
                 h("a", { href: "#/settings" }, `${TEXTS.settingsAll} →`),
+                h("a", { href: "#/help" }, `${TEXTS.helpTitle} →`),           // nápověda (V4.3.4)
                 isSignedIn() ? null : h("span", { class: "muted" }, TEXTS.settingsAppearanceHint)),
         ],
     });

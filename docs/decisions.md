@@ -209,7 +209,7 @@ Formát **V<hlavní>.<vedlejší>.<oprava>** (např. V1.2.1):
   **V4.1.3** = komunita (zařazená před jazyky, aby se nové texty překládaly jen jednou).
 - **Výjimka V4.2:** jazyky ve dvou částech – **V4.2.1** texty rozhraní, **V4.2.2** přeložená data (filmy,
   kolekce, kategorie, patička).
-- **Výjimka V4.3:** velké doplnění filmů je rozdělené na **V4.3.1–V4.3.7** (třetí číslo = část fáze, jako
+- **Výjimka V4.3:** velké doplnění filmů je rozdělené na **V4.3.1–V4.3.8** (třetí číslo = část fáze, jako
   u V3.0); případné opravy dostanou čtvrté číslo (V4.3.1.1…).
 - **V3.6.3** – jen plán a dokumentace (rozplánování kapitoly 4), aplikace beze změny.
 - **V3.6.4** – oprava výkonu přehledu pro přihlášené (patch k V3.6.2).
@@ -367,16 +367,17 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 46a | V4.3.1 | Editor a požadavky ✅ | admin: **úpravy kolekce s jedním Save** (změny se sbírají, *Save* / *Discard*, varování při odchodu), **hledání filmu se po přidání nesmaže**; požadavky: uživatel u filmů nastaví **Section / Series / Label a pořadí**, **vlastní kolekce** z libovolných filmů (ne jen jedna série TMDB), **limit 30 filmů** v požadavku (dřív 20) |
 | 46b | V4.3.2 | Nástroje + westerny ✅ | admin: **kolekce z osoby** (režisér / herec, i **průnik dvou osob**), **kolekce ze studia / klíčového slova TMDB**, **ukazatel cíle** (např. 1 264 / 2 000); kategorie **Western** 🤠, **Bud Spencer & Terence Hill**, Leone, westernové výběry |
 | 46c | V4.3.3 | Požadavky: odpovědi a podobné kolekce ✅ | zamítnutí s **důvodem a poznámkou** pro uživatele, zamítnutý požadavek na kolekci jde **upravit a poslat znovu**, „New answer“; upozornění na **podobnou kolekci**, která už v MMD je (uživatel, admin u požadavku i ve staviteli) |
-| 46d | V4.3.4 | Režiséři a klasika | nový typ kolekce **Director** (záložka *Directors*), 10 režisérů, **Best Picture Winners**, Universal Monsters, Hammer, Louis de Funès, Belmondo |
-| 46e | V4.3.5 | Série a monstra | ~40 komediálních, akčních, sci-fi / fantasy a hororových sérií, **Godzilla + MonsterVerse**, King Kong; studia A24, Blumhouse, Amblin, Toho |
-| 46f | V4.3.6 | Anime a česká klasika | kategorie **Anime** 🎌 a **Czech & Slovak** 🇨🇿; Shinkai, Hosoda, Kon, Evangelion, Pokémon, Dragon Ball, Detective Conan, Cartoon Saloon; Slunce, seno…, Básníci, Anděl Páně, české pohádky, Svěrák |
-| 46g | V4.3.7 | Žánrové výběry a cesty | ~20 nových žánrových výběrů po 12–15 filmech + 7 nových cest; **cíl 2 000 filmů splněn** |
+| 46d | V4.3.4 | Překlady kolekcí a průvodce ✅ | admin: záložka **Translations** – názvy a popisy kolekcí ve 4 jazycích, **kontrola s TMDB** (název série / prvního filmu), *Use* / *Keep ours* / ruční oprava bez nového vydání; nové kolekce ze série TMDB dostanou přeložený název samy; **průvodce pro nováčky** (prohlídka přehledu a tlačítek u filmů) a stránka **Help** |
+| 46e | V4.3.5 | Režiséři a klasika | nový typ kolekce **Director** (záložka *Directors*), 10 režisérů, **Best Picture Winners**, Universal Monsters, Hammer, Louis de Funès, Belmondo |
+| 46f | V4.3.6 | Série a monstra | ~40 komediálních, akčních, sci-fi / fantasy a hororových sérií, **Godzilla + MonsterVerse**, King Kong; studia A24, Blumhouse, Amblin, Toho |
+| 46g | V4.3.7 | Anime a česká klasika | kategorie **Anime** 🎌 a **Czech & Slovak** 🇨🇿; Shinkai, Hosoda, Kon, Evangelion, Pokémon, Dragon Ball, Detective Conan, Cartoon Saloon; Slunce, seno…, Básníci, Anděl Páně, české pohádky, Svěrák |
+| 46h | V4.3.8 | Žánrové výběry a cesty | ~20 nových žánrových výběrů po 12–15 filmech + 7 nových cest; **cíl 2 000 filmů splněn** |
 | 47 | V4.4 | Výhody za úroveň a odznaky | s úrovní rostou limity (otevřené požadavky, filmy v požadavku, velikost a počet seznamů) – přehled „co odemkne další úroveň“ v profilu; odznak **Elite** pro vybrané lidi (jen ozdoba) |
 | 48 | V4.5 | Wrapped | rok v kostce – **poprvé za rok 2027** (prosinec 2027): nováček si na začátku doplní stovky filmů, první celý rok dat bude 2027; filmy „Seen before“ se nepočítají |
 | 49 | V4.6 | Optimalizace před seriály | úklid a výkon s velkým katalogem (načítání, hledání, import), **katalog v mezipaměti prohlížeče** pro opakované návštěvy – připravit půdu pro kapitolu V5 |
 
 #### V4.3 – velké doplnění filmů (plán 9. 11. 2026)
-**Cíl:** z dnešních **1 264 filmů na 2 000**, pak dál po 500 (2 500, 3 000…). Rozděleno na **sedm částí** (od 18. 11.; od 14. 11. šest) –
+**Cíl:** z dnešních **1 264 filmů na 2 000**, pak dál po 500 (2 500, 3 000…). Rozděleno na **osm částí** (od 18. 11.; od 14. 11. šest) –
 nejdřív nástroje, aby přidávání nebyla ruční dřina, pak obsah po tematických balících. Každá část je sama
 o sobě hotová a vydaná (migrace → Edge Functions → import → push). Odhad počtu filmů je hrubý (filmy se
 mezi kolekcemi opakují – kolekce režiséra sdílí filmy se studii, výběry se sériemi).
@@ -386,10 +387,11 @@ mezi kolekcemi opakují – kolekce režiséra sdílí filmy se studii, výběry
 | V4.3.1 Editor a požadavky | – (nástroje) | 1 264 |
 | V4.3.2 Nástroje + westerny | ~120 | ~1 380 |
 | V4.3.3 Požadavky: odpovědi a podobné kolekce | – (nástroje) | ~1 380 |
-| V4.3.4 Režiséři a klasika | ~250 | ~1 630 |
-| V4.3.5 Série a monstra | ~230 | ~1 860 |
-| V4.3.6 Anime a česká klasika | ~180 | ~2 040 |
-| V4.3.7 Žánrové výběry a cesty | ~150 | **~2 190** |
+| V4.3.4 Překlady kolekcí a průvodce | – (nástroje) | ~1 460 (filmy přidané přes požadavky) |
+| V4.3.5 Režiséři a klasika | ~250 | ~1 710 |
+| V4.3.6 Série a monstra | ~230 | ~1 940 |
+| V4.3.7 Anime a česká klasika | ~180 | ~2 120 |
+| V4.3.8 Žánrové výběry a cesty | ~150 | **~2 270** |
 
 **V4.3.1 – Editor a požadavky** (plán 14. 11. 2026 – bez nových filmů, aby se ve zbytku V4.3 dobře přidávalo)
 - **Úpravy kolekce s jedním Save:** změny filmů (Section, Series, Label, Story #, Optional, pořadí šipkami,
@@ -424,7 +426,11 @@ mezi kolekcemi opakují – kolekce režiséra sdílí filmy se studii, výběry
   jde upravit a poslat znovu.
 - **Podobná kolekce už v MMD** – upozornění při skládání požadavku, u požadavku v adminu i ve staviteli.
 
-**V4.3.4 – Režiséři a klasika**
+**V4.3.4 – Překlady kolekcí a průvodce** (přidáno 18. 11. 2026 – kamarád při testování našel špatný český název kolekce)
+- Kontrola názvů kolekcí proti TMDB a opravy překladů přímo v admin panelu (bez nového vydání).
+- Průvodce pro nováčky (prohlídka, co dělá které tlačítko) a stránka nápovědy s pravidly.
+
+**V4.3.5 – Režiséři a klasika**
 - Nový typ kolekce **Director** – záložka *Directors* na přehledu vedle Series / Studios / Genre picks / Paths,
   filmy po desetiletích; odznak na kartě jako u cest. Návrh: achievement **Auteur** (dokončené kolekce
   režisérů, úrovně 1 / 3 / 5).
@@ -434,7 +440,7 @@ mezi kolekcemi opakují – kolekce režiséra sdílí filmy se studii, výběry
 - **Louis de Funès** (Četníci ze Saint-Tropez, Fantomas) a **Jean-Paul Belmondo**.
 - Cesty **Nolan in Order** a **Oscar Essentials**.
 
-**V4.3.5 – Série a monstra**
+**V4.3.6 – Série a monstra**
 - **Komedie:** Police Academy, The Naked Gun, Hot Shots!, Scary Movie, Austin Powers, American Pie, Home Alone,
   Night at the Museum, Rush Hour, Bad Boys, Beverly Hills Cop, The Hangover.
 - **Akční:** The Expendables, Taken, The Transporter, The Equalizer, Underworld, Riddick, Ip Man,
@@ -448,14 +454,14 @@ mezi kolekcemi opakují – kolekce režiséra sdílí filmy se studii, výběry
 - Studia **A24** (výběr), **Blumhouse**, **Amblin**, **Toho**.
 - Cesta **Kaiju 101**.
 
-**V4.3.6 – Anime a česká klasika** (až po V4.2 – české názvy filmů už budou v aplikaci)
+**V4.3.7 – Anime a česká klasika** (až po V4.2 – české názvy filmů už budou v aplikaci)
 - Kategorie **Anime** 🎌 (Studio Ghibli se přidá i sem) a **Czech & Slovak** 🇨🇿.
 - **Anime:** Makoto Shinkai, Mamoru Hosoda, Satoshi Kon, Evangelion, Akira, Ghost in the Shell;
   na objem **Pokémon**, **Dragon Ball**, **Detective Conan**. Studio **Cartoon Saloon**.
 - **Česká klasika:** Slunce, seno… (3), Básníci (6), Anděl Páně (2), výběr **České pohádky**, filmy Svěráků.
 - Cesty **Anime Starter** a **Czech Classics**.
 
-**V4.3.7 – Žánrové výběry a cesty** (na konec – výběry pak sáhnou i po filmech z předchozích částí)
+**V4.3.8 – Žánrové výběry a cesty** (na konec – výběry pak sáhnou i po filmech z předchozích částí)
 - Výběry: 90s Action, Disaster, Sports, Musicals, Biopics, Mafia & Gangster, Prison, Courtroom, Spy (mimo
   Bonda), Survival, Post-apocalyptic, Alien Invasion, AI & Robots, Sword & Sandal, Rom-com, Coming of Age,
   Spoof & Parody, Buddy Cop, Dog Movies.
@@ -507,6 +513,9 @@ mezi kolekcemi opakují – kolekce režiséra sdílí filmy se studii, výběry
   reálně získat; navazují na požadavky z V4.3.1. Wrapped → **V4.5**, optimalizace → **V4.6**.
 - **18. 11.: odpovědi na požadavky a podobné kolekce jako V4.3.3** (V4.3 má sedm částí) – před velkým
   přidáváním obsahu přijde víc požadavků a duplicit; režiséři a další obsah se posunuli o jednu (V4.3.4–V4.3.7).
+- **18. 11.: překlady kolekcí a průvodce jako V4.3.4** (V4.3 má osm částí) – obojí se hodí dřív, než přibude
+  hodně filmů a nových lidí; obsah se posunul ještě o jednu (V4.3.5–V4.3.8). Katalog mezitím narostl přes
+  požadavky na ~1 460 filmů.
 - **Rychlost hlídá V4.6** – po V4.3 bude katalog skoro dvakrát větší (hledání, přehled, import).
 - **V3.5 = obsah od uživatelů** ve třech krocích, které na sebe navazují: bez požadavků nepřibudou filmy, bez
   seznamů není co ukazovat v komunitě.
@@ -2102,11 +2111,11 @@ testovacích seznamů byla vymyšlená.
 
 #### Rozhodnutí ve fázi 46b
 - **Obsah jako balíček, ne přepsaný seed** – seed u Adama obsahuje změny z aplikace, které tady nemám; balíček
-  se do něj jen přidá. Další části V4.3 přijdou stejně (`v4.3.4-…json`).
+  se do něj jen přidá. Další části V4.3 přijdou stejně (`v4.3.5-…json`).
 - **Filmy v balíčku podle názvu a roku** (bez TMDB ID) – import hledá rok premiéry, pak libovolné vydání,
   pak bez roku; co nesedí, je v reportu a opraví se v adminu (editor) nebo doplněním `"tmdb"`.
 - **Sólovky Buda a Terence jako volitelné** – kolekce je hlavně o dvojici; sólovky se do postupu nepočítají.
-- **Stavitel nezakládá typ Director** – ten přijde ve V4.3.4 (původně V4.3.3); Sergio Leone je zatím série.
+- **Stavitel nezakládá typ Director** – ten přijde ve V4.3.5 (původně V4.3.3); Sergio Leone je zatím série.
 - **Řazení ve stavitelské kolekci po skupinách** (Together → první osoba → druhá), uvnitř podle premiéry – oddíly
   v pohledu kolekce tak drží pohromadě.
 
@@ -2145,6 +2154,52 @@ testovacích seznamů byla vymyšlená.
   vším, upozornění by pak bylo pořád. Správce vidí všechny typy.
 - **„New answer“ podle prohlížeče** (`localStorage`, čas minulé návštěvy) – bez nové tabulky; na jiném zařízení
   se štítek ukáže ještě jednou.
+
+### Fáze 46d – překlady kolekcí a průvodce ✅ (18. 11. 2026) – **V4.3.4**
+- **Chyba, kterou to řeší:** názvy filmů se od V4.2.2 překládají z TMDB, ale **názvy kolekcí** jsem tehdy přeložil
+  ručně do `catalog.<jazyk>.json` – u Happy Death Day doslova („Šťastný den smrti“ místo distribučního
+  „Všechno nejhorší“). Opraveno v souboru (i „Univerzum V zajetí démonů“, „Plivu na tvůj hrob“, německy
+  „Happy Deathday“) a hlavně přidán nástroj, aby se to dalo hlídat a opravovat bez nového vydání.
+- **Opravy v databázi** (migrace `20261119100000_collection_translations.sql`): tabulka `universe_translations`
+  (kolekce × jazyk: název, popis, zdroj `manual` / `tmdb`) a funkce `collection_texts(lang)`. Web bere
+  **databáze → soubor → angličtina**, po jednotlivých polích (oprava jen názvu nechá popis ze souboru).
+- **Admin – záložka Translations** (`web/js/views/admin-translations.js`, logika `web/js/collection-texts.js`):
+  u každé kolekce a jazyka název a popis, odkud jsou (*Edited*, *From TMDB*, *Default*, *English*), filtr
+  *All / Differences / Untranslated*, výběr jazyka, hledání. **Check with TMDB** (nová akce `collection-names`
+  Edge Function `admin`) stáhne název série v každém jazyce (bez „kolekce / Filmreihe / Colección“) a ukáže, kde
+  se liší: **Use** převezme název z TMDB, **Keep ours** potvrdí náš (už se neukáže), pole jde přepsat a uložit.
+  **Use TMDB for N untranslated** převezme návrhy u kolekcí, které jsou zatím jen anglicky.
+- **Nové kolekce ze série TMDB** (schválený požadavek, *Suggested new collections*) dostanou přeložený název
+  a popis z TMDB hned při založení (`source = 'tmdb'`).
+- **Průvodce pro nováčky** (`web/js/guide.js`, `web/js/views/guide.js`): při první návštěvě přehledu prohlídka
+  v deseti krocích (kolekce, záložky, hledání, Coming soon, watchlist, požadavky, profil, ⚙) – stránka se
+  ztmaví a „světlo“ ukáže na dané tlačítko, na telefonu na spodní lištu. Při prvním otevření kolekce druhá
+  prohlídka tlačítek u filmů (+, −, ☆, ☰, hodnocení, postup, pořadí). Nepřihlášený vidí kratší verzi
+  s pozvánkou k registraci. Ovládání i klávesnicí (→ ← Esc), fokus zůstává v kartičce. Co uživatel viděl,
+  si pamatuje prohlížeč (`mmd-guide`).
+- **Nápověda** (`#/help`, `web/js/views/help.js`): tlačítka v kostce (ukázky, jak vypadají v aplikaci),
+  osm oddílů – začínáme, označování filmů, watchlist / hodnocení / seznamy, úrovně, přátelé a soukromí,
+  požadavky, **pravidla (co je zakázané)**, nastavení – a *Take the tour again*. Odkaz v patičce, v okně ⚙
+  a na konci prohlídky. Vše v pěti jazycích.
+- Ověřeno: migrace na lokálním Postgresu (i opakovaně; anon ani běžný uživatel zapisovat nesmí), webové testy
+  záložky Translations (kontrola, Use, Keep ours, hromadné převzetí, ruční úprava, návrat na soubor = smazání
+  opravy, český web pak ukáže „Všechno nejhorší“), prohlídky na počítači, telefonu i bez přihlášení,
+  v pěti jazycích na 320 px (kartička vždy celá na obrazovce), axe bez chyb (světlý i tmavý režim),
+  `node --test` (64).
+
+#### Rozhodnutí ve fázi 46d
+- **Opravy v databázi, výchozí překlady dál v souborech** – soubory se verzují s webem a fungují i bez migrace;
+  oprava jednoho názvu ale nemá čekat na vydání.
+- **Návrh z TMDB jen u sérií** – žánrové výběry, studia a cesty v TMDB nejsou (jsou to naše názvy).
+  Série TMDB se bere z `universes.tmdb_collection_id`, jinak ze série, do které patří aspoň polovina filmů
+  kolekce (MCU tak nedostane návrh „Avengers“). Když TMDB překlad série nemá, vezme se název prvního filmu –
+  jen když se kolekce jmenuje stejně jako první film (Happy Death Day, Saw; ne MCU → „Iron Man“).
+- **Kontrola na tlačítko, ne automaticky** – správce rozhoduje; TMDB má občas i horší překlad než my.
+- **„Keep ours“ = ruční potvrzení** – rozdíl se pak už neukazuje, ani po další kontrole.
+- **Prohlídka jako ztmavení se světlem, ne bubliny všude** – jedna věc najednou, funguje na telefonu i počítači
+  (cíl je pro každou velikost jiný prvek). Krok, jehož tlačítko na stránce není, se přeskočí.
+- **Prohlídka jednou pro každého** – i stávající uživatelé ji uvidí jednou (jde přeskočit jedním klepnutím).
+- **Pravidla v nápovědě srozumitelně, závazné jsou podmínky** – odkaz na Terms of Service zůstává.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

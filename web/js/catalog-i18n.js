@@ -7,6 +7,8 @@
 //       notes       { anglická poznámka: překlad }   terms { anglický popisek: překlad }
 //     Poznámky a popisky se hledají podle anglického textu – po úpravě v adminu se ukáže anglický,
 //     dokud se překlad nedoplní.
+//   • opravy názvů a popisů kolekcí z admin panelu (V4.3.4, záložka Translations) a názvy sérií
+//     z TMDB u nových kolekcí: z databáze (collection_texts) – mají přednost před souborem.
 // Překládá se přímo v načtených datech (data.js, lists.js…) a anglický název zůstane
 // v title_en / name_en – hledání najde film i kolekci podle obou. Co přeložené není, zůstane anglicky.
 // Admin panel si bere data bez překladu (fetchUniverse(slug, { original: true })), aby se do
@@ -26,16 +28,33 @@ let texts = EMPTY;
 export const catalogReady = TRANSLATED ? load() : Promise.resolve();
 
 async function load() {
-    const [titleMap, file] = await Promise.all([
-        supabase.rpc("film_titles", { p_lang: LANG })
-            .then(({ data, error }) => (error ? null : data))
-            .catch(() => null),
+    const rpc = (name) => supabase.rpc(name, { p_lang: LANG })
+        .then(({ data, error }) => (error ? null : data))
+        .catch(() => null);
+    const [titleMap, file, fixes] = await Promise.all([
+        rpc("film_titles"),
         fetch(new URL(`./i18n/catalog.${LANG}.json`, import.meta.url))
             .then((response) => (response.ok ? response.json() : null))
             .catch(() => null),
+        rpc("collection_texts"),                // V4.3.4 – bez migrace chyba → jen soubor
     ]);
     titles = new Map(Object.entries(titleMap ?? {}).map(([id, title]) => [Number(id), title]));
     texts = { ...EMPTY, ...(file ?? {}) };
+    texts.collections = mergeCollections(texts.collections, fixes);
+}
+
+/**
+ * Překlady kolekcí: soubor + opravy z databáze (V4.3.4). Opravy mají přednost po jednotlivých
+ * polích – oprava jen názvu nechá popis ze souboru.
+ */
+export function mergeCollections(fromFile, fromDatabase) {
+    const merged = { ...(fromFile ?? {}) };
+    for (const [slug, fix] of Object.entries(fromDatabase ?? {})) {
+        merged[slug] = { ...merged[slug] };
+        if (fix?.name) merged[slug].name = fix.name;
+        if (fix?.description) merged[slug].description = fix.description;
+    }
+    return merged;
 }
 
 /**

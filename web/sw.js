@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v29";       // V4.3.3: důvod zamítnutí požadavku, podobné kolekce; od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v30";       // V4.3.4: překlady kolekcí v adminu, průvodce a nápověda; od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline
@@ -52,6 +52,8 @@ const SHELL = [
     "js/requests.js",
     "js/lists.js",
     "js/settings.js",
+    "js/guide.js",
+    "js/collection-texts.js",
     "js/views/universes.js",
     "js/views/universe.js",
     "js/views/watchlist.js",
@@ -90,6 +92,9 @@ const SHELL = [
     "js/views/admin.js",
     "js/views/admin-universe.js",
     "js/views/admin-builder.js",
+    "js/views/admin-translations.js",
+    "js/views/guide.js",
+    "js/views/help.js",
     "js/views/not-found.js",
     "icons/icon-192.png",
     "icons/icon-512.png",

@@ -7559,3 +7559,341 @@ a.friend-row__name:hover {
     border-top: 1px dashed var(--border);
     padding-top: 10px;
 }
+
+/* =====================================================================
+   V4.3.4 – překlady kolekcí v admin panelu (#/admin/translations)
+   ===================================================================== */
+.translation-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.translation-summary {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.translation-filters {
+    display: grid;
+    gap: 10px;
+    margin: 14px 0;
+}
+
+.translation-filters > .segmented {
+    justify-self: start;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.translation-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+}
+
+.translation-card {
+    display: grid;
+    gap: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+}
+
+.translation-card__head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+    align-items: center;
+}
+
+.translation-card__name {
+    font-size: 1.05rem;
+}
+
+.translation-card__link {
+    margin-left: auto;
+    font-size: 0.85rem;
+}
+
+.translation-card__rows {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+}
+
+.translation-row {
+    display: grid;
+    gap: 6px;
+    align-content: start;
+    min-width: 0;
+}
+
+.translation-row__head {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.translation-row__lang {
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+}
+
+.translation-row__name,
+.translation-row__description {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-deep);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.9rem;
+}
+
+.translation-row__description {
+    resize: vertical;
+    font-size: 0.85rem;
+}
+
+.translation-status {
+    font-size: 0.75rem;
+    padding: 1px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+}
+
+.translation-status--manual,
+.translation-status--tmdb {
+    color: var(--success);
+    border-color: currentColor;
+}
+
+.translation-status--english {
+    color: #e0a347;
+    border-color: currentColor;
+}
+
+:root[data-theme="light"] .translation-status--english {
+    color: #8a5a12;
+}
+
+.translation-suggestion {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 8px;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: var(--bg-deep);
+    border: 1px dashed var(--accent);
+    font-size: 0.85rem;
+}
+
+.translation-suggestion > span {
+    flex: 1 1 160px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.translation-card__actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.translation-more {
+    display: flex;
+    justify-content: center;
+    margin: 14px 0;
+}
+
+.translation-empty {
+    padding: 18px 4px;
+}
+
+/* =====================================================================
+   V4.3.4 – průvodce pro nováčky (views/guide.js) a nápověda (#/help)
+   ===================================================================== */
+.guide {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+}
+
+/* Ztmavení se „světlem“ na prvku, o kterém je řeč */
+.guide__hole {
+    position: fixed;
+    border-radius: 14px;
+    box-shadow: 0 0 0 200vmax rgba(5, 8, 12, 0.7);
+    outline: 2px solid var(--accent);
+    outline-offset: 0;
+    pointer-events: none;
+    transition: left 0.25s ease, top 0.25s ease, width 0.25s ease, height 0.25s ease;
+}
+
+.guide--center::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 8, 12, 0.7);
+}
+
+.guide__card {
+    position: fixed;
+    box-sizing: border-box;
+    display: grid;
+    gap: 8px;
+    padding: 16px 18px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+    transition: left 0.25s ease, top 0.25s ease;
+}
+
+.guide__count {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+}
+
+.guide__title {
+    margin: 0;
+    font-size: 1.15rem;
+    color: var(--heading);
+}
+
+.guide__text {
+    margin: 0;
+    font-size: 0.93rem;
+    line-height: 1.5;
+}
+
+.guide__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-top: 6px;
+}
+
+.guide__spacer {
+    flex: 1 1 auto;
+}
+
+.guide__skip {
+    font-size: 0.85rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .guide__hole,
+    .guide__card {
+        transition: none;
+    }
+}
+
+:root[data-motion="reduced"] .guide__hole,
+:root[data-motion="reduced"] .guide__card {
+    transition: none;
+}
+
+/* Nápověda */
+.help-tour {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    align-items: center;
+    margin-top: 6px;
+}
+
+.help-tour__hint {
+    flex: 1 1 260px;
+    margin: 0;
+    font-size: 0.88rem;
+}
+
+.help-keys {
+    margin-bottom: 14px;
+}
+
+.help-keys__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 10px 18px;
+}
+
+.help-key {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    min-width: 0;
+}
+
+.help-key > span:last-child {
+    min-width: 0;
+    font-size: 0.92rem;
+}
+
+.help-key__sample {
+    flex: 0 0 auto;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 8px;
+    box-sizing: border-box;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--heading);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+.help-key__sample--add {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+}
+
+.help-key__sample--star,
+.help-key__sample--rate {
+    color: var(--accent);
+}
+
+.help-key__sample--level {
+    min-width: 26px;
+    height: 26px;
+    margin: 0 5px;
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+}
+
+.help-key__sample--wide {
+    font-size: 0.78rem;
+    font-weight: 600;
+    min-width: 0;
+    height: 28px;
+}
+
+.help-key__sample--icon {
+    color: var(--text);
+}

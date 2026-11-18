@@ -25,6 +25,8 @@ Jeden soubor: `node --test tests/levels.test.mjs`.
 | `texts.test.mjs` | jazyky (V4.2): každý slovník má všechny texty mimo admin, žádné navíc, stejné `{0}` jako angličtina a tvary podle počtu (1 / 2 / 5 / 21…) |
 | `catalog-i18n.test.mjs` | přeložená data katalogu (V4.2.2): soubory `catalog.<jazyk>.json` mají správný tvar, žádné prázdné texty a stejné kolekce ve všech jazycích |
 | `add-pack.test.mjs` | balíček kolekcí do seedu (V4.3.2): nové kolekce na konec, úpravy existujících, ostatní řádky beze změny, opakované spuštění nic nepřidá, CRLF; platnost balíčku V4.3.2; další cíl katalogu (2 000, pak po 500) |
+| `collection-texts.test.mjs` | překlady kolekcí (V4.3.4): oprava z databáze → soubor → angličtina, rozdíly proti návrhům z TMDB (ne u „Keep ours“), co uložit po ruční úpravě (návrat na soubor = smazání opravy) |
+| `guide.test.mjs` | průvodce pro nováčky (V4.3.4): která prohlídka se kde spustí, kratší verze bez přihlášení, texty všech kroků, zapamatování i bez úložiště |
 | `theme.test.mjs` | každá barva kolekce ze `supabase/seed/universes.json` dá tlačítko s kontrastem aspoň 4,5 : 1 (WCAG AA) |
 
 ## Pomocné soubory

@@ -224,6 +224,9 @@ Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny
     a naimportuje je. Seed pak commitni. Filmy, které import nenašel, jsou v `import-reports/`.
 20. **Odpovědi na požadavky a podobné kolekce (V4.3.3):** migrace `20261118130000_request_answers.sql`, pak znovu
     nasadit Edge Function **`admin`**. Funkce `requests` a `tmdb` beze změny.
+21. **Překlady kolekcí a průvodce (V4.3.4):** migrace `20261119100000_collection_translations.sql`, pak znovu
+    nasadit Edge Function **`admin`**. Potom v admin panelu záložka **Translations → Check with TMDB** a projít
+    rozdíly (*Use* / *Keep ours* / oprava). Opravy se ukážou po obnovení stránky, bez nového vydání.
 
 **Seed a admin panel (od V3.5.2.1):** seed je zdroj pravdy pro import, ale **úpravy z aplikace se neztratí** –
 databáze si je pamatuje (`universe_items.source`, `universes.source`, tabulka `seed_removals`) a `import.sh`

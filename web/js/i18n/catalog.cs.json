@@ -205,7 +205,7 @@
             "description": "Wallace a Gromit, Slepičí úlet, Ovečka Shaun a další plastelínové filmy studia Aardman."
         },
         "conjuring": {
-            "name": "Svět V zajetí démonů",
+            "name": "Univerzum V zajetí démonů",
             "description": "Případy Eda a Lorraine Warrenových – V zajetí démonů, Annabelle, Sestra a další."
         },
         "saw": {
@@ -249,7 +249,7 @@
             "description": "Klaun Art – tichý, usměvavý a nesmírně krvavý."
         },
         "happy-death-day": {
-            "name": "Šťastný den smrti",
+            "name": "Všechno nejhorší",
             "description": "Pořád tytéž narozeniny, pořád tentýž maskovaný vrah – znovu a znovu."
         },
         "x-trilogy": {
@@ -409,7 +409,7 @@
             "description": "Dva příběhy o kanibalské řeži, oba napsal a režíroval Wes Craven – o klanu mutantů, který číhá v poušti."
         },
         "i-spit-on-your-grave": {
-            "name": "Plivu na váš hrob",
+            "name": "Plivu na tvůj hrob",
             "description": "Brutální příběhy pomsty – původní film, remake z roku 2010 a jeho pokračování."
         },
         "the-purge": {
@@ -652,7 +652,7 @@
         "The Hangover": "Pařba ve Vegas",
         "National Treasure": "Lovci pokladů",
         "The Conjuring": "V zajetí démonů",
-        "The Conjuring Universe": "Svět V zajetí démonů",
+        "The Conjuring Universe": "Univerzum V zajetí démonů",
         "The Nun": "Sestra",
         "Final Destination": "Nezvratný osud",
         "Lethal Weapon": "Smrtonosná zbraň",

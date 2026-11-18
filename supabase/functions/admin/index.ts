@@ -37,6 +37,8 @@
 //                                       → nová kolekce z editoru (V4.3.1) – schválení požadavku na kolekci
 //                                         (série TMDB i vlastní): filmy v daném pořadí s oddílem, sérií,
 //                                         popiskem; čekající požadavky na ně → added, reject_ids → rejected
+//   collection-names { universe_ids? }  → názvy sérií v jazycích aplikace z TMDB (V4.3.4, záložka
+//                                         Translations): název série TMDB, jinak název prvního filmu
 //   request-create-collection { tmdb_collection_id, name, tmdb_ids?, also? }
 //                                       → nová kolekce ze série TMDB (V3.5.2): díly série
 //                                         do films a do kolekce, čekající požadavky na ně → added;
@@ -185,6 +187,161 @@ function pickTranslations(tmdbId: number, englishTitle: string, data: TmdbTransl
     if (localTitle || overview) rows.push({ tmdb_id: tmdbId, lang, title: localTitle, overview });
   }
   return rows;
+}
+
+// ---------------------------------------------------------------------
+// Překlady názvů kolekcí (V4.3.4) – název série TMDB v jazycích aplikace
+// ---------------------------------------------------------------------
+
+interface TmdbCollectionTranslations {
+  translations: { iso_639_1: string; iso_3166_1: string; data: { title?: string; name?: string; overview?: string } }[];
+}
+
+/** Slova, která TMDB přidává k názvu série („Vetřelec (kolekce)“, „Matrix Filmreihe“, „Colección Alien“). */
+const COLLECTION_WORDS = "kolekce|filmová série|série|filmreihe|reihe|sammlung|kollektion|collection|colección|coleccion|saga de películas|колекція|кіноколекція|збірка|серія фільмів|фільмова серія";
+const COLLECTION_SUFFIX = new RegExp(`[\\s\\-–—:,]+\\(?\\s*(?:${COLLECTION_WORDS})\\s*\\)?$`, "iu");
+const COLLECTION_PREFIX = new RegExp(`^\\(?(?:${COLLECTION_WORDS})\\)?(?:\\s+(?:de|del|de la|z|aus))?[\\s:\\-–—]+`, "iu");
+
+/** Název série bez „kolekce / Filmreihe / Colección“ a uvozovek. */
+export function cleanCollectionName(name: string | null | undefined): string | null {
+  let clean = (name ?? "").replace(/\s+/g, " ").trim();
+  for (let i = 0; i < 2; i++) clean = clean.replace(COLLECTION_SUFFIX, "").replace(COLLECTION_PREFIX, "").trim();
+  clean = clean.replace(/^[«„“"']+|[»“”"']+$/g, "").trim();
+  return clean.length >= 2 ? clean.slice(0, 80) : null;
+}
+
+/** Názvy (a popisy) série TMDB v jazycích aplikace – { cs: { name, overview } … }; prázdné vynechá. */
+async function collectionTranslations(tmdbCollectionId: number) {
+  const data = await tmdbGet<TmdbCollectionTranslations>(`/collection/${tmdbCollectionId}/translations`);
+  const all = data?.translations ?? [];
+  const result: Record<string, { name: string | null; overview: string | null }> = {};
+  for (const [lang, regions] of Object.entries(TRANSLATION_REGIONS)) {
+    const candidates = all
+      .filter((t) => t.iso_639_1 === lang)
+      .sort((a, b) => regionRank(regions, a.iso_3166_1) - regionRank(regions, b.iso_3166_1));
+    const name = candidates.map((t) => cleanCollectionName(t.data?.title ?? t.data?.name)).find(Boolean) ?? null;
+    const overview = candidates.map((t) => t.data?.overview?.trim()).find(Boolean) ?? null;
+    if (name || overview) result[lang] = { name, overview };
+  }
+  return result;
+}
+
+/** Všechny řádky dotazu po stránkách (PostgREST vrací nejvýš 1 000 najednou). */
+async function selectAll<T>(query: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: { message: string } | null }>) {
+  const rows: T[] = [];
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await query(from, from + 999);
+    if (error) throw new Error(error.message);
+    rows.push(...(data ?? []));
+    if (!data || data.length < 1000) return rows;
+  }
+}
+
+/** Název pro porovnání (malá písmena, jen písmena a číslice). */
+const plainName = (text: string | null | undefined) => (text ?? "").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+
+/**
+ * Návrhy názvů kolekcí typu série v jazycích aplikace (V4.3.4, záložka Translations):
+ *   • série TMDB (universes.tmdb_collection_id, jinak série, do které patří aspoň 2 filmy a aspoň
+ *     polovina filmů kolekce – MCU tak nedostane název „Avengers“) → její přeložený název bez „kolekce“,
+ *   • jinak (nebo když TMDB překlad nemá) název prvního filmu v daném jazyce – jen když se kolekce
+ *     jmenuje stejně jako první film (Happy Death Day, Alien, Saw; ne MCU → Iron Man).
+ * Vrací [{ universe_id, slug, tmdb_collection_id, names: { cs: { name, from: "series" | "film" } … } }].
+ */
+async function collectionNames(db: SupabaseClient, rawIds: unknown) {
+  const onlyIds = new Set(Array.isArray(rawIds) ? rawIds.map(Number).filter(Number.isInteger) : []);
+  const { data: universes, error } = await db.from("universes")
+    .select("id, slug, name, kind, tmdb_collection_id")
+    .eq("kind", "series");
+  if (error) throw new Error(error.message);
+  const series = (universes ?? []).filter((u) => onlyIds.size === 0 || onlyIds.has(u.id));
+  if (series.length === 0) return [];
+  const seriesIds = series.map((u) => u.id);
+
+  type ItemRow = { universe_id: number; tmdb_id: number; release_order: number; is_optional: boolean; film: { title: string; tmdb_collection_id: number | null } | null };
+  const items = await selectAll<ItemRow>((from, to) => db.from("universe_items")
+    .select("universe_id, tmdb_id, release_order, is_optional, film:films(title, tmdb_collection_id)")
+    .in("universe_id", seriesIds)
+    .order("universe_id").order("release_order")
+    .range(from, to) as unknown as PromiseLike<{ data: ItemRow[] | null; error: { message: string } | null }>);
+
+  const byUniverse = new Map<number, ItemRow[]>();
+  for (const item of items) {
+    if (!byUniverse.has(item.universe_id)) byUniverse.set(item.universe_id, []);
+    byUniverse.get(item.universe_id)!.push(item);
+  }
+
+  // První film kolekce (bez volitelných) – jen když se kolekce jmenuje podle něj
+  const firstFilm = new Map<number, number>();
+  for (const universe of series) {
+    const rows = byUniverse.get(universe.id) ?? [];
+    const first = rows.find((r) => !r.is_optional) ?? rows[0];
+    const name = plainName(universe.name);
+    if (first && name.length >= 2 && plainName(first.film?.title) === name) firstFilm.set(universe.id, first.tmdb_id);
+  }
+  type TitleRow = { tmdb_id: number; lang: string; title: string | null };
+  const firstIds = [...new Set(firstFilm.values())];
+  const titles = firstIds.length === 0 ? [] : await selectAll<TitleRow>((from, to) => db.from("film_translations")
+    .select("tmdb_id, lang, title")
+    .in("tmdb_id", firstIds)
+    .range(from, to) as unknown as PromiseLike<{ data: TitleRow[] | null; error: { message: string } | null }>);
+  const titleOf = new Map(titles.filter((t) => t.title).map((t) => [`${t.tmdb_id}:${t.lang}`, t.title as string]));
+
+  return await mapLimited(series, 6, async (universe) => {
+    const rows = byUniverse.get(universe.id) ?? [];
+    let collectionId: number | null = universe.tmdb_collection_id ?? null;
+    if (!collectionId) {
+      const counts = new Map<number, number>();
+      for (const row of rows) {
+        const id = row.film?.tmdb_collection_id;
+        if (id && id > 0) counts.set(id, (counts.get(id) ?? 0) + 1);
+      }
+      const best = [...counts.entries()].sort((a, b) => b[1] - a[1])[0];
+      if (best && best[1] >= 2 && best[1] * 2 >= rows.length) collectionId = best[0];
+    }
+
+    let fromSeries: Record<string, { name: string | null; overview: string | null }> = {};
+    if (collectionId) {
+      try {
+        fromSeries = await collectionTranslations(collectionId);
+      } catch (error) {
+        console.error(`collection ${collectionId}:`, error);
+      }
+    }
+
+    const names: Record<string, { name: string; from: "series" | "film" }> = {};
+    const first = firstFilm.get(universe.id);
+    for (const lang of Object.keys(TRANSLATION_REGIONS)) {
+      const seriesName = fromSeries[lang]?.name;
+      const filmName = first ? titleOf.get(`${first}:${lang}`) : undefined;
+      if (seriesName) names[lang] = { name: seriesName, from: "series" };
+      else if (filmName) names[lang] = { name: filmName.slice(0, 80), from: "film" };
+    }
+    return { universe_id: universe.id, slug: universe.slug, tmdb_collection_id: collectionId, names };
+  });
+}
+
+/**
+ * Nová kolekce ze série TMDB dostane hned přeložený název a popis (V4.3.4) – jen do tabulky
+ * universe_translations (source = 'tmdb'); chyba TMDB kolekci nezastaví.
+ */
+async function saveCollectionTranslations(db: SupabaseClient, universeId: number, tmdbCollectionId: number) {
+  try {
+    const translations = await collectionTranslations(tmdbCollectionId);
+    const rows = Object.entries(translations).map(([lang, t]) => ({
+      universe_id: universeId,
+      lang,
+      name: t.name,
+      description: t.overview ? shortDescription(t.overview, 200) || null : null,
+      source: "tmdb",
+    })).filter((row) => row.name || row.description);
+    if (rows.length > 0) {
+      const { error } = await db.from("universe_translations").upsert(rows, { onConflict: "universe_id,lang" });
+      if (error) console.error("universe_translations:", error.message);
+    }
+  } catch (error) {
+    console.error(`collection translations ${tmdbCollectionId}:`, error);
+  }
 }
 
 /** Hledání filmů podle názvu (prvních 12 výsledků). */
@@ -816,6 +973,9 @@ async function createCollection(db: SupabaseClient, options: {
   }).select("id, slug").single();
   if (error) throw new Error(error.message);
 
+  // Přeložený název a popis série z TMDB (V4.3.4) – vlastní kolekce ho nemá, název je od správce
+  if (tmdbCollectionId) await saveCollectionTranslations(db, universe.id, tmdbCollectionId);
+
   const { error: itemsError } = await db.from("universe_items").insert(films.map((film, index) => ({
     universe_id: universe.id,
     tmdb_id: film.tmdb_id,
@@ -1289,6 +1449,8 @@ Deno.serve(async (request) => {
         return json(await decideSeriesUpdate(db, Number(body.id), body.add === true, body.also));
       case "series-dismiss-all":
         return json(await dismissAllSeriesUpdates(db));
+      case "collection-names":
+        return json(await collectionNames(db, body.universe_ids));
       case "request-create-collection":
         return json(await createCollectionFromSeries(db, Number(body.tmdb_collection_id), body.name, body.tmdb_ids, body.also));
       case "create-collection":

@@ -153,6 +153,13 @@ export function adminSearch({ key, placeholder, filters = [], onChange }) {
             renderFilters();
             changed();
         },
+        /** Přepnout filtr z kódu (V4.3.4 – po kontrole překladů rovnou „Differences“); bez onChange. */
+        setFilter: (value) => {
+            if (!filters.some((f) => f.value === value)) return;
+            state.filter = value;
+            saveState(key, state);
+            renderFilters();
+        },
         setCount: (shown, total) => {
             counter.textContent = shown === total ? format("adminSearchTotal", total) : format("adminSearchShown", shown, total);
         },

@@ -39,6 +39,7 @@ export function adminHeader(active) {
         h("nav", { class: "tabs" },
             tab("#/admin", TEXTS.adminTabUniverses, "universes"),
             tab("#/admin/builder", TEXTS.adminTabBuilder, "builder"),
+            tab("#/admin/translations", TEXTS.adminTabTranslations, "translations"),
             tab("#/admin/users", TEXTS.adminTabUsers, "users"),
             tab("#/admin/words", TEXTS.adminTabWords, "words"),
             tab("#/admin/requests", TEXTS.adminTabRequests, "requests"),

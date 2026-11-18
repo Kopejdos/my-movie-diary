@@ -33,7 +33,8 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Settings ⚙ – System / Light / Dark mode, Modern or Paper classic style, collection colors or one fixed color, compact density and reduced animations; your defaults and account in one place
 - Admin panel: collections, movies (search TMDB right from the app), users and requests – an editor that saves every change of a collection with one Save, a new collection from a TMDB series or a request in one click; changes are written back into the seed automatically; new parts of TMDB series are spotted for you
 - Collection builder for admins: a person's filmography, two people together (Bud Spencer & Terence Hill), a studio or a TMDB keyword → tick the movies → a new collection; a progress bar towards the next catalog goal
-- Five languages – English, Čeština, Deutsch, Español, Українська (follows your browser, or pick one in Settings), including translated movie titles from TMDB and translated collections
+- Five languages – English, Čeština, Deutsch, Español, Українська (follows your browser, or pick one in Settings), including translated movie titles from TMDB and translated collections (admins can check them against TMDB and fix them in the app)
+- A short tour for newcomers and a Help page – what every button does and the rules
 - Phone-friendly: a compact layout with a bottom bar
 - Installable on a phone or computer (PWA), opens even offline
 
