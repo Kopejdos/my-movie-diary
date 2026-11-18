@@ -1210,6 +1210,58 @@
         "comedy-teen": {
             "name": "Teeniekomödien",
             "description": "Abschlussbälle, Partys und Eltern außer Haus – Highschool-Komödien von Ich glaub', ich steh' im Wald bis Bottoms."
+        },
+        "afi-100": {
+            "name": "AFI: Die 100 besten amerikanischen Filme",
+            "description": "Die Liste des American Film Institute von 2007 – von Citizen Kane auf Platz 1 bis Ben Hur auf Platz 100, in Rangfolge."
+        },
+        "best-international-feature-winners": {
+            "name": "Oscar-Gewinner: Bester internationaler Film",
+            "description": "Alle Oscar-Gewinner für den besten fremdsprachigen bzw. internationalen Film seit 1956 – von La Strada bis Sentimental Value."
+        },
+        "ingmar-bergman": {
+            "description": "Glaube, Tod und Ehe unter schwedischem Himmel – Das siebente Siegel, Persona, Fanny und Alexander."
+        },
+        "federico-fellini": {
+            "description": "Clowns, Träume und Rom bei Nacht – La Strada, Das süße Leben, 8½ und Amarcord."
+        },
+        "andrei-tarkovsky": {
+            "name": "Andrei Tarkowski",
+            "description": "Sieben Filme, in die Zeit gemeißelt – Andrej Rubljow, Solaris, Der Spiegel, Stalker."
+        },
+        "wong-kar-wai": {
+            "description": "Neonbeleuchtetes Hongkong, verpasste Chancen und Sehnsucht in Zeitlupe – Chungking Express, In the Mood for Love."
+        },
+        "yasujiro-ozu": {
+            "name": "Yasujirō Ozu",
+            "description": "Tiefe Kamera, stille Familien und die vergehende Zeit – Später Frühling, Die Reise nach Tokio, Ein Herbstnachmittag."
+        },
+        "krzysztof-kieslowski": {
+            "description": "Zufall, Schicksal und die Drei-Farben-Trilogie – der polnische Meister der leisen Wunder."
+        },
+        "pedro-almodovar": {
+            "description": "Kräftige Farben, Mütter und Melodram – Frauen am Rande des Nervenzusammenbruchs, Alles über meine Mutter, Sprich mit ihr, Volver."
+        },
+        "charlie-chaplin": {
+            "description": "Der Tramp und mehr – alle Spielfilme, bei denen Chaplin Regie führte, von The Kid bis Die Gräfin von Hongkong."
+        },
+        "buster-keaton": {
+            "description": "Der Mann, der niemals lachte – halsbrecherische Stunts und Stummfilmkomik ohne ein einziges Lächeln."
+        },
+        "billy-wilder": {
+            "description": "Nobody is perfect – Noir, Satire und die schärfsten Komödien Hollywoods, von Frau ohne Gewissen bis Das Appartement."
+        },
+        "sidney-lumet": {
+            "description": "New York, Gewissen und Schnellkochtöpfe – das Wichtigste von Lumet, von Die zwölf Geschworenen bis Network."
+        },
+        "clint-eastwood": {
+            "description": "Fünfzig Jahre hinter der Kamera – Erbarmungslos, Million Dollar Baby, Gran Torino und Juror #2."
+        },
+        "michael-mann": {
+            "description": "Profis in der Nacht – Der Einzelgänger, Heat, Collateral und die coolsten Schießereien in Los Angeles."
+        },
+        "brian-de-palma": {
+            "description": "Split Screens, Voyeure und Hitchcock auf Steroiden – Carrie, Scarface, Die Unbestechlichen, Mission: Impossible."
         }
     },
     "notes": {
@@ -1516,6 +1568,33 @@
         "The Lion King": "Der König der Löwen",
         "The Little Mermaid": "Arielle, die Meerjungfrau",
         "Documentary": "Dokumentarfilm",
-        "Reboots": "Neustarts"
+        "Reboots": "Neustarts",
+        "Italy": "Italien",
+        "France": "Frankreich",
+        "Sweden": "Schweden",
+        "Czechoslovakia": "Tschechoslowakei",
+        "Soviet Union": "Sowjetunion",
+        "Algeria": "Algerien",
+        "Ivory Coast": "Elfenbeinküste",
+        "West Germany": "Westdeutschland",
+        "Hungary": "Ungarn",
+        "Spain": "Spanien",
+        "Switzerland": "Schweiz",
+        "Argentina": "Argentinien",
+        "Netherlands": "Niederlande",
+        "Denmark": "Dänemark",
+        "Russia": "Russland",
+        "Czech Republic": "Tschechien",
+        "Bosnia and Herzegovina": "Bosnien und Herzegowina",
+        "Germany": "Deutschland",
+        "Canada": "Kanada",
+        "South Africa": "Südafrika",
+        "Austria": "Österreich",
+        "Poland": "Polen",
+        "Mexico": "Mexiko",
+        "South Korea": "Südkorea",
+        "United Kingdom": "Vereinigtes Königreich",
+        "Brazil": "Brasilien",
+        "Norway": "Norwegen"
     }
 }

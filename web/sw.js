@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v37";       // V4.4.2: režiséři, série a výběry (nové překlady katalogu); od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v38";       // V4.4.3: velké seznamy a klasici (nové překlady katalogu); od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline

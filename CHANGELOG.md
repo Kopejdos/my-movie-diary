@@ -3,6 +3,12 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.4.3 – November 2026
+- AFI's 100 Greatest American Films – in ranking order, from Citizen Kane to Ben-Hur
+- Best International Feature Winners – all 70 Oscar winners since 1956, with their country
+- 14 new directors: Ingmar Bergman, Federico Fellini, Andrei Tarkovsky, Wong Kar-wai, Yasujirō Ozu, Krzysztof Kieślowski, Pedro Almodóvar, Charlie Chaplin, Buster Keaton, Billy Wilder, Sidney Lumet, Clint Eastwood, Michael Mann and Brian De Palma
+- About 3,400 movies in My Movie Diary now
+
 ## V4.4.2 – November 2026
 - 16 new directors: Martin Scorsese, James Cameron, Ridley Scott, the Coen brothers, Guillermo del Toro, Peter Jackson, Sam Raimi, John Carpenter, David Lynch, Francis Ford Coppola, Bong Joon-ho, Park Chan-wook, Paul Thomas Anderson, Greta Gerwig, Edgar Wright and Miloš Forman
 - Over 40 new series – Ocean's, Now You See Me, Hellboy, The Addams Family, Highlander, Starship Troopers, Bridget Jones, Mean Girls, Spy Kids, Herbie and many more

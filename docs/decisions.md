@@ -375,7 +375,8 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 47 | V4.4 | Výhody za úroveň a odznaky ✅ | s úrovní rostou limity (otevřené požadavky, filmy v požadavku, velikost a počet seznamů) – hlídá je databáze (úroveň spočítaná v SQL stejně jako ve webu); v profilu **Výhody za úroveň**; odznak **Elite** ★ (přiděluje správce) |
 | 47a | V4.4.1 | Animáky ✅ | Looney Tunes (i Coyote vs. Acme), Tom a Jerry, Scooby-Doo, Šmoulové, Želvy nindža, SpongeBob, Sonic, Garfield, Alvin, Peanuts, Medvídek Pú; studia DisneyToon, Warner Bros. Animation, Netflix a Nickelodeon; režiséři Don Bluth, Karel Zeman a Jan Švankmajer; Česká animace, oscaroví vítězové za animaci, světová animace, animace pro dospělé, seriály v kině; One Piece, Naruto, My Hero Academia, Demon Slayer, Moderní anime; oprava kolekcí z kontroly seedu – katalog ~2 740 filmů |
 | 47b | V4.4.2 | Režiséři, série a výběry ✅ | 16 režisérů (Scorsese, Cameron, Ridley Scott, Coenové, del Toro, Peter Jackson, Raimi, Carpenter, Lynch, Coppola, Bong Joon-ho, Park Chan-wook, P. T. Anderson, Gerwig, Edgar Wright, Forman), 47 sérií (Ocean's, Now You See Me, Hellboy, Addams Family, Highlander, Starship Troopers, Shaft, Herbie, Spy Kids…), studio Neon, výběry Film Noir, Neo-noir, Zlatá palma (od 1990), kultovní filmy, road movies, teen komedie – **katalog přes 3 000 (~3 150)** |
-| 47c–d | V4.4.3–V4.4.4 | Velké seznamy a kinematografie | AFI 100, Sight & Sound, Oscar za cizojazyčný film, nejlepší filmy desetiletí, kinematografie zemí (Korea, Itálie, Francie, Indie… – možná nové kategorie = migrace), herci, další režiséři, česká vlna 2 – **cíl 4 000** |
+| 47c | V4.4.3 | Velké seznamy a klasici ✅ | **AFI 100** v pořadí žebříčku, všech 70 vítězů **Oscara za mezinárodní film** (se zemí), 14 režisérů: Bergman, Fellini, Tarkovskij, Wong Kar-wai, Ozu, Kieślowski, Almodóvar, Chaplin, Keaton, Wilder, Lumet, Eastwood, Mann, De Palma – katalog ~3 440 |
+| 47d | V4.4.4 | Kinematografie zemí a herci | kinematografie zemí (Korea, Itálie, Francie, Indie… – možná nové kategorie = migrace), herci, další režiséři, česká vlna 2 – **cíl 4 000** |
 | 48 | V4.5 | Wrapped | rok v kostce – **poprvé za rok 2027** (prosinec 2027): nováček si na začátku doplní stovky filmů, první celý rok dat bude 2027; filmy „Seen before“ se nepočítají |
 | 49 | V4.6 | Optimalizace před seriály | úklid a výkon s velkým katalogem (načítání, hledání, import), **katalog v mezipaměti prohlížeče** pro opakované návštěvy – připravit půdu pro kapitolu V5 |
 
@@ -482,8 +483,8 @@ kde to jde; každá část je hotová a vydaná zvlášť.
 |---|---|---|
 | V4.4.1 Animáky | ~295 (skutečně) | ~2 740 |
 | V4.4.2 Režiséři, série a výběry | ~410 (skutečně) | **~3 150 – cíl 3 000 splněn** |
-| V4.4.3 Velké seznamy (AFI, Sight & Sound, cizojazyčný Oscar, desetiletí) | ~400 | ~3 550 |
-| V4.4.4 Kinematografie zemí, herci, další režiséři | ~450 | **~4 000** |
+| V4.4.3 Velké seznamy a klasici (AFI 100, mezinárodní Oscar, 14 režisérů) | ~285 (skutečně) | ~3 440 |
+| V4.4.4 Kinematografie zemí, herci, další režiséři | ~560 | **~4 000** |
 
 #### V4.4 – výhody za úroveň a odznaky (plán 14. 11. 2026)
 - **Výhody za úroveň** – s úrovní rostou limity. Návrh (doladí se před začátkem verze):
@@ -2453,6 +2454,31 @@ testovacích seznamů byla vymyšlená.
   i na přehledu je dobré je mít jako celek.
 - **Zlatá palma od roku 1990** – starší vítězové jsou často těžko k vidění; případně se doplní ve V4.4.3
   s velkými seznamy.
+
+### Fáze 47c – velké seznamy a klasici ✅ (18. 11. 2026) – **V4.4.3**
+- **Jen obsah** – bez migrace a beze změn Edge Functions. Balíček `v4.4.3-lists-masters.json` (16 kolekcí,
+  404 řádků, ~285 nových filmů → katalog ~3 440):
+  - **AFI's 100 Greatest American Films** (vydání 2007) v pořadí žebříčku – skupiny #1–25 … #76–100, u každého
+    filmu štítek s pořadím (#1 Citizen Kane … #100 Ben-Hur);
+  - **Best International Feature Winners** – všech 70 vítězů od roku 1956 (La Strada) po Sentimental Value
+    (Oscar 2026), po desetiletích, se štítkem země (přeložené); české filmy pod původními názvy (Obchod na korze,
+    Ostře sledované vlaky, Kolja);
+  - **14 režisérů** po desetiletích: Ingmar Bergman (od Léta s Monikou), Federico Fellini, Andrej Tarkovskij,
+    Wong Kar-wai, Jasudžiró Ozu, Krzysztof Kieślowski, Pedro Almodóvar, Charlie Chaplin (všechny celovečerní),
+    Buster Keaton (filmy, které režíroval), Billy Wilder, Sidney Lumet (výběr), Clint Eastwood (všech 40),
+    Michael Mann a Brian De Palma.
+- Sight & Sound a nejlepší filmy desetiletí z plánu vypadly – žebříček Sight & Sound má remízy a přes 100 míst,
+  „nejlepší filmy desetiletí“ nemají jeden uznávaný zdroj. Místo nich klasici světového i hollywoodského filmu.
+- Ověřeno: `add-pack` na seedu po V4.4.2 (16 nových, podruhé nic), `node --test` (76 – nově platnost balíčku
+  V4.4.3: AFI má 100 filmů se štítky #1–#100, 70 mezinárodních vítězů se zemí), webové testy v češtině, němčině,
+  angličtině a ukrajinštině na 320–1280 px (štítky pořadí a zemí u filmů).
+
+#### Rozhodnutí ve fázi 47c
+- **Pořadí a země jako štítek filmu** – štítek už aplikace umí (Phase 1, Remake…), překládá se přes `terms`;
+  žádná změna kódu ani databáze.
+- **AFI 100 jako žánrový výběr** – nejde o studio ani sérii; dokončení se počítá jako u ostatních výběrů.
+- **U plodných režisérů výběr** (Bergman od roku 1953, Lumet 18 z 44 filmů) – popis to říká („the essential“);
+  u ostatních kompletní filmografie celovečerních filmů.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

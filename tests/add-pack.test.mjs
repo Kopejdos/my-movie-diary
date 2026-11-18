@@ -229,6 +229,31 @@ test("balíček V4.4.2: 16 režisérů po desetiletích, přes 40 sérií, Neon 
     }
 });
 
+test("balíček V4.4.3: AFI 100 v pořadí, 70 oscarových mezinárodních filmů se zemí, 14 režisérů", () => {
+    const pack = JSON.parse(readFileSync(new URL("../supabase/packs/v4.4.3-lists-masters.json", import.meta.url), "utf8"));
+    const categories = new Set(["superhero", "scifi", "fantasy", "animation", "anime", "family", "action-adventure", "comedy",
+        "drama", "crime-thriller", "war", "western", "horror", "czech-slovak"]);
+    const afi = pack.universes.find((u) => u.slug === "afi-100");
+    assert.equal(afi.films.length, 100);
+    assert.deepEqual(afi.films.map((f) => f.label), afi.films.map((_, i) => `#${i + 1}`));
+    const intl = pack.universes.find((u) => u.slug === "best-international-feature-winners");
+    assert.equal(intl.films.length, 70);
+    assert.ok(intl.films.every((f) => f.label && f.group === `${Math.floor(f.year / 10) * 10}s`));
+    assert.equal(pack.universes.filter((u) => u.kind === "director").length, 14);
+    for (const universe of pack.universes) {
+        assert.match(universe.slug, /^[a-z0-9-]{2,40}$/, universe.slug);
+        assert.ok(universe.categories.length > 0 && universe.categories.every((c) => categories.has(c)), universe.slug);
+        assert.match(universe.color, /^#[0-9a-f]{6}$/, universe.slug);
+        assert.ok(universe.description && universe.description.length <= 160, universe.slug);
+        const keys = universe.films.map((f) => `${f.title}|${f.year}`);
+        assert.equal(new Set(keys).size, keys.length, `${universe.slug}: film dvakrát`);
+        for (const film of universe.films) {
+            assert.ok(film.title && Number.isInteger(film.year), `${universe.slug}: ${film.title}`);
+            if (universe.kind === "director") assert.equal(film.group, `${Math.floor(film.year / 10) * 10}s`, `${universe.slug}: ${film.title}`);
+        }
+    }
+});
+
 test("nextGoal: 2 000, pak po 500", async () => {
     const { nextGoal } = await import("../web/js/admin.js");
     assert.equal(nextGoal(1264), 2000);

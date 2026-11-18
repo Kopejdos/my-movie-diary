@@ -1267,6 +1267,58 @@
         "comedy-teen": {
             "name": "Teenagerské komedie",
             "description": "Plesy, mejdany a rodiče mimo město – středoškolské komedie od Fast Times po Bottoms."
+        },
+        "afi-100": {
+            "name": "AFI: 100 nejlepších amerických filmů",
+            "description": "Žebříček Amerického filmového institutu z roku 2007 – od Občana Kanea na 1. místě po Ben Hura na 100., v pořadí žebříčku."
+        },
+        "best-international-feature-winners": {
+            "name": "Vítězové Oscara za mezinárodní film",
+            "description": "Všichni držitelé Oscara za nejlepší cizojazyčný / mezinárodní film od roku 1956 – od Silnice po Citovou hodnotu. Dvakrát i Československo a jednou Česko."
+        },
+        "ingmar-bergman": {
+            "description": "Víra, smrt a manželství pod švédským nebem – Sedmá pečeť, Persona, Fanny a Alexandr."
+        },
+        "federico-fellini": {
+            "description": "Klauni, sny a noční Řím – Silnice, Sladký život, 8½ a Amarcord."
+        },
+        "andrei-tarkovsky": {
+            "name": "Andrej Tarkovskij",
+            "description": "Sedm filmů tesaných časem – Andrej Rublev, Solaris, Zrcadlo, Stalker."
+        },
+        "wong-kar-wai": {
+            "description": "Neonový Hongkong, promarněné šance a touha ve zpomaleném záběru – Chungking Express, Stvořeni pro lásku."
+        },
+        "yasujiro-ozu": {
+            "name": "Jasudžiró Ozu",
+            "description": "Nízká kamera, tiché rodiny a plynutí času – Pozdní jaro, Příběh z Tokia, Podzimní odpoledne."
+        },
+        "krzysztof-kieslowski": {
+            "description": "Náhoda, osud a trilogie Tři barvy – polský mistr tichých zázraků."
+        },
+        "pedro-almodovar": {
+            "description": "Výrazné barvy, matky a melodrama – Ženy na pokraji nervového zhroucení, Vše o mé matce, Mluv s ní, Volver."
+        },
+        "charlie-chaplin": {
+            "description": "Tulák a mnohem víc – všechny celovečerní filmy, které Chaplin režíroval, od Kida po Hraběnku z Hongkongu."
+        },
+        "buster-keaton": {
+            "description": "Muž, který se nikdy nesmál – životu nebezpečné kaskadérské kousky a němá komedie bez jediného úsměvu."
+        },
+        "billy-wilder": {
+            "description": "Nikdo není dokonalý – noir, satira a nejostřejší komedie Hollywoodu, od Pojistky smrti po Byt."
+        },
+        "sidney-lumet": {
+            "description": "New York, svědomí a tlakové hrnce – to podstatné od Lumeta, od Dvanácti rozhněvaných mužů po Network."
+        },
+        "clint-eastwood": {
+            "description": "Padesát let za kamerou – Nesmiřitelní, Million Dollar Baby, Gran Torino a Porotce č. 2."
+        },
+        "michael-mann": {
+            "description": "Profesionálové v noci – Zloděj, Nelítostný souboj, Collateral a nejlepší přestřelky v Los Angeles."
+        },
+        "brian-de-palma": {
+            "description": "Rozdělené plátno, voyeuři a Hitchcock na steroidech – Carrie, Zjizvená tvář, Neúplatní, Mission: Impossible."
         }
     },
     "notes": {
@@ -1622,6 +1674,35 @@
         "The Lion King": "Lví král",
         "The Little Mermaid": "Malá mořská víla",
         "Documentary": "Dokument",
-        "Reboots": "Restarty"
+        "Reboots": "Restarty",
+        "Italy": "Itálie",
+        "France": "Francie",
+        "Sweden": "Švédsko",
+        "Czechoslovakia": "Československo",
+        "Soviet Union": "Sovětský svaz",
+        "Algeria": "Alžírsko",
+        "Ivory Coast": "Pobřeží slonoviny",
+        "West Germany": "Západní Německo",
+        "Hungary": "Maďarsko",
+        "Spain": "Španělsko",
+        "Switzerland": "Švýcarsko",
+        "Netherlands": "Nizozemsko",
+        "Denmark": "Dánsko",
+        "Russia": "Rusko",
+        "Czech Republic": "Česko",
+        "Taiwan": "Tchaj-wan",
+        "Bosnia and Herzegovina": "Bosna a Hercegovina",
+        "Germany": "Německo",
+        "Canada": "Kanada",
+        "South Africa": "Jihoafrická republika",
+        "Austria": "Rakousko",
+        "Japan": "Japonsko",
+        "Iran": "Írán",
+        "Poland": "Polsko",
+        "Mexico": "Mexiko",
+        "South Korea": "Jižní Korea",
+        "United Kingdom": "Velká Británie",
+        "Brazil": "Brazílie",
+        "Norway": "Norsko"
     }
 }

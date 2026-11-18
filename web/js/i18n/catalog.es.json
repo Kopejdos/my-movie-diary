@@ -1246,6 +1246,58 @@
         "comedy-teen": {
             "name": "Comedias adolescentes",
             "description": "Bailes de graduación, fiestas y padres fuera de casa: comedias de instituto de Aquel excitante curso a Bottoms."
+        },
+        "afi-100": {
+            "name": "AFI: Las 100 mejores películas estadounidenses",
+            "description": "La lista del American Film Institute de 2007: de Ciudadano Kane en el n.º 1 a Ben-Hur en el n.º 100, por orden de clasificación."
+        },
+        "best-international-feature-winners": {
+            "name": "Ganadoras del Óscar a la mejor película internacional",
+            "description": "Todas las ganadoras del Óscar a la mejor película de habla no inglesa / internacional desde 1956: de La strada a Valor sentimental."
+        },
+        "ingmar-bergman": {
+            "description": "Fe, muerte y matrimonio bajo el cielo sueco: El séptimo sello, Persona, Fanny y Alexander."
+        },
+        "federico-fellini": {
+            "description": "Payasos, sueños y Roma de noche: La strada, La dolce vita, Fellini, ocho y medio y Amarcord."
+        },
+        "andrei-tarkovsky": {
+            "name": "Andréi Tarkovski",
+            "description": "Siete películas esculpidas en el tiempo: Andréi Rubliov, Solaris, El espejo, Stalker."
+        },
+        "wong-kar-wai": {
+            "description": "Hong Kong de neón, oportunidades perdidas y anhelo a cámara lenta: Chungking Express, Deseando amar."
+        },
+        "yasujiro-ozu": {
+            "name": "Yasujirō Ozu",
+            "description": "Cámara baja, familias silenciosas y el paso del tiempo: Primavera tardía, Cuentos de Tokio, El sabor del sake."
+        },
+        "krzysztof-kieslowski": {
+            "description": "Azar, destino y la trilogía Tres colores: el maestro polaco de los milagros silenciosos."
+        },
+        "pedro-almodovar": {
+            "description": "Colores intensos, madres y melodrama: Mujeres al borde de un ataque de nervios, Todo sobre mi madre, Hable con ella, Volver."
+        },
+        "charlie-chaplin": {
+            "description": "Charlot y mucho más: todos los largometrajes que dirigió Chaplin, de El chico a La condesa de Hong Kong."
+        },
+        "buster-keaton": {
+            "description": "Cara de palo: acrobacias que desafían a la muerte y comedia muda sin una sola sonrisa."
+        },
+        "billy-wilder": {
+            "description": "Nadie es perfecto: cine negro, sátira y las comedias más afiladas de Hollywood, de Perdición a El apartamento."
+        },
+        "sidney-lumet": {
+            "description": "Nueva York, conciencia y ollas a presión: lo esencial de Lumet, de Doce hombres sin piedad a Network."
+        },
+        "clint-eastwood": {
+            "description": "Cincuenta años detrás de la cámara: Sin perdón, Million Dollar Baby, Gran Torino y Jurado n.º 2."
+        },
+        "michael-mann": {
+            "description": "Profesionales de noche: Ladrón, Heat, Collateral y los tiroteos más espectaculares de Los Ángeles."
+        },
+        "brian-de-palma": {
+            "description": "Pantallas partidas, mirones y Hitchcock con esteroides: Carrie, El precio del poder, Los intocables, Misión imposible."
         }
     },
     "notes": {
@@ -1596,6 +1648,34 @@
         "The Lion King": "El rey león",
         "The Little Mermaid": "La sirenita",
         "Documentary": "Documental",
-        "Reboots": "Reinicios"
+        "Reboots": "Reinicios",
+        "Italy": "Italia",
+        "France": "Francia",
+        "Sweden": "Suecia",
+        "Czechoslovakia": "Checoslovaquia",
+        "Soviet Union": "Unión Soviética",
+        "Algeria": "Argelia",
+        "Ivory Coast": "Costa de Marfil",
+        "West Germany": "Alemania Occidental",
+        "Hungary": "Hungría",
+        "Spain": "España",
+        "Switzerland": "Suiza",
+        "Netherlands": "Países Bajos",
+        "Denmark": "Dinamarca",
+        "Russia": "Rusia",
+        "Czech Republic": "Chequia",
+        "Taiwan": "Taiwán",
+        "Bosnia and Herzegovina": "Bosnia y Herzegovina",
+        "Germany": "Alemania",
+        "Canada": "Canadá",
+        "South Africa": "Sudáfrica",
+        "Japan": "Japón",
+        "Iran": "Irán",
+        "Poland": "Polonia",
+        "Mexico": "México",
+        "South Korea": "Corea del Sur",
+        "United Kingdom": "Reino Unido",
+        "Brazil": "Brasil",
+        "Norway": "Noruega"
     }
 }

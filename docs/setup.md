@@ -246,6 +246,8 @@ Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny
     (28 nových kolekcí, 21 kolekcím z požadavků nové popisy) a commit seedu. Pak Translations → Check with TMDB.
 28. **Režiséři, série a výběry (V4.4.2):** bez migrace a beze změn funkcí – `./scripts/add-pack.sh
     supabase/packs/v4.4.2-directors-series.json` (70 nových kolekcí) a commit seedu. Pak Translations → Check with TMDB.
+29. **Velké seznamy a klasici (V4.4.3):** bez migrace a beze změn funkcí – `./scripts/add-pack.sh
+    supabase/packs/v4.4.3-lists-masters.json` (16 nových kolekcí) a commit seedu. Pak Translations → Check with TMDB.
 
 **Seed a admin panel (od V3.5.2.1):** seed je zdroj pravdy pro import, ale **úpravy z aplikace se neztratí** –
 databáze si je pamatuje (`universe_items.source`, `universes.source`, tabulka `seed_removals`) a `import.sh`
