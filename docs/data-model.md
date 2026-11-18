@@ -236,6 +236,9 @@ Od V4.3.1 i `kind = 'custom'` – **vlastní kolekce** z libovolných filmů; `c
 Unikátní `(request_id, tmdb_id)`. Od V4.3.1 u požadavku na kolekci i **`position`** (pořadí od uživatele),
 **`group_label`** (Section), **`franchise`** (Series) a **`label`** (Label) – každý ≤ 60 znaků; správce je při
 schválení dostane předvyplněné v editoru.
+Od V4.3.3 u zamítnutého filmu **`reject_reason`** (`in_mmd` / `similar` / `not_released` / `not_movie` /
+`off_topic` / `duplicate` / `needs_changes` / `left_out` / `other`; web ho přeloží) a **`reject_note`**
+(poznámka správce, ≤ 300 znaků) – obojí vidí autor požadavku.
 
 **`film_request_votes`** – +1: `(tmdb_id, user_id)` PK, `created_at`.
 
@@ -244,13 +247,17 @@ schválení dostane předvyplněné v editoru.
   limity: ≤ 30 filmů v požadavku – do V4.3.1 20, ≤ 5 nevyřízených požadavků; název vlastní kolekce a texty
   bez zakázaných slov – `is_text_allowed`). Hlasy: vlastní, jen u filmu, který čeká
   (`film_request_pending()`), zrušit vlastní.
-- Rozhodnutí (Edge Function `admin`, akce `request-decide`) platí pro film ve **všech** čekajících požadavcích.
+- Rozhodnutí (Edge Function `admin`, akce `request-decide`) platí pro film ve **všech** čekajících požadavcích;
+  od V4.3.3 zamítnutí u požadavku na kolekci (`only_this`) jen pro danou položku.
 - Požadavek na kolekci (V3.5.2): funkce `requests` ověří podle TMDB, že všechny filmy patří do jedné série
   (jinak chyba `not_same_series`), aspoň 2 filmy, série ještě nemá kolekci v MMD ani čekající požadavek.
   Správce z něj vytvoří kolekci akcí `request-create-collection` funkce `admin`.
 - **`wanted_films(query, status)`** – jeden řádek na požadovaný film pro všechny přihlášené: `title`,
   `release_date`, `poster_path`, `status` (čeká-li aspoň jeden → `pending`), `wants` (žadatelé + hlasy),
   `i_want`, `requested_by_me`, `first_requested`. Jména žadatelů neprozrazuje.
+- **`similar_collections(tmdb_ids, name)`** (V4.3.3) – nejvýš 5 kolekcí podobných požadavku: aspoň 2 společné
+  filmy a zároveň polovina výběru nebo polovina filmů kolekce, anebo podobný název (bez „The“ / „Collection“).
+  Vrací `slug`, `name`, `kind`, `overlap`, `total`, `name_match`. Jen veřejné údaje katalogu – smí kdokoli.
 - **`other_films`** (pohled) – filmy v `films`, které nejsou v žádné kolekci (schválené požadavky, filmy přidané
   adminem). Čte se v hledání; na profilu a ve statistikách jsou jako *Other movies*.
 

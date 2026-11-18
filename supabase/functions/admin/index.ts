@@ -21,9 +21,11 @@
 //   delete-user  { user_id }            → smaže účet i všechna jeho data (ne sám sebe)
 //   reset-username { user_id }          → automatický nick + skrytý profil (V2.3, ne sám sobě)
 //   requests     {}                     → nevyřízené požadavky na filmy s návrhem kolekce (V3.5.1)
-//   request-decide { items: [{ id, approve, universe_id? }] }
+//   request-decide { items: [{ id, approve, universe_id?, reason?, note?, only_this? }] }
 //                                       → přijme (film do films, případně do kolekce) / zamítne;
-//                                         rozhodnutí platí pro film ve všech požadavcích
+//                                         rozhodnutí platí pro film ve všech požadavcích – zamítnutí
+//                                         s only_this jen pro tuto položku (požadavek na kolekci);
+//                                         reason + note = důvod zamítnutí pro uživatele (V4.3.3)
 //   people-search { query }            → hledání osoby v TMDB (V4.3.2 – stavitel kolekcí)
 //   person-films { person_id, second_person_id? }
 //                                       → filmografie osoby / dvou osob s rolemi (průnik = Together)
@@ -924,7 +926,10 @@ async function createCollectionFromEditor(db: SupabaseClient, body: Record<strin
   const result = await createCollection(db, { name, description, kind: String(body.kind ?? "series"), tmdbCollectionId, items, also: body.also });
 
   const rejectIds = (Array.isArray(body.reject_ids) ? body.reject_ids : []).map(Number).filter(Number.isInteger);
-  if (rejectIds.length > 0) await decideRequests(db, rejectIds.map((id) => ({ id, approve: false })));
+  // Filmy, které správce do kolekce nevzal – jen v tomto požadavku, s důvodem „left_out“ (V4.3.3)
+  if (rejectIds.length > 0) {
+    await decideRequests(db, rejectIds.map((id) => ({ id, approve: false, only_this: true, reason: "left_out" })));
+  }
   return result;
 }
 
@@ -934,6 +939,9 @@ async function createCollectionFromEditor(db: SupabaseClient, body: Record<strin
  * Vrací i řádky do seedu – jen pro kontrolu: položky mají source = 'request', import je nesmaže
  * a skript scripts/sync-seed.sh je do seedu dopíše sám (V3.5.2).
  */
+/** Důvody zamítnutí (V4.3.3) – web je uživateli přeloží. */
+const REJECT_REASONS = ["in_mmd", "similar", "not_released", "not_movie", "off_topic", "duplicate", "needs_changes", "left_out", "other"];
+
 async function decideRequests(db: SupabaseClient, decisions: unknown) {
   if (!Array.isArray(decisions) || decisions.length === 0) throw new HttpError(400, "Nothing to decide");
   const ids = decisions.map((d) => Number(d?.id)).filter((id) => Number.isInteger(id));
@@ -948,9 +956,14 @@ async function decideRequests(db: SupabaseClient, decisions: unknown) {
     if (!item || item.status !== "pending") continue;
 
     if (decision.approve !== true) {
-      const { error: rejectError } = await db.from("film_request_items")
-        .update({ status: "rejected", decided_at: now })
-        .eq("tmdb_id", item.tmdb_id).eq("status", "pending");
+      // Důvod a poznámka pro uživatele (V4.3.3); u požadavku na kolekci jen tato položka
+      const reason = REJECT_REASONS.includes(decision.reason) ? decision.reason : null;
+      const note = typeof decision.note === "string" && decision.note.trim() ? decision.note.trim().slice(0, 300) : null;
+      let rejectQuery = db.from("film_request_items")
+        .update({ status: "rejected", decided_at: now, reject_reason: reason, reject_note: note })
+        .eq("status", "pending");
+      rejectQuery = decision.only_this === true ? rejectQuery.eq("id", item.id) : rejectQuery.eq("tmdb_id", item.tmdb_id);
+      const { error: rejectError } = await rejectQuery;
       if (rejectError) throw new Error(rejectError.message);
       results.push({ tmdb_id: item.tmdb_id, status: "rejected" });
       continue;

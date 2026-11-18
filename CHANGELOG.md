@@ -3,6 +3,13 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.3.3 – November 2026
+- Rejected requests now say why – a reason and a note from the admin, shown in your language
+- A rejected collection request can be edited and sent again in one click
+- "New answer" marks requests decided since your last visit
+- Building your own collection warns you when a similar one is already in My Movie Diary
+- Admin: reject with a reason and a note; similar collections are shown next to collection requests and in the builder
+
 ## V4.3.2 – November 2026
 - Westerns 🤠 – a new Western category with Bud Spencer & Terence Hill, Sergio Leone, Django, The Magnificent Seven, Western Classics, Spaghetti Western and Modern Westerns; Winnetou joins too
 - Admin: collection builder – a person's movies, two people together, a studio or a TMDB keyword; filter, tick and create

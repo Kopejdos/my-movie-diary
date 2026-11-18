@@ -23,7 +23,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Public profiles you can share with a link – opt-in, private by default
 - Friends – mutual friend requests by nickname; friends can see each other's profile even when it's private
 - Compare with a friend – movies in common, taste match from your ratings, recommendations and collections side by side
-- Movie requests – ask for missing movies (up to 30 at once), a whole series or your own collection from any movies (with order, sections and labels), +1 what others want, follow the status of your requests
+- Movie requests – ask for missing movies (up to 30 at once), a whole series or your own collection from any movies (with order, sections and labels), +1 what others want, follow the status of your requests (with the reason when one is rejected – edit a collection request and send it again), a warning when a similar collection already exists
 - Curated paths – step-by-step routes like MCU Essentials or Horror 101, with a note for every step
 - Watchlist across all collections
 - Achievements with levels (Bronze → Platinum) and completed-collection badges

@@ -15,6 +15,7 @@ import {
 import { TEXTS, format, movies } from "../texts.js";
 import { h, mount, poster, pill, toast, loadingView } from "../dom.js";
 import { requireAdminView, adminHeader } from "./admin.js";
+import { similarBox } from "./admin-requests.js";
 
 const SOURCES = ["person", "two", "studio", "keyword"];
 const DOCUMENTARY = 99;                 // žánr TMDB „Documentary“
@@ -322,6 +323,24 @@ export function adminBuilderView(container) {
         mount(create.result);
     }
 
+    // Podobné kolekce ke vybraným filmům (V4.3.3) – po chvíli klidu, ne při každém zaškrtnutí
+    const similarHolder = h("div");
+    let similarTimer = null;
+    let similarFor = "";
+    function refreshSimilar() {
+        clearTimeout(similarTimer);
+        similarTimer = setTimeout(() => {
+            const ids = [...state.selected];
+            const key = `${ids.join()}|${create.name.value.trim()}`;
+            if (key === similarFor) return;
+            similarFor = key;
+            mount(similarHolder, ids.length >= 2 || create.name.value.trim().length >= 4
+                ? similarBox(ids, create.name.value.trim())
+                : null);
+        }, 600);
+    }
+    create.name.addEventListener("input", refreshSimilar);
+
     function renderCreate() {
         createBox.hidden = state.films.length === 0;
         if (state.films.length === 0) {
@@ -329,6 +348,7 @@ export function adminBuilderView(container) {
             return;
         }
         fillDefaults();
+        refreshSimilar();
         const button = h("button", { class: "btn btn--primary", type: "button", onClick: () => submit(button) },
             format("adminBuilderCreate", movies(state.selected.size)));
         button.disabled = state.selected.size < 2;
@@ -345,6 +365,7 @@ export function adminBuilderView(container) {
                     h("label", { class: "mini-field" }, h("span", {}, state.people[0]?.name ?? "A"), create.groupA),
                     h("label", { class: "mini-field" }, h("span", {}, state.people[1]?.name ?? "B"), create.groupB))
                 : null,
+            similarHolder,
             h("p", { class: "hint" }, TEXTS.adminBuilderCreateHint),
             h("div", { class: "admin-form__actions" }, button),
             create.result);

@@ -74,7 +74,7 @@ export async function fetchWantedFilms(query = "", status = null) {
 export async function fetchMyRequests() {
     const rows = await supabase
         .from("film_requests")
-        .select("id, note, created_at, kind, collection_name, items:film_request_items(id, tmdb_id, title, release_date, poster_path, status, decided_at, position, group_label, franchise, label, universe:universes(slug, name, color))")
+        .select("id, note, created_at, kind, collection_name, items:film_request_items(id, tmdb_id, title, release_date, poster_path, status, decided_at, position, group_label, franchise, label, reject_reason, reject_note, universe:universes(slug, name, color))")
         .order("created_at", { ascending: false })
         .then(check);
     // Filmy požadavku na kolekci v pořadí uživatele (V4.3.1), jinak podle premiéry
@@ -108,4 +108,15 @@ export async function cancelFilmRequest(id) {
 /** Počet nevyřízených vlastních požadavků (limit MAX_OPEN_REQUESTS). */
 export function openRequestCount(requests) {
     return requests.filter((r) => r.status === "pending").length;
+}
+
+/**
+ * Podobné kolekce v MMD (V4.3.3): kolekce, které už mají většinu daných filmů nebo podobný název.
+ * [{ slug, name, kind, overlap, total, name_match }] – nejvýš 5, podle počtu společných filmů.
+ */
+export async function fetchSimilarCollections(tmdbIds, name = null) {
+    if (tmdbIds.length < 2 && !name) return [];
+    const { data, error } = await supabase.rpc("similar_collections", { p_tmdb_ids: tmdbIds, p_name: name || null });
+    if (error) throw new Error(error.message);
+    return data ?? [];
 }

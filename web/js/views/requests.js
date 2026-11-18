@@ -6,12 +6,16 @@
 //       Own collection – vlastní kolekce z libovolných filmů s názvem (V4.3.1).
 //     U kolekcí uživatel v editoru (collection-editor.js – stejný kód jako admin panel) nastaví
 //     pořadí a u filmů oddíl (Section), sérii (Series) a popisek (Label).
-//   • My requests: vlastní požadavky se stavem (Pending / Added / Rejected / Partly added).
+//   • My requests: vlastní požadavky se stavem (Pending / Added / Rejected / Partly added);
+//     od V4.3.3 s důvodem zamítnutí a poznámkou správce, „New answer“ u nových rozhodnutí
+//     a zamítnutou kolekci jde načíst zpátky do formuláře, upravit a poslat znovu.
+//   • U kolekce upozorní na podobnou kolekci, která už v MMD je (V4.3.3).
 //   • Wanted movies: všechny požadované filmy (bez jmen žadatelů), hledání a +1.
 
 import {
     searchTmdbForRequest, createFilmRequest, fetchWantedFilms, fetchMyRequests, voteForFilm,
     cancelFilmRequest, openRequestCount, fetchSeriesForRequest, createCollectionRequest, createCustomRequest,
+    fetchSimilarCollections,
     MAX_REQUEST_FILMS, MAX_OPEN_REQUESTS, MAX_NOTE,
 } from "../requests.js";
 import { isSignedIn } from "../auth.js";
@@ -25,6 +29,19 @@ import { createCollectionEditor } from "./collection-editor.js";
 const SEARCH_DELAY = 350;          // ms po posledním znaku, než se zeptáme TMDB
 const WANTED_TABS = ["pending", "added", "rejected"];
 const MODES = ["films", "collection", "custom"];   // druh nového požadavku (V3.5.2, vlastní kolekce V4.3.1)
+const SEEN_KEY = "mmd-requests-seen";               // kdy uživatel naposledy viděl své požadavky (V4.3.3)
+
+/** Čas poslední návštěvy stránky (ISO) a uložení nového – „New answer“ u novějších rozhodnutí. */
+function takeLastSeen() {
+    let previous = null;
+    try {
+        previous = localStorage.getItem(SEEN_KEY);
+        localStorage.setItem(SEEN_KEY, new Date().toISOString());
+    } catch {
+        // bez úložiště se „New answer“ neukazuje
+    }
+    return previous;
+}
 
 export async function requestsView(container, context) {
     setAccent(null);
@@ -73,6 +90,8 @@ class RequestsPage {
         this.wantedTab = "pending";
         this.wantedQuery = "";
         this.initialQuery = initialQuery;
+        this.lastSeen = takeLastSeen();     // V4.3.3 – „New answer“
+        this.similarTimer = null;
 
         this.composer = h("section", { class: "req-composer" });
         this.mineSection = h("section", { class: "req-section" });
@@ -112,11 +131,15 @@ class RequestsPage {
         this.modeTabs = h("div", { class: "segmented req-modes", role: "group", "aria-label": TEXTS.requestsKind });
         this.modeHint = h("p", { class: "hint req-mode-hint" });
         this.seriesMessage = h("p", { class: "req-series-message", role: "alert", hidden: true });
+        this.similarBox = h("div", { class: "req-similar", "aria-live": "polite", hidden: true });     // V4.3.3
         // Vlastní kolekce (V4.3.1): název nad editorem
         this.customName = h("input", {
             class: "admin-input req-custom__name", type: "text", name: "collection-name", maxlength: 80, autocomplete: "off",
             placeholder: TEXTS.requestsCustomNamePlaceholder, "aria-label": TEXTS.requestsCustomName,
-            onInput: () => this.updateSubmit(),
+            onInput: () => {
+                this.updateSubmit();
+                this.checkSimilar();
+            },
         });
 
         mount(this.composer,
@@ -134,6 +157,7 @@ class RequestsPage {
                 this.seriesMessage,
                 this.resultsBox,
                 this.selectedBox,
+                this.similarBox,
                 this.note,
                 h("div", { class: "req-form__actions" }, this.submit),
             ));
@@ -165,6 +189,7 @@ class RequestsPage {
         this.renderModes();
         this.renderResults();
         this.renderSelected();
+        this.checkSimilar();
     }
 
     /** Hláška nad výsledky (cizí série, film bez série…); null = schovat. */
@@ -347,6 +372,7 @@ class RequestsPage {
             this.editorIds = ids;
             this.renderResults();
             this.renderEditorExtras();
+            this.checkSimilar();
         }
         this.updateSubmit();
     }
@@ -438,6 +464,78 @@ class RequestsPage {
         this.renderSelected();
     }
 
+    /**
+     * Podobná kolekce už v MMD (V4.3.3) – jen upozornění, poslat jde dál. Série a cesty s většinou
+     * stejných filmů nebo kolekce s podobným názvem (studia a žánrové výběry se nepočítají).
+     */
+    checkSimilar() {
+        clearTimeout(this.similarTimer);
+        const editor = this.activeEditor();
+        const ids = editor ? editor.items().map((item) => item.tmdb_id) : [];
+        const name = this.mode === "custom" ? this.customName.value.trim() : this.series?.collection.name ?? "";
+        if (!editor || (ids.length < 2 && name.length < 4)) {
+            this.similarBox.hidden = true;
+            return;
+        }
+        this.similarTimer = setTimeout(async () => {
+            try {
+                const similar = (await fetchSimilarCollections(ids, name))
+                    .filter((c) => c.name_match || c.kind === "series" || c.kind === "path");
+                this.similarBox.hidden = similar.length === 0;
+                mount(this.similarBox, similar.length === 0 ? null : [
+                    h("strong", {}, TEXTS.requestsSimilar),
+                    h("ul", {}, similar.map((c) => h("li", {},
+                        h("a", { href: `#/collection/${c.slug}` }, c.name), " ",
+                        h("span", { class: "muted" }, c.overlap >= 2
+                            ? format("requestsSimilarCount", c.overlap, c.total)
+                            : TEXTS.requestsSimilarName)))),
+                    h("span", { class: "hint" }, TEXTS.requestsSimilarHint),
+                ].flat());
+            } catch {
+                this.similarBox.hidden = true;
+            }
+        }, 500);
+    }
+
+    /**
+     * Zamítnutý požadavek na kolekci zpátky do formuláře (V4.3.3): stejné filmy v pořadí
+     * s oddíly, sériemi a popisky, název a poznámka – uživatel upraví a pošle znovu.
+     */
+    async resend(request) {
+        const items = [...request.items].sort((a, b) => (a.position ?? 999) - (b.position ?? 999));
+        const editorItem = (item) => ({
+            tmdb_id: item.tmdb_id,
+            film: { tmdb_id: item.tmdb_id, title: item.title, poster_path: item.poster_path, release_date: item.release_date },
+            group_label: item.group_label, franchise: item.franchise, label: item.label,
+        });
+        this.note.value = request.note ?? "";
+        if (request.kind === "custom") {
+            this.customName.value = request.collection_name ?? "";
+            this.customEditor = createCollectionEditor({ items: items.map(editorItem), mode: "request", onChange: () => this.editorChanged() });
+            this.mode = "custom";
+        } else {
+            this.mode = "collection";
+            this.series = null;
+            this.seriesEditor = null;
+            this.renderModes();
+            await this.chooseSeries(items[0]);
+            if (this.series) {
+                const parts = new Set(this.series.collection.parts.map((part) => part.tmdb_id));
+                this.seriesEditor = createCollectionEditor({
+                    items: items.filter((item) => parts.has(item.tmdb_id)).map(editorItem),
+                    mode: "request", onChange: () => this.editorChanged(),
+                });
+            }
+        }
+        this.hideSeriesMessage();
+        this.renderModes();
+        this.renderResults();
+        this.renderSelected();
+        this.checkSimilar();
+        this.composer.scrollIntoView({ behavior: "smooth", block: "start" });
+        toast(TEXTS.requestsResendLoaded);
+    }
+
     renderSelected() {
         this.countLine = null;
         this.customHint = null;
@@ -479,6 +577,7 @@ class RequestsPage {
 
     /** Po odeslání: vyčistit formulář a načíst požadavky znovu. */
     async sent() {
+        this.similarBox.hidden = true;
         this.note.value = "";
         this.searchInput.value = "";
         this.results = [];
@@ -598,22 +697,36 @@ class RequestsPage {
                 },
             }, TEXTS.requestsCancel)
             : null;
+        // Odpověď správce (V4.3.3): nové rozhodnutí od minulé návštěvy, důvod a poznámka
+        const decidedAt = request.items.map((i) => i.decided_at).filter(Boolean).sort().at(-1) ?? null;
+        const isNew = Boolean(decidedAt && this.lastSeen && decidedAt > this.lastSeen);
+        const collection = request.kind === "collection" || request.kind === "custom";
+        const answer = collection ? requestAnswer(request.items) : null;
+        const resend = collection && request.status === "rejected"
+            ? h("button", { class: "btn btn--small", type: "button", onClick: () => this.resend(request) }, TEXTS.requestsResend)
+            : null;
         return h("li", { class: `req-card req-card--${request.status}` },
             h("div", { class: "req-card__head" },
                 statusPill(request.status),
+                isNew ? h("span", { class: "pill pill--new" }, TEXTS.requestsNewAnswer) : null,
                 h("span", { class: "muted" }, formatDate(request.created_at.slice(0, 10))),
                 h("span", { class: "muted" }, movies(request.items.length)),
-                cancel),
+                cancel, resend),
             request.kind === "collection" || request.kind === "custom"
                 ? h("p", { class: "req-card__kind" },
                     h("span", { class: "eyebrow" }, request.kind === "custom" ? TEXTS.requestsCustomLabel : TEXTS.requestsSeriesLabel), " ",
                     h("strong", {}, request.collection_name))
                 : null,
             request.note ? h("p", { class: "req-card__note" }, `“${request.note}”`) : null,
+            answer,
             h("ul", { class: "req-card__films" }, request.items.map((item) => h("li", { class: "req-film" },
                 poster(item.poster_path, item.title, "req-film__poster", false, "tiny"),
                 h("span", { class: "req-film__title" }, item.title, item.release_date ? h("span", { class: "muted" }, ` (${yearOf(item.release_date)})`) : null,
-                    attributesText(item) ? h("span", { class: "req-film__attrs muted" }, attributesText(item)) : null),
+                    attributesText(item) ? h("span", { class: "req-film__attrs muted" }, attributesText(item)) : null,
+                    // U filmů důvod přímo u filmu; u kolekce jen „vynecháno“ (důvod celé kolekce je nahoře)
+                    item.status === "rejected" && item.reject_reason && (!collection || item.reject_reason === "left_out")
+                        ? h("span", { class: "req-film__reason" }, reasonText(item))
+                        : null),
                 statusPill(item.status),
                 item.universe ? collectionPill(item.universe) : null))),
         );
@@ -719,6 +832,25 @@ function editorFilm(film) {
 /** Oddíl · série · popisek navržené v požadavku (V4.3.1). */
 function attributesText(item) {
     return [item.group_label, item.franchise, item.label].filter(Boolean).join(" · ");
+}
+
+/** Důvod zamítnutí filmu: „Already in My Movie Diary – poznámka“. */
+function reasonText(item) {
+    const reason = TEXTS[`requestsReason_${item.reject_reason}`] ?? "";
+    return item.reject_note ? `${reason} – ${item.reject_note}` : reason;
+}
+
+/**
+ * Odpověď správce u požadavku na kolekci (V4.3.3): důvod a poznámka zamítnutí celé kolekce
+ * (vynechané filmy mají „left_out“ u sebe). Nic k zobrazení = null.
+ */
+function requestAnswer(items) {
+    const rejected = items.find((item) => item.status === "rejected" && item.reject_reason && item.reject_reason !== "left_out");
+    if (!rejected) return null;
+    return h("div", { class: "req-answer" },
+        h("span", { class: "eyebrow" }, TEXTS.requestsReasonLabel),
+        h("strong", {}, TEXTS[`requestsReason_${rejected.reject_reason}`] ?? ""),
+        rejected.reject_note ? h("p", {}, h("span", { class: "muted" }, `${TEXTS.requestsAdminNote}: `), `“${rejected.reject_note}”`) : null);
 }
 
 /** Pilulka stavu: Pending / Added / Rejected / Partly added. */

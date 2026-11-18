@@ -12,8 +12,13 @@
 //   • Požadavek na kolekci (série TMDB i vlastní kolekce z libovolných filmů) se schvaluje
 //     v editoru kolekce (stejný jako v admin panelu i u uživatele) – předvyplněný pořadím,
 //     oddílem, sérií a popiskem od uživatele; správce jen doladí, případně přidá další filmy.
+// V4.3.3:
+//   • Zamítnutí s důvodem a poznámkou pro uživatele (místo „hrubého odhození“); u kolekce jen
+//     tento požadavek, uživatel ji může upravit a poslat znovu.
+//   • U požadavku na kolekci upozornění na podobné kolekce, které už v MMD jsou.
 
 import { listFilmRequests, decideFilmRequests, createCollectionFromSeries, createCollection, searchTmdb } from "../admin.js";
+import { fetchSimilarCollections } from "../requests.js";
 import { TEXTS, format, movies } from "../texts.js";
 import { h, mount, poster, yearOf, formatDate, toast, loadingView, errorView } from "../dom.js";
 import { requireAdminView, adminHeader } from "./admin.js";
@@ -250,13 +255,16 @@ function collectionRequestCard(request, studios, reload) {
             }
         },
     }, TEXTS.adminNewCollectionCreate);
+    const reason = rejectReasonPicker("needs_changes");
     const rejectButton = h("button", {
         class: "btn btn--small btn--danger", type: "button",
         onClick: async () => {
-            if (!window.confirm(format("adminRejectCollectionConfirm", request.collection_name ?? ""))) return;
             buttons.forEach((b) => { b.disabled = true; });
             try {
-                const { results } = await decideFilmRequests(request.items.map((item) => ({ id: item.id, approve: false })));
+                // Jen položky tohoto požadavku, s důvodem a poznámkou pro uživatele (V4.3.3)
+                const { results } = await decideFilmRequests(request.items.map((item) => ({
+                    id: item.id, approve: false, only_this: true, ...reason.value(),
+                })));
                 toast(format("adminRequestsRejected", movies(results.length)));
                 await reload(null);
             } catch (error) {
@@ -274,18 +282,75 @@ function collectionRequestCard(request, studios, reload) {
             h("span", { class: "muted" }, formatDate(request.created_at.slice(0, 10))),
             h("span", { class: "muted" }, movies(request.items.length))),
         request.note ? h("p", { class: "req-card__note" }, `“${request.note}”`) : null,
+        similarBox(request.items.map((item) => item.tmdb_id), request.collection_name, (found) => {
+            // Podobná kolekce existuje → předvybraný důvod „similar“ s jejím názvem
+            const match = found.find((c) => c.name_match || c.kind === "series" || c.kind === "path");
+            if (match) reason.preset("similar", match.name);
+        }),
         h("div", { class: "admin-request__create admin-request__create--details" }, name, description),
         h("p", { class: "hint" }, TEXTS.adminCollectionRequestHint),
         editor.element,
         search.element,
         studios.element,
-        h("div", { class: "admin-request__actions" }, ...buttons),
+        h("div", { class: "admin-request__actions" }, createButton),
+        h("div", { class: "admin-request__actions admin-request__reject" }, reason.element, rejectButton),
     );
+}
+
+/**
+ * Výběr důvodu zamítnutí a poznámky pro uživatele (V4.3.3).
+ * value() → { reason, note }; preset(reason, note) předvyplní (např. podobná kolekce).
+ */
+export function rejectReasonPicker(initial = "other") {
+    const select = h("select", { class: "admin-input admin-select", "aria-label": TEXTS.adminRejectReason },
+        REJECT_REASONS.map((code) => h("option", { value: code, selected: code === initial }, TEXTS[`requestsReason_${code}`])));
+    const note = h("input", {
+        type: "text", class: "admin-input admin-input--grow", maxlength: 300,
+        placeholder: TEXTS.adminRejectNote, "aria-label": TEXTS.adminRejectNote,
+    });
+    return {
+        element: h("div", { class: "reject-reason" },
+            h("label", { class: "mini-field" }, h("span", {}, TEXTS.adminRejectReason), select), note),
+        value: () => ({ reason: select.value, note: note.value.trim() || null }),
+        preset(reason, text) {
+            select.value = reason;
+            if (!note.value) note.value = text;
+        },
+    };
+}
+
+/** Důvody, které správce nabízí (left_out se doplňuje sám u filmů vynechaných z kolekce). */
+const REJECT_REASONS = ["needs_changes", "similar", "in_mmd", "duplicate", "not_released", "not_movie", "off_topic", "other"];
+
+/**
+ * Podobné kolekce v MMD (V4.3.3) – načtou se na pozadí; onFound(dostal seznam) jen když nějaké jsou.
+ * Ukazuje i studia a výběry (správce posoudí sám).
+ */
+export function similarBox(tmdbIds, name, onFound = () => {}) {
+    const box = h("div", { class: "req-similar", hidden: true });
+    fetchSimilarCollections(tmdbIds, name)
+        .then((found) => {
+            if (found.length === 0) return;
+            box.hidden = false;
+            mount(box,
+                h("strong", {}, `⚠ ${TEXTS.adminSimilarTitle}`),
+                h("ul", {}, found.map((c) => h("li", {},
+                    h("a", { href: `#/admin/collection/${c.slug}` }, c.name), " ",
+                    h("span", { class: "muted" }, [
+                        c.overlap >= 1 ? format("adminSimilarItem", c.overlap, tmdbIds.length, c.total) : null,
+                        c.name_match ? TEXTS.adminSimilarName : null,
+                        TEXTS[{ series: "kindSeries", studio: "kindStudio", genre: "kindGenre", path: "kindPath" }[c.kind] ?? "kindSeries"],
+                    ].filter(Boolean).join(" · "))))));
+            onFound(found);
+        })
+        .catch(() => {});
+    return box;
 }
 
 /** Karta požadavku: žadatel, poznámka, filmy s výběrem kolekce a tlačítka. */
 function requestCard(request, universes, reload) {
     const rows = request.items.map((item) => itemRow(item, universes));
+    const reason = rejectReasonPicker("other");
 
     async function decide(approve) {
         const picked = rows.filter((r) => r.checkbox.checked);
@@ -299,6 +364,7 @@ function requestCard(request, universes, reload) {
                 id: r.item.id,
                 approve,
                 universe_id: approve && r.select.value ? Number(r.select.value) : null,
+                ...(approve ? {} : reason.value()),            // důvod pro uživatele (V4.3.3)
             })));
             const added = results.filter((r) => r.status === "added").length;
             const rejected = results.filter((r) => r.status === "rejected").length;
@@ -322,7 +388,8 @@ function requestCard(request, universes, reload) {
         request.note ? h("p", { class: "req-card__note" }, `“${request.note}”`) : null,
         h("ul", { class: "admin-request__films" }, rows.map((r) => r.element)),
         h("div", { class: "admin-request__actions" },
-            h("span", { class: "hint" }, TEXTS.adminRequestsSelectedHint), ...buttons),
+            h("span", { class: "hint" }, TEXTS.adminRequestsSelectedHint), approveButton),
+        h("div", { class: "admin-request__actions admin-request__reject" }, reason.element, rejectButton),
     );
 }
 

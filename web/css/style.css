@@ -7500,3 +7500,62 @@ a.friend-row__name:hover {
         grid-template-columns: minmax(0, 1fr);
     }
 }
+
+/* ---------- Odpovědi na požadavky a podobné kolekce (V4.3.3) ---------- */
+.req-similar {
+    display: grid;
+    gap: 4px;
+    margin: 10px 0;
+    padding: 10px 14px;
+    border: 1px solid color-mix(in srgb, var(--warning, #f59e0b) 55%, var(--border));
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--warning, #f59e0b) 8%, var(--panel));
+}
+
+.req-similar[hidden] {
+    display: none;
+}
+
+.req-similar ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.req-answer {
+    display: grid;
+    gap: 2px;
+    margin: 8px 0;
+    padding: 10px 14px;
+    border-left: 3px solid var(--danger);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--danger) 7%, var(--panel));
+}
+
+.req-answer p {
+    margin: 4px 0 0;
+}
+
+.req-film__reason {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--text);
+}
+
+.pill--new {
+    border-color: var(--u);
+    color: var(--heading);
+    font-weight: 600;
+}
+
+.reject-reason {
+    display: flex;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-request__reject {
+    border-top: 1px dashed var(--border);
+    padding-top: 10px;
+}
