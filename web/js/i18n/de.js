@@ -860,6 +860,15 @@ export default {
     levelTitle_StudioHead: "Studioboss",
     levelTitle_Legend: "Legende",
 
+    // Detail filmu (V4.4.6)
+    filmDetailOpen: "Details: {0}",
+    filmDetailTrailer: "Trailer",
+    filmDetailFindTrailer: "Trailer suchen",
+    filmDetailNoOverview: "Noch keine Beschreibung.",
+    filmDetailCollections: "In Sammlungen",
+    filmDetailMore: "+{0} weitere",
+    filmDetailSource: "Beschreibung und Trailer von TMDB.",
+
     plural_movies: { one: "{0} Film", other: "{0} Filme" },
     plural_collections: { one: "{0} Kollektion", other: "{0} Kollektionen" },
     plural_steps: { one: "{0} Schritt", other: "{0} Schritte" },

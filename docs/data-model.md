@@ -29,7 +29,8 @@ films ◄──── universe_items ────► universes
 |---|---|---|
 | `id` | `uuid` PK | = `auth.users.id`, vzniká automaticky při registraci (trigger) |
 | `username` | `text` unique | nickname, 3–24 znaků: písmena, číslice, `_`, `-`; unikátní i bez ohledu na velikost písmen |
-| `is_admin` | `boolean` | správce (nastavuje se jen v SQL, uživatel si ho změnit nemůže) |
+| `is_admin` | `boolean` | správce (nastavuje se jen v SQL, uživatel si ho změnit nemůže; od V4.4.6 i vlastník v admin panelu) |
+| `is_owner` | `boolean` | vlastník webu (V4.4.6) – jediný smí měnit roli správce a účty jiných správců; jen v SQL, vždy zároveň `is_admin` (check `profiles_owner_is_admin`) |
 | `is_public` | `boolean` | veřejný profil (od V2.0); výchozí `false` = soukromý, mění ho jen uživatel sám |
 | `created_at` | `timestamptz` | |
 
@@ -39,11 +40,14 @@ films ◄──── universe_items ────► universes
 | `tmdb_id` | `integer` PK | ID filmu v TMDB |
 | `title` | `text` | anglický název |
 | `original_title` | `text` | původní název (Ghibli, Asterix…) |
+| `original_language` | `text` | původní jazyk filmu z TMDB (`cs`, `ja`…, V4.4.6) – v tomhle jazyce web ukáže původní název, když TMDB nemá překlad názvu |
 | `release_date` | `date` | |
 | `runtime` | `integer` | délka v minutách (pro statistiky) |
 | `poster_path` | `text` | cesta k plakátu na CDN TMDB (`/abc.jpg`) |
 | `backdrop_path` | `text` | širokoúhlý záběr z filmu – banner v detailu univerza |
-| `overview` | `text` | krátký popis |
+| `overview` | `text` | krátký popis (anglicky; detail filmu – V4.4.6) |
+| `trailer_key` | `text` | klíč videa na YouTube (V4.4.6) – trailer v detailu filmu; plní import, admin panel a akce `film-trailer` |
+| `trailer_checked_at` | `timestamptz` | kdy se trailer hledal (V4.4.6); `trailer_key = null` + datum = TMDB trailer nemá, znovu se zkusí po 30 dnech |
 | `translated_at` | `timestamptz` | kdy se uložily překlady (V4.2.2); `null` = ještě ne → vezme ho akce `translate` |
 | `updated_at` | `timestamptz` | kdy se naposledy obnovilo z TMDB |
 
@@ -55,7 +59,7 @@ Zapisuje do ní jen Edge Function `tmdb` (service role), web ji jen čte.
 | `tmdb_id` | `integer` FK → `films` (cascade) | PK spolu s `lang` |
 | `lang` | `text` | `cs` / `de` / `es` / `uk` |
 | `title` | `text` | název v jazyce; `null` = stejný jako anglický (web ukáže anglický) |
-| `overview` | `text` | popis v jazyce (web ho zatím neukazuje) |
+| `overview` | `text` | popis v jazyce – detail filmu (V4.4.6) |
 
 - Plní ji Edge Function `tmdb` (import – překlady přijdou ve stejné odpovědi TMDB, `append_to_response=translations`;
   akce `translate` pro filmy bez překladu, volá ji `scripts/translate.sh`) a `admin` (přidání filmu).
@@ -297,6 +301,19 @@ Od V4.3.3 u zamítnutého filmu **`reject_reason`** (`in_mmd` / `similar` / `not
 **`user_badges`** – odznaky: `(user_id, badge)` PK, `badge` zatím jen `elite`, `granted_at`. Číst smí kdokoli,
 přidat / odebrat jen správce (`is_admin()`). **`badges_for(usernames[])`** – odznaky podle nicků (jen nick a odznaky).
 
+### `admin_log` – deník správců (V4.4.6)
+| Sloupec | Typ | Poznámka |
+|---|---|---|
+| `id` | `bigint` PK (identity) | |
+| `admin_id` | `uuid` FK → `profiles` (set null) | kdo změnu udělal; smazaný účet = `null` |
+| `action` | `text` | kód akce (`save-collection`, `grant-admin`, `decide-requests`…), 1–60 znaků |
+| `target` | `text` | čeho se týká (slug kolekce, nick, slovo…), max. 200 znaků |
+| `details` | `jsonb` | podrobnosti (počty filmů, přidané filmy, odznak…) |
+| `created_at` | `timestamptz` | |
+
+- Číst smí jen správce (záložka *Activity*). Zapisuje Edge Function `admin` (service role) a web přes
+  `admin_log_action()` – přímý zápis z prohlížeče je zakázaný.
+
 ### `blocked_words` – zakázaná slova v nickách (V2.3)
 
 | Sloupec | Typ | Popis |
@@ -329,6 +346,11 @@ Zapisuje do ní jen GitHub Action přes databázovou funkci `ping()`; drží se 
 - **`email_for_username(username)`** – e-mail k nicku pro přihlášení nickem; smí ji volat **jen `service_role`** (Edge Function `login`).
 - **`remove_watched_from_watchlist()`** (trigger na `watches`) – po zhlédnutí film zmizí z watchlistu.
 - **`is_admin()`** – je přihlášený uživatel správce? (používají ji pravidla RLS admin panelu)
+- **`is_owner()`** (V4.4.6) – je přihlášený uživatel vlastník? (admin panel podle ní ukáže tlačítka role správce)
+- **`admin_log_action(action, target, details)`** (V4.4.6) – zápis do deníku správců z webu; jen správce (jinak `42501`).
+- **`admin_log_recent(limit)`** (V4.4.6) – posledních N záznamů deníku (max. 500) s nickem správce; jen správce.
+- **`film_titles(lang)`** – názvy filmů v jazyce (překlad z TMDB); od V4.4.6 i **původní název** filmů natočených v tomhle
+  jazyce, když TMDB překlad názvu nemá (*Jak svět přichází o básníky* v češtině).
 - **`public_profile(username)`** (V2.0) – veřejný profil jako JSON `{ username, member_since, watches: [{ tmdb_id, watched_on, created_at, film }] }`,
   nebo `null`, když profil neexistuje **nebo je soukromý** (navenek se neliší). Smí i nepřihlášený. Nevrací e-mail, id,
   admin, watchlist ani hodnocení a poznámky ke zhlédnutí.

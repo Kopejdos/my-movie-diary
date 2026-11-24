@@ -378,6 +378,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 47c | V4.4.3 | Velké seznamy a klasici ✅ | **AFI 100** v pořadí žebříčku, všech 70 vítězů **Oscara za mezinárodní film** (se zemí), 14 režisérů: Bergman, Fellini, Tarkovskij, Wong Kar-wai, Ozu, Kieślowski, Almodóvar, Chaplin, Keaton, Wilder, Lumet, Eastwood, Mann, De Palma – katalog ~3 440 |
 | 47d | V4.4.4 | Kinematografie zemí a režiséři ✅ | 10 kinematografií zemí jako žánrové výběry (Korea, Itálie, Francie, Indie, Hongkong, Španělsko a Latinská Amerika, Německo, Severské země, Japonsko, Británie) a 40 režisérů (Soderbergh, Spike Lee, Zemeckis, Ron Howard, Boyle, Ritchie, Lanthimos, Linklater, Shyamalan, Tony Scott, Bigelow, John Woo, Besson, von Trier, Haneke, Kore-eda, Zhang Yimou, Ang Lee, Menzel, Chytilová, Lipský, Vorlíček…) – **katalog ~4 000** |
 | 47e | V4.4.5 | Coming soon: hledání a filtr ✅ | na stránce Coming soon **hledání** (název, rok, kolekce) a **filtr** jako na přehledu (druh kolekce, žánr) + **jen můj watchlist**; balíčky umí **přidat filmy do existujících kolekcí** (`addFilms`) – 14 chystaných a letos vydaných filmů do kolekcí z V4.4.x |
+| 47f | V4.4.6 | Optimalizace rozhraní a rozšíření admin týmu ✅ | **detail filmu** (klik na plakát / název – větší plakát, popis v jazyce aplikace, kolekce, **trailer na YouTube**, TMDB); český film česky (**původní název v původním jazyce**); **admin tým** – vlastník a další správci, **deník správců** (záložka Activity), **návod pro správce** (`docs/admin-guide.md`); přesnější import (hledání podle přesného názvu ±1 rok) a **opravy 19 špatně spárovaných filmů** (`fix` v balíčcích), filmy do správné skupiny (`addFilms` podle roku), import bez dvojí synchronizace seedu; Bud Spencer & Terence Hill sólo, Short Circuit, Hřbitov zvířátek |
 | 48 | V4.5 | Wrapped | rok v kostce – **poprvé za rok 2027** (prosinec 2027): nováček si na začátku doplní stovky filmů, první celý rok dat bude 2027; filmy „Seen before“ se nepočítají |
 | 49 | V4.6 | Optimalizace před seriály | úklid a výkon s velkým katalogem (načítání, hledání, import), **katalog v mezipaměti prohlížeče** pro opakované návštěvy – připravit půdu pro kapitolu V5 |
 
@@ -2535,6 +2536,65 @@ testovacích seznamů byla vymyšlená.
 - **Text hledání v adrese, filtr v prohlížeči** – odkaz „#/coming-soon?q=marvel“ jde poslat; druh a žánr
   jsou osobní volba (jako na přehledu).
 - **`addFilms` jen přidává** – odebrání filmu dál přes admin panel (zaznamená se do `seed_removals`).
+
+### Fáze 47f – Optimalizace rozhraní a rozšíření admin týmu ✅ (24. 11. 2026) – **V4.4.6**
+- **Detail filmu** (`views/film-detail.js`, logika `js/film-detail-data.js`) – plakát i název filmu jsou tlačítko
+  (kolekce, Up next, hledání, watchlist, Coming soon); otevře okno (`<dialog>`) s větším plakátem a záběrem z filmu,
+  přeloženým názvem i původním názvem, rokem a délkou, **popisem v jazyce aplikace** (`film_translations.overview`,
+  jinak anglicky), **kolekcemi**, ve kterých film je (odkazy), tlačítkem **▶ Trailer** (YouTube) a odkazem na TMDB.
+  Zavře ho ×, Esc, klik mimo okno i přechod na jinou stránku.
+  - Trailer: klíč videa `films.trailer_key` – plní ho import a admin panel (`append_to_response=videos`, výběr
+    `pickTrailer`: oficiální *Trailer* před *Teaser*, angličtina, nejnovější) a u starších filmů **při prvním
+    otevření detailu** veřejná akce `tmdb?action=film-trailer&id=` (jen filmy z katalogu, výsledek se uloží; „TMDB
+    trailer nemá“ se zkusí znovu po 30 dnech). Bez traileru tlačítko **Find trailer** – hledání na YouTube podle
+    původního názvu a roku.
+- **Český film česky** – `films.original_language`; `film_titles(lang)` vrací i **původní název** filmů natočených
+  v daném jazyce, když TMDB nemá překlad názvu (*Básníci* – „Jak svět přichází o básníky“ místo „How the World Is
+  Losing Poets“). Původní jazyk doplní akce `translate` (migrace jí pošle znovu filmy s neanglickým názvem).
+- **Admin tým:**
+  - **vlastník** (`profiles.is_owner`, jen v SQL) – jediný smí dávat a brát roli správce a měnit účty jiných
+    správců (smazání, reset nicku); ostatní správci spravují obsah, běžné uživatele, požadavky a nahlášené seznamy.
+    Hlídá to Edge Function `admin` (`canManageUser`), web jen schová tlačítka (`userPermissions`);
+  - další správce = **samostatný účet jen pro správu** (`docs/setup.md` 7b), heslo hlavního účtu nikdo další nedostane;
+  - **deník správců** (`admin_log`, záložka **Activity**) – úpravy a mazání kolekcí, požadavky, filmy ze sérií,
+    uživatelé, odznaky, zakázaná slova, překlady, nahlášené seznamy; hledání a filtr podle správce;
+  - **návod pro správce** `docs/admin-guide.md` (česky, odkaz *📖 Admin guide* v admin panelu) – záložky, typy kolekcí,
+    editor, stavitel (osoba, dvojice, studio, klíčové slovo), časté úkoly a co dělá jen vlastník.
+- **Import a balíčky:**
+  - **hledání filmu bez ID** (`searchMovie`) – přednostně přesný název (i původní) s rokem, pak přesný název s rokem
+    ±1; teprve když nic nesedí, první výsledek (a report ho vypíše jako *⚠ ke kontrole*). Dřív bral první výsledek
+    hned, a tak *300* (2006) skončilo jako jiný film;
+  - nová operace balíčku **`fix`** – doplní ID filmu v TMDB (`"tmdb"`), případně nový název (`"newTitle"`) ve všech
+    kolekcích, kde film je, a ty kolekce znovu naimportuje (bez ID jen znovu naimportuje s lepším hledáním);
+  - **`addFilms` na správné místo** – do své skupiny (`group`) a podle roku (`insertAfter`), ne na konec kolekce;
+  - `add-pack.sh` volá import s `MMD_SKIP_SYNC=1` – seed se synchronizuje **jen jednou** (dřív druhá synchronizace
+    v `import.sh` přepsala úpravy z balíčku u kolekcí vytvořených v aplikaci).
+- **Balíček `v4.4.6-fixes.json`:** opravy 19 filmů (300, Hostel, The Raid, Millennium Actress, The Grey, Drunken Master
+  II, GitS: Solid State Society, Tři veteráni s ověřeným ID; To Begin Again → *Begin the Beguine*; Don Camillo, Kes,
+  Sing Sing, Hard Eight, Bernie, Hit Man, Bubble, To the Wonder, Boy and the World, Sisters znovu importem), **Bud
+  Spencer** sólo (Charleston, Why Did You Pick On Me?, Bomber, Thieves and Robbers, Aladdin 1986), **Terence Hill**
+  sólo (Man of the East – *Podivné dědictví*, A Genius, Two Friends, and an Idiot, March or Die, My Name Is Thomas),
+  AI & Robots + Short Circuit 2 a Real Steel (*Ocelová pěst*), nová série **Short Circuit** (*Krátké spojení*, *Číslo 5
+  žije*). Oprava českého názvu kolekce **Hřbitov zvířátek**.
+- Ověřeno: migrace na lokálním PostgreSQL 16 (vlastník jen se správcem, cizí účet nezapíše do deníku, přímý zápis
+  zakázaný, `film_titles('cs')` → „Jak svět přichází o básníky“), `node --test` (94 – nově `film-detail.test.mjs`,
+  `admin-team.test.mjs`, `fix` a `insertAfter` v `add-pack.test.mjs`), balíček na seedu z 18. 11. (22 kolekcí
+  opraveno, podruhé nic nového), webové testy detailu filmu v češtině, angličtině a němčině na 320–1280 px, světlý
+  i tmavý režim, deník a role v Users jako vlastník i správce.
+
+#### Rozhodnutí ve fázi 47f
+- **Druhý správce na vlastním účtu, ne sdílený admin** – heslo hlavního účtu zná jen vlastník; deník ukáže, kdo co
+  udělal, a odebrat roli jde jedním kliknutím.
+- **Vlastník jen v SQL** – kdyby šel nastavit z webu, převzal by ho kdokoli se správcovským účtem.
+- **Správce nemění jiné správce** – ani smazání, ani reset nicku; ochrana proti chybě i proti ukradenému účtu.
+- **Deník zapisuje server i web** – akce přes Edge Function zapíše funkce, úpravy přímo v databázi (editor,
+  odznaky, slova, překlady) web přes `admin_log_action` (jen správce). Selhání zápisu nikdy nezastaví samotnou úpravu.
+- **Trailer odkazem na YouTube, ne přehrávačem v okně** – žádný cizí iframe a cookies na webu, žádná změna zásad
+  ochrany soukromí; klíč se hledá líně, až když ho někdo chce (katalog má přes 4 000 filmů).
+- **Detail jako okno, ne stránka** – nemění adresu ani pozici v dlouhé kolekci; plná stránka filmu může přijít později.
+- **Opravy přes balíček, ne ručně v admin panelu** – stejná chyba byla ve více kolekcích (300 ve dvou, Millennium
+  Actress ve dvou); `fix` je opraví najednou a seed zůstane zdrojem pravdy.
+- **Fáze V4.5 a V4.6 beze změny** – V4.4.6 se vešla před ně jako další část V4.4 (47f).
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

@@ -889,6 +889,15 @@ export default {
     levelTitle_StudioHead: "Šéf studia",
     levelTitle_Legend: "Legenda",
 
+    // Detail filmu (V4.4.6)
+    filmDetailOpen: "Detail: {0}",
+    filmDetailTrailer: "Trailer",
+    filmDetailFindTrailer: "Najít trailer",
+    filmDetailNoOverview: "Popis zatím chybí.",
+    filmDetailCollections: "V kolekcích",
+    filmDetailMore: "+{0} další",
+    filmDetailSource: "Popis a trailer z TMDB.",
+
     // Tvary podle počtu
     plural_movies: { one: "{0} film", few: "{0} filmy", many: "{0} filmu", other: "{0} filmů" },
     plural_collections: { one: "{0} kolekce", few: "{0} kolekce", many: "{0} kolekce", other: "{0} kolekcí" },

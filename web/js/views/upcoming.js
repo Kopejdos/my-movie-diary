@@ -17,6 +17,7 @@ import { loadPref, savePref } from "../prefs.js";
 import { TEXTS, format, movies, LOCALE } from "../texts.js";
 import { h, mount, loadingView, errorView } from "../dom.js";
 import { soonPill, soonPoster } from "./coming-soon.js";
+import { filmOpener } from "./film-detail.js";
 import { watchlistStar, collectionPill } from "./film-controls.js";
 import { kindLabel } from "./universes.js";
 
@@ -211,9 +212,9 @@ export function quarterLabel(group) {
 function row(entry, watchlist, signedIn) {
     const { film } = entry;
     return h("li", { class: "film film--soon" },
-        soonPoster(film, "film__poster"),
+        filmOpener(film, soonPoster(film, "film__poster"), "film-open film-open--poster"),
         h("div", { class: "film__info" },
-            h("h3", { class: "film__title" }, film.title),
+            h("h3", { class: "film__title" }, filmOpener(film, film.title)),
             h("div", { class: "film__meta" },
                 soonPill(film),
                 entry.universes.map((u) => collectionPill(u)),

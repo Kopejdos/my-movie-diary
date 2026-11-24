@@ -683,7 +683,7 @@
             "description": "Staré domácí filmy a Bughuul, požírač dětí."
         },
         "pet-sematary": {
-            "name": "Řbitov zvířátek",
+            "name": "Hřbitov zvířátek",
             "description": "Někdy je lepší být mrtvý. Kingův hřbitov – pokračování a prequel jsou volitelné."
         },
         "gremlins": {
@@ -1481,6 +1481,10 @@
         },
         "vaclav-vorlicek": {
             "description": "Pohádky a fantastické komedie – Tři oříšky pro Popelku, Kdo chce zabít Jessii?, Dívka na koštěti."
+        },
+        "short-circuit": {
+            "name": "Krátké spojení",
+            "description": "Číslo 5 žije! Vojenský robot, do kterého uhodil blesk, objeví knížky, svobodu a život."
         }
     },
     "notes": {

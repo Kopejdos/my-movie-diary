@@ -860,6 +860,15 @@ export default {
     levelTitle_StudioHead: "Голова студії",
     levelTitle_Legend: "Легенда",
 
+    // Detail filmu (V4.4.6)
+    filmDetailOpen: "Деталі: {0}",
+    filmDetailTrailer: "Трейлер",
+    filmDetailFindTrailer: "Знайти трейлер",
+    filmDetailNoOverview: "Опису поки немає.",
+    filmDetailCollections: "У колекціях",
+    filmDetailMore: "+ще {0}",
+    filmDetailSource: "Опис і трейлер з TMDB.",
+
     plural_movies: { one: "{0} фільм", few: "{0} фільми", many: "{0} фільмів", other: "{0} фільму" },
     plural_collections: { one: "{0} колекція", few: "{0} колекції", many: "{0} колекцій", other: "{0} колекції" },
     plural_steps: { one: "{0} крок", few: "{0} кроки", many: "{0} кроків", other: "{0} кроку" },

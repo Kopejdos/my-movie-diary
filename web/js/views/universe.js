@@ -32,6 +32,7 @@ import { loadPref, savePref } from "../prefs.js";
 import { TEXTS, format, movies, steps } from "../texts.js";
 import { listButton } from "./list-button.js";
 import { watchlistStar } from "./film-controls.js";
+import { filmOpener } from "./film-detail.js";
 import {
     h, mount, poster, pill, backdropUrl, yearOf, formatDate, toast, loadingView, errorView,
 } from "../dom.js";
@@ -294,11 +295,11 @@ export class UniversePage {
         const { film } = next;
         mount(this.upNext,
             h("div", { class: "up-next" },
-                poster(film.poster_path, film.title, "up-next__poster", false, "small"),
+                filmOpener(film, poster(film.poster_path, film.title, "up-next__poster", false, "small"), "film-open film-open--poster"),
                 h("div", { class: "up-next__info" },
                     h("span", { class: "eyebrow" }, this.isPath ? TEXTS.nextStep : TEXTS.upNext),
                     next.label ? h("span", { class: "film__label" }, next.label) : null,
-                    h("h2", { class: "up-next__title" }, film.title),
+                    h("h2", { class: "up-next__title" }, filmOpener(film, film.title)),
                     h("div", { class: "pills" },
                         this.isPath
                             ? pill(format("stepOf", this.stepNumbers.get(film.tmdb_id), this.universe.items.length), true)
@@ -414,10 +415,10 @@ export class UniversePage {
                 ? h("span", { class: "film__step", "aria-label": format("stepOf", this.stepNumbers.get(film.tmdb_id), this.universe.items.length) },
                     count > 0 ? "✓" : String(this.stepNumbers.get(film.tmdb_id)))
                 : null,
-            poster(film.poster_path, film.title, "film__poster", false, "small"),
+            filmOpener(film, poster(film.poster_path, film.title, "film__poster", false, "small"), "film-open film-open--poster"),
             h("div", { class: "film__info" },
                 item.label ? h("span", { class: "film__label" }, item.label) : null,
-                h("h3", { class: "film__title" }, film.title),
+                h("h3", { class: "film__title" }, filmOpener(film, film.title)),
                 h("div", { class: "film__meta" },
                     pill(yearOf(film.release_date)),
                     film.runtime ? pill(format("minutes", film.runtime)) : null,

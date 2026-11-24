@@ -20,7 +20,14 @@
 //             nejsou (films.translated_at je null) – po dávkách (?limit=, výchozí 150).
 //             Vrací { translated, remaining }; scripts/translate.sh ji volá, dokud
 //             remaining není 0. Import překládá filmy rovnou (stejný dotaz na TMDB).
-//             Jen pro správce.
+//             Jen pro správce. Od V4.4.6 si zjistí i původní jazyk filmu (films.original_language).
+//   film-trailer – GET ?id=<tmdb_id> (V4.4.6, veřejná): klíč traileru na YouTube pro detail filmu.
+//             Jen pro filmy, které už jsou v katalogu; výsledek se uloží (films.trailer_key),
+//             TMDB se ptá jen poprvé (film bez traileru se zkusí znovu po 30 dnech).
+//
+// Hledání filmu (V4.4.6): když v daném roce nesedí název, zkusí se přesný název ±1 rok
+// (TMDB má často rok premiéry na festivalu / v USA o rok jinak) – teprve pak první výsledek
+// hledání; ten se v reportu označí „Title differs“ a import.sh ho vypíše ke kontrole.
 //
 // Tajemství (Supabase → Edge Functions → Secrets):
 //   TMDB_READ_TOKEN – TMDB API Read Access Token
@@ -71,6 +78,9 @@ interface FilmRow {
   poster_path: string | null;
   backdrop_path: string | null;
   overview: string | null;
+  original_language: string | null;   // V4.4.6 – český film se v češtině ukáže pod původním názvem
+  trailer_key?: string | null;        // V4.4.6 – YouTube (jen když ho TMDB poslal)
+  trailer_checked_at?: string;
   tmdb_collection_id: number;   // série TMDB, 0 = žádná (V3.5.2.3 – hlídání nových dílů)
   translated_at: string;        // kdy se uložily překlady (V4.2.2)
   updated_at: string;
@@ -232,9 +242,29 @@ interface TmdbMovieDetails {
   poster_path: string | null;
   backdrop_path: string | null;
   overview: string;
+  original_language?: string;
   status: string; // "Released", "Post Production", …
   belongs_to_collection?: { id: number; name: string } | null;
   translations?: TmdbTranslations;  // s append_to_response=translations (V4.2.2)
+  videos?: TmdbVideos;              // s append_to_response=videos (V4.4.6)
+}
+
+interface TmdbVideos {
+  results: { key: string; site: string; type: string; official?: boolean; iso_639_1?: string; published_at?: string }[];
+}
+
+/**
+ * Nejlepší trailer z videí TMDB (V4.4.6): YouTube, Trailer před Teaserem, oficiální
+ * před neoficiálním, anglický před ostatními, novější před starším. null = žádný.
+ */
+export function pickTrailer(videos: TmdbVideos | undefined): string | null {
+  const list = (videos?.results ?? []).filter((v) =>
+    v.site === "YouTube" && /^[A-Za-z0-9_-]{6,20}$/.test(v.key) && (v.type === "Trailer" || v.type === "Teaser"));
+  if (list.length === 0) return null;
+  const score = (v: TmdbVideos["results"][number]) =>
+    (v.type === "Trailer" ? 8 : 0) + (v.official ? 4 : 0) + (v.iso_639_1 === "en" ? 2 : 0);
+  list.sort((a, b) => score(b) - score(a) || (b.published_at ?? "").localeCompare(a.published_at ?? ""));
+  return list[0].key;
 }
 
 interface TmdbTranslations {
@@ -279,8 +309,10 @@ async function saveTranslations(db: SupabaseClient, rows: TranslationRow[]) {
 }
 
 /**
- * Najde film podle názvu a roku. Zkouší postupně: rok premiéry, libovolné
- * vydání v daném roce, bez roku. Přednost má přesná shoda názvu.
+ * Najde film podle názvu a roku. Zkouší postupně: rok premiéry, libovolné vydání v daném roce,
+ * bez roku. Přednost má přesná shoda názvu (i původního); bez roku jen s rokem ±1 (V4.4.6 –
+ * TMDB má často rok o jeden jinak: festival / premiéra v USA). Až když přesná shoda nikde
+ * není, vezme se první výsledek prvního hledání, které něco našlo (report: „Title differs“).
  */
 async function searchMovie(title: string, year?: number): Promise<TmdbSearchResult | null> {
   const attempts: Record<string, string>[] = [];
@@ -291,7 +323,11 @@ async function searchMovie(title: string, year?: number): Promise<TmdbSearchResu
   attempts.push({});
 
   const wanted = normalizeTitle(title);
+  const isExact = (r: TmdbSearchResult) =>
+    normalizeTitle(r.title) === wanted || normalizeTitle(r.original_title) === wanted;
+  const yearOf = (r: TmdbSearchResult) => (r.release_date ? Number(r.release_date.slice(0, 4)) : NaN);
 
+  let fallback: TmdbSearchResult | null = null;
   for (const extra of attempts) {
     const data = await tmdbGet<{ results: TmdbSearchResult[] }>("/search/movie", {
       query: title,
@@ -301,12 +337,17 @@ async function searchMovie(title: string, year?: number): Promise<TmdbSearchResu
     });
     if (data.results.length === 0) continue;
 
-    const exact = data.results.find(
-      (r) => normalizeTitle(r.title) === wanted || normalizeTitle(r.original_title) === wanted,
-    );
-    return exact ?? data.results[0];
+    const withYear = Object.keys(extra).length > 0;
+    const exact = withYear || !year
+      ? data.results.find(isExact)
+      // bez roku: přesný název nejblíž hledanému roku, nejvýš ±1
+      : data.results
+        .filter((r) => isExact(r) && Math.abs(yearOf(r) - year) <= 1)
+        .sort((a, b) => Math.abs(yearOf(a) - year) - Math.abs(yearOf(b) - year))[0];
+    if (exact) return exact;
+    fallback ??= data.results[0];
   }
-  return null;
+  return fallback;
 }
 
 /** Dohledá jeden film ze seedu a připraví řádek pro tabulku films. */
@@ -332,7 +373,7 @@ async function resolveFilm(seed: SeedFilm): Promise<Resolved> {
     // Překlady (V4.2.2) přijdou ve stejné odpovědi – žádný dotaz na TMDB navíc
     const details = await tmdbGet<TmdbMovieDetails>(`/movie/${tmdbId}`, {
       language: TMDB_LANGUAGE,
-      append_to_response: "translations",
+      append_to_response: "translations,videos",   // trailer (V4.4.6) ve stejné odpovědi
     });
 
     // Zrušený film se neukládá (jen do reportu)
@@ -354,6 +395,9 @@ async function resolveFilm(seed: SeedFilm): Promise<Resolved> {
       poster_path: details.poster_path,
       backdrop_path: details.backdrop_path,
       overview: details.overview || null,
+      original_language: details.original_language || null,
+      trailer_key: pickTrailer(details.videos),
+      trailer_checked_at: new Date().toISOString(),
       tmdb_collection_id: details.belongs_to_collection?.id ?? 0,
       translated_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -556,8 +600,12 @@ async function handleTranslate(request: Request, url: URL): Promise<Response> {
   const failed: string[] = [];
   const results = await mapLimited(list, CONCURRENCY, async (film) => {
     try {
-      const data = await tmdbGet<TmdbTranslations>(`/movie/${film.tmdb_id}/translations`);
-      return { film, rows: pickTranslations(film.tmdb_id, film.title, data) };
+      // Detail s překlady (jeden dotaz) – od V4.4.6 kvůli původnímu jazyku filmu
+      const data = await tmdbGet<TmdbMovieDetails>(`/movie/${film.tmdb_id}`, {
+        language: TMDB_LANGUAGE,
+        append_to_response: "translations",
+      });
+      return { film, rows: pickTranslations(film.tmdb_id, film.title, data.translations), language: data.original_language || null };
     } catch (tmdbError) {
       failed.push(`${film.title} [tmdb ${film.tmdb_id}]: ${String(tmdbError)}`);
       return null;
@@ -575,6 +623,15 @@ async function handleTranslate(request: Request, url: URL): Promise<Response> {
       .in("tmdb_id", markIds);
     if (markError) throw new Error(`translated_at: ${markError.message}`);
   }
+  // Původní jazyk (V4.4.6) – jedna úprava pro každý jazyk
+  const byLanguage = new Map<string, number[]>();
+  for (const r of done) {
+    if (r.language && /^[a-z]{2}$/.test(r.language)) byLanguage.set(r.language, [...(byLanguage.get(r.language) ?? []), r.film.tmdb_id]);
+  }
+  for (const [language, ids] of byLanguage) {
+    const { error: languageError } = await db.from("films").update({ original_language: language }).in("tmdb_id", ids);
+    if (languageError) throw new Error(`original_language: ${languageError.message}`);
+  }
 
   const { count, error: countError } = await db
     .from("films")
@@ -589,6 +646,42 @@ async function handleTranslate(request: Request, url: URL): Promise<Response> {
     remaining: count ?? 0,
     failed,
   });
+}
+
+// ---------------------------------------------------------------------
+// Trailer pro detail filmu (V4.4.6) – veřejná akce, bez klíče správce
+//
+// GET ?action=film-trailer&id=603 → { key: "vKQi3bBA1y8" | null }
+// Jen pro filmy, které už v katalogu jsou (nejde použít jako volný přístup k TMDB).
+// Výsledek se uloží do films.trailer_key; film bez traileru se zkusí znovu po 30 dnech.
+// ---------------------------------------------------------------------
+
+const TRAILER_RECHECK_DAYS = 30;
+
+async function handleFilmTrailer(url: URL): Promise<Response> {
+  const id = Number(url.searchParams.get("id"));
+  if (!Number.isInteger(id) || id <= 0) return json({ error: "Invalid id" }, 400);
+
+  const db = createAdminClient();
+  const { data: film, error } = await db
+    .from("films")
+    .select("tmdb_id, trailer_key, trailer_checked_at")
+    .eq("tmdb_id", id)
+    .maybeSingle();
+  if (error) throw new Error(`film: ${error.message}`);
+  if (!film) return json({ error: "Not in the catalog" }, 404);
+
+  const checked = film.trailer_checked_at ? Date.parse(film.trailer_checked_at) : 0;
+  const fresh = film.trailer_key || Date.now() - checked < TRAILER_RECHECK_DAYS * 86_400_000;
+  if (checked && fresh) return json({ key: film.trailer_key ?? null, cached: true });
+
+  const videos = await tmdbGet<TmdbVideos>(`/movie/${id}/videos`);
+  const key = pickTrailer(videos);
+  const { error: saveError } = await db.from("films")
+    .update({ trailer_key: key, trailer_checked_at: new Date().toISOString() })
+    .eq("tmdb_id", id);
+  if (saveError) throw new Error(`trailer save: ${saveError.message}`);
+  return json({ key, cached: false });
 }
 
 // ---------------------------------------------------------------------
@@ -1048,6 +1141,8 @@ Deno.serve(async (request) => {
         return await handleSeedSync(request);
       case "translate":
         return await handleTranslate(request, url);
+      case "film-trailer":
+        return await handleFilmTrailer(url);
       default:
         return json({ error: `Unknown action: ${action}` }, 400);
     }

@@ -6,6 +6,7 @@ import { fetchReportedLists, moderateList } from "../lists.js";
 import { TEXTS, format, movies } from "../texts.js";
 import { h, mount, pill, toast, loadingView, errorView } from "../dom.js";
 import { requireAdminView, adminHeader } from "./admin.js";
+import { logAdmin } from "../admin.js";
 
 export async function adminReportsView(container, context) {
     if (!requireAdminView(container)) return;
@@ -54,6 +55,7 @@ function reportCard(list, reload) {
         buttons.forEach((b) => { b.disabled = true; });
         try {
             await moderateList(list.id, hide);
+            logAdmin(hide ? "hide-list" : (list.hidden ? "show-list" : "dismiss-reports"), list.title, { owner: list.username });
             toast(hide ? format("adminReportsHiddenToast", list.title) : format("adminReportsShownToast", list.title));
             reload();
         } catch (error) {

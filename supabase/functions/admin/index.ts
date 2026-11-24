@@ -18,9 +18,13 @@
 //                                         (V3.5.2.1); sync-seed ho dopíše do seedu
 //   users        {}                     → seznam uživatelů (nick, e-mail, správce, počet zhlédnutí;
 //                                         od V4.4 i odznaky a úroveň z databáze)
-//   set-admin    { user_id, is_admin }  → udělí / odebere správce (ne sám sobě)
-//   delete-user  { user_id }            → smaže účet i všechna jeho data (ne sám sebe)
-//   reset-username { user_id }          → automatický nick + skrytý profil (V2.3, ne sám sobě)
+//   set-admin    { user_id, is_admin }  → udělí / odebere správce (ne sám sobě) – od V4.4.6 jen vlastník
+//   delete-user  { user_id }            → smaže účet i všechna jeho data (ne sám sebe; správce jen vlastník)
+//   reset-username { user_id }          → automatický nick + skrytý profil (V2.3, ne sám sobě; správce jen vlastník)
+//
+// Admin tým (V4.4.6): vlastník (profiles.is_owner, nastavuje se jen v SQL) je jediný, kdo smí
+// měnit roli správce a mazat / resetovat jiné správce; vlastníka nesmí změnit nikdo z webu.
+// Akce, které něco mění, se zapisují do deníku správců (admin_log – záložka Activity).
 //   requests     {}                     → nevyřízené požadavky na filmy s návrhem kolekce (V3.5.1;
 //                                         od V4.3.5 i kolekce režiséra podle režiséra filmu)
 //   request-decide { items: [{ id, approve, universe_id?, reason?, note?, only_this? }] }
@@ -100,8 +104,14 @@ function getServiceKey(): string {
 // Ověření správce
 // ---------------------------------------------------------------------
 
-/** Z hlavičky Authorization zjistí uživatele a ověří, že je správce. Vrací jeho id. */
-async function requireAdmin(db: SupabaseClient, request: Request): Promise<string> {
+/** Přihlášený správce: id a jestli je vlastník (V4.4.6). */
+interface AdminActor {
+  id: string;
+  isOwner: boolean;
+}
+
+/** Z hlavičky Authorization zjistí uživatele a ověří, že je správce. */
+async function requireAdmin(db: SupabaseClient, request: Request): Promise<AdminActor> {
   const token = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
   if (!token) throw new HttpError(401, "Not signed in");
 
@@ -110,12 +120,35 @@ async function requireAdmin(db: SupabaseClient, request: Request): Promise<strin
 
   const { data: profile } = await db
     .from("profiles")
-    .select("is_admin")
+    .select("*")                      // is_owner jen po migraci V4.4.6 – * nespadne ani bez ní
     .eq("id", data.user.id)
     .maybeSingle();
   if (!profile?.is_admin) throw new HttpError(403, "Administrators only");
 
-  return data.user.id;
+  return { id: data.user.id, isOwner: profile.is_owner === true };
+}
+
+/**
+ * Smí správce (actor) měnit účet uživatele (target)? Vlastníka nikdo z webu, jiného správce
+ * jen vlastník, běžného uživatele kterýkoli správce. Sám sebe tu nikdo (V4.4.6).
+ */
+export function canManageUser(actor: AdminActor, target: { id: string; is_admin?: boolean; is_owner?: boolean } | null): string | null {
+  if (!target) return "User not found";
+  if (target.id === actor.id) return "You cannot change your own account here";
+  if (target.is_owner) return "The owner account can only be changed in SQL";
+  if (target.is_admin && !actor.isOwner) return "Only the owner can change other administrators";
+  return null;
+}
+
+async function targetProfile(db: SupabaseClient, userId: string) {
+  const { data } = await db.from("profiles").select("*").eq("id", userId).maybeSingle();
+  return data ? { id: userId, is_admin: data.is_admin === true, is_owner: data.is_owner === true, username: data.username as string | null } : null;
+}
+
+/** Zápis do deníku správců (V4.4.6). Chyba zápisu akci nezastaví (např. bez migrace). */
+async function logAction(db: SupabaseClient, actor: AdminActor, action: string, target: string | null, details: Record<string, unknown> | null = null) {
+  const { error } = await db.from("admin_log").insert({ admin_id: actor.id, action, target: target?.slice(0, 200) ?? null, details });
+  if (error) console.error(`admin_log: ${error.message}`);
 }
 
 // ---------------------------------------------------------------------
@@ -152,6 +185,20 @@ interface TmdbMovieDetails extends TmdbSearchResult {
   production_companies?: { id: number; name: string }[];
   genres?: { id: number; name: string }[];
   translations?: TmdbTranslations;    // s append_to_response=translations (V4.2.2)
+  original_language?: string;         // V4.4.6
+  videos?: { results: TmdbVideo[] };  // s append_to_response=videos (V4.4.6)
+}
+
+interface TmdbVideo { key: string; site: string; type: string; official?: boolean; iso_639_1?: string; published_at?: string }
+
+/** Nejlepší trailer na YouTube (stejné pravidlo jako v Edge Function tmdb, V4.4.6). */
+function pickTrailer(videos: { results: TmdbVideo[] } | undefined): string | null {
+  const list = (videos?.results ?? []).filter((v) =>
+    v.site === "YouTube" && /^[A-Za-z0-9_-]{6,20}$/.test(v.key) && (v.type === "Trailer" || v.type === "Teaser"));
+  if (list.length === 0) return null;
+  const score = (v: TmdbVideo) => (v.type === "Trailer" ? 8 : 0) + (v.official ? 4 : 0) + (v.iso_639_1 === "en" ? 2 : 0);
+  list.sort((a, b) => score(b) - score(a) || (b.published_at ?? "").localeCompare(a.published_at ?? ""));
+  return list[0].key;
 }
 
 // ---------------------------------------------------------------------
@@ -517,7 +564,7 @@ async function discoverFilms(db: SupabaseClient, body: Record<string, unknown>) 
 async function addFilm(db: SupabaseClient, tmdbId: number) {
   if (!Number.isInteger(tmdbId) || tmdbId <= 0) throw new HttpError(400, "Invalid tmdb_id");
   // Překlady (V4.2.2) přijdou ve stejné odpovědi
-  const d = await tmdbGet<TmdbMovieDetails>(`/movie/${tmdbId}`, { language: "en-US", append_to_response: "translations" });
+  const d = await tmdbGet<TmdbMovieDetails>(`/movie/${tmdbId}`, { language: "en-US", append_to_response: "translations,videos" });
 
   const film = {
     tmdb_id: d.id,
@@ -528,6 +575,9 @@ async function addFilm(db: SupabaseClient, tmdbId: number) {
     poster_path: d.poster_path,
     backdrop_path: d.backdrop_path,
     overview: d.overview || null,
+    original_language: d.original_language || null,            // V4.4.6 – původní název v jazyce filmu
+    trailer_key: pickTrailer(d.videos),                         // V4.4.6 – detail filmu
+    trailer_checked_at: new Date().toISOString(),
     tmdb_collection_id: d.belongs_to_collection?.id ?? 0,      // série TMDB (V3.5.2.3)
     translated_at: new Date().toISOString(),                    // V4.2.2
     updated_at: new Date().toISOString(),
@@ -558,7 +608,7 @@ async function listUsers(db: SupabaseClient) {
     { data: badges },
     { data: progress },
   ] = await Promise.all([
-    db.from("profiles").select("id, username, is_admin, is_public, created_at"),
+    db.from("profiles").select("*"),                          // od V4.4.6 i is_owner
     db.from("watches").select("user_id"),
     db.rpc("flagged_profile_ids"),
     db.from("user_badges").select("user_id, badge"),          // V4.4 – bez migrace chyba → bez odznaků
@@ -586,6 +636,7 @@ async function listUsers(db: SupabaseClient) {
         email: user.email ?? null,
         username: profile?.username ?? null,
         is_admin: profile?.is_admin ?? false,
+        is_owner: profile?.is_owner === true,                // V4.4.6 – vlastník webu
         is_public: profile?.is_public ?? false,
         flagged: flaggedIds.has(user.id),        // nick porušuje pravidla (V2.3)
         provider: (user.app_metadata?.provider as string | undefined) ?? "email",
@@ -599,18 +650,28 @@ async function listUsers(db: SupabaseClient) {
     .sort((a, b) => (a.username ?? "").localeCompare(b.username ?? ""));
 }
 
-async function setAdmin(db: SupabaseClient, selfId: string, userId: string, isAdmin: boolean) {
-  if (userId === selfId) throw new HttpError(400, "You cannot change your own administrator role");
+async function setAdmin(db: SupabaseClient, actor: AdminActor, userId: string, isAdmin: boolean) {
+  if (userId === actor.id) throw new HttpError(400, "You cannot change your own administrator role");
+  // Roli správce uděluje a bere jen vlastník (V4.4.6)
+  if (!actor.isOwner) throw new HttpError(403, "Only the owner can grant or remove the administrator role");
+  const target = await targetProfile(db, userId);
+  const problem = canManageUser(actor, target);
+  if (problem) throw new HttpError(403, problem);
   const { error } = await db.from("profiles").update({ is_admin: isAdmin === true }).eq("id", userId);
   if (error) throw new Error(error.message);
+  await logAction(db, actor, isAdmin ? "grant-admin" : "remove-admin", target?.username ?? userId);
   return { ok: true };
 }
 
-async function deleteUser(db: SupabaseClient, selfId: string, userId: string) {
-  if (userId === selfId) throw new HttpError(400, "You cannot delete your own account here");
+async function deleteUser(db: SupabaseClient, actor: AdminActor, userId: string) {
+  if (userId === actor.id) throw new HttpError(400, "You cannot delete your own account here");
+  const target = await targetProfile(db, userId);
+  const problem = target ? canManageUser(actor, target) : null;     // účet bez profilu smí smazat kterýkoli správce
+  if (problem) throw new HttpError(403, problem);
   // Smazání účtu smaže díky cizím klíčům (on delete cascade) i profil, zhlédnutí a watchlist
   const { error } = await db.auth.admin.deleteUser(userId);
   if (error) throw new Error(error.message);
+  await logAction(db, actor, "delete-user", target?.username ?? userId);
   return { ok: true };
 }
 
@@ -618,11 +679,15 @@ async function deleteUser(db: SupabaseClient, selfId: string, userId: string) {
  * Reset nicku (V2.3): automatický nick user_xxxxxxxx a skrytý veřejný profil.
  * Uživatel si při dalším otevření webu musí zvolit nový nick (web ho pošle do profilu).
  */
-async function resetUsername(db: SupabaseClient, selfId: string, userId: string) {
-  if (userId === selfId) throw new HttpError(400, "You cannot reset your own nickname here");
+async function resetUsername(db: SupabaseClient, actor: AdminActor, userId: string) {
+  if (userId === actor.id) throw new HttpError(400, "You cannot reset your own nickname here");
+  const target = await targetProfile(db, userId);
+  const problem = canManageUser(actor, target);
+  if (problem) throw new HttpError(403, problem);
   const generated = "user_" + userId.replaceAll("-", "").slice(0, 8);
   const { error } = await db.from("profiles").update({ username: generated, is_public: false }).eq("id", userId);
   if (error) throw new Error(error.message);
+  await logAction(db, actor, "reset-nickname", target?.username ?? userId, { new: generated });
   return { ok: true, username: generated };
 }
 
@@ -1425,7 +1490,7 @@ Deno.serve(async (request) => {
     const db = createClient(requireEnv("SUPABASE_URL"), getServiceKey(), {
       auth: { persistSession: false, autoRefreshToken: false },
     });
-    const selfId = await requireAdmin(db, request);
+    const actor = await requireAdmin(db, request);
     const body = await request.json().catch(() => ({})) as Record<string, unknown>;
 
     switch (body.action) {
@@ -1446,15 +1511,24 @@ Deno.serve(async (request) => {
       case "users":
         return json(await listUsers(db));
       case "set-admin":
-        return json(await setAdmin(db, selfId, String(body.user_id), body.is_admin === true));
+        return json(await setAdmin(db, actor, String(body.user_id), body.is_admin === true));
       case "delete-user":
-        return json(await deleteUser(db, selfId, String(body.user_id)));
+        return json(await deleteUser(db, actor, String(body.user_id)));
       case "reset-username":
-        return json(await resetUsername(db, selfId, String(body.user_id)));
+        return json(await resetUsername(db, actor, String(body.user_id)));
       case "requests":
         return json(await listRequests(db));
-      case "request-decide":
-        return json(await decideRequests(db, body.items));
+      case "request-decide": {
+        const decided = await decideRequests(db, body.items);
+        const added = decided.results.filter((r) => r.status === "added");
+        if (decided.results.length > 0) {
+          await logAction(db, actor, "decide-requests", null, {
+            added: added.map((r) => `${r.title}${r.universe ? ` → ${r.universe}` : ""}`).slice(0, 20),
+            rejected: decided.results.length - added.length,
+          });
+        }
+        return json(decided);
+      }
       case "add-item": {
         // Film do kolekce z admin panelu (V3.5.2.1): detail z TMDB + zařazení podle data premiéry
         const film = await addFilm(db, Number(body.tmdb_id));
@@ -1465,22 +1539,32 @@ Deno.serve(async (request) => {
           is_optional: body.optional === true,
           source: "admin",
         });
+        await logAction(db, actor, "add-film", film.title, { universe_id: universeId, tmdb_id: film.tmdb_id });
         return json({ ...film, added });
       }
       case "series-updates":       // kontrola sérií, jen když od poslední uběhl den (V3.5.2.3)
         return json(await seriesCheck(db, false));
       case "series-check":         // kontrola hned („Check now“)
         return json(await seriesCheck(db, true));
-      case "series-decide":
-        return json(await decideSeriesUpdate(db, Number(body.id), body.add === true, body.also));
+      case "series-decide": {
+        const result = await decideSeriesUpdate(db, Number(body.id), body.add === true, body.also);
+        await logAction(db, actor, body.add === true ? "series-add" : "series-dismiss", String(body.id), { status: result.status });
+        return json(result);
+      }
       case "series-dismiss-all":
         return json(await dismissAllSeriesUpdates(db));
       case "collection-names":
         return json(await collectionNames(db, body.universe_ids));
-      case "request-create-collection":
-        return json(await createCollectionFromSeries(db, Number(body.tmdb_collection_id), body.name, body.tmdb_ids, body.also));
-      case "create-collection":
-        return json(await createCollectionFromEditor(db, body));
+      case "request-create-collection": {
+        const result = await createCollectionFromSeries(db, Number(body.tmdb_collection_id), body.name, body.tmdb_ids, body.also);
+        await logAction(db, actor, "create-collection", result.slug, { films: result.films, from: "tmdb-series" });
+        return json(result);
+      }
+      case "create-collection": {
+        const result = await createCollectionFromEditor(db, body) as { slug?: string; films?: number };
+        await logAction(db, actor, "create-collection", result.slug ?? String(body.name ?? ""), { films: result.films ?? null, kind: body.kind ?? "series" });
+        return json(result);
+      }
       default:
         return json({ error: `Unknown action: ${body.action}` }, 400);
     }

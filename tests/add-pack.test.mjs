@@ -4,7 +4,7 @@ import "./setup.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { applyPack } from "../scripts/add-pack.mjs";
+import { applyPack, insertAfter } from "../scripts/add-pack.mjs";
 
 const SEED = [
     "{",
@@ -303,10 +303,136 @@ test("balíček V4.4.5: jen addFilms do existujících kolekcí, filmy s rokem",
     }
 });
 
+const GROUPED = [
+    "{",
+    '  "universes": [',
+    "    {",
+    '      "slug": "duo",',
+    '      "name": "Duo",',
+    '      "films": [',
+    '        { "title": "T1", "year": 1970, "group": "Together" },',
+    '        { "title": "B1", "year": 1973, "group": "Bud" },',
+    '        { "title": "B2", "year": 1980, "group": "Bud" },',
+    '        { "title": "H1", "year": 1975, "group": "Hill" },',
+    '        { "title": "H2", "year": 1990, "group": "Hill" }',
+    "      ]",
+    "    },",
+    "    {",
+    '      "slug": "robots",',
+    '      "name": "Robots",',
+    '      "films": [',
+    '        { "title": "R1", "year": 1986 },',
+    '        { "title": "R2", "year": 2004, "tmdb": 5 },',
+    '        { "title": "R3", "year": 2024 }',
+    "      ]",
+    "    }",
+    "  ]",
+    "}",
+    "",
+].join("\n");
+
+test("add-pack: addFilms zařadí film do jeho skupiny a podle roku (V4.4.6)", () => {
+    const pack = { update: {
+        duo: { addFilms: [
+            { title: "B0", year: 1977, group: "Bud" },      // doprostřed skupiny Bud
+            { title: "H0", year: 1972, group: "Hill" },     // na začátek skupiny Hill
+            { title: "H9", year: 2018, group: "Hill" },     // na konec kolekce
+            { title: "N1", year: 2000, group: "New" },      // nová skupina na konec
+        ] },
+        robots: { addFilms: [{ title: "R0", year: 1988 }, { title: "R9", year: 2011 }] },
+    } };
+    const { text } = applyPack(GROUPED, pack);
+    const seed = JSON.parse(text);
+    assert.deepEqual(seed.universes[0].films.map((f) => f.title), ["T1", "B1", "B0", "B2", "H0", "H1", "H2", "H9", "N1"]);
+    assert.deepEqual(seed.universes[1].films.map((f) => f.title), ["R1", "R0", "R2", "R9", "R3"]);
+    // čárky sedí (platný JSON výše) a poslední film je bez čárky
+    assert.ok(text.includes('        { "title": "N1", "year": 2000, "group": "New" }\n      ]'));
+    assert.equal(applyPack(text, pack).text, text);
+});
+
+test("add-pack: insertAfter – neseřazená kolekce a film bez roku jdou na konec", () => {
+    const rows = [{ index: 5, film: { title: "A", year: 2000 } }, { index: 6, film: { title: "B", year: 1990 } }];
+    assert.equal(insertAfter(rows, { title: "X", year: 1995 }), 6);
+    assert.equal(insertAfter([{ index: 5, film: { title: "A", year: 2000 } }], { title: "X" }), 5);
+    assert.equal(insertAfter([], { title: "X", year: 2000 }), null);
+    assert.equal(insertAfter([{ index: 5, film: { title: "A", year: 2000 } }], { title: "X", year: 1990 }), 4);
+});
+
+test("add-pack: fix doplní tmdb a přejmenuje film ve všech kolekcích (V4.4.6)", () => {
+    const pack = { fix: [
+        { title: "B1", year: 1973, tmdb: 46091 },
+        { title: "R2", year: 2004, tmdb: 7 },                         // nahradí staré tmdb
+        { title: "R3", year: 2024, newTitle: "R3 Renamed" },
+        { title: "Missing", year: 1999, tmdb: 1 },
+    ] };
+    const { text, fixed, updated } = applyPack(GROUPED, pack);
+    const seed = JSON.parse(text);
+    assert.deepEqual(fixed, ["duo", "robots"]);
+    assert.deepEqual(updated, []);
+    assert.ok(text.includes('        { "title": "B1", "year": 1973, "tmdb": 46091, "group": "Bud" },'));
+    assert.ok(text.includes('        { "title": "R2", "year": 2004, "tmdb": 7 },'));
+    assert.equal(seed.universes[1].films[2].title, "R3 Renamed");
+    // znovu: nic dalšího, B1 už tmdb má (R3 se podruhé nenajde – už je přejmenovaný)
+    const again = applyPack(text, pack);
+    assert.equal(again.text, text);
+    assert.deepEqual(again.fixed, ["duo", "robots"]);           // znovu naimportovat smí
+});
+
 test("nextGoal: 2 000, pak po 500", async () => {
     const { nextGoal } = await import("../web/js/admin.js");
     assert.equal(nextGoal(1264), 2000);
     assert.equal(nextGoal(2000), 2500);
     assert.equal(nextGoal(2499), 2500);
     assert.equal(nextGoal(2500), 3000);
+});
+
+test("balíček V4.4.6: opravy s ověřeným ID, filmy do skupin, nová série", () => {
+    const pack = JSON.parse(readFileSync(new URL("../supabase/packs/v4.4.6-fixes.json", import.meta.url), "utf8"));
+    const keys = new Set();
+    for (const fix of pack.fix) {
+        assert.ok(fix.title && Number.isInteger(fix.year), fix.title);
+        assert.ok(fix.tmdb === undefined || (Number.isInteger(fix.tmdb) && fix.tmdb > 0), fix.title);
+        const key = `${fix.title}|${fix.year}`;
+        assert.ok(!keys.has(key), `dvakrát: ${key}`);
+        keys.add(key);
+    }
+    const duo = pack.update["bud-spencer-terence-hill"].addFilms;
+    for (const film of duo) assert.ok(["Bud Spencer", "Terence Hill"].includes(film.group), film.title);
+    assert.deepEqual(pack.universes.map((u) => u.slug), ["short-circuit"]);
+
+    // Použití na malý seed: oprava doplní tmdb, filmy se zařadí do skupiny podle roku
+    const seed = [
+        "{",
+        '  "universes": [',
+        "    {",
+        '      "slug": "bud-spencer-terence-hill",',
+        '      "name": "Bud Spencer & Terence Hill",',
+        '      "films": [',
+        '        { "title": "Ace High", "year": 1968, "group": "Together" },',
+        '        { "title": "Flatfoot", "year": 1973, "group": "Bud Spencer" },',
+        '        { "title": "Banana Joe", "year": 1982, "group": "Bud Spencer" },',
+        '        { "title": "My Name Is Nobody", "year": 1973, "group": "Terence Hill" },',
+        '        { "title": "Don Camillo", "year": 1983, "group": "Terence Hill", "optional": true }',
+        "      ]",
+        "    },",
+        "    {",
+        '      "slug": "300",',
+        '      "name": "300",',
+        '      "films": [',
+        '        { "title": "300", "year": 2006 }',
+        "      ]",
+        "    }",
+        "  ]",
+        "}",
+        "",
+    ].join("\n");
+    const result = applyPack(seed, { fix: pack.fix, update: { "bud-spencer-terence-hill": pack.update["bud-spencer-terence-hill"] } });
+    const parsed = JSON.parse(result.text);
+    const duoFilms = parsed.universes[0].films.map((f) => `${f.group}:${f.title}`);
+    assert.deepEqual(duoFilms.slice(0, 2), ["Together:Ace High", "Bud Spencer:Flatfoot"]);
+    assert.ok(duoFilms.indexOf("Bud Spencer:Charleston") < duoFilms.indexOf("Bud Spencer:Banana Joe"));
+    assert.ok(duoFilms.indexOf("Terence Hill:Man of the East") < duoFilms.indexOf("Terence Hill:My Name Is Nobody"));
+    assert.equal(duoFilms.at(-1), "Terence Hill:My Name Is Thomas");
+    assert.equal(parsed.universes[1].films[0].tmdb, 1271);
+    assert.deepEqual(result.fixed.sort(), ["300", "bud-spencer-terence-hill"]);
 });

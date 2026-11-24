@@ -860,6 +860,15 @@ export default {
     levelTitle_StudioHead: "Jefe de estudio",
     levelTitle_Legend: "Leyenda",
 
+    // Detail filmu (V4.4.6)
+    filmDetailOpen: "Detalles: {0}",
+    filmDetailTrailer: "Tráiler",
+    filmDetailFindTrailer: "Buscar tráiler",
+    filmDetailNoOverview: "Aún no hay descripción.",
+    filmDetailCollections: "En colecciones",
+    filmDetailMore: "+{0} más",
+    filmDetailSource: "Descripción y tráiler de TMDB.",
+
     plural_movies: { one: "{0} película", other: "{0} películas" },
     plural_collections: { one: "{0} colección", other: "{0} colecciones" },
     plural_steps: { one: "{0} paso", other: "{0} pasos" },

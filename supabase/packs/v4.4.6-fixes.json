@@ -1,0 +1,55 @@
+{
+    "_comment": "Balíček V4.4.6 – opravy špatně spárovaných filmů z importu (fix), chybějící samostatné filmy Bud Spencera a Terence Hilla, Číslo 5 žije a Ocelová pěst do AI & Robots a nová malá série Short Circuit. Přidá se příkazem ./scripts/add-pack.sh supabase/packs/v4.4.6-fixes.json (migrace 20261124100000 musí být spuštěná dřív kvůli traileru a původnímu jazyku, balíček sám ji nepotřebuje).",
+    "fix": [
+        { "title": "300", "year": 2006, "tmdb": 1271 },
+        { "title": "Hostel", "year": 2005, "tmdb": 1690 },
+        { "title": "The Raid", "year": 2011, "tmdb": 94329 },
+        { "title": "Millennium Actress", "year": 2001, "tmdb": 33320 },
+        { "title": "The Grey", "year": 2011, "tmdb": 75174 },
+        { "title": "Drunken Master II", "year": 1994, "tmdb": 12207 },
+        { "title": "Ghost in the Shell: Stand Alone Complex - Solid State Society", "year": 2006, "tmdb": 18874 },
+        { "title": "Tři veteráni", "year": 1983, "tmdb": 46091 },
+        { "title": "To Begin Again", "year": 1982, "newTitle": "Begin the Beguine" },
+        { "title": "Don Camillo", "year": 1983 },
+        { "title": "Kes", "year": 1969 },
+        { "title": "Sing Sing", "year": 2023 },
+        { "title": "Hard Eight", "year": 1996 },
+        { "title": "Bernie", "year": 2011 },
+        { "title": "Hit Man", "year": 2023 },
+        { "title": "Bubble", "year": 2005 },
+        { "title": "To the Wonder", "year": 2012 },
+        { "title": "Boy and the World", "year": 2013 },
+        { "title": "Sisters", "year": 1972 }
+    ],
+    "update": {
+        "bud-spencer-terence-hill": { "addFilms": [
+            { "title": "Charleston", "year": 1977, "tmdb": 46448, "group": "Bud Spencer" },
+            { "title": "Why Did You Pick On Me?", "year": 1980, "tmdb": 11039, "group": "Bud Spencer" },
+            { "title": "Bomber", "year": 1982, "tmdb": 11614, "group": "Bud Spencer" },
+            { "title": "Thieves and Robbers", "year": 1983, "tmdb": 11613, "group": "Bud Spencer" },
+            { "title": "Aladdin", "year": 1986, "tmdb": 9807, "group": "Bud Spencer" },
+            { "title": "Man of the East", "year": 1972, "tmdb": 54164, "group": "Terence Hill" },
+            { "title": "A Genius, Two Friends, and an Idiot", "year": 1975, "tmdb": 10915, "group": "Terence Hill" },
+            { "title": "March or Die", "year": 1977, "tmdb": 25388, "group": "Terence Hill" },
+            { "title": "My Name Is Thomas", "year": 2018, "group": "Terence Hill" }
+        ] },
+        "scifi-ai-robots": { "addFilms": [
+            { "title": "Short Circuit 2", "year": 1988 },
+            { "title": "Real Steel", "year": 2011 }
+        ] }
+    },
+    "universes": [
+        {
+            "slug": "short-circuit",
+            "name": "Short Circuit",
+            "kind": "series",
+            "categories": ["scifi", "comedy", "family"],
+            "color": "#0284c7",
+            "description": "Number 5 is alive! A military robot struck by lightning discovers books, freedom and life.",
+            "films": [
+                { "title": "Short Circuit", "year": 1986 },
+                { "title": "Short Circuit 2", "year": 1988 }
+            ]
+        }
+    ]
+}

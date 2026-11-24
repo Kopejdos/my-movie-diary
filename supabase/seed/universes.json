@@ -1331,6 +1331,7 @@
         { "title": "The Lego Movie", "year": 2014, "group": "2010s", "franchise": "The Lego Movie" },
         { "title": "American Sniper", "year": 2014, "group": "2010s" },
         { "title": "Mad Max: Fury Road", "year": 2015, "group": "2010s", "franchise": "Mad Max" },
+        { "title": "I Spit on Your Grave III: Vengeance Is Mine", "year": 2015, "tmdb": 357096, "group": "2010s", "franchise": "R & Revenge" },
         { "title": "Fantastic Beasts and Where to Find Them", "year": 2016, "group": "2010s", "franchise": "Wizarding World" },
         { "title": "Batman v Superman: Dawn of Justice", "year": 2016, "group": "2010s", "franchise": "DC" },
         { "title": "Suicide Squad", "year": 2016, "group": "2010s", "franchise": "DC" },
@@ -1397,8 +1398,10 @@
         { "title": "Man of Tomorrow", "year": 2027, "group": "2020s", "franchise": "DC" },
         { "title": "Godzilla x Kong: Supernova", "year": 2027, "group": "2020s", "franchise": "MonsterVerse" },
         { "title": "Final Destination 7", "year": 2028, "tmdb": 1505252, "group": "2020s", "franchise": "Final Destination" },
+        { "title": "Gremlins 3", "year": 2028, "tmdb": 1423577, "group": "2020s", "franchise": "Gremlins" },
         { "title": "The Batman Part II", "year": 2027, "group": "2020s", "franchise": "DC" },
-        { "title": "Lethal Weapon 5", "tmdb": 1528550, "group": "2020s", "franchise": "Lethal Weapon" }
+        { "title": "Lethal Weapon 5", "tmdb": 1528550, "group": "2020s", "franchise": "Lethal Weapon" },
+        { "title": "Mortal Kombat III", "tmdb": 1561021, "group": "2020s", "franchise": "Mortal Kombat" }
       ]
     },
     {
@@ -1973,6 +1976,7 @@
         { "title": "Jacob's Ladder", "year": 1990 },
         { "title": "Misery", "year": 1990 },
         { "title": "The Silence of the Lambs", "year": 1991 },
+        { "title": "Mother's Day", "year": 2010, "tmdb": 101669 },
         { "title": "Black Swan", "year": 2010 },
         { "title": "Get Out", "year": 2017 },
         { "title": "The Lighthouse", "year": 2019 },
@@ -2517,7 +2521,7 @@
         { "title": "Kill Bill: Vol. 1", "year": 2003 },
         { "title": "Kung Fu Hustle", "year": 2004 },
         { "title": "Ip Man", "year": 2008 },
-        { "title": "The Raid", "year": 2011 },
+        { "title": "The Raid", "year": 2011, "tmdb": 94329 },
         { "title": "Everything Everywhere All at Once", "year": 2022 }
       ]
     },
@@ -2795,9 +2799,11 @@
       "color": "#ef4444",
       "description": "CineTel Films acquired rights to remake I Spit on Your Grave, which had a Halloween 2010 worldwide theatrical release. The remake was produced by CineTel president and CEO Paul Hertzberg and Lisa Hans",
       "films": [
-        { "title": "I Spit on Your Grave", "year": 2010, "tmdb": 43947 },
+        { "title": "Day of the Woman", "year": 1978, "tmdb": 25239 },
+        { "title": "I Spit on Your Grave", "year": 2010, "tmdb": 43947, "cover": true },
         { "title": "I Spit on Your Grave 2", "year": 2013, "tmdb": 207768 },
-        { "title": "I Spit on Your Grave III: Vengeance Is Mine", "year": 2015, "tmdb": 357096 }
+        { "title": "I Spit on Your Grave III: Vengeance Is Mine", "year": 2015, "tmdb": 357096 },
+        { "title": "I Spit on Your Grave: Déjà Vu", "year": 2019, "tmdb": 369196 }
       ]
     },
     {
@@ -2863,8 +2869,10 @@
         { "title": "Resident Evil: Retribution", "year": 2012, "tmdb": 71679, "franchise": "Live action" },
         { "title": "Resident Evil: Damnation", "year": 2012, "tmdb": 133121, "franchise": "animated" },
         { "title": "Resident Evil: The Final Chapter", "year": 2016, "tmdb": 173897, "franchise": "Live action" },
+        { "title": "Resident Evil: Welcome to Raccoon City", "year": 2021, "tmdb": 460458, "franchise": "Live action" },
         { "title": "Resident Evil: Death Island", "year": 2023, "tmdb": 1083862, "franchise": "animated" },
-        { "title": "Resident Evil: Vendetta", "year": 2017, "tmdb": 400136, "franchise": "animated" }
+        { "title": "Resident Evil: Vendetta", "year": 2017, "tmdb": 400136, "franchise": "animated" },
+        { "title": "Resident Evil", "year": 2026, "tmdb": 1423191, "franchise": "Live action" }
       ]
     },
     {
@@ -3191,18 +3199,27 @@
         { "title": "Troublemakers", "year": 1994, "group": "Together" },
         { "title": "Flatfoot", "year": 1973, "group": "Bud Spencer", "franchise": "Flatfoot", "optional": true },
         { "title": "Flatfoot in Hong Kong", "year": 1975, "group": "Bud Spencer", "franchise": "Flatfoot", "optional": true },
+        { "title": "Charleston", "year": 1977, "tmdb": 46448, "group": "Bud Spencer" },
         { "title": "Flatfoot in Africa", "year": 1978, "group": "Bud Spencer", "franchise": "Flatfoot", "optional": true },
         { "title": "They Called Him Bulldozer", "year": 1978, "group": "Bud Spencer", "optional": true },
         { "title": "The Sheriff and the Satellite Kid", "year": 1979, "group": "Bud Spencer", "optional": true },
         { "title": "Flatfoot in Egypt", "year": 1980, "group": "Bud Spencer", "franchise": "Flatfoot", "optional": true },
+        { "title": "Why Did You Pick On Me?", "year": 1980, "tmdb": 11039, "group": "Bud Spencer" },
         { "title": "Buddy Goes West", "year": 1981, "group": "Bud Spencer", "optional": true },
         { "title": "Banana Joe", "year": 1982, "group": "Bud Spencer", "optional": true },
+        { "title": "Bomber", "year": 1982, "tmdb": 11614, "group": "Bud Spencer" },
+        { "title": "Thieves and Robbers", "year": 1983, "tmdb": 11613, "group": "Bud Spencer" },
+        { "title": "Aladdin", "year": 1986, "tmdb": 9807, "group": "Bud Spencer" },
+        { "title": "Man of the East", "year": 1972, "tmdb": 54164, "group": "Terence Hill" },
         { "title": "My Name Is Nobody", "year": 1973, "group": "Terence Hill", "optional": true },
+        { "title": "A Genius, Two Friends, and an Idiot", "year": 1975, "tmdb": 10915, "group": "Terence Hill" },
         { "title": "Mr. Billion", "year": 1977, "group": "Terence Hill", "optional": true },
+        { "title": "March or Die", "year": 1977, "tmdb": 25388, "group": "Terence Hill" },
         { "title": "Super Fuzz", "year": 1980, "group": "Terence Hill", "optional": true },
         { "title": "Don Camillo", "year": 1983, "group": "Terence Hill", "optional": true },
         { "title": "Renegade", "year": 1987, "group": "Terence Hill", "optional": true },
-        { "title": "Lucky Luke", "year": 1991, "group": "Terence Hill", "optional": true }
+        { "title": "Lucky Luke", "year": 1991, "group": "Terence Hill", "optional": true },
+        { "title": "My Name Is Thomas", "year": 2018, "group": "Terence Hill" }
       ]
     },
     {
@@ -3371,7 +3388,8 @@
         { "title": "I Spit on Your Grave", "year": 2010, "tmdb": 43947 },
         { "title": "The Seasoning House", "year": 2012, "tmdb": 127651 },
         { "title": "I Spit on Your Grave 2", "year": 2013, "tmdb": 207768 },
-        { "title": "Savaged", "year": 2014, "tmdb": 216580 }
+        { "title": "Savaged", "year": 2014, "tmdb": 216580 },
+        { "title": "I Spit on Your Grave III: Vengeance Is Mine", "year": 2015, "tmdb": 357096 }
       ]
     },
     {
@@ -4070,7 +4088,8 @@
         { "title": "Home Alone 3", "year": 1997, "optional": true },
         { "title": "Home Alone 4", "year": 2002, "optional": true },
         { "title": "Home Alone: The Holiday Heist", "year": 2012, "optional": true },
-        { "title": "Home Sweet Home Alone", "year": 2021, "optional": true }
+        { "title": "Home Sweet Home Alone", "year": 2021, "optional": true },
+        { "title": "Untitled Home Alone Film", "tmdb": 1832995 }
       ]
     },
     {
@@ -4097,7 +4116,8 @@
       "films": [
         { "title": "Rush Hour", "year": 1998 },
         { "title": "Rush Hour 2", "year": 2001 },
-        { "title": "Rush Hour 3", "year": 2007 }
+        { "title": "Rush Hour 3", "year": 2007 },
+        { "title": "Rush Hour 4", "tmdb": 1059776 }
       ]
     },
     {
@@ -4151,7 +4171,8 @@
       "films": [
         { "title": "Meet the Parents", "year": 2000 },
         { "title": "Meet the Fockers", "year": 2004 },
-        { "title": "Little Fockers", "year": 2010 }
+        { "title": "Little Fockers", "year": 2010 },
+        { "title": "Focker In-Law", "year": 2026, "tmdb": 1400336 }
       ]
     },
     {
@@ -4248,7 +4269,8 @@
       "films": [
         { "title": "Olympus Has Fallen", "year": 2013 },
         { "title": "London Has Fallen", "year": 2016 },
-        { "title": "Angel Has Fallen", "year": 2019 }
+        { "title": "Angel Has Fallen", "year": 2019 },
+        { "title": "Night Has Fallen", "tmdb": 762409 }
       ]
     },
     {
@@ -4290,7 +4312,7 @@
       "color": "#b45309",
       "description": "Indonesian martial arts at full speed – some of the best action ever filmed.",
       "films": [
-        { "title": "The Raid", "year": 2011 },
+        { "title": "The Raid", "year": 2011, "tmdb": 94329 },
         { "title": "The Raid 2", "year": 2014 }
       ]
     },
@@ -4358,7 +4380,8 @@
         { "title": "Mortal Kombat", "year": 1995 },
         { "title": "Mortal Kombat: Annihilation", "year": 1997 },
         { "title": "Mortal Kombat", "year": 2021 },
-        { "title": "Mortal Kombat II", "year": 2026 }
+        { "title": "Mortal Kombat II", "year": 2026 },
+        { "title": "Mortal Kombat III", "tmdb": 1561021 }
       ]
     },
     {
@@ -4377,7 +4400,8 @@
         { "title": "The Scorpion King 3: Battle for Redemption", "year": 2012, "optional": true, "franchise": "The Scorpion King" },
         { "title": "The Scorpion King 4: Quest for Power", "year": 2015, "optional": true, "franchise": "The Scorpion King" },
         { "title": "The Mummy", "year": 2017, "optional": true, "label": "Reboot" },
-        { "title": "The Scorpion King: Book of Souls", "year": 2018, "optional": true, "franchise": "The Scorpion King" }
+        { "title": "The Scorpion King: Book of Souls", "year": 2018, "optional": true, "franchise": "The Scorpion King" },
+        { "title": "The Mummy: Book of the Dead", "year": 2027, "tmdb": 1574840 }
       ]
     },
     {
@@ -4403,7 +4427,8 @@
       "films": [
         { "title": "A Quiet Place", "year": 2018 },
         { "title": "A Quiet Place Part II", "year": 2021 },
-        { "title": "A Quiet Place: Day One", "year": 2024, "story": 1 }
+        { "title": "A Quiet Place: Day One", "year": 2024, "story": 1 },
+        { "title": "A Quiet Place Part III", "year": 2027, "tmdb": 1324923 }
       ]
     },
     {
@@ -4484,7 +4509,9 @@
         { "title": "Evil Dead II", "year": 1987 },
         { "title": "Army of Darkness", "year": 1992 },
         { "title": "Evil Dead", "year": 2013 },
-        { "title": "Evil Dead Rise", "year": 2023 }
+        { "title": "Evil Dead Rise", "year": 2023 },
+        { "title": "Evil Dead Burn", "year": 2026, "tmdb": 1212763 },
+        { "title": "Evil Dead Wrath", "year": 2028, "tmdb": 1280608 }
       ]
     },
     {
@@ -4523,7 +4550,8 @@
       "color": "#991b1b",
       "description": "Backpacking in Slovakia goes very wrong – Eli Roth's torture horror. Part III is optional.",
       "films": [
-        { "title": "Hostel", "year": 2005 },
+        { "title": "Hostel", "year": 2005, "tmdb": 1690 },
+        { "title": "Hostel", "year": 2006, "tmdb": 1690 },
         { "title": "Hostel: Part II", "year": 2007 },
         { "title": "Hostel: Part III", "year": 2011, "optional": true }
       ]
@@ -4553,7 +4581,8 @@
         { "title": "28 Days Later", "year": 2002 },
         { "title": "28 Weeks Later", "year": 2007 },
         { "title": "28 Years Later", "year": 2025 },
-        { "title": "28 Years Later: The Bone Temple", "year": 2026 }
+        { "title": "28 Years Later: The Bone Temple", "year": 2026 },
+        { "title": "28 Years Later: Part III", "tmdb": 1273002 }
       ]
     },
     {
@@ -4661,7 +4690,8 @@
       "description": "Three rules: no bright light, no water and never feed him after midnight.",
       "films": [
         { "title": "Gremlins", "year": 1984 },
-        { "title": "Gremlins 2: The New Batch", "year": 1990 }
+        { "title": "Gremlins 2: The New Batch", "year": 1990 },
+        { "title": "Gremlins 3", "year": 2028, "tmdb": 1423577 }
       ]
     },
     {
@@ -4707,7 +4737,8 @@
         { "title": "Kong: Skull Island", "year": 2017, "group": "Hollywood", "franchise": "MonsterVerse" },
         { "title": "Godzilla: King of the Monsters", "year": 2019, "group": "Hollywood", "franchise": "MonsterVerse" },
         { "title": "Godzilla vs. Kong", "year": 2021, "group": "Hollywood", "franchise": "MonsterVerse" },
-        { "title": "Godzilla x Kong: The New Empire", "year": 2024, "group": "Hollywood", "franchise": "MonsterVerse" }
+        { "title": "Godzilla x Kong: The New Empire", "year": 2024, "group": "Hollywood", "franchise": "MonsterVerse" },
+        { "title": "Godzilla x Kong: Supernova", "year": 2027, "tmdb": 1288438 }
       ]
     },
     {
@@ -4726,7 +4757,8 @@
         { "title": "King Kong", "year": 2005 },
         { "title": "Kong: Skull Island", "year": 2017, "franchise": "MonsterVerse" },
         { "title": "Godzilla vs. Kong", "year": 2021, "franchise": "MonsterVerse" },
-        { "title": "Godzilla x Kong: The New Empire", "year": 2024, "franchise": "MonsterVerse" }
+        { "title": "Godzilla x Kong: The New Empire", "year": 2024, "franchise": "MonsterVerse" },
+        { "title": "Godzilla x Kong: Supernova", "year": 2027, "tmdb": 1288438 }
       ]
     },
     {
@@ -4831,7 +4863,8 @@
         { "title": "The Mask of Zorro", "year": 1998, "group": "1990s" },
         { "title": "Super 8", "year": 2011, "group": "2010s" },
         { "title": "Ready Player One", "year": 2018, "group": "2010s" },
-        { "title": "1917", "year": 2019, "group": "2010s" }
+        { "title": "1917", "year": 2019, "group": "2010s" },
+        { "title": "Gremlins 3", "year": 2028, "tmdb": 1423577, "group": "2020s", "franchise": "Gremlins" }
       ]
     },
     {
@@ -4935,7 +4968,7 @@
       "description": "Dreams, films and reality blurring into one – all four features of Satoshi Kon.",
       "films": [
         { "title": "Perfect Blue", "year": 1997, "group": "1990s" },
-        { "title": "Millennium Actress", "year": 2001, "group": "2000s" },
+        { "title": "Millennium Actress", "year": 2001, "tmdb": 33320, "group": "2000s" },
         { "title": "Tokyo Godfathers", "year": 2003, "group": "2000s" },
         { "title": "Paprika", "year": 2006, "group": "2000s" }
       ]
@@ -4950,6 +4983,8 @@
       "films": [
         { "title": "Neon Genesis Evangelion: Death & Rebirth", "year": 1997, "group": "Original", "optional": true },
         { "title": "The End of Evangelion", "year": 1997, "group": "Original" },
+        { "title": "EVANGELION: DEATH (TRUE)²", "year": 1998, "tmdb": 857862 },
+        { "title": "Revival of Evangelion", "year": 1998, "tmdb": 54270 },
         { "title": "Evangelion: 1.0 You Are (Not) Alone", "year": 2007, "group": "Rebuild" },
         { "title": "Evangelion: 2.0 You Can (Not) Advance", "year": 2009, "group": "Rebuild" },
         { "title": "Evangelion: 3.0 You Can (Not) Redo", "year": 2012, "group": "Rebuild" },
@@ -4966,7 +5001,7 @@
       "films": [
         { "title": "Ghost in the Shell", "year": 1995 },
         { "title": "Ghost in the Shell 2: Innocence", "year": 2004 },
-        { "title": "Ghost in the Shell: Stand Alone Complex - Solid State Society", "year": 2006, "optional": true },
+        { "title": "Ghost in the Shell: Stand Alone Complex - Solid State Society", "year": 2006, "tmdb": 18874, "optional": true },
         { "title": "Ghost in the Shell 2.0", "year": 2008, "optional": true },
         { "title": "Ghost in the Shell: The New Movie", "year": 2015, "optional": true },
         { "title": "Ghost in the Shell", "year": 2017, "optional": true, "label": "Live action" }
@@ -4994,6 +5029,7 @@
         { "title": "Pokémon: Arceus and the Jewel of Life", "year": 2009 },
         { "title": "Pokémon: Zoroark: Master of Illusions", "year": 2010 },
         { "title": "Pokémon the Movie: White - Victini and Zekrom", "year": 2011 },
+        { "title": "Pokémon the Movie: Black - Victini and Reshiram", "year": 2011, "tmdb": 115223 },
         { "title": "Pokémon the Movie: Kyurem vs. the Sword of Justice", "year": 2012 },
         { "title": "Pokémon the Movie: Genesect and the Legend Awakened", "year": 2013 },
         { "title": "Pokémon the Movie: Diancie and the Cocoon of Destruction", "year": 2014 },
@@ -5072,7 +5108,8 @@
         { "title": "Detective Conan: The Bride of Halloween", "year": 2022, "group": "2020s" },
         { "title": "Detective Conan: Black Iron Submarine", "year": 2023, "group": "2020s" },
         { "title": "Detective Conan: The Million-Dollar Pentagram", "year": 2024, "group": "2020s" },
-        { "title": "Detective Conan: One-Eyed Flashback", "year": 2025, "group": "2020s" }
+        { "title": "Detective Conan: One-Eyed Flashback", "year": 2025, "group": "2020s" },
+        { "title": "Detective Conan: Fallen Angel of the Highway", "year": 2026, "tmdb": 1545621 }
       ]
     },
     {
@@ -5090,7 +5127,7 @@
         { "title": "Ghost in the Shell", "year": 1995, "group": "1990s" },
         { "title": "Perfect Blue", "year": 1997, "group": "1990s" },
         { "title": "Jin-Roh: The Wolf Brigade", "year": 1999, "group": "1990s" },
-        { "title": "Millennium Actress", "year": 2001, "group": "2000s" },
+        { "title": "Millennium Actress", "year": 2001, "tmdb": 33320, "group": "2000s" },
         { "title": "Metropolis", "year": 2001, "group": "2000s" },
         { "title": "Cowboy Bebop: The Movie", "year": 2001, "group": "2000s" },
         { "title": "Mind Game", "year": 2004, "group": "2000s" },
@@ -5227,7 +5264,7 @@
         { "title": "Tři oříšky pro Popelku", "year": 1973, "group": "1970s" },
         { "title": "Malá mořská víla", "year": 1976, "group": "1970s" },
         { "title": "Jak se budí princezny", "year": 1977, "group": "1970s" },
-        { "title": "Tři veteráni", "year": 1983, "group": "1980s" },
+        { "title": "Tři veteráni", "year": 1983, "tmdb": 46091, "group": "1980s" },
         { "title": "S čerty nejsou žerty", "year": 1984, "group": "1980s" },
         { "title": "Nesmrtelná teta", "year": 1993, "group": "1990s" },
         { "title": "Princezna ze mlejna", "year": 1994, "group": "1990s" },
@@ -5552,7 +5589,7 @@
         { "title": "Rescue Dawn", "year": 2006 },
         { "title": "Into the Wild", "year": 2007 },
         { "title": "127 Hours", "year": 2010 },
-        { "title": "The Grey", "year": 2011 },
+        { "title": "The Grey", "year": 2011, "tmdb": 75174 },
         { "title": "Life of Pi", "year": 2012 },
         { "title": "All Is Lost", "year": 2013 },
         { "title": "Gravity", "year": 2013 },
@@ -5624,12 +5661,14 @@
         { "title": "Westworld", "year": 1973 },
         { "title": "Blade Runner", "year": 1982 },
         { "title": "Short Circuit", "year": 1986 },
+        { "title": "Short Circuit 2", "year": 1988 },
         { "title": "The Iron Giant", "year": 1999 },
         { "title": "Bicentennial Man", "year": 1999 },
         { "title": "A.I. Artificial Intelligence", "year": 2001 },
         { "title": "I, Robot", "year": 2004 },
         { "title": "WALL·E", "year": 2008 },
         { "title": "Moon", "year": 2009 },
+        { "title": "Real Steel", "year": 2011 },
         { "title": "Her", "year": 2013 },
         { "title": "Ex Machina", "year": 2015 },
         { "title": "M3GAN", "year": 2022 },
@@ -5654,7 +5693,7 @@
         { "title": "Gladiator", "year": 2000 },
         { "title": "Troy", "year": 2004 },
         { "title": "Alexander", "year": 2004 },
-        { "title": "300", "year": 2006 },
+        { "title": "300", "year": 2006, "tmdb": 1271 },
         { "title": "Centurion", "year": 2010 },
         { "title": "The Eagle", "year": 2011 },
         { "title": "Pompeii", "year": 2014 },
@@ -6450,10 +6489,23 @@
       "color": "#0f766e",
       "description": "Tanjiro's fight against the demons – the record-breaking Mugen Train and the Infinity Castle trilogy.",
       "films": [
+        { "title": "Demon Slayer: Kimetsu no Yaiba - Sibling's Bond", "year": 2019, "tmdb": 820232 },
         { "title": "Demon Slayer: Mugen Train", "year": 2020, "group": "Films" },
+        { "title": "Demon Slayer: Kimetsu no Yaiba Mt. Natagumo Arc", "year": 2021, "tmdb": 802401 },
+        { "title": "Demon Slayer: Kimetsu no Yaiba - The Hashira Meeting Arc", "year": 2021, "tmdb": 811948 },
+        { "title": "Demon Slayer: Kimetsu no Yaiba - Asakusa Arc", "year": 2022, "tmdb": 895003 },
+        { "title": "Demon Slayer: Kimetsu no Yaiba - Tsuzumi Mansion Arc", "year": 2022, "tmdb": 895006 },
+        { "title": "Demon Slayer: Kimetsu no Yaiba - Entertainment District Decisive Battle Arc", "year": 2023, "tmdb": 1490213 },
+        { "title": "Demon Slayer: Kimetsu no Yaiba Entertainment District Infiltration Arc", "year": 2025, "tmdb": 1519421 },
+        { "title": "Demon Slayer: Kimetsu no Yaiba Special Edition Swordsmith Village Arc Part 1", "year": 2025, "tmdb": 1519438 },
+        { "title": "Demon Slayer: Kimetsu no Yaiba Special Edition Swordsmith Village Arc Part 2", "year": 2025, "tmdb": 1519448 },
+        { "title": "Demon Slayer: Kimetsu no Yaiba Special Edition Hashira Training Arc Part 1", "year": 2025, "tmdb": 1519451 },
+        { "title": "Demon Slayer: Kimetsu no Yaiba Special Edition Hashira Training Arc Part 2", "year": 2025, "tmdb": 1519456 },
         { "title": "Demon Slayer: Kimetsu no Yaiba Infinity Castle", "year": 2025, "group": "Films" },
         { "title": "Demon Slayer: Kimetsu no Yaiba – To the Swordsmith Village", "year": 2023, "group": "Theatrical compilations", "optional": true },
-        { "title": "Demon Slayer: Kimetsu no Yaiba – To the Hashira Training", "year": 2024, "group": "Theatrical compilations", "optional": true }
+        { "title": "Demon Slayer: Kimetsu no Yaiba – To the Hashira Training", "year": 2024, "group": "Theatrical compilations", "optional": true },
+        { "title": "Demon Slayer: Kimetsu no Yaiba - Infinity Castle 2", "tmdb": 1311034 },
+        { "title": "Demon Slayer: Kimetsu no Yaiba - Infinity Castle 3", "tmdb": 1311035 }
       ]
     },
     {
@@ -6893,7 +6945,8 @@
       "films": [
         { "title": "Now You See Me", "year": 2013 },
         { "title": "Now You See Me 2", "year": 2016 },
-        { "title": "Now You See Me: Now You Don't", "year": 2025 }
+        { "title": "Now You See Me: Now You Don't", "year": 2025 },
+        { "title": "Untitled Fourth Now You See Me Film", "tmdb": 1457735 }
       ]
     },
     {
@@ -7008,7 +7061,9 @@
       "description": "The demon who works for the good guys – del Toro's films, the 2019 reboot and The Crooked Man.",
       "films": [
         { "title": "Hellboy", "year": 2004, "group": "Guillermo del Toro" },
+        { "title": "Hellboy Animated: Iron Shoes", "year": 2007, "tmdb": 154207 },
         { "title": "Hellboy II: The Golden Army", "year": 2008, "group": "Guillermo del Toro" },
+        { "title": "Hellboy Animated: The Dark Below", "year": 2010, "tmdb": 789978 },
         { "title": "Hellboy", "year": 2019, "group": "Reboots" },
         { "title": "Hellboy: The Crooked Man", "year": 2024, "group": "Reboots" },
         { "title": "Hellboy: Sword of Storms", "year": 2006, "group": "Animated", "optional": true },
@@ -7147,7 +7202,8 @@
       "description": "A San Francisco teenager finds out she is the princess of Genovia.",
       "films": [
         { "title": "The Princess Diaries", "year": 2001 },
-        { "title": "The Princess Diaries 2: Royal Engagement", "year": 2004 }
+        { "title": "The Princess Diaries 2: Royal Engagement", "year": 2004 },
+        { "title": "The Princess Diaries 3", "tmdb": 1077873 }
       ]
     },
     {
@@ -7160,9 +7216,12 @@
       "films": [
         { "title": "Jackass: The Movie", "year": 2002 },
         { "title": "Jackass Number Two", "year": 2006 },
+        { "title": "Jackass 2.5", "year": 2007, "tmdb": 14158 },
         { "title": "Jackass 3D", "year": 2010 },
+        { "title": "Jackass 3.5", "year": 2011, "tmdb": 65851 },
         { "title": "Jackass Presents: Bad Grandpa", "year": 2013 },
         { "title": "Jackass Forever", "year": 2022 },
+        { "title": "Jackass 4.5", "year": 2022, "tmdb": 828853 },
         { "title": "Jackass: Best and Last", "year": 2026 }
       ]
     },
@@ -7215,6 +7274,8 @@
       "description": "Van Damme and Lundgren as dead soldiers brought back to fight again.",
       "films": [
         { "title": "Universal Soldier", "year": 1992 },
+        { "title": "Universal Soldier II: Brothers in Arms", "year": 1998, "tmdb": 10704 },
+        { "title": "Universal Soldier III: Unfinished Business", "year": 1998, "tmdb": 27847 },
         { "title": "Universal Soldier: The Return", "year": 1999 },
         { "title": "Universal Soldier: Regeneration", "year": 2009 },
         { "title": "Universal Soldier: Day of Reckoning", "year": 2012 }
@@ -7240,8 +7301,10 @@
       "color": "#b45309",
       "description": "This is Sparta! Thermopylae and Salamis in Zack Snyder style.",
       "films": [
-        { "title": "300", "year": 2006 },
-        { "title": "300: Rise of an Empire", "year": 2014 }
+        { "title": "300", "year": 2007, "tmdb": 1271 },
+        { "title": "300", "year": 2006, "tmdb": 1271 },
+        { "title": "300: Rise of an Empire", "year": 2014 },
+        { "title": "Meet the Spartans", "year": 2008, "tmdb": 7278, "group": "Parody", "optional": true }
       ]
     },
     {
@@ -7265,7 +7328,8 @@
       "description": "Two Irish brothers clean up Boston – a cult vigilante duo.",
       "films": [
         { "title": "The Boondock Saints", "year": 1999 },
-        { "title": "The Boondock Saints II: All Saints Day", "year": 2009 }
+        { "title": "The Boondock Saints II: All Saints Day", "year": 2009 },
+        { "title": "The Boondock Saints III", "tmdb": 893060 }
       ]
     },
     {
@@ -7278,7 +7342,8 @@
       "films": [
         { "title": "The Blair Witch Project", "year": 1999 },
         { "title": "Book of Shadows: Blair Witch 2", "year": 2000 },
-        { "title": "Blair Witch", "year": 2016 }
+        { "title": "Blair Witch", "year": 2016 },
+        { "title": "Blair Witch Project", "year": 2027, "tmdb": 1122220 }
       ]
     },
     {
@@ -7366,6 +7431,7 @@
         { "title": "Herbie Rides Again", "year": 1974 },
         { "title": "Herbie Goes to Monte Carlo", "year": 1977 },
         { "title": "Herbie Goes Bananas", "year": 1980 },
+        { "title": "The Love Bug", "year": 1997, "tmdb": 32643 },
         { "title": "Herbie: Fully Loaded", "year": 2005 }
       ]
     },
@@ -7398,7 +7464,10 @@
         { "title": "Diary of a Wimpy Kid: The Long Haul", "year": 2017, "group": "Live action" },
         { "title": "Diary of a Wimpy Kid", "year": 2021, "group": "Animated", "optional": true },
         { "title": "Diary of a Wimpy Kid: Rodrick Rules", "year": 2022, "group": "Animated", "optional": true },
-        { "title": "Diary of a Wimpy Kid Christmas: Cabin Fever", "year": 2023, "group": "Animated", "optional": true }
+        { "title": "Diary of a Wimpy Kid Christmas: Cabin Fever", "year": 2023, "group": "Animated", "optional": true },
+        { "title": "Diary of a Wimpy Kid: The Last Straw", "year": 2025, "tmdb": 1392796 },
+        { "title": "Diary of a Wimpy Kid Christmas: The Getaway", "year": 2026, "tmdb": 1519780 },
+        { "title": "Untitled Animated Diary of a Wimpy Kid Film", "tmdb": 1668773 }
       ]
     },
     {
@@ -7448,7 +7517,8 @@
       "description": "A mouse adopted by the Little family in New York.",
       "films": [
         { "title": "Stuart Little", "year": 1999 },
-        { "title": "Stuart Little 2", "year": 2002 }
+        { "title": "Stuart Little 2", "year": 2002 },
+        { "title": "Stuart Little 3: Call of the Wild", "year": 2005, "tmdb": 30178 }
       ]
     },
     {
@@ -7462,6 +7532,9 @@
         { "title": "Doctor Dolittle", "year": 1967 },
         { "title": "Dr. Dolittle", "year": 1998 },
         { "title": "Dr. Dolittle 2", "year": 2001 },
+        { "title": "Dr. Dolittle 3", "year": 2006, "tmdb": 18843 },
+        { "title": "Dr. Dolittle: Tail to the Chief", "year": 2008, "tmdb": 27996 },
+        { "title": "Dr. Dolittle: Million Dollar Mutts", "year": 2009, "tmdb": 19273 },
         { "title": "Dolittle", "year": 2020 }
       ]
     },
@@ -7503,7 +7576,9 @@
         { "title": "Beethoven's 3rd", "year": 2000, "group": "Direct-to-video", "optional": true },
         { "title": "Beethoven's 4th", "year": 2001, "group": "Direct-to-video", "optional": true },
         { "title": "Beethoven's 5th", "year": 2003, "group": "Direct-to-video", "optional": true },
-        { "title": "Beethoven's Big Break", "year": 2008, "group": "Direct-to-video", "optional": true }
+        { "title": "Beethoven's Big Break", "year": 2008, "group": "Direct-to-video", "optional": true },
+        { "title": "Beethoven's Christmas Adventure", "year": 2011, "tmdb": 78080 },
+        { "title": "Beethoven's Treasure Tail", "year": 2014, "tmdb": 295887 }
       ]
     },
     {
@@ -7875,7 +7950,7 @@
         { "title": "The Tin Drum", "year": 1979, "group": "1970s", "label": "West Germany" },
         { "title": "Moscow Does Not Believe in Tears", "year": 1980, "group": "1980s", "label": "Soviet Union" },
         { "title": "Mephisto", "year": 1981, "group": "1980s", "label": "Hungary" },
-        { "title": "To Begin Again", "year": 1982, "group": "1980s", "label": "Spain" },
+        { "title": "Begin the Beguine", "year": 1982, "group": "1980s", "label": "Spain" },
         { "title": "Fanny and Alexander", "year": 1982, "group": "1980s", "label": "Sweden" },
         { "title": "Dangerous Moves", "year": 1984, "group": "1980s", "label": "Switzerland" },
         { "title": "The Official Story", "year": 1985, "group": "1980s", "label": "Argentina" },
@@ -8432,7 +8507,7 @@
         { "title": "The Killer", "year": 1989, "group": "1980s" },
         { "title": "Bullet in the Head", "year": 1990, "group": "1990s" },
         { "title": "Full Contact", "year": 1992, "group": "1990s" },
-        { "title": "Drunken Master II", "year": 1994, "group": "1990s" },
+        { "title": "Drunken Master II", "year": 1994, "tmdb": 12207, "group": "1990s" },
         { "title": "Shaolin Soccer", "year": 2001, "group": "2000s" },
         { "title": "Infernal Affairs", "year": 2002, "group": "2000s" },
         { "title": "Infernal Affairs II", "year": 2003, "group": "2000s" },
@@ -9084,6 +9159,7 @@
         { "title": "Deadly Blessing", "year": 1981, "group": "1980s" },
         { "title": "Swamp Thing", "year": 1982, "group": "1980s" },
         { "title": "A Nightmare on Elm Street", "year": 1984, "group": "1980s" },
+        { "title": "The Hills Have Eyes Part 2", "year": 1985, "tmdb": 18477, "group": "1980s" },
         { "title": "The Serpent and the Rainbow", "year": 1988, "group": "1980s" },
         { "title": "Shocker", "year": 1989, "group": "1980s" },
         { "title": "The People Under the Stairs", "year": 1991, "group": "1990s" },
@@ -9532,7 +9608,7 @@
         { "title": "Adéla ještě nevečeřela", "year": 1977, "group": "1970s" },
         { "title": "Ať žijí duchové!", "year": 1977, "group": "1970s" },
         { "title": "Tajemství hradu v Karpatech", "year": 1981, "group": "1980s" },
-        { "title": "Tři veteráni", "year": 1983, "group": "1980s" }
+        { "title": "Tři veteráni", "year": 1983, "tmdb": 46091, "group": "1980s" }
       ]
     },
     {
@@ -9554,6 +9630,155 @@
         { "title": "Princ a Večernice", "year": 1978, "group": "1970s" },
         { "title": "Kouzelný měšec", "year": 1996, "group": "1990s" },
         { "title": "Pták Ohnivák", "year": 1997, "group": "1990s" }
+      ]
+    },
+    {
+      "slug": "m3gab",
+      "name": "M3GAN",
+      "kind": "series",
+      "color": "#d4a75a",
+      "films": [
+        { "title": "M3GAN", "year": 2022, "tmdb": 536554 },
+        { "title": "M3GAN 2.0", "year": 2025, "tmdb": 1071585 },
+        { "title": "Soulm8te", "year": 2026, "tmdb": 1307118 }
+      ]
+    },
+    {
+      "slug": "taylor-sheridan",
+      "name": "Taylor Sheridan",
+      "kind": "director",
+      "categories": ["crime-thriller"],
+      "color": "#d4a75a",
+      "films": [
+        { "title": "Sicario", "year": 2015, "tmdb": 273481 },
+        { "title": "Hell or High Water", "year": 2016, "tmdb": 338766 },
+        { "title": "Wind River", "year": 2017, "tmdb": 395834, "cover": true },
+        { "title": "Sicario: Day of the Soldado", "year": 2018, "tmdb": 400535 },
+        { "title": "Tom Clancy's Without Remorse", "year": 2021, "tmdb": 567189 },
+        { "title": "Those Who Wish Me Dead", "year": 2021, "tmdb": 578701 }
+      ]
+    },
+    {
+      "slug": "james-wan",
+      "name": "James Wan",
+      "kind": "director",
+      "categories": ["crime-thriller", "horror"],
+      "color": "#d4a75a",
+      "films": [
+        { "title": "Stygian", "year": 1998, "tmdb": 198181 },
+        { "title": "Saw", "year": 2004, "tmdb": 176 },
+        { "title": "Dead Silence", "year": 2007, "tmdb": 14001 },
+        { "title": "Death Sentence", "year": 2007, "tmdb": 11835 },
+        { "title": "Insidious", "year": 2011, "tmdb": 49018 },
+        { "title": "The Conjuring", "year": 2013, "tmdb": 138843 },
+        { "title": "Insidious: Chapter 2", "year": 2013, "tmdb": 91586 },
+        { "title": "Furious 7", "year": 2015, "tmdb": 168259 },
+        { "title": "The Conjuring 2", "year": 2016, "tmdb": 259693 },
+        { "title": "Aquaman", "year": 2018, "tmdb": 297802 },
+        { "title": "Malignant", "year": 2021, "tmdb": 619778, "cover": true },
+        { "title": "Aquaman and the Lost Kingdom", "year": 2023, "tmdb": 572802 }
+      ]
+    },
+    {
+      "slug": "eli-roth",
+      "name": "Eli Roth",
+      "kind": "director",
+      "categories": ["action-adventure", "crime-thriller", "horror"],
+      "color": "#d4a75a",
+      "films": [
+        { "title": "Cabin Fever", "year": 2003, "tmdb": 11547 },
+        { "title": "Hostel", "year": 2006, "tmdb": 1690 },
+        { "title": "Hostel: Part II", "year": 2007, "tmdb": 1691 },
+        { "title": "The Green Inferno", "year": 2014, "tmdb": 171424 },
+        { "title": "Knock Knock", "year": 2015, "tmdb": 263472 },
+        { "title": "Death Wish", "year": 2018, "tmdb": 395990 },
+        { "title": "The House with a Clock in Its Walls", "year": 2018, "tmdb": 463821 },
+        { "title": "Thanksgiving", "year": 2023, "tmdb": 1071215, "cover": true },
+        { "title": "Borderlands", "year": 2024, "tmdb": 365177 },
+        { "title": "Ice Cream Man", "year": 2026, "tmdb": 1477712 }
+      ]
+    },
+    {
+      "slug": "cabin-fever",
+      "name": "Cabin Fever",
+      "kind": "series",
+      "color": "#d4a75a",
+      "films": [
+        { "title": "Cabin Fever", "year": 2003, "tmdb": 11547 },
+        { "title": "Cabin Fever 2: Spring Fever", "year": 2009, "tmdb": 28739 },
+        { "title": "Cabin Fever: Patient Zero", "year": 2014, "tmdb": 157424 },
+        { "title": "Cabin Fever", "year": 2016, "tmdb": 298584 }
+      ]
+    },
+    {
+      "slug": "david-leitch",
+      "name": "David Leitch",
+      "kind": "director",
+      "color": "#d4a75a",
+      "films": [
+        { "title": "Atomic Blonde", "year": 2017, "tmdb": 341013 },
+        { "title": "Deadpool 2", "year": 2018, "tmdb": 383498 },
+        { "title": "Once Upon a Deadpool", "year": 2018, "tmdb": 567604 },
+        { "title": "Fast & Furious Presents: Hobbs & Shaw", "year": 2019, "tmdb": 384018 },
+        { "title": "Bullet Train", "year": 2022, "tmdb": 718930 },
+        { "title": "The Fall Guy", "year": 2024, "tmdb": 746036 },
+        { "title": "How to Rob a Bank", "year": 2026, "tmdb": 1437511 }
+      ]
+    },
+    {
+      "slug": "ghost-house-productions",
+      "name": "Ghost House Productions",
+      "kind": "studio",
+      "categories": ["horror"],
+      "color": "#d4a75a",
+      "films": [
+        { "title": "The Grudge", "year": 2004, "tmdb": 1970 },
+        { "title": "Boogeyman", "year": 2005, "tmdb": 8968 },
+        { "title": "The Last House in the Woods", "year": 2006, "tmdb": 30861 },
+        { "title": "The Grudge 2", "year": 2006, "tmdb": 1975 },
+        { "title": "The Messengers", "year": 2007, "tmdb": 9966 },
+        { "title": "The Substitute", "year": 2007, "tmdb": 12416 },
+        { "title": "Rise: Blood Hunter", "year": 2007, "tmdb": 1872 },
+        { "title": "Room 205", "year": 2007, "tmdb": 16008 },
+        { "title": "Trackman", "year": 2007, "tmdb": 62680 },
+        { "title": "Brotherhood of Blood", "year": 2007, "tmdb": 12682 },
+        { "title": "30 Days of Night", "year": 2007, "tmdb": 4513 },
+        { "title": "Boogeyman 2", "year": 2007, "tmdb": 14913 },
+        { "title": "The Tattooist", "year": 2007, "tmdb": 14440 },
+        { "title": "Dark Floors", "year": 2008, "tmdb": 14145 },
+        { "title": "No Man's Land: The Rise of Reeker", "year": 2008, "tmdb": 18616 },
+        { "title": "Stag Night", "year": 2008, "tmdb": 24421 },
+        { "title": "Seventh Moon", "year": 2008, "tmdb": 24330 },
+        { "title": "Dance of the Dead", "year": 2008, "tmdb": 13094 },
+        { "title": "Boogeyman 3", "year": 2008, "tmdb": 15262 },
+        { "title": "The Children", "year": 2008, "tmdb": 16342 },
+        { "title": "Offspring", "year": 2009, "tmdb": 24868 },
+        { "title": "Messengers 2: The Scarecrow", "year": 2009, "tmdb": 20441 },
+        { "title": "The Grudge 3", "year": 2009, "tmdb": 1977 },
+        { "title": "The Thaw", "year": 2009, "tmdb": 23410 },
+        { "title": "Psych:9", "year": 2010, "tmdb": 55045 },
+        { "title": "30 Days of Night: Dark Days", "year": 2010, "tmdb": 42941 },
+        { "title": "The Possession", "year": 2012, "tmdb": 77883 },
+        { "title": "Evil Dead", "year": 2013, "tmdb": 109428 },
+        { "title": "Poltergeist", "year": 2015, "tmdb": 243688 },
+        { "title": "Don't Breathe", "year": 2016, "tmdb": 300669 },
+        { "title": "The Unholy", "year": 2021, "tmdb": 632357 },
+        { "title": "Don't Breathe 2", "year": 2021, "tmdb": 482373 },
+        { "title": "Nightbooks", "year": 2021, "tmdb": 739990 },
+        { "title": "Evil Dead Rise", "year": 2023, "tmdb": 713704 },
+        { "title": "Evil Dead Burn", "year": 2026, "tmdb": 1212763 }
+      ]
+    },
+    {
+      "slug": "short-circuit",
+      "name": "Short Circuit",
+      "kind": "series",
+      "categories": ["scifi", "comedy", "family"],
+      "color": "#0284c7",
+      "description": "Number 5 is alive! A military robot struck by lightning discovers books, freedom and life.",
+      "films": [
+        { "title": "Short Circuit", "year": 1986 },
+        { "title": "Short Circuit 2", "year": 1988 }
       ]
     }
   ]

@@ -144,7 +144,7 @@ function buildPage(container, universe, categories, reload) {
                     label: item.label, story_order: item.story_order, is_optional: item.is_optional, note: item.note,
                 })),
                 removed: editor.removedIds(),
-            });
+            }, universe.slug);
             toast(TEXTS.adminSaved);
             setLeaveGuard(null);
             reload();

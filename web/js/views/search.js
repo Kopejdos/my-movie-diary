@@ -21,6 +21,7 @@ import { universeCard } from "./universes.js";
 import { watchStatus } from "./universe.js";
 import { searchUsers } from "../social.js";
 import { soonPill } from "./coming-soon.js";
+import { filmOpener } from "./film-detail.js";
 import { fetchCommunityLists } from "../lists.js";
 import { listGrid } from "./list-card.js";
 
@@ -354,9 +355,9 @@ class SearchPage {
         row.className = `film film--search${count > 0 ? " film--watched" : ""}${upcoming ? " film--upcoming" : ""}`;
 
         mount(row,
-            poster(film.poster_path, film.title, "film__poster", false, "small"),
+            filmOpener(film, poster(film.poster_path, film.title, "film__poster", false, "small"), "film-open film-open--poster"),
             h("div", { class: "film__info" },
-                h("h3", { class: "film__title" }, film.title),
+                h("h3", { class: "film__title" }, filmOpener(film, film.title)),
                 h("div", { class: "film__meta" },
                     upcoming ? soonPill(film) : pill(yearOf(film.release_date)),
                     film.runtime ? pill(format("minutes", film.runtime)) : null,

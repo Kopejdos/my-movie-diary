@@ -1,6 +1,8 @@
 // Logika admin panelu: univerza a jejich filmy (přímo přes Supabase – pravidla RLS
 // pustí jen správce) a akce přes Edge Function "admin" (TMDB, uživatelé).
 // Čistá logika – nic nevykresluje.
+// V4.4.6 – admin tým: vlastník (jediný mění roli správce) a deník správců (admin_log):
+// úpravy přímo přes Supabase se zapisují tady (logAdmin), akce Edge Function zapisuje funkce sama.
 
 import { supabase } from "./supabase.js";
 import { clearDataCache } from "./cache.js";
@@ -29,12 +31,49 @@ export const deleteUser = (userId) => callAdmin("delete-user", { user_id: userId
 export const resetUsername = (userId) => callAdmin("reset-username", { user_id: userId });
 
 /** Přidá / odebere odznak uživateli (V4.4 – Elite; pravidla RLS pustí jen správce). */
-export async function setUserBadge(userId, badge, on) {
+export async function setUserBadge(userId, badge, on, username = null) {
     const query = on
         ? supabase.from("user_badges").insert({ user_id: userId, badge })
         : supabase.from("user_badges").delete().eq("user_id", userId).eq("badge", badge);
     const { error } = await query;
     if (error && error.code !== "23505") throw new Error(error.message);       // už ho má = v pořádku
+    logAdmin(on ? "grant-badge" : "remove-badge", username ?? userId, { badge });
+}
+
+// ---------------------------------------------------------------------
+// Admin tým (V4.4.6)
+// ---------------------------------------------------------------------
+
+/**
+ * Zápis do deníku správců – na pozadí, chyba nic nezastaví (např. před migrací V4.4.6).
+ * action = krátký kód (save-collection, delete-collection…), target = slug / nick, details = JSON.
+ */
+export function logAdmin(action, target = null, details = null) {
+    supabase.rpc("admin_log_action", { p_action: action, p_target: target, p_details: details })
+        .then(({ error }) => { if (error) console.warn("admin log:", error.message); }, () => {});
+}
+
+/** Je přihlášený správce vlastník webu? Bez migrace V4.4.6 → false. */
+export async function fetchIsOwner() {
+    const { data, error } = await supabase.rpc("is_owner");
+    return !error && data === true;
+}
+
+/** Posledních N záznamů deníku: [{ id, created_at, admin_name, action, target, details }]. */
+export async function fetchAdminLog(limit = 200) {
+    const { data, error } = await supabase.rpc("admin_log_recent", { p_limit: limit });
+    if (error) throw new Error(error.message);
+    return data ?? [];
+}
+
+/**
+ * Co smí správce s účtem v seznamu uživatelů (V4.4.6) – stejná pravidla jako Edge Function admin:
+ * vlastníka nikdo, jiného správce jen vlastník, sám sebe nikdo; roli správce mění jen vlastník.
+ * { manage: smazat / reset nicku, role: udělit / odebrat správce }
+ */
+export function userPermissions(user, { selfId, isOwner }) {
+    if (!user || user.id === selfId || user.is_owner) return { manage: false, role: false };
+    return { manage: !user.is_admin || isOwner, role: isOwner };
 }
 
 // Požadavky na filmy (V3.5.1)
@@ -140,10 +179,12 @@ export async function listBlockedWords() {
 /** Přidá slovo; word = malá písmena a číslice, mode = "contains" | "exact". */
 export async function addBlockedWord(word, mode) {
     await supabase.from("blocked_words").insert({ word, match_mode: mode }).then(check);
+    logAdmin("add-blocked-word", word, { mode });
 }
 
-export async function removeBlockedWord(id) {
+export async function removeBlockedWord(id, word = null) {
     await supabase.from("blocked_words").delete().eq("id", id).then(check);
+    logAdmin("remove-blocked-word", word ?? String(id));
 }
 
 // ---------------------------------------------------------------------
@@ -175,16 +216,19 @@ export async function createUniverse({ name, slug, description, color }) {
         .from("universes").select("sort_order").order("sort_order", { ascending: false }).limit(1)
         .then(check);
     const sortOrder = (last[0]?.sort_order ?? 0) + 10;
-    return await supabase
+    const created = await supabase
         .from("universes")
         .insert({ name, slug, description: description || null, color: color || null, sort_order: sortOrder })
         .select("id, slug")
         .single()
         .then(check);
+    logAdmin("create-collection", created.slug, { name });
+    return created;
 }
 
-export async function deleteUniverse(id) {
+export async function deleteUniverse(id, slug = null) {
     await supabase.from("universes").delete().eq("id", id).then(check);
+    logAdmin("delete-collection", slug ?? String(id));
 }
 
 /** Prohodí pořadí dvou univerz (posun nahoru / dolů na přehledu). */
@@ -205,14 +249,22 @@ export async function swapUniverseOrder(a, b) {
  * categories = ID kategorií nebo null, items = všechny filmy v novém pořadí (nové bez id – musí být
  * v katalogu, viz addFilmToCatalog), removed = ID odebraných položek.
  */
-export async function saveCollection(universeId, { universe, categories, items, removed }) {
-    return await supabase.rpc("admin_save_collection", {
+export async function saveCollection(universeId, { universe, categories, items, removed }, slug = null) {
+    const result = await supabase.rpc("admin_save_collection", {
         p_universe_id: universeId,
         p_universe: universe,
         p_categories: categories,
         p_items: items,
         p_removed: removed,
     }).then(check);
+    logAdmin("save-collection", slug ?? String(universeId), {
+        details: universe ? Object.keys(universe) : [],
+        categories: categories !== null && categories !== undefined,
+        films: items?.length ?? null,
+        added: (items ?? []).filter((item) => !item.id).length,
+        removed: removed?.length ?? 0,
+    });
+    return result;
 }
 
 // ---------------------------------------------------------------------
@@ -242,17 +294,20 @@ export async function fetchTranslationData(langs) {
 
 /** Uloží opravu názvu / popisu kolekce v jazyce (source "manual" = od správce, "tmdb" = převzatý z TMDB). */
 export async function saveCollectionTranslation(universeId, lang, { name, description, source }) {
-    return await supabase.from("universe_translations")
+    const row = await supabase.from("universe_translations")
         .upsert({ universe_id: universeId, lang, name, description, source, updated_at: new Date().toISOString() },
             { onConflict: "universe_id,lang" })
         .select("universe_id, lang, name, description, source, updated_at")
         .single()
         .then(check);
+    logAdmin("save-translation", String(universeId), { lang, source });
+    return row;
 }
 
 /** Smaže opravu – web zase vezme překlad ze souboru (nebo angličtinu). */
 export async function deleteCollectionTranslation(universeId, lang) {
     await supabase.from("universe_translations").delete().eq("universe_id", universeId).eq("lang", lang).then(check);
+    logAdmin("delete-translation", String(universeId), { lang });
 }
 
 /** Návrhy názvů sérií z TMDB (Edge Function admin, collection-names) – všechny série nebo vybrané. */
@@ -262,8 +317,10 @@ export const checkCollectionNames = (universeIds = []) => callAdmin("collection-
 export async function saveCollectionTranslations(rows) {
     if (rows.length === 0) return [];
     const now = new Date().toISOString();
-    return await supabase.from("universe_translations")
+    const saved = await supabase.from("universe_translations")
         .upsert(rows.map((row) => ({ ...row, updated_at: now })), { onConflict: "universe_id,lang" })
         .select("universe_id, lang, name, description, source, updated_at")
         .then(check);
+    logAdmin("save-translations", null, { count: rows.length });
+    return saved;
 }

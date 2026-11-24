@@ -3,6 +3,14 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.4.6 – November 2026
+- Tap a movie's poster or title to open its details – a bigger poster, the story, runtime, every collection it's in and a YouTube trailer
+- Czech, German and other non-English movies now show their original title in that language when TMDB has no translation (Básníci in Czech)
+- 19 movies that the import had matched to the wrong film are fixed – 300, The Raid, Hostel, Millennium Actress, Drunken Master II and more
+- Bud Spencer & Terence Hill: their solo movies Charleston, Bomber, Thieves and Robbers, Aladdin, Man of the East, March or Die and more
+- Short Circuit 2 and Real Steel in AI & Robots, plus a new Short Circuit series
+- For admins: a team with an owner, an activity log of every change in the admin panel and an admin guide
+
 ## V4.4.5 – November 2026
 - Coming soon has a search box – find upcoming movies by title, year or collection
 - Filter Coming soon like the Collections page – by collection type and genre – or show just your watchlist

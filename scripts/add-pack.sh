@@ -7,7 +7,8 @@
 #
 # 1. sync-seed – nejdřív se do seedu propíšou změny z aplikace (ať balíček nic nepřepíše),
 # 2. add-pack.mjs – nové kolekce z balíčku na konec seedu, existujícím doplní kategorie / popis,
-# 3. import.sh – naimportuje kolekce z balíčku (a doplní překlady názvů).
+# 3. import.sh – naimportuje kolekce z balíčku (a doplní překlady názvů); podruhé už
+#    nesynchronizuje (MMD_SKIP_SYNC=1) – vrátila by úpravy z balíčku zpět (oprava V4.4.6).
 # Jde spustit opakovaně (podruhé jen znovu naimportuje). Pak seed commitni.
 # Klíč MMD_ADMIN_KEY se zadává jen jednou (skrytě).
 # =====================================================================
@@ -28,6 +29,10 @@ bash scripts/sync-seed.sh
 output=$(node scripts/add-pack.mjs "$1")
 echo "$output" | sed '$d'                 # souhrn (bez posledního řádku se slugy)
 slugs=$(echo "$output" | tail -n 1)
+if [ -z "$slugs" ]; then
+    echo "Balíček nic nemění – není co importovat."
+    exit 0
+fi
 
 # shellcheck disable=SC2086              # slugy se mají rozdělit na jednotlivé argumenty
-bash scripts/import.sh $slugs
+MMD_SKIP_SYNC=1 bash scripts/import.sh $slugs

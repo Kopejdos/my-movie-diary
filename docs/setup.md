@@ -167,6 +167,35 @@ Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny
    where id = (select id from auth.users where email = 'adiskop987+admin@gmail.com');
    ```
 
+### 7b. Další správce a vlastník (V4.4.6)
+
+Další správce dostane **vlastní samostatný účet jen pro správu** – stejně jako hlavní admin účet výš.
+Na svém osobním účtu zůstane běžný uživatel a heslo k hlavnímu admin účtu nikdy nedostane.
+
+1. Po migraci `20261124100000_admin_team_film_details.sql` jednou nastav **vlastníka** (jen ten smí dělat
+   a rušit správce a měnit účty jiných správců):
+   ```sql
+   update public.profiles
+   set is_owner = true
+   where id = (select id from auth.users where email = 'adiskop987+admin@gmail.com');
+   ```
+2. Supabase → **Authentication → Users → Add user → Create new user**: e-mail nového správce
+   (např. `spravce@example.com`), dočasné heslo, **Auto Confirm User**. Jeden e-mail = jeden účet: když
+   už má na webu osobní účet se stejnou adresou, použij jinou (nebo variantu s `+admin`, pokud ji jeho
+   pošta umí – Gmail ano, Seznam ne).
+3. SQL Editor (nick bez diakritiky, 3–20 znaků):
+   ```sql
+   update public.profiles
+   set username = 'nick_spravce', is_admin = true
+   where id = (select id from auth.users where email = 'spravce@example.com');
+   ```
+   Roli jde od V4.4.6 dát i z webu: přihlášený vlastník → Admin → Users → **Make admin**.
+4. Dočasné heslo pošli jinou cestou než e-mail s adresou účtu (SMS, osobně); správce si ho hned změní
+   v **Settings → Change password**. Návod pro správce: `docs/admin-guide.md` (odkaz v admin panelu).
+5. Když měl k hlavnímu admin účtu přístup někdo další, změň jeho heslo; když znal i `MMD_ADMIN_KEY`
+   (skripty), vygeneruj nový a ulož ho do **Edge Functions → Secrets** – správce ho nepotřebuje.
+6. Odebrání správce: vlastník → Users → **Remove admin** (nebo v SQL `is_admin = false`).
+
 ## 8. Admin panel
 
 1. Migrace `20261105050000_admin_panel.sql` (pravidla pro správce).
@@ -253,6 +282,12 @@ Vypnutí v nouzi: v Supabase vypnout *Enable CAPTCHA protection* (web pak tokeny
 31. **Coming soon: hledání a filtr (V4.4.5):** bez migrace a beze změn funkcí – `./scripts/add-pack.sh
     supabase/packs/v4.4.5-coming-soon.json` (balíček jen přidá 14 filmů do existujících kolekcí – `addFilms`)
     a commit seedu.
+32. **Optimalizace rozhraní a rozšíření admin týmu (V4.4.6):** migrace `20261124100000_admin_team_film_details.sql`
+    (vlastník, deník správců, původní jazyk filmu, trailer), pak znovu nasadit Edge Functions **`tmdb`** a **`admin`**
+    (Verify JWT dál vypnuté). Potom `./scripts/add-pack.sh supabase/packs/v4.4.6-fixes.json` (opravy špatně
+    spárovaných filmů, samostatné filmy Bud Spencera a Terence Hilla, Short Circuit) – na konci importu se spustí
+    i překlady, které si zjistí původní jazyk filmů (české filmy česky); kdyby se přerušily, `./scripts/translate.sh`.
+    Commit seedu. Nakonec vlastník a další správce podle **7b**.
 
 **Seed a admin panel (od V3.5.2.1):** seed je zdroj pravdy pro import, ale **úpravy z aplikace se neztratí** –
 databáze si je pamatuje (`universe_items.source`, `universes.source`, tabulka `seed_removals`) a `import.sh`

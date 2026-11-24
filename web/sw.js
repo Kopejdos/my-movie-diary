@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v40";       // V4.4.5: hledání a filtr v Coming soon; od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v41";       // V4.4.6: detail filmu, admin tým a deník správců; od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline
@@ -56,6 +56,9 @@ const SHELL = [
     "js/perks.js",
     "js/badges.js",
     "js/collection-texts.js",
+    "js/soon-filter.js",
+    "js/film-detail-data.js",
+    "js/admin-log.js",
     "js/views/universes.js",
     "js/views/universe.js",
     "js/views/watchlist.js",
@@ -82,6 +85,7 @@ const SHELL = [
     "js/views/list-card.js",
     "js/views/list-button.js",
     "js/views/film-controls.js",
+    "js/views/film-detail.js",
     "js/views/modal.js",
     "js/views/admin-reports.js",
     "js/views/achievements.js",
@@ -95,6 +99,7 @@ const SHELL = [
     "js/views/admin-universe.js",
     "js/views/admin-builder.js",
     "js/views/admin-translations.js",
+    "js/views/admin-activity.js",
     "js/views/guide.js",
     "js/views/help.js",
     "js/views/not-found.js",

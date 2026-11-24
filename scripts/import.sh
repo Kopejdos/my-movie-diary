@@ -12,6 +12,7 @@
 # změnilo v aplikaci (požadavky, admin panel – V3.5.2, V3.5.2.1). Změněný seed pak commitni.
 # Reporty se ukládají do složky import-reports/ (Git ji ignoruje).
 # Na konci se samy doplní přeložené názvy filmů, které ještě chybí (scripts/translate.sh, V4.2.2).
+# Filmy, které import přiřadil k filmu s jiným názvem („Title differs“), se vypíšou ke kontrole (V4.4.6).
 # =====================================================================
 
 set -euo pipefail
@@ -46,8 +47,12 @@ fi
 mkdir -p "$REPORTS"
 
 # Nejdřív propsat do seedu změny z aplikace (požadavky, admin panel), ať je seed úplný
-# a import je převezme jako obyčejné položky – nic z aplikace se tak nepřepíše
-MMD_KEY="$KEY" bash scripts/sync-seed.sh
+# a import je převezme jako obyčejné položky – nic z aplikace se tak nepřepíše.
+# add-pack.sh synchronizuje sám ještě před úpravou seedu a předá MMD_SKIP_SYNC=1 – druhá
+# synchronizace by u kolekcí upravených v aplikaci vrátila úpravy z balíčku zpět (V4.4.6).
+if [ "${MMD_SKIP_SYNC:-}" != "1" ]; then
+    MMD_KEY="$KEY" bash scripts/sync-seed.sh
+fi
 
 for slug in "${targets[@]}"; do
     name="${slug:-all}"
@@ -69,6 +74,9 @@ for slug in "${targets[@]}"; do
         warnings=$(grep -c '→' "$REPORTS/$name.json" || true)
         soon=$(awk '/"comingSoon": \[$/{f=1; next} f && /\]/{f=0} f{c++} END{print c+0}' "$REPORTS/$name.json")
         echo "✓ $name – ${summary:-?} filmů (z toho Coming soon: $soon), varování: $warnings  ($REPORTS/$name.json)"
+        # Jiný název = možná úplně jiný film (V4.4.6) – vypsat ke kontrole
+        grep 'Title differs' "$REPORTS/$name.json" | sed -e 's/^[[:space:]]*"//' -e 's/",\{0,1\}[[:space:]]*$//' -e 's/\\"/"/g' \
+            | while IFS= read -r line; do echo "    ⚠ ke kontrole: $line"; done || true
     fi
 done
 

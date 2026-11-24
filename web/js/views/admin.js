@@ -1,5 +1,7 @@
 // Obrazovky admin panelu: přehled univerz (#/admin), uživatelé (#/admin/users)
 // a zakázaná slova v nickách (#/admin/words).
+// V4.4.6 – admin tým: záložka Activity (deník správců, admin-activity.js), odkaz na návod pro
+// správce (docs/admin-guide.md na GitHubu), v Users štítek Owner a tlačítka podle práv.
 // V3.5.2.2: v každé záložce pole pro hledání (admin-search.js) – filtruje se okamžitě
 // v prohlížeči; kolekce jdou najít i podle filmu, který obsahují.
 
@@ -8,6 +10,7 @@ import {
     listUniversesForAdmin, createUniverse, deleteUniverse, swapUniverseOrder, slugify,
     listUsers, setUserAdmin, deleteUser, resetUsername, setUserBadge,
     listBlockedWords, addBlockedWord, removeBlockedWord, countCatalogFilms, nextGoal,
+    fetchIsOwner, userPermissions,
 } from "../admin.js";
 import { setAccent } from "../theme.js";
 import { TEXTS, format, movies, collections, LOCALE } from "../texts.js";
@@ -30,13 +33,18 @@ export function requireAdminView(container) {
     return false;
 }
 
+/** Návod pro správce (V4.4.6) – Markdown v repozitáři, GitHub ho zobrazí. */
+export const ADMIN_GUIDE_URL = "https://github.com/Kopejdos/my-movie-diary/blob/main/docs/admin-guide.md";
+
 /** Nadpis a záložky admin panelu. */
 export function adminHeader(active) {
     const tab = (href, label, key) =>
         h("a", { class: `tab${active === key ? " tab--active" : ""}`, href }, label);
     return h("section", { class: "page-header" },
         h("span", { class: "eyebrow" }, TEXTS.navAdmin),
-        h("h1", {}, TEXTS.adminTitle),
+        h("div", { class: "admin-title" },
+            h("h1", {}, TEXTS.adminTitle),
+            h("a", { class: "btn btn--small", href: ADMIN_GUIDE_URL, target: "_blank", rel: "noopener" }, `📖 ${TEXTS.adminGuide} ↗`)),
         h("nav", { class: "tabs" },
             tab("#/admin", TEXTS.adminTabUniverses, "universes"),
             tab("#/admin/builder", TEXTS.adminTabBuilder, "builder"),
@@ -45,6 +53,7 @@ export function adminHeader(active) {
             tab("#/admin/words", TEXTS.adminTabWords, "words"),
             tab("#/admin/requests", TEXTS.adminTabRequests, "requests"),
             tab("#/admin/reports", TEXTS.adminTabReports, "reports"),
+            tab("#/admin/activity", TEXTS.adminTabActivity, "activity"),
         ),
     );
 }
@@ -216,7 +225,7 @@ function universeRow(universe, previous, next, reload, { query = "", film = null
                 class: "btn btn--small btn--danger", type: "button",
                 onClick: () => {
                     if (!window.confirm(format("adminConfirmDeleteUniverse", universe.name))) return;
-                    run(() => deleteUniverse(universe.id), TEXTS.adminDeleted);
+                    run(() => deleteUniverse(universe.id, universe.slug), TEXTS.adminDeleted);
                 },
             }, TEXTS.adminDelete),
         ),
@@ -291,9 +300,9 @@ export async function adminUsersView(container, context) {
     document.title = `${TEXTS.adminTabUsers} · ${TEXTS.appName}`;
     mount(container, adminHeader("users"), loadingView());
 
-    let users;
+    let users, isOwner;
     try {
-        users = await listUsers();
+        [users, isOwner] = await Promise.all([listUsers(), fetchIsOwner()]);
     } catch (error) {
         if (!context.isCurrent()) return;
         mount(container, adminHeader("users"), errorView(format("errorGeneric", error.message),
@@ -333,7 +342,8 @@ export async function adminUsersView(container, context) {
         search.setCount(shown.length, users.length);
         mount(list, shown.length === 0
             ? noResults(() => search.reset())
-            : h("ol", { class: "admin-list" }, shown.map((user) => userRow(user, user.id === selfId, reload, query))));
+            : h("ol", { class: "admin-list" }, shown.map((user) =>
+                userRow(user, user.id === selfId, userPermissions(user, { selfId, isOwner }), reload, query))));
     }
     render();
 
@@ -343,12 +353,14 @@ export async function adminUsersView(container, context) {
             h("h2", {}, TEXTS.adminTabUsers),
             h("span", { class: "muted" }, format("adminUsersCount", users.length)),
         ),
+        // Kdo co smí (V4.4.6) – roli správce mění jen vlastník
+        h("p", { class: "muted admin-team-hint" }, isOwner ? TEXTS.adminTeamOwnerHint : TEXTS.adminTeamHint),
         search.element,
         list,
     );
 }
 
-function userRow(user, isSelf, reload, query = "") {
+function userRow(user, isSelf, can, reload, query = "") {
     async function run(action, message) {
         try {
             await action();
@@ -373,7 +385,8 @@ function userRow(user, isSelf, reload, query = "") {
             h("span", { class: "muted admin-row__email" }, highlight(user.email ?? "", query)),
             h("div", { class: "pills" },
                 user.flagged ? h("span", { class: "pill pill--danger", title: TEXTS.adminFlaggedHint }, `⚠ ${TEXTS.adminFlagged}`) : null,
-                user.is_admin ? pill(TEXTS.profileAdmin, true) : null,
+                user.is_owner ? pill(`👑 ${TEXTS.adminOwner}`, true) : null,
+                user.is_admin && !user.is_owner ? pill(TEXTS.profileAdmin, true) : null,
                 (user.badges ?? []).includes("elite") ? badgeChip("elite") : null,
                 isSelf ? pill(TEXTS.adminYou, true) : null,
                 user.level ? pill(format("levelLabel", user.level)) : null,
@@ -392,30 +405,34 @@ function userRow(user, isSelf, reload, query = "") {
                 onClick: () => {
                     const on = !(user.badges ?? []).includes("elite");
                     run(async () => {
-                        await setUserBadge(user.id, "elite", on);
+                        await setUserBadge(user.id, "elite", on, user.username);
                         forgetBadges(user.username);
                     }, on ? format("adminEliteGranted", name) : format("adminEliteRemoved", name));
                 },
             }, (user.badges ?? []).includes("elite") ? TEXTS.adminEliteRemove : TEXTS.adminEliteGrant),
-            isSelf ? null : h("button", {
+            // Roli správce mění jen vlastník; vlastníka a sebe nikdo (V4.4.6)
+            can.role ? h("button", {
                 class: "btn btn--small", type: "button",
-                onClick: () => run(() => setUserAdmin(user.id, !user.is_admin), TEXTS.adminSaved),
-            }, user.is_admin ? TEXTS.adminRemoveAdmin : TEXTS.adminMakeAdmin),
-            isSelf ? null : h("button", {
+                onClick: () => {
+                    if (!user.is_admin && !window.confirm(format("adminConfirmMakeAdmin", name))) return;
+                    run(() => setUserAdmin(user.id, !user.is_admin), TEXTS.adminSaved);
+                },
+            }, user.is_admin ? TEXTS.adminRemoveAdmin : TEXTS.adminMakeAdmin) : null,
+            can.manage ? h("button", {
                 class: `btn btn--small${user.flagged ? " btn--primary" : ""}`, type: "button",
                 title: TEXTS.adminResetNicknameHint,
                 onClick: () => {
                     if (!window.confirm(format("adminConfirmResetNickname", name))) return;
                     run(() => resetUsername(user.id), TEXTS.adminNicknameReset);
                 },
-            }, TEXTS.adminResetNickname),
-            isSelf ? null : h("button", {
+            }, TEXTS.adminResetNickname) : null,
+            can.manage ? h("button", {
                 class: "btn btn--small btn--danger", type: "button",
                 onClick: () => {
                     if (!window.confirm(format("adminConfirmDeleteUser", name))) return;
                     run(() => deleteUser(user.id), TEXTS.adminDeleted);
                 },
-            }, TEXTS.adminDelete),
+            }, TEXTS.adminDelete) : null,
         ),
     );
 }
@@ -479,7 +496,7 @@ export async function adminWordsView(container, context) {
                 onClick: async (event) => {
                     event.currentTarget.disabled = true;
                     try {
-                        await removeBlockedWord(w.id);
+                        await removeBlockedWord(w.id, w.word);
                         toast(format("adminWordRemoved", w.word));
                         reload();
                     } catch (error) {

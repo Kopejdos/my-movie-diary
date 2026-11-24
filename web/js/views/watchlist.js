@@ -7,6 +7,7 @@ import { setAccent } from "../theme.js";
 import { TEXTS, format, movies } from "../texts.js";
 import { h, mount, poster, pill, yearOf, formatDate, toast, loadingView, errorView } from "../dom.js";
 import { soonPill } from "./coming-soon.js";
+import { filmOpener } from "./film-detail.js";
 import { collectionPill } from "./film-controls.js";
 
 export async function watchlistView(container, context) {
@@ -89,9 +90,9 @@ export async function watchlistView(container, context) {
         });
 
         return h("li", { class: `film film--watchlist${item.upcoming ? " film--upcoming" : ""}` },
-            poster(film.poster_path, film.title, "film__poster", false, "small"),
+            filmOpener(film, poster(film.poster_path, film.title, "film__poster", false, "small"), "film-open film-open--poster"),
             h("div", { class: "film__info" },
-                h("h3", { class: "film__title" }, film.title),
+                h("h3", { class: "film__title" }, filmOpener(film, film.title)),
                 h("div", { class: "film__meta" },
                     item.upcoming ? soonPill(film) : pill(yearOf(film.release_date)),
                     film.runtime ? pill(format("minutes", film.runtime)) : null,
