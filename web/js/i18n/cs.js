@@ -669,7 +669,7 @@ export default {
     deleteConfirmLabel: "Pro potvrzení napiš svou přezdívku",
     deleteButton: "Navždy smazat můj účet",
     deleteDone: "Tvůj účet je smazaný. Měj se! 👋",
-    deleteAdmin: "Správce tady svůj účet smazat nemůže – nejdřív předej roli správce.",
+    deleteAdmin: "Agent tady svůj účet smazat nemůže – nejdřív ho vlastník musí odebrat z agentů.",
     errorEmail: "Zadej platnou e-mailovou adresu.",
     errorPasswordShort: "Heslo musí mít aspoň {0} znaků.",
     errorPasswordWeak: "Heslo musí obsahovat aspoň jedno písmeno a jednu číslici.",
@@ -733,7 +733,7 @@ export default {
     profileChooseNickname: "Vyber si přezdívku – uvidí ji tví přátelé.",
     profileSave: "Uložit přezdívku",
     profileSaved: "Přezdívka uložena.",
-    profileAdmin: "Správce",
+    profileAdmin: "Agent",
 
     navAdmin: "Admin",
     notFoundTitle: "Stránka nenalezena",

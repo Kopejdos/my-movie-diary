@@ -6,7 +6,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 
 🌐 **Live:** https://kopejdos.github.io/my-movie-diary/
 
-> **V4.4.6** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
+> **V4.4.6.1** – see [CHANGELOG.md](CHANGELOG.md) for what's new and [docs/decisions.md](docs/decisions.md) for the roadmap.
 
 ## Features
 
@@ -35,7 +35,7 @@ Instead of a simple checkbox, every viewing is logged, so you can see how many t
 - Sign in with email or nickname & password, or with Google; password reset and bot protection (Cloudflare Turnstile)
 - Settings ⚙ – System / Light / Dark mode, Modern or Paper classic style, collection colors or one fixed color, compact density and reduced animations; your defaults and account in one place
 - Admin panel: collections, movies (search TMDB right from the app), users and requests – an editor that saves every change of a collection with one Save, a new collection from a TMDB series or a request in one click; changes are written back into the seed automatically; new parts of TMDB series are spotted for you
-- An admin team – the owner grants the admin role, every change in the admin panel goes into an activity log, and an [admin guide](docs/admin-guide.md) explains every tab
+- An admin team of agents – the owner grants the agent role, every change in the admin panel goes into an activity log, and an [admin guide](docs/admin-guide.md) explains every tab
 - Collection builder for admins: a person's filmography, two people together (Bud Spencer & Terence Hill), a studio or a TMDB keyword → tick the movies → a new collection; a progress bar towards the next catalog goal
 - Five languages – English, Čeština, Deutsch, Español, Українська (follows your browser, or pick one in Settings), including translated movie titles from TMDB and translated collections (admins can check them against TMDB and fix them in the app)
 - A short tour for newcomers and a Help page – what every button does and the rules

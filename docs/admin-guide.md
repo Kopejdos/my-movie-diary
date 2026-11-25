@@ -15,9 +15,11 @@ jen anglicky; tenhle návod je česky a v panelu na něj vede tlačítko **📖 
 | Role | Co smí |
 |---|---|
 | **Vlastník** (👑 Owner) | všechno; jako jediný dělá a ruší správce, mění účty jiných správců; spouští skripty (balíčky, import, překlady) a nasazuje novou verzi |
-| **Správce** (Administrator) | kolekce, filmy, překlady, požadavky, nahlášené seznamy, nicky a běžné uživatele |
+| **Agent** (správce) | kolekce, filmy, překlady, požadavky, nahlášené seznamy, nicky a běžné uživatele |
 
-- Správce **nemůže** udělit ani odebrat roli správce, smazat jiného správce ani mu resetovat nick.
+- Správci se v rozhraní jmenují **agenti** (od V4.4.6.1) a mají nick ve tvaru `Agent_` + písmeno (`Agent_A`,
+  `Agent_F`). Vyhrazená slova (*admin*, *agent*, *staff*…) smí mít v nicku jen agent – urážky nesmí nikdo.
+- Agent **nemůže** udělit ani odebrat roli agenta, smazat jiného správce ani mu resetovat nick.
   To hlídá i server (Edge Function `admin`), ne jen tlačítka.
 - Vlastník se nastavuje jen v SQL (viz `docs/setup.md`, „Další správce“) – z webu to nejde.
 - Správcovský účet je **samostatný účet jen pro správu** (vlastní e-mail a heslo). Na svém osobním
@@ -104,19 +106,25 @@ Názvy a popisy kolekcí v češtině, němčině, španělštině a ukrajinšti
 
 ### Users – uživatelé
 
-Hledání podle nicku nebo e-mailu, filtr **Admins**. U uživatele: úroveň, počet zhlédnutí, veřejný /
+Hledání podle nicku nebo e-mailu, filtr **Agents**. U uživatele: úroveň, počet zhlédnutí, veřejný /
 soukromý profil, způsob přihlášení.
 
 - **★ Make Elite / Remove Elite** – odznak Elite u nicku (jen ozdoba, nemění limity).
 - **Reset nickname** – dá automatický nick a profil přepne na soukromý (nick porušuje pravidla).
 - **Delete** – trvale smaže účet a všechna jeho zhlédnutí. Nejde vrátit.
-- **Make admin / Remove admin** – jen vlastník.
+- **Make agent / Remove agent** – jen vlastník.
 
 ### Nicknames – zakázaná slova
 
 Slova, která nesmí být v nicku. **Anywhere in the nickname** = kdekoli v nicku, **Whole nickname** = jen
-celý nick. Čísla a znaky se berou jako písmena (k0k0t = kokot). Nick se slovem dostane v Users příznak
-*Nickname breaks the rules* – resetuj ho.
+celý nick. Čísla a znaky se berou jako písmena (k0k0t = kokot); podtržítko a pomlčka se při porovnání
+vynechají, v nicku jsou ale povolené (*Movie_Fan*). Nick se slovem dostane v Users příznak *Nickname breaks
+the rules* – resetuj ho.
+
+- **🛡 Reserved** – vyhrazené slovo (*admin*, *agent*, *moderator*, *staff*, *official*…): běžný uživatel ho
+  v nicku mít nesmí, aby se nevydával za tým webu, agent ano (*Agent_F*). V názvech seznamů se nekontroluje.
+  Tlačítkem **Reserve for agents / Block for everyone** slovo přepneš, u nového slova zaškrtni *Reserved*.
+- Urážky a vulgarity nech **zakázané pro všechny** – ty nesmí mít ani agent.
 
 ### Requests – požadavky
 

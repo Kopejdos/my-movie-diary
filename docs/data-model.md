@@ -321,6 +321,7 @@ přidat / odebrat jen správce (`is_admin()`). **`badges_for(usernames[])`** –
 | `id` | `bigint` | identifikátor |
 | `word` | `text` | slovo – malá písmena a číslice, 2–30 znaků |
 | `match_mode` | `text` | `contains` = kdekoli v nicku, `exact` = celý nick (pro slova, která by blokovala nevinné nicky) |
+| `reserved` | `boolean` | vyhrazené slovo (V4.4.6.1) – zakázané běžným uživatelům, agent (správce) ho v nicku mít smí; v textech seznamů se nekontroluje |
 | `created_at` | `timestamptz` | kdy bylo přidáno |
 
 ### `heartbeat` – keep-alive
@@ -375,10 +376,12 @@ Výpočty běží v databázi, ne v prohlížeči – web dostane hotová čísl
 **Moderace nicků (V2.3):**
 - **`normalize_username(text)`** – malá písmena, `0→o 1→i 3→e 4→a 5→s 7→t 8→b @→a $→s`, bez ostatních znaků,
   sloučená opakovaná písmena (`F_u-u-uck` → `fuck`, `k0k0t` → `kokot`).
-- **`is_username_allowed(username)`** – neobsahuje nick zakázané slovo? (smí i nepřihlášený; automatický nick
-  `user_xxxxxxxx` je vždy povolený).
+- **`username_allowed(username, staff)`** (V4.4.6.1) – neobsahuje nick zakázané slovo? `staff = true` = nick agenta,
+  vyhrazená slova (`reserved`) se pak nepočítají; automatický nick `user_xxxxxxxx` je vždy povolený.
+- **`is_username_allowed(username)`** – totéž pro web (smí i nepřihlášený); od V4.4.6.1 přihlášený agent smí
+  vyhrazená slova.
 - **Trigger `profiles_username_allowed`** – při každém vložení nebo změně nicku; zakázaný nick skončí chybou
-  `username_not_allowed`.
+  `username_not_allowed` (agent – `is_admin` v témže řádku – smí vyhrazená slova).
 - **`handle_new_user()`** – při registraci se zakázaným, neplatným nebo obsazeným nickem dostane účet automatický
   nick (uživatel si pak zvolí jiný).
 - **`flagged_profile_ids()`** – účty (mimo správce), jejichž nick porušuje pravidla; jen `service_role`

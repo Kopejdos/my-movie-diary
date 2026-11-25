@@ -186,10 +186,13 @@ Na svém osobním účtu zůstane běžný uživatel a heslo k hlavnímu admin �
 3. SQL Editor (nick bez diakritiky, 3–20 znaků):
    ```sql
    update public.profiles
-   set username = 'nick_spravce', is_admin = true
+   set username = 'Agent_X', is_admin = true
    where id = (select id from auth.users where email = 'spravce@example.com');
    ```
-   Roli jde od V4.4.6 dát i z webu: přihlášený vlastník → Admin → Users → **Make admin**.
+   Od V4.4.6.1 se správci jmenují **agenti** a nick mají `Agent_` + písmeno (`Agent_A`). Vyhrazená slova
+   (*admin*, *agent*, *staff*…) smí v nicku mít jen agent – migrace `20261125100000_agent_nicknames.sql`.
+   Roli jde od V4.4.6 dát i z webu: přihlášený vlastník → Admin → Users → **Make agent**; nick si pak agent
+   změní sám v Settings.
 4. Dočasné heslo pošli jinou cestou než e-mail s adresou účtu (SMS, osobně); správce si ho hned změní
    v **Settings → Change password**. Návod pro správce: `docs/admin-guide.md` (odkaz v admin panelu).
 5. Když měl k hlavnímu admin účtu přístup někdo další, změň jeho heslo; když znal i `MMD_ADMIN_KEY`
@@ -288,6 +291,9 @@ Na svém osobním účtu zůstane běžný uživatel a heslo k hlavnímu admin �
     spárovaných filmů, samostatné filmy Bud Spencera a Terence Hilla, Short Circuit) – na konci importu se spustí
     i překlady, které si zjistí původní jazyk filmů (české filmy česky); kdyby se přerušily, `./scripts/translate.sh`.
     Commit seedu. Nakonec vlastník a další správce podle **7b**.
+33. **Agenti (V4.4.6.1):** migrace `20261125100000_agent_nicknames.sql` (vyhrazená slova v nickách – agent smí
+    *admin*, *agent*…, běžný uživatel ne), znovu nasadit Edge Function **`admin`** (Verify JWT vypnuté). Nicky agentů
+    přejmenovat podle **7b** (`Agent_A`, `Agent_F`).
 
 **Seed a admin panel (od V3.5.2.1):** seed je zdroj pravdy pro import, ale **úpravy z aplikace se neztratí** –
 databáze si je pamatuje (`universe_items.source`, `universes.source`, tabulka `seed_removals`) a `import.sh`

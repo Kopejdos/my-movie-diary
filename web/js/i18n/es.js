@@ -644,7 +644,7 @@ export default {
     deleteConfirmLabel: "Escribe tu apodo para confirmar",
     deleteButton: "Eliminar mi cuenta para siempre",
     deleteDone: "Tu cuenta se ha eliminado. ¡Hasta luego! 👋",
-    deleteAdmin: "Los administradores no pueden eliminar su cuenta aquí: primero cede el rol de administrador.",
+    deleteAdmin: "Los agentes no pueden eliminar su cuenta aquí: primero pide al propietario que quite el rol de agente.",
     errorEmail: "Introduce una dirección de correo válida.",
     errorPasswordShort: "La contraseña debe tener al menos {0} caracteres.",
     errorPasswordWeak: "La contraseña debe contener al menos una letra y un número.",
@@ -705,7 +705,7 @@ export default {
     profileChooseNickname: "Elige un apodo: tus amigos lo verán más adelante.",
     profileSave: "Guardar apodo",
     profileSaved: "Apodo guardado.",
-    profileAdmin: "Administrador",
+    profileAdmin: "Agente",
 
     navAdmin: "Admin",
     notFoundTitle: "Página no encontrada",

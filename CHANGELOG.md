@@ -3,6 +3,11 @@
 All notable changes to My Movie Diary. Versions follow **V<major>.<minor>.<patch>** –
 see [docs/decisions.md](docs/decisions.md#verzování) for the rules.
 
+## V4.4.6.1 – November 2026
+- Admins are now called agents (Agent_A, Agent_F) – agents may use reserved words like admin or agent in their nickname, regular users still can't
+- Reserved words are no longer checked in list names (a list called "Official MCU order" is fine); insults stay blocked everywhere
+- Admin panel → Nicknames: mark a word as reserved for agents or blocked for everyone
+
 ## V4.4.6 – November 2026
 - Tap a movie's poster or title to open its details – a bigger poster, the story, runtime, every collection it's in and a YouTube trailer
 - Czech, German and other non-English movies now show their original title in that language when TMDB has no translation (Básníci in Czech)

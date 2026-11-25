@@ -10,7 +10,7 @@
 // • Supabase (data, přihlášení) a obrázky TMDB: prohlížeč sám (bez SW).
 // =====================================================================
 
-const VERSION = "mmd-v41";       // V4.4.6: detail filmu, admin tým a deník správců; od V3.1.5 síť první i pro JS a CSS
+const VERSION = "mmd-v42";       // V4.4.6.1: agenti a vyhrazená slova v nickách; od V3.1.5 síť první i pro JS a CSS
 const CACHE = `${VERSION}-app`;
 
 // Uloží se při instalaci, aby aplikace šla otevřít i offline

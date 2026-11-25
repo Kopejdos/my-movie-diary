@@ -24,6 +24,7 @@
 //
 // Admin tým (V4.4.6): vlastník (profiles.is_owner, nastavuje se jen v SQL) je jediný, kdo smí
 // měnit roli správce a mazat / resetovat jiné správce; vlastníka nesmí změnit nikdo z webu.
+// Od V4.4.6.1 se správci v rozhraní jmenují agenti (Agent_A, Agent_F) – v kódu dál „admin“.
 // Akce, které něco mění, se zapisují do deníku správců (admin_log – záložka Activity).
 //   requests     {}                     → nevyřízené požadavky na filmy s návrhem kolekce (V3.5.1;
 //                                         od V4.3.5 i kolekce režiséra podle režiséra filmu)
@@ -136,7 +137,7 @@ export function canManageUser(actor: AdminActor, target: { id: string; is_admin?
   if (!target) return "User not found";
   if (target.id === actor.id) return "You cannot change your own account here";
   if (target.is_owner) return "The owner account can only be changed in SQL";
-  if (target.is_admin && !actor.isOwner) return "Only the owner can change other administrators";
+  if (target.is_admin && !actor.isOwner) return "Only the owner can change other agents";
   return null;
 }
 
@@ -651,9 +652,9 @@ async function listUsers(db: SupabaseClient) {
 }
 
 async function setAdmin(db: SupabaseClient, actor: AdminActor, userId: string, isAdmin: boolean) {
-  if (userId === actor.id) throw new HttpError(400, "You cannot change your own administrator role");
+  if (userId === actor.id) throw new HttpError(400, "You cannot change your own agent role");
   // Roli správce uděluje a bere jen vlastník (V4.4.6)
-  if (!actor.isOwner) throw new HttpError(403, "Only the owner can grant or remove the administrator role");
+  if (!actor.isOwner) throw new HttpError(403, "Only the owner can make or remove agents");
   const target = await targetProfile(db, userId);
   const problem = canManageUser(actor, target);
   if (problem) throw new HttpError(403, problem);

@@ -171,15 +171,25 @@ export async function dismissAllSeriesUpdates() {
 export async function listBlockedWords() {
     return await supabase
         .from("blocked_words")
-        .select("id, word, match_mode, created_at")
+        .select("*")                                     // i „reserved“ (V4.4.6.1), před migrací chybí
         .order("word")
         .then(check);
 }
 
-/** Přidá slovo; word = malá písmena a číslice, mode = "contains" | "exact". */
-export async function addBlockedWord(word, mode) {
-    await supabase.from("blocked_words").insert({ word, match_mode: mode }).then(check);
-    logAdmin("add-blocked-word", word, { mode });
+/**
+ * Přidá slovo; word = malá písmena a číslice, mode = "contains" | "exact",
+ * reserved = vyhrazené slovo – zakázané běžným uživatelům, agenti ho smí mít (V4.4.6.1).
+ */
+export async function addBlockedWord(word, mode, reserved = false) {
+    const row = reserved ? { word, match_mode: mode, reserved: true } : { word, match_mode: mode };
+    await supabase.from("blocked_words").insert(row).then(check);
+    logAdmin("add-blocked-word", word, { mode, reserved });
+}
+
+/** Přepne slovo mezi zakázaným pro všechny a vyhrazeným pro agenty (V4.4.6.1). */
+export async function setBlockedWordReserved(id, word, reserved) {
+    await supabase.from("blocked_words").update({ reserved }).eq("id", id).then(check);
+    logAdmin(reserved ? "reserve-word" : "unreserve-word", word);
 }
 
 export async function removeBlockedWord(id, word = null) {

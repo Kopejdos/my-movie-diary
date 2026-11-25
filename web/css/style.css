@@ -3962,11 +3962,19 @@ button {
 }
 
 .admin-list--words {
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 }
 
+/* Slovo nahoře, štítky a tlačítka pod ním (V4.4.6.1 – přibylo „Reserve for agents“) */
 .admin-row--word {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: 10px;
+}
+
+.admin-row--word .admin-row__actions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
 }
 
 /* Formuláře admina na telefonu: pole přes celou šířku, výběr a tlačítko pod ním */

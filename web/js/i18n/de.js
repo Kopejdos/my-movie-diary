@@ -644,7 +644,7 @@ export default {
     deleteConfirmLabel: "Gib zur Bestätigung deinen Spitznamen ein",
     deleteButton: "Mein Konto für immer löschen",
     deleteDone: "Dein Konto wurde gelöscht. Tschüss! 👋",
-    deleteAdmin: "Admins können ihr Konto hier nicht löschen – gib zuerst die Admin-Rolle ab.",
+    deleteAdmin: "Agents können ihr Konto hier nicht löschen – bitte zuerst den Besitzer, die Agent-Rolle zu entfernen.",
     errorEmail: "Gib eine gültige E-Mail-Adresse ein.",
     errorPasswordShort: "Das Passwort muss mindestens {0} Zeichen haben.",
     errorPasswordWeak: "Das Passwort muss mindestens einen Buchstaben und eine Zahl enthalten.",
@@ -705,7 +705,7 @@ export default {
     profileChooseNickname: "Wähle einen Spitznamen – deine Freunde sehen ihn später.",
     profileSave: "Spitzname speichern",
     profileSaved: "Spitzname gespeichert.",
-    profileAdmin: "Administrator",
+    profileAdmin: "Agent",
 
     navAdmin: "Admin",
     notFoundTitle: "Seite nicht gefunden",

@@ -9,7 +9,7 @@ import { getProfile, getUser, isSignedIn } from "../auth.js";
 import {
     listUniversesForAdmin, createUniverse, deleteUniverse, swapUniverseOrder, slugify,
     listUsers, setUserAdmin, deleteUser, resetUsername, setUserBadge,
-    listBlockedWords, addBlockedWord, removeBlockedWord, countCatalogFilms, nextGoal,
+    listBlockedWords, addBlockedWord, removeBlockedWord, setBlockedWordReserved, countCatalogFilms, nextGoal,
     fetchIsOwner, userPermissions,
 } from "../admin.js";
 import { setAccent } from "../theme.js";
@@ -465,6 +465,8 @@ export async function adminWordsView(container, context) {
     const mode = h("select", { class: "admin-input admin-select", "aria-label": TEXTS.adminWordMode },
         h("option", { value: "contains" }, TEXTS.adminWordContains),
         h("option", { value: "exact" }, TEXTS.adminWordExact));
+    // Vyhrazené slovo (admin, agent…) – běžní uživatelé ne, agenti ano (V4.4.6.1)
+    const reserved = h("input", { type: "checkbox" });
     const submit = h("button", { class: "btn btn--primary", type: "submit" }, TEXTS.adminAdd);
 
     async function add(event) {
@@ -476,7 +478,7 @@ export async function adminWordsView(container, context) {
         }
         submit.disabled = true;
         try {
-            await addBlockedWord(value, mode.value);
+            await addBlockedWord(value, mode.value, reserved.checked);
             toast(format("adminWordAdded", value));
             reload();
         } catch (error) {
@@ -489,8 +491,22 @@ export async function adminWordsView(container, context) {
         h("div", { class: "admin-row__info" },
             h("strong", {}, highlight(w.word, query)),
             h("div", { class: "pills" },
-                pill(w.match_mode === "exact" ? TEXTS.adminWordExact : TEXTS.adminWordContains))),
+                pill(w.match_mode === "exact" ? TEXTS.adminWordExact : TEXTS.adminWordContains),
+                w.reserved ? h("span", { class: "pill pill--accent", title: TEXTS.adminWordReservedHint }, `🛡 ${TEXTS.adminWordReserved}`) : null)),
         h("div", { class: "admin-row__actions" },
+            "reserved" in w ? h("button", {
+                class: "btn btn--small", type: "button", title: TEXTS.adminWordReservedHint,
+                onClick: async (event) => {
+                    event.currentTarget.disabled = true;
+                    try {
+                        await setBlockedWordReserved(w.id, w.word, !w.reserved);
+                        toast(format(w.reserved ? "adminWordUnreservedDone" : "adminWordReservedDone", w.word));
+                        reload();
+                    } catch (error) {
+                        toast(format("errorGeneric", error.message), "error");
+                    }
+                },
+            }, w.reserved ? TEXTS.adminWordUnreserve : TEXTS.adminWordReserve) : null,
             h("button", {
                 class: "btn btn--small btn--danger", type: "button",
                 onClick: async (event) => {
@@ -513,12 +529,15 @@ export async function adminWordsView(container, context) {
             { value: "all", label: TEXTS.kindAll },
             { value: "contains", label: TEXTS.adminWordContains },
             { value: "exact", label: TEXTS.adminWordExact },
+            { value: "reserved", label: `🛡 ${TEXTS.adminWordReserved}` },
         ],
         onChange: () => render(),
     });
     function render() {
         const query = search.query();
-        const shown = words.filter((w) => (search.filter() === "all" || w.match_mode === search.filter()) && matchesQuery(query, w.word));
+        const filter = search.filter();
+        const shown = words.filter((w) => (filter === "all" || (filter === "reserved" ? w.reserved : w.match_mode === filter))
+            && matchesQuery(query, w.word));
         search.setCount(shown.length, words.length);
         mount(list, shown.length === 0
             ? noResults(() => search.reset())
@@ -531,6 +550,7 @@ export async function adminWordsView(container, context) {
             h("h2", { class: "admin-form__title" }, TEXTS.adminWordsTitle),
             h("p", { class: "hint", style: "margin: 0" }, TEXTS.adminWordsHint),
             h("div", { class: "admin-search" }, word, mode, submit),
+            h("label", { class: "mini-check" }, reserved, h("span", {}, TEXTS.adminWordReservedLabel)),
         ),
         h("div", { class: "section-title" },
             h("h2", {}, TEXTS.adminTabWords),

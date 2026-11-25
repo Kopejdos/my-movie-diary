@@ -214,6 +214,7 @@ Formát **V<hlavní>.<vedlejší>.<oprava>** (např. V1.2.1):
 - **V3.6.3** – jen plán a dokumentace (rozplánování kapitoly 4), aplikace beze změny.
 - **V3.6.4** – oprava výkonu přehledu pro přihlášené (patch k V3.6.2).
 - **V4.0.1** – rozložení stránky Settings na širší obrazovce (patch k V4.0).
+- **V4.4.6.1** – agenti a vyhrazená slova v nickách (doplněk k V4.4.6, čtvrté číslo jako u V4.3.1.1).
 - Verze a **měsíc poslední aktualizace** jsou v patičce webu (např. „V1.1 · November 2026“). Obojí je v `web/js/config.js` (`APP_VERSION`, `APP_UPDATED` ve tvaru `2026-11` – od V4.2.1 se název měsíce ukáže v jazyce aplikace) – při vydání nové verze se změní tam.
 - Při vydání: úprava `config.js`, záznam do `CHANGELOG.md`, commit a **tag verze** (`git tag v1.1`, `git push --tags`). Tagy `faze-N` z verzí V0.x zůstávají, od V1.1 se používají jen tagy `vX.Y`.
 
@@ -379,6 +380,7 @@ Nejdřív se uklidí a rozšíří to, co už na webu je (V3.0), a teprve podle 
 | 47d | V4.4.4 | Kinematografie zemí a režiséři ✅ | 10 kinematografií zemí jako žánrové výběry (Korea, Itálie, Francie, Indie, Hongkong, Španělsko a Latinská Amerika, Německo, Severské země, Japonsko, Británie) a 40 režisérů (Soderbergh, Spike Lee, Zemeckis, Ron Howard, Boyle, Ritchie, Lanthimos, Linklater, Shyamalan, Tony Scott, Bigelow, John Woo, Besson, von Trier, Haneke, Kore-eda, Zhang Yimou, Ang Lee, Menzel, Chytilová, Lipský, Vorlíček…) – **katalog ~4 000** |
 | 47e | V4.4.5 | Coming soon: hledání a filtr ✅ | na stránce Coming soon **hledání** (název, rok, kolekce) a **filtr** jako na přehledu (druh kolekce, žánr) + **jen můj watchlist**; balíčky umí **přidat filmy do existujících kolekcí** (`addFilms`) – 14 chystaných a letos vydaných filmů do kolekcí z V4.4.x |
 | 47f | V4.4.6 | Optimalizace rozhraní a rozšíření admin týmu ✅ | **detail filmu** (klik na plakát / název – větší plakát, popis v jazyce aplikace, kolekce, **trailer na YouTube**, TMDB); český film česky (**původní název v původním jazyce**); **admin tým** – vlastník a další správci, **deník správců** (záložka Activity), **návod pro správce** (`docs/admin-guide.md`); přesnější import (hledání podle přesného názvu ±1 rok) a **opravy 19 špatně spárovaných filmů** (`fix` v balíčcích), filmy do správné skupiny (`addFilms` podle roku), import bez dvojí synchronizace seedu; Bud Spencer & Terence Hill sólo, Short Circuit, Hřbitov zvířátek |
+| 47f.1 | V4.4.6.1 | Agenti ✅ | správci se v rozhraní jmenují **agenti** (`Agent_A`, `Agent_F`); **vyhrazená slova** v nickách (*admin*, *agent*, *staff*…) – běžný uživatel ne, agent ano, urážky nikdo; vyhrazená slova se nekontrolují v názvech seznamů; přepínání v záložce Nicknames |
 | 48 | V4.5 | Wrapped | rok v kostce – **poprvé za rok 2027** (prosinec 2027): nováček si na začátku doplní stovky filmů, první celý rok dat bude 2027; filmy „Seen before“ se nepočítají |
 | 49 | V4.6 | Optimalizace před seriály | úklid a výkon s velkým katalogem (načítání, hledání, import), **katalog v mezipaměti prohlížeče** pro opakované návštěvy – připravit půdu pro kapitolu V5 |
 
@@ -2595,6 +2597,28 @@ testovacích seznamů byla vymyšlená.
 - **Opravy přes balíček, ne ručně v admin panelu** – stejná chyba byla ve více kolekcích (300 ve dvou, Millennium
   Actress ve dvou); `fix` je opraví najednou a seed zůstane zdrojem pravdy.
 - **Fáze V4.5 a V4.6 beze změny** – V4.4.6 se vešla před ně jako další část V4.4 (47f).
+
+### Fáze 47f.1 – Agenti ✅ (25. 11. 2026) – **V4.4.6.1**
+- **Agenti** – správci se v rozhraní (Users, Settings, deník) jmenují *Agent* a mají nick `Agent_` + písmeno
+  (`Agent_A` vlastník, `Agent_F`). V kódu a databázi zůstává `admin` / `is_admin`.
+- **Vyhrazená slova** (`blocked_words.reserved`) – *admin, agent, moderator, mymoviediary, support, mod, mmd,
+  staff, root, system, official, owner*: běžný uživatel je v nicku mít nesmí, agent ano. Urážky a vulgarity
+  zůstávají zakázané všem. Kontrola `username_allowed(nick, staff)`; trigger bere `is_admin` z ukládaného řádku,
+  takže `update … set username = 'Agent_F', is_admin = true` projde jedním příkazem, a přihlášený agent si nick
+  změní i v Settings.
+- Vyhrazená slova se **nekontrolují v textech seznamů** (`is_text_allowed`) – „Official MCU order“ projde,
+  dřív ho blokovalo *official*.
+- Admin panel → **Nicknames**: štítek 🛡 *Reserved*, filtr, přepínač **Reserve for agents / Block for everyone**,
+  zaškrtávátko u nového slova; zápis do deníku (`reserve-word`, `unreserve-word`).
+- Ověřeno: migrace 2× za sebou na lokálním PostgreSQL 16 (Bob nesmí *Agent_B* ani přepnout slovo, Alice-agent
+  si nick *Agent_A* uloží sama, *Agent_Kurva* nesmí ani agent), `node --test` (94), záložka Nicknames na 360 a 1280 px.
+
+#### Rozhodnutí ve fázi 47f.1
+- **Podtržítko bylo povolené vždy** – *Admin_F* neprošel kvůli slovu *admin* (ochrana proti vydávání se za tým),
+  ne kvůli `_`. Podtržítko a pomlčka se jen vynechávají při porovnání se zakázanými slovy (`F_u_c_k` = *fuck*).
+- **„agent“ je vyhrazené** (`contains`) – jinak by si kdokoli mohl dát *Agent_Z*. Zablokuje i *AgentSmith*;
+  kdyby to vadilo, jde přepnout na *Whole nickname* nebo smazat.
+- **Vlastník se jmenuje taky agent** (`Agent_A`) – 👑 *Owner* v Users stačí, navenek je tým jednotný.
 
 ## Drobnosti k dořešení
 - Nausicaä se v TMDB může zobrazovat pod starým americkým názvem *Warriors of the Wind* – případně doplnit možnost přepsat zobrazovaný název (admin panel).

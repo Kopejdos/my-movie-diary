@@ -22,7 +22,8 @@ test("vlastník – spravuje i správce a mění roli, sebe ani jiného vlastní
 });
 
 test("deník správců – popisek akce a shrnutí podrobností", () => {
-    assert.equal(actionLabel("grant-admin"), "made admin");
+    assert.equal(actionLabel("grant-admin"), "made agent");
+    assert.equal(actionLabel("reserve-word"), "reserved word for agents");
     assert.equal(actionLabel("save-collection"), "edited collection");
     assert.equal(actionLabel("something-new"), "something-new");
     assert.equal(detailsSummary({ added: ["A", "B"], removed: [], name: "X", hidden: true, skip: false }), "added: A, B · name: X · hidden");
